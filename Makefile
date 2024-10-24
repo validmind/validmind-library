@@ -17,8 +17,6 @@ lint:
 
 install:
 	poetry install --all-extras
-# TODO: get poetry to install these dependencies
-	poetry run pip install fairlearn aequitas vl-convert-python
 	poetry run pre-commit install --hook-type pre-commit --hook-type pre-push
 
 build:

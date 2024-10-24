@@ -386,8 +386,8 @@ class TestResultWrapper(ResultWrapper):
                 self.metric.summary = self._get_filtered_summary()
 
             tasks.append(
-                api_client.log_metrics(
-                    metrics=[self.metric],
+                api_client.log_metric_result(
+                    metric=self.metric,
                     inputs=self.inputs,
                     output_template=self.output_template,
                     section_id=section_id,
@@ -396,7 +396,7 @@ class TestResultWrapper(ResultWrapper):
             )
 
         if self.figures:
-            tasks.append(api_client.log_figures(self.figures))
+            tasks.extend([api_client.log_figure(figure) for figure in self.figures])
 
         if hasattr(self, "result_metadata") and self.result_metadata:
             description = self.result_metadata[0].get("text", "")

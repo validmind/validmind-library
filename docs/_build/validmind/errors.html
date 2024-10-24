@@ -191,6 +191,15 @@
 
             </li>
             <li>
+                    <a class="class" href="#MissingDependencyError">MissingDependencyError</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#MissingDependencyError.__init__">MissingDependencyError</a>
+                        </li>
+                </ul>
+
+            </li>
+            <li>
                     <a class="class" href="#MissingRExtrasError">MissingRExtrasError</a>
                             <ul class="memberlist">
                         <li>
@@ -291,7 +300,7 @@
                     <h1 class="modulename">
 <a href="./../validmind.html">validmind</a><wbr>.errors    </h1>
 
-                        <div class="docstring"><p>This module contains all the custom errors that are used in the developer framework.</p>
+                        <div class="docstring"><p>This module contains all the custom errors that are used in the library.</p>
 
 <p>The following base errors are defined for others:</p>
 
@@ -1077,6 +1086,55 @@ method does not have the expected arguments.</p>
             <div><dt>builtins.BaseException</dt>
                                 <dd id="MissingRequiredTestInputError.with_traceback" class="function">with_traceback</dd>
                 <dd id="MissingRequiredTestInputError.add_note" class="function">add_note</dd>
+
+            </div>
+                                </dl>
+                            </div>
+                </section>
+                <section id="MissingDependencyError">
+                    <div class="attr class">
+            
+    <span class="def">class</span>
+    <span class="name">MissingDependencyError</span><wbr>(<span class="base"><a href="#BaseError">BaseError</a></span>):
+
+        
+    </div>
+    <a class="headerlink" href="#MissingDependencyError"></a>
+    
+            <div class="docstring"><p>When a required dependency is missing.</p>
+</div>
+
+
+                            <div id="MissingDependencyError.__init__" class="classattr">
+                                <div class="attr function">
+            
+        <span class="name">MissingDependencyError</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">message</span><span class="o">=</span><span class="s1">&#39;&#39;</span>, </span><span class="param"><span class="n">required_dependencies</span><span class="o">=</span><span class="kc">None</span>, </span><span class="param"><span class="n">extra</span><span class="o">=</span><span class="kc">None</span></span>)</span>
+
+        
+    </div>
+    <a class="headerlink" href="#MissingDependencyError.__init__"></a>
+    
+            <div class="docstring"><h6 id="arguments">Arguments:</h6>
+
+<ul>
+<li><strong>message (str):</strong>  The error message.</li>
+<li><strong>required_dependencies (list):</strong>  A list of required dependencies.</li>
+<li><strong>extra (str):</strong>  The particular validmind <code>extra</code> that will install the missing dependencies.</li>
+</ul>
+</div>
+
+
+                            </div>
+                            <div class="inherited">
+                                <h5>Inherited Members</h5>
+                                <dl>
+                                    <div><dt><a href="#BaseError">BaseError</a></dt>
+                                <dd id="MissingDependencyError.description" class="function"><a href="#BaseError.description">description</a></dd>
+
+            </div>
+            <div><dt>builtins.BaseException</dt>
+                                <dd id="MissingDependencyError.with_traceback" class="function">with_traceback</dd>
+                <dd id="MissingDependencyError.add_note" class="function">add_note</dd>
 
             </div>
                                 </dl>

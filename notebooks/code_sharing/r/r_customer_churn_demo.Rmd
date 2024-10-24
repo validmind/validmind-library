@@ -13,7 +13,7 @@ For this simple demonstration, we will use the following bank customer churn dat
 
 We will train a sample model and demonstrate the following documentation functionalities:
 
-\- Initializing the ValidMind Developer Framework
+\- Initializing the ValidMind Library
 
 \- Using a sample datasets provided by the library to train a simple classification model
 
@@ -60,7 +60,7 @@ In the "Client Integration" page of the newly created project, you will find the
 
 -   project: The project identifier. The \`project\` argument is mandatory since it allows the library to associate all data collected with a specific account project.
 
-The code snippet can be copied and pasted directly in the cell below to initialize the ValidMind Developer Framework when run:
+The code snippet can be copied and pasted directly in the cell below to initialize the ValidMind Library when run:
 
 ```{r}
 vm_r <- vm(
