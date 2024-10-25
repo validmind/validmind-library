@@ -16,7 +16,7 @@ class TestFullTestSuiteNB(unittest.TestCase):
         "validmind.api_client",
         log_figure=unittest.mock.DEFAULT,
         log_metadata=unittest.mock.DEFAULT,
-        log_metrics=unittest.mock.DEFAULT,
+        log_metric_result=unittest.mock.DEFAULT,
         log_test_result=unittest.mock.DEFAULT,
         log_input=unittest.mock.DEFAULT,
     )

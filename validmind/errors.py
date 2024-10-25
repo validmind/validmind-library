@@ -252,11 +252,11 @@ class MissingTextContentsError(APIRequestError):
     pass
 
 
-class MissingProjectIdError(BaseError):
+class MissingModelIdError(BaseError):
     def description(self, *args, **kwargs):
         return (
             self.message
-            or "Project ID must be provided either as an environment variable or as an argument to init."
+            or "Model ID must be provided either as an environment variable or as an argument to init."
         )
 
 

@@ -1,7 +1,7 @@
 # This workflow will install Python dependencies, run tests and lint with a single version of Python
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
 
-name: Python application
+name: Code Quality and Unit Testing
 
 on:
   push:
@@ -13,7 +13,7 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  tests:
     runs-on: ubuntu-latest
 
     steps:
@@ -46,14 +46,12 @@ jobs:
           cache: 'poetry'
 
       - name: Install Dependencies
-        # TODO: figure out why pyarrow will only install with pip and not poetry
-        run: poetry env use python3.9 && poetry run pip install pyarrow==17.0.0 && poetry install -E huggingface -E llm
-
-      - name: Install PyTorch CPU
-        run: poetry run pip install torch==2.0.1 --extra-index-url https://download.pytorch.org/whl/cpu
-
-      - name: Install dependencies for bias and fairness tests
-        run: poetry run pip install aequitas fairlearn vl-convert-python
+        run: |
+          poetry env use python3.9
+          poetry run pip install pyarrow==17.0.0
+          poetry install -E huggingface -E llm
+          poetry run pip install torch==2.0.1 --extra-index-url https://download.pytorch.org/whl/cpu
+          poetry run pip install aequitas fairlearn vl-convert-python
 
       - name: Ensure notebooks have no printed outputs
         run: make ensure-clean-notebooks
