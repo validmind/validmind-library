@@ -69,13 +69,7 @@
                     <a class="function" href="#test">test</a>
             </li>
             <li>
-                    <a class="function" href="#log_figure">log_figure</a>
-            </li>
-            <li>
-                    <a class="function" href="#log_metrics">log_metrics</a>
-            </li>
-            <li>
-                    <a class="function" href="#log_test_results">log_test_results</a>
+                    <a class="function" href="#log_metric">log_metric</a>
             </li>
     </ul>
 
@@ -150,7 +144,7 @@ and to upload to the ValidMind Platform.</p>
                 <section id="__version__">
                     <div class="attr variable">
             <span class="name">__version__</span>        =
-<span class="default_value">&#39;2.5.21&#39;</span>
+<span class="default_value">&#39;2.5.22&#39;</span>
 
         
     </div>
@@ -211,7 +205,7 @@ retrieve them from the environment variables <code>VM_API_KEY</code> and <code>V
 <h6 id="arguments">Arguments:</h6>
 
 <ul>
-<li><strong>project (str, optional):</strong>  The project CUID. Alias for model. Defaults to None.</li>
+<li><strong>project (str, optional):</strong>  The project CUID. Alias for model. Defaults to None. [DEPRECATED]</li>
 <li><strong>model (str, optional):</strong>  The model CUID. Defaults to None.</li>
 <li><strong>api_key (str, optional):</strong>  The API key. Defaults to None.</li>
 <li><strong>api_secret (str, optional):</strong>  The API secret. Defaults to None.</li>
@@ -599,106 +593,34 @@ as the metric's description.</p>
 
 
                 </section>
-                <section id="log_figure">
+                <section id="log_metric">
                     <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">log_figure</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">figure</span></span><span class="return-annotation">):</span></span>
+        <span class="name">log_metric</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">key</span><span class="p">:</span> <span class="nb">str</span>,</span><span class="param">	<span class="n">value</span><span class="p">:</span> <span class="nb">float</span>,</span><span class="param">	<span class="n">inputs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">recorded_at</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></span><span class="return-annotation">):</span></span>
 
         
     </div>
-    <a class="headerlink" href="#log_figure"></a>
+    <a class="headerlink" href="#log_metric"></a>
     
-            <div class="docstring"><p>Logs a figure</p>
+            <div class="docstring"><p>Logs a unit metric</p>
+
+<p>Unit metrics are key-value pairs where the key is the metric name and the value is
+a scalar (int or float). These key-value pairs are associated with the currently
+selected model (inventory model in the ValidMind Platform) and keys can be logged
+to over time to create a history of the metric. On the platform, these metrics
+will be used to create plots/visualizations for documentation and dashboards etc.</p>
 
 <h6 id="arguments">Arguments:</h6>
 
 <ul>
-<li><strong>figure (Figure):</strong>  The Figure object wrapper</li>
+<li><strong>key (str):</strong>  The metric key</li>
+<li><strong>value (float):</strong>  The metric value</li>
+<li><strong>inputs (list, optional):</strong>  A list of input IDs that were used to compute the metric.</li>
+<li><strong>params (dict, optional):</strong>  Dictionary of parameters used to compute the metric.</li>
+<li><strong>recorded_at (str, optional):</strong>  The timestamp of the metric. Server will use
+current time if not provided.</li>
 </ul>
-
-<h6 id="raises">Raises:</h6>
-
-<ul>
-<li><strong>Exception:</strong>  If the API call fails</li>
-</ul>
-
-<h6 id="returns">Returns:</h6>
-
-<blockquote>
-  <p>dict: The response from the API</p>
-</blockquote>
-</div>
-
-
-                </section>
-                <section id="log_metrics">
-                    <div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">log_metrics</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">metrics</span>, </span><span class="param"><span class="n">inputs</span><span class="o">=</span><span class="kc">None</span></span><span class="return-annotation">):</span></span>
-
-        
-    </div>
-    <a class="headerlink" href="#log_metrics"></a>
-    
-            <div class="docstring"><p>Logs metrics to ValidMind API.</p>
-
-<h6 id="arguments">Arguments:</h6>
-
-<ul>
-<li><strong>metrics (list):</strong>  A list of Metric objects</li>
-<li><strong>inputs (list):</strong>  A list of input names to associate with the metrics</li>
-</ul>
-
-<h6 id="raises">Raises:</h6>
-
-<ul>
-<li><strong>Exception:</strong>  If the API call fails</li>
-</ul>
-
-<h6 id="returns">Returns:</h6>
-
-<blockquote>
-  <p>dict: The response from the API</p>
-</blockquote>
-</div>
-
-
-                </section>
-                <section id="log_test_results">
-                    <div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">log_test_results</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">results</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n"><a href="validmind/vm_models.html#ThresholdTestResults">validmind.vm_models.ThresholdTestResults</a></span><span class="p">]</span>,</span><span class="param">	<span class="n">inputs</span></span><span class="return-annotation">) -> <span class="n">List</span><span class="p">[</span><span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]</span>:</span></span>
-
-        
-    </div>
-    <a class="headerlink" href="#log_test_results"></a>
-    
-            <div class="docstring"><p>Logs test results information</p>
-
-<p>This method will be called automatically be any function
-running tests but can also be called directly if the user wants to run tests on their own.</p>
-
-<h6 id="arguments">Arguments:</h6>
-
-<ul>
-<li><strong>results (list):</strong>  A list of ThresholdTestResults objects</li>
-<li><strong>inputs (list):</strong>  A list of input IDs that were used to run the test</li>
-</ul>
-
-<h6 id="raises">Raises:</h6>
-
-<ul>
-<li><strong>Exception:</strong>  If the API call fails</li>
-</ul>
-
-<h6 id="returns">Returns:</h6>
-
-<blockquote>
-  <p>list: list of responses from the API</p>
-</blockquote>
 </div>
 
 
