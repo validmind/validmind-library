@@ -8,4 +8,5 @@ Entrypoint for credit risk datasets.
 
 __all__ = [
     "lending_club",
+    "lending_club_bias",
 ]

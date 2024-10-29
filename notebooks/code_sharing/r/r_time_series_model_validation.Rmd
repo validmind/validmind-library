@@ -2,7 +2,7 @@
 
 ## 1. Introduction
 
-The Time Series Data Validation Full Suite notebook aims to demonstrate the application of various data validation tests using the **ValidMind MRM Platform** and **Developer Framework**.
+The Time Series Data Validation Full Suite notebook aims to demonstrate the application of various data validation tests using the **ValidMind MRM Platform** and **Library**.
 
 In this demo, we will use the `time_series_model_validation` **test suite** to run multiple model validation tests on several pre-trained time series models.
 
@@ -71,13 +71,13 @@ In the "Client Integration" page of the newly created project, you will find the
 
 -   project: The project identifier. The \`project\` argument is mandatory since it allows the library to associate all data collected with a specific account project.
 
-The code snippet can be copied and pasted directly in the cell below to initialize the ValidMind Developer Framework when run:
+The code snippet can be copied and pasted directly in the cell below to initialize the ValidMind Library when run:
 
 ```{r}
 vm_r <- vm(
   api_key="b34dfe4dcb5491212be3eefe77c85cd6",
   api_secret="40f8d2d583baa9e730a7f8872dd57e2f4657c7918c13fa259ba7ccda8a60e858",
-  project="clmp6k8e800ds19mot0zu8o34",
+  model="clmp6k8e800ds19mot0zu8o34",
   python_version=python_version,
   api_host="https://api.dev.vm.validmind.ai/api/v1/tracking"
 )

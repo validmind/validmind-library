@@ -34,6 +34,7 @@ test-integration:
 	poetry run python scripts/run_e2e_notebooks.py
 
 docs:
+	rm -rf docs/_build
 	poetry run pdoc validmind -d google -t docs/templates --no-show-source --logo https://vmai.s3.us-west-1.amazonaws.com/vm-logo.svg --favicon https://vmai.s3.us-west-1.amazonaws.com/favicon.ico -o docs/_build
 
 docs-serve:

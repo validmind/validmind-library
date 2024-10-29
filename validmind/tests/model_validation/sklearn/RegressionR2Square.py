@@ -3,11 +3,10 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 import pandas as pd
-
 from sklearn import metrics
 
-from validmind.tests.model_validation.statsmodels.statsutils import adj_r2_score
 from validmind import tags, tasks
+from validmind.tests.model_validation.statsmodels.statsutils import adj_r2_score
 
 
 @tags("sklearn", "model_performance")

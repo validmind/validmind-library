@@ -6,7 +6,6 @@
 import plotly.graph_objects as go
 from matplotlib import cm
 
-
 from validmind import tags, tasks
 
 

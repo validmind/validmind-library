@@ -80,6 +80,7 @@ class ThresholdTest(Test):
 
         self.result = ThresholdTestResultWrapper(
             result_id=self.test_id,
+            result_description=self.description(),
             result_metadata=[
                 get_description_metadata(
                     test_id=self.test_id,

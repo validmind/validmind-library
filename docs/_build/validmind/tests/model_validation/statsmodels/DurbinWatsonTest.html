@@ -32,16 +32,7 @@
             <h3>High Level API</h3>
                 <ul class="memberlist">
             <li>
-                    <a class="class" href="#DurbinWatsonTest">DurbinWatsonTest</a>
-                            <ul class="memberlist">
-                        <li>
-                                <a class="function" href="#DurbinWatsonTest.__init__">DurbinWatsonTest</a>
-                        </li>
-                        <li>
-                                <a class="function" href="#DurbinWatsonTest.run">run</a>
-                        </li>
-                </ul>
-
+                    <a class="function" href="#DurbinWatsonTest">DurbinWatsonTest</a>
             </li>
     </ul>
 
@@ -66,11 +57,12 @@
                 
             </section>
                 <section id="DurbinWatsonTest">
-                    <div class="attr class">
-                    <div class="decorator">@dataclass</div>
+                    <div class="attr function">
+                    <div class="decorator">@tasks(&#39;regression&#39;)</div>
+        <div class="decorator">@tags(&#39;time_series_data&#39;, &#39;forecasting&#39;, &#39;statistical_test&#39;, &#39;statsmodels&#39;)</div>
 
-    <span class="def">class</span>
-    <span class="name">DurbinWatsonTest</span><wbr>(<span class="base">validmind.vm_models.test.metric.Metric</span>):
+        <span class="def">def</span>
+        <span class="name">DurbinWatsonTest</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">dataset</span>, </span><span class="param"><span class="n">model</span>, </span><span class="param"><span class="n">threshold</span><span class="o">=</span><span class="p">[</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">]</span></span><span class="return-annotation">):</span></span>
 
         
     </div>
@@ -120,56 +112,6 @@ to detect higher-order autocorrelation.</li>
 </div>
 
 
-                            <div id="DurbinWatsonTest.__init__" class="classattr">
-                                <div class="attr function">
-            
-        <span class="name">DurbinWatsonTest</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">context</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n"><a href="../../../vm_models.html#TestContext">validmind.vm_models.TestContext</a></span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">inputs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n"><a href="../../../vm_models.html#TestInput">validmind.vm_models.TestInput</a></span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">tasks</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">_ref_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">_section_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">test_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">result</span><span class="p">:</span> <span class="n">validmind</span><span class="o">.</span><span class="n">vm_models</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">result_wrapper</span><span class="o">.</span><span class="n">MetricResultWrapper</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">params</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">output_template</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">generate_description</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span></span>)</span>
-
-        
-    </div>
-    <a class="headerlink" href="#DurbinWatsonTest.__init__"></a>
-    
-    
-
-                            </div>
-                            <div id="DurbinWatsonTest.run" class="classattr">
-                                <div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">run</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">):</span></span>
-
-        
-    </div>
-    <a class="headerlink" href="#DurbinWatsonTest.run"></a>
-    
-            <div class="docstring"><p>Calculates DB for each of the dataset features</p>
-</div>
-
-
-                            </div>
-                            <div class="inherited">
-                                <h5>Inherited Members</h5>
-                                <dl>
-                                    <div><dt>validmind.vm_models.test.metric.Metric</dt>
-                                <dd id="DurbinWatsonTest.summary" class="function">summary</dd>
-                <dd id="DurbinWatsonTest.cache_results" class="function">cache_results</dd>
-
-            </div>
-            <div><dt>validmind.vm_models.test.test.Test</dt>
-                                <dd id="DurbinWatsonTest.description" class="function">description</dd>
-                <dd id="DurbinWatsonTest.log" class="function">log</dd>
-
-            </div>
-            <div><dt>validmind.vm_models.test_context.TestUtils</dt>
-                                <dd id="DurbinWatsonTest.get_accessed_inputs" class="function">get_accessed_inputs</dd>
-                <dd id="DurbinWatsonTest.dataset" class="variable">dataset</dd>
-                <dd id="DurbinWatsonTest.model" class="variable">model</dd>
-                <dd id="DurbinWatsonTest.models" class="variable">models</dd>
-                <dd id="DurbinWatsonTest.validate_inputs" class="function">validate_inputs</dd>
-
-            </div>
-                                </dl>
-                            </div>
                 </section>
     </main>
 <script>

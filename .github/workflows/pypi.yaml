@@ -1,16 +1,17 @@
-# This worklfow pushes the ValidMind Developer Framework package to PyPI
+# This worklfow pushes the ValidMind Library package to PyPI
 
 name: Publish to PyPI
 
 on:
   push:
-    branches: [prod]
+    branches:
+      - prod
 
 permissions:
   contents: read
 
 jobs:
-  build:
+  publish:
     runs-on: ubuntu-latest
 
     steps:
@@ -28,10 +29,13 @@ jobs:
       - name: Install Dependencies
         run: poetry env use python3.11 && poetry install
 
-      - name: Install PyTorch CPU
-        run: poetry run pip install torch --extra-index-url https://download.pytorch.org/whl/cpu
+      - name: Update twine
+        run: poetry run pip install --upgrade twine
 
       - name: Publish to PyPI
+        env:
+          PYPI_USERNAME: __token__
+          PYPI_PASSWORD: ${{ secrets.POETRY_PYPI_TOKEN_PYPI }}
         run: |
           poetry build
-          poetry run twine upload -u __token__ -p ${{ secrets.POETRY_PYPI_TOKEN_PYPI }} dist/*
+          poetry publish -u $PYPI_USERNAME -p $PYPI_PASSWORD

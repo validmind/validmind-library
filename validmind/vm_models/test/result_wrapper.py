@@ -128,6 +128,8 @@ class ResultWrapper(ABC):
     # id of the result, can be set by the subclass. This helps
     # looking up results later on
     result_id: str = None
+    # Text description from test or metric (docstring usually)
+    result_description: str = None
     # Text metadata about the result, can include description, etc.
     result_metadata: List[dict] = None
     # Output template to use for rendering the result
@@ -300,38 +302,60 @@ class MetricResultWrapper(ResultWrapper):
         return VBox(vbox_children)
 
     def _get_filtered_summary(self):
-        """Check if the metric summary has columns from input datasets"""
-        dataset_columns = set()
+        """Check if the metric summary has columns from input datasets with matching row counts."""
+        dataset_columns = self._get_dataset_columns()
+        filtered_results = []
 
-        for input in self.inputs:
-            input_id = input if isinstance(input, str) else input.input_id
+        for table in self.metric.summary.results:
+            table_columns = self._get_table_columns(table)
+            sensitive_columns = self._find_sensitive_columns(
+                dataset_columns, table_columns
+            )
+
+            if sensitive_columns:
+                self._log_sensitive_data_warning(sensitive_columns)
+            else:
+                filtered_results.append(table)
+
+        self.metric.summary.results = filtered_results
+        return self.metric.summary
+
+    def _get_dataset_columns(self):
+        dataset_columns = {}
+        for input_item in self.inputs:
+            input_id = (
+                input_item if isinstance(input_item, str) else input_item.input_id
+            )
             input_obj = input_registry.get(input_id)
             if isinstance(input_obj, VMDataset):
-                dataset_columns.update(input_obj.columns)
-
-        for table in [*self.metric.summary.results]:
-            columns = set()
-
-            if isinstance(table.data, pd.DataFrame):
-                columns.update(table.data.columns)
-            elif isinstance(table.data, list):
-                columns.update(table.data[0].keys())
-            else:
-                raise ValueError("Invalid data type in summary table")
-
-            if bool(columns.intersection(dataset_columns)):
-                logger.warning(
-                    "Sensitive data in metric summary table. Not logging to API automatically."
-                    " Pass `unsafe=True` to result.log() method to override manually."
+                dataset_columns.update(
+                    {col: len(input_obj.df) for col in input_obj.columns}
                 )
-                logger.warning(
-                    f"The following columns are present in the table: {columns}"
-                    f" and also present in the dataset: {dataset_columns}"
-                )
+        return dataset_columns
 
-                self.metric.summary.results.remove(table)
+    def _get_table_columns(self, table):
+        if isinstance(table.data, pd.DataFrame):
+            return {col: len(table.data) for col in table.data.columns}
+        elif isinstance(table.data, list) and table.data:
+            return {col: len(table.data) for col in table.data[0].keys()}
+        else:
+            raise ValueError("Invalid data type in summary table")
 
-        return self.metric.summary
+    def _find_sensitive_columns(self, dataset_columns, table_columns):
+        return [
+            col
+            for col, row_count in table_columns.items()
+            if col in dataset_columns and row_count == dataset_columns[col]
+        ]
+
+    def _log_sensitive_data_warning(self, sensitive_columns):
+        logger.warning(
+            "Sensitive data in metric summary table. Not logging to API automatically. "
+            "Pass `unsafe=True` to result.log() method to override manually."
+        )
+        logger.warning(
+            f"The following columns are present in the table with matching row counts: {sensitive_columns}"
+        )
 
     async def log_async(
         self, section_id: str = None, position: int = None, unsafe=False
@@ -354,8 +378,8 @@ class MetricResultWrapper(ResultWrapper):
                 self.metric.summary = self._get_filtered_summary()
 
             tasks.append(
-                api_client.log_metrics(
-                    metrics=[self.metric],
+                api_client.log_metric_result(
+                    metric=self.metric,
                     inputs=self.inputs,
                     output_template=self.output_template,
                     section_id=section_id,
@@ -364,7 +388,7 @@ class MetricResultWrapper(ResultWrapper):
             )
 
         if self.figures:
-            tasks.append(api_client.log_figures(self.figures))
+            tasks.extend([api_client.log_figure(figure) for figure in self.figures])
 
         if hasattr(self, "result_metadata") and self.result_metadata:
             description = self.result_metadata[0].get("text", "")
@@ -450,7 +474,7 @@ class ThresholdTestResultWrapper(ResultWrapper):
         ]
 
         if self.figures:
-            tasks.append(api_client.log_figures(self.figures))
+            tasks.extend([api_client.log_figure(figure) for figure in self.figures])
 
         if hasattr(self, "result_metadata") and self.result_metadata:
             description = self.result_metadata[0].get("text", "")

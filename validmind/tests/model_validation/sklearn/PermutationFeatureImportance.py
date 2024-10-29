@@ -109,7 +109,7 @@ class PermutationFeatureImportance(Metric):
             )
         )
         fig.update_layout(
-            title_text="Permutation Importances (train set)",
+            title_text="Permutation Importances",
             yaxis=dict(
                 tickmode="linear",  # set tick mode to linear
                 dtick=1,  # set interval between ticks

@@ -84,7 +84,6 @@ class TextDescription(Metric):
     tags = ["nlp", "text_data", "visualization"]
 
     def general_text_metrics(self, df, text_column):
-        nltk.download("punkt", quiet=True)
         results = []
 
         for text in df[text_column]:
@@ -174,6 +173,9 @@ class TextDescription(Metric):
         # Can only run this test if we have a Dataset object
         if not isinstance(self.inputs.dataset, VMDataset):
             raise ValueError("TextDescription requires a validmind Dataset object")
+
+        # download nltk data
+        nltk.download("punkt_tab", quiet=True)
 
         df_text_description = self.text_description_table(
             self.inputs.dataset.df, self.params

@@ -152,13 +152,13 @@ code configures the following arguments:
     collected with a specific account project.
 
 The code snippet can be copied and pasted directly in the cell below to
-initialize the ValidMind Developer Framework when run:
+initialize the ValidMind Library when run:
 
 ```{r}
 vm_r <- vm(
   api_key="<your_api_key_here>",
   api_secret="<your_api_secret_here>",
-  project="<your_project_id_here>",
+  model="<your_project_id_here>",
   python_version=python_version,
   api_host="https://api.dev.vm.validmind.ai/api/v1/tracking"
 )

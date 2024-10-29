@@ -77,6 +77,7 @@ class Metric(Test):
 
         self.result = MetricResultWrapper(
             result_id=self.test_id,
+            result_description=self.description(),
             result_metadata=[
                 (
                     get_description_metadata(

@@ -8,8 +8,27 @@ import plotly.express as px
 from datasets import Dataset
 
 from validmind import tags, tasks
+from validmind.errors import MissingDependencyError
 
 from .utils import get_ragas_config, get_renamed_columns
+
+try:
+    from ragas import evaluate
+    from ragas.metrics import AspectCritic
+    from ragas.metrics._aspect_critic import (
+        coherence,
+        conciseness,
+        correctness,
+        harmfulness,
+        maliciousness,
+    )
+except ImportError as e:
+    raise MissingDependencyError(
+        "Missing required package `ragas` for AspectCritique. "
+        "Please run `pip install validmind[llm]` to use LLM tests",
+        required_dependencies=["ragas"],
+        extra="llm",
+    ) from e
 
 LOWER_IS_BETTER_ASPECTS = ["harmfulness", "maliciousness"]
 
@@ -101,20 +120,7 @@ def AspectCritique(
     )
     ```
     """
-    try:
-        from ragas import evaluate
-        from ragas.metrics.critique import AspectCritique as _AspectCritique
-        from ragas.metrics.critique import (
-            coherence,
-            conciseness,
-            correctness,
-            harmfulness,
-            maliciousness,
-        )
-    except ImportError:
-        raise ImportError("Please run `pip install validmind[llm]` to use LLM tests")
-
-    aspect_map = {
+    built_in_aspects = {
         "coherence": coherence,
         "conciseness": conciseness,
         "correctness": correctness,
@@ -136,16 +142,15 @@ def AspectCritique(
 
     df = get_renamed_columns(dataset._df, required_columns)
 
-    built_in_aspects = [aspect_map[aspect] for aspect in aspects]
     custom_aspects = (
         [
-            _AspectCritique(name=name, definition=description)
+            AspectCritic(name=name, definition=description)
             for name, description in additional_aspects
         ]
         if additional_aspects
         else []
     )
-    all_aspects = [*built_in_aspects, *custom_aspects]
+    all_aspects = [built_in_aspects[aspect] for aspect in aspects] + custom_aspects
 
     result_df = evaluate(
         Dataset.from_pandas(df), metrics=all_aspects, **get_ragas_config()

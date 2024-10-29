@@ -78,6 +78,7 @@ class SHAPGlobalImportance(Metric):
     default_params = {
         "kernel_explainer_samples": 10,
         "tree_or_linear_explainer_samples": 200,
+        "class_of_interest": None,
     }
 
     def _generate_shap_plot(self, type_, shap_values, x_test):
@@ -107,6 +108,7 @@ class SHAPGlobalImportance(Metric):
                 shap_values / max_shap_value * 100
             )  # scaling factor to make the top feature 100%
             summary_plot_extra_args = {"plot_type": "bar"}
+
             shap.summary_plot(
                 shap_values, x_test, show=False, **summary_plot_extra_args
             )
@@ -192,6 +194,10 @@ class SHAPGlobalImportance(Metric):
 
         shap_values = explainer.shap_values(shap_sample)
 
+        # Select the SHAP values for the specified class (classification) or for the regression output.
+        class_of_interest = self.params["class_of_interest"]
+        shap_values = _select_shap_values(shap_values, class_of_interest)
+
         figures = [
             self._generate_shap_plot("mean", shap_values, shap_sample),
             self._generate_shap_plot("summary", shap_values, shap_sample),
@@ -214,3 +220,56 @@ class SHAPGlobalImportance(Metric):
         for fig_num, type_ in enumerate(["mean", "summary"], start=1):
             assert isinstance(self.result.figures[fig_num - 1], Figure)
             assert self.result.figures[fig_num - 1].metadata["type"] == type_
+
+
+def _select_shap_values(shap_values, class_of_interest=None):
+    """
+    Selects SHAP values for binary or multiclass classification. For regression models,
+    returns the SHAP values directly as there are no classes.
+
+    Parameters:
+    -----------
+    shap_values : list or numpy.ndarray
+        The SHAP values returned by the SHAP explainer. For multiclass classification,
+        this will be a list where each element corresponds to a class. For regression,
+        this will be a single array of SHAP values.
+
+    class_of_interest : int, optional
+        The class index for which to retrieve SHAP values. If None (default), the function
+        will assume binary classification and use class 1 by default.
+
+    Returns:
+    --------
+    numpy.ndarray
+        The SHAP values for the specified class (classification) or for the regression output.
+
+    Raises:
+    -------
+    ValueError
+        If class_of_interest is specified and is out of bounds for the number of classes.
+    """
+    # Check if we are dealing with a multiclass classification
+    if isinstance(shap_values, list):
+        num_classes = len(shap_values)
+
+        # Default to class 1 for binary classification
+        if num_classes == 2 and class_of_interest is None:
+            logger.info(
+                "Binary classification detected: using SHAP values for class 1 (positive class)."
+            )
+            return shap_values[1]
+        else:
+            # Multiclass classification: use the specified class_of_interest
+            if class_of_interest is not None and 0 <= class_of_interest < num_classes:
+                logger.info(
+                    f"Multiclass classification: using SHAP values for class {class_of_interest}."
+                )
+                return shap_values[class_of_interest]
+            else:
+                raise ValueError(
+                    f"Invalid class_of_interest: {class_of_interest}. Must be between 0 and {num_classes - 1}."
+                )
+    else:
+        # For regression, return the SHAP values as they are
+        logger.info("Regression model detected: returning SHAP values as-is.")
+        return shap_values

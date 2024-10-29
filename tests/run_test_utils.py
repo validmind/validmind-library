@@ -13,13 +13,14 @@ import xgboost as xgb
 from transformers import pipeline
 from openai import OpenAI
 from sklearn.cluster import KMeans
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
 
 from validmind.datasets.classification import customer_churn
 from validmind.datasets.cluster import digits as digits_dataset
 from validmind.datasets.nlp import cnn_dailymail
-from validmind.datasets.regression import fred
+from validmind.datasets.regression import fred_timeseries
 from validmind.models import FoundationModel, Prompt
 
 os.environ["OPENAI_API_KEY"] = "123"
@@ -160,25 +161,92 @@ def setup_time_series_test_inputs(test_inputs={}, test_config={}):
         test_inputs (dict): Glogal test inputs to be updated
         test_config (dict): Global test config to be updated
     """
-    df = fred.load_data()
-    df = df.sample(1000, random_state=42)
+    df = fred_timeseries.load_data()
+
+    target_column = fred_timeseries.target_column
 
     # Models
+    train_df, test_df = train_test_split(df, test_size=0.2, shuffle=False)
+
+    # Take the first difference of the training and test sets
+    train_diff_df = train_df.diff().dropna()
+    test_diff_df = test_df.diff().dropna()
+
+    # Extract the features and target variable from the training set
+    X_diff_train = train_diff_df.drop(target_column, axis=1)
+    y_diff_train = train_diff_df[target_column]
+
+    # Extract the features and target variable from the test set
+    X_diff_test = test_diff_df.drop(target_column, axis=1)
+
+    # Fit the random forest model
+    model_rf = RandomForestRegressor(n_estimators=1500, random_state=0)
+    model_rf.fit(X_diff_train, y_diff_train)
+
+    # Make predictions on the training and test sets
+    y_diff_train_pred = model_rf.predict(X_diff_train)
+    y_diff_test_pred = model_rf.predict(X_diff_test)
+
+    # Transform the predictions back to the original scale
+    y_train_rf_pred = _transform_to_levels(
+        y_diff_train_pred, first_value=train_df[target_column].iloc[0]
+    )
+    y_test_rf_pred = _transform_to_levels(
+        y_diff_test_pred, first_value=test_df[target_column].iloc[0]
+    )
+
+    vm_model_rf = vm.init_model(
+        model_rf,
+        input_id="random_forests_model",
+        __log=False,
+    )
 
     # Datasets
     vm_raw_dataset = vm.init_dataset(
         input_id="raw_dataset",
         dataset=df,
-        target_column=fred.target_column,
+        target_column=target_column,
         __log=False,
     )
 
-    # TODO: Assign predictions for each model
-    # e.g. vm_train_ds.assign_predictions(vm_classifier_model)
+    vm_train_ds = vm.init_dataset(
+        input_id="train_ds",
+        dataset=train_df,
+        target_column=target_column,
+        __log=False,
+    )
+
+    vm_test_ds = vm.init_dataset(
+        input_id="test_ds",
+        dataset=test_df,
+        target_column=target_column,
+        __log=False,
+    )
+
+    # Assign predictions for each model
+    vm_train_ds.assign_predictions(
+        model=vm_model_rf,
+        prediction_values=y_train_rf_pred,
+    )
+
+    vm_test_ds.assign_predictions(
+        model=vm_model_rf,
+        prediction_values=y_test_rf_pred,
+    )
 
     test_inputs["time_series"] = {
         "single_dataset": {
             "dataset": vm_raw_dataset,
+        },
+        "two_datasets": {
+            "datasets": [vm_train_ds, vm_test_ds],
+        },
+        "single_model": {
+            "model": vm_model_rf,
+        },
+        "model_and_dataset": {
+            "dataset": vm_test_ds,
+            "model": vm_model_rf,
         },
     }
 
@@ -396,3 +464,10 @@ def setup_clustering_test_inputs(test_inputs={}, test_config={}):
             "datasets": [vm_train_ds, vm_test_ds],
         },
     }
+
+
+def _transform_to_levels(y_diff_pred, first_value=0):
+    y_pred = [first_value]
+    for pred in y_diff_pred:
+        y_pred.append(y_pred[-1] + pred)
+    return y_pred

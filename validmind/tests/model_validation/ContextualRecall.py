@@ -58,6 +58,9 @@ def ContextualRecall(dataset, model):
     - Models that effectively use infrequent words might be undervalued, as these words might not overlap as often.
     """
 
+    # download nltk data
+    nltk.download("punkt_tab", quiet=True)
+
     y_true = dataset.y
     y_pred = dataset.y_pred(model)
 

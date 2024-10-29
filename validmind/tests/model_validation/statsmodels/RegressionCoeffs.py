@@ -7,8 +7,8 @@ import pandas as pd
 import plotly.graph_objects as go
 from scipy import stats
 
-from validmind.errors import SkipTestError
 from validmind import tags, tasks
+from validmind.errors import SkipTestError
 
 
 @tags("tabular_data", "visualization", "model_training")

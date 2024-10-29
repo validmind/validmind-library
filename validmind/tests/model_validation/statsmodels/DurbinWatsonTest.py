@@ -2,15 +2,15 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from dataclasses import dataclass
-
+import pandas as pd
 from statsmodels.stats.stattools import durbin_watson
 
-from validmind.vm_models import Metric
+from validmind import tags, tasks
 
 
-@dataclass
-class DurbinWatsonTest(Metric):
+@tasks("regression")
+@tags("time_series_data", "forecasting", "statistical_test", "statsmodels")
+def DurbinWatsonTest(dataset, model, threshold=[1.5, 2.5]):
     """
     Assesses autocorrelation in time series data features using the Durbin-Watson statistic.
 
@@ -49,18 +49,38 @@ class DurbinWatsonTest(Metric):
     to detect higher-order autocorrelation.
     """
 
-    name = "durbin_watson"
-    required_inputs = ["dataset"]
-    tasks = ["regression"]
-    tags = ["time_series_data", "forecasting", "statistical_test", "statsmodels"]
+    # Validate threshold values
+    if not (0 < threshold[0] < threshold[1] < 4):
+        raise ValueError(
+            "Invalid threshold. It should be in the form [a, b] where 0 < a < b < 4."
+        )
 
-    def run(self):
-        """
-        Calculates DB for each of the dataset features
-        """
-        x_train = self.inputs.dataset.df
-        dw_values = {}
-        for col in x_train.columns:
-            dw_values[col] = durbin_watson(x_train[col].values)
+    # Check if threshold values are around 2
+    if abs(2 - threshold[0]) > 1 or abs(2 - threshold[1]) > 1:
+        raise ValueError(
+            "Threshold values should be around 2 for meaningful Durbin-Watson test results."
+        )
 
-        return self.cache_results(dw_values)
+    y_true = dataset.y
+    y_pred = dataset.y_pred(model)
+    residuals = y_true - y_pred
+
+    dw_statistic = durbin_watson(residuals)
+
+    def get_autocorrelation(dw_value, threshold):
+        if dw_value < threshold[0]:
+            return "Positive autocorrelation"
+        elif dw_value > threshold[1]:
+            return "Negative autocorrelation"
+        else:
+            return "No autocorrelation"
+
+    results = pd.DataFrame(
+        {
+            "dw_statistic": [dw_statistic],
+            "threshold": [str(threshold)],
+            "autocorrelation": [get_autocorrelation(dw_statistic, threshold)],
+        }
+    )
+
+    return results

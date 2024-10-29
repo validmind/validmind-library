@@ -9,8 +9,7 @@ Threshold based tests
 import re
 from dataclasses import dataclass
 
-import matplotlib.pyplot as plt
-import seaborn as sns
+import plotly.graph_objects as go
 
 from validmind.vm_models import Figure, ThresholdTest, VMDataset
 
@@ -74,25 +73,23 @@ class Hashtags(ThresholdTest):
         text_column = self.inputs.dataset.text_column
 
         def find_hash(text):
-            line = re.findall(r"(?<=#)\w+", text)
-            return " ".join(line)
+            return re.findall(r"(?<=#)\w+", str(text))
 
-        temp = (
-            self.inputs.dataset.df[text_column]
-            .apply(lambda x: find_hash(x))
-            .value_counts()[:][1 : self.params["top_hashtags"]]
-        )
-        temp = (
-            temp.to_frame()
-            .reset_index()
-            .rename(columns={"index": "Hashtag", text_column: "count"})
-        )
+        # Extract hashtags from the text column and count occurrences
+        hashtags = self.inputs.dataset.df[text_column].apply(find_hash).explode()
+        temp = hashtags.value_counts().head(self.params["top_hashtags"])
+
+        print(f"temp: {temp}")
 
         figures = []
         if not temp.empty:
-            fig = plt.figure()
-            sns.barplot(x="Hashtag", y="count", data=temp)
-            plt.xticks(rotation=90)
+            fig = go.Figure(data=[go.Bar(x=temp.index, y=temp.values)])
+            fig.update_layout(
+                title="Top Hashtags",
+                xaxis_title="Hashtag",
+                yaxis_title="Count",
+                xaxis_tickangle=-45,
+            )
             figures.append(
                 Figure(
                     for_object=self,
@@ -100,7 +97,5 @@ class Hashtags(ThresholdTest):
                     figure=fig,
                 )
             )
-            # Do this if you want to prevent the figure from being displayed
-            plt.close("all")
 
         return self.cache_results([], passed=True, figures=figures)

@@ -15,7 +15,7 @@ from uuid import uuid4
 import pandas as pd
 from ipywidgets import HTML, Accordion
 
-from ..errors import LoadTestError
+from ..errors import LoadTestError, MissingDependencyError
 from ..html_templates.content_blocks import test_content_block_html
 from ..logging import get_logger
 from ..unit_metrics.composite import load_composite_metric
@@ -88,10 +88,30 @@ def list_tests(
     Returns:
         list or pandas.DataFrame: A list of all tests or a formatted table.
     """
-    tests = {
-        test_id: load_test(test_id, reload=True)
-        for test_id in test_store.get_test_ids()
-    }
+    # tests = {
+    #     test_id: load_test(test_id, reload=True)
+    #     for test_id in test_store.get_test_ids()
+    # }
+    tests = {}
+    for test_id in test_store.get_test_ids():
+        try:
+            tests[test_id] = load_test(test_id, reload=True)
+        except MissingDependencyError as e:
+            # skip tests that have missing dependencies
+            logger.debug(str(e))
+
+            if e.extra:
+                logger.info(
+                    f"Skipping `{test_id}` as it requires extra dependencies: {e.required_dependencies}."
+                    f" Please run `pip install validmind[{e.extra}]` to view and run this test."
+                )
+            else:
+                logger.info(
+                    f"Skipping `{test_id}` as it requires missing dependencies: {e.required_dependencies}."
+                    " Please install the missing dependencies to view and run this test."
+                )
+
+            continue
 
     # first search by the filter string since it's the most general search
     if filter is not None:

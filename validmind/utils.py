@@ -175,6 +175,10 @@ def format_records(df):
             continue
         not_zero = df[col][df[col] != 0]
         min_number = not_zero.min()
+        if math.isnan(min_number) or math.isinf(min_number):
+            df[col] = df[col].round(DEFAULT_SMALL_NUMBER_DECIMALS)
+            continue
+
         _, min_scale = precision_and_scale(min_number)
 
         if min_number >= 10:

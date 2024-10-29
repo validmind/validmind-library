@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 """
-This module contains all the custom errors that are used in the developer framework.
+This module contains all the custom errors that are used in the library.
 
 The following base errors are defined for others:
 - BaseError
@@ -207,6 +207,23 @@ class MissingRequiredTestInputError(BaseError):
     pass
 
 
+class MissingDependencyError(BaseError):
+    """
+    When a required dependency is missing.
+    """
+
+    def __init__(self, message="", required_dependencies=None, extra=None):
+        """
+        Args:
+            message (str): The error message.
+            required_dependencies (list): A list of required dependencies.
+            extra (str): The particular validmind `extra` that will install the missing dependencies.
+        """
+        super().__init__(message)
+        self.required_dependencies = required_dependencies or []
+        self.extra = extra
+
+
 class MissingRExtrasError(BaseError):
     """
     When the R extras have not been installed.
@@ -217,14 +234,6 @@ class MissingRExtrasError(BaseError):
             self.message
             or "ValidMind r-support needs to be installed: `pip install validmind[r-support]`"
         )
-
-
-class MissingRunCUIDError(APIRequestError):
-    """
-    When data is being sent to the API but the run_cuid is missing.
-    """
-
-    pass
 
 
 class MissingTextContentIdError(APIRequestError):
@@ -243,28 +252,12 @@ class MissingTextContentsError(APIRequestError):
     pass
 
 
-class MissingProjectIdError(BaseError):
+class MissingModelIdError(BaseError):
     def description(self, *args, **kwargs):
         return (
             self.message
-            or "Project ID must be provided either as an environment variable or as an argument to init."
+            or "Model ID must be provided either as an environment variable or as an argument to init."
         )
-
-
-class StartTestRunFailedError(APIRequestError):
-    """
-    When the API was not able to start a test run.
-    """
-
-    pass
-
-
-class TestRunNotFoundError(APIRequestError):
-    """
-    When a test run is not found in the API.
-    """
-
-    pass
 
 
 class TestInputInvalidDatasetError(BaseError):
@@ -352,11 +345,8 @@ def raise_api_error(error_string):
         "missing_text": MissingTextContentsError,
         "invalid_text_object": InvalidTextObjectError,
         "invalid_content_id_prefix": InvalidContentIdPrefixError,
-        "missing_run_cuid": MissingRunCUIDError,
-        "test_run_not_found": TestRunNotFoundError,
         "invalid_metric_results": InvalidMetricResultsError,
         "invalid_test_results": InvalidTestResultsError,
-        "start_test_run_failed": StartTestRunFailedError,
     }
 
     error_class = error_map.get(api_code, APIRequestError)

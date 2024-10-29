@@ -1,0 +1,29 @@
+id: test_result_description
+name: Test Result Description
+description: Generate a description for a test result
+version: 0.1.0
+model: gpt-4o
+temperature: 0.0
+output_type: markdown
+prompts:
+  system:
+    role: system
+    path: system.jinja
+  user:
+    role: user
+    path: user.jinja
+inputs:
+  test_name:
+    description: The name of the test that produced the result (usually the last part of the test ID)
+    type: string
+  test_description:
+    description: The description (docstring) of the test that was run
+    type: string
+  summary:
+    description: The json result summary (i.e. the table(s) returned by the test)
+    type: list
+    optional: true
+  figures:
+    description: A list of base64 encoded images of the figures returned by the test
+    type: list
+    optional: true

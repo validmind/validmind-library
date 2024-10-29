@@ -7,6 +7,7 @@ import pandas as pd
 from scipy.stats import chi2_contingency
 
 from validmind import tags, tasks
+from validmind.errors import SkipTestError
 
 
 @tags("tabular_data", "categorical_data", "statistical_test")
@@ -55,8 +56,10 @@ def ChiSquaredFeaturesTable(dataset, p_threshold=0.05):
     """
 
     target_column = dataset.target_column
-
     features = dataset.feature_columns_categorical
+
+    if not features:
+        raise SkipTestError("No categorical features found in dataset")
 
     results_df = _chi_squared_categorical_feature_selection(
         dataset.df, features, target_column, p_threshold
