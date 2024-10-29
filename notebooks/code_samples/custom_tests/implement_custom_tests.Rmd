@@ -264,7 +264,7 @@ register_result <- register_custom_test(
 test_result <- run_custom_test(
   "my_custom_tests.ConfusionMatrix",
   inputs = list(dataset = vm_test_ds, model = vm_model),
-  test_register = register_result
+  test_registry = register_result
 )
 
 test_result$log()
