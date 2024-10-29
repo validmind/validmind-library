@@ -250,14 +250,10 @@ confusion_matrix <- function(dataset, model) {
     return(cm_display$figure_)
 }
 
-# Add a description attribute to your function
-attr(confusion_matrix, "description") <- "Confusion matrix metric"
-
 # Register your confusion_matrix function
 register_result <- register_custom_test(
     confusion_matrix,
     test_id = "my_custom_tests.ConfusionMatrix",
-    description = "Confusion matrix metric",
     required_inputs = c("dataset", "model")
 )
 

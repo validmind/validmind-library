@@ -146,8 +146,8 @@ run_custom_test <- function(test_id, inputs, test_registry, show = FALSE) {
         results=test$result,
         test_id=test_id,
         inputs=list(),
-        params=NULL,
-        generate_description=FALSE,
+        params=test$params,
+        description=test$description()
     )
 
     # Return the test result object
