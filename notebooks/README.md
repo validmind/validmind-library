@@ -13,7 +13,7 @@ Sample notebooks are organized into the following folders:
 
 ## Getting started
 
-ValidMind enables organizations to identify, document, and manage model risks for all types of models, including AI/ML models, LLMs, and statistical models. As a model developer, you use the ValidMind Library to automate documentation and validation tests, and then use the ValidMind AI Risk Platform UI to collaborate on documentation projects. Together, these products simplify model risk management, facilitate compliance with regulations and institutional standards, and enhance collaboration between yourself and model validators.
+ValidMind enables organizations to identify, document, and manage model risks for all types of models, including AI/ML models, LLMs, and statistical models. As a model developer, you use the ValidMind Library to automate documentation and validation tests, and then use the ValidMind Platform to collaborate on documentation projects. Together, these products simplify model risk management, facilitate compliance with regulations and institutional standards, and enhance collaboration between yourself and model validators.
 
 If this is your first time trying out ValidMind, you can make use of the following resources alongside our sample notebooks:
 

@@ -61,7 +61,7 @@ from .tests.decorator import metric, tags, tasks, test
 
 __all__ = [  # noqa
     "__version__",
-    # Framework Python Library API
+    # Python Library API
     "datasets",
     "errors",
     "get_test_suite",
