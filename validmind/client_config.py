@@ -17,7 +17,6 @@ class ClientConfig:
     when initializing the API client.
     """
 
-    project: object
     model: object
     feature_flags: dict
     document_type: str
@@ -42,7 +41,6 @@ class ClientConfig:
 
 
 client_config = ClientConfig(
-    project=None,
     model=None,
     feature_flags={},
     document_type="model_documentation",

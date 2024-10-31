@@ -1,5 +1,9 @@
 # ValidMind Library
 
+<!-- TODO: put back in when workflows are working properly -->
+<!-- [![Code Quality](https://github.com/validmind/developer-framework/actions/workflows/python.yaml/badge.svg)](https://github.com/validmind/developer-framework/actions/workflows/python.yaml)
+[![Integration Tests](https://github.com/validmind/developer-framework/actions/workflows/integration.yaml/badge.svg)](https://github.com/validmind/developer-framework/actions/workflows/integration.yaml) -->
+
 ![ValidMind logo](images/ValidMind-logo-color.svg "ValidMind logo")
 
 The ValidMind Library is a suite of developer tools and methods designed to run validation tests and automate the documentation of your models. The ValidMind Library provides a rich suite of documentation tools and test suites, from documenting descriptions of your dataset to testing your models for weak spots and overfit areas.
@@ -12,7 +16,7 @@ We believe in the power of collaboration and welcome contributions to the ValidM
 
 - Interested in connecting with fellow AI model risk practitioners? Join our [Community Slack](https://docs.validmind.ai/about/contributing/join-community.html)!
 
-- For more information about ValidMind's open source tests and Jupyter notebooks, read the [ValidMind Library docs](https://docs.validmind.ai/developer/get-started-developer-framework.html).
+- For more information about ValidMind's open source tests and Jupyter Notebooks, read the [ValidMind Library docs](https://docs.validmind.ai/developer/get-started-developer-framework.html).
 
 ## Getting started
 

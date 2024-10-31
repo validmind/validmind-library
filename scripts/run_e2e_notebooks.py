@@ -34,36 +34,29 @@ import papermill as pm
 
 dotenv.load_dotenv()
 
-DEFAULT_PROJECT_ID = os.getenv(
-    "NOTEBOOK_RUNNER_DEFAULT_PROJECT_ID", "cltnl29bz00051omgwepjgu1r"
+DEFAULT_MODEL_CUID = os.getenv(
+    "NOTEBOOK_RUNNER_DEFAULT_MODEL", "cltnl28x600001omg9wu8wfty"
 )  # Demo Account Dev Customer Churn Model
 
 NOTEBOOKS_TO_RUN = [
-    {
-        "path": "notebooks/code_samples/quickstart_customer_churn_full_suite.ipynb",
-        "project": "cltnl29bz00051omgwepjgu1r",  # Demo Account Dev Customer Churn Model
-    },
-    {
-        "path": "notebooks/code_samples/time_series/quickstart_time_series_full_suite.ipynb",
-        "project": "cltnl8c7v001j1omgyzmjrzhj",  # Demo Account Dev Time-Series Model
-    },
-    {
-        "path": "notebooks/code_samples/regression/quickstart_regression_full_suite.ipynb",
-        "project": "cltnl7t6t000x1omg706sdv0j",  # Demo Account Dev Regression Model
-    },
+    "notebooks/code_samples/quickstart_customer_churn_full_suite.ipynb",
+    "notebooks/code_samples/time_series/quickstart_time_series_full_suite.ipynb",
+    "notebooks/code_samples/regression/quickstart_regression_full_suite.ipynb",
     "notebooks/how_to/run_unit_metrics.ipynb",
     "notebooks/code_samples/custom_tests/integrate_external_test_providers.ipynb",
     "notebooks/code_samples/custom_tests/implement_custom_tests.ipynb",
 ]
 
 INIT_CELL_CODE = """
+import os
+os.environ["VALIDMIND_LLM_DESCRIPTIONS_ENABLED"] = "0"
 import validmind as vm
 
 vm.init(
   api_host = "{api_host}",
   api_key = "{api_key}",
   api_secret = "{api_secret}",
-  project = "{project_id}"
+  model = "{model}"
 )
 
 
@@ -85,22 +78,39 @@ logger.info("Site-packages path: " + str(site.getsitepackages()))
 @click.option(
     "--kernel", default="python3", help="Kernel to use when executing notebooks."
 )
-def main(kernel):
+@click.option(
+    "--log-output",
+    is_flag=True,
+    default=False,
+    help="Log the output of the notebook to the console.",
+)
+@click.option(
+    "--progress-bar",
+    is_flag=True,
+    default=True,
+    help="Show the progress bar when executing notebooks.",
+)
+def main(kernel, log_output=False, progress_bar=True):
     """Run notebooks from the specified directory for end-to-end testing."""
     for notebook_file in NOTEBOOKS_TO_RUN:
         if isinstance(notebook_file, dict):
             notebook_path = os.path.join(os.getcwd(), notebook_file["path"])
-            project_id = notebook_file["project"]
+            model = notebook_file["model"]
         else:
             notebook_path = os.path.join(os.getcwd(), notebook_file)
-            project_id = DEFAULT_PROJECT_ID
+            model = DEFAULT_MODEL_CUID
 
         backup_notebook(notebook_path)
 
         try:
-            update_vm_init_cell(notebook_path, project_id)
+            update_vm_init_cell(notebook_path, model)
             click.echo(f"\n -------- Executing {notebook_path} ---------- \n")
-            run_notebook(notebook_path, kernel)
+            run_notebook(
+                notebook_path=notebook_path,
+                kernel_name=kernel,
+                log_output=log_output,
+                progress_bar=progress_bar,
+            )
             click.echo(f" -------- Finished executing {notebook_path} ---------- \n")
         except Exception as e:
             click.echo(f"Error running {notebook_path}: {e}")
@@ -111,7 +121,7 @@ def main(kernel):
         restore_notebook(notebook_path)
 
 
-def run_notebook(notebook_path, kernel_name):
+def run_notebook(notebook_path, kernel_name, log_output=False, progress_bar=True):
     output_path = notebook_path.replace(".ipynb", ".out.ipynb")
 
     is_gh_actions = os.getenv("GITHUB_ACTIONS") == "true"
@@ -120,8 +130,8 @@ def run_notebook(notebook_path, kernel_name):
         input_path=notebook_path,
         output_path=output_path,
         kernel_name=kernel_name,
-        log_output=is_gh_actions,
-        progress_bar=(not is_gh_actions),
+        log_output=log_output or is_gh_actions,
+        progress_bar=progress_bar or (not is_gh_actions and not log_output),
         cwd=os.path.dirname(notebook_path),
     )
 
@@ -129,7 +139,7 @@ def run_notebook(notebook_path, kernel_name):
     os.remove(output_path)
 
 
-def update_vm_init_cell(notebook_path, project_id):
+def update_vm_init_cell(notebook_path, model):
     api_host = os.getenv(
         "NOTEBOOK_RUNNER_API_HOST", "https://api.dev.vm.validmind.ai/api/v1/tracking"
     )
@@ -140,7 +150,7 @@ def update_vm_init_cell(notebook_path, project_id):
         api_host=api_host,
         api_key=api_key,
         api_secret=api_secret,
-        project_id=project_id,
+        model=model,
     )
 
     with open(notebook_path, "r") as f:
