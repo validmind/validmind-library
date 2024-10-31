@@ -88,6 +88,10 @@ def list_tests(
     Returns:
         list or pandas.DataFrame: A list of all tests or a formatted table.
     """
+    # tests = {
+    #     test_id: load_test(test_id, reload=True)
+    #     for test_id in test_store.get_test_ids()
+    # }
     tests = {}
     for test_id in test_store.get_test_ids():
         try:

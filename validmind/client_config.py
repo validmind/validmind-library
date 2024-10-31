@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 """
-Central class to track configuration of the developer framework
+Central class to track configuration of the library
 client against the ValidMind API
 """
 
@@ -17,7 +17,6 @@ class ClientConfig:
     when initializing the API client.
     """
 
-    project: object
     model: object
     feature_flags: dict
     document_type: str
@@ -42,7 +41,6 @@ class ClientConfig:
 
 
 client_config = ClientConfig(
-    project=None,
     model=None,
     feature_flags={},
     document_type="model_documentation",

@@ -37,11 +37,11 @@ class Context:
         pass
 
     def load(self, input_data):
-        # this task can accept a dict or a test result object from the dev framework
+        # this task can accept a dict or a test result object from the library
         if isinstance(input_data, dict):
             return input_data
 
-        # we are likely running outside of the dev framework and need to convert
+        # we are likely running outside of the library and need to convert
         # the test result object to a dictionary
         test_result = input_data
 

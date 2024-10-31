@@ -100,7 +100,6 @@ def AnswerCorrectness(
     }
     ```
     """
-
     warnings.filterwarnings(
         "ignore",
         category=FutureWarning,

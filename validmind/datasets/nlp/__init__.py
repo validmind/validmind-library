@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 """
-Example datasets that can be used with the developer framework.
+Example datasets that can be used with the library.
 """
 
 __all__ = [
