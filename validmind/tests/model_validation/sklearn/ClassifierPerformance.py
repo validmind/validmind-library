@@ -67,6 +67,7 @@ class ClassifierPerformance(Metric):
         "multiclass_classification",
         "model_performance",
     ]
+    default_params = {"average": "macro"}
 
     def summary(self, metric_value: dict):
         """
@@ -134,11 +135,13 @@ class ClassifierPerformance(Metric):
         if len(np.unique(y_true)) > 2:
             y_pred = self.inputs.dataset.y_pred(self.inputs.model)
             y_true = y_true.astype(y_pred.dtype)
-            roc_auc = multiclass_roc_auc_score(y_true, y_pred)
+            roc_auc = multiclass_roc_auc_score(
+                y_true, y_pred, average=self.params["average"]
+            )
         else:
             y_prob = self.inputs.dataset.y_prob(self.inputs.model)
             y_true = y_true.astype(y_prob.dtype).flatten()
-            roc_auc = roc_auc_score(y_true, y_prob)
+            roc_auc = roc_auc_score(y_true, y_prob, average=self.params["average"])
 
         report["roc_auc"] = roc_auc
 

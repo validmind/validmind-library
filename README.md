@@ -1,24 +1,28 @@
-# ValidMind Developer Framework
+# ValidMind Library
+
+<!-- TODO: put back in when workflows are working properly -->
+<!-- [![Code Quality](https://github.com/validmind/developer-framework/actions/workflows/python.yaml/badge.svg)](https://github.com/validmind/developer-framework/actions/workflows/python.yaml)
+[![Integration Tests](https://github.com/validmind/developer-framework/actions/workflows/integration.yaml/badge.svg)](https://github.com/validmind/developer-framework/actions/workflows/integration.yaml) -->
 
 ![ValidMind logo](images/ValidMind-logo-color.svg "ValidMind logo")
 
-ValidMind's Developer Framework is a library of developer tools and methods designed to run validation tests and automate the documentation of your models. The Developer Framework provides a rich suite of documentation tools and test suites, from documenting descriptions of your dataset to testing your models for weak spots and overfit areas.
+ValidMind's Library contains a suite of developer tools and methods designed to run validation tests and automate the documentation of your models. The Library provides a rich suite of documentation tools and test suites, from documenting descriptions of your dataset to testing your models for weak spots and overfit areas.
 
-The Developer Framework includes the Python client library, which is designed to be model agnostic. If your model is built in Python, ValidMind's Python library will provide all the standard functionality without requiring your developers to rewrite any functions.
+The Library includes the Python client library, which is designed to be model agnostic. If your model is built in Python, ValidMind's Python library will provide all the standard functionality without requiring your developers to rewrite any functions.
 
-## Contributing to the ValidMind Developer Framework
+## Contributing to the ValidMind Library
 
-We believe in the power of collaboration and welcome contributions to the ValidMind Developer Framework. If you've noticed a bug, have a feature request, or want to contribute a test, please create a pull request or submit an issue and refer to the [contributing guide](README.md#how-to-contribute) below.
+We believe in the power of collaboration and welcome contributions to the ValidMind Library. If you've noticed a bug, have a feature request, or want to contribute a test, please create a pull request or submit an issue and refer to the [contributing guide](README.md#how-to-contribute) below.
 
 - Interested in connecting with fellow AI model risk practitioners? Join our [Community Slack](https://docs.validmind.ai/about/contributing/join-community.html)!
 
-- For more information about ValidMind's open source tests and Jupyter notebooks, read the [Developer Framework docs](https://docs.validmind.ai/developer/get-started-developer-framework.html).
+- For more information about ValidMind's open source tests and Jupyter notebooks, read the [Library docs](https://docs.validmind.ai/developer/get-started-developer-framework.html).
 
 ## Getting started
 
 ### Install from PyPI
 
-To install the ValidMind Developer Framework and all optional dependencies, run:
+To install the ValidMind Library and all optional dependencies, run:
 
 ```bash
 pip install validmind[all]
@@ -74,7 +78,7 @@ This will install the dependencies and git hooks for the project.
 a new kernel with Jupyter:
 
 ```bash
-poetry run python -m ipykernel install --user --name dev-framework --display-name "Developer Framework"
+poetry run python -m ipykernel install --user --name dev-framework --display-name "Library"
 ```
 
 ### Installing LLM validation dependencies
@@ -87,7 +91,7 @@ poetry install --extras llm
 
 ### Installing R dependencies
 
-If you want to use the R support that is provided by the ValidMind Developer Framework, you must have R installed on your machine. You can download R from <https://cran.r-project.org/>. On a Mac, you can install R using Homebrew:
+If you want to use the R support that is provided by the ValidMind Library, you must have R installed on your machine. You can download R from <https://cran.r-project.org/>. On a Mac, you can install R using Homebrew:
 
 ```bash
 brew install r
