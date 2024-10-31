@@ -306,7 +306,7 @@ class TestResultWrapper(ResultWrapper):
             f"The following columns are present in the table with matching row counts: {sensitive_columns}"
         )
 
-    def to_widget(self):
+    def to_widget(self):  # noqa
         if self.metric and self.metric.key == "dataset_description":
             return ""
 

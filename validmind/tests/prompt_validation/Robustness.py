@@ -33,7 +33,7 @@ Example:
 User-provided prompt:
 ```
 Analyse the following sentence and output its sentiment:
-\{sentence\}
+\\{sentence\\}
 ```
 
 Your response (generated inputs):
