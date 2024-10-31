@@ -78,7 +78,7 @@ This will install the dependencies and git hooks for the project.
 a new kernel with Jupyter:
 
 ```bash
-poetry run python -m ipykernel install --user --name dev-framework --display-name "ValidMind Library"
+poetry run python -m ipykernel install --user --name validmind --display-name "ValidMind Library"
 ```
 
 ### Installing LLM validation dependencies
