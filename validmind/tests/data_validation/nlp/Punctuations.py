@@ -8,15 +8,24 @@ Metrics functions for any Pandas-compatible datasets
 
 import string
 from collections import defaultdict
-from dataclasses import dataclass
 
 import matplotlib.pyplot as plt
 
-from validmind.vm_models import Figure, Metric, VMDataset
+from validmind import tags, tasks
+from validmind.vm_models import VMDataset
 
 
-@dataclass
-class Punctuations(Metric):
+def create_corpus(df, text_column):
+    corpus = []
+    for x in df[text_column].str.split():
+        for i in x:
+            corpus.append(i)
+        return corpus
+
+
+@tags("nlp", "text_data", "frequency_analysis", "visualization")
+@tasks("text_classification", "text_summarization")
+def Punctuations(dataset: VMDataset):
     """
     Analyzes and visualizes the frequency distribution of punctuation usage in a given text dataset.
 
@@ -53,45 +62,18 @@ class Punctuations(Metric):
     - Less effective with languages that use non-standard or different punctuation.
     - Visualization may lack interpretability when there are many unique punctuation marks in the dataset.
     """
+    text_column = dataset.text_column
+    corpus = create_corpus(dataset.df, text_column=text_column)
 
-    name = "punctuations"
-    required_inputs = ["dataset"]
-    tasks = ["text_classification", "text_summarization"]
-    tags = ["nlp", "text_data", "visualization", "frequency_analysis"]
+    special = string.punctuation
 
-    def run(self):
-        # Can only run this test if we have a Dataset object
-        if not isinstance(self.inputs.dataset, VMDataset):
-            raise ValueError("Punctuations requires a validmind Dataset object")
+    dic = defaultdict(int, {key: 0 for key in special})
+    for i in corpus:
+        if i in special:
+            dic[i] += 1
 
-        def create_corpus(df, text_column):
-            corpus = []
-            for x in df[text_column].str.split():
-                for i in x:
-                    corpus.append(i)
-            return corpus
+    fig = plt.figure()
+    x, y = zip(*dic.items())
+    plt.bar(x, y, color="#17C37B")
 
-        text_column = self.inputs.dataset.text_column
-        corpus = create_corpus(self.inputs.dataset.df, text_column=text_column)
-
-        special = string.punctuation
-        dic = defaultdict(int, {key: 0 for key in special})
-        for i in corpus:
-            if i in special:
-                dic[i] += 1
-        figures = []
-        # if dic:
-        fig = plt.figure()
-        x, y = zip(*dic.items())
-        plt.bar(x, y, color="#17C37B")
-        figures.append(
-            Figure(
-                for_object=self,
-                key=self.key,
-                figure=fig,
-            )
-        )
-        # Do this if you want to prevent the figure from being displayed
-        plt.close("all")
-
-        return self.cache_results(figures=figures)
+    return fig
