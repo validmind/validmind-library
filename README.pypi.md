@@ -6,7 +6,9 @@ Built to be model agnostic, it works seamlessly with any Python model without re
 
 It includes a suite of rich documentation and model testing capabilities - from dataset descriptions to identifying model weak spots and overfit areas. Through this library, you can automate documentation generation by feeding artifacts and test results to the ValidMind platform.
 
-## Installation
+## Getting started
+
+### Install from PyPI
 
 To install the library and all optional dependencies, run:
 
@@ -14,35 +16,33 @@ To install the library and all optional dependencies, run:
 pip install validmind[all]
 ```
 
-To install the library without optional dependencies (core functionality only), run:
+To just install the core functionality without optional dependencies (some tests and models may not work), run:
 
 ```bash
 pip install validmind
 ```
 
-### Extra dependencies
+#### Extra dependencies
 
-The library has optional dependencies that can be installed separately to support additional model types and tests.
-
-- **LLM Support**: To be able to run tests for Large Language Models (LLMs), install the `llm` extra:
+- **Install with LLM Support**
 
     ```bash
     pip install validmind[llm]
     ```
 
-- **PyTorch Models**: To use pytorch models with the library, install the `torch` extra:
-
-    ```bash
-    pip install validmind[torch]
-    ```
-
-- **Hugging Face Transformers**: To use Hugging Face Transformers models with the library, install the `transformers` extra:
+- **Install with Hugging Face `transformers` support**
 
     ```bash
     pip install validmind[transformers]
     ```
 
-- **R Models**: To use R models with the library, install the `r` extra:
+- **Install with PyTorch support**
+
+    ```bash
+    pip install validmind[pytorch]
+    ```
+
+- **Install with R support (requires R to be installed)**
 
     ```bash
     pip install validmind[r-support]

@@ -6,9 +6,11 @@
 
 ![ValidMind logo](images/ValidMind-logo-color.svg "ValidMind logo")
 
-ValidMind's Library contains a suite of developer tools and methods designed to run validation tests and automate the documentation of your models. The Library provides a rich suite of documentation tools and test suites, from documenting descriptions of your dataset to testing your models for weak spots and overfit areas.
+ValidMind's Python library automates the documentation and validation of your models through a comprehensive suite of developer tools and methods.
 
-The Library includes the Python client library, which is designed to be model agnostic. If your model is built in Python, ValidMind's Python library will provide all the standard functionality without requiring your developers to rewrite any functions.
+Built to be model agnostic, it works seamlessly with any Python model without requiring developers to rewrite existing code.
+
+It includes a suite of rich documentation and model testing capabilities - from dataset descriptions to identifying model weak spots and overfit areas. Through this library, you can automate documentation generation by feeding artifacts and test results to the ValidMind platform.
 
 ## Contributing to the ValidMind Library
 
@@ -22,7 +24,7 @@ We believe in the power of collaboration and welcome contributions to the ValidM
 
 ### Install from PyPI
 
-To install the ValidMind Library and all optional dependencies, run:
+To install the library and all optional dependencies, run:
 
 ```bash
 pip install validmind[all]
