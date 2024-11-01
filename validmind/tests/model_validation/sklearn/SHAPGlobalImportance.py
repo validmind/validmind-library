@@ -271,5 +271,6 @@ def _select_shap_values(shap_values, class_of_interest=None):
                 )
     else:
         # For regression, return the SHAP values as they are
-        logger.info("Regression model detected: returning SHAP values as-is.")
+        # TODO: shap_values is always an array of all predictions, how is the if above supposed to work?
+        # logger.info("Regression model detected: returning SHAP values as-is.")
         return shap_values
