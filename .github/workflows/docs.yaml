@@ -12,15 +12,15 @@ on:
   workflow_dispatch:
     inputs:
       note:
-        description: "Provide a description of the changes"
+        description: 'Provide a description of the changes'
         required: true
-        default: "Update docs"
+        default: 'Update docs'
 
 permissions:
   contents: write
 
 jobs:
-  build:
+  docs:
     runs-on: ubuntu-latest
 
     steps:
@@ -34,17 +34,15 @@ jobs:
       - name: Set up Python 3.11
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
-          cache: "poetry"
+          python-version: '3.11'
+          cache: 'poetry'
 
       - name: Install Dependencies
-        run: poetry env use python3.11 && poetry install --all-extras
-
-      - name: Install dependencies for bias and fairness tests
-        run: poetry run pip install aequitas fairlearn vl-convert-python
-
-      - name: Install PyTorch CPU
-        run: poetry run pip install torch --extra-index-url https://download.pytorch.org/whl/cpu
+        run: |
+          poetry env use python3.11
+          poetry install -E huggingface -E llm
+          poetry run pip install torch==2.0.1 --extra-index-url https://download.pytorch.org/whl/cpu
+          poetry run pip install aequitas fairlearn vl-convert-python
 
       - name: Generate Docs
         run: make docs
@@ -53,5 +51,5 @@ jobs:
         uses: EndBug/add-and-commit@v9
         with:
           default_author: github_actions
-          message: "Generate docs"
-          add: "docs/_build/"
+          message: 'Generate docs'
+          add: 'docs/_build/'

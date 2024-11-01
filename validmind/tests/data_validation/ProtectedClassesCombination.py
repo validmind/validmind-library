@@ -7,18 +7,26 @@ import sys
 import pandas as pd
 import plotly.graph_objects as go
 import plotly.subplots as sp
-from fairlearn.metrics import (
-    MetricFrame,
-    count,
-    demographic_parity_ratio,
-    equalized_odds_ratio,
-    false_positive_rate,
-    selection_rate,
-    true_positive_rate,
-)
 
 from validmind import tags, tasks
+from validmind.errors import MissingDependencyError
 from validmind.logging import get_logger
+
+try:
+    from fairlearn.metrics import (
+        MetricFrame,
+        count,
+        demographic_parity_ratio,
+        equalized_odds_ratio,
+        false_positive_rate,
+        selection_rate,
+        true_positive_rate,
+    )
+except ImportError as e:
+    raise MissingDependencyError(
+        "Missing required package `fairlearn` for ProtectedClassesCombination.",
+        required_dependencies=["fairlearn"],
+    ) from e
 
 logger = get_logger(__name__)
 

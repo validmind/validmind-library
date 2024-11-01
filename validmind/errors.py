@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 """
-This module contains all the custom errors that are used in the developer framework.
+This module contains all the custom errors that are used in the library.
 
 The following base errors are defined for others:
 - BaseError
@@ -207,6 +207,23 @@ class MissingRequiredTestInputError(BaseError):
     pass
 
 
+class MissingDependencyError(BaseError):
+    """
+    When a required dependency is missing.
+    """
+
+    def __init__(self, message="", required_dependencies=None, extra=None):
+        """
+        Args:
+            message (str): The error message.
+            required_dependencies (list): A list of required dependencies.
+            extra (str): The particular validmind `extra` that will install the missing dependencies.
+        """
+        super().__init__(message)
+        self.required_dependencies = required_dependencies or []
+        self.extra = extra
+
+
 class MissingRExtrasError(BaseError):
     """
     When the R extras have not been installed.
@@ -235,11 +252,11 @@ class MissingTextContentsError(APIRequestError):
     pass
 
 
-class MissingProjectIdError(BaseError):
+class MissingModelIdError(BaseError):
     def description(self, *args, **kwargs):
         return (
             self.message
-            or "Project ID must be provided either as an environment variable or as an argument to init."
+            or "Model ID must be provided either as an environment variable or as an argument to init."
         )
 
 

@@ -7,19 +7,27 @@ import sys
 
 import matplotlib.pyplot as plt
 import pandas as pd
-from fairlearn.metrics import (
-    MetricFrame,
-    count,
-    demographic_parity_ratio,
-    equalized_odds_ratio,
-    false_negative_rate,
-    false_positive_rate,
-    true_positive_rate,
-)
-from fairlearn.postprocessing import ThresholdOptimizer, plot_threshold_optimizer
 
 from validmind import tags, tasks
+from validmind.errors import MissingDependencyError
 from validmind.logging import get_logger
+
+try:
+    from fairlearn.metrics import (
+        MetricFrame,
+        count,
+        demographic_parity_ratio,
+        equalized_odds_ratio,
+        false_negative_rate,
+        false_positive_rate,
+        true_positive_rate,
+    )
+    from fairlearn.postprocessing import ThresholdOptimizer, plot_threshold_optimizer
+except ImportError as e:
+    raise MissingDependencyError(
+        "Missing required package `fairlearn` for ProtectedClassesThresholdOptimizer.",
+        required_dependencies=["fairlearn"],
+    ) from e
 
 logger = get_logger(__name__)
 
