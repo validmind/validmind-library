@@ -341,10 +341,10 @@ class WeakspotsDiagnosis(ThresholdTest):
         # barplot.legend(handles=handles[:-1], labels=labels, loc="upper right")
         barplot.legend(
             handles=handles[:-1],
-            labels=labels,
+            labels=labels[:-1],
             loc="upper center",
             bbox_to_anchor=(0.5, 0.1),
-            ncol=len(handles),
+            ncol=len(handles) - 1,
         )
 
         # Do this if you want to prevent the figure from being displayed
