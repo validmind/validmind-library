@@ -57,8 +57,8 @@ tqdm = "*"
 transformers = {version = "^4.32.0", optional = true}
 xgboost = ">=1.5.2,<3"
 ydata-profiling = "*"
-yfinance = "^0.2.48"
 quantlib = "^1.36"
+yfinance = "^0.2.48"
 
 [tool.poetry.group.dev.dependencies]
 black = "^22.1.0"
