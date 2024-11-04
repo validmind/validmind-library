@@ -2,20 +2,21 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from dataclasses import dataclass
-
 import pandas as pd
 from arch.unitroot import DFGLS
 from numpy.linalg import LinAlgError
 
+from validmind import tags, tasks
+from validmind.errors import SkipTestError
 from validmind.logging import get_logger
-from validmind.vm_models import Metric, ResultSummary, ResultTable, ResultTableMetadata
+from validmind.vm_models import VMDataset
 
 logger = get_logger(__name__)
 
 
-@dataclass
-class DFGLSArch(Metric):
+@tags("time_series_data", "forecasting", "unit_root_test")
+@tasks("regression")
+def DickeyFullerGLS(dataset: VMDataset):
     """
     Assesses stationarity in time series data using the Dickey-Fuller GLS test to determine the order of integration.
 
@@ -56,77 +57,44 @@ class DFGLSArch(Metric):
     - The test also presents challenges when dealing with shorter time series data or volatile data, not producing
     reliable results in these cases.
     """
+    df = dataset.df.dropna()
 
-    name = "dickey_fuller_gls"
-    required_inputs = ["dataset"]
-    tasks = ["regression"]
-    tags = ["time_series_data", "forecasting", "unit_root_test"]
-
-    def run(self):
-        """
-        Calculates Dickey-Fuller GLS metric for each of the dataset features
-        """
-        dataset = self.inputs.dataset.df
-
-        # Check if the dataset is a time series
-        if not isinstance(dataset.index, (pd.DatetimeIndex, pd.PeriodIndex)):
-            raise ValueError(
-                "Dataset index must be a datetime or period index for time series analysis."
-            )
-
-        # Preprocessing: Drop rows with any NaN values
-        if dataset.isnull().values.any():
-            logger.warning(
-                "Dataset contains missing values. Rows with NaNs will be dropped."
-            )
-            dataset = dataset.dropna()
-
-        # Convert to numeric and handle non-numeric data
-        dataset = dataset.apply(pd.to_numeric, errors="coerce")
-
-        # Initialize a list to store DFGLS results
-        dfgls_values = []
-
-        for col in dataset.columns:
-            try:
-                dfgls_out = DFGLS(dataset[col].values)
-                dfgls_values.append(
-                    {
-                        "Variable": col,
-                        "stat": dfgls_out.stat,
-                        "pvalue": dfgls_out.pvalue,
-                        "usedlag": dfgls_out.lags,
-                        "nobs": dfgls_out.nobs,
-                    }
-                )
-            except LinAlgError as e:
-                logger.error(
-                    f"SVD did not converge while processing column '{col}'. This could be due to numerical instability or multicollinearity. Error details: {e}"
-                )
-                dfgls_values.append(
-                    {
-                        "Variable": col,
-                        "stat": None,
-                        "pvalue": None,
-                        "usedlag": None,
-                        "nobs": None,
-                        "error": str(e),
-                    }
-                )
-
-        return self.cache_results({"dfgls_results": dfgls_values})
-
-    def summary(self, metric_value):
-        """
-        Build a table for summarizing the DFGLS results
-        """
-        dfgls_results = metric_value["dfgls_results"]
-
-        return ResultSummary(
-            results=[
-                ResultTable(
-                    data=dfgls_results,
-                    metadata=ResultTableMetadata(title="DFGLS Test Results"),
-                )
-            ]
+    if not isinstance(df.index, (pd.DatetimeIndex, pd.PeriodIndex)):
+        raise SkipTestError(
+            "Dataset index must be a datetime or period index for time series analysis."
         )
+
+    df = df.apply(pd.to_numeric, errors="coerce")
+
+    dfgls_values = []
+
+    for col in df.columns:
+        try:
+            dfgls_out = DFGLS(df[col].values)
+            dfgls_values.append(
+                {
+                    "Variable": col,
+                    "stat": dfgls_out.stat,
+                    "pvalue": dfgls_out.pvalue,
+                    "usedlag": dfgls_out.lags,
+                    "nobs": dfgls_out.nobs,
+                }
+            )
+        except LinAlgError as e:
+            logger.error(
+                f"SVD did not converge while processing column '{col}'. This could be due to numerical instability or multicollinearity. Error details: {e}"
+            )
+            dfgls_values.append(
+                {
+                    "Variable": col,
+                    "stat": None,
+                    "pvalue": None,
+                    "usedlag": None,
+                    "nobs": None,
+                    "error": str(e),
+                }
+            )
+
+    return {
+        "DFGLS Test Results": dfgls_values,
+    }

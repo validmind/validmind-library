@@ -6,10 +6,13 @@ import pandas as pd
 import plotly.graph_objects as go
 from statsmodels.tsa.stattools import acf, pacf
 
-from validmind.vm_models import Figure, Metric
+from validmind import tags, tasks
+from validmind.vm_models import VMDataset
 
 
-class ACFandPACFPlot(Metric):
+@tags("time_series_data", "forecasting", "statistical_test", "visualization")
+@tasks("regression")
+def ACFandPACFPlot(dataset: VMDataset):
     """
     Analyzes time series data using Autocorrelation Function (ACF) and Partial Autocorrelation Function (PACF) plots to
     reveal trends and correlations.
@@ -49,74 +52,42 @@ class ACFandPACFPlot(Metric):
     - The plots can only represent linear correlations and fail to capture any non-linear relationships within the data.
     - The plots might be difficult for non-experts to interpret and should not replace more advanced analyses.
     """
+    if not pd.api.types.is_datetime64_any_dtype(dataset.df.index):
+        raise ValueError("Index must be a datetime type")
 
-    name = "acf_pacf_plot"
-    required_inputs = ["dataset"]
-    tasks = ["regression"]
-    tags = [
-        "time_series_data",
-        "forecasting",
-        "statistical_test",
-        "visualization",
-    ]
+    columns = list(dataset.df.columns)
+    df = dataset.df.dropna()
 
-    def run(self):
-        # Check if index is datetime
-        if not pd.api.types.is_datetime64_any_dtype(self.inputs.dataset.df.index):
-            raise ValueError("Index must be a datetime type")
+    if not set(columns).issubset(set(df.columns)):
+        raise ValueError("Provided 'columns' must exist in the dataset")
 
-        columns = list(self.inputs.dataset.df.columns)
+    figures = []
+    for col in df.columns:
+        series = df[col]
+        max_lags = min(40, len(series) // 2 - 1)
 
-        df = self.inputs.dataset.df.dropna()
+        # Create ACF plot using Plotly
+        acf_values = acf(series, nlags=max_lags)
+        acf_fig = go.Figure()
+        acf_fig.add_trace(go.Bar(x=list(range(len(acf_values))), y=acf_values))
+        acf_fig.update_layout(
+            title=f"ACF for {col}",
+            xaxis_title="Lag",
+            yaxis_title="ACF",
+            font=dict(size=18),
+        )
+        figures.append(acf_fig)
 
-        if not set(columns).issubset(set(df.columns)):
-            raise ValueError("Provided 'columns' must exist in the dataset")
+        # Create PACF plot using Plotly
+        pacf_values = pacf(series, nlags=max_lags)
+        pacf_fig = go.Figure()
+        pacf_fig.add_trace(go.Bar(x=list(range(len(pacf_values))), y=pacf_values))
+        pacf_fig.update_layout(
+            title=f"PACF for {col}",
+            xaxis_title="Lag",
+            yaxis_title="PACF",
+            font=dict(size=18),
+        )
+        figures.append(pacf_fig)
 
-        figures = []
-
-        for col in df.columns:
-            series = df[col]
-
-            # Calculate the maximum number of lags based on the size of the dataset
-            max_lags = min(40, len(series) // 2 - 1)
-
-            # Calculate ACF and PACF values
-            acf_values = acf(series, nlags=max_lags)
-            pacf_values = pacf(series, nlags=max_lags)
-
-            # Create ACF plot using Plotly
-            acf_fig = go.Figure()
-            acf_fig.add_trace(go.Bar(x=list(range(len(acf_values))), y=acf_values))
-            acf_fig.update_layout(
-                title=f"ACF for {col}",
-                xaxis_title="Lag",
-                yaxis_title="ACF",
-                font=dict(size=18),
-            )
-
-            # Create PACF plot using Plotly
-            pacf_fig = go.Figure()
-            pacf_fig.add_trace(go.Bar(x=list(range(len(pacf_values))), y=pacf_values))
-            pacf_fig.update_layout(
-                title=f"PACF for {col}",
-                xaxis_title="Lag",
-                yaxis_title="PACF",
-                font=dict(size=18),
-            )
-
-            figures.append(
-                Figure(
-                    for_object=self,
-                    key=f"{self.key}:{col}_acf",
-                    figure=acf_fig,
-                )
-            )
-            figures.append(
-                Figure(
-                    for_object=self,
-                    key=f"{self.key}:{col}_pacf",
-                    figure=pacf_fig,
-                )
-            )
-
-        return self.cache_results(figures=figures)
+    return tuple(figures)

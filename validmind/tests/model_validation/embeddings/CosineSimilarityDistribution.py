@@ -5,10 +5,13 @@
 import plotly.express as px
 from sklearn.metrics.pairwise import cosine_similarity
 
-from validmind.vm_models import Figure, Metric
+from validmind import tags, tasks
+from validmind.vm_models import VMDataset, VMModel
 
 
-class CosineSimilarityDistribution(Metric):
+@tags("llm", "text_data", "embeddings", "visualization")
+@tasks("feature_extraction")
+def CosineSimilarityDistribution(dataset: VMDataset, model: VMModel):
     """
     Assesses the similarity between predicted text embeddings from a model using a Cosine Similarity distribution
     histogram.
@@ -49,30 +52,9 @@ class CosineSimilarityDistribution(Metric):
     - The output is sensitive to the choice of bin number for the histogram. Different bin numbers could give a
     slightly altered perspective on the distribution of cosine similarity.
     """
-
-    name = "Text Embeddings Cosine Similarity Distribution"
-    required_inputs = ["model", "dataset"]
-    tasks = ["feature_extraction"]
-    tags = ["llm", "text_data", "embeddings", "visualization"]
-
-    def run(self):
-        # Compute cosine similarity
-        similarities = cosine_similarity(self.inputs.dataset.y_pred(self.inputs.model))
-
-        # plot the distribution
-        fig = px.histogram(
-            x=similarities.flatten(),
-            nbins=100,
-            title="Cosine Similarity Distribution",
-            labels={"x": "Cosine Similarity"},
-        )
-
-        return self.cache_results(
-            figures=[
-                Figure(
-                    for_object=self,
-                    key=self.key,
-                    figure=fig,
-                )
-            ],
-        )
+    return px.histogram(
+        x=cosine_similarity(dataset.y_pred(model)).flatten(),
+        nbins=100,
+        title="Cosine Similarity Distribution",
+        labels={"x": "Cosine Similarity"},
+    )
