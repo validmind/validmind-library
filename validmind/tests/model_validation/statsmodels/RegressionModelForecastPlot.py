@@ -76,7 +76,7 @@ def RegressionModelForecastPlot(
     ax.plot(dataset.index, dataset.y, label="Observed")
     ax.plot(dataset.index, dataset.y_pred(model), label="Forecast", color="grey")
 
-    plt.title(f"Forecast vs Observed")
+    plt.title("Forecast vs Observed")
 
     # Set the x-axis limits to zoom in/out
     plt.xlim(start_date, end_date)

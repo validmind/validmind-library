@@ -71,7 +71,7 @@ def RegressionModelForecastPlotLevels(
     # raw data vs forecast
     axs[0].plot(dataset.index, dataset.y, label="Observed", color="grey")
     axs[0].plot(dataset.index, y_pred, label="Forecast")
-    axs[0].set_title(f"Forecast vs Observed")
+    axs[0].set_title("Forecast vs Observed")
     axs[0].legend()
 
     # transformed data
@@ -85,7 +85,7 @@ def RegressionModelForecastPlotLevels(
         color="grey",
     )
     axs[1].plot(dataset.index, y_pred_transformed, label="Forecast")
-    axs[1].set_title(f"Integrated Forecast vs Observed")
+    axs[1].set_title("Integrated Forecast vs Observed")
     axs[1].legend()
 
     return fig

@@ -3,7 +3,6 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 import warnings
-from dataclasses import dataclass
 
 import matplotlib.pyplot as plt
 import numpy as np
