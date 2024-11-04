@@ -5,10 +5,44 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 
-from validmind.vm_models import Figure, Metric
+from validmind import tags, tasks
+from validmind.errors import SkipTestError
+from validmind.vm_models import VMDataset
 
 
-class RollingStatsPlot(Metric):
+def plot_rolling_statistics(df, col, window_size):
+    rolling_mean = df[col].rolling(window=window_size).mean()
+    rolling_std = df[col].rolling(window=window_size).std()
+
+    fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True)
+
+    ax1.plot(rolling_mean)
+    ax1.set_title(
+        f"Rolling Mean for {col}",
+        fontsize=20,
+        weight="bold",
+    )
+    ax1.set_ylabel("")
+    ax1.tick_params(axis="both", labelsize=18)
+    ax1.legend()
+
+    ax2.plot(rolling_std, label="Rolling Standard Deviation", color="orange")
+    ax2.set_title(
+        f"Rolling STD for {col}",
+        fontsize=20,
+        weight="bold",
+    )
+    ax2.set_xlabel("")
+    ax2.set_ylabel("")
+    ax2.tick_params(axis="both", labelsize=18)
+    ax2.legend()
+
+    return fig
+
+
+@tags("time_series_data", "visualization", "stationarity")
+@tasks("regression")
+def RollingStatsPlot(dataset: VMDataset, window_size: int = 12):
     """
     Evaluates the stationarity of time series data by plotting its rolling mean and standard deviation over a specified
     window.
@@ -58,81 +92,16 @@ class RollingStatsPlot(Metric):
     such as through statistical tests. Therefore, the interpretation is subjective and depends heavily on modeler
     discretion.
     """
+    if not pd.api.types.is_datetime64_any_dtype(dataset.df.index):
+        raise SkipTestError("Index must be a datetime type")
 
-    name = "rolling_stats_plot"
-    required_inputs = ["dataset"]
-    default_params = {"window_size": 12}
-    tasks = ["regression"]
-    tags = ["time_series_data", "visualization", "stationarity"]
-
-    def plot_rolling_statistics(self, col, window_size=12):
-        """
-        Plot rolling mean and rolling standard deviation in different subplots for a given series.
-        :param series: Pandas Series with time-series data
-        :param window_size: Window size for the rolling calculations
-        :param ax1: Axis object for the rolling mean plot
-        :param ax2: Axis object for the rolling standard deviation plot
-        """
-        rolling_mean = (
-            self.inputs.dataset.df[col].rolling(window=int(window_size)).mean()
-        )
-        rolling_std = self.inputs.dataset.df[col].rolling(window=int(window_size)).std()
-
-        # Create a new figure and axis objects
-        fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True)
-
-        ax1.plot(rolling_mean)
-
-        ax1.set_title(
-            f"Rolling Mean for {col}",
-            fontsize=20,
-            weight="bold",
-        )
-        ax1.set_ylabel("")
-        ax1.tick_params(axis="both", labelsize=18)
-        ax1.legend()
-
-        ax2.plot(rolling_std, label="Rolling Standard Deviation", color="orange")
-        ax2.set_title(
-            f"Rolling STD for {col}",
-            fontsize=20,
-            weight="bold",
-        )
-        ax2.set_xlabel("")
-        ax2.set_ylabel("")
-        ax2.tick_params(axis="both", labelsize=18)
-        ax2.legend()
-
-        return fig
-
-    def run(self):
-        if "window_size" not in self.params:
-            raise ValueError("Window size must be provided in params")
-
-        # Check if index is datetime
-        if not pd.api.types.is_datetime64_any_dtype(self.inputs.dataset.df.index):
-            raise ValueError("Index must be a datetime type")
-
-        window_size = self.params["window_size"]
-        df = self.inputs.dataset.df.dropna()
-
-        if not set(df.columns).issubset(set(df.columns)):
-            raise ValueError("Provided 'columns' must exist in the dataset")
-
-        figures = []
-
-        for col in df.columns:
-            fig = self.plot_rolling_statistics(col, window_size=window_size)
-
-            figures.append(
-                Figure(
-                    for_object=self,
-                    key=f"{self.key}:{col}",
-                    figure=fig,
-                )
+    return tuple(
+        [
+            plot_rolling_statistics(
+                df=dataset.df.dropna(),
+                col=col,
+                window_size=window_size,
             )
-
-            # Do this if you want to prevent the figure from being displayed
-            plt.close("all")
-
-        return self.cache_results(figures=figures)
+            for col in dataset.feature_columns
+        ]
+    )

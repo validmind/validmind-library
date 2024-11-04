@@ -2,16 +2,17 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from dataclasses import dataclass
-
 import pandas as pd
 import scorecardpy as sc
 
-from validmind.vm_models import Metric, ResultSummary, ResultTable, ResultTableMetadata
+from validmind import tags, tasks
+from validmind.errors import SkipTestError
+from validmind.vm_models import VMDataset
 
 
-@dataclass
-class WOEBinTable(Metric):
+@tags("tabular_data", "categorical_data")
+@tasks("classification")
+def WOEBinTable(dataset: VMDataset, breaks_adj: list = None):
     """
     Assesses the Weight of Evidence (WoE) and Information Value (IV) of each feature to evaluate its predictive power
     in a binary classification model.
@@ -26,9 +27,10 @@ class WOEBinTable(Metric):
     ### Test Mechanism
 
     The test uses the `scorecardpy.woebin` method to perform automatic binning of the dataset based on WoE. The method
-    adjusts the cut-off points for binning numeric variables based on the parameter `breaks_adj`. The bins are then
-    used to calculate the WoE and IV values, effectively creating a dataframe that includes the bin boundaries, WoE,
-    and IV values for each feature. A target variable is required in the dataset to perform this analysis.
+    accepts a list of break points for binning numeric variables through the parameter `breaks_adj`. If no breaks are
+    provided, it uses default binning. The bins are then used to calculate the WoE and IV values, effectively creating
+    a dataframe that includes the bin boundaries, WoE, and IV values for each feature. A target variable is required
+    in the dataset to perform this analysis.
 
     ### Signs of High Risk
 
@@ -49,65 +51,22 @@ class WOEBinTable(Metric):
     - The metric does not help in distinguishing whether the observed predictive factor is due to data randomness or a
     true phenomenon.
     """
+    df = dataset.df
 
-    name = "woe_bin_table"
-    required_inputs = ["dataset"]
-    default_params = {"breaks_adj": None}
-    tasks = ["classification"]
-    tags = ["tabular_data", "categorical_data"]
+    non_numeric_cols = df.select_dtypes(exclude=["int64", "float64"]).columns
+    df[non_numeric_cols] = df[non_numeric_cols].astype(str)
 
-    def run(self):
-        target_column = self.inputs.dataset.target_column
-        breaks_adj = self.params["breaks_adj"]
+    try:
+        bins = sc.woebin(df, dataset.target_column, breaks_list=breaks_adj)
+    except Exception as e:
+        raise SkipTestError(f"Error during binning: {e}")
 
-        df = self.inputs.dataset.df
-        print(
-            f"Running with breaks_adj: {breaks_adj}"
-        )  # print the breaks_adj being used
-        bins_df = self.binning_data(df, target_column, breaks_adj)
-
-        return self.cache_results(
-            {
-                "woe_iv": bins_df.to_dict(orient="records"),
-            }
+    return {
+        "Weight of Evidence (WoE) and Information Value (IV)": (
+            pd.concat(bins.values(), keys=bins.keys())
+            .reset_index()
+            .drop(columns=["variable"])
+            .rename(columns={"level_0": "variable"})
+            .assign(bin_number=lambda x: x.groupby("variable").cumcount())
         )
-
-    def binning_data(self, df, y, breaks_adj=None):
-        """
-        This function performs automatic binning using WoE.
-        df: A pandas dataframe
-        y: The target variable in quotes, e.g. 'target'
-        """
-        non_numeric_cols = df.select_dtypes(exclude=["int64", "float64"]).columns
-        df[non_numeric_cols] = df[non_numeric_cols].astype(str)
-
-        try:
-            print(
-                f"Performing binning with breaks_adj: {breaks_adj}"
-            )  # print the breaks_adj being used
-            bins = sc.woebin(df, y, breaks_list=breaks_adj)
-        except Exception as e:
-            print("Error during binning: ")
-            print(e)
-        else:
-            bins_df = pd.concat(bins.values(), keys=bins.keys())
-            bins_df.reset_index(inplace=True)
-            bins_df.drop(columns=["variable"], inplace=True)
-            bins_df.rename(columns={"level_0": "variable"}, inplace=True)
-
-            bins_df["bin_number"] = bins_df.groupby("variable").cumcount()
-
-            return bins_df
-
-    def summary(self, metric_value):
-        summary_woe_iv_table = metric_value["woe_iv"]
-        return ResultSummary(
-            results=[
-                ResultTable(
-                    data=summary_woe_iv_table,
-                    metadata=ResultTableMetadata(
-                        title="Weight of Evidence (WoE) and Information Value (IV)"
-                    ),
-                )
-            ]
-        )
+    }

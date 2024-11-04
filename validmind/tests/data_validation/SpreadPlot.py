@@ -5,10 +5,13 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-from validmind.vm_models import Figure, Metric
+from validmind import tags, tasks
+from validmind.vm_models import VMDataset
 
 
-class SpreadPlot(Metric):
+@tags("time_series_data", "visualization")
+@tasks("regression")
+def SpreadPlot(dataset: VMDataset):
     """
     Assesses potential correlations between pairs of time series variables through visualization to enhance
     understanding of their relationships.
@@ -51,66 +54,34 @@ class SpreadPlot(Metric):
     plots.
     - Might not completely capture intricate non-linear relationships between the variables.
     """
+    df = dataset.df.dropna()
 
-    name = "spread_plot"
-    required_inputs = ["dataset"]
-    tasks = ["regression"]
-    tags = ["time_series_data", "visualization"]
+    # Get all unique pairs of feature columns
+    feature_pairs = [
+        (df.feature_columns[i], df.feature_columns[j])
+        for i in range(len(df.feature_columns))
+        for j in range(i + 1, len(df.feature_columns))
+    ]
 
-    @staticmethod
-    def plot_spread(series1, series2, ax=None):
-        """
-        Plot the spread between two time series variables.
-        :param series1: Pandas Series with time-series data for the first variable
-        :param series2: Pandas Series with time-series data for the second variable
-        :param ax: Axis object for the spread plot
-        """
-        spread = series1 - series2
+    figures = []
 
-        if ax is None:
-            _, ax = plt.subplots()
+    for var1, var2 in feature_pairs:
+        fig, ax = plt.subplots()
+        fig.suptitle(
+            f"Spread between {var1} and {var2}",
+            fontsize=20,
+            weight="bold",
+            y=0.95,
+        )
 
-        sns.lineplot(data=spread, ax=ax)
+        sns.lineplot(
+            data=df[var1] - df[var2],
+            ax=ax,
+        )
 
-        return ax
+        ax.set_xlabel("")
+        ax.tick_params(axis="both", labelsize=18)
 
-    def run(self):
-        df = self.inputs.dataset.df.dropna()
+        figures.append(fig)
 
-        figures = []
-        columns = df.columns
-        num_vars = len(columns)
-
-        for i in range(num_vars):
-            for j in range(i + 1, num_vars):
-                var1 = columns[i]
-                var2 = columns[j]
-
-                series1 = df[var1]
-                series2 = df[var2]
-
-                fig, ax = plt.subplots()
-                fig.suptitle(
-                    f"Spread between {var1} and {var2}",
-                    fontsize=20,
-                    weight="bold",
-                    y=0.95,
-                )
-
-                self.plot_spread(series1, series2, ax=ax)
-
-                ax.set_xlabel("")
-                ax.tick_params(axis="both", labelsize=18)
-
-                # Do this if you want to prevent the figure from being displayed
-                plt.close("all")
-
-                figures.append(
-                    Figure(
-                        for_object=self,
-                        key=f"{self.key}:{var1}_{var2}",
-                        figure=fig,
-                    )
-                )
-
-        return self.cache_results(figures=figures)
+    return tuple(figures)

@@ -81,7 +81,6 @@ TestID = Literal[
     "validmind.model_validation.sklearn.ROCCurve",
     "validmind.model_validation.sklearn.RegressionR2Square",
     "validmind.model_validation.sklearn.RegressionErrors",
-    "validmind.model_validation.sklearn.ClusterPerformance",
     "validmind.model_validation.sklearn.TrainingTestDegradation",
     "validmind.model_validation.sklearn.RegressionErrorsComparison",
     "validmind.model_validation.sklearn.FeatureImportance",

@@ -2,22 +2,24 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from dataclasses import dataclass
-
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 from sklearn.metrics import roc_auc_score
 
+from validmind import tags, tasks
 from validmind.errors import SkipTestError
 from validmind.logging import get_logger
-from validmind.vm_models import Figure, Metric
+from validmind.vm_models import VMDataset, VMModel
 
 logger = get_logger(__name__)
 
 
-@dataclass
-class FeaturesAUC(Metric):
+@tags("feature_importance", "AUC", "visualization")
+@tasks("classification")
+def FeaturesAUC(
+    model: VMModel, dataset: VMDataset, fontsize: int = 12, figure_height: int = 500
+):
     """
     Evaluates the discriminatory power of each individual feature within a binary classification model by calculating
     the Area Under the Curve (AUC) for each feature separately.
@@ -57,73 +59,43 @@ class FeaturesAUC(Metric):
     - This metric is applicable only to binary classification tasks and cannot be directly extended to multiclass
     classification or regression without modifications.
     """
+    x = dataset.x_df()
+    y = dataset.y_df()
 
-    name = "features_auc"
-    required_inputs = ["model", "dataset"]
-    default_params = {
-        "fontsize": 12,
-        "figure_height": 500,
-    }
-    tasks = ["classification"]
-    tags = [
-        "feature_importance",
-        "AUC",
-        "visualization",
-    ]
+    if y.nunique() != 2:
+        raise SkipTestError("FeaturesAUC metric requires a binary target variable.")
 
-    def run(self):
-        dataset = self.inputs.dataset
-        x = dataset.x_df()
-        y = dataset.y_df()
-        n_targets = dataset.df[dataset.target_column].nunique()
+    aucs = pd.DataFrame(index=x.columns, columns=["AUC"])
 
-        if n_targets != 2:
-            raise SkipTestError("FeaturesAUC metric requires a binary target variable.")
+    for column in x.columns:
+        feature_values = x[column]
+        if feature_values.nunique() > 1:
+            aucs.loc[column, "AUC"] = roc_auc_score(y, feature_values)
+        else:
+            # Not enough unique values to calculate AUC
+            aucs.loc[column, "AUC"] = np.nan
 
-        aucs = pd.DataFrame(index=x.columns, columns=["AUC"])
+    sorted_indices = aucs["AUC"].dropna().sort_values(ascending=False).index
 
-        for column in x.columns:
-            feature_values = x[column]
-            if feature_values.nunique() > 1:
-                auc_score = roc_auc_score(y, feature_values)
-                aucs.loc[column, "AUC"] = auc_score
-            else:
-                aucs.loc[
-                    column, "AUC"
-                ] = np.nan  # Not enough unique values to calculate AUC
-
-        # Sorting the AUC scores in descending order
-        sorted_indices = aucs["AUC"].dropna().sort_values(ascending=False).index
-
-        # Plotting the results
-        fig = go.Figure()
-        fig.add_trace(
-            go.Bar(
-                y=[column for column in sorted_indices],
-                x=[aucs.loc[column, "AUC"] for column in sorted_indices],
-                orientation="h",
-            )
+    fig = go.Figure()
+    fig.add_trace(
+        go.Bar(
+            y=[column for column in sorted_indices],
+            x=[aucs.loc[column, "AUC"] for column in sorted_indices],
+            orientation="h",
         )
-        fig.update_layout(
-            title_text="Feature AUC Scores",
-            yaxis=dict(
-                tickmode="linear",
-                dtick=1,
-                tickfont=dict(size=self.params["fontsize"]),
-                title="Features",
-                autorange="reversed",  # Ensure that the highest AUC is at the top
-            ),
-            xaxis=dict(title="AUC"),
-            height=self.params["figure_height"],
-        )
+    )
+    fig.update_layout(
+        title_text="Feature AUC Scores",
+        yaxis=dict(
+            tickmode="linear",
+            dtick=1,
+            tickfont=dict(size=fontsize),
+            title="Features",
+            autorange="reversed",  # Ensure that the highest AUC is at the top
+        ),
+        xaxis=dict(title="AUC"),
+        height=figure_height,
+    )
 
-        return self.cache_results(
-            metric_value=aucs.to_dict(),
-            figures=[
-                Figure(
-                    for_object=self,
-                    key="features_auc",
-                    figure=fig,
-                ),
-            ],
-        )
+    return fig
