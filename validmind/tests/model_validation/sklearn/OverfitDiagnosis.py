@@ -162,10 +162,10 @@ def _plot_overfit_regions(
 
     barplot.legend(
         handles=handles[:-1],
-        labels=labels,
+        labels=labels[:-1],
         loc="upper center",
         bbox_to_anchor=(0.5, 0.1),
-        ncol=len(handles),
+        ncol=len(handles) - 1,
     )
 
     plt.close("all")
