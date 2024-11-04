@@ -11,7 +11,7 @@ from tabulate import tabulate
 from tqdm import tqdm
 from validmind.logging import get_logger
 from validmind.tests import list_tests, load_test, run_test
-from validmind.vm_models.test.result_wrapper import (
+from validmind.vm_models.result import (
     MetricResultWrapper,
     ThresholdTestResultWrapper,
 )

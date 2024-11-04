@@ -32,7 +32,7 @@ from validmind.vm_models.figure import (
     is_plotly_figure,
     is_png_image,
 )
-from validmind.vm_models.test.result_wrapper import MetricResultWrapper
+from validmind.vm_models.result import MetricResultWrapper
 
 from ._store import test_store
 

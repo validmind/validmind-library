@@ -7,7 +7,7 @@ from ...logging import get_logger, log_performance
 from ...tests import LoadTestError
 from ...tests import load_test as load_test_class
 from ...utils import test_id_to_name
-from ..test.result_wrapper import FailedResultWrapper, ResultWrapper
+from ..result import FailedResultWrapper, ResultWrapper
 from ..test.test import Test
 from ..test_context import TestContext, TestInput
 

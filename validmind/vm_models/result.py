@@ -14,13 +14,13 @@ from typing import Dict, List, Optional, Union
 import pandas as pd
 from ipywidgets import HTML, GridBox, Layout, VBox
 
-from ... import api_client
-from ...ai.test_descriptions import AI_REVISION_NAME, DescriptionFuture
-from ...input_registry import input_registry
-from ...logging import get_logger
-from ...utils import NumpyEncoder, display, run_async, test_id_to_name
-from ..dataset import VMDataset
-from ..figure import Figure
+from .. import api_client
+from ..ai.test_descriptions import AI_REVISION_NAME, DescriptionFuture
+from ..input_registry import input_registry
+from ..logging import get_logger
+from ..utils import NumpyEncoder, display, run_async, test_id_to_name
+from .dataset import VMDataset
+from .figure import Figure
 from .output_template import OutputTemplate
 from .result_summary import ResultSummary
 

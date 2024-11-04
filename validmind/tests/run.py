@@ -24,10 +24,7 @@ from validmind.vm_models import (
     ThresholdTestResults,
 )
 from validmind.vm_models.figure import is_matplotlib_figure, is_plotly_figure
-from validmind.vm_models.test.result_wrapper import (
-    MetricResultWrapper,
-    ThresholdTestResultWrapper,
-)
+from validmind.vm_models.result import MetricResultWrapper, ThresholdTestResultWrapper
 
 from .__types__ import TestID
 from .load import load_test
