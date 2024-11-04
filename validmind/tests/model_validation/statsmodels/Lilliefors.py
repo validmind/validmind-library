@@ -2,15 +2,15 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from dataclasses import dataclass
-
 from statsmodels.stats.diagnostic import lilliefors
 
-from validmind.vm_models import Metric
+from validmind import tags, tasks
+from validmind.vm_models import VMDataset, VMModel
 
 
-@dataclass
-class Lilliefors(Metric):
+@tags("tabular_data", "data_distribution", "statistical_test", "statsmodels")
+@tasks("classification", "regression")
+def Lilliefors(model: VMModel, dataset: VMDataset):
     """
     Assesses the normality of feature distributions in an ML model's training dataset using the Lilliefors test.
 
@@ -56,29 +56,18 @@ class Lilliefors(Metric):
     - Like any other statistical test, Lilliefors test may also produce false positives or negatives. Hence, banking
     solely on this test, without considering other characteristics of the data, may give rise to risks.
     """
+    df = dataset.df[dataset.feature_columns_numeric]
 
-    name = "lilliefors_test"
-    required_inputs = ["dataset"]
-    tasks = ["classification", "regression"]
-    tags = [
-        "tabular_data",
-        "data_distribution",
-        "statistical_test",
-        "statsmodels",
-    ]
+    table = []
 
-    def run(self):
-        """
-        Calculates Lilliefors test for each of the dataset features
-        """
-        x_train = self.inputs.dataset.df[self.inputs.dataset.feature_columns_numeric]
-
-        lilliefors_values = {}
-        for col in x_train.columns:
-            l_stat, p_value = lilliefors(x_train[col].values)
-            lilliefors_values[col] = {
-                "stat": l_stat,
-                "pvalue": p_value,
+    for col in df.columns:
+        l_stat, p_value = lilliefors(df[col].values)
+        table.append(
+            {
+                "Column": col,
+                "Statistic": l_stat,
+                "P-Value": p_value,
             }
+        )
 
-        return self.cache_results(lilliefors_values)
+    return table

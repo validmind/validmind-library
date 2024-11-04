@@ -2,19 +2,19 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from dataclasses import dataclass
-
 import numpy as np
 import plotly.graph_objects as go
 from sklearn.metrics import precision_recall_curve
 
+from validmind import tags, tasks
 from validmind.errors import SkipTestError
 from validmind.models import FoundationModel
-from validmind.vm_models import Figure, Metric
+from validmind.vm_models import VMDataset, VMModel
 
 
-@dataclass
-class PrecisionRecallCurve(Metric):
+@tags("sklearn", "binary_classification", "model_performance", "visualization")
+@tasks("classification", "text_classification")
+def PrecisionRecallCurve(model: VMModel, dataset: VMDataset):
     """
     Evaluates the precision-recall trade-off for binary classification models and visualizes the Precision-Recall curve.
 
@@ -55,59 +55,30 @@ class PrecisionRecallCurve(Metric):
     - It may not fully represent the overall accuracy of the model if the cost of false positives and false negatives
     are extremely different, or if the dataset is heavily imbalanced.
     """
+    if isinstance(model, FoundationModel):
+        raise SkipTestError("Skipping PrecisionRecallCurve for Foundation models")
 
-    name = "pr_curve"
-    required_inputs = ["model", "dataset"]
-    tasks = ["classification", "text_classification"]
-    tags = [
-        "sklearn",
-        "binary_classification",
-        "multiclass_classification",
-        "model_performance",
-        "visualization",
-    ]
-
-    def run(self):
-        if isinstance(self.inputs.model, FoundationModel):
-            raise SkipTestError("Skipping PrecisionRecallCurve for Foundation models")
-
-        y_true = self.inputs.dataset.y
-        y_pred = self.inputs.dataset.y_prob(self.inputs.model)
-
-        # PR curve is only supported for binary classification
-        if len(np.unique(y_true)) > 2:
-            raise SkipTestError(
-                "Precision Recall Curve is only supported for binary classification models"
-            )
-
-        precision, recall, pr_thresholds = precision_recall_curve(y_true, y_pred)
-
-        trace = go.Scatter(
-            x=recall,
-            y=precision,
-            mode="lines",
-            name="Precision-Recall Curve",
-            line=dict(color="#DE257E"),
+    y_true = dataset.y
+    if len(np.unique(y_true)) > 2:
+        raise SkipTestError(
+            "Precision Recall Curve is only supported for binary classification models"
         )
-        layout = go.Layout(
+
+    precision, recall, _ = precision_recall_curve(y_true, dataset.y_prob(model))
+
+    return go.Figure(
+        data=[
+            go.Scatter(
+                x=recall,
+                y=precision,
+                mode="lines",
+                name="Precision-Recall Curve",
+                line=dict(color="#DE257E"),
+            )
+        ],
+        layout=go.Layout(
             title="Precision-Recall Curve",
             xaxis=dict(title="Recall"),
             yaxis=dict(title="Precision"),
-        )
-
-        fig = go.Figure(data=[trace], layout=layout)
-
-        return self.cache_results(
-            metric_value={
-                "precision": precision,
-                "recall": recall,
-                "thresholds": pr_thresholds,
-            },
-            figures=[
-                Figure(
-                    for_object=self,
-                    key="pr_curve",
-                    figure=fig,
-                )
-            ],
-        )
+        ),
+    )
