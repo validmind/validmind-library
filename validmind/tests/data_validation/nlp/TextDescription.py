@@ -13,15 +13,26 @@ from validmind import tags, tasks
 from validmind.vm_models import VMDataset
 
 
-def general_text_metrics(df, text_column):
+def create_metrics_df(df, text_column, unwanted_tokens, lang):
+    stop_words = set(word.lower() for word in stopwords.words(lang))
+    unwanted_tokens = set(token.lower() for token in unwanted_tokens)
+
     results = []
 
     for text in df[text_column]:
-        sentences = nltk.sent_tokenize(text)
+        # pre-process text
         words = nltk.word_tokenize(text)
-        paragraphs = text.split("\n\n")
+        filtered_words = [
+            word
+            for word in words
+            if word.lower() not in stop_words
+            and word.lower() not in unwanted_tokens
+            and word not in string.punctuation
+        ]
+        sentences = nltk.sent_tokenize(text)
 
-        total_words = len(words)
+        # calculate metrics
+        total_words = len(filtered_words)
         total_sentences = len(sentences)
         avg_sentence_length = round(
             (
@@ -31,10 +42,23 @@ def general_text_metrics(df, text_column):
             ),
             1,
         )
-        total_paragraphs = len(paragraphs)
+        total_paragraphs = len(text.split("\n\n"))
+        total_unique_words = len(set(filtered_words))
+        total_punctuations = sum(1 for word in words if word in string.punctuation)
+        lexical_diversity = round(
+            total_unique_words / len(filtered_words) if filtered_words else 0, 1
+        )
 
         results.append(
-            [total_words, total_sentences, avg_sentence_length, total_paragraphs]
+            [
+                total_words,
+                total_sentences,
+                avg_sentence_length,
+                total_paragraphs,
+                total_unique_words,
+                total_punctuations,
+                lexical_diversity,
+            ]
         )
 
     return pd.DataFrame(
@@ -44,58 +68,14 @@ def general_text_metrics(df, text_column):
             "Total Sentences",
             "Avg Sentence Length",
             "Total Paragraphs",
+            "Total Unique Words",
+            "Total Punctuations",
+            "Lexical Diversity",
         ],
     )
 
 
-def vocabulary_structure_metrics(df, text_column, unwanted_tokens, num_top_words, lang):
-    stop_words = set(word.lower() for word in stopwords.words(lang))
-    unwanted_tokens = set(token.lower() for token in unwanted_tokens)
-
-    results = []
-
-    for text in df[text_column]:
-        words = nltk.word_tokenize(text)
-
-        filtered_words = [
-            word
-            for word in words
-            if word.lower() not in stop_words
-            and word.lower() not in unwanted_tokens
-            and word not in string.punctuation
-        ]
-
-        total_unique_words = len(set(filtered_words))
-        total_punctuations = sum(1 for word in words if word in string.punctuation)
-        lexical_diversity = round(
-            total_unique_words / len(filtered_words) if filtered_words else 0, 1
-        )
-
-        results.append([total_unique_words, total_punctuations, lexical_diversity])
-
-    return pd.DataFrame(
-        results,
-        columns=["Total Unique Words", "Total Punctuations", "Lexical Diversity"],
-    )
-
-
-# Wrapper function that combines the outputs
-def text_description_table(df, params):
-    text_column = dataset.text_column
-    unwanted_tokens = params["unwanted_tokens"]
-    num_top_words = params["num_top_words"]
-    lang = params["lang"]
-
-    gen_metrics_df = general_text_metrics(df, text_column)
-    vocab_metrics_df = vocabulary_structure_metrics(
-        df, text_column, unwanted_tokens, num_top_words, lang
-    )
-    combined_df = pd.concat([gen_metrics_df, vocab_metrics_df], axis=1)
-
-    return combined_df
-
-
-def text_description_plots(df, params):
+def create_text_description_plots(df, params):
     combinations_to_plot = params["combinations_to_plot"]
     figures = []
 
@@ -136,7 +116,6 @@ def TextDescription(
         "us",
         "``",
     },
-    num_top_words: int = 3,
     lang: str = "english",
 ):
     """
@@ -183,30 +162,22 @@ def TextDescription(
     - Assumes well-structured documents, which may result in inaccuracies with poorly formatted text.
     """
 
-    # Enforce that text_column must be provided as part of the params
     if dataset.text_column is None:
         raise ValueError("A 'text_column' must be provided to run this test.")
 
-    # download nltk data
     nltk.download("punkt_tab", quiet=True)
 
-    df_text_description = text_description_table(
-        dataset.df,
-        {
-            "unwanted_tokens": unwanted_tokens,
-            "num_top_words": num_top_words,
-            "lang": lang,
-        },
+    text_description_df = create_metrics_df(
+        dataset.df, dataset.text_column, unwanted_tokens, lang
     )
 
-    # Define the combinations you want to plot
     combinations_to_plot = [
         ("Total Words", "Total Sentences"),
         ("Total Words", "Total Unique Words"),
         ("Total Sentences", "Avg Sentence Length"),
         ("Total Unique Words", "Lexical Diversity"),
     ]
-    params = {"combinations_to_plot": combinations_to_plot}
-    figures = text_description_plots(df_text_description, params)
 
-    return figures
+    return tuple(
+        create_text_description_plots(text_description_df, combinations_to_plot)
+    )

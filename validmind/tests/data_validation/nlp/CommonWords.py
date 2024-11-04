@@ -2,22 +2,19 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-"""
-Metrics functions for any Pandas-compatible datasets
-"""
-
 from collections import Counter
-from dataclasses import dataclass
 
 import matplotlib.pyplot as plt
 import nltk
 from nltk.corpus import stopwords
 
-from ....vm_models import Figure, Metric, VMDataset
+from validmind import tags, tasks
+from validmind.vm_models import VMDataset
 
 
-@dataclass
-class CommonWords(Metric):
+@tags("nlp", "text_data", "visualization", "frequency_analysis")
+@tasks("text_classification", "text_summarization")
+def CommonWords(dataset: VMDataset):
     """
     Assesses the most frequent non-stopwords in a text column for identifying prevalent language patterns.
 
@@ -57,49 +54,24 @@ class CommonWords(Metric):
     - The metric requires a valid Dataset object, indicating a dependency condition that limits its broader
     applicability.
     """
+    counter = Counter(
+        [word for x in dataset.df[dataset.text_column].str.split() for word in x]
+    )
+    most = counter.most_common()
 
-    name = "common_words"
-    required_inputs = ["dataset"]
-    tasks = ["text_classification", "text_summarization"]
-    tags = ["nlp", "text_data", "visualization", "frequency_analysis"]
+    x = []
+    y = []
 
-    def run(self):
-        # Can only run this test if we have a Dataset object
-        if not isinstance(self.inputs.dataset, VMDataset):
-            raise ValueError("CommonWords requires a validmind Dataset object")
+    nltk.download("stopwords")
+    stop = set(stopwords.words("english"))
 
-        def create_corpus(df, text_column):
-            corpus = []
-            for x in df[text_column].str.split():
-                for i in x:
-                    corpus.append(i)
-            return corpus
+    for word, count in most[:40]:
+        if word not in stop:
+            x.append(word)
+            y.append(count)
 
-        text_column = self.inputs.dataset.text_column
-        corpus = create_corpus(self.inputs.dataset.df, text_column=text_column)
+    fig = plt.figure()
+    plt.bar(x, y, color="#17C37B")
+    plt.xticks(rotation=90)
 
-        counter = Counter(corpus)
-        most = counter.most_common()
-        x = []
-        y = []
-        nltk.download("stopwords")
-        stop = set(stopwords.words("english"))
-        for word, count in most[:40]:
-            if word not in stop:
-                x.append(word)
-                y.append(count)
-        fig = plt.figure()
-        plt.bar(x, y, color="#17C37B")
-        plt.xticks(rotation=90)
-        # Do this if you want to prevent the figure from being displayed
-        plt.close("all")
-
-        return self.cache_results(
-            figures=[
-                Figure(
-                    for_object=self,
-                    key=self.key,
-                    figure=fig,
-                )
-            ]
-        )
+    return fig

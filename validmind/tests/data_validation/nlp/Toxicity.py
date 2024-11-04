@@ -62,7 +62,7 @@ def Toxicity(dataset):
         alpha=0.5,
         linewidth=0,
     )
-    ax.set_title(f"Toxicity score of {dataset.text_column} ")
+    ax.set_title(f"Toxicity score of {dataset.text_column}")
     ax.set_xlabel("Toxicity score")
-    plt.close("all")
+
     return fig
