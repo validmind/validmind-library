@@ -29,28 +29,86 @@ from ..utils import (
 )
 from .__types__ import TestID
 from ._store import test_provider_store, test_store
-from .decorator import test as test_decorator
+from .test_providers import ValidMindTestProvider
 from .utils import test_description
 
 logger = get_logger(__name__)
 
 
-def __init__():
-    directories = [p.name for p in Path(__file__).parent.iterdir() if p.is_dir()]
-
-    for d in directories:
-        for path in Path(__file__).parent.joinpath(d).glob("**/**/*.py"):
-            if path.name.startswith("__") or not path.name[0].isupper():
-                continue  # skip __init__.py and other special files as well as non Test files
-            test_id = (
-                f"validmind.{d}.{path.parent.stem}.{path.stem}"
-                if path.parent.parent.stem == d
-                else f"validmind.{d}.{path.stem}"
-            )
-            test_store.register_test(test_id)
+validmind_test_provider = ValidMindTestProvider()
 
 
-__init__()
+def load_test(test_id: str):
+    """Load a test by test ID
+
+    Test IDs are in the format `namespace.path_to_module.TestClassOrFuncName[:tag]`.
+    The tag is optional and is used to distinguish between multiple results from the
+    same test.
+
+    Args:
+        test_id (str): The test ID in the format `namespace.path_to_module.TestName[:tag]`
+    """
+    # TODO: we should use a dedicated class for test IDs to handle this consistently
+    test_id, tag = test_id.split(":", 1) if ":" in test_id else (test_id, None)
+
+    error = None
+    namespace = test_id.split(".", 1)[0]
+
+    # if not already loaded, load it from appropriate provider
+    if test_id not in test_store.tests:
+        if test_id.startswith("validmind.composite_metric"):
+            error, test_func = load_composite_metric(test_id)
+
+        elif namespace == "validmind":
+            error, test_func = _load_validmind_test(test_id)
+
+        elif test_provider_store.has_test_provider(namespace):
+            provider = test_provider_store.get_test_provider(namespace)
+
+            try:
+                test_func = provider.load_test(test_id.split(".", 1)[1])
+            except Exception as e:
+                error = (
+                    f"Unable to load test {test_id} from test provider: "
+                    f"{provider}\n Got Exception: {e}"
+                )
+
+        else:
+            error = f"Unable to load test {test_id}. No test provider found."
+
+        if error:
+            logger.error(error)
+            raise LoadTestError(error)
+
+        test_store.register_test(test_id, test_func)
+
+    return test_store.get_test(test_id)
+
+
+def _load_tests():
+    tests = {}
+
+    for test_id in test_store.get_test_ids():
+        try:
+            tests[test_id] = load_test(test_id)
+        except MissingDependencyError as e:
+            # skip tests that have missing dependencies
+            logger.debug(str(e))
+
+            if e.extra:
+                logger.info(
+                    f"Skipping `{test_id}` as it requires extra dependencies: {e.required_dependencies}."
+                    f" Please run `pip install validmind[{e.extra}]` to view and run this test."
+                )
+            else:
+                logger.info(
+                    f"Skipping `{test_id}` as it requires missing dependencies: {e.required_dependencies}."
+                    " Please install the missing dependencies to view and run this test."
+                )
+
+            continue
+
+    return tests
 
 
 def _pretty_list_tests(tests, truncate=True):
@@ -88,30 +146,7 @@ def list_tests(
     Returns:
         list or pandas.DataFrame: A list of all tests or a formatted table.
     """
-    # tests = {
-    #     test_id: load_test(test_id, reload=True)
-    #     for test_id in test_store.get_test_ids()
-    # }
-    tests = {}
-    for test_id in test_store.get_test_ids():
-        try:
-            tests[test_id] = load_test(test_id, reload=True)
-        except MissingDependencyError as e:
-            # skip tests that have missing dependencies
-            logger.debug(str(e))
-
-            if e.extra:
-                logger.info(
-                    f"Skipping `{test_id}` as it requires extra dependencies: {e.required_dependencies}."
-                    f" Please run `pip install validmind[{e.extra}]` to view and run this test."
-                )
-            else:
-                logger.info(
-                    f"Skipping `{test_id}` as it requires missing dependencies: {e.required_dependencies}."
-                    " Please install the missing dependencies to view and run this test."
-                )
-
-            continue
+    tests = _load_tests()
 
     # first search by the filter string since it's the most general search
     if filter is not None:
@@ -142,89 +177,6 @@ def list_tests(
         return list(tests.keys())
 
     return _pretty_list_tests(tests, truncate=truncate)
-
-
-def _load_validmind_test(test_id, reload=False):
-    parts = test_id.split(":")[0].split(".")
-
-    test_module = ".".join(parts[1:-1])
-    test_class = parts[-1]
-
-    error = None
-    test = None
-
-    try:
-        full_path = f"validmind.tests.{test_module}.{test_class}"
-
-        if reload and full_path in sys.modules:
-            module = importlib.reload(sys.modules[full_path])
-        else:
-            module = importlib.import_module(full_path)
-
-        test = getattr(module, test_class)
-    except ModuleNotFoundError as e:
-        error = f"Unable to load test {test_id}. {e}"
-    except AttributeError:
-        error = f"Unable to load test {test_id}. Test not in module: {test_class}"
-
-    return error, test
-
-
-def load_test(test_id: str, reload=False):
-    """Load a test by test ID
-
-    Test IDs are in the format `namespace.path_to_module.TestClassOrFuncName[:result_id]`.
-    The result ID is optional and is used to distinguish between multiple results from the
-    running the same test.
-
-    Args:
-        test_id (str): The test ID in the format `namespace.path_to_module.TestName[:result_id]`
-        reload (bool, optional): Whether to reload the test module. Defaults to False.
-    """
-    # TODO: we should use a dedicated class for test IDs to handle this consistently
-    test_id, result_id = test_id.split(":", 1) if ":" in test_id else (test_id, None)
-
-    error = None
-    namespace = test_id.split(".", 1)[0]
-
-    # TODO: lets implement an extensible loading system instead of this ugly if/else
-    if test_store.get_custom_test(test_id):
-        test = test_store.get_custom_test(test_id)
-
-    elif test_id.startswith("validmind.composite_metric"):
-        error, test = load_composite_metric(test_id)
-
-    elif namespace == "validmind":
-        error, test = _load_validmind_test(test_id, reload=reload)
-
-    elif test_provider_store.has_test_provider(namespace):
-        provider = test_provider_store.get_test_provider(namespace)
-
-        try:
-            test = provider.load_test(test_id.split(".", 1)[1])
-        except Exception as e:
-            error = (
-                f"Unable to load test {test_id} from test provider: "
-                f"{provider}\n Got Exception: {e}"
-            )
-
-    else:
-        error = f"Unable to load test {test_id}. No test provider found."
-
-    if error:
-        logger.error(error)
-        raise LoadTestError(error)
-
-    if inspect.isfunction(test):
-        # if its a function, we decorate it and then load the class
-        # TODO: simplify this as we move towards all functional metrics
-        # "_" is used here so it doesn't conflict with other test ids
-        test_decorator("_")(test)
-        test = test_store.get_custom_test("_")
-
-    test.test_id = f"{test_id}:{result_id}" if result_id else test_id
-
-    return test
 
 
 def describe_test(test_id: TestID = None, raw: bool = False, show: bool = True):

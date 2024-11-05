@@ -5,32 +5,14 @@
 import importlib.util
 import os
 import sys
-from typing import Protocol
+from pathlib import Path
+from typing import List, Protocol
 
 from validmind.logging import get_logger
 
 from ._store import test_provider_store
 
 logger = get_logger(__name__)
-
-
-class TestProvider(Protocol):
-    """Protocol for user-defined test providers"""
-
-    def load_test(self, test_id: str):
-        """Load the test by test ID
-
-        Args:
-            test_id (str): The test ID (does not contain the namespace under which
-                the test is registered)
-
-        Returns:
-            Test: A test class or function
-
-        Raises:
-            FileNotFoundError: If the test is not found
-        """
-        ...
 
 
 class LocalTestProviderLoadModuleError(Exception):
@@ -47,6 +29,33 @@ class LocalTestProviderLoadTestError(Exception):
     """
 
     pass
+
+
+class TestProvider(Protocol):
+    """Protocol for user-defined test providers"""
+
+    def list_tests(self) -> List[str]:
+        """List all tests in the given namespace
+
+        Returns:
+            list: A list of test IDs
+        """
+        ...
+
+    def load_test(self, test_id: str) -> callable:
+        """Load the test function identified by the given test_id
+
+        Args:
+            test_id (str): The test ID (does not contain the namespace under which
+                the test is registered)
+
+        Returns:
+            callable: The test function
+
+        Raises:
+            FileNotFoundError: If the test is not found
+        """
+        ...
 
 
 class LocalTestProvider:
@@ -69,6 +78,11 @@ class LocalTestProvider:
     # Register the test provider with a namespace
     register_test_provider("my_namespace", test_provider)
 
+    # List all tests in the namespace (returns a list of test IDs)
+    test_provider.list_tests()
+    # this is used by the validmind.tests.list_tests() function to aggregate all tests
+    # from all test providers
+
     # Load a test using the test_id (namespace + path to test class module)
     test = test_provider.load_test("my_namespace.my_test_class")
     # full path to the test class module is /path/to/tests/folder/my_test_class.py
@@ -87,6 +101,28 @@ class LocalTestProvider:
             root_folder (str): The root directory for local tests.
         """
         self.root_folder = root_folder
+
+    def list_tests(self):
+        """List all tests in the given namespace
+
+        Returns:
+            list: A list of test IDs
+        """
+        test_ids = []
+
+        directories = [p.name for p in Path(self.root_folder).iterdir() if p.is_dir()]
+
+        for d in directories:
+            for path in Path(self.root_folder).joinpath(d).glob("**/**/*.py"):
+                if path.name.startswith("__") or not path.name[0].isupper():
+                    continue  # skip __init__.py and other special files as well as non Test files
+                test_ids.append(
+                    f"{self.namespace}.{d}.{path.parent.stem}.{path.stem}"
+                    if path.parent.parent.stem == d
+                    else f"{self.namespace}.{d}.{path.stem}"
+                )
+
+        return test_ids
 
     def load_test(self, test_id: str):
         """
@@ -147,6 +183,27 @@ class LocalTestProvider:
             raise LocalTestProviderLoadTestError(
                 f"Failed to find the test class in the module. Error: {str(e)}"
             )
+
+
+class ValidMindTestProvider:
+    """Test provider for ValidMind tests"""
+
+    def __init__(self):
+        # two subproviders: unit_metrics and normal tests
+        self.metrics_provider = LocalTestProvider(
+            os.path.join(os.path.dirname(__file__), "..", "unit_metrics")
+        )
+        self.tests_provider = LocalTestProvider(os.path.dirname(__file__))
+
+    def list_tests(self) -> List[str]:
+        return self.metrics_provider.list_tests() + self.tests_provider.list_tests()
+
+    def load_test(self, test_id: str) -> callable:
+        return (
+            self.metrics_provider.load_test(test_id)
+            if test_id.startswith("validmind.unit_metrics")
+            else self.tests_provider.load_test(test_id)
+        )
 
 
 def register_test_provider(namespace: str, test_provider: "TestProvider") -> None:

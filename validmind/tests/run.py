@@ -2,29 +2,23 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+import inspect
 import itertools
 from itertools import product
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List, Tuple, Union
 from uuid import uuid4
 
 import pandas as pd
 
-from validmind.ai.test_descriptions import get_description_metadata
-from validmind.errors import LoadTestError
+from validmind.ai.test_descriptions import get_result_description
+from validmind.errors import LoadTestError, MissingRequiredTestInputError
+from validmind.input_registry import input_registry
 from validmind.logging import get_logger
 from validmind.unit_metrics import run_metric
 from validmind.unit_metrics.composite import load_composite_metric
-from validmind.vm_models import (
-    MetricResult,
-    ResultSummary,
-    ResultTable,
-    ResultTableMetadata,
-    TestContext,
-    TestInput,
-    ThresholdTestResults,
-)
+from validmind.vm_models import VMDataset, VMModel
 from validmind.vm_models.figure import is_matplotlib_figure, is_plotly_figure
-from validmind.vm_models.result import MetricResultWrapper, ThresholdTestResultWrapper
+from validmind.vm_models.result import ResultTable, ResultTableMetadata, TestResult
 
 from .__types__ import TestID
 from .load import load_test
@@ -32,54 +26,17 @@ from .load import load_test
 logger = get_logger(__name__)
 
 
-def _cartesian_product(input_grid: Dict[str, List[Any]]):
-    """Get all possible combinations for a set of inputs"""
-    return [dict(zip(input_grid, values)) for values in product(*input_grid.values())]
+INPUT_TYPE_MAP = {
+    "dataset": VMDataset,
+    "datasets": List[VMDataset],
+    "model": VMModel,
+    "models": List[VMModel],
+}
 
 
-def _combine_summaries(summaries: List[Dict[str, Any]]):
-    """Combine the summaries from multiple results
-
-    Args:
-        summaries (List[Dict[str, Any]]): A list of dictionaries where each dictionary
-            has two keys: "inputs" and "summary". The "inputs" key should contain the
-            inputs used for the test and the "summary" key should contain the actual
-            summary object.
-
-    Constraint: The summaries must all have the same structure meaning that each has
-    the same number of tables in the same order with the same columns etc. This
-    should always be the case for comparison tests since its the same test run
-    multiple times with different inputs.
-    """
-    if not summaries[0]["summary"]:
-        return None
-
-    def combine_tables(table_index):
-        combined_df = pd.DataFrame()
-
-        for summary_obj in summaries:
-            serialized = summary_obj["summary"].results[table_index].serialize()
-            summary_df = pd.DataFrame(serialized["data"])
-            summary_df = pd.concat(
-                [
-                    pd.DataFrame(summary_obj["inputs"], index=summary_df.index),
-                    summary_df,
-                ],
-                axis=1,
-            )
-            combined_df = pd.concat([combined_df, summary_df], ignore_index=True)
-
-        return ResultTable(
-            data=combined_df.to_dict(orient="records"),
-            metadata=summaries[0]["summary"].results[table_index].metadata,
-        )
-
-    return ResultSummary(
-        results=[
-            combine_tables(table_index)
-            for table_index in range(len(summaries[0]["summary"].results))
-        ]
-    )
+def _cartesian_product(grid: Dict[str, List[Any]]):
+    """Get all possible combinations for a set of inputs or params"""
+    return [dict(zip(grid, values)) for values in product(*grid.values())]
 
 
 def _get_input_id(v):
@@ -91,6 +48,71 @@ def _get_input_id(v):
     elif hasattr(v, "input_id"):
         return v.input_id  # If v has an input_id attribute, return it.
     return str(v)  # Otherwise, return the string representation of v.
+
+
+def _check_for_sensitive_data(tables: List[ResultTable], inputs: Dict[str, VMInput]):
+    """Check if a table contains raw data from input datasets"""
+    dataset_columns = {
+        col: len(input_obj.df)
+        for input_obj in inputs.values()
+        if isinstance(input_obj, VMDataset)
+        for col in input_obj.columns
+    }
+
+    for i, table in enumerate(tables):
+        table_columns = {col: len(table.data) for col in table.data.columns}
+
+        offending_columns = [
+            col
+            for col in table_columns
+            if col in dataset_columns and table_columns[col] == dataset_columns[col]
+        ]
+
+        if offending_columns:
+            name = table.title or i
+            raise ValueError(
+                f"Raw input data found in table ({name}), pass `unsafe=True` "
+                f"or remove the offending columns: {offending_columns}"
+            )
+
+
+def _combine_tables(
+    tables_lists_with_inputs: List[Tuple[List[ResultTable], Dict[str, Any]]]
+):
+    """Combine the tables from multiple results
+
+    Args:
+        tables_lists_with_inputs (List[Tuple[List[ResultTable], Dict[str, Any]]]): A list
+            of tuples where the first element is a list of ResultTable objects and the
+            second element is a dictionary of inputs passed to the test that generated the
+            tables.
+    """
+    # use the first set of tables as the primary since all should have the same schema/titles
+    primary_tables = tables_lists_with_inputs[0][0]
+
+    combined_tables = []
+
+    # process first table in each list first then second, etc.
+    for table_idx in range(len(primary_tables)):
+        dfs = []
+
+        for tables, inputs in tables_lists_with_inputs:
+            table = tables[table_idx]
+
+            for input_name, input_value in inputs.items():
+                table.data[input_name] = _get_input_id(input_value)
+
+            dfs.append(table.data)
+
+        # combine into new table with all the rows and same title
+        combined_tables.append(
+            ResultTable(
+                data=pd.concat(dfs, ignore_index=True),
+                title=primary_tables[table_idx].title,
+            )
+        )
+
+    return combined_tables
 
 
 def _update_plotly_titles(figures, input_group, title_template):
@@ -146,7 +168,7 @@ def _combine_figures(figure_lists: List[List[Any]], input_groups: List[Dict[str,
     return [figure for figures in figure_lists for figure in figures]
 
 
-def _combine_unit_metrics(results: List[MetricResultWrapper]):
+def _combine_unit_metrics(results: List[TestResult]):
     if not results[0].scalar:
         return
 
@@ -166,8 +188,8 @@ def _combine_unit_metrics(results: List[MetricResultWrapper]):
             result.metric.summary.results.append(table)
 
 
-def metric_comparison(
-    results: List[MetricResultWrapper],
+def build_comparison_result(
+    results: List[TestResult],
     test_id: TestID,
     input_params_groups: Union[Dict[str, List[Any]], List[Dict[str, Any]]],
     output_template: str = None,
@@ -202,7 +224,7 @@ def metric_comparison(
     # handle unit metrics (scalar values) by adding it to the summary
     _combine_unit_metrics(results)
 
-    merged_summary = _combine_summaries(
+    merged_summary = _combine_tables(
         [
             {"inputs": input_group_strings[i], "summary": result.metric.summary}
             for i, result in enumerate(results)
@@ -219,8 +241,16 @@ def metric_comparison(
             figure.metadata["_name"] = test_id
             figure.metadata["_ref_id"] = ref_id
 
-    return MetricResultWrapper(
+    return TestResult(
         result_id=test_id,
+        result_description=get_result_description(
+            test_id=test_id,
+            test_description=results[0].result_description,
+            tables=merged_tables,
+            figures=merged_figures,
+            passed=passed,
+            should_generate=generate_description,
+        ),
         result_metadata=[
             get_description_metadata(
                 test_id=test_id,
@@ -237,87 +267,9 @@ def metric_comparison(
             for item in (input if isinstance(input, list) else [input])
             if hasattr(item, "input_id") or isinstance(item, str)
         ],
-        output_template=output_template,
-        metric=MetricResult(
-            key=test_id,
-            ref_id=ref_id,
-            value=[],
-            summary=merged_summary,
-        ),
+        tables=merged_tables,
         figures=merged_figures,
-    )
-
-
-def threshold_test_comparison(
-    results: List[ThresholdTestResultWrapper],
-    test_id: TestID,
-    input_groups: Union[Dict[str, List[Any]], List[Dict[str, Any]]],
-    output_template: str = None,
-    generate_description: bool = True,
-):
-    """Build a comparison result for multiple threshold test results"""
-    ref_id = str(uuid4())
-
-    input_group_strings = []
-
-    for group in input_groups:
-        new_group = {}
-        for k, v in group.items():
-            if isinstance(v, str):
-                new_group[k] = v
-            elif hasattr(v, "input_id"):
-                new_group[k] = v.input_id
-            elif isinstance(v, list) and all(hasattr(item, "input_id") for item in v):
-                new_group[k] = ", ".join([item.input_id for item in v])
-            else:
-                raise ValueError(f"Unsupported type for value: {v}")
-        input_group_strings.append(new_group)
-
-    merged_summary = _combine_summaries(
-        [
-            {"inputs": input_group_strings[i], "summary": result.test_results.summary}
-            for i, result in enumerate(results)
-        ]
-    )
-    merged_figures = _combine_figures(
-        [result.figures for result in results], input_groups
-    )
-
-    # Patch figure metadata so they are connected to the comparison result
-    if merged_figures and len(merged_figures):
-        for i, figure in enumerate(merged_figures):
-            figure.key = f"{figure.key}-{i}"
-            figure.metadata["_name"] = test_id
-            figure.metadata["_ref_id"] = ref_id
-
-    return ThresholdTestResultWrapper(
-        result_id=test_id,
-        result_metadata=[
-            get_description_metadata(
-                test_id=test_id,
-                default_description=f"Comparison test result for {test_id}",
-                summary=merged_summary.serialize() if merged_summary else None,
-                figures=merged_figures,
-                prefix="test_description",
-                should_generate=generate_description,
-            )
-        ],
-        inputs=[
-            input if isinstance(input, str) else input.input_id
-            for group in input_groups
-            for input in group.values()
-        ],
         output_template=output_template,
-        test_results=ThresholdTestResults(
-            test_name=test_id,
-            ref_id=ref_id,
-            # TODO: when we have param_grid support, this will need to be updated
-            params=results[0].test_results.params,
-            passed=all(result.test_results.passed for result in results),
-            results=[],
-            summary=merged_summary,
-        ),
-        figures=merged_figures,
     )
 
 
@@ -372,12 +324,8 @@ def run_comparison_test(
         )
         for inputs_params in (inputs_params_product or [{}])
     ]
-    if isinstance(results[0], MetricResultWrapper):
-        func = metric_comparison
-    else:
-        func = threshold_test_comparison
 
-    result = func(
+    result = build_comparison_result(
         results, test_id, inputs_params_product, output_template, generate_description
     )
 
@@ -387,113 +335,204 @@ def run_comparison_test(
     return result
 
 
-def run_test(
-    test_id: TestID = None,
-    params: Dict[str, Any] = None,
-    param_grid: Union[Dict[str, List[Any]], List[Dict[str, Any]]] = None,
-    inputs: Dict[str, Any] = None,
-    input_grid: Union[Dict[str, List[Any]], List[Dict[str, Any]]] = None,
-    name: str = None,
-    unit_metrics: List[TestID] = None,
+def _inspect_signature(test_func: callable):
+    inputs = {}
+    params = {}
+
+    for name, arg in inspect.signature(test_func).parameters.items():
+        if name in INPUT_TYPE_MAP:
+            inputs[name] = {"type": INPUT_TYPE_MAP[name]}
+        else:
+            params[name] = {
+                "type": arg.annotation,
+                "default": (
+                    arg.default if arg.default is not inspect.Parameter.empty else None
+                ),
+            }
+
+    return inputs, params
+
+
+def _get_test_kwargs(test_func, inputs, params):
+    input_kwargs = {}  # map function inputs (`dataset` etc) to actual objects
+
+    func_inputs, func_params = _inspect_signature(test_func)
+
+    for key in func_inputs.keys():
+        try:
+            _input = inputs[key]
+        except KeyError:
+            raise MissingRequiredTestInputError(f"Missing required input: {key}.")
+
+        # 1) retrieve input object from input registry if an input_id string is provided
+        # 2) check the input_id type if a list of inputs (mix of strings and objects) is provided
+        # 3) if its a dict, it should contain the `input_id` key as well as other options
+        if isinstance(_input, str):
+            _input = input_registry.get(key=_input)
+        elif isinstance(_input, list) or isinstance(_input, tuple):
+            _input = [
+                input_registry.get(key=v) if isinstance(v, str) else v for v in _input
+            ]
+        elif isinstance(_input, dict):
+            assert "input_id" in _input, (
+                "Input dictionary must contain an 'input_id' key "
+                "to retrieve the input object from the input registry."
+            )
+            _input = input_registry.get(key=_input["input_id"]).with_options(
+                **{k: v for k, v in _input.items() if k != "input_id"}
+            )
+
+        input_kwargs[key] = _input
+
+    param_kwargs = {
+        key: params.get(key, func_params[key]["default"]) for key in func_params.keys()
+    }
+
+    return input_kwargs, param_kwargs
+
+
+def _build_result(
+    results: Union[Any, Tuple[Any, ...]],
+    test_id: str,
+    inputs: List[str],
+    params: Dict[str, Any],
+    description: str = None,
     output_template: str = None,
-    show: bool = True,
-    __generate_description: bool = True,
-    **kwargs,
-) -> Union[MetricResultWrapper, ThresholdTestResultWrapper]:
-    """Run a test by test ID.
-    test_id (TestID, optional): The test ID to run. Not required if `unit_metrics` is provided.
-    params (dict, optional): A dictionary of parameters to pass into the test. Params
-        are used to customize the test behavior and are specific to each test. See the
-        test details for more information on the available parameters. Defaults to None.
-    param_grid (Union[Dict[str, List[Any]], List[Dict[str, Any]]], optional): To run
-        a comparison test, provide either a dictionary of parameters where the keys are
-        the parameter names and the values are lists of different parameters, or a list of
-        dictionaries where each dictionary is a set of parameters to run the test with.
-        This will run the test multiple times with different sets of parameters and then
-        combine the results into a single output. When passing a dictionary, the grid
-        will be created by taking the Cartesian product of the parameter lists. Its simply
-        a more convenient way of forming the param grid as opposed to passing a list of
-        all possible combinations. Defaults to None.
-    inputs (Dict[str, Any], optional): A dictionary of test inputs to pass into the
-        test. Inputs are either models or datasets that have been initialized using
-        vm.init_model() or vm.init_dataset(). Defaults to None.
-    input_grid (Union[Dict[str, List[Any]], List[Dict[str, Any]]], optional): To run
-        a comparison test, provide either a dictionary of inputs where the keys are
-        the input names and the values are lists of different inputs, or a list of
-        dictionaries where each dictionary is a set of inputs to run the test with.
-        This will run the test multiple times with different sets of inputs and then
-        combine the results into a single output. When passing a dictionary, the grid
-        will be created by taking the Cartesian product of the input lists. Its simply
-        a more convenient way of forming the input grid as opposed to passing a list of
-        all possible combinations. Defaults to None.
-    name (str, optional): The name of the test (used to create a composite metric
-        out of multiple unit metrics) - required when running multiple unit metrics
-    unit_metrics (list, optional): A list of unit metric IDs to run as a composite
-        metric - required when running multiple unit metrics
-    output_template (str, optional): A jinja2 html template to customize the output
-        of the test. Defaults to None.
-    show (bool, optional): Whether to display the results. Defaults to True.
-    **kwargs: Keyword inputs to pass into the test (same as `inputs` but as keyword
-        args instead of a dictionary):
-        - dataset: A validmind Dataset object or a Pandas DataFrame
-        - model: A model to use for the test
-        - models: A list of models to use for the test
-        - dataset: A validmind Dataset object or a Pandas DataFrame
-    """
+    generate_description: bool = True,
+):
+    ref_id = str(uuid4())
+    figure_metadata = {
+        "_type": "metric",
+        "_name": test_id,
+        "_ref_id": ref_id,
+    }
 
-    # Validate input arguments with helper functions
-    validate_test_inputs(test_id, name, unit_metrics)
-    validate_grid_inputs(input_grid, kwargs, inputs, param_grid, params)
+    tables = []
+    figures = []
+    scalars = []
 
-    # Handle composite metric creation
-    if unit_metrics:
-        test_id = generate_composite_test_id(name, test_id)
+    def process_result_item(item):
+        # TOOD: build out a more robust/extensible system for this
+        # TODO: custom type handlers would be really cool
 
-    # Run comparison tests if applicable
-    if input_grid or param_grid:
-        return run_comparison_test_with_grids(
-            test_id,
-            inputs,
-            input_grid,
-            param_grid,
-            name,
-            unit_metrics,
-            params,
-            output_template,
-            show,
-            __generate_description,
-        )
+        # unit metrics (scalar values) - for now only one per test
+        if isinstance(item, int) or isinstance(item, float):
+            if scalars:
+                raise ValueError("Only one unit metric may be returned per test.")
+            scalars.append(item)
 
-    # Run unit metric tests
-    if test_id.startswith("validmind.unit_metrics"):
-        # TODO: as we move towards a more unified approach to metrics
-        # we will want to make everything functional and remove the
-        # separation between unit metrics and "normal" metrics
-        return run_metric(test_id, inputs=inputs, params=params, show=show)
+        # plots
+        elif isinstance(item, Figure):
+            figures.append(item)
+        elif is_matplotlib_figure(item) or is_plotly_figure(item) or is_png_image(item):
+            figures.append(
+                Figure(
+                    key=f"{test_id}:{len(figures) + 1}",
+                    figure=item,
+                    metadata=figure_metadata,
+                )
+            )
 
-    # Load the appropriate test class
-    TestClass = load_test_class(test_id, unit_metrics, name)
+        # tables
+        elif isinstance(item, list) or isinstance(item, pd.DataFrame):
+            tables.append(ResultTable(data=item))
+        elif isinstance(item, dict):
+            for table_name, table in item.items():
+                if not isinstance(table, list) and not isinstance(table, pd.DataFrame):
+                    raise ValueError(
+                        f"Invalid table format: {table_name} must be a list or DataFrame"
+                    )
 
-    # Create and run the test
-    test = TestClass(
-        test_id=test_id,
-        context=TestContext(),
-        inputs=TestInput({**kwargs, **(inputs or {})}),
-        output_template=output_template,
+                tables.append(
+                    ResultTable(
+                        data=table,
+                        metadata=ResultTableMetadata(title=table_name),
+                    )
+                )
+
+        else:
+            raise ValueError(f"Invalid return type: {type(item)}")
+
+    # if the results are a tuple, process each item as a separate result
+    if isinstance(results, tuple):
+        for item in results:
+            process_result_item(item)
+    else:
+        process_result_item(results)
+
+    metric_inputs = [
+        sub_i.input_id if hasattr(sub_i, "input_id") else sub_i
+        for i in inputs
+        for sub_i in (i if isinstance(i, list) else [i])
+    ]
+
+    return TestResult(
+        result_id=test_id,
+        result_description=get_result_description(
+            test_id=test_id,
+            test_description=description,
+            tables=tables,
+            figures=figures,
+            passed=passed,
+            should_generate=generate_description,
+        ),
+        metric=scalars[0] if scalars else None,
+        tables=tables,
+        figures=figures,
+        inputs=metric_inputs,
         params=params,
-        generate_description=__generate_description,
+        output_template=output_template,
     )
 
-    test.run()
 
-    if show:
-        test.result.show()
+def run_test(
+    test_id: Union[TestID, None] = None,
+    params: Union[Dict[str, Any], None] = None,
+    param_grid: Union[Dict[str, List[Any]], List[Dict[str, Any]], None] = None,
+    inputs: Union[Dict[str, Any], None] = None,
+    input_grid: Union[Dict[str, List[Any]], List[Dict[str, Any]], None] = None,
+    name: Union[str, None] = None,
+    unit_metrics: Union[List[TestID], None] = None,
+    output_template: Union[str, None] = None,
+    show: bool = True,
+    __generate_description: bool = True,  # TODO: deprecate
+    generate_description: bool = True,
+    **kwargs,
+) -> TestResult:
+    """Run a ValidMind or custom test
 
-    return test.result
+    This function is the main entry point for running tests. It can run simple unit metrics,
+    ValidMind and custom tests, composite tests made up of multiple unit metrics and comparison
+    tests made up of multiple tests.
 
+    Args:
+        test_id (TestID, optional): Test ID to run. Not required if `unit_metrics` provided.
+        params (dict, optional): Parameters to customize test behavior. See test details for available parameters.
+        param_grid (Union[Dict[str, List[Any]], List[Dict[str, Any]]], optional): For comparison tests, either:
+            - Dict mapping parameter names to lists of values (creates Cartesian product)
+            - List of parameter dictionaries to test
+        inputs (Dict[str, Any], optional): Test inputs (models/datasets initialized with vm.init_model/dataset)
+        input_grid (Union[Dict[str, List[Any]], List[Dict[str, Any]]], optional): For comparison tests, either:
+            - Dict mapping input names to lists of values (creates Cartesian product)
+            - List of input dictionaries to test
+        name (str, optional): Test name (required for composite metrics)
+        unit_metrics (list, optional): Unit metric IDs to run as composite metric
+        output_template (str, optional): Custom jinja2 HTML template for output
+        show (bool, optional): Whether to display results. Defaults to True.
+        generate_description (bool, optional): Whether to generate a description. Defaults to True.
+        **kwargs: Additional test inputs:
+            - dataset: ValidMind Dataset or DataFrame
+            - model: Model to test
+            - models: List of models to test
 
-def validate_test_inputs(test_id, name, unit_metrics):
-    """Validate the main test inputs for `test_id`, `name`, and `unit_metrics`."""
+    Returns:
+        TestResult: A TestResult object containing the test results
+
+    Raises:
+        ValueError: If the test inputs are invalid
+        LoadTestError: If the test class fails to load
+    """
+    # Validation
     if not test_id and not (name and unit_metrics):
         raise ValueError(
             "`test_id` or both `name` and `unit_metrics` must be provided to run a test"
@@ -502,50 +541,35 @@ def validate_test_inputs(test_id, name, unit_metrics):
     if bool(unit_metrics) != bool(name):
         raise ValueError("`name` and `unit_metrics` must be provided together")
 
-
-def validate_grid_inputs(input_grid, kwargs, inputs, param_grid, params):
-    """Validate the grid inputs to avoid conflicting parameters."""
     if input_grid and (kwargs or inputs):
         raise ValueError("Cannot provide `input_grid` along with `inputs` or `kwargs`")
 
     if param_grid and (kwargs or params):
         raise ValueError("Cannot provide `param_grid` along with `params` or `kwargs`")
 
+    generate_description = generate_description or __generate_description
 
-def generate_composite_test_id(name, test_id):
-    """Generate a composite test ID if unit metrics are provided."""
-    metric_id_name = "".join(word.capitalize() for word in name.split())
-    return f"validmind.composite_metric.{metric_id_name}" or test_id
+    if unit_metrics:
+        if not test_id:
+            name = "".join(word.capitalize() for word in name.split())
+            test_id = f"validmind.composite_metric.{name}"
 
-
-def run_comparison_test_with_grids(
-    test_id,
-    inputs,
-    input_grid,
-    param_grid,
-    name,
-    unit_metrics,
-    params,
-    output_template,
-    show,
-    generate_description,
-):
-    """Run a comparison test based on the presence of input and param grids."""
-    if input_grid and param_grid:
-        return run_comparison_test(
-            test_id,
-            input_grid,
-            name=name,
+        return run_composite_metric(
+            test_id=test_id,
             unit_metrics=unit_metrics,
-            param_grid=param_grid,
+            inputs=inputs,
+            params=params,
             output_template=output_template,
             show=show,
             generate_description=generate_description,
         )
-    if input_grid:
+
+    if input_grid or param_grid:
         return run_comparison_test(
-            test_id,
-            input_grid,
+            test_id=test_id,
+            inputs=inputs,
+            input_grid=input_grid,
+            param_grid=param_grid,
             name=name,
             unit_metrics=unit_metrics,
             params=params,
@@ -553,21 +577,11 @@ def run_comparison_test_with_grids(
             show=show,
             generate_description=generate_description,
         )
-    if param_grid:
-        return run_comparison_test(
-            test_id,
-            inputs=inputs,
-            name=name,
-            unit_metrics=unit_metrics,
-            param_grid=param_grid,
-            output_template=output_template,
-            show=show,
-            generate_description=generate_description,
-        )
 
+    # Run unit metric tests
+    if test_id.startswith("validmind.unit_metrics"):
+        return run_metric(test_id, inputs=inputs, params=params, show=show)
 
-def load_test_class(test_id, unit_metrics, name):
-    """Load the appropriate test class based on `test_id` and unit metrics."""
     if unit_metrics:
         metric_id_name = "".join(word.capitalize() for word in name.split())
         error, TestClass = load_composite_metric(
@@ -575,5 +589,18 @@ def load_test_class(test_id, unit_metrics, name):
         )
         if error:
             raise LoadTestError(error)
-        return TestClass
-    return load_test(test_id, reload=True)
+        test = TestClass
+
+    test_func = load_test(test_id, reload=True)
+
+    # Create and run the test
+    input_kwargs, param_kwargs = _get_test_kwargs(test_func, inputs, params)
+    raw_result = test_func(**input_kwargs, **param_kwargs)
+    result = build_test_result(
+        raw_result, test_id, output_template, generate_description
+    )
+
+    if show:
+        result.show()
+
+    return result

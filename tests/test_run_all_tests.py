@@ -11,10 +11,7 @@ from tabulate import tabulate
 from tqdm import tqdm
 from validmind.logging import get_logger
 from validmind.tests import list_tests, load_test, run_test
-from validmind.vm_models.result import (
-    MetricResultWrapper,
-    ThresholdTestResultWrapper,
-)
+from validmind.vm_models.result import TestResult
 
 from run_test_utils import (
     setup_clustering_test_inputs,
@@ -176,28 +173,28 @@ def create_unit_test_func(vm_test_id, vm_test_class):
                 return
 
         start_time = time.time()
-        results = run_test(**test_kwargs)
+        result = run_test(**test_kwargs)
         end_time = time.time()
         execution_time = round(end_time - start_time, 2)
 
         self.assertTrue(
-            isinstance(results, (MetricResultWrapper, ThresholdTestResultWrapper)),
-            f"Expected MetricResultWrapper or ThresholdTestResultWrapper, got {type(results)}",
+            isinstance(result, TestResult),
+            f"Expected TestResult, got {type(result)}",
         )
         self.assertEqual(
-            results.result_id,
+            result.result_id,
             vm_test_id,
-            f"Expected result_id to be {vm_test_id}, got {results.result_id}",
+            f"Expected result_id to be {vm_test_id}, got {result.result_id}",
         )
-        if isinstance(results, MetricResultWrapper):
+        if isinstance(result, TestResult):
             self.assertTrue(
-                results.metric is not None or results.figures is not None,
+                result.metric is not None or result.figures is not None,
                 f"A metric result needs to produce a metric result or a figure",
             )
 
-        if isinstance(results, ThresholdTestResultWrapper):
+        if isinstance(result, TestResult):
             self.assertTrue(
-                results.test_results is not None or results.figures is not None,
+                result.test_results is not None or result.figures is not None,
                 f"A threshold test needs to produce a test result or a figure",
             )
 

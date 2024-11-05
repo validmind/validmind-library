@@ -10,10 +10,9 @@ from .decorator import metric, tags, tasks, test
 from .load import describe_test, list_tests, load_test
 from .metadata import list_tags, list_tasks, list_tasks_and_tags
 from .run import run_test
-from .test_providers import LocalTestProvider, TestProvider, register_test_provider
+from .test_providers import TestProvider, register_test_provider
 
 logger = get_logger(__name__)
-
 
 __all__ = [
     "data_validation",

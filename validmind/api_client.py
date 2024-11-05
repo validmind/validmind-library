@@ -23,9 +23,7 @@ from .client_config import client_config
 from .errors import MissingAPICredentialsError, MissingModelIdError, raise_api_error
 from .logging import get_logger, init_sentry, send_single_error
 from .utils import NumpyEncoder, run_async
-from .vm_models import Figure, MetricResult, ThresholdTestResults
-
-# TODO: can't import types from vm_models because of circular dependency
+from .vm_models import Figure, TestResult
 
 logger = get_logger(__name__)
 
@@ -244,30 +242,7 @@ def reload():
         raise e
 
 
-async def log_figure(figure: Figure) -> Dict[str, Any]:
-    """Logs a figure
-
-    Args:
-        figure (Figure): The Figure object wrapper
-
-    Raises:
-        Exception: If the API call fails
-
-    Returns:
-        dict: The response from the API
-    """
-    try:
-        return await _post(
-            "log_figure",
-            data=figure.serialize(),
-            files=figure.serialize_files(),
-        )
-    except Exception as e:
-        logger.error("Error logging figure to ValidMind API")
-        raise e
-
-
-async def get_metadata(content_id: str) -> Dict[str, Any]:
+async def aget_metadata(content_id: str) -> Dict[str, Any]:
     """Gets a metadata object from ValidMind API.
 
     Args:
@@ -283,7 +258,7 @@ async def get_metadata(content_id: str) -> Dict[str, Any]:
     return await _get(f"get_metadata/{content_id}")
 
 
-async def log_metadata(
+async def alog_metadata(
     content_id: str,
     text: Optional[str] = None,
     _json: Optional[Dict[str, Any]] = None,
@@ -317,21 +292,11 @@ async def log_metadata(
         raise e
 
 
-async def log_metric_result(
-    metric: MetricResult,
-    inputs: List[str],
-    output_template: str = None,
-    section_id: str = None,
-    position: int = None,
-) -> Dict[str, Any]:
-    """Logs metrics to ValidMind API.
+async def alog_figure(figure: Figure) -> Dict[str, Any]:
+    """Logs a figure
 
     Args:
-        metric (MetricResult): A MetricResult object
-        inputs (list): A list of input keys (names) that were used to run the test
-        output_template (str): The optional output template for the test
-        section_id (str): The section ID add a test driven block to the documentation
-        position (int): The position in the section to add the test driven block
+        figure (Figure): The Figure object wrapper
 
     Raises:
         Exception: If the API call fails
@@ -339,32 +304,19 @@ async def log_metric_result(
     Returns:
         dict: The response from the API
     """
-    request_params = {}
-    if section_id:
-        request_params["section_id"] = section_id
-    if position is not None:
-        request_params["position"] = position
-
-    metric_data = {
-        **metric.serialize(),
-        "inputs": inputs,
-    }
-    if output_template:
-        metric_data["output_template"] = output_template
-
     try:
         return await _post(
-            "log_metrics",
-            params=request_params,
-            data=json.dumps([metric_data], cls=NumpyEncoder, allow_nan=False),
+            "log_figure",
+            data=figure.serialize(),
+            files=figure.serialize_files(),
         )
     except Exception as e:
-        logger.error("Error logging metrics to ValidMind API")
+        logger.error("Error logging figure to ValidMind API")
         raise e
 
 
-async def log_test_result(
-    result: ThresholdTestResults,
+async def alog_test_result(
+    result: TestResult,
     inputs: List[str],
     section_id: str = None,
     position: int = None,
@@ -410,7 +362,9 @@ async def log_test_result(
         raise e
 
 
-def log_input(input_id: str, type: str, metadata: Dict[str, Any]) -> Dict[str, Any]:
+async def alog_input(
+    input_id: str, type: str, metadata: Dict[str, Any]
+) -> Dict[str, Any]:
     """Logs input information - internal use for now (don't expose via public API)
 
     Args:
@@ -425,8 +379,7 @@ def log_input(input_id: str, type: str, metadata: Dict[str, Any]) -> Dict[str, A
         dict: The response from the API
     """
     try:
-        return run_async(
-            _post,
+        return await _post(
             "log_input",
             data=json.dumps(
                 {
@@ -441,6 +394,10 @@ def log_input(input_id: str, type: str, metadata: Dict[str, Any]) -> Dict[str, A
     except Exception as e:
         logger.error("Error logging input to ValidMind API")
         raise e
+
+
+def log_input(input_id: str, type: str, metadata: Dict[str, Any]) -> Dict[str, Any]:
+    return run_async(alog_input, input_id, type, metadata)
 
 
 async def alog_metric(

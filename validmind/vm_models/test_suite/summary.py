@@ -9,7 +9,7 @@ import ipywidgets as widgets
 
 from ...logging import get_logger
 from ...utils import display, md_to_html
-from ..result import FailedResultWrapper
+from ..result import ErrorResult
 from .test_suite import TestSuiteSection, TestSuiteTest
 
 logger = get_logger(__name__)
@@ -52,7 +52,7 @@ class TestSuiteSectionSummary:
             children.append(test.result.to_widget())
             titles.append(
                 f"❌ {test.result.name}: {test.name} ({test.test_id})"
-                if isinstance(test.result, FailedResultWrapper)
+                if isinstance(test.result, ErrorResult)
                 else f"{test.result.name}: {test.name} ({test.test_id})"
             )
 

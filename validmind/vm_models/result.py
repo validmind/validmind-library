@@ -9,7 +9,7 @@ import asyncio
 import json
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 import pandas as pd
 from ipywidgets import HTML, GridBox, Layout, VBox
@@ -22,9 +22,32 @@ from ..utils import NumpyEncoder, display, run_async, test_id_to_name
 from .dataset import VMDataset
 from .figure import Figure
 from .output_template import OutputTemplate
-from .result_summary import ResultSummary
 
 logger = get_logger(__name__)
+
+
+@dataclass
+class ResultTable:
+    """
+    A dataclass that holds the table summary of result
+    """
+
+    data: Union[List[Any], pd.DataFrame]
+    title: str
+
+    def __post_init__(self):
+        if isinstance(self.data, list):
+            self.data = pd.DataFrame(self.data)
+
+        self.data = self.data.round(4)
+
+    def serialize(self):
+        return {
+            "data": self.data.to_dict(orient="records"),
+            "metadata": {
+                "title": self.title,
+            },
+        }
 
 
 async def update_metadata(content_id: str, text: str, _json: Union[Dict, List] = None):
@@ -71,17 +94,16 @@ def plot_figures(figures: List[Figure]) -> None:
     )
 
 
-def _summary_tables_to_widget(summary: ResultSummary):
-    """Convert summary (list of json tables) into ipywidgets"""
+def _tables_to_widgets(tables: List[ResultTable]):
+    """Convert summary (list of json tables) into a list of ipywidgets"""
     widgets = []
 
-    for table in summary.results:
-        if table.metadata and table.metadata.title:
-            widgets.append(HTML(f"<h4>{table.metadata.title}</h4>"))
+    for table in tables:
+        if table.title:
+            widgets.append(HTML(f"<h4>{table.title}</h4>"))
 
         df_html = (
-            pd.DataFrame(table.data)
-            .style.format(precision=4)
+            table.data.style.format(precision=4)
             .hide(axis="index")
             .set_table_styles(
                 [
@@ -119,19 +141,10 @@ def _summary_tables_to_widget(summary: ResultSummary):
 
 
 @dataclass
-class ResultWrapper(ABC):
+class Result:
     """Base Class for test suite results"""
 
-    name: str = "ResultWrapper"
-    # id of the result, can be set by the subclass. This helps
-    # looking up results later on
     result_id: str = None
-    # Text description from test or metric (docstring usually)
-    result_description: str = None
-    # Text metadata about the result, can include description, etc.
-    result_metadata: List[dict] = None
-    # Output template to use for rendering the result
-    output_template: Optional[str] = None
 
     def __str__(self) -> str:
         """May be overridden by subclasses"""
@@ -142,41 +155,25 @@ class ResultWrapper(ABC):
         """Create an ipywdiget representation of the result... Must be overridden by subclasses"""
         raise NotImplementedError
 
-    def render(self, output_template=None):
-        """Helper method thats lets the user try out output templates"""
-        if output_template:
-            self.output_template = output_template
-
-        return self.to_widget()
+    @abstractmethod
+    def log(self):
+        """Log the result... Must be overridden by subclasses"""
+        raise NotImplementedError
 
     def show(self):
         """Display the result... May be overridden by subclasses"""
         display(self.to_widget())
 
-    @abstractmethod
-    async def log_async(self):
-        """Log the result... Must be overridden by subclasses"""
-        raise NotImplementedError
-
-    def log(self, section_id: str = None, position: int = None):
-        """Log the result... May be overridden by subclasses"""
-
-        self._validate_section_id_for_block(section_id, position)
-        run_async(self.log_async, section_id=section_id, position=position)
-
 
 @dataclass
-class FailedResultWrapper(ResultWrapper):
-    """
-    Result wrapper for test suites that fail to load or run properly
-    """
+class ErrorResult(Result):
+    """Result for test suites that fail to load or run properly"""
 
-    name: str = "Failed"
     error: Exception = None
     message: str = None
 
     def __repr__(self) -> str:
-        return f'FailedResult(result_id="{self.result_id}")'
+        return f'ErrorResult(result_id="{self.result_id}")'
 
     def to_widget(self):
         return HTML(f"<h3 style='color: red;'>{self.message}</h3><p>{self.error}</p>")
@@ -186,32 +183,79 @@ class FailedResultWrapper(ResultWrapper):
 
 
 @dataclass
-class TestResultWrapper(ResultWrapper):
-    """Test result wrapper"""
+class TestResult(Result):
+    """Test result"""
 
-    name: str = "Test"
-    scalar: Optional[Union[int, float]] = None
-    summary: Optional[ResultSummary] = None
+    description: Optional[Union[str, DescriptionFuture]] = None
+    metric: Optional[Union[int, float]] = None
+    tables: Optional[List[ResultTable]] = None
     figures: Optional[List[Figure]] = None
-    params: Optional[dict] = None
     passed: Optional[bool] = None
-    inputs: List[str] = None  # List of input ids
+    params: Optional[Dict[str, Any]] = None
+    inputs: List[str] = None
 
-    def __repr__(self) -> str:
-        if self.metric:
-            return f'{self.__class__.__name__}(result_id="{self.result_id}", metric, figures)'
+    def to_widget(self):  # noqa
+        if self.metric and self.metric.key == "dataset_description":
+            return ""
+
+        vbox_children = []
+
+        if self.passed is not None:
+            title_html = f"""
+            <h1>{test_id_to_name(self.result_id)} {"✅" if self.passed else "❌"}</h1>
+            """
+            vbox_children.append(HTML(title_html))
         else:
-            return f'{self.__class__.__name__}(result_id="{self.result_id}", figures)'
+            vbox_children.append(HTML(f"<h1>{test_id_to_name(self.result_id)}</h1>"))
 
-    def _validate_section_id_for_block(self, section_id: str, position: int = None):
-        """
-        Validate the section_id exits on the template before logging. We validate
-        if the section exists and if the user provided position is within the bounds
-        of the section. When the position is None, we assume it goes to the end of the section.
-        """
-        if section_id is None:
-            return
+        if self.description:
+            if isinstance(self.description, DescriptionFuture):
+                metric_description = metric_description.get_description()
+                self.result_metadata[0]["text"] = metric_description
 
+            vbox_children.append(HTML(metric_description))
+
+        if self.params:
+            params_html = f"""
+            <h4>Test Parameters</h4>
+            <pre>{json.dumps(self.params, cls=NumpyEncoder, indent=2)}</pre>
+            """
+            vbox_children.append(HTML(params_html))
+
+        if self.scalar is not None:
+            vbox_children.append(
+                HTML(
+                    "<h3>Unit Metrics</h3>"
+                    f"<p>{test_id_to_name(self.result_id)} "
+                    f"(<i>{self.result_id}</i>): "
+                    f"<code>{self.scalar}</code></p>"
+                )
+            )
+
+        if self.metric:
+            vbox_children.append(HTML("<h3>Tables</h3>"))
+            if self.output_template:
+                vbox_children.append(
+                    HTML(
+                        OutputTemplate(self.output_template).render(
+                            value=self.metric.value
+                        )
+                    )
+                )
+            elif self.metric.summary:
+                vbox_children.extend(_tables_to_widgets(self.metric.summary))
+
+        if self.figures:
+            vbox_children.append(HTML("<h3>Plots</h3>"))
+            plot_widgets = plot_figures(self.figures)
+            vbox_children.append(plot_widgets)
+
+        return VBox(vbox_children)
+
+    def _validate_section_id_for_block(
+        self, section_id: str, position: Union[int, None] = None
+    ):
+        """Validate the section_id exits on the template before logging"""
         api_client.reload()
         found = False
         client_config = api_client.client_config
@@ -250,146 +294,32 @@ class TestResultWrapper(ResultWrapper):
                     f"Invalid position {position}. Must be between 0 and {num_blocks}"
                 )
 
-    def _get_filtered_summary(self):
-        """Check if the metric summary has columns from input datasets with matching row counts."""
-        dataset_columns = self._get_dataset_columns()
-        filtered_results = []
-
-        for table in self.metric.summary.results:
-            table_columns = self._get_table_columns(table)
-            sensitive_columns = self._find_sensitive_columns(
-                dataset_columns, table_columns
-            )
-
-            if sensitive_columns:
-                self._log_sensitive_data_warning(sensitive_columns)
-            else:
-                filtered_results.append(table)
-
-        self.metric.summary.results = filtered_results
-        return self.metric.summary
-
-    def _get_dataset_columns(self):
-        dataset_columns = {}
-        for input_item in self.inputs:
-            input_id = (
-                input_item if isinstance(input_item, str) else input_item.input_id
-            )
-            input_obj = input_registry.get(input_id)
-            if isinstance(input_obj, VMDataset):
-                dataset_columns.update(
-                    {col: len(input_obj.df) for col in input_obj.columns}
-                )
-        return dataset_columns
-
-    def _get_table_columns(self, table):
-        if isinstance(table.data, pd.DataFrame):
-            return {col: len(table.data) for col in table.data.columns}
-        elif isinstance(table.data, list) and table.data:
-            return {col: len(table.data) for col in table.data[0].keys()}
-        else:
-            raise ValueError("Invalid data type in summary table")
-
-    def _find_sensitive_columns(self, dataset_columns, table_columns):
-        return [
-            col
-            for col, row_count in table_columns.items()
-            if col in dataset_columns and row_count == dataset_columns[col]
-        ]
-
-    def _log_sensitive_data_warning(self, sensitive_columns):
-        logger.warning(
-            "Sensitive data in metric summary table. Not logging to API automatically. "
-            "Pass `unsafe=True` to result.log() method to override manually."
-        )
-        logger.warning(
-            f"The following columns are present in the table with matching row counts: {sensitive_columns}"
-        )
-
-    def to_widget(self):  # noqa
-        if self.metric and self.metric.key == "dataset_description":
-            return ""
-
-        vbox_children = []
-
-        if self.passed is not None:
-            title_html = f"""
-            <h1>{test_id_to_name(self.result_id)} {"✅" if self.passed else "❌"}</h1>
-            """
-            vbox_children.append(HTML(title_html))
-        else:
-            vbox_children.append(HTML(f"<h1>{test_id_to_name(self.result_id)}</h1>"))
-
-        if self.result_metadata:
-            metric_description = self.result_metadata[0].get("text", "")
-            if isinstance(metric_description, DescriptionFuture):
-                metric_description = metric_description.get_description()
-                self.result_metadata[0]["text"] = metric_description
-
-            vbox_children.append(HTML(metric_description))
-
-        if self.params:
-            params_html = f"""
-            <h4>Test Parameters</h4>
-            <pre>{json.dumps(self.params, cls=NumpyEncoder, indent=2)}</pre>
-            """
-            vbox_children.append(HTML(params_html))
-
-        if self.scalar is not None:
-            vbox_children.append(
-                HTML(
-                    "<h3>Unit Metrics</h3>"
-                    f"<p>{test_id_to_name(self.result_id)} "
-                    f"(<i>{self.result_id}</i>): "
-                    f"<code>{self.scalar}</code></p>"
-                )
-            )
-
-        if self.metric:
-            vbox_children.append(HTML("<h3>Tables</h3>"))
-            if self.output_template:
-                vbox_children.append(
-                    HTML(
-                        OutputTemplate(self.output_template).render(
-                            value=self.metric.value
-                        )
-                    )
-                )
-            elif self.metric.summary:
-                vbox_children.extend(_summary_tables_to_widget(self.metric.summary))
-
-        if self.figures:
-            vbox_children.append(HTML("<h3>Plots</h3>"))
-            plot_widgets = plot_figures(self.figures)
-            vbox_children.append(plot_widgets)
-
-        return VBox(vbox_children)
-
     async def log_async(
-        self, section_id: str = None, position: int = None, unsafe=False
+        self, section_id: str = None, position: int = None, unsafe: bool = False
     ):
         tasks = []  # collect tasks to run in parallel (async)
 
-        if self.scalar is not None:
+        if self.metric is not None:
             # scalars (unit metrics) are logged as key-value pairs associated with the inventory model
             tasks.append(
                 api_client.alog_metric(
                     key=self.result_id,
-                    value=self.scalar,
+                    value=self.metric,
                     inputs=self.inputs,
                     params=self.params,
                 )
             )
 
-        if self.metric:
-            if self.metric.summary and not unsafe:
-                self.metric.summary = self._get_filtered_summary()
+        if self.tables:
+            if not unsafe:
+                tables = self._get_filtered_tables()
+            else:
+                tables = self.tables
 
             tasks.append(
-                api_client.log_metric_result(
-                    metric=self.metric,
+                api_client.alog_test_result(
+                    tables=tables,
                     inputs=self.inputs,
-                    output_template=self.output_template,
                     section_id=section_id,
                     position=position,
                 )
@@ -398,19 +328,34 @@ class TestResultWrapper(ResultWrapper):
         if self.figures:
             tasks.extend([api_client.log_figure(figure) for figure in self.figures])
 
-        if hasattr(self, "result_metadata") and self.result_metadata:
-            description = self.result_metadata[0].get("text", "")
-            if isinstance(description, DescriptionFuture):
-                description = description.get_description()
-                self.result_metadata[0]["text"] = description
+        if self.description:
+            if isinstance(self.description, DescriptionFuture):
+                description = self.description.get_description()
+            else:
+                description = self.description
 
-            for metadata in self.result_metadata:
-                tasks.append(
-                    update_metadata(
-                        content_id=metadata["content_id"],
-                        text=metadata.get("text", ""),
-                        _json=metadata.get("json"),
-                    )
+            tasks.append(
+                update_metadata(
+                    content_id=f"test_description:{self.result_id}",
+                    text=description,
                 )
+            )
 
         return await asyncio.gather(*tasks)
+
+    def log(self, section_id: str = None, position: int = None, unsafe: bool = False):
+        """Log the result to ValidMind
+
+        Args:
+            section_id (str): The section ID within the model document to insert the
+                test result
+            position (int): The position (index) within the section to insert the test
+                result
+            unsafe (bool): If True, log the result even if it contains sensitive data
+                i.e. raw data from input datasets
+        """
+        # do validation before starting as async since that messes with the traceback
+        if section_id:
+            self._validate_section_id_for_block(section_id, position)
+
+        run_async(self.log_async, section_id=section_id, position=position)

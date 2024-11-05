@@ -7,7 +7,7 @@ from ...logging import get_logger, log_performance
 from ...tests import LoadTestError
 from ...tests import load_test as load_test_class
 from ...utils import test_id_to_name
-from ..result import FailedResultWrapper, ResultWrapper
+from ..result import ErrorResult, Result
 from ..test.test import Test
 from ..test_context import TestContext, TestInput
 
@@ -45,7 +45,7 @@ class TestSuiteTest:
         try:
             self._test_class = load_test_class(self.test_id)
         except LoadTestError as e:
-            self.result = FailedResultWrapper(
+            self.result = ErrorResult(
                 error=e,
                 message=f"Failed to load test '{self.test_id}'",
                 result_id=self.test_id,
@@ -84,7 +84,7 @@ class TestSuiteTest:
                 f"Failed to load test '{self.test_id}': "
                 f"({e.__class__.__name__}) {e}"
             )
-            self.result = FailedResultWrapper(
+            self.result = ErrorResult(
                 error=e,
                 message=f"Failed to load test '{self.name}'",
                 result_id=self.test_id,
@@ -97,8 +97,6 @@ class TestSuiteTest:
             return
 
         try:
-            self._test_instance.validate_inputs()
-
             # run the test and log the performance if LOG_LEVEL is set to DEBUG
             log_performance(
                 func=self._test_instance.run,
@@ -113,7 +111,7 @@ class TestSuiteTest:
             logger.error(
                 f"Failed to run test '{self.test_id}': " f"({e.__class__.__name__}) {e}"
             )
-            self.result = FailedResultWrapper(
+            self.result = ErrorResult(
                 name=f"Failed {self._test_instance.test_type}",
                 error=e,
                 message=f"Failed to run '{self.name}'",
@@ -123,7 +121,7 @@ class TestSuiteTest:
             return
 
         if self._test_instance.result is None:
-            self.result = FailedResultWrapper(
+            self.result = ErrorResult(
                 name=f"Failed {self._test_instance.test_type}",
                 error=None,
                 message=f"'{self.name}' did not return a result",
@@ -132,8 +130,8 @@ class TestSuiteTest:
 
             return
 
-        if not isinstance(self._test_instance.result, ResultWrapper):
-            self.result = FailedResultWrapper(
+        if not isinstance(self._test_instance.result, Result):
+            self.result = ErrorResult(
                 name=f"Failed {self._test_instance.test_type}",
                 error=None,
                 message=f"{self.name} returned an invalid result: {self._test_instance.result}",
