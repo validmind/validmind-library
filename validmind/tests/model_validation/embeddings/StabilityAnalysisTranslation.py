@@ -4,14 +4,24 @@
 
 from transformers import MarianMTModel, MarianTokenizer
 
+from validmind import tags, tasks
 from validmind.logging import get_logger
+from validmind.vm_models import VMDataset, VMModel
 
-from .StabilityAnalysis import StabilityAnalysis
+from .utils import create_stability_analysis_result
 
 logger = get_logger(__name__)
 
 
-class StabilityAnalysisTranslation(StabilityAnalysis):
+@tags("llm", "text_data", "embeddings", "visualization")
+@tasks("feature_extraction")
+def StabilityAnalysisTranslation(
+    dataset: VMDataset,
+    model: VMModel,
+    source_lang: str = "en",
+    target_lang: str = "fr",
+    mean_similarity_threshold: float = 0.7,
+):
     """
     Evaluates robustness of text embeddings models to noise introduced by translating the original text to another
     language and back.
@@ -61,23 +71,7 @@ class StabilityAnalysisTranslation(StabilityAnalysis):
     those highly dissimilar to the source language.
     """
 
-    name = "Text Embeddings Stability Analysis to Translation"
-    default_params = {
-        "source_lang": "en",
-        "target_lang": "fr",
-        **StabilityAnalysis.default_params,
-    }
-
-    def perturb_data(self, data: str):
-        if len(data) > 512:
-            logger.info(
-                "Data length exceeds 512 tokens. Truncating data to 512 tokens."
-            )
-            data = data[:512]
-
-        source_lang = self.params["source_lang"]
-        target_lang = self.params["target_lang"]
-
+    def perturb_data(data: str):
         # Initialize the Marian tokenizer and model for the source language
         model_name = f"Helsinki-NLP/opus-mt-{source_lang}-{target_lang}"
         model = MarianMTModel.from_pretrained(model_name)
@@ -104,3 +98,15 @@ class StabilityAnalysisTranslation(StabilityAnalysis):
         )
 
         return reverse_decoded
+
+    original_df = dataset.df[[dataset.text_column]]
+    perturbed_df = original_df.copy()
+    perturbed_df.update(
+        perturbed_df.select_dtypes(include="object").applymap(perturb_data)
+    )
+
+    return create_stability_analysis_result(
+        dataset.y_pred(model),
+        model.predict(perturbed_df),
+        mean_similarity_threshold,
+    )

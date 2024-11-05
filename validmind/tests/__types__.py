@@ -45,7 +45,6 @@ TestID = Literal[
     "validmind.model_validation.embeddings.EuclideanDistanceComparison",
     "validmind.model_validation.embeddings.ClusterDistribution",
     "validmind.model_validation.embeddings.EuclideanDistanceHeatmap",
-    "validmind.model_validation.embeddings.StabilityAnalysis",
     "validmind.model_validation.embeddings.StabilityAnalysisKeyword",
     "validmind.model_validation.embeddings.StabilityAnalysisSynonyms",
     "validmind.model_validation.embeddings.DescriptiveAnalytics",

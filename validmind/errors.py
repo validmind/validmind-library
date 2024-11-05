@@ -79,14 +79,6 @@ class InvalidContentIdPrefixError(APIRequestError):
     """
 
 
-class InvalidFigureForObjectError(BaseError):
-    """
-    When a figure was constructed with an unsupported for_object value.
-    """
-
-    pass
-
-
 class InvalidMetricResultsError(APIRequestError):
     """
     When an invalid metric results object is sent to the API.
