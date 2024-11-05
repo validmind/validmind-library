@@ -254,26 +254,36 @@ def metric_comparison(
 def threshold_test_comparison(
     results: List[ThresholdTestResultWrapper],
     test_id: TestID,
-    input_groups: Union[Dict[str, List[Any]], List[Dict[str, Any]]],
+    input_params_groups: Union[Dict[str, List[Any]], List[Dict[str, Any]]],
     output_template: str = None,
     generate_description: bool = True,
 ):
     """Build a comparison result for multiple threshold test results"""
     ref_id = str(uuid4())
 
+    # Treat param_groups and input_groups as empty lists if they are None or empty
+    input_params_groups = input_params_groups or [{}]
     input_group_strings = []
 
-    for group in input_groups:
+    for input_params in input_params_groups:
         new_group = {}
-        for k, v in group.items():
-            if isinstance(v, str):
-                new_group[k] = v
-            elif hasattr(v, "input_id"):
-                new_group[k] = v.input_id
-            elif isinstance(v, list) and all(hasattr(item, "input_id") for item in v):
-                new_group[k] = ", ".join([item.input_id for item in v])
+
+        for param_k, param_v in input_params["params"].items():
+            new_group[param_k] = param_v
+
+        for input_k, input_v in input_params["inputs"].items():
+            # Process values in the input group
+            if isinstance(input_v, str):
+                new_group[input_k] = input_v
+            elif hasattr(input_v, "input_id"):
+                new_group[input_k] = input_v.input_id
+            elif isinstance(input_v, list) and all(
+                hasattr(item, "input_id") for item in input_v
+            ):
+                new_group[input_k] = ", ".join([item.input_id for item in input_v])
             else:
-                raise ValueError(f"Unsupported type for value: {v}")
+                raise ValueError(f"Unsupported type for value: {input_v}")
+
         input_group_strings.append(new_group)
 
     merged_summary = _combine_summaries(
