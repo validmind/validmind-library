@@ -293,7 +293,7 @@ def threshold_test_comparison(
         ]
     )
     merged_figures = _combine_figures(
-        [result.figures for result in results], input_groups
+        [result.figures for result in results], input_params_groups
     )
 
     # Patch figure metadata so they are connected to the comparison result
@@ -316,15 +316,16 @@ def threshold_test_comparison(
             )
         ],
         inputs=[
-            input if isinstance(input, str) else input.input_id
-            for group in input_groups
-            for input in group.values()
+            item.input_id if hasattr(item, "input_id") else item
+            for group in input_params_groups
+            for input in group["inputs"].values()
+            for item in (input if isinstance(input, list) else [input])
+            if hasattr(item, "input_id") or isinstance(item, str)
         ],
         output_template=output_template,
         test_results=ThresholdTestResults(
             test_name=test_id,
             ref_id=ref_id,
-            # TODO: when we have param_grid support, this will need to be updated
             params=results[0].test_results.params,
             passed=all(result.test_results.passed for result in results),
             results=[],
