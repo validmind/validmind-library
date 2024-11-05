@@ -2,7 +2,6 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from dataclasses import dataclass
 from typing import List
 
 import matplotlib.pyplot as plt
@@ -11,17 +10,9 @@ import pandas as pd
 import seaborn as sns
 from sklearn import metrics
 
+from validmind import tags, tasks
 from validmind.logging import get_logger
-from validmind.vm_models import (
-    Figure,
-    ResultSummary,
-    ResultTable,
-    ResultTableMetadata,
-    ThresholdTest,
-    ThresholdTestResult,
-    VMDataset,
-    VMModel,
-)
+from validmind.vm_models import VMDataset, VMModel
 
 logger = get_logger(__name__)
 
@@ -292,18 +283,8 @@ def OverfitDiagnosis(
             )
 
         results = _prepare_results(results_train, results_test, metric)
-
-        fig = _plot_overfit_regions(results, feature_column, cut_off_threshold, metric)
         test_figures.append(
-            Figure(
-                key=f"overfit_diagnosis:{metric}:{feature_column}",
-                figure=fig,
-                metadata={
-                    "metric": metric,
-                    "cut_off_threshold": cut_off_threshold,
-                    "feature": feature_column,
-                },
-            )
+            _plot_overfit_regions(results, feature_column, cut_off_threshold, metric)
         )
 
         for _, row in results[results["gap"] > cut_off_threshold].iterrows():

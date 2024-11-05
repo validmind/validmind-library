@@ -68,7 +68,7 @@ def ClassImbalance(dataset: VMDataset, min_percent_threshold: int = 10):
         normalize=True
     )
     if len(imbalance_percentages) > 10:
-        raise SkipTestError(f"Skipping target column with more than 10 classes")
+        raise SkipTestError("Skipping target column with more than 10 classes")
 
     classes = list(imbalance_percentages.index)
 

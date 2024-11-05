@@ -2,15 +2,13 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from dataclasses import dataclass
 from typing import List, Tuple, Union
-from uuid import uuid4
 
 from ..ai.test_descriptions import get_description_metadata
 from ..logging import get_logger
 from ..tests.decorator import _inspect_signature
 from ..utils import run_async, test_id_to_name
-from ..vm_models.result import MetricResultWrapper, TestResultWrapper
+from ..vm_models.result import MetricResultWrapper
 from ..vm_models.result_summary import ResultSummary, ResultTable
 from . import load_metric, run_metric
 
@@ -48,9 +46,7 @@ def load_composite_metric(
         inputs, _ = _inspect_signature(load_metric(metric_id))
         required_inputs.update(inputs.keys())
 
-    class_def.required_inputs = list(required_inputs)
-
-    return None, class_def
+    return description, required_inputs
 
 
 def run_metrics(
