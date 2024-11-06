@@ -3,8 +3,8 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 import warnings
-
 import plotly.express as px
+
 from datasets import Dataset
 
 from validmind import tags, tasks
@@ -14,7 +14,7 @@ from .utils import get_ragas_config, get_renamed_columns
 
 try:
     from ragas import evaluate
-    from ragas.metrics import noise_sensitivity_relevant
+    from ragas.metrics import NoiseSensitivity as RagasNoiseSensitivity
 except ImportError as e:
     raise MissingDependencyError(
         "Missing required package `ragas` for NoiseSensitivity. "
@@ -22,6 +22,8 @@ except ImportError as e:
         required_dependencies=["ragas"],
         extra="llm",
     ) from e
+
+VALID_FOCUS_VALUES = ["relevant", "irrelevant"]
 
 
 @tags("ragas", "llm", "rag_performance")
@@ -31,6 +33,7 @@ def NoiseSensitivity(
     answer_column="answer",
     contexts_column="contexts",
     ground_truth_column="ground_truth",
+    focus="relevant",
 ):
     """
     Assesses the sensitivity of a Large Language Model (LLM) to noise in retrieved context by measuring how often it
@@ -118,37 +121,47 @@ def NoiseSensitivity(
         message="promote has been superseded by promote_options='default'.",
     )
 
+    if focus not in VALID_FOCUS_VALUES:
+        raise ValueError(
+            f"Invalid focus parameter: '{focus}'. "
+            f"Must be one of: {VALID_FOCUS_VALUES}"
+        )
+
     required_columns = {
-        "answer": answer_column,
-        "contexts": contexts_column,
-        "ground_truth": ground_truth_column,
+        "response": answer_column,
+        "retrieved_contexts": contexts_column,
+        "reference": ground_truth_column,
     }
 
     df = get_renamed_columns(dataset._df, required_columns)
 
     result_df = evaluate(
         Dataset.from_pandas(df),
-        metrics=[noise_sensitivity_relevant],
+        metrics=[RagasNoiseSensitivity(focus=focus)],
         **get_ragas_config(),
     ).to_pandas()
 
+    score_column = f"noise_sensitivity_{focus}"
+
     fig_histogram = px.histogram(
-        x=result_df["noise_sensitivity_relevant"].to_list(), nbins=10
+        x=result_df[score_column].to_list(),
+        nbins=10,
+        title=f"Noise Sensitivity ({focus})",
     )
-    fig_box = px.box(x=result_df["noise_sensitivity_relevant"].to_list())
+    fig_box = px.box(
+        x=result_df[score_column].to_list(),
+        title=f"Noise Sensitivity Distribution ({focus})",
+    )
 
     return (
         {
-            # "Scores (will not be uploaded to UI)": result_df[
-            #     ["contexts", "answer", "ground_truth", "noise_sensitivity_relevant"]
-            # ],
             "Aggregate Scores": [
                 {
-                    "Mean Score": result_df["noise_sensitivity_relevant"].mean(),
-                    "Median Score": result_df["noise_sensitivity_relevant"].median(),
-                    "Max Score": result_df["noise_sensitivity_relevant"].max(),
-                    "Min Score": result_df["noise_sensitivity_relevant"].min(),
-                    "Standard Deviation": result_df["noise_sensitivity_relevant"].std(),
+                    "Mean Score": result_df[score_column].mean(),
+                    "Median Score": result_df[score_column].median(),
+                    "Max Score": result_df[score_column].max(),
+                    "Min Score": result_df[score_column].min(),
+                    "Standard Deviation": result_df[score_column].std(),
                     "Count": result_df.shape[0],
                 }
             ],

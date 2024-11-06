@@ -162,7 +162,7 @@ def AspectCritique(
             result_df[aspect] = 1 - result_df[aspect]
 
     df_melted = result_df.melt(
-        id_vars=["question", "answer", "contexts"],
+        id_vars=["user_input", "response", "retrieved_contexts"],
         value_vars=[aspect.name for aspect in all_aspects],
         var_name="Metric",
         value_name="Result",
