@@ -10,40 +10,14 @@ from validmind.ai.test_descriptions import get_result_description
 from validmind.errors import MissingRequiredTestInputError
 from validmind.input_registry import input_registry
 from validmind.logging import get_logger
-from validmind.vm_models import VMDataset, VMInput
-from validmind.vm_models.result import ResultTable, TestResult
+from validmind.vm_models.input import VMInput
+from validmind.vm_models.result import TestResult
 
 from .__types__ import TestID
 from .load import load_test
 from .output import process_output
 
 logger = get_logger(__name__)
-
-
-def _check_for_sensitive_data(tables: List[ResultTable], inputs: Dict[str, VMInput]):
-    """Check if a table contains raw data from input datasets"""
-    dataset_columns = {
-        col: len(input_obj.df)
-        for input_obj in inputs.values()
-        if isinstance(input_obj, VMDataset)
-        for col in input_obj.columns
-    }
-
-    for i, table in enumerate(tables):
-        table_columns = {col: len(table.data) for col in table.data.columns}
-
-        offending_columns = [
-            col
-            for col in table_columns
-            if col in dataset_columns and table_columns[col] == dataset_columns[col]
-        ]
-
-        if offending_columns:
-            name = table.title or i
-            raise ValueError(
-                f"Raw input data found in table ({name}), pass `unsafe=True` "
-                f"or remove the offending columns: {offending_columns}"
-            )
 
 
 def _get_test_kwargs(test_func, inputs, params):
@@ -96,11 +70,7 @@ def build_test_result(
     result = TestResult(
         result_id=test_id,
         ref_id=ref_id,
-        inputs=[
-            sub_i.input_id if hasattr(sub_i, "input_id") else sub_i
-            for i in inputs
-            for sub_i in (i if isinstance(i, list) else [i])
-        ],
+        inputs=inputs,
         params=params,
     )
 
@@ -109,8 +79,6 @@ def build_test_result(
 
     for item in outputs:
         process_output(item, result)
-
-    _check_for_sensitive_data(result.tables, inputs)
 
     result.description = get_result_description(
         test_id=test_id,

@@ -85,6 +85,9 @@ def load_test(test_id: str):
                 original_error=e,
             ) from e
 
+        # add test_id as an attribute to the test function
+        test_func.test_id = test_id
+
         # fallback to using func name if no docstring is found
         if not inspect.getdoc(test_func):
             test_func.__doc__ = f"{test_func.__name__} ({test_id})"
@@ -195,19 +198,21 @@ def list_tests(filter=None, task=None, tags=None, pretty=True, truncate=True):
             test_id: test
             for test_id, test in tests.items()
             if filter.lower() in test_id.lower()
-            or any(filter.lower() in task.lower() for task in test.tasks)
-            or any(fuzzy_match(tag, filter.lower()) for tag in test.tags)
+            or any(filter.lower() in task.lower() for task in test.__tasks__)
+            or any(fuzzy_match(tag, filter.lower()) for tag in test.__tags__)
         }
 
     # then filter by task type and tags since they are more specific
     if task is not None:
-        tests = {test_id: test for test_id, test in tests.items() if task in test.tasks}
+        tests = {
+            test_id: test for test_id, test in tests.items() if task in test.__tasks__
+        }
 
     if tags is not None:
         tests = {
             test_id: test
             for test_id, test in tests.items()
-            if all(tag in test.tags for tag in tags)
+            if all(tag in test.__tags__ for tag in tags)
         }
 
     if not pretty:

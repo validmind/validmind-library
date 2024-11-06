@@ -20,6 +20,7 @@ from ..ai.test_descriptions import DescriptionFuture
 from ..logging import get_logger
 from ..utils import NumpyEncoder, display, run_async, test_id_to_name
 from .figure import Figure
+from .input import VMInput
 
 logger = get_logger(__name__)
 
@@ -195,7 +196,7 @@ class TestResult(Result):
     figures: Optional[List[Figure]] = None
     passed: Optional[bool] = None
     params: Optional[Dict[str, Any]] = None
-    inputs: List[str] = None
+    inputs: Optional[Dict[str, VMInput]] = None
 
     _was_description_generated: bool = False
 
