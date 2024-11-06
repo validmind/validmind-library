@@ -5,7 +5,7 @@
 """Module for storing loaded tests and test providers"""
 
 
-from .test_providers import TestProvider, ValidMindTestProvider
+from .test_providers import ValidMindTestProvider
 
 
 def singleton(cls):

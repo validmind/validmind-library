@@ -6,7 +6,7 @@ import pandas as pd
 
 from validmind.utils import format_dataframe
 
-from .load import list_tests
+from .load import _load_tests, list_tests
 
 
 def list_tags():
@@ -16,7 +16,7 @@ def list_tags():
 
     unique_tags = set()
 
-    for test_id in list_tests():
+    for test in _load_tests(list_tests(pretty=False)):
         unique_tags.update(test.tags)
 
     return list(unique_tags)
@@ -32,7 +32,7 @@ def list_tasks_and_tags():
     """
     task_tags_dict = {}
 
-    for test in list_tests():
+    for test in _load_tests(list_tests(pretty=False)):
         for task in test.tasks:
             task_tags_dict.setdefault(task, set()).update(test.tags)
 
@@ -53,7 +53,7 @@ def list_tasks():
 
     unique_tasks = set()
 
-    for test in list_tests(__as_class=True):
+    for test in _load_tests(list_tests(pretty=False)):
         unique_tasks.update(test.tasks)
 
     return list(unique_tasks)

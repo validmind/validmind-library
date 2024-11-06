@@ -2,10 +2,10 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Union
+
 from ...errors import should_raise_on_fail_fast
 from ...logging import get_logger, log_performance
-from ...tests import LoadTestError
-from ...tests import load_test as load_test_class
 from ...utils import test_id_to_name
 from ..result import ErrorResult, Result
 
@@ -19,8 +19,8 @@ class TestSuiteTest:
 
     test_id: str
     output_template: str = None
-    name: str = None
-    result: object = None
+    name: Union[str, None] = None
+    result: Union[Result, None] = None
 
     def __init__(self, test_id_or_obj):
         """Load the test class from the test id

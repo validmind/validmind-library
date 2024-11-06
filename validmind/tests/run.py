@@ -2,27 +2,20 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from inspect import getdoc
 from typing import Any, Dict, List, Tuple, Union
 from uuid import uuid4
-
-import numpy as np
-import pandas as pd
 
 from validmind.ai.test_descriptions import get_result_description
 from validmind.errors import MissingRequiredTestInputError
 from validmind.input_registry import input_registry
 from validmind.logging import get_logger
 from validmind.vm_models import VMDataset, VMInput
-from validmind.vm_models.figure import (
-    Figure,
-    is_matplotlib_figure,
-    is_plotly_figure,
-    is_png_image,
-)
 from validmind.vm_models.result import ResultTable, TestResult
 
 from .__types__ import TestID
 from .load import load_test
+from .output import process_output
 
 logger = get_logger(__name__)
 
@@ -93,21 +86,16 @@ def _get_test_kwargs(test_func, inputs, params):
 def build_test_result(
     outputs: Union[Any, Tuple[Any, ...]],
     test_id: str,
-    inputs: List[str],
+    inputs: Dict[str, Union[VMInput, List[VMInput]]],
     params: Dict[str, Any],
     description: str = None,
     generate_description: bool = True,
 ):
     ref_id = str(uuid4())
-    figure_metadata = {
-        "_type": "metric",
-        "_name": test_id,
-        "_ref_id": ref_id,
-    }
 
     result = TestResult(
         result_id=test_id,
-        description=description,
+        ref_id=ref_id,
         inputs=[
             sub_i.input_id if hasattr(sub_i, "input_id") else sub_i
             for i in inputs
@@ -120,67 +108,28 @@ def build_test_result(
         outputs = (outputs,)
 
     for item in outputs:
-        # TODO: build out a more robust/extensible system for this
+        process_output(item, result)
 
-        # pass/fail (threshold tests)
-        if isinstance(item, (bool, np.bool_)):
-            if result.passed is not None:
-                raise ValueError("Test returned more than one boolean value")
+    _check_for_sensitive_data(result.tables, inputs)
 
-            result.passed = bool(item)
-
-        # unit metrics (scalar values) - for now only one per test
-        elif isinstance(item, int) or isinstance(item, float):
-            if result.metric is not None:
-                raise ValueError("Only one unit metric may be returned per test.")
-
-            result.metric = item
-
-        ## rest of the output types can have as many as they want
-        # plots
-        elif isinstance(item, Figure):
-            if not result.figures:
-                result.figures = []
-            result.figures.append(item)
-        elif is_matplotlib_figure(item) or is_plotly_figure(item) or is_png_image(item):
-            if not result.figures:
-                result.figures = []
-
-            result.figures.append(
-                Figure(
-                    key=f"{test_id}:{len(result.figures) + 1}",
-                    figure=item,
-                    metadata=figure_metadata,
-                )
-            )
-
-        # tables
-        elif isinstance(item, list) or isinstance(item, pd.DataFrame):
-            if not result.tables:
-                result.tables = []
-
-            result.tables.append(ResultTable(data=item))
-        elif isinstance(item, dict):
-            if not result.tables:
-                result.tables = []
-
-            for table_name, table in item.items():
-                if not isinstance(table, list) and not isinstance(table, pd.DataFrame):
-                    raise ValueError(
-                        f"Invalid table format: {table_name} must be a list or DataFrame"
-                    )
-
-                result.tables.append(
-                    ResultTable(
-                        data=table,
-                        title=table_name,
-                    )
-                )
-
-        else:
-            raise ValueError(f"Invalid test output type: {type(item)}")
+    result.description = get_result_description(
+        test_id=test_id,
+        test_description=description,
+        tables=result.tables,
+        figures=result.figures,
+        metric=result.metric,
+        should_generate=generate_description,
+    )
 
     return result
+
+
+def run_composite_test(*args, **kwargs):
+    raise NotImplementedError("Composite tests are not yet implemented")
+
+
+def run_comparison_test(*args, **kwargs):
+    raise NotImplementedError("Comparison tests are not yet implemented")
 
 
 def run_test(
@@ -215,10 +164,6 @@ def run_test(
         unit_metrics (list, optional): Unit metric IDs to run as composite metric
         show (bool, optional): Whether to display results. Defaults to True.
         generate_description (bool, optional): Whether to generate a description. Defaults to True.
-        **kwargs: Additional test inputs:
-            - dataset: ValidMind Dataset or DataFrame
-            - model: Model to test
-            - models: List of models to test
 
     Returns:
         TestResult: A TestResult object containing the test results
@@ -242,14 +187,12 @@ def run_test(
     if param_grid and (kwargs or params):
         raise ValueError("Cannot provide `param_grid` along with `params` or `kwargs`")
 
-    generate_description = generate_description or __generate_description
-
     if unit_metrics:
         if not test_id:
             name = "".join(word.capitalize() for word in name.split())
             test_id = f"validmind.composite_metric.{name}"
 
-        return run_composite_metric(
+        return run_composite_test(
             test_id=test_id,
             unit_metrics=unit_metrics,
             inputs=inputs,
@@ -283,9 +226,9 @@ def run_test(
     result = build_test_result(
         raw_result,
         test_id,
-        input_kwargs.keys(),
+        input_kwargs,
         param_kwargs,
-        test_func.__doc__,
+        getdoc(test_func),
         generate_description,
     )
 

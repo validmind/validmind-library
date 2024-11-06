@@ -512,7 +512,7 @@ def _run_documentation_section(
 
     TestSuiteRunner(
         suite=test_suite,
-        input=TestInput({**kwargs, **(inputs or {})}),
+        inputs={**kwargs, **(inputs or {})},
         config=config,
     ).run(send=send, fail_fast=fail_fast)
 
