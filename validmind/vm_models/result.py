@@ -195,9 +195,6 @@ class TestResult(Result):
     inputs: List[str] = None
 
     def to_widget(self):  # noqa
-        if self.metric and self.metric.key == "dataset_description":
-            return ""
-
         vbox_children = []
 
         if self.passed is not None:
@@ -210,10 +207,9 @@ class TestResult(Result):
 
         if self.description:
             if isinstance(self.description, DescriptionFuture):
-                metric_description = metric_description.get_description()
-                self.result_metadata[0]["text"] = metric_description
+                self.description = self.description.get_description()
 
-            vbox_children.append(HTML(metric_description))
+            vbox_children.append(HTML(self.description))
 
         if self.params:
             params_html = f"""
@@ -222,28 +218,19 @@ class TestResult(Result):
             """
             vbox_children.append(HTML(params_html))
 
-        if self.scalar is not None:
+        if self.metric is not None:
             vbox_children.append(
                 HTML(
                     "<h3>Unit Metrics</h3>"
                     f"<p>{test_id_to_name(self.result_id)} "
                     f"(<i>{self.result_id}</i>): "
-                    f"<code>{self.scalar}</code></p>"
+                    f"<code>{self.metric}</code></p>"
                 )
             )
 
-        if self.metric:
+        if self.tables:
             vbox_children.append(HTML("<h3>Tables</h3>"))
-            if self.output_template:
-                vbox_children.append(
-                    HTML(
-                        OutputTemplate(self.output_template).render(
-                            value=self.metric.value
-                        )
-                    )
-                )
-            elif self.metric.summary:
-                vbox_children.extend(_tables_to_widgets(self.metric.summary))
+            vbox_children.extend(_tables_to_widgets(self.tables))
 
         if self.figures:
             vbox_children.append(HTML("<h3>Plots</h3>"))

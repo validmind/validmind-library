@@ -27,7 +27,7 @@ from .template import get_template_test_suite
 from .template import preview_template as _preview_template
 from .test_suites import get_by_id as get_test_suite_by_id
 from .utils import get_dataset_info, get_model_info
-from .vm_models import TestInput, TestSuite, TestSuiteRunner
+from .vm_models import TestSuite, TestSuiteRunner
 from .vm_models.dataset import DataFrameDataset, PolarsDataset, TorchDataset, VMDataset
 from .vm_models.model import (
     ModelAttributes,
@@ -409,7 +409,7 @@ def run_test_suite(
 
     TestSuiteRunner(
         suite=suite,
-        input=TestInput({**kwargs, **(inputs or {})}),
+        inputs={**kwargs, **(inputs or {})},
         config=config or {},
     ).run(fail_fast=fail_fast, send=send)
 

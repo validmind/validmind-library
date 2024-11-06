@@ -9,7 +9,6 @@ from IPython.display import display
 
 from ...logging import get_logger
 from ...utils import is_notebook, run_async, run_async_check
-from ..test_context import TestContext, TestInput
 from .summary import TestSuiteSummary
 from .test_suite import TestSuite
 
@@ -22,8 +21,6 @@ class TestSuiteRunner:
     """
 
     suite: TestSuite = None
-    context: TestContext = None
-    input: TestInput = None
     config: dict = None
 
     _test_configs: dict = None
@@ -32,15 +29,11 @@ class TestSuiteRunner:
     pbar_description: widgets.Label = None
     pbar_box: widgets.HBox = None
 
-    def __init__(self, suite: TestSuite, input: TestInput, config: dict = None):
+    def __init__(self, suite: TestSuite, config: dict = None):
         self.suite = suite
-        self.input = input
         self.config = config or {}
 
-        self.context = TestContext()
-
         self._load_config()
-        self._init_tests()
 
     def _load_config(self):
         """Splits the config into a global config and test configs"""
@@ -60,39 +53,6 @@ class TestSuiteRunner:
                 )
             else:
                 self._test_configs[key] = value
-
-    def _init_tests(self):
-        """
-        Loads the tests in a test suite
-        """
-        for section in self.suite.sections:
-            for test in section.tests:
-                # use local inputs from config if provided
-                test_configs = self._test_configs.get(test.test_id, {})
-                inputs = self.input
-                if (
-                    test.test_id in self.config
-                    and "inputs" in self.config[test.test_id]
-                ):
-                    inputs = TestInput(self.config[test.test_id]["inputs"])
-                    test_configs = {
-                        key: value
-                        for key, value in test_configs.items()
-                        if key != "inputs"
-                    }
-                    test_configs = test_configs.get("params", {})
-                else:
-                    if (test_configs) and ("params" not in test_configs):
-                        # [DEPRECATED] This is the old way of setting test parameters
-                        msg = (
-                            "Setting test parameters directly in the 'config' parameter"
-                            " of the run_documentation_tests() method is deprecated. "
-                            "Instead, use the new format of the config: "
-                            'config = {"test_id": {"params": {...}, "inputs": {...}}}'
-                        )
-                        logger.warning(msg)
-
-                test.load(inputs=inputs, context=self.context, config=test_configs)
 
     def _start_progress_bar(self, send: bool = True):
         """
@@ -176,10 +136,6 @@ class TestSuiteRunner:
 
         for section in self.suite.sections:
             for test in section.tests:
-                if test._test_class is None:
-                    self.pbar.value += 1
-                    continue
-
                 self.pbar_description.value = f"Running {test.test_type}: {test.name}"
                 test.run(fail_fast=fail_fast)
                 self.pbar.value += 1

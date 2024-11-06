@@ -4,12 +4,10 @@
 
 """Module for listing and loading tests."""
 
-import importlib
 import inspect
 import json
-import sys
-from pathlib import Path
 from pprint import pformat
+from typing import List
 from uuid import uuid4
 
 import pandas as pd
@@ -18,24 +16,40 @@ from ipywidgets import HTML, Accordion
 from ..errors import LoadTestError, MissingDependencyError
 from ..html_templates.content_blocks import test_content_block_html
 from ..logging import get_logger
-from ..unit_metrics.composite import load_composite_metric
-from ..utils import (
-    NumpyEncoder,
-    display,
-    format_dataframe,
-    fuzzy_match,
-    md_to_html,
-    test_id_to_name,
-)
+from ..utils import display, format_dataframe, fuzzy_match, md_to_html, test_id_to_name
+from ..vm_models import VMDataset, VMModel
 from .__types__ import TestID
 from ._store import test_provider_store, test_store
-from .test_providers import ValidMindTestProvider
-from .utils import test_description
 
 logger = get_logger(__name__)
 
 
-validmind_test_provider = ValidMindTestProvider()
+INPUT_TYPE_MAP = {
+    "dataset": VMDataset,
+    "datasets": List[VMDataset],
+    "model": VMModel,
+    "models": List[VMModel],
+}
+
+
+def _inspect_signature(test_func: callable):
+    inputs = {}
+    params = {}
+
+    for name, arg in inspect.signature(test_func).parameters.items():
+        if name in INPUT_TYPE_MAP:
+            inputs[name] = {"type": INPUT_TYPE_MAP[name]}
+        elif name == "args" or name == "kwargs":
+            continue
+        else:
+            params[name] = {
+                "type": arg.annotation.__name__ if arg.annotation else None,
+                "default": (
+                    arg.default if arg.default is not inspect.Parameter.empty else None
+                ),
+            }
+
+    return inputs, params
 
 
 def load_test(test_id: str):
@@ -48,51 +62,67 @@ def load_test(test_id: str):
     Args:
         test_id (str): The test ID in the format `namespace.path_to_module.TestName[:tag]`
     """
-    # TODO: we should use a dedicated class for test IDs to handle this consistently
-    test_id, tag = test_id.split(":", 1) if ":" in test_id else (test_id, None)
-
-    error = None
+    # remove tag if present
+    test_id = test_id.split(":", 1)[0]
     namespace = test_id.split(".", 1)[0]
 
     # if not already loaded, load it from appropriate provider
     if test_id not in test_store.tests:
         if test_id.startswith("validmind.composite_metric"):
-            error, test_func = load_composite_metric(test_id)
+            # TODO: add composite metric loading
+            pass
 
-        elif namespace == "validmind":
-            error, test_func = _load_validmind_test(test_id)
+        if not test_provider_store.has_test_provider(namespace):
+            raise LoadTestError(f"No test provider found for namespace: {namespace}")
 
-        elif test_provider_store.has_test_provider(namespace):
-            provider = test_provider_store.get_test_provider(namespace)
+        provider = test_provider_store.get_test_provider(namespace)
 
-            try:
-                test_func = provider.load_test(test_id.split(".", 1)[1])
-            except Exception as e:
-                error = (
-                    f"Unable to load test {test_id} from test provider: "
-                    f"{provider}\n Got Exception: {e}"
-                )
+        try:
+            test_func = provider.load_test(test_id.split(".", 1)[1])
+        except Exception as e:
+            raise LoadTestError(
+                f"Unable to load test '{test_id}' from {namespace} test provider",
+                original_error=e,
+            ) from e
 
-        else:
-            error = f"Unable to load test {test_id}. No test provider found."
+        # fallback to using func name if no docstring is found
+        if not inspect.getdoc(test_func):
+            test_func.__doc__ = f"{test_func.__name__} ({test_id})"
 
-        if error:
-            logger.error(error)
-            raise LoadTestError(error)
+        # add inputs and params as attributes to the test function
+        test_func.inputs, test_func.params = _inspect_signature(test_func)
 
         test_store.register_test(test_id, test_func)
 
     return test_store.get_test(test_id)
 
 
-def _load_tests():
+def _list_test_ids():
+    test_ids = []
+
+    for namespace, test_provider in test_provider_store.test_providers.items():
+        test_ids.extend(
+            [f"{namespace}.{test_id}" for test_id in sorted(test_provider.list_tests())]
+        )
+
+    return test_ids
+
+
+def _load_tests(test_ids):
+    """Load a set of tests, handling missing dependencies."""
     tests = {}
 
-    for test_id in test_store.get_test_ids():
+    for test_id in test_ids:
         try:
             tests[test_id] = load_test(test_id)
-        except MissingDependencyError as e:
-            # skip tests that have missing dependencies
+        except LoadTestError as e:
+            if not e.original_error or not isinstance(
+                e.original_error, MissingDependencyError
+            ):
+                raise e
+
+            e = e.original_error
+
             logger.debug(str(e))
 
             if e.extra:
@@ -106,9 +136,16 @@ def _load_tests():
                     " Please install the missing dependencies to view and run this test."
                 )
 
-            continue
-
     return tests
+
+
+def _test_description(test_func):
+    description = inspect.getdoc(test_func).strip()
+
+    if len(description.split("\n")) > 5:
+        return description.strip().split("\n")[0] + "..."
+
+    return description
 
 
 def _pretty_list_tests(tests, truncate=True):
@@ -116,9 +153,9 @@ def _pretty_list_tests(tests, truncate=True):
         {
             "ID": test_id,
             "Name": test_id_to_name(test_id),
-            "Description": test_description(test, truncate),
-            "Required Inputs": test.required_inputs,
-            "Params": test.default_params or {},
+            "Description": _test_description(test),
+            "Required Inputs": test.inputs,
+            "Params": test.params,
         }
         for test_id, test in tests.items()
     ]
@@ -126,9 +163,7 @@ def _pretty_list_tests(tests, truncate=True):
     return format_dataframe(pd.DataFrame(table))
 
 
-def list_tests(
-    filter=None, task=None, tags=None, pretty=True, truncate=True, __as_class=False
-):
+def list_tests(filter=None, task=None, tags=None, pretty=True, truncate=True):
     """List all tests in the tests directory.
 
     Args:
@@ -146,7 +181,13 @@ def list_tests(
     Returns:
         list or pandas.DataFrame: A list of all tests or a formatted table.
     """
-    tests = _load_tests()
+    test_ids = _list_test_ids()
+
+    # no need to load test funcs (takes a while) if we're just returning the test ids
+    if not filter and not task and not tags and not pretty:
+        return test_ids
+
+    tests = _load_tests(test_ids)
 
     # first search by the filter string since it's the most general search
     if filter is not None:
@@ -169,11 +210,7 @@ def list_tests(
             if all(tag in test.tags for tag in tags)
         }
 
-    if __as_class:
-        return list(tests.values())
-
     if not pretty:
-        # only return test ids
         return list(tests.keys())
 
     return _pretty_list_tests(tests, truncate=truncate)
@@ -191,13 +228,13 @@ def describe_test(test_id: TestID = None, raw: bool = False, show: bool = True):
         raw (bool, optional): If True, returns a dictionary with the test details.
             Defaults to False.
     """
-    test = load_test(test_id, reload=True)
+    test = load_test(test_id)
 
     details = {
         "ID": test_id,
         "Name": test_id_to_name(test_id),
-        "Required Inputs": test.required_inputs or [],
-        "Params": test.default_params or {},
+        "Required Inputs": test.inputs or [],
+        "Params": test.params or {},
         "Description": inspect.getdoc(test).strip() or "",
     }
 
@@ -212,8 +249,8 @@ def describe_test(test_id: TestID = None, raw: bool = False, show: bool = True):
         required_inputs=", ".join(details["Required Inputs"] or ["None"]),
         params_table="\n".join(
             [
-                f"<tr><td>{param}</td><td>{pformat(value, indent=4)}</td></tr>"
-                for param, value in details["Params"].items()
+                f"<tr><td>{param}</td><td>{pformat(param_spec['default'], indent=4)}</td></tr>"
+                for param, param_spec in details["Params"].items()
             ]
         ),
         table_display="table" if details["Params"] else "none",
@@ -221,7 +258,10 @@ def describe_test(test_id: TestID = None, raw: bool = False, show: bool = True):
             {name: f"my_vm_{name}" for name in (details["Required Inputs"] or [])},
             indent=4,
         ),
-        example_params=json.dumps(details["Params"] or {}, indent=4, cls=NumpyEncoder),
+        example_params=json.dumps(
+            {param: f"my_vm_{param}" for param in (details["Params"] or {}).keys()},
+            indent=4,
+        ),
         instructions_display="block" if show else "none",
     )
 
@@ -231,6 +271,6 @@ def describe_test(test_id: TestID = None, raw: bool = False, show: bool = True):
     display(
         Accordion(
             children=[HTML(html)],
-            titles=[f"Test Description: {details['Name']} ('{test_id}')"],
+            titles=[f"Test: {details['Name']} ('{test_id}')"],
         )
     )

@@ -5,6 +5,9 @@
 """Module for storing loaded tests and test providers"""
 
 
+from .test_providers import TestProvider, ValidMindTestProvider
+
+
 def singleton(cls):
     """Decorator to make a class a singleton"""
     instances = {}
@@ -95,3 +98,6 @@ class TestStore:
 
 test_store = TestStore()
 test_provider_store = TestProviderStore()
+
+# setup built-in test providers
+test_provider_store.register_test_provider("validmind", ValidMindTestProvider())

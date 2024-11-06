@@ -4,7 +4,8 @@
 
 from sklearn import metrics
 
-from validmind import VMDataset, VMModel, tags, tasks
+from validmind import tags, tasks
+from validmind.vm_models import VMDataset, VMModel
 
 
 @tags("sklearn", "model_performance")

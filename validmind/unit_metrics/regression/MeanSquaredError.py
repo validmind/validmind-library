@@ -10,4 +10,5 @@ from validmind import tags, tasks
 @tags("regression")
 @tasks("regression")
 def MeanSquaredError(model, dataset, **kwargs):
+    """Calculates the mean squared error for a regression model."""
     return mean_squared_error(dataset.y, dataset.y_pred(model), **kwargs)

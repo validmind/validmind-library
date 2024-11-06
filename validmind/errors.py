@@ -9,7 +9,9 @@ The following base errors are defined for others:
 - BaseError
 - APIRequestError
 """
+
 import json
+from typing import Optional
 
 
 class BaseError(Exception):
@@ -156,7 +158,9 @@ class LoadTestError(BaseError):
     Exception raised when an error occurs while loading a test
     """
 
-    pass
+    def __init__(self, message: str, original_error: Optional[Exception] = None):
+        super().__init__(message)
+        self.original_error = original_error
 
 
 class MismatchingClassLabelsError(BaseError):

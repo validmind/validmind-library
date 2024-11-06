@@ -8,10 +8,10 @@ import plotly.express as px
 from sklearn.manifold import TSNE
 
 from validmind import tags, tasks
-from validmind.logging import logger
+from validmind.logging import get_logger
 from validmind.vm_models import VMDataset, VMModel
 
-logger = logger.get_logger(__name__)
+logger = get_logger(__name__)
 
 
 @tags("llm", "text_data", "embeddings", "visualization")

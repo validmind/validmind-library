@@ -14,8 +14,8 @@ from .utils import get_ragas_config, get_renamed_columns
 
 try:
     from ragas import evaluate
-    from ragas.metrics import AspectCritic
-    from ragas.metrics._aspect_critic import (
+    from ragas.metrics.critique import (
+        AspectCritique,
         coherence,
         conciseness,
         correctness,
@@ -144,7 +144,7 @@ def AspectCritique(
 
     custom_aspects = (
         [
-            AspectCritic(name=name, definition=description)
+            AspectCritique(name=name, definition=description)
             for name, description in additional_aspects
         ]
         if additional_aspects

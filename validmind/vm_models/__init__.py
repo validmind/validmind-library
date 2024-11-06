@@ -10,7 +10,7 @@ from .dataset.dataset import VMDataset
 from .figure import Figure
 from .input import VMInput
 from .model import R_MODEL_TYPES, ModelAttributes, VMModel
-from .result import ResultSummary, ResultTable
+from .result import ResultTable, TestResult
 from .test_suite.runner import TestSuiteRunner
 from .test_suite.test_suite import TestSuite
 
@@ -21,8 +21,8 @@ __all__ = [
     "Figure",
     "ModelAttributes",
     "R_MODEL_TYPES",
-    "ResultSummary",
     "ResultTable",
+    "TestResult",
     "TestSuite",
     "TestSuiteRunner",
 ]
