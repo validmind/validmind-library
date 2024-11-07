@@ -48,7 +48,6 @@ jobs:
         run: |
           rm -rf /tmp/pip-*  # Clear pip temporary files
           rm -rf ~/.cache/pip  # Clear pip cache
-          rm -rf ~/.cache/pypoetry  # Clear poetry cache
 
       - name: Build the package
         run: poetry build
@@ -66,12 +65,8 @@ jobs:
       - name: Install Built Package
         run: sdist-venv/bin/pip install --no-cache-dir "$(ls dist/validmind*.whl | head -n 1)[llm,huggingface]"
 
-      # Additional cleanup step before installing more dependencies
-      - name: Clear pip temporary files before additional dependencies
-        run: rm -rf /tmp/pip-*  # Clear pip temporary files
-
       - name: Install Additional Dependencies
-        run: sdist-venv/bin/pip install --no-cache-dir nbformat papermill jupyter
+        run: sdist-venv/bin/pip install nbformat papermill jupyter
 
       - name: Create Jupyter Kernel
         run: sdist-venv/bin/python -m ipykernel install --user --name sdist-venv
