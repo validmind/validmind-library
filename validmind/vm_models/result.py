@@ -20,6 +20,7 @@ from .. import api_client
 from ..ai.test_descriptions import DescriptionFuture
 from ..logging import get_logger
 from ..utils import NumpyEncoder, display, run_async, test_id_to_name
+from .dataset import VMDataset
 from .figure import Figure
 from .input import VMInput
 
@@ -45,6 +46,30 @@ RESULT_HTML_TEMPLATE = """
 <h3>Metric: <code language="json">{{ metric }}</code></h3>
 {% endif %}
 """
+
+
+def check_for_sensitive_data(data: pd.DataFrame, inputs: Dict[str, VMInput]):
+    """Check if a table contains raw data from input datasets"""
+    dataset_columns = {
+        col: len(input_obj.df)
+        for input_obj in inputs.values()
+        if isinstance(input_obj, VMDataset)
+        for col in input_obj.columns
+    }
+
+    table_columns = {col: len(data) for col in data.columns}
+
+    offending_columns = [
+        col
+        for col in table_columns
+        if col in dataset_columns and table_columns[col] == dataset_columns[col]
+    ]
+
+    if offending_columns:
+        raise ValueError(
+            f"Raw input data found in table, pass `unsafe=True` "
+            f"or remove the offending columns: {offending_columns}"
+        )
 
 
 @dataclass
@@ -224,6 +249,7 @@ class TestResult(Result):
     inputs: Optional[Dict[str, VMInput]] = None
 
     _was_description_generated: bool = False
+    _unsafe: bool = False
 
     def __repr__(self) -> str:
         return f'TestResult(result_id="{self.result_id}")'
@@ -398,7 +424,10 @@ class TestResult(Result):
             unsafe (bool): If True, log the result even if it contains sensitive data
                 i.e. raw data from input datasets
         """
-        # do validation before starting as async since that messes with the traceback
+        if not unsafe:
+            for table in self.tables:
+                check_for_sensitive_data(table.data, self.inputs)
+
         if section_id:
             self._validate_section_id_for_block(section_id, position)
 

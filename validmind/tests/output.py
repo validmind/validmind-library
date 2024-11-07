@@ -9,7 +9,6 @@ from uuid import uuid4
 import numpy as np
 import pandas as pd
 
-from validmind.vm_models import VMDataset, VMInput
 from validmind.vm_models.figure import (
     Figure,
     is_matplotlib_figure,
@@ -17,30 +16,6 @@ from validmind.vm_models.figure import (
     is_png_image,
 )
 from validmind.vm_models.result import ResultTable, TestResult
-
-
-def check_for_sensitive_data(data: pd.DataFrame, inputs: Dict[str, VMInput]):
-    """Check if a table contains raw data from input datasets"""
-    dataset_columns = {
-        col: len(input_obj.df)
-        for input_obj in inputs.values()
-        if isinstance(input_obj, VMDataset)
-        for col in input_obj.columns
-    }
-
-    table_columns = {col: len(data) for col in data.columns}
-
-    offending_columns = [
-        col
-        for col in table_columns
-        if col in dataset_columns and table_columns[col] == dataset_columns[col]
-    ]
-
-    if offending_columns:
-        raise ValueError(
-            f"Raw input data found in table, pass `unsafe=True` "
-            f"or remove the offending columns: {offending_columns}"
-        )
 
 
 class OutputHandler(ABC):
@@ -120,7 +95,6 @@ class TableOutputHandler(OutputHandler):
             if isinstance(table_data, list):
                 table_data = pd.DataFrame(table_data)
 
-            check_for_sensitive_data(table_data, result.inputs)
             result.add_table(ResultTable(data=table_data, title=table_name or None))
 
 
