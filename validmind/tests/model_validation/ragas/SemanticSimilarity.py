@@ -107,8 +107,10 @@ def SemanticSimilarity(
         Dataset.from_pandas(df), metrics=[semantic_similarity()], **get_ragas_config()
     ).to_pandas()
 
-    fig_histogram = px.histogram(x=result_df["semantic_similarity"].to_list(), nbins=10)
-    fig_box = px.box(x=result_df["semantic_similarity"].to_list())
+    score_column = "semantic_similarity"
+
+    fig_histogram = px.histogram(x=result_df[score_column].to_list(), nbins=10)
+    fig_box = px.box(x=result_df[score_column].to_list())
 
     return (
         {
@@ -117,11 +119,11 @@ def SemanticSimilarity(
             # ],
             "Aggregate Scores": [
                 {
-                    "Mean Score": result_df["semantic_similarity"].mean(),
-                    "Median Score": result_df["semantic_similarity"].median(),
-                    "Max Score": result_df["semantic_similarity"].max(),
-                    "Min Score": result_df["semantic_similarity"].min(),
-                    "Standard Deviation": result_df["semantic_similarity"].std(),
+                    "Mean Score": result_df[score_column].mean(),
+                    "Median Score": result_df[score_column].median(),
+                    "Max Score": result_df[score_column].max(),
+                    "Min Score": result_df[score_column].min(),
+                    "Standard Deviation": result_df[score_column].std(),
                     "Count": result_df.shape[0],
                 }
             ],

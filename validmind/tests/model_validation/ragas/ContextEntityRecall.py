@@ -113,10 +113,10 @@ def ContextEntityRecall(
         Dataset.from_pandas(df), metrics=[context_entity_recall()], **get_ragas_config()
     ).to_pandas()
 
-    fig_histogram = px.histogram(
-        x=result_df["context_entity_recall"].to_list(), nbins=10
-    )
-    fig_box = px.box(x=result_df["context_entity_recall"].to_list())
+    score_column = "context_entity_recall"
+
+    fig_histogram = px.histogram(x=result_df[score_column].to_list(), nbins=10)
+    fig_box = px.box(x=result_df[score_column].to_list())
 
     return (
         {
@@ -129,11 +129,11 @@ def ContextEntityRecall(
             # ],
             "Aggregate Scores": [
                 {
-                    "Mean Score": result_df["context_entity_recall"].mean(),
-                    "Median Score": result_df["context_entity_recall"].median(),
-                    "Max Score": result_df["context_entity_recall"].max(),
-                    "Min Score": result_df["context_entity_recall"].min(),
-                    "Standard Deviation": result_df["context_entity_recall"].std(),
+                    "Mean Score": result_df[score_column].mean(),
+                    "Median Score": result_df[score_column].median(),
+                    "Max Score": result_df[score_column].max(),
+                    "Min Score": result_df[score_column].min(),
+                    "Standard Deviation": result_df[score_column].std(),
                     "Count": result_df.shape[0],
                 }
             ],
