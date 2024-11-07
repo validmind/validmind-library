@@ -2,7 +2,7 @@
 #'
 #' @param api_key The ValidMind API key
 #' @param api_secret The ValidMind API secret
-#' @param project The ValidMind project
+#' @param model The ValidMind model
 #' @param python_version The Python Version to use
 #' @param api_host The ValidMind host, defaulting to local
 #'
@@ -16,14 +16,14 @@
 #' vm_r <- vm(
 #'    api_key="<your_api_key_here>",
 #'    api_secret="<your_api_secret_here>",
-#'    project="<your_project_id_here>",
+#'    model="<your_model_id_here>",
 #'    python_version=python_version,
 #'    api_host="https://api.dev.vm.validmind.ai/api/v1/tracking"
 #'  )
 #'}
 #'
 #' @export
-vm <- function(api_key, api_secret, project, python_version,
+vm <- function(api_key, api_secret, model, python_version,
                api_host = "http://localhost:3000/api/v1/tracking") {
   use_python(python_version)
 
@@ -33,7 +33,7 @@ vm <- function(api_key, api_secret, project, python_version,
     api_host = api_host,
     api_key = api_key,
     api_secret = api_secret,
-    project = project
+    model = model
   )
 
   return(vm)
@@ -356,4 +356,27 @@ display_report <- function(processed_results) {
   }
 
   return(all_widgets)
+}
+
+#' Save an R model to a temporary file
+#'
+#' This function saves a given R model object to a randomly named `.RData` file
+#' in the `/tmp/` directory. The file is saved with a unique name generated
+#' using random letters.
+#'
+#' @param model The R model object to be saved.
+#'
+#' @return A string representing the full file path to the saved `.RData` file.
+#'
+#' @examples
+#' model <- lm(mpg ~ cyl, data = mtcars)
+#' file_path <- save_model(model)
+#'
+#' @export
+save_model <- function(model) {
+  random_name <- paste(sample(letters, 10, replace = TRUE), collapse = "")
+  file_path <- paste0("/tmp/", random_name, ".RData")
+  save(model, file = file_path)
+
+  return(file_path)
 }
