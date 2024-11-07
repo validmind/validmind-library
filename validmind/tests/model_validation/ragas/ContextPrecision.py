@@ -25,7 +25,7 @@ except ImportError as e:
 
 
 @tags("ragas", "llm", "retrieval_performance")
-@tasks("text_qa", "text_generation", "text_summarization", "text_classification")
+@tasks("text_generation", "text_summarization", "text_classification")
 def ContextPrecision(
     dataset,
     user_input_column: str = "user_input",

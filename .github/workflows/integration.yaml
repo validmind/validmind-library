@@ -20,6 +20,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Initial Cleanup (clear /tmp folder)
+        run: rm -rf /tmp/*
+
       - uses: actions/checkout@v4
 
       - name: Install poetry

@@ -5,7 +5,7 @@ name: Code Quality and Unit Testing
 
 on:
   push:
-    branches: [main]
+    branches: [juan5508/sc-7312/update-rag-tests-for-compatibility-with-latest-ragas-package]
   pull_request:
     branches: ["*"]
 
