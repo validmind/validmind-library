@@ -375,7 +375,7 @@ display_report <- function(processed_results) {
 #' @export
 save_model <- function(model) {
   random_name <- paste(sample(letters, 10, replace = TRUE), collapse = "")
-  file_path <- paste0("/tmp/", random_name, ".RData")
+  file_path <- paste0(tempdir(), random_name, ".RData")
   save(model, file = file_path)
 
   return(file_path)
