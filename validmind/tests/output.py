@@ -4,6 +4,7 @@
 
 from abc import ABC, abstractmethod
 from typing import Any, Dict, List, Union
+from uuid import uuid4
 
 import numpy as np
 import pandas as pd
@@ -89,9 +90,10 @@ class FigureOutputHandler(OutputHandler):
         if isinstance(item, Figure):
             result.add_figure(item)
         else:
+            random_id = str(uuid4())[:4]
             result.add_figure(
                 Figure(
-                    key=f"{result.result_id}:{len(result.figures) + 1}",
+                    key=f"{result.result_id}:{random_id}",
                     figure=item,
                     ref_id=result.ref_id,
                 )

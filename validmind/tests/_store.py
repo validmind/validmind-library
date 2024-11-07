@@ -5,7 +5,7 @@
 """Module for storing loaded tests and test providers"""
 
 
-from .test_providers import ValidMindTestProvider
+from .test_providers import TestProvider, ValidMindTestProvider
 
 
 def singleton(cls):
@@ -38,7 +38,7 @@ class TestProviderStore:
         """
         return namespace in self.test_providers
 
-    def get_test_provider(self, namespace: str):
+    def get_test_provider(self, namespace: str) -> TestProvider:
         """Get a test provider by namespace
 
         Args:

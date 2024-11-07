@@ -185,7 +185,7 @@ def init(
     api_secret: Optional[str] = None,
     api_host: Optional[str] = None,
     model: Optional[str] = None,
-    monitoring=False,
+    monitoring: bool = False,
 ):
     """
     Initializes the API client instances and calls the /ping endpoint to ensure
@@ -200,7 +200,7 @@ def init(
         api_key (str, optional): The API key. Defaults to None.
         api_secret (str, optional): The API secret. Defaults to None.
         api_host (str, optional): The API host. Defaults to None.
-        monitoring (str, optional): The ongoing monitoring flag. Defaults to False.
+        monitoring (bool): The ongoing monitoring flag. Defaults to False.
 
     Raises:
         ValueError: If the API key and secret are not provided
@@ -210,7 +210,7 @@ def init(
     if api_key == "...":
         # special case to detect when running a notebook placeholder (...)
         # will override with environment variables for easier local development
-        api_host = api_key = api_secret = project = None
+        api_host = api_key = api_secret = project = model = None
 
     _model_cuid = project or model or os.getenv("VM_API_MODEL")
     if _model_cuid is None:
@@ -254,7 +254,6 @@ async def aget_metadata(content_id: str) -> Dict[str, Any]:
     Returns:
         dict: Metadata object
     """
-    # TODO: add a more accurate type hint/documentation
     return await _get(f"get_metadata/{content_id}")
 
 
@@ -316,8 +315,7 @@ async def alog_figure(figure: Figure) -> Dict[str, Any]:
 
 
 async def alog_test_result(
-    result: TestResult,
-    inputs: List[str],
+    result: Dict[str, Any],
     section_id: str = None,
     position: int = None,
 ) -> Dict[str, Any]:
@@ -327,8 +325,7 @@ async def alog_test_result(
     can also be called directly if the user wants to run tests on their own.
 
     Args:
-        result (validmind.ThresholdTestResults): A ThresholdTestResults object
-        inputs (list): A list of input keys (names) that were used to run the test
+        result (dict): A dictionary representing the test result
         section_id (str, optional): The section ID add a test driven block to the documentation
         position (int): The position in the section to add the test driven block
 
@@ -349,10 +346,7 @@ async def alog_test_result(
             "log_test_results",
             params=request_params,
             data=json.dumps(
-                {
-                    **result.serialize(),
-                    "inputs": inputs,
-                },
+                result,
                 cls=NumpyEncoder,
                 allow_nan=False,
             ),
@@ -402,7 +396,7 @@ def log_input(input_id: str, type: str, metadata: Dict[str, Any]) -> Dict[str, A
 
 async def alog_metric(
     key: str,
-    value: float,
+    value: Union[int, float],
     inputs: Optional[List[str]] = None,
     params: Optional[Dict[str, Any]] = None,
     recorded_at: Optional[str] = None,
@@ -411,8 +405,14 @@ async def alog_metric(
     if not key or not isinstance(key, str):
         raise ValueError("`key` must be a non-empty string")
 
-    if not value or not isinstance(value, (int, float)):
-        raise ValueError("`value` must be a scalar (int or float)")
+    if value is None:
+        raise ValueError("Must provide a value for the metric")
+
+    if not isinstance(value, (int, float)):
+        try:
+            value = float(value)
+        except (ValueError, TypeError):
+            raise ValueError("`value` must be a scalar (int or float)")
 
     try:
         return await _post(
