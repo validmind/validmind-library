@@ -6,13 +6,16 @@ import pandas as pd
 from statsmodels.tsa.arima.model import ARIMA
 from statsmodels.tsa.stattools import adfuller
 
+from validmind import tags, tasks
 from validmind.logging import get_logger
-from validmind.vm_models import Metric, ResultSummary, ResultTable, ResultTableMetadata
+from validmind.vm_models import VMDataset
 
 logger = get_logger(__name__)
 
 
-class AutoMA(Metric):
+@tags("time_series_data", "statsmodels", "forecasting", "statistical_test")
+@tasks("regression")
+def AutoMA(dataset: VMDataset, max_ma_order: int = 3):
     """
     Automatically selects the optimal Moving Average (MA) order for each variable in a time series dataset based on
     minimal BIC and AIC values.
@@ -59,98 +62,58 @@ class AutoMA(Metric):
     - The computation time increases with the rise in `max_ma_order`, hence, the metric may become computationally
     costly for larger values.
     """
+    df = dataset.df
 
-    type = "dataset"
-    name = "auto_ma"
-    required_inputs = ["dataset"]
-    default_params = {"max_ma_order": 3}
-    tasks = ["regression"]
-    tags = ["time_series_data", "statsmodels", "forecasting", "statistical_test"]
+    summary_ma_analysis = pd.DataFrame()
+    best_ma_order = pd.DataFrame()
 
-    def run(self):
-        if "max_ma_order" not in self.params:
-            raise ValueError("max_ma_order must be provided in params")
+    for col in df.columns:
+        series = df[col].dropna()
 
-        max_ma_order = int(self.params["max_ma_order"])
+        # Check for stationarity using the Augmented Dickey-Fuller test
+        adf_test = adfuller(series)
+        if adf_test[1] > 0.05:
+            logger.warning(
+                f"Warning: {col} is not stationary. Results may be inaccurate."
+            )
 
-        df = self.inputs.dataset.df
+        for ma_order in range(0, max_ma_order + 1):
+            try:
+                model = ARIMA(series, order=(0, 0, ma_order))
+                model_fit = model.fit()
 
-        # Create empty DataFrames to store the results
-        summary_ma_analysis = pd.DataFrame()
-        best_ma_order = pd.DataFrame()
-
-        for col in df.columns:
-            series = df[col].dropna()
-
-            # Check for stationarity using the Augmented Dickey-Fuller test
-            adf_test = adfuller(series)
-            if adf_test[1] > 0.05:
-                logger.warning(
-                    f"Warning: {col} is not stationary. Results may be inaccurate."
+                # Append the result of each MA order directly into the DataFrame
+                summary_ma_analysis = pd.concat(
+                    [
+                        summary_ma_analysis,
+                        pd.DataFrame(
+                            [
+                                {
+                                    "Variable": col,
+                                    "MA Order": ma_order,
+                                    "BIC": model_fit.bic,
+                                    "AIC": model_fit.aic,
+                                }
+                            ]
+                        ),
+                    ],
+                    ignore_index=True,
                 )
+            except Exception as e:
+                logger.error(f"Error fitting MA({ma_order}) model for {col}: {e}")
 
-            for ma_order in range(0, max_ma_order + 1):
-                try:
-                    model = ARIMA(series, order=(0, 0, ma_order))
-                    model_fit = model.fit()
+        # Find the best MA Order for this variable based on the minimum BIC
+        variable_summary = summary_ma_analysis[summary_ma_analysis["Variable"] == col]
+        best_bic_row = variable_summary[
+            variable_summary["BIC"] == variable_summary["BIC"].min()
+        ]
+        best_ma_order = pd.concat([best_ma_order, best_bic_row])
 
-                    # Append the result of each MA order directly into the DataFrame
-                    summary_ma_analysis = pd.concat(
-                        [
-                            summary_ma_analysis,
-                            pd.DataFrame(
-                                [
-                                    {
-                                        "Variable": col,
-                                        "MA Order": ma_order,
-                                        "BIC": model_fit.bic,
-                                        "AIC": model_fit.aic,
-                                    }
-                                ]
-                            ),
-                        ],
-                        ignore_index=True,
-                    )
-                except Exception as e:
-                    logger.error(f"Error fitting MA({ma_order}) model for {col}: {e}")
+    # Convert the 'MA Order' column to integer
+    summary_ma_analysis["MA Order"] = summary_ma_analysis["MA Order"].astype(int)
+    best_ma_order["MA Order"] = best_ma_order["MA Order"].astype(int)
 
-            # Find the best MA Order for this variable based on the minimum BIC
-            variable_summary = summary_ma_analysis[
-                summary_ma_analysis["Variable"] == col
-            ]
-            best_bic_row = variable_summary[
-                variable_summary["BIC"] == variable_summary["BIC"].min()
-            ]
-            best_ma_order = pd.concat([best_ma_order, best_bic_row])
-
-        # Convert the 'MA Order' column to integer
-        summary_ma_analysis["MA Order"] = summary_ma_analysis["MA Order"].astype(int)
-        best_ma_order["MA Order"] = best_ma_order["MA Order"].astype(int)
-
-        return self.cache_results(
-            {
-                "auto_ma_analysis": summary_ma_analysis.to_dict(orient="records"),
-                "best_ma_order": best_ma_order.to_dict(orient="records"),
-            }
-        )
-
-    def summary(self, metric_value):
-        """
-        Build one table for summarizing the auto MA results
-        and another for the best MA Order results
-        """
-        summary_ma_analysis = metric_value["auto_ma_analysis"]
-        best_ma_order = metric_value["best_ma_order"]
-
-        return ResultSummary(
-            results=[
-                ResultTable(
-                    data=summary_ma_analysis,
-                    metadata=ResultTableMetadata(title="Auto MA Analysis Results"),
-                ),
-                ResultTable(
-                    data=best_ma_order,
-                    metadata=ResultTableMetadata(title="Best MA Order Results"),
-                ),
-            ]
-        )
+    return {
+        "Auto MA Analysis Results": summary_ma_analysis,
+        "Best MA Order Results": best_ma_order,
+    }

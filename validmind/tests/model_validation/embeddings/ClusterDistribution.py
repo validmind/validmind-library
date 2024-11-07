@@ -5,10 +5,13 @@
 import plotly.express as px
 from sklearn.cluster import KMeans
 
-from validmind.vm_models import Figure, Metric
+from validmind import tags, tasks
+from validmind.vm_models import VMDataset, VMModel
 
 
-class ClusterDistribution(Metric):
+@tags("llm", "text_data", "embeddings", "visualization")
+@tasks("feature_extraction")
+def ClusterDistribution(model: VMModel, dataset: VMDataset, num_clusters: int = 5):
     """
     Assesses the distribution of text embeddings across clusters produced by a model using KMeans clustering.
 
@@ -49,34 +52,8 @@ class ClusterDistribution(Metric):
     - Uses the KMeans clustering algorithm, which assumes that clusters are convex and isotropic, and may not work as
     intended if the true clusters in the data are not of this shape.
     """
-
-    name = "Text Embeddings Cluster Distribution"
-    required_inputs = ["model", "dataset"]
-    default_params = {
-        "num_clusters": 5,
-    }
-    tasks = ["feature_extraction"]
-    tags = ["llm", "text_data", "embeddings", "visualization"]
-
-    def run(self):
-        # run kmeans clustering on embeddings
-        kmeans = KMeans(n_clusters=self.params["num_clusters"]).fit(
-            self.inputs.dataset.y_pred(self.inputs.model)
-        )
-
-        # plot the distribution
-        fig = px.histogram(
-            kmeans.labels_,
-            nbins=self.params["num_clusters"],
-            title="Embeddings Cluster Distribution",
-        )
-
-        return self.cache_results(
-            figures=[
-                Figure(
-                    for_object=self,
-                    key=self.key,
-                    figure=fig,
-                )
-            ],
-        )
+    return px.histogram(
+        KMeans(n_clusters=num_clusters).fit(dataset.y_pred(model)).labels_,
+        nbins=num_clusters,
+        title="Embeddings Cluster Distribution",
+    )

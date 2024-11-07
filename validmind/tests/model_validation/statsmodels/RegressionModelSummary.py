@@ -2,18 +2,17 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from dataclasses import dataclass
-
-import pandas as pd
 from sklearn.metrics import mean_squared_error, r2_score
 
-from validmind.vm_models import Metric, ResultSummary, ResultTable, ResultTableMetadata
+from validmind import tags, tasks
+from validmind.vm_models import VMDataset, VMModel
 
 from .statsutils import adj_r2_score
 
 
-@dataclass
-class RegressionModelSummary(Metric):
+@tags("model_performance", "regression")
+@tasks("regression")
+def RegressionModelSummary(dataset: VMDataset, model: VMModel):
     """
     Evaluates regression model performance using metrics including R-Squared, Adjusted R-Squared, MSE, and RMSE.
 
@@ -26,11 +25,8 @@ class RegressionModelSummary(Metric):
 
     ### Test Mechanism
 
-    This test employs the 'train_ds' attribute of the model to gather and analyze the training data. Initially, it
-    fetches the independent variables and uses the model to make predictions on these given features. Subsequently, it
-    calculates several standard regression performance metrics including R-Squared, Adjusted R-Squared, Mean Squared
-    Error (MSE), and Root Mean Squared Error (RMSE), which quantify the approximation of the predicted responses to the
-    actual responses.
+    This test uses the sklearn library to calculate the R-Squared, Adjusted R-Squared, MSE, and RMSE. It outputs a
+    table with the results of these metrics along with the feature columns used by the model.
 
     ### Signs of High Risk
 
@@ -45,54 +41,21 @@ class RegressionModelSummary(Metric):
 
     ### Limitations
 
-    - Applicable exclusively to regression models.
     - RMSE and MSE might be sensitive to outliers.
     - A high R-Squared or Adjusted R-Squared may not necessarily indicate a good model, especially in cases of
     overfitting.
     """
+    y_true = dataset.y
+    y_pred = dataset.y_pred(model)
 
-    name = "regression_model_summary"
-    required_inputs = ["model", "dataset"]
-    tasks = ["regression"]
-    tags = ["model_metadata", "model_comparison"]
-
-    def run(self):
-        X_columns = self.inputs.dataset.feature_columns
-
-        y_true = self.inputs.dataset.y
-        y_pred = self.inputs.dataset.y_pred(self.inputs.model)
-
-        r2 = r2_score(y_true, y_pred)
-        adj_r2 = adj_r2_score(y_true, y_pred, len(y_true), len(X_columns))
-        mse = mean_squared_error(y_true=y_true, y_pred=y_pred, squared=True)
-        rmse = mean_squared_error(y_true=y_true, y_pred=y_pred, squared=False)
-
-        results = {
-            "Independent Variables": X_columns,
-            "R-Squared": r2,
-            "Adjusted R-Squared": adj_r2,
-            "MSE": mse,
-            "RMSE": rmse,
+    return [
+        {
+            "Independent Variables": dataset.feature_columns,
+            "R-Squared": r2_score(y_true, y_pred),
+            "Adjusted R-Squared": adj_r2_score(
+                y_true, y_pred, len(y_true), len(dataset.feature_columns)
+            ),
+            "MSE": mean_squared_error(y_true=y_true, y_pred=y_pred, squared=True),
+            "RMSE": mean_squared_error(y_true=y_true, y_pred=y_pred, squared=False),
         }
-        summary_regression = pd.DataFrame(results)
-
-        return self.cache_results(
-            {
-                "regression_analysis": summary_regression.to_dict(orient="records"),
-            }
-        )
-
-    def summary(self, metric_value):
-        """
-        Build one table for summarizing the regression analysis results
-        """
-        summary_regression = metric_value["regression_analysis"]
-
-        return ResultSummary(
-            results=[
-                ResultTable(
-                    data=summary_regression,
-                    metadata=ResultTableMetadata(title="Regression Analysis Results"),
-                ),
-            ]
-        )
+    ]

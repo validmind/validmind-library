@@ -2,23 +2,24 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from dataclasses import dataclass
-
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 from sklearn.metrics import r2_score
 from sklearn.utils import check_random_state
 
-from validmind.errors import SkipTestError
+from validmind import tags, tasks
 from validmind.logging import get_logger
-from validmind.vm_models import Figure, Metric
+from validmind.vm_models import VMDataset, VMModel
 
 logger = get_logger(__name__)
 
 
-@dataclass
-class RegressionPermutationFeatureImportance(Metric):
+@tags("statsmodels", "feature_importance", "visualization")
+@tasks("regression")
+def RegressionPermutationFeatureImportance(
+    dataset: VMDataset, model: VMModel, fontsize: int = 12, figure_height: int = 500
+):
     """
     Assesses the significance of each feature in a model by evaluating the impact on model performance when feature
     values are randomly rearranged.
@@ -55,79 +56,45 @@ class RegressionPermutationFeatureImportance(Metric):
     features.
     - Assumes independence of features when calculating importance, which might not always hold true.
     """
+    y_true = dataset.y
 
-    name = "regression_pfi"
-    required_inputs = ["model", "dataset"]
-    default_params = {
-        "fontsize": 12,
-        "figure_height": 500,
-    }
-    tasks = ["regression"]
-    tags = [
-        "statsmodels",
-        "feature_importance",
-        "visualization",
-    ]
+    baseline_performance = r2_score(y_true, dataset.y_pred(model))
 
-    def run(self):
-        x = self.inputs.dataset.x_df()
-        y = self.inputs.dataset.y_df()
+    importances = pd.DataFrame(
+        index=dataset.feature_columns, columns=["Importance", "Std Dev"]
+    )
 
-        model = self.inputs.model.model
-        if not hasattr(model, "predict"):
-            raise SkipTestError(
-                "Model does not support 'predict' method required for PFI"
-            )
+    for column in dataset.feature_columns:
+        shuffled_scores = []
+        for _ in range(30):  # Default number of shuffles
+            x_shuffled = dataset.x_df()
+            x_shuffled[column] = check_random_state(0).permutation(x_shuffled[column])
+            permuted_performance = r2_score(y_true, model.predict(x_shuffled))
+            shuffled_scores.append(baseline_performance - permuted_performance)
 
-        # Calculate baseline performance
-        baseline_performance = r2_score(y, model.predict(x))
-        importances = pd.DataFrame(index=x.columns, columns=["Importance", "Std Dev"])
+        importances.loc[column] = {
+            "Importance": np.mean(shuffled_scores),
+            "Std Dev": np.std(shuffled_scores),
+        }
 
-        for column in x.columns:
-            shuffled_scores = []
-            for _ in range(30):  # Default number of shuffles
-                x_shuffled = x.copy()
-                x_shuffled[column] = check_random_state(0).permutation(
-                    x_shuffled[column]
-                )
-                permuted_performance = r2_score(y, model.predict(x_shuffled))
-                shuffled_scores.append(baseline_performance - permuted_performance)
+    sorted_idx = importances["Importance"].argsort()
 
-            importances.loc[column] = {
-                "Importance": np.mean(shuffled_scores),
-                "Std Dev": np.std(shuffled_scores),
-            }
-
-        sorted_idx = importances["Importance"].argsort()
-
-        # Plotting the results
-        fig = go.Figure()
-        fig.add_trace(
-            go.Bar(
-                y=importances.index[sorted_idx],
-                x=importances.loc[importances.index[sorted_idx], "Importance"],
-                orientation="h",
-                error_x=dict(
-                    type="data",
-                    array=importances.loc[importances.index[sorted_idx], "Std Dev"],
-                ),
-            )
-        )
-        fig.update_layout(
-            title_text="Permutation Feature Importances",
-            yaxis=dict(
-                tickmode="linear", dtick=1, tickfont=dict(size=self.params["fontsize"])
+    fig = go.Figure()
+    fig.add_trace(
+        go.Bar(
+            y=importances.index[sorted_idx],
+            x=importances.loc[importances.index[sorted_idx], "Importance"],
+            orientation="h",
+            error_x=dict(
+                type="data",
+                array=importances.loc[importances.index[sorted_idx], "Std Dev"],
             ),
-            height=self.params["figure_height"],
         )
+    )
+    fig.update_layout(
+        title_text="Permutation Feature Importances",
+        yaxis=dict(tickmode="linear", dtick=1, tickfont=dict(size=fontsize)),
+        height=figure_height,
+    )
 
-        return self.cache_results(
-            metric_value=importances.to_dict(),
-            figures=[
-                Figure(
-                    for_object=self,
-                    key="regression_pfi",
-                    figure=fig,
-                ),
-            ],
-        )
+    return fig

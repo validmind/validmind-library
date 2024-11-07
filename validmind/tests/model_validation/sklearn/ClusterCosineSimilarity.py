@@ -2,17 +2,17 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from dataclasses import dataclass
-
 import numpy as np
-import pandas as pd
 from sklearn.metrics.pairwise import cosine_similarity
 
-from validmind.vm_models import Metric, ResultSummary, ResultTable, ResultTableMetadata
+from validmind import tags, tasks
+from validmind.errors import SkipTestError
+from validmind.vm_models import VMDataset, VMModel
 
 
-@dataclass
-class ClusterCosineSimilarity(Metric):
+@tags("sklearn", "model_performance", "clustering")
+@tasks("clustering")
+def ClusterCosineSimilarity(model: VMModel, dataset: VMDataset):
     """
     Measures the intra-cluster similarity of a clustering model using cosine similarity.
 
@@ -56,59 +56,29 @@ class ClusterCosineSimilarity(Metric):
     - Lastly, although rare, perfect perpendicular vectors (cosine similarity = 0) could be within the same cluster,
     which may give an inaccurate representation of a 'bad' cluster due to low cosine similarity score.
     """
+    y_pred = dataset.y_pred(model)
+    num_clusters = len(np.unique(y_pred))
 
-    name = "cluster_cosine_similarity"
-    required_inputs = ["model", "dataset"]
-    tasks = ["clustering"]
-    tags = [
-        "sklearn",
-        "model_performance",
-    ]
+    table = []
 
-    def run(self):
-        y_true_train = self.inputs.dataset.y
-        y_pred_train = self.inputs.dataset.y_pred(self.inputs.model)
-        y_true_train = y_true_train.astype(y_pred_train.dtype).flatten()
-        num_clusters = len(np.unique(y_pred_train))
-        # Calculate cosine similarity for each cluster
-        results = []
-        for cluster_id in range(num_clusters):
-            cluster_mask = y_pred_train == cluster_id
-            cluster_data = self.inputs.dataset.x[cluster_mask]
-            if cluster_data.size != 0:
-                # Compute the centroid of the cluster
-                cluster_centroid = np.mean(cluster_data, axis=0)
-                # Compute cosine similarities between the centroid and data points in the cluster
-                cosine_similarities = cosine_similarity(
-                    cluster_data, [cluster_centroid]
-                )
-                # Extract cosine similarity values for each data point in the cluster
-                cosine_similarities = cosine_similarities.flatten()
-                results.append(
-                    {
-                        "Cluster": cluster_id,
-                        "Mean Cosine Similarity": np.mean(cosine_similarities),
-                    }
-                )
-        return self.cache_results(
-            {
-                "cosine_similarity": pd.DataFrame(results).to_dict(orient="records"),
-            }
-        )
+    for cluster_idx in range(num_clusters):
+        cluster_data = dataset.x[y_pred == cluster_idx]
 
-    def summary(self, metric_value):
-        """
-        Build one table for summarizing the cluster cosine similarity results
-        """
-        summary_regression = metric_value["cosine_similarity"]
-
-        return ResultSummary(
-            results=[
-                ResultTable(
-                    data=summary_regression,
-                    metadata=ResultTableMetadata(
-                        title="Cluster Cosine Similarity Results"
+        if cluster_data.size != 0:
+            cluster_centroid = np.mean(cluster_data, axis=0)
+            table.append(
+                {
+                    "Cluster": cluster_idx,
+                    "Mean Cosine Similarity": np.mean(
+                        cosine_similarity(
+                            X=cluster_data,
+                            Y=[cluster_centroid],
+                        ).flatten()
                     ),
-                ),
-            ]
-        )
+                }
+            )
+
+    if not table:
+        raise SkipTestError("No clusters found")
+
+    return table

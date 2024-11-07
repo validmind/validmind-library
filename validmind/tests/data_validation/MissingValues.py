@@ -2,20 +2,13 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from dataclasses import dataclass
-from typing import List
-
-from validmind.vm_models import (
-    ResultSummary,
-    ResultTable,
-    ResultTableMetadata,
-    ThresholdTest,
-    ThresholdTestResult,
-)
+from validmind import tags, tasks
+from validmind.vm_models import VMDataset
 
 
-@dataclass
-class MissingValues(ThresholdTest):
+@tags("tabular_data", "data_quality")
+@tasks("classification", "regression")
+def MissingValues(dataset: VMDataset, min_threshold: int = 1):
     """
     Evaluates dataset quality by ensuring missing value ratio across all features does not exceed a set threshold.
 
@@ -53,49 +46,15 @@ class MissingValues(ThresholdTest):
     - Does not account for data encoded as values like "-999" or "None," which might not technically classify as
     missing but could bear similar implications.
     """
+    df = dataset.df
+    missing = df.isna().sum()
 
-    name = "missing"
-    required_inputs = ["dataset"]
-    default_params = {"min_threshold": 1}
-    tasks = ["classification", "regression"]
-    tags = ["tabular_data", "data_quality"]
-
-    def summary(self, results: List[ThresholdTestResult], all_passed: bool):
-        """
-        The missing values test returns results like these:
-        [{"values": {"n_missing": 0, "p_missing": 0.0}, "column": "Exited", "passed": true}]
-        """
-        results_table = [
-            {
-                "Column": result.column,
-                "Number of Missing Values": result.values["n_missing"],
-                "Percentage of Missing Values (%)": result.values["p_missing"] * 100,
-                "Pass/Fail": "Pass" if result.passed else "Fail",
-            }
-            for result in results
-        ]
-        return ResultSummary(
-            results=[
-                ResultTable(
-                    data=results_table,
-                    metadata=ResultTableMetadata(
-                        title="Missing Values Results for Dataset"
-                    ),
-                )
-            ]
-        )
-
-    def run(self):
-        rows = self.inputs.dataset.df.shape[0]
-
-        missing = self.inputs.dataset.df.isna().sum()
-        results = [
-            ThresholdTestResult(
-                column=col,
-                passed=missing[col] < self.params["min_threshold"],
-                values={"n_missing": missing[col], "p_missing": missing[col] / rows},
-            )
-            for col in missing.index
-        ]
-
-        return self.cache_results(results, passed=all([r.passed for r in results]))
+    return [
+        {
+            "Column": col,
+            "Number of Missing Values": missing[col],
+            "Percentage of Missing Values (%)": missing[col] / df.shape[0] * 100,
+            "Pass/Fail": "Pass" if missing[col] < min_threshold else "Fail",
+        }
+        for col in missing.index
+    ], all(missing[col] < min_threshold for col in missing.index)

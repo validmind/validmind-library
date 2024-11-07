@@ -4,8 +4,8 @@ Unit tests for ValidMind tests module
 
 import unittest
 from unittest import TestCase
+from typing import Callable
 
-from validmind.vm_models import Test
 from validmind.tests import list_tests, load_test, describe_test, register_test_provider
 
 
@@ -27,7 +27,10 @@ class TestTestsModule(TestCase):
     def test_load_test(self):
         test = load_test("validmind.model_validation.ModelMetadata")
         self.assertTrue(test is not None)
-        self.assertTrue(issubclass(test, Test))
+        self.assertTrue(isinstance(test, Callable))
+        self.assertTrue(test.test_id is not None)
+        self.assertTrue(test.inputs is not None)
+        self.assertTrue(test.params is not None)
 
     def test_describe_test(self):
         describe_test("validmind.model_validation.ModelMetadata")
@@ -44,10 +47,11 @@ class TestTestsModule(TestCase):
 
     def test_test_provider_registration(self):
         class TestProvider:
-            def load_test(self, test_id):
-                fake_test = Test(test_id=test_id)
-                fake_test.test_id = test_id
-                return fake_test
+            def list_tests(self):
+                return ["fake.fake_test_id"]
+
+            def load_test(self, _):
+                return lambda: None
 
         register_test_provider("fake", TestProvider())
 

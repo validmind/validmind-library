@@ -2,102 +2,15 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from dataclasses import dataclass
-from typing import List, Tuple, Union
-from uuid import uuid4
+from typing import List
 
-from ..ai.test_descriptions import get_description_metadata
+from ..ai.test_descriptions import get_result_description
 from ..logging import get_logger
-from ..tests.decorator import _inspect_signature
-from ..utils import run_async, test_id_to_name
-from ..vm_models.test.metric import Metric
-from ..vm_models.test.metric_result import MetricResult
-from ..vm_models.test.result_summary import ResultSummary, ResultTable
-from ..vm_models.test.result_wrapper import MetricResultWrapper
-from . import load_metric, run_metric
+from ..utils import test_id_to_name
+from ..vm_models.result import ResultTable, TestResult
+from . import run_metric
 
 logger = get_logger(__name__)
-
-
-@dataclass
-class CompositeMetric(Metric):
-    unit_metrics: List[str] = None
-
-    def __post_init__(self):
-        if self._unit_metrics:
-            self.unit_metrics = self._unit_metrics
-        elif self.unit_metrics is None:
-            raise ValueError("unit_metrics must be provided")
-
-        if hasattr(self, "_output_template") and self._output_template:
-            self.output_template = self._output_template
-
-    def run(self):
-        self.result = run_metrics(
-            test_id=self.test_id,
-            metric_ids=self.unit_metrics,
-            description=self.description(),
-            inputs=self._get_input_dict(),
-            accessed_inputs=self.get_accessed_inputs(),
-            params=self.params,
-            output_template=self.output_template,
-            show=False,
-            generate_description=self.generate_description,
-        )
-
-        return self.result
-
-    def summary(self, result: dict):
-        return ResultSummary(results=[ResultTable(data=[result])])
-
-
-def load_composite_metric(
-    test_id: str = None,
-    metric_name: str = None,
-    unit_metrics: List[str] = None,
-    output_template: str = None,
-) -> Tuple[Union[None, str], Union[CompositeMetric, None]]:
-    # this function can either create a composite metric from a list of unit metrics or
-    # load a stored composite metric based on the test id
-
-    # TODO: figure out this circular import thing:
-    from ..api_client import get_metadata
-
-    if test_id:
-        # get the unit metric ids and output template (if any) from the metadata
-        try:
-            unit_metrics = run_async(
-                get_metadata, f"composite_metric_def:{test_id}:unit_metrics"
-            )["json"]
-            output_template = run_async(
-                get_metadata, f"composite_metric_def:{test_id}:output_template"
-            )["json"]["output_template"]
-        except Exception:
-            return f"Could not load composite metric {test_id}", None
-
-    description = f"""
-    Composite metric built from the following unit metrics:
-    {', '.join([metric_id.split('.')[-1] for metric_id in unit_metrics])}
-    """
-
-    class_def = type(
-        test_id.split(".")[-1] if test_id else metric_name,
-        (CompositeMetric,),
-        {
-            "__doc__": description,
-            "_unit_metrics": unit_metrics,
-            "_output_template": output_template,
-        },
-    )
-
-    required_inputs = set()
-    for metric_id in unit_metrics:
-        inputs, _ = _inspect_signature(load_metric(metric_id))
-        required_inputs.update(inputs.keys())
-
-    class_def.required_inputs = list(required_inputs)
-
-    return None, class_def
 
 
 def run_metrics(
@@ -111,7 +24,7 @@ def run_metrics(
     test_id: str = None,
     show: bool = True,
     generate_description: bool = True,
-) -> MetricResultWrapper:
+) -> TestResult:
     """Run a composite metric
 
     Composite metrics are metrics that are composed of multiple unit metrics. This
@@ -172,64 +85,24 @@ def run_metrics(
 
     test_id = f"validmind.composite_metric.{name}" if not test_id else test_id
 
-    if not output_template:
+    tables = [ResultTable(data=[results])]
 
-        def row(name):
-            return f"""
-            <tr>
-                <td><strong>{name}</strong></td>
-                <td>{{{{ value['{name}'] | number }}}}</td>
-            </tr>
-            """
-
-        output_template = f"""
-        <h1{test_id_to_name(test_id)}</h1>
-        <table>
-            <thead>
-                <tr>
-                    <th>Metric</th>
-                    <th>Value</th>
-                </tr>
-            </thead>
-            <tbody>
-                {"".join([row(name) for name in results.keys()])}
-            </tbody>
-        </table>
-        <style>
-            th, td {{
-                padding: 5px;
-                text-align: left;
-            }}
-        </style>
-        """
-
-    result_summary = ResultSummary(results=[ResultTable(data=[results])])
-    result_wrapper = MetricResultWrapper(
+    result_wrapper = TestResult(
         result_id=test_id,
         result_metadata=[
-            get_description_metadata(
+            get_result_description(
                 test_id=test_id,
-                default_description=description,
-                summary=result_summary.serialize(),
+                test_description=description,
+                tables=tables,
                 should_generate=generate_description,
             ),
             {
                 "content_id": f"composite_metric_def:{test_id}:unit_metrics",
                 "json": metric_ids,
             },
-            {
-                "content_id": f"composite_metric_def:{test_id}:output_template",
-                "json": {"output_template": output_template},
-            },
         ],
+        tables=tables,
         inputs=accessed_inputs,
-        output_template=output_template,
-        metric=MetricResult(
-            key=test_id,
-            ref_id=str(uuid4()),
-            value=results,
-            summary=result_summary,
-        ),
     )
 
     if show:

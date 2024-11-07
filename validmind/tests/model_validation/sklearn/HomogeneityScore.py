@@ -2,15 +2,15 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from dataclasses import dataclass
-
 from sklearn import metrics
 
-from .ClusterPerformance import ClusterPerformance
+from validmind import tags, tasks
+from validmind.vm_models import VMDataset, VMModel
 
 
-@dataclass
-class HomogeneityScore(ClusterPerformance):
+@tags("sklearn", "model_performance")
+@tasks("clustering")
+def HomogeneityScore(dataset: VMDataset, model: VMModel):
     """
     Assesses clustering homogeneity by comparing true and predicted labels, scoring from 0 (heterogeneous) to 1
     (homogeneous).
@@ -50,14 +50,11 @@ class HomogeneityScore(ClusterPerformance):
     - The score does not address the actual number of clusters formed, or the evenness of cluster sizes. It only checks
     the homogeneity within the given clusters created by the model.
     """
-
-    name = "homogeneity_score"
-    required_inputs = ["model", "dataset"]
-    tasks = ["clustering"]
-    tags = [
-        "sklearn",
-        "model_performance",
+    return [
+        {
+            "Homogeneity Score": metrics.homogeneity_score(
+                labels_true=dataset.y,
+                labels_pred=dataset.y_pred(model),
+            )
+        }
     ]
-
-    def metric_info(self):
-        return {"Homogeneity Score": metrics.homogeneity_score}

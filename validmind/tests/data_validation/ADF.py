@@ -2,19 +2,21 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from dataclasses import dataclass
-
 import pandas as pd
 from statsmodels.tsa.stattools import adfuller
 
+from validmind import tags, tasks
 from validmind.logging import get_logger
-from validmind.vm_models import Metric, ResultSummary, ResultTable, ResultTableMetadata
+from validmind.vm_models import VMDataset
 
 logger = get_logger(__name__)
 
 
-@dataclass
-class ADF(Metric):
+@tags(
+    "time_series_data", "statsmodels", "forecasting", "statistical_test", "stationarity"
+)
+@tasks("regression")
+def ADF(dataset: VMDataset):
     """
     Assesses the stationarity of a time series dataset using the Augmented Dickey-Fuller (ADF) test.
 
@@ -51,84 +53,48 @@ class ADF(Metric):
     - It assumes the data follows an autoregressive process, which might not always be the case.
     - The test struggles with time series data that have structural breaks.
     """
+    df = dataset.df.dropna()
 
-    name = "adf"
-    required_inputs = ["dataset"]
-    tasks = ["regression"]
-    tags = [
-        "time_series_data",
-        "statsmodels",
-        "forecasting",
-        "statistical_test",
-        "stationarity",
-    ]
-
-    def summary(self, metric_value: dict):
-        table = pd.DataFrame.from_dict(metric_value, orient="index")
-        table = table.reset_index()
-        table.columns = [
-            "Feature",
-            "ADF Statistic",
-            "P-Value",
-            "Used Lag",
-            "Number of Observations",
-            "Critical Values",
-            "IC Best",
-        ]
-        table = table.rename_axis("Index", axis=1)
-
-        return ResultSummary(
-            results=[
-                ResultTable(
-                    data=table,
-                    metadata=ResultTableMetadata(
-                        title="ADF Test Results for Each Feature"
-                    ),
-                ),
-            ]
+    if not isinstance(df.index, (pd.DatetimeIndex, pd.PeriodIndex)):
+        raise ValueError(
+            "Dataset index must be a datetime or period index for time series analysis."
         )
 
-    def run(self):
-        """
-        Calculates ADF metric for each of the dataset features
-        """
-        dataset = self.inputs.dataset.df
+    adf_values = {}
+    for col in df.columns:
+        try:
+            adf_result = adfuller(df[col].values)
+            adf_values[col] = {
+                "ADF Statistic": adf_result[0],
+                "P-Value": adf_result[1],
+                "Used Lag": adf_result[2],
+                "Number of Observations": adf_result[3],
+                "Critical Values": adf_result[4],
+                "IC Best": adf_result[5],
+            }
+        except Exception as e:
+            logger.error(f"Error processing column '{col}': {e}")
+            adf_values[col] = {
+                "ADF Statistic": None,
+                "P-Value": None,
+                "Used Lag": None,
+                "Number of Observations": None,
+                "Critical Values": None,
+                "IC Best": None,
+                "Error": str(e),
+            }
 
-        # Check if the dataset is a time series
-        if not isinstance(dataset.index, (pd.DatetimeIndex, pd.PeriodIndex)):
-            raise ValueError(
-                "Dataset index must be a datetime or period index for time series analysis."
-            )
+    table = pd.DataFrame.from_dict(adf_values, orient="index")
+    table = table.reset_index()
+    table.columns = [
+        "Feature",
+        "ADF Statistic",
+        "P-Value",
+        "Used Lag",
+        "Number of Observations",
+        "Critical Values",
+        "IC Best",
+    ]
+    table = table.rename_axis("Index", axis=1)
 
-        # Preprocessing: Drop rows with any NaN values
-        if dataset.isnull().values.any():
-            logger.warning(
-                "Dataset contains missing values. Rows with NaNs will be dropped."
-            )
-            dataset = dataset.dropna()
-
-        adf_values = {}
-        for col in dataset.columns:
-            try:
-                adf_result = adfuller(dataset[col].values)
-                adf_values[col] = {
-                    "ADF Statistic": adf_result[0],
-                    "P-Value": adf_result[1],
-                    "Used Lag": adf_result[2],
-                    "Number of Observations": adf_result[3],
-                    "Critical Values": adf_result[4],
-                    "IC Best": adf_result[5],
-                }
-            except Exception as e:
-                logger.error(f"Error processing column '{col}': {e}")
-                adf_values[col] = {
-                    "ADF Statistic": None,
-                    "P-Value": None,
-                    "Used Lag": None,
-                    "Number of Observations": None,
-                    "Critical Values": None,
-                    "IC Best": None,
-                    "Error": str(e),
-                }
-
-        return self.cache_results(adf_values)
+    return {"ADF Test Results for Each Feature": table}

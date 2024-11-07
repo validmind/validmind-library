@@ -10,6 +10,7 @@ from validmind import tags, tasks
 @tags("regression")
 @tasks("regression")
 def KolmogorovSmirnovStatistic(dataset, model):
+    """Calculates the Kolmogorov-Smirnov statistic for a regression model."""
     y_true = dataset.y.flatten()
     y_pred = dataset.y_pred(model)
 

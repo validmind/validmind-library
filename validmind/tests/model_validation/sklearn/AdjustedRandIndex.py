@@ -2,15 +2,15 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from dataclasses import dataclass
+from sklearn.metrics import adjusted_rand_score
 
-from sklearn import metrics
+from validmind import tags, tasks
+from validmind.vm_models import VMDataset, VMModel
 
-from .ClusterPerformance import ClusterPerformance
 
-
-@dataclass
-class AdjustedRandIndex(ClusterPerformance):
+@tags("sklearn", "model_performance", "clustering")
+@tasks("clustering")
+def AdjustedRandIndex(model: VMModel, dataset: VMDataset):
     """
     Measures the similarity between two data clusters using the Adjusted Rand Index (ARI) metric in clustering machine
     learning models.
@@ -49,14 +49,11 @@ class AdjustedRandIndex(ClusterPerformance):
     - It may be difficult to interpret the implications of an ARI score without context or a benchmark, as it is
     heavily dependent on the characteristics of the dataset used.
     """
-
-    name = "adjusted_rand_index"
-    required_inputs = ["model", "dataset"]
-    tasks = ["clustering"]
-    tags = [
-        "sklearn",
-        "model_performance",
+    return [
+        {
+            "Adjusted Rand Index": adjusted_rand_score(
+                labels_true=dataset.y,
+                labels_pred=dataset.y_pred(model),
+            )
+        }
     ]
-
-    def metric_info(self):
-        return {"Adjusted Rand Index": metrics.adjusted_rand_score}

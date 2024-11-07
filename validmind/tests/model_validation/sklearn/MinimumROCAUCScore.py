@@ -2,24 +2,19 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from dataclasses import dataclass
-from typing import List
-
 import numpy as np
-import pandas as pd
-from sklearn import metrics, preprocessing
+from sklearn.metrics import roc_auc_score
+from sklearn.preprocessing import LabelBinarizer
 
-from validmind.vm_models import (
-    ResultSummary,
-    ResultTable,
-    ResultTableMetadata,
-    ThresholdTest,
-    ThresholdTestResult,
+from validmind.tests import tags, tasks
+from validmind.vm_models import VMDataset, VMModel
+
+
+@tags(
+    "sklearn", "binary_classification", "multiclass_classification", "model_performance"
 )
-
-
-@dataclass
-class MinimumROCAUCScore(ThresholdTest):
+@tasks("classification", "text_classification")
+def MinimumROCAUCScore(dataset: VMDataset, model: VMModel, min_threshold: float = 0.5):
     """
     Validates model by checking if the ROC AUC score meets or surpasses a specified threshold.
 
@@ -61,69 +56,25 @@ class MinimumROCAUCScore(ThresholdTest):
     - The use of macro average for multiclass ROC AUC score implies equal weightage to each class, which might not be
     appropriate if the classes are imbalanced.
     """
+    y_true = dataset.y
 
-    name = "roc_auc_score"
-    required_inputs = ["model", "dataset"]
-    default_params = {"min_threshold": 0.5}
-    tasks = ["classification", "text_classification"]
-    tags = [
-        "sklearn",
-        "binary_classification",
-        "multiclass_classification",
-        "model_performance",
-    ]
+    if len(np.unique(y_true)) > 2:
+        lb = LabelBinarizer()
+        lb.fit(y_true)
 
-    def summary(self, results: List[ThresholdTestResult], all_passed: bool):
-        """
-        The roc auc score test returns results like these:
-        [{"values": {"score": 0.734375, "threshold": 0.7}, "passed": true}]
-        """
-        result = results[0]
-        results_table = [
-            {
-                "Score": result.values["score"],
-                "Threshold": result.values["threshold"],
-                "Pass/Fail": "Pass" if result.passed else "Fail",
-            }
-        ]
-
-        return ResultSummary(
-            results=[
-                ResultTable(
-                    data=pd.DataFrame(results_table),
-                    metadata=ResultTableMetadata(title="Minimum ROC AUC Score Test"),
-                )
-            ]
+        roc_auc = roc_auc_score(
+            y_true=lb.transform(y_true),
+            y_score=lb.transform(dataset.y_pred(model)),
+            average="macro",
         )
 
-    def multiclass_roc_auc_score(self, y_test, y_pred, average="macro"):
-        lb = preprocessing.LabelBinarizer()
-        lb.fit(y_test)
-        y_test = lb.transform(y_test)
-        y_pred = lb.transform(y_pred)
-        return metrics.roc_auc_score(y_test, y_pred, average=average)
+    else:
+        roc_auc = roc_auc_score(y_true=y_true, y_score=dataset.y_prob(model))
 
-    def run(self):
-        y_true = self.inputs.dataset.y
-
-        if len(np.unique(y_true)) > 2:
-            class_pred = self.inputs.dataset.y_pred(self.inputs.model)
-            y_true = y_true.astype(class_pred.dtype)
-            roc_auc = self.multiclass_roc_auc_score(y_true, class_pred)
-        else:
-            y_prob = self.inputs.dataset.y_prob(self.inputs.model)
-            y_true = y_true.astype(y_prob.dtype).flatten()
-            roc_auc = metrics.roc_auc_score(y_true, y_prob)
-
-        passed = roc_auc > self.params["min_threshold"]
-        results = [
-            ThresholdTestResult(
-                passed=passed,
-                values={
-                    "score": roc_auc,
-                    "threshold": self.params["min_threshold"],
-                },
-            )
-        ]
-
-        return self.cache_results(results, passed=all([r.passed for r in results]))
+    return [
+        {
+            "Score": roc_auc,
+            "Threshold": min_threshold,
+            "Pass/Fail": "Pass" if roc_auc > min_threshold else "Fail",
+        }
+    ], roc_auc > min_threshold

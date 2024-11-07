@@ -2,23 +2,17 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from dataclasses import dataclass
-
 import pandas as pd
 import plotly.graph_objects as go
 
-from validmind.vm_models import (
-    Figure,
-    ResultSummary,
-    ResultTable,
-    ResultTableMetadata,
-    ThresholdTest,
-    ThresholdTestResult,
-)
+from validmind import tags, tasks
+from validmind.errors import SkipTestError
+from validmind.vm_models import VMDataset
 
 
-@dataclass
-class TimeSeriesOutliers(ThresholdTest):
+@tags("time_series_data")
+@tasks("regression")
+def TimeSeriesOutliers(dataset: VMDataset, zscore_threshold: int = 3):
     """
     Identifies and visualizes outliers in time-series data using the z-score method.
 
@@ -62,174 +56,63 @@ class TimeSeriesOutliers(ThresholdTest):
     - It does not address possible ways to handle identified outliers in the data.
     - The requirement for a datetime index could limit its application.
     """
+    df = dataset.df
 
-    name = "time_series_outliers"
-    required_inputs = ["dataset"]
-    default_params = {"zscore_threshold": 3}
-    tasks = ["regression"]
-    tags = ["time_series_data"]
+    if not pd.api.types.is_datetime64_any_dtype(df.index):
+        raise SkipTestError("Dataset must be provided with datetime index")
 
-    def summary(self, results, all_passed: bool):
-        """
-        Example output:
-        [
-            {
-                "values": {
-                    "Variable": [...],
-                    "z-score": [...],
-                    "Threshold": [3, 3, 3, 3, 3, 3],
-                    "Date": [...]
-                },
-                "test_name": "outliers",
-                "passed": false
-            }
-        ]
-        """
+    df_numeric = df[dataset.feature_columns_numeric]
+    z_scores = pd.DataFrame(
+        data=df_numeric.apply(lambda x: (x - x.mean()) / x.std()),
+        index=df.index,
+        columns=dataset.feature_columns_numeric,
+    )
 
-        first_result = results[0]
+    outlier_table = []
+    outliers = z_scores[(z_scores.abs() > zscore_threshold).any(axis=1)]
 
-        variables = first_result.values["Variable"]
-        zScores = first_result.values["z-score"]
-        dates = first_result.values["Date"]
-        passFail = [
-            "Pass" if abs(z) < self.params["zscore_threshold"] else "Fail"
-            for z in zScores
-        ]
-
-        return ResultSummary(
-            results=[
-                ResultTable(
-                    # Sort by variable and then by date
-                    data=pd.DataFrame(
-                        {
-                            "Variable": variables,
-                            "Date": dates,
-                            "z-Score": zScores,
-                            "Pass/Fail": passFail,
-                        }
-                    ).sort_values(["Variable", "Date"]),
-                    metadata=ResultTableMetadata(
-                        title="Outliers Results with z-Score Test"
-                    ),
+    for idx, row in outliers.iterrows():
+        for col in dataset.feature_columns_numeric:
+            if abs(row[col]) > zscore_threshold:
+                outlier_table.append(
+                    {
+                        "Column": col,
+                        "Z-Score": row[col],
+                        "Threshold": zscore_threshold,
+                        "Date": idx.strftime("%Y-%m-%d"),
+                        "Pass/Fail": "Fail",
+                    }
                 )
-            ]
+
+    outlier_df = pd.DataFrame(outlier_table)
+    figures = []
+
+    for column in outlier_df["Column"].unique():
+        fig = go.Figure()
+
+        fig.add_trace(
+            go.Scatter(x=df.index, y=df[column], mode="lines", name="Time Series")
         )
 
-    def run(self):
-        # Initialize the test_results list
-        test_results = []
-
-        # Check if the index of dataframe is datetime
-        is_datetime = pd.api.types.is_datetime64_any_dtype(self.inputs.dataset.df.index)
-        if not is_datetime:
-            raise ValueError("Dataset must be provided with datetime index")
-
-        # Validate threshold parameter
-        if "zscore_threshold" not in self.params:
-            raise ValueError("zscore_threshold must be provided in params")
-        zscore_threshold = self.params["zscore_threshold"]
-
-        temp_df = self.inputs.dataset.df.copy()
-        # temp_df = temp_df.dropna()
-
-        # Infer numeric columns
-        num_features_columns = temp_df.select_dtypes(
-            include=["number"]
-        ).columns.tolist()
-
-        outliers_table = self.identify_outliers(
-            temp_df[num_features_columns], zscore_threshold
-        )
-
-        test_figures = self._plot_outliers(temp_df, outliers_table)
-        passed = outliers_table.empty
-
-        if not outliers_table.empty:
-            outliers_table["Date"] = outliers_table["Date"].astype(str)
-
-        test_results.append(
-            ThresholdTestResult(
-                test_name="outliers",
-                passed=passed,
-                values=outliers_table.to_dict(orient="list"),
+        column_outliers = outlier_df[outlier_df["Column"] == column]
+        fig.add_trace(
+            go.Scatter(
+                x=pd.to_datetime(column_outliers["Date"]),
+                y=df.loc[pd.to_datetime(column_outliers["Date"]), column],
+                mode="markers",
+                marker=dict(color="red", size=10),
+                name="Outliers",
             )
         )
 
-        return self.cache_results(test_results, passed=passed, figures=test_figures)
-
-    def z_score_with_na(self, df):
-        return df.apply(
-            lambda x: (x - x.mean()) / x.std() if x.dtype.kind in "biufc" else x
+        fig.update_layout(
+            title=f"Outliers for {column}", xaxis_title="Date", yaxis_title=column
         )
 
-    def identify_outliers(self, df, threshold):
-        """
-        Identifies and returns outliers in a pandas DataFrame using the z-score method.
-        Args:
-        df (pandas.DataFrame): A pandas DataFrame containing the data to be analyzed.
-        threshold (float): The absolute value of the z-score above which a value is considered an outlier.
-        Returns:
-        pandas.DataFrame: A DataFrame containing the variables, z-scores, threshold, and dates of the identified outliers.
-        """
-        z_scores = pd.DataFrame(
-            self.z_score_with_na(df), index=df.index, columns=df.columns
-        )
+        figures.append(fig)
 
-        outliers = z_scores[(z_scores.abs() > threshold).any(axis=1)]
-        outlier_table = []
-        for idx, row in outliers.iterrows():
-            for col in df.columns:
-                if abs(row[col]) > threshold:
-                    outlier_table.append(
-                        {
-                            "Variable": col,
-                            "z-score": row[col],
-                            "Threshold": threshold,
-                            "Date": idx,
-                        }
-                    )
-        return pd.DataFrame(outlier_table)
-
-    def _plot_outliers(self, df, outliers_table):
-        """
-        Plots time series with identified outliers.
-        Args:
-            df (pandas.DataFrame): Input data with time series.
-            outliers_table (pandas.DataFrame): DataFrame with identified outliers.
-        Returns:
-            list: A list of Figure objects with subplots for each variable.
-        """
-        figures = []
-
-        for col in df.columns:
-            fig = go.Figure()
-
-            fig.add_trace(go.Scatter(x=df.index, y=df[col], mode="lines", name=col))
-
-            if not outliers_table.empty:
-                variable_outliers = outliers_table[outliers_table["Variable"] == col]
-                fig.add_trace(
-                    go.Scatter(
-                        x=variable_outliers["Date"],
-                        y=df.loc[variable_outliers["Date"], col],
-                        mode="markers",
-                        marker=dict(color="red", size=10),
-                        name="Outlier",
-                    )
-                )
-
-            fig.update_layout(
-                title=f"Outliers for {col}",
-                xaxis_title="Date",
-                yaxis_title=col,
-            )
-
-            figures.append(
-                Figure(
-                    for_object=self,
-                    key=f"{self.name}:{col}_{self.inputs.dataset.input_id}",
-                    figure=fig,
-                )
-            )
-
-        return figures
+    return (
+        outlier_df.sort_values(["Column", "Date"]),
+        figures,
+        len(outlier_df) == 0,
+    )

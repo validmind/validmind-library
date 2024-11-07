@@ -10,4 +10,5 @@ from validmind import tags, tasks
 @tags("regression")
 @tasks("regression")
 def MeanAbsoluteError(model, dataset, **kwargs):
+    """Calculates the mean absolute error for a regression model."""
     return _mean_absolute_error(dataset.y, dataset.y_pred(model), **kwargs)

@@ -5,10 +5,13 @@
 import numpy as np
 import plotly.express as px
 
-from validmind.vm_models import Figure, Metric
+from validmind import tags, tasks
+from validmind.vm_models import VMDataset, VMModel
 
 
-class DescriptiveAnalytics(Metric):
+@tags("llm", "text_data", "embeddings", "visualization")
+@tasks("feature_extraction")
+def DescriptiveAnalytics(dataset: VMDataset, model: VMModel):
     """
     Evaluates statistical properties of text embeddings in an ML model via mean, median, and standard deviation
     histograms.
@@ -52,32 +55,17 @@ class DescriptiveAnalytics(Metric):
     - While it displays valuable information about the central tendency and spread of data, it does not provide
     information about correlations between different embedding dimensions.
     """
-
-    name = "Descriptive Analytics for Text Embeddings Models"
-    required_inputs = ["model", "dataset"]
-    tasks = ["feature_extraction"]
-    tags = ["llm", "text_data", "embeddings", "visualization"]
-
-    def run(self):
-        # Assuming y_pred returns a 2D array of embeddings [samples, features]
-        preds = self.inputs.dataset.y_pred(self.inputs.model)
-
-        # Calculate statistics across the embedding dimensions, not across all embeddings
-        means = np.mean(preds, axis=0)  # Mean of each feature across all samples
-        medians = np.median(preds, axis=0)  # Median of each feature across all samples
-        stds = np.std(preds, axis=0)  # Std. dev. of each feature across all samples
-
-        # Plot histograms of the calculated statistics
-        mean_fig = px.histogram(x=means, title="Distribution of Embedding Means")
-        median_fig = px.histogram(x=medians, title="Distribution of Embedding Medians")
-        std_fig = px.histogram(
-            x=stds, title="Distribution of Embedding Standard Deviations"
-        )
-
-        return self.cache_results(
-            figures=[
-                Figure(for_object=self, key=f"{self.key}_mean", figure=mean_fig),
-                Figure(for_object=self, key=f"{self.key}_median", figure=median_fig),
-                Figure(for_object=self, key=f"{self.key}_std", figure=std_fig),
-            ],
-        )
+    return (
+        px.histogram(
+            x=np.mean(dataset.y_pred(model), axis=0),
+            title="Distribution of Embedding Means",
+        ),
+        px.histogram(
+            x=np.median(dataset.y_pred(model), axis=0),
+            title="Distribution of Embedding Medians",
+        ),
+        px.histogram(
+            x=np.std(dataset.y_pred(model), axis=0),
+            title="Distribution of Embedding Standard Deviations",
+        ),
+    )

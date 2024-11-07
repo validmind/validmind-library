@@ -12,6 +12,7 @@ from validmind import tags, tasks
 @tasks("classification")
 @tags("classification")
 def ROC_AUC(model, dataset, **kwargs):
+    """Calculates the ROC AUC for a classification model."""
     y_true = dataset.y
 
     if len(unique(y_true)) > 2:

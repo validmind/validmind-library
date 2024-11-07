@@ -2,15 +2,15 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from dataclasses import dataclass
+from sklearn.metrics import adjusted_mutual_info_score
 
-from sklearn import metrics
+from validmind import tags, tasks
+from validmind.vm_models import VMDataset, VMModel
 
-from .ClusterPerformance import ClusterPerformance
 
-
-@dataclass
-class AdjustedMutualInformation(ClusterPerformance):
+@tags("sklearn", "model_performance", "clustering")
+@tasks("clustering")
+def AdjustedMutualInformation(model: VMModel, dataset: VMDataset):
     """
     Evaluates clustering model performance by measuring mutual information between true and predicted labels, adjusting
     for chance.
@@ -52,14 +52,11 @@ class AdjustedMutualInformation(ClusterPerformance):
     - The interpretability of the score can be complex as it depends on the understanding of information theory
     concepts.
     """
-
-    name = "adjusted_mutual_information"
-    required_inputs = ["model", "dataset"]
-    tasks = ["clustering"]
-    tags = [
-        "sklearn",
-        "model_performance",
+    return [
+        {
+            "Adjusted Mutual Information": adjusted_mutual_info_score(
+                labels_true=dataset.y,
+                labels_pred=dataset.y_pred(model),
+            )
+        }
     ]
-
-    def metric_info(self):
-        return {"Adjusted Mutual Information": metrics.adjusted_mutual_info_score}

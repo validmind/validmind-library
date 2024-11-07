@@ -2,17 +2,17 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from dataclasses import dataclass
-
 import numpy as np
 import plotly.figure_factory as ff
 import plotly.graph_objects as go
 
-from validmind.vm_models import Figure, Metric
+from validmind import tags, tasks
+from validmind.vm_models import VMDataset, VMModel
 
 
-@dataclass
-class RegressionResidualsPlot(Metric):
+@tags("model_performance", "visualization")
+@tasks("regression")
+def RegressionResidualsPlot(model: VMModel, dataset: VMDataset, bin_size: float = 0.1):
     """
     Evaluates regression model performance using residual distribution and actual vs. predicted plots.
 
@@ -54,75 +54,54 @@ class RegressionResidualsPlot(Metric):
     - Does not summarize model performance into a single quantifiable metric, which might be needed for comparative or
     summary analyses.
     """
+    y_true = dataset.y
+    y_pred = dataset.y_pred(model)
 
-    name = "regression_residuals_plot"
-    required_inputs = ["model", "dataset"]
-    tasks = ["regression"]
-    tags = ["model_performance"]
-    default_params = {"bin_size": 0.1}
+    figures = []
 
-    def run(self):
-        y_true = self.inputs.dataset.y
-        y_pred = self.inputs.dataset.y_pred(self.inputs.model)
-        # Calculate residuals
-        residuals = y_true.flatten() - y_pred.flatten()
-        # Create residuals plot
-        hist_data = [residuals]
-        group_labels = ["Residuals"]  # Names of the dataset
-        bin_size = self.params["bin_size"]
-        fig = ff.create_distplot(
-            hist_data, group_labels, bin_size=[bin_size], show_hist=True, show_rug=False
-        )
-        fig.update_layout(
-            title="Distribution of Residuals",
-            xaxis_title="Residuals",
-            yaxis_title="Density",
-        )
-        figures = [
-            Figure(
-                for_object=self,
-                key=self.key,
-                figure=fig,
-            )
-        ]
-        # Create a scatter plot of actual vs predicted values
-        scatter = go.Scatter(
-            x=y_true.flatten(),
-            y=y_pred.flatten(),
-            mode="markers",
-            name="True vs Predicted",
-            marker=dict(color="blue", opacity=0.5),
-        )
+    # Residuals plot
+    fig = ff.create_distplot(
+        hist_data=[y_true.flatten() - y_pred.flatten()],
+        group_labels=["Residuals"],
+        bin_size=[bin_size],
+        show_hist=True,
+        show_rug=False,
+    )
+    fig.update_layout(
+        title="Distribution of Residuals",
+        xaxis_title="Residuals",
+        yaxis_title="Density",
+    )
+    figures.append(fig)
 
-        # Line of perfect prediction
-        max_val = np.nanmax([np.nanmax(y_true), np.nanmax(y_pred)])
-        min_val = np.nanmin([np.nanmin(y_true), np.nanmin(y_pred)])
-        line = go.Scatter(
-            x=[min_val, max_val],
-            y=[min_val, max_val],
-            mode="lines",
-            name="Perfect Fit",
-            line=dict(color="red", dash="dash"),
+    # True vs Predicted w/ perfect fit line plot
+    max_val = np.nanmax([np.nanmax(y_true), np.nanmax(y_pred)])
+    min_val = np.nanmin([np.nanmin(y_true), np.nanmin(y_pred)])
+    figures.append(
+        go.Figure(
+            data=[
+                go.Scatter(
+                    x=y_true.flatten(),
+                    y=y_pred.flatten(),
+                    mode="markers",
+                    name="True vs Predicted",
+                    marker=dict(color="blue", opacity=0.5),
+                ),
+                go.Scatter(
+                    x=[min_val, max_val],
+                    y=[min_val, max_val],
+                    mode="lines",
+                    name="Perfect Fit",
+                    line=dict(color="red", dash="dash"),
+                ),
+            ],
+            layout=go.Layout(
+                title="True vs. Predicted Values",
+                xaxis_title="True Values",
+                yaxis_title="Predicted Values",
+                showlegend=True,
+            ),
         )
+    )
 
-        # Layout settings
-        layout = go.Layout(
-            title="True vs. Predicted Values",
-            xaxis_title="True Values",
-            yaxis_title="Predicted Values",
-            showlegend=True,
-        )
-
-        fig = go.Figure(data=[scatter, line], layout=layout)
-
-        figures.append(
-            Figure(
-                for_object=self,
-                key=self.key,
-                figure=fig,
-            )
-        )
-
-        return self.cache_results(
-            figures=figures,
-        )
+    return tuple(figures)

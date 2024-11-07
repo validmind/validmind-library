@@ -2,19 +2,24 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from dataclasses import dataclass
-
 import numpy as np
 import plotly.graph_objects as go
 from sklearn.metrics import roc_auc_score, roc_curve
 
+from validmind import tags, tasks
 from validmind.errors import SkipTestError
-from validmind.models import FoundationModel
-from validmind.vm_models import Figure, Metric
+from validmind.vm_models import VMDataset, VMModel
 
 
-@dataclass
-class ROCCurve(Metric):
+@tags(
+    "sklearn",
+    "binary_classification",
+    "multiclass_classification",
+    "model_performance",
+    "visualization",
+)
+@tasks("classification", "text_classification")
+def ROCCurve(model: VMModel, dataset: VMDataset):
     """
     Evaluates binary classification model performance by generating and plotting the Receiver Operating Characteristic
     (ROC) curve and calculating the Area Under Curve (AUC) score.
@@ -61,78 +66,39 @@ class ROCCurve(Metric):
     incorrect, provided that the model's ranking format is retained. This phenomenon is commonly termed the "Class
     Imbalance Problem".
     """
-
-    name = "roc_curve"
-    required_inputs = ["model", "dataset"]
-    tasks = ["classification", "text_classification"]
-    tags = [
-        "sklearn",
-        "binary_classification",
-        "multiclass_classification",
-        "model_performance",
-        "visualization",
-    ]
-
-    def run(self):
-        if isinstance(self.inputs.model, FoundationModel):
-            raise SkipTestError("Skipping ROCCurve for Foundation models")
-
-        y_true = self.inputs.dataset.y
-        y_prob = self.inputs.dataset.y_prob(self.inputs.model)
-
-        # ROC curve is only supported for binary classification
-        if len(np.unique(y_true)) > 2:
-            raise SkipTestError(
-                "ROC Curve is only supported for binary classification models"
-            )
-
-        y_true = y_true.astype(y_prob.dtype).flatten()
-        assert np.all((y_prob >= 0) & (y_prob <= 1)), "Invalid probabilities in y_prob."
-
-        fpr, tpr, roc_thresholds = roc_curve(y_true, y_prob, drop_intermediate=False)
-
-        # Remove Inf values from roc_thresholds
-        valid_thresholds_mask = np.isfinite(roc_thresholds)
-        roc_thresholds = roc_thresholds[valid_thresholds_mask]
-        auc = roc_auc_score(y_true, y_prob)
-
-        trace0 = go.Scatter(
-            x=fpr,
-            y=tpr,
-            mode="lines",
-            name=f"ROC curve (AUC = {auc:.2f})",
-            line=dict(color="#DE257E"),
-        )
-        trace1 = go.Scatter(
-            x=[0, 1],
-            y=[0, 1],
-            mode="lines",
-            name="Random (AUC = 0.5)",
-            line=dict(color="grey", dash="dash"),
+    if len(np.unique(dataset.y)) > 2:
+        raise SkipTestError(
+            "ROC Curve is only supported for binary classification models"
         )
 
-        layout = go.Layout(
-            title=f"ROC Curve for {self.inputs.model.input_id} on {self.inputs.dataset.input_id}",
+    y_prob = dataset.y_prob(model)
+    y_true = dataset.y.astype(y_prob.dtype).flatten()
+
+    fpr, tpr, _ = roc_curve(y_true, y_prob, drop_intermediate=False)
+    auc = roc_auc_score(y_true, y_prob)
+
+    return go.Figure(
+        data=[
+            go.Scatter(
+                x=fpr,
+                y=tpr,
+                mode="lines",
+                name=f"ROC curve (AUC = {auc:.2f})",
+                line=dict(color="#DE257E"),
+            ),
+            go.Scatter(
+                x=[0, 1],
+                y=[0, 1],
+                mode="lines",
+                name="Random (AUC = 0.5)",
+                line=dict(color="grey", dash="dash"),
+            ),
+        ],
+        layout=go.Layout(
+            title=f"ROC Curve for {model.input_id} on {dataset.input_id}",
             xaxis=dict(title="False Positive Rate"),
             yaxis=dict(title="True Positive Rate"),
             width=700,
             height=500,
-        )
-
-        fig = go.Figure(data=[trace0, trace1], layout=layout)
-
-        return self.cache_results(
-            metric_value={
-                "auc": auc,
-                "fpr": fpr,
-                "tpr": tpr,
-                "thresholds": roc_thresholds,
-            },
-            figures=[
-                Figure(
-                    for_object=self,
-                    key="roc_auc_curve",
-                    figure=fig,
-                )
-            ],
-        )
+        ),
+    )

@@ -9,5 +9,6 @@ from validmind import tags, tasks
 
 @tags("regression")
 @tasks("regression")
-def RSquaredError(model, dataset):
+def RSquaredScore(model, dataset):
+    """Calculates the R-squared score for a regression model."""
     return r2_score(dataset.y, dataset.y_pred(model))

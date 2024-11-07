@@ -10,7 +10,7 @@ import math
 import re
 import sys
 from platform import python_version
-from typing import Any
+from typing import Any, Dict, List
 
 import matplotlib.pylab as pylab
 import mistune
@@ -158,7 +158,7 @@ def precision_and_scale(x):
     return (magnitude + scale, scale)
 
 
-def format_records(df):
+def format_records(df: pd.DataFrame) -> List[Dict[str, Any]]:
     """
     Round the values on each dataframe's column to a given number of decimal places.
     The returned value is converted to a dict in "records" with Pandas's to_dict() function.
@@ -191,7 +191,7 @@ def format_records(df):
     return df.to_dict("records")
 
 
-def format_key_values(key_values):
+def format_key_values(key_values: Dict[str, Any]) -> Dict[str, Any]:
     """
     Round the values on each dict's value to a given number of decimal places.
 

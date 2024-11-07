@@ -2,15 +2,17 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from dataclasses import dataclass
-
 import plotly.graph_objects as go
 
-from validmind.vm_models import Figure, Metric
+from validmind import tags, tasks
+from validmind.vm_models import VMDataset
 
 
-@dataclass
-class MissingValuesBarPlot(Metric):
+@tags("tabular_data", "data_quality", "visualization")
+@tasks("classification", "regression")
+def MissingValuesBarPlot(
+    dataset: VMDataset, threshold: int = 80, fig_height: int = 600
+):
     """
     Assesses the percentage and distribution of missing values in the dataset via a bar plot, with emphasis on
     identifying high-risk columns based on a user-defined threshold.
@@ -55,90 +57,62 @@ class MissingValuesBarPlot(Metric):
     - The metric does not consider possible impacts of the missing data on the model's accuracy or precision.
     - Interpretation of the findings and the next steps might require an expert understanding of the field.
     """
+    # Calculate the percentage of missing values in each column
+    missing_percentages = (dataset.df.isnull().sum() / len(dataset.df)) * 100
+    # Only keep entries where missing_percentage > 0
+    missing_percentages = missing_percentages[missing_percentages > 0]
+    # Sort missing value percentages in ascending order
+    missing_percentages_sorted = missing_percentages.sort_values(ascending=True)
 
-    name = "missing_values_bar_plot"
-    required_inputs = ["dataset"]
-    default_params = {"threshold": 80, "fig_height": 600}
-    tasks = ["classification", "regression"]
-    tags = ["tabular_data", "data_quality", "visualization"]
+    # Create lists to store the x and y values for each bar
+    y_below_threshold = []
+    x_below_threshold = []
+    y_above_threshold = []
+    x_above_threshold = []
 
-    def run(self):
-        threshold = self.params["threshold"]
-        fig_height = self.params["fig_height"]
+    # Iterate through the missing percentages and separate values based on the threshold
+    for index, value in missing_percentages_sorted.items():
+        if value < threshold:
+            y_below_threshold.append(index)
+            x_below_threshold.append(value)
+        else:
+            y_above_threshold.append(index)
+            x_above_threshold.append(value)
 
-        figure = self.visualize_missing_values(threshold, fig_height)
+    # Create bar traces for values below and above threshold
+    trace_below_threshold = go.Bar(
+        y=y_below_threshold,
+        x=x_below_threshold,
+        marker_color="grey",
+        name="Below Threshold",
+        orientation="h",
+        hovertemplate="Column: %{y}<br>Missing Value Percentage: %{x:.2f}%",
+    )
+    trace_above_threshold = go.Bar(
+        y=y_above_threshold,
+        x=x_above_threshold,
+        marker_color="lightcoral",
+        name="Above Threshold",
+        orientation="h",
+        hovertemplate="Column: %{y}<br>Missing Value Percentage: %{x:.2f}%",
+    )
 
-        return self.cache_results(figures=figure)
+    # Draw a red line at the specified threshold
+    threshold_line = go.Scatter(
+        y=missing_percentages_sorted.index,
+        x=[threshold] * len(missing_percentages_sorted.index),
+        mode="lines",
+        name="Threshold: {}%".format(threshold),
+        line=dict(color="red", dash="dash"),
+    )
 
-    def visualize_missing_values(self, threshold, fig_height):
-        # Calculate the percentage of missing values in each column
-        missing_percentages = (
-            self.inputs.dataset.df.isnull().sum() / len(self.inputs.dataset.df)
-        ) * 100
-
-        # Only keep entries where missing_percentage > 0
-        missing_percentages = missing_percentages[missing_percentages > 0]
-
-        # Sort missing value percentages in ascending order
-        missing_percentages_sorted = missing_percentages.sort_values(ascending=True)
-
-        # Create lists to store the x and y values for each bar
-        y_below_threshold = []
-        x_below_threshold = []
-        y_above_threshold = []
-        x_above_threshold = []
-
-        # Iterate through the missing percentages and separate values based on the threshold
-        for index, value in missing_percentages_sorted.items():
-            if value < threshold:
-                y_below_threshold.append(index)
-                x_below_threshold.append(value)
-            else:
-                y_above_threshold.append(index)
-                x_above_threshold.append(value)
-
-        # Create bar traces for values below and above threshold
-        trace_below_threshold = go.Bar(
-            y=y_below_threshold,
-            x=x_below_threshold,
-            marker_color="grey",
-            name="Below Threshold",
-            orientation="h",
-            hovertemplate="Column: %{y}<br>Missing Value Percentage: %{x:.2f}%",
-        )
-
-        trace_above_threshold = go.Bar(
-            y=y_above_threshold,
-            x=x_above_threshold,
-            marker_color="lightcoral",
-            name="Above Threshold",
-            orientation="h",
-            hovertemplate="Column: %{y}<br>Missing Value Percentage: %{x:.2f}%",
-        )
-
-        # Draw a red line at the specified threshold
-        threshold_line = go.Scatter(
-            y=missing_percentages_sorted.index,
-            x=[threshold] * len(missing_percentages_sorted.index),
-            mode="lines",
-            name="Threshold: {}%".format(threshold),
-            line=dict(color="red", dash="dash"),
-        )
-
-        # Create a layout
-        layout = go.Layout(
+    return go.Figure(
+        data=[trace_below_threshold, trace_above_threshold, threshold_line],
+        layout=go.Layout(
             title="Missing Values",
             yaxis=dict(title="Columns"),
             xaxis=dict(title="Missing Value Percentage (%)", range=[0, 100]),
             barmode="stack",
             height=fig_height,
-        )
-
-        # Create a Figure object
-        fig = go.Figure(
-            data=[trace_below_threshold, trace_above_threshold, threshold_line],
-            layout=layout,
-        )
-
-        figure = Figure(for_object=self, key=self.key, figure=fig)
-        return [figure]
+        ),
+    )
