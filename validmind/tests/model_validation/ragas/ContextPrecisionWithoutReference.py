@@ -14,7 +14,7 @@ from .utils import get_ragas_config, get_renamed_columns
 
 try:
     from ragas import evaluate
-    from ragas.metrics import LLMContextPrecisionWithReference as context_precision
+    from ragas.metrics import LLMContextPrecisionWithoutReference as context_precision
 except ImportError as e:
     raise MissingDependencyError(
         "Missing required package `ragas` for ContextPrecision. "
@@ -26,71 +26,66 @@ except ImportError as e:
 
 @tags("ragas", "llm", "retrieval_performance")
 @tasks("text_qa", "text_generation", "text_summarization", "text_classification")
-def ContextPrecision(
+def ContextPrecisionWithoutReference(
     dataset,
     user_input_column: str = "user_input",
     retrieved_contexts_column: str = "retrieved_contexts",
-    reference_column: str = "reference",
+    response_column: str = "response",
 ):  # noqa: B950
     """
-    Context Precision is a metric that evaluates whether all of the ground-truth
-    relevant items present in the contexts are ranked higher or not. Ideally all the
-    relevant chunks must appear at the top ranks. This metric is computed using the
-    `question`, `ground_truth` and the `contexts`, with values ranging between 0 and 1,
-    where higher scores indicate better precision.
+    Context Precision Without Reference is a metric used to evaluate the relevance of
+    retrieved contexts compared to the expected response for a given user input. This
+    metric compares each retrieved context (or chunk) with the response to estimate
+    if the retrieved context is relevant.
 
-    $$
-    \\text{Context Precision@K} = \\frac{\\sum_{k=1}^{K} \\left( \\text{Precision@k} \\times v_k \\right)}{\\text{Total number of relevant items in the top } K \\text{ results}}
-    $$
-    $$
-    \\text{Precision@k} = {\\text{true positives@k} \\over  (\\text{true positives@k} + \\text{false positives@k})}
-    $$
-
-    Where $K$ is the total number of chunks in contexts and $v_k \\in \\{0, 1\\}$ is the
-    relevance indicator at rank $k$.
+    This metric can be used when you have both retrieved contexts and associated
+    reference contexts for a `user_input`. Using a Language Model (LLM), it determines
+    the relevance of each retrieved context by comparing it directly with the response,
+    producing scores between 0 and 1, where higher scores indicate better precision in
+    retrieving relevant contexts.
 
     ### Configuring Columns
 
     This metric requires the following columns in your dataset:
 
-    - `user_input` (str): The text query that was input into the model.
-    - `retrieved_contexts` (List[str]): A list of text contexts which are retrieved and which
-    will be evaluated to make sure they contain relevant info in the correct order.
-    - `reference` (str): The ground truth text to compare with the retrieved contexts.
+    - `user_input` (str): The user query or input to the model.
+    - `retrieved_contexts` (List[str]): A list of text contexts retrieved for the
+      user input that will be evaluated for relevance.
+    - `response` (str): The model’s output response associated with the user input.
 
-    If the above data is not in the appropriate column, you can specify different column
-    names for these fields using the parameters `user_input_column`, `retrieved_contexts_column`
-    and `reference_column`.
+    If your dataset stores this data in different columns, you can specify alternate
+    column names using the parameters `user_input_column`, `retrieved_contexts_column`,
+    and `response_column`.
 
-    For example, if your dataset has this data stored in different columns, you can
-    pass the following parameters:
+    Example configuration for custom column names:
     ```python
     {
-        "user_input_column": "question",
-        "retrieved_contexts_column": "context_info",
-        "reference_column": "my_ground_truth_col",
+        "user_input_column": "user_query",
+        "retrieved_contexts_column": "retrieved_texts",
+        "response_column": "model_output",
     }
     ```
 
-    If the data is stored as a dictionary in another column, specify the column and key
-    like this:
+    For datasets with data stored as dictionaries in other columns, specify the
+    column and key like so:
     ```python
     pred_col = dataset.prediction_column(model)
     params = {
-        "retrieved_contexts_column": f"{pred_col}.retrieved_contexts",
-        "reference_column": "my_ground_truth_col",
+        "retrieved_contexts_column": f"{pred_col}.contexts",
+        "response_column": f"{pred_col}.response",
     }
     ```
 
-    For more complex situations, you can use a function to extract the data:
+    Alternatively, for complex situations, you may use a function to extract data:
     ```python
     pred_col = dataset.prediction_column(model)
     params = {
         "retrieved_contexts_column": lambda x: [x[pred_col]["context_message"]],
-        "reference_column": "my_ground_truth_col",
+        "response_column": "my_response_col",
     }
     ```
     """
+
     warnings.filterwarnings(
         "ignore",
         category=FutureWarning,
@@ -100,7 +95,7 @@ def ContextPrecision(
     required_columns = {
         "user_input": user_input_column,
         "retrieved_contexts": retrieved_contexts_column,
-        "reference": reference_column,
+        "response": response_column,
     }
 
     df = get_renamed_columns(dataset._df, required_columns)
@@ -109,7 +104,7 @@ def ContextPrecision(
         Dataset.from_pandas(df), metrics=[context_precision()], **get_ragas_config()
     ).to_pandas()
 
-    score_column = "llm_context_precision_with_reference"
+    score_column = "llm_context_precision_without_reference"
 
     fig_histogram = px.histogram(x=result_df[score_column].to_list(), nbins=10)
     fig_box = px.box(x=result_df[score_column].to_list())
@@ -117,7 +112,7 @@ def ContextPrecision(
     return (
         {
             # "Scores (will not be uploaded to UI)": result_df[
-            #     ["user_input", "retrieved_contexts", "reference", "llm_context_precision_with_reference"]
+            #     ["user_input", "retrieved_contexts", "response", "llm_context_precision_without_reference"]
             # ],
             "Aggregate Scores": [
                 {
