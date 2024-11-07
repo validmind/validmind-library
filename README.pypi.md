@@ -1,53 +1,48 @@
 # ValidMind Library
 
-ValidMind’s Python Library contains a suite of developer tools and methods designed to automate
-the documentation and validation of your models.
+ValidMind's Python library automates the documentation and validation of your models through a comprehensive suite of developer tools and methods.
 
-The Library is designed to be model agnostic. If your model is built in Python, ValidMind's
-Python library will provide all the standard functionality without requiring your developers to rewrite any functions.
+Built to be model agnostic, it works seamlessly with any Python model without requiring developers to rewrite existing code.
 
-The Library provides a rich suite of documentation tools and test suites, from documenting
-descriptions of your dataset to testing your models for weak spots and overfit areas. The Developer
-Framework helps you automate the generation of model documentation by feeding the ValidMind platform with
-documentation artifacts and test results to the ValidMind platform.
+It includes a suite of rich documentation and model testing capabilities - from dataset descriptions to identifying model weak spots and overfit areas. Through this library, you can automate documentation generation by feeding artifacts and test results to the ValidMind platform.
 
-## Installation
+## Getting started
 
-To install the ValidMind Library and all optional dependencies, run:
+### Install from PyPI
+
+To install the library and all optional dependencies, run:
 
 ```bash
 pip install validmind[all]
 ```
 
-To install the Library without optional dependencies (core functionality only), run:
+To just install the core functionality without optional dependencies (some tests and models may not work), run:
 
 ```bash
 pip install validmind
 ```
 
-### Extra dependencies
+#### Extra dependencies
 
-The Library has optional dependencies that can be installed separately to support additional model types and tests.
-
-- **LLM Support**: To be able to run tests for Large Language Models (LLMs), install the `llm` extra:
+- **Install with LLM Support**
 
     ```bash
     pip install validmind[llm]
     ```
 
-- **PyTorch Models**: To use pytorch models with the Library, install the `torch` extra:
-
-    ```bash
-    pip install validmind[torch]
-    ```
-
-- **Hugging Face Transformers**: To use Hugging Face Transformers models with the Library, install the `transformers` extra:
+- **Install with Hugging Face `transformers` support**
 
     ```bash
     pip install validmind[transformers]
     ```
 
-- **R Models**: To use R models with the Library, install the `r` extra:
+- **Install with PyTorch support**
+
+    ```bash
+    pip install validmind[pytorch]
+    ```
+
+- **Install with R support (requires R to be installed)**
 
     ```bash
     pip install validmind[r-support]
