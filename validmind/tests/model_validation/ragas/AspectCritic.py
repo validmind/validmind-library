@@ -39,8 +39,8 @@ def AspectCritic(
     dataset,
     user_input_column="user_input",
     response_column="response",
-    retrieved_contexts_column="retrieved_contexts",
-    aspects: list = [  # noqa: B006 this is fine as immutable default since it never gets modified
+    retrieved_contexts_column=None,
+    aspects: list = [
         "coherence",
         "conciseness",
         "correctness",
@@ -97,7 +97,7 @@ def AspectCritic(
         params={
             "user_input_column": "input_prompt",
             "response_column": f"{pred_col}.llm_output",
-            "retrieved_contexts_column": lambda row: [row[pred_col]["context_message"]],
+            "retrieved_contexts_column": "retrieval_model_prediction",
         },
     )
     ```
@@ -137,8 +137,10 @@ def AspectCritic(
     required_columns = {
         "user_input": user_input_column,
         "response": response_column,
-        "retrieved_contexts": retrieved_contexts_column,
     }
+
+    if retrieved_contexts_column:
+        required_columns["retrieved_contexts"] = retrieved_contexts_column
 
     df = get_renamed_columns(dataset._df, required_columns)
 
@@ -162,7 +164,8 @@ def AspectCritic(
             result_df[aspect] = 1 - result_df[aspect]
 
     df_melted = result_df.melt(
-        id_vars=["user_input", "response", "retrieved_contexts"],
+        id_vars=["user_input", "response"]
+        + (["retrieved_contexts"] if retrieved_contexts_column else []),
         value_vars=[aspect.name for aspect in all_aspects],
         var_name="Metric",
         value_name="Result",
