@@ -22,7 +22,7 @@ jobs:
 
     steps:
       - name: Clear pip temporary files
-        run: rm -rf /tmp/pip-*
+        run: rm -rf /tmp/pip-*  # Initial cleanup of pip temporary files
 
       - uses: actions/checkout@v4
 
@@ -40,8 +40,15 @@ jobs:
           poetry config virtualenvs.in-project true
           poetry env use python3.11
           poetry install -E huggingface -E llm
-          poetry run pip install torch==2.0.1 --extra-index-url https://download.pytorch.org/whl/cpu
-          poetry run pip install aequitas fairlearn vl-convert-python
+          poetry run pip install --no-cache-dir torch==2.0.1 --extra-index-url https://download.pytorch.org/whl/cpu
+          poetry run pip install --no-cache-dir aequitas fairlearn vl-convert-python
+
+      # Add a cleanup step after dependency installation to remove cache and temporary files
+      - name: Cleanup After Dependency Installation
+        run: |
+          rm -rf /tmp/pip-*  # Clear pip temporary files
+          rm -rf ~/.cache/pip  # Clear pip cache
+          rm -rf ~/.cache/pypoetry  # Clear poetry cache
 
       - name: Build the package
         run: poetry build
@@ -52,11 +59,19 @@ jobs:
       - name: Setup Virtual Environment
         run: python -m venv sdist-venv
 
+      # Add a cleanup step before installing the built package to free up space
+      - name: Clear pip temporary files before installing built package
+        run: rm -rf /tmp/pip-*  # Clear pip temporary files again
+
       - name: Install Built Package
         run: sdist-venv/bin/pip install --no-cache-dir "$(ls dist/validmind*.whl | head -n 1)[llm,huggingface]"
 
+      # Additional cleanup step before installing more dependencies
+      - name: Clear pip temporary files before additional dependencies
+        run: rm -rf /tmp/pip-*  # Clear pip temporary files
+
       - name: Install Additional Dependencies
-        run: sdist-venv/bin/pip install nbformat papermill jupyter
+        run: sdist-venv/bin/pip install --no-cache-dir nbformat papermill jupyter
 
       - name: Create Jupyter Kernel
         run: sdist-venv/bin/python -m ipykernel install --user --name sdist-venv
@@ -76,3 +91,4 @@ jobs:
           curl https://hooks.slack.com/triggers/T0313C4GBC5/6083618566112/${{ secrets.NOTEBOOK_RUNNER_HOOK_ID }}
         env:
           NOTEBOOK_RUNNER_HOOK_ID: ${{ secrets.NOTEBOOK_RUNNER_HOOK_ID }}
+
