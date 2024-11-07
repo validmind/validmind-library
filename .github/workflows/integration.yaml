@@ -21,8 +21,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Initial Cleanup (clear /tmp folder)
-        run: rm -rf /tmp/*
+      - name: Clear pip temporary files
+        run: rm -rf /tmp/pip-*
 
       - uses: actions/checkout@v4
 
