@@ -1,7 +1,7 @@
 Package: validmind
 Type: Package
 Title: Interface to the 'ValidMind' Platform
-Version: 0.1.1
+Version: 0.1.2
 Authors@R: c(person("Andres", "Rodriguez", role = c("aut", "cre","cph"),
                       email = "andres@validmind.ai"))
 Maintainer: Andres Rodriguez <andres@validmind.ai>
@@ -14,7 +14,7 @@ Encoding: UTF-8
 LazyData: true
 URL: https://github.com/validmind/developer-framework
 BugReports: https://github.com/validmind/developer-framework/issues
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 Imports:
   glue,
   reticulate,
