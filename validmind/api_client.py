@@ -23,7 +23,7 @@ from .client_config import client_config
 from .errors import MissingAPICredentialsError, MissingModelIdError, raise_api_error
 from .logging import get_logger, init_sentry, send_single_error
 from .utils import NumpyEncoder, run_async
-from .vm_models import Figure, TestResult
+from .vm_models import Figure
 
 logger = get_logger(__name__)
 

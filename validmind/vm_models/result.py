@@ -19,7 +19,7 @@ from jinja2 import Template
 from .. import api_client
 from ..ai.test_descriptions import DescriptionFuture
 from ..logging import get_logger
-from ..utils import NumpyEncoder, display, md_to_html, run_async, test_id_to_name
+from ..utils import NumpyEncoder, display, run_async, test_id_to_name
 from .figure import Figure
 from .input import VMInput
 

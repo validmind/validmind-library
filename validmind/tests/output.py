@@ -114,7 +114,7 @@ class TableOutputHandler(OutputHandler):
         for table_name, table_data in tables.items():
             if not isinstance(table_data, (list, pd.DataFrame)):
                 raise ValueError(
-                    f"Invalid table format: must be a list of dictionaries or a DataFrame"
+                    "Invalid table format: must be a list of dictionaries or a DataFrame"
                 )
 
             if isinstance(table_data, list):
