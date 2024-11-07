@@ -29,7 +29,7 @@ except ImportError as e:
 def ResponseRelevancy(
     dataset,
     user_input_column="user_input",
-    retrieved_contexts_column="retrieved_contexts",
+    retrieved_contexts_column=None,
     response_column="response",
 ):
     """
@@ -113,14 +113,18 @@ def ResponseRelevancy(
     required_columns = {
         "user_input": user_input_column,
         "response": response_column,
-        "retrieved_contexts": retrieved_contexts_column,
     }
+
+    if retrieved_contexts_column:
+        required_columns["retrieved_contexts"] = retrieved_contexts_column
 
     df = get_renamed_columns(dataset._df, required_columns)
 
+    metrics = [response_relevancy()]
+
     result_df = evaluate(
         Dataset.from_pandas(df),
-        metrics=[response_relevancy()],
+        metrics=metrics,
         **get_ragas_config(),
     ).to_pandas()
 
