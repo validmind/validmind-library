@@ -17,7 +17,6 @@ def run_metrics(
     name: str = None,
     metric_ids: List[str] = None,
     description: str = None,
-    output_template: str = None,
     inputs: dict = None,
     accessed_inputs: List[str] = None,
     params: dict = None,
@@ -43,8 +42,6 @@ def run_metrics(
         metric_ids (list[str]): List of unit metric IDs to run. Required.
         description (str, optional): Description of the composite metric. Defaults to
             None.
-        output_template (_type_, optional): Output template to customize the result
-            table.
         inputs (_type_, optional): Inputs to pass to the unit metrics. Defaults to None
         accessed_inputs (_type_, optional): Inputs that were accessed when running the
             unit metrics - used for input tracking. Defaults to None.

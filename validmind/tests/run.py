@@ -3,21 +3,29 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 from inspect import getdoc
-from typing import Any, Dict, List, Tuple, Union
-from uuid import uuid4
+from itertools import product
+from typing import Any, Dict, List, Union
 
-from validmind.ai.test_descriptions import get_result_description
 from validmind.errors import MissingRequiredTestInputError
 from validmind.input_registry import input_registry
 from validmind.logging import get_logger
 from validmind.vm_models.input import VMInput
-from validmind.vm_models.result import TestResult
+from validmind.vm_models.result import TestResult, build_test_result
 
 from .__types__ import TestID
 from .load import load_test
-from .output import process_output
 
 logger = get_logger(__name__)
+
+
+def _cartesian_product(grid: Dict[str, List[Any]]):
+    """Get all possible combinations for a grid of inputs or params
+
+    Example:
+        _cartesian_product({"a": [1, 2], "b": [3, 4]})
+        >>> [{'a': 1, 'b': 3}, {'a': 1, 'b': 4}, {'a': 2, 'b': 3}, {'a': 2, 'b': 4}]
+    """
+    return [dict(zip(grid, values)) for values in product(*grid.values())]
 
 
 def _get_test_kwargs(test_func, inputs, params):
@@ -57,47 +65,106 @@ def _get_test_kwargs(test_func, inputs, params):
     return input_kwargs, param_kwargs
 
 
-def build_test_result(
-    outputs: Union[Any, Tuple[Any, ...]],
-    test_id: str,
+def _combine_tables(results: List[TestResult]):
+    tables = []
+
+    for result in results:
+        tables.extend(result.tables)
+
+    return tables
+
+
+def _combine_figures(results: List[TestResult]):
+    figures = []
+
+    for result in results:
+        figures.extend(result.figures)
+
+    return figures
+
+
+def _run_composite_test(
+    test_id: TestID,
+    metric_ids: List[TestID],
     inputs: Dict[str, Union[VMInput, List[VMInput]]],
     params: Dict[str, Any],
-    description: str = None,
+    show: bool = True,
     generate_description: bool = True,
 ):
-    ref_id = str(uuid4())
+    results = [
+        run_test(
+            test_id=metric_id,
+            inputs=inputs,
+            params=params,
+            show=show,
+            generate_description=generate_description,
+        )
+        for metric_id in metric_ids
+    ]
 
-    result = TestResult(
-        result_id=test_id,
-        ref_id=ref_id,
+    result = build_test_result(
+        outputs=[result.metric for result in results],
+        test_id=test_id,
         inputs=inputs,
         params=params,
+        description="\n---\n".join([result.description for result in results]),
+        generate_description=generate_description,
     )
 
-    if not isinstance(outputs, tuple):
-        outputs = (outputs,)
-
-    for item in outputs:
-        process_output(item, result)
-
-    result.description = get_result_description(
-        test_id=test_id,
-        test_description=description,
-        tables=result.tables,
-        figures=result.figures,
-        metric=result.metric,
-        should_generate=generate_description,
-    )
+    if show:
+        result.show()
 
     return result
 
 
-def run_composite_test(*args, **kwargs):
-    raise NotImplementedError("Composite tests are not yet implemented")
+def _run_comparison_test(
+    test_id: TestID,
+    input_grid: Union[Dict[str, List[Any]], List[Dict[str, Any]]],
+    param_grid: Union[Dict[str, List[Any]], List[Dict[str, Any]]],
+    inputs: Dict[str, Union[VMInput, List[VMInput]]],
+    params: Dict[str, Any],
+    show: bool = True,
+    generate_description: bool = True,
+):
+    if inputs:
+        input_grid = _cartesian_product(inputs)
 
+    if params:
+        param_grid = _cartesian_product(params)
 
-def run_comparison_test(*args, **kwargs):
-    raise NotImplementedError("Comparison tests are not yet implemented")
+    full_grid = _cartesian_product(input_grid, param_grid)
+
+    print(full_grid)
+
+    results = [
+        run_test(
+            test_id=test_id,
+            inputs=group,
+            params=params,
+            show=show,
+            generate_description=generate_description,
+        )
+        for group in full_grid
+    ]
+
+    combined_tables = _combine_tables(results)
+    combined_figures = _combine_figures(results)
+
+    combined_outputs = tuple(*combined_tables, *combined_figures)
+
+    result = build_test_result(
+        outputs=combined_outputs,
+        test_id=test_id,
+        inputs=inputs,
+        params=params,
+        description=results[0].description,
+        generate_description=generate_description,
+    )
+
+    if show:
+        result.show()
+
+    return result
 
 
 def run_test(
@@ -140,7 +207,6 @@ def run_test(
         ValueError: If the test inputs are invalid
         LoadTestError: If the test class fails to load
     """
-    # Validation
     if not test_id and not (name and unit_metrics):
         raise ValueError(
             "`test_id` or both `name` and `unit_metrics` must be provided to run a test"
@@ -150,27 +216,27 @@ def run_test(
         raise ValueError("`name` and `unit_metrics` must be provided together")
 
     if input_grid and (kwargs or inputs):
-        raise ValueError("Cannot provide `input_grid` along with `inputs` or `kwargs`")
+        raise ValueError("Cannot provide `input_grid` along with `inputs`")
 
-    if param_grid and (kwargs or params):
-        raise ValueError("Cannot provide `param_grid` along with `params` or `kwargs`")
+    if param_grid and params:
+        raise ValueError("Cannot provide `param_grid` along with `params`")
 
     if unit_metrics:
         if not test_id:
             name = "".join(word.capitalize() for word in name.split())
             test_id = f"validmind.composite_metric.{name}"
 
-        return run_composite_test(
+        result = _run_composite_test(
             test_id=test_id,
-            unit_metrics=unit_metrics,
+            metric_ids=unit_metrics,
             inputs=inputs,
             params=params,
             show=show,
             generate_description=generate_description,
         )
 
-    if input_grid or param_grid:
-        return run_comparison_test(
+    elif input_grid or param_grid:
+        result = _run_comparison_test(
             test_id=test_id,
             inputs=inputs,
             input_grid=input_grid,
@@ -182,23 +248,24 @@ def run_test(
             generate_description=generate_description,
         )
 
-    test_func = load_test(test_id)
+    else:
+        test_func = load_test(test_id)
 
-    inputs = inputs or kwargs or {}
-    params = params or {}
+        inputs = inputs or kwargs or {}
+        params = params or {}
 
-    input_kwargs, param_kwargs = _get_test_kwargs(test_func, inputs, params)
+        input_kwargs, param_kwargs = _get_test_kwargs(test_func, inputs, params)
 
-    raw_result = test_func(**input_kwargs, **param_kwargs)
+        raw_result = test_func(**input_kwargs, **param_kwargs)
 
-    result = build_test_result(
-        raw_result,
-        test_id,
-        input_kwargs,
-        param_kwargs,
-        getdoc(test_func),
-        generate_description,
-    )
+        result = build_test_result(
+            raw_result,
+            test_id,
+            input_kwargs,
+            param_kwargs,
+            getdoc(test_func),
+            generate_description,
+        )
 
     if show:
         result.show()

@@ -9,7 +9,7 @@ import asyncio
 import json
 from abc import abstractmethod
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 from uuid import uuid4
 
 import pandas as pd
@@ -17,12 +17,13 @@ from ipywidgets import HTML, GridBox, Layout, VBox
 from jinja2 import Template
 
 from .. import api_client
-from ..ai.test_descriptions import DescriptionFuture
+from ..ai.test_descriptions import DescriptionFuture, get_result_description
 from ..logging import get_logger
 from ..utils import NumpyEncoder, display, run_async, test_id_to_name
 from .dataset import VMDataset
 from .figure import Figure
 from .input import VMInput
+from .output import process_output
 
 logger = get_logger(__name__)
 
@@ -432,3 +433,38 @@ class TestResult(Result):
             self._validate_section_id_for_block(section_id, position)
 
         run_async(self.log_async, section_id=section_id, position=position)
+
+
+def build_test_result(
+    outputs: Union[Any, Tuple[Any, ...]],
+    test_id: str,
+    inputs: Dict[str, Union[VMInput, List[VMInput]]],
+    params: Dict[str, Any],
+    description: str = None,
+    generate_description: bool = True,
+):
+    ref_id = str(uuid4())
+
+    result = TestResult(
+        result_id=test_id,
+        ref_id=ref_id,
+        inputs=inputs,
+        params=params,
+    )
+
+    if not isinstance(outputs, tuple):
+        outputs = (outputs,)
+
+    for item in outputs:
+        process_output(item, result)
+
+    result.description = get_result_description(
+        test_id=test_id,
+        test_description=description,
+        tables=result.tables,
+        figures=result.figures,
+        metric=result.metric,
+        should_generate=generate_description,
+    )
+
+    return result
