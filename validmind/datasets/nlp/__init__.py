@@ -8,5 +8,5 @@ Example datasets that can be used with the library.
 
 __all__ = [
     "cnn_dailymail",
-    "twitter_covide_19",
+    "twitter_covid_19",
 ]

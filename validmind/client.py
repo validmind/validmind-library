@@ -277,6 +277,7 @@ def init_model(
 
 def init_r_model(
     model_path: str,
+    input_id: str = "model",
 ) -> VMModel:
     """
     Initializes a VM Model for an R model
@@ -325,6 +326,7 @@ def init_r_model(
     vm_model = RModel(
         r=r,
         model=model,
+        input_id=input_id,
     )
 
     return vm_model
