@@ -9,7 +9,6 @@ on:
       - main
       - prod
       - release-v1
-      - juan5508/sc-7312/update-rag-tests-for-compatibility-with-latest-ragas-package  
 
 permissions:
   contents: read
@@ -39,13 +38,6 @@ jobs:
           poetry install -E huggingface -E llm
           poetry run pip install torch==2.0.1 --extra-index-url https://download.pytorch.org/whl/cpu
           poetry run pip install aequitas fairlearn vl-convert-python
-
-      # Add a cleanup step after dependency installation to remove cache and temporary files
-      - name: Cleanup After Dependency Installation
-        run: |
-          rm -rf /tmp/pip-*  # Clear pip temporary files
-          rm -rf ~/.cache/pip  # Clear pip cache
-          rm -rf ~/.cache/pypoetry  # Clear poetry cache
 
       - name: Build the package
         run: poetry build
