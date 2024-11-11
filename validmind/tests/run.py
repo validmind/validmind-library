@@ -354,7 +354,7 @@ def run_comparison_test(
         else:
             input_groups = input_grid
     else:
-        input_groups = list(inputs) if inputs else []
+        input_groups = [inputs] if inputs else [{}]
 
     if param_grid:
         if isinstance(param_grid, dict):
@@ -362,18 +362,17 @@ def run_comparison_test(
         else:
             param_groups = param_grid
     else:
-        param_groups = list(params) if inputs else []
+        param_groups = [params] if params else [{}]
 
-    input_groups = input_groups or [{}]
-    param_groups = param_groups or [{}]
     # Use itertools.product to compute the Cartesian product
     inputs_params_product = [
         {
-            "inputs": item1,
-            "params": item2,
-        }  # Merge dictionaries from input_groups and param_groups
+            "inputs": item1 if isinstance(item1, dict) else {},
+            "params": item2 if isinstance(item2, dict) else {},
+        }
         for item1, item2 in itertools.product(input_groups, param_groups)
     ]
+
     results = [
         run_test(
             test_id,
@@ -384,7 +383,7 @@ def run_comparison_test(
             params=inputs_params["params"],
             __generate_description=False,
         )
-        for inputs_params in (inputs_params_product or [{}])
+        for inputs_params in inputs_params_product
     ]
     if isinstance(results[0], MetricResultWrapper):
         func = metric_comparison
@@ -545,10 +544,13 @@ def run_comparison_test_with_grids(
     generate_description,
 ):
     """Run a comparison test based on the presence of input and param grids."""
+    inputs = inputs or {}
+
     if input_grid and param_grid:
         return run_comparison_test(
             test_id,
-            input_grid,
+            input_grid=input_grid,
+            inputs=inputs,
             name=name,
             unit_metrics=unit_metrics,
             param_grid=param_grid,
@@ -559,7 +561,8 @@ def run_comparison_test_with_grids(
     if input_grid:
         return run_comparison_test(
             test_id,
-            input_grid,
+            input_grid=input_grid,
+            inputs=inputs,
             name=name,
             unit_metrics=unit_metrics,
             params=params,
