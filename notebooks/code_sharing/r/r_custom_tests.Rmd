@@ -82,9 +82,9 @@ If you encounter errors due to missing modules in your Python environment, insta
 
 <a id='toc4_'></a>
 
-## Install the client library
+## Install the ValidMind Library
 
-The client library provides Python support for the ValidMind Library. To install it:
+To install the library:
 
 ```{r, eval=FALSE}
 install.packages("validmind")
@@ -92,9 +92,9 @@ install.packages("validmind")
 
 <a id='toc5_'></a>
 
-## Initialize the client library
+## Initialize the ValidMind Library
 
-ValidMind generates a unique _code snippet_ for each registered model to connect with your developer environment. You initialize the client library with this code snippet, which ensures that your documentation and tests are uploaded to the correct model when you run the notebook.
+ValidMind generates a unique _code snippet_ for each registered model to connect with your developer environment. You initialize the ValidMind Library with this code snippet, which ensures that your documentation and tests are uploaded to the correct model when you run the notebook.
 
 Get your code snippet:
 
