@@ -15,9 +15,9 @@ library(validmind)
 
 ## About ValidMind
 
-ValidMind is a platform for managing model risk, including risk associated with AI and statistical models.
+ValidMind is a suite of tools for managing model risk, including risk associated with AI and statistical models.
 
-You use the ValidMind Library to automate documentation and validation tests, and then use the ValidMind AI Risk Platform UI to collaborate on model documentation. Together, these products simplify model risk management, facilitate compliance with regulations and institutional standards, and enhance collaboration between yourself and model validators.
+You use the ValidMind Library to automate documentation and validation tests, and then use the ValidMind Platform to collaborate on model documentation. Together, these products simplify model risk management, facilitate compliance with regulations and institutional standards, and enhance collaboration between yourself and model validators.
 
 <a id='toc2_1_'></a>
 
@@ -33,9 +33,9 @@ If you encounter errors due to missing modules in your Python environment, insta
 
 If you haven't already seen our [Get started with the ValidMind Library](https://docs.validmind.ai/developer/get-started-developer-framework.html), we recommend you explore the available resources for developers at some point. There, you can learn more about documenting models, find code samples, or read our developer reference.
 
-<div class="alert alert-block alert-info" style="background-color: #f7e4ee; color: #222425; border: 1px solid #222425;">For access to all features available in this notebook, create a free ValidMind account.
-
-Signing up is FREE — <a href="https://app.prod.validmind.ai"><b>Sign up now</b></a></div>
+<div class="alert alert-block alert-info" style="background-color: #B5B5B510; color: black; border: 1px solid #083E44; border-left-width: 5px; box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);border-radius: 5px;"><span style="color: #083E44;"><b>For access to all features available in this notebook, create a free ValidMind account.</b></span>
+<br></br>
+Signing up is FREE — <a href="https://docs.validmind.ai/guide/configuration/register-with-validmind.html" style="color: #DE257E;"><b>Register with ValidMind</b></a></div>
 
 <a id='toc2_3_'></a>
 
@@ -47,7 +47,7 @@ Signing up is FREE — <a href="https://app.prod.validmind.ai"><b>Sign up now</b
 
 **Tests**: A function contained in the ValidMind Library, designed to run a specific quantitative test on the dataset or model. Tests are the building blocks of ValidMind, used to evaluate and document models and datasets, and can be run individually or as part of a suite defined by your model documentation template.
 
-**Custom tests**: Custom tests are functions that you define to evaluate your model or dataset. These functions can be registered with ValidMind to be used in the platform.
+**Custom tests**: Custom tests are functions that you define to evaluate your model or dataset. These functions can be registered via the ValidMind Library to be used with the ValidMind Platform.
 
 **Inputs**: Objects to be evaluated and documented in the ValidMind Library. They can be any of the following:
 
@@ -74,10 +74,9 @@ Example: the [`classifier_full_suite`](https://docs.validmind.ai/validmind/valid
 
 ### New to ValidMind?
 
-To access the ValidMind Platform UI, you'll need an account.
-
-Signing up is FREE — **[Create your account](https://app.prod.validmind.ai)**.
-:::
+<div class="alert alert-block alert-info" style="background-color: #B5B5B510; color: black; border: 1px solid #083E44; border-left-width: 5px; box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);border-radius: 5px;"><span style="color: #083E44;"><b>To access the ValidMind Platform, you'll need an account.</b></span>
+<br></br>
+Signing up is FREE — <a href="https://docs.validmind.ai/guide/configuration/register-with-validmind.html" style="color: #DE257E;"><b>Register with ValidMind</b></a></div>
 
 If you encounter errors due to missing modules in your Python environment, install the modules with `pip install`, and then re-run the notebook. For more help, refer to [Installing Python Modules](https://docs.python.org/3/installing/index.html).
 
@@ -99,7 +98,7 @@ ValidMind generates a unique _code snippet_ for each registered model to connect
 
 Get your code snippet:
 
-1. In a browser, log into the [Platform UI](https://app.prod.validmind.ai).
+1. In a browser, [log in to ValidMind](https://docs.validmind.ai/guide/configuration/log-in-to-validmind.html).
 
 2. In the left sidebar, navigate to **Model Inventory** and click **+ Register new model**.
 
