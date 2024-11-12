@@ -19,7 +19,7 @@ run_custom_test(test_id, inputs, test_registry, show = FALSE)
 An object representing the result of the test, with an additional log function.
 }
 \description{
-This function runs a custom test using the ValidMind framework through Python's 
+This function runs a custom test using the ValidMind Library through Python's 
 `validmind.vm_models`. It retrieves a custom test by `test_id`, executes it with the provided 
 `inputs`, and optionally displays the result. The result is also logged.
 }

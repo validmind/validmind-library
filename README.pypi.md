@@ -1,13 +1,10 @@
 # ValidMind Library
 
-The ValidMind Library is a suite of developer tools and methods designed to automate
-the documentation and validation of your models.
+The ValidMind Library is a suite of developer tools and methods designed to automate the documentation and validation of your models.
 
-The ValidMind Library is designed to be model agnostic. If your model is built in Python, the ValidMind Library will provide all the standard functionality without requiring your developers to rewrite any functions.
+Designed to be model agnostic, the ValidMind Library provides all the standard functionality without requiring you to rewrite any functions as long as your model is built in Python.
 
-The ValidMind Library provides a rich suite of documentation tools and test suites, from documenting
-descriptions of your dataset to testing your models for weak spots and overfit areas. The ValidMind Library helps you automate the generation of model documentation by feeding the ValidMind Platform with
-documentation artifacts and test results.
+With a rich array of documentation tools and test suites, from documenting descriptions of your datasets to testing your models for weak spots and overfit areas, the ValidMind Library helps you automate model documentation by feeding the ValidMind Platform with documentation artifacts and test results. 
 
 ## Installation
 
