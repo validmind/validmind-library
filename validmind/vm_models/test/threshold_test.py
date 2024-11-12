@@ -39,7 +39,7 @@ class ThresholdTest(Test):
         Return the threshold test summary. May be overridden by subclasses. Defaults to showing
         a table with test_name(optional), column and passed.
 
-        The test summary allows renderers (e.g. Word and ValidMind UI) to display a
+        The test summary allows renderers (e.g. Word and ValidMind Platform) to display a
         short summary of the test results.
         """
         if results is None:
