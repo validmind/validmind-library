@@ -135,7 +135,7 @@ def ResponseRelevancy(
 
     return (
         {
-            # "Scores (will not be uploaded to UI)": result_df[
+            # "Scores (will not be uploaded to ValidMind Platform)": result_df[
             #     ["user_input", "retrieved_contexts", "response", "answer_relevancy"]
             # ],
             "Aggregate Scores": [

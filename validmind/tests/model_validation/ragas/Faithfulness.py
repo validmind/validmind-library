@@ -115,7 +115,7 @@ def Faithfulness(
 
     return (
         {
-            # "Scores (will not be uploaded to UI)": result_df[
+            # "Scores (will not be uploaded to ValidMind Platform)": result_df[
             #     ["retrieved_contexts", "response", "faithfulness"]
             # ],
             "Aggregate Scores": [
