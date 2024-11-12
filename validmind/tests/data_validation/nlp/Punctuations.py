@@ -54,35 +54,24 @@ def Punctuations(dataset, count_mode="token"):
     - Less effective with languages that use non-standard or different punctuation.
     - Visualization may lack interpretability when there are many unique punctuation marks in the dataset.
     """
-
-    # Validate count_mode parameter
     if count_mode not in ["token", "word"]:
         raise ValueError("count_mode parameter must be either 'token' or 'word'")
 
-    def create_corpus(df, text_column):
-        corpus = []
-        for x in df[text_column].str.split():
-            for i in x:
-                corpus.append(i)
-            return corpus
+    corpus = _create_corpus(dataset.df, dataset.text_column)
+    punctuation_counts = _count_punctuations(corpus, count_mode)
+    return _create_punctuation_plot(punctuation_counts)
 
-    text_column = dataset.text_column
-    corpus = create_corpus(dataset.df, text_column=text_column)
 
-    special = string.punctuation
-    dic = defaultdict(int, {key: 0 for key in special})
-    if count_mode == "token":
-        for i in corpus:
-            if i in special:
-                dic[i] += 1
-    if count_mode == "word":
-        for word in corpus:
-            for char in word:
-                if char in special:
-                    dic[char] += 1
-
+def _create_punctuation_plot(punctuation_counts):
+    """Create a bar plot visualization of punctuation frequencies."""
     fig = go.Figure(
-        data=[go.Bar(x=list(dic.keys()), y=list(dic.values()), marker_color="#17C37B")]
+        data=[
+            go.Bar(
+                x=list(punctuation_counts.keys()),
+                y=list(punctuation_counts.values()),
+                marker_color="#17C37B",
+            )
+        ]
     )
     fig.update_layout(
         title="Punctuation Distribution",
@@ -90,5 +79,31 @@ def Punctuations(dataset, count_mode="token"):
         yaxis_title="Frequency",
         showlegend=False,
     )
-
     return fig
+
+
+def _create_corpus(df, text_column):
+    """Create a corpus from the dataset's text column."""
+    corpus = []
+    for x in df[text_column].str.split():
+        for i in x:
+            corpus.append(i)
+    return corpus
+
+
+def _count_punctuations(corpus, count_mode="token"):
+    """Count punctuation marks in the corpus based on the specified mode."""
+    special = string.punctuation
+    dic = defaultdict(int, {key: 0 for key in special})
+
+    if count_mode == "token":
+        for i in corpus:
+            if i in special:
+                dic[i] += 1
+    else:  # count_mode == "word"
+        for word in corpus:
+            for char in word:
+                if char in special:
+                    dic[char] += 1
+
+    return dic
