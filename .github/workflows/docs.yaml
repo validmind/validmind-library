@@ -2,7 +2,7 @@
 # documentation from docstrings using Sphinx. We generate the HTML
 # documentation to keep it up to date with the Markdown files
 
-name: Framework API docs
+name: Python Library API docs
 
 on:
   push:
