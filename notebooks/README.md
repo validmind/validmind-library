@@ -18,4 +18,4 @@ ValidMind enables organizations to identify, document, and manage model risks fo
 If this is your first time trying out ValidMind, you can make use of the following resources alongside our sample notebooks:
 
 - [Get started](https://docs.validmind.ai/get-started/get-started.html) — The basics, including key concepts, and how our products work
-- [Get started with the ValidMind Library](https://docs.validmind.ai/developer/get-started-developer-framework.html) —  The path for developers, more code samples, and our developer reference
+- [Get started with the ValidMind Library](https://docs.validmind.ai/developer/get-started-validmind-library.html) —  The path for developers, more code samples, and our developer reference
