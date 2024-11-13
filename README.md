@@ -6,9 +6,11 @@
 
 ![ValidMind logo](images/ValidMind-logo-color.svg "ValidMind logo")
 
-The ValidMind Library is a suite of developer tools and methods designed to run validation tests and automate the documentation of your models. The ValidMind Library provides a rich suite of documentation tools and test suites, from documenting descriptions of your dataset to testing your models for weak spots and overfit areas.
+The ValidMind Library is a suite of developer tools and methods designed to run validation tests and automate the documentation of your models. 
 
-The ValidMind Library includes the Python client library, which is designed to be model agnostic. If your model is built in Python, the ValidMind library will provide all the standard functionality without requiring your developers to rewrite any functions.
+Designed to be model agnostic, the ValidMind Library provides all the standard functionality without requiring you to rewrite any functions as long as your model is built in Python.
+
+With a rich array of documentation tools and test suites, from documenting descriptions of your datasets to testing your models for weak spots and overfit areas, the ValidMind Library helps you automate model documentation by feeding the ValidMind Platform with documentation artifacts and test results. 
 
 ## Contributing to the ValidMind Library
 
@@ -16,7 +18,7 @@ We believe in the power of collaboration and welcome contributions to the ValidM
 
 - Interested in connecting with fellow AI model risk practitioners? Join our [Community Slack](https://docs.validmind.ai/about/contributing/join-community.html)!
 
-- For more information about ValidMind's open source tests and Jupyter Notebooks, read the [ValidMind Library docs](https://docs.validmind.ai/developer/get-started-developer-framework.html).
+- For more information about ValidMind's open-source tests and Jupyter Notebooks, read the [ValidMind Library docs](https://docs.validmind.ai/developer/get-started-developer-framework.html).
 
 ## Getting started
 
@@ -141,7 +143,7 @@ Single file:
 poetry run python scripts/add_test_description.py review validmind/tests/ongoing_monitoring/FeatureDrift.py
 ```
 
-## Adding a Copyright Header
+## Adding a copyright header
 
 When adding new files to the project, you can add the ValidMind copyright header to any files that
 are missing it by running:
@@ -150,7 +152,7 @@ are missing it by running:
 make copyright
 ```
 
-## Known Issues
+## Known issues
 
 ### ValidMind wheel errors
 

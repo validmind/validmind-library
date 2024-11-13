@@ -1,6 +1,6 @@
-# ValidMind Sample Notebooks
+# ValidMind sample notebooks
 
-Our code samples, based on Jupyter notebooks, are designed to showcase the capabilities and features of the ValidMind Library and ValidMind Platform, while also providing you with useful examples that you can build on and adapt for your own use cases.
+Our [Jupyter Notebook](https://jupyter.org/) code samples are designed to showcase the capabilities and features of ValidMind, while also providing you with useful examples that you can build on and adapt for your own use cases.
 
 Sample notebooks are organized into the following folders:
 
