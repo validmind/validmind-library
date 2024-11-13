@@ -10,7 +10,7 @@ from collections import defaultdict
 from dataclasses import dataclass
 from typing import List
 
-import matplotlib.pyplot as plt
+import plotly.graph_objects as go
 import nltk
 import pandas as pd
 from nltk.corpus import stopwords
@@ -90,7 +90,7 @@ class StopWords(ThresholdTest):
                 ResultTable(
                     data=df,
                     metadata=ResultTableMetadata(
-                        title=f"Stop words results for column '{self.inputs.dataset.target_column}'"
+                        title=f"Stop words results for column '{self.inputs.dataset.text_column}'"
                     ),
                 )
             ]
@@ -136,15 +136,16 @@ class StopWords(ThresholdTest):
         ]
         figures = []
         if top:
-            fig, _ = plt.subplots()
             x, y = zip(*top)
-            plt.bar(x, y)
-            plt.xticks(rotation=90)
+            fig = go.Figure(data=[go.Bar(x=x, y=y)])
 
-            # Do this if you want to prevent the figure from being displayed
-            plt.close("all")
+            fig.update_layout(
+                title=f"Stop Words Frequency in {self.inputs.dataset.text_column}",
+                xaxis_title="Stop Words",
+                yaxis_title="Percentage (%)",
+                xaxis_tickangle=-45,
+            )
 
-            figures = []
             figures.append(
                 Figure(
                     for_object=self,

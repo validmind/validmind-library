@@ -12,7 +12,7 @@ from validmind import tags, tasks
 
 @tags("nlp", "text_data", "data_validation")
 @tasks("nlp")
-def PolarityAndSubjectivity(dataset):
+def PolarityAndSubjectivity(dataset, threshold_subjectivity=0.5, threshold_polarity=0):
     """
     Analyzes the polarity and subjectivity of text data within a given dataset to visualize the sentiment distribution.
 
@@ -67,6 +67,78 @@ def PolarityAndSubjectivity(dataset):
         data, x="polarity", y="subjectivity", title="Polarity vs Subjectivity"
     )
     fig.update_traces(textposition="top center")
-    fig.update_layout(xaxis_title="Polarity", yaxis_title="Subjectivity")
 
-    return fig
+    # Add threshold lines with names for legend
+    fig.add_hline(
+        y=threshold_subjectivity,
+        line_dash="dash",
+        line_color="gray",
+        opacity=0.5,
+        name=f"Subjectivity Threshold ({threshold_subjectivity})",
+    )
+    fig.add_vline(
+        x=threshold_polarity,
+        line_dash="dash",
+        line_color="gray",
+        opacity=0.5,
+        name=f"Polarity Threshold ({threshold_polarity})",
+    )
+
+    fig.update_layout(
+        xaxis_title="Polarity",
+        yaxis_title="Subjectivity",
+        xaxis=dict(range=[-1, 1]),
+        yaxis=dict(range=[0, 1]),
+        showlegend=True,
+    )
+
+    # Create Quadrant Distribution table
+    quadrant_df = pd.DataFrame(
+        {
+            "Quadrant": [
+                "Subjective - Positive Sentiment",
+                "Subjective - Negative Sentiment",
+                "Objective - Positive Sentiment",
+                "Objective - Negative Sentiment",
+            ],
+            "Ratio (%)": [
+                (
+                    (data["polarity"] >= threshold_polarity)
+                    & (data["subjectivity"] >= threshold_subjectivity)
+                ).mean()
+                * 100,
+                (
+                    (data["polarity"] < threshold_polarity)
+                    & (data["subjectivity"] >= threshold_subjectivity)
+                ).mean()
+                * 100,
+                (
+                    (data["polarity"] >= threshold_polarity)
+                    & (data["subjectivity"] < threshold_subjectivity)
+                ).mean()
+                * 100,
+                (
+                    (data["polarity"] < threshold_polarity)
+                    & (data["subjectivity"] < threshold_subjectivity)
+                ).mean()
+                * 100,
+            ],
+        }
+    )
+
+    # Create Statistics table
+    stats_df = pd.DataFrame(
+        {
+            "Metric": ["Polarity", "Subjectivity"],
+            "Range": ["[-1, 1]", "[0, 1]"],
+            "Mean": [data["polarity"].mean(), data["subjectivity"].mean()],
+            "Median": [data["polarity"].median(), data["subjectivity"].median()],
+            "Std": [data["polarity"].std(), data["subjectivity"].std()],
+            "Min": [data["polarity"].min(), data["subjectivity"].min()],
+            "Max": [data["polarity"].max(), data["subjectivity"].max()],
+        }
+    )
+
+    statistics_tables = {"Quadrant Distribution": quadrant_df, "Statistics": stats_df}
+
+    return fig, statistics_tables
