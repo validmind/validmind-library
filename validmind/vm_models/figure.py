@@ -176,7 +176,7 @@ class Figure:
 
         elif is_plotly_figure(self.figure):
             # When using plotly, we need to use we will produce two files:
-            # - a JSON file that will be used to display the figure in the UI
+            # - a JSON file that will be used to display the figure in the ValidMind Platform
             # - a PNG file that will be used to display the figure in documents
             return {
                 "image": (

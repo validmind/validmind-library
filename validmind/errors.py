@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 """
-This module contains all the custom errors that are used in the library.
+This module contains all the custom errors that are used in the ValidMind Library.
 
 The following base errors are defined for others:
 - BaseError

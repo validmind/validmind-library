@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 """
-Central class to track configuration of the library
+Central class to track configuration of the ValidMind Library
 client against the ValidMind API
 """
 

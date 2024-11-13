@@ -119,7 +119,7 @@ knitr::knit_hooks$set(print_table = custom_print_table_hook)
 
 ## **Initializing the ValidMind Client Library**
 
-Log in to the ValidMind platform with your registered email address, and
+Log in to the ValidMind Platform with your registered email address, and
 navigate to the Documentation Projects page.
 
 ### **Creating a new Documentation Project**

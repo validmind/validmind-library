@@ -20,7 +20,7 @@ Or you can install the package from source. Ensure you are in the `r/validmind` 
 devtools::install()
 ```
 
-## Quick Start
+## QuickStart
 
 You can connect to your ValidMind profile by providing the appropriate credentials:
 
@@ -34,7 +34,7 @@ vm_r <- vm(
 )
 ```
 
-## Fleshed out Example
+## Fleshed out example
 
 Please see the `notebooks/code-sharing/r` folder for examples of how to use!
 

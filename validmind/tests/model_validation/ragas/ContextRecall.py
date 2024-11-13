@@ -116,7 +116,7 @@ def ContextRecall(
 
     return (
         {
-            # "Scores (will not be uploaded to UI)": result_df[
+            # "Scores (will not be uploaded to ValidMind Platform)": result_df[
             #     ["question", "contexts", "ground_truth", "context_recall"]
             # ],
             "Aggregate Scores": [
