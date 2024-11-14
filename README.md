@@ -1,8 +1,8 @@
 # ValidMind Library
 
 <!-- TODO: put back in when workflows are working properly -->
-<!-- [![Code Quality](https://github.com/validmind/developer-framework/actions/workflows/python.yaml/badge.svg)](https://github.com/validmind/developer-framework/actions/workflows/python.yaml)
-[![Integration Tests](https://github.com/validmind/developer-framework/actions/workflows/integration.yaml/badge.svg)](https://github.com/validmind/developer-framework/actions/workflows/integration.yaml) -->
+<!-- [![Code Quality](https://github.com/validmind/validmind-library/actions/workflows/python.yaml/badge.svg)](https://github.com/validmind/validmind-library/actions/workflows/python.yaml)
+[![Integration Tests](https://github.com/validmind/validmind-library/actions/workflows/integration.yaml/badge.svg)](https://github.com/validmind/validmind-library/actions/workflows/integration.yaml) -->
 
 ![ValidMind logo](images/ValidMind-logo-color.svg "ValidMind logo")
 

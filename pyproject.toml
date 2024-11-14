@@ -30,7 +30,7 @@ matplotlib = "*"
 mistune = "^3.0.2"
 nest-asyncio = "^1.6.0"
 nltk = "^3.8.1"
-numba = "<0.59.0" # TODO: https://github.com/validmind/developer-framework/pull/28
+numba = "<0.59.0" # TODO: https://github.com/validmind/validmind-library/pull/28
 numpy = "*"
 openai = ">=1"
 pandas = ">=1.1,<=2.0.3"
