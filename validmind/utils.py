@@ -111,8 +111,8 @@ class NumpyEncoder(json.JSONEncoder):
         if isinstance(obj, pd.Timestamp):
             return str(obj)
         if isinstance(obj, ql.Date):
-            # Convert QuantLib Date to string in YYYY-MM-DD format
-            return f"{obj.year()}-{obj.month()}-{obj.dayOfMonth()}"
+            # Convert QuantLib Date to ISO string format
+            return obj.ISO()
         if isinstance(obj, set):
             return list(obj)
         return super().default(obj)
