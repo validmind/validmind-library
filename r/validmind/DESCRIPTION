@@ -12,8 +12,8 @@ Description: Deploy, execute, and analyze the results of models hosted on the
 License: AGPL-3
 Encoding: UTF-8
 LazyData: true
-URL: https://github.com/validmind/developer-framework
-BugReports: https://github.com/validmind/developer-framework/issues
+URL: https://github.com/validmind/validmind-library
+BugReports: https://github.com/validmind/validmind-library/issues
 RoxygenNote: 7.3.2
 Imports:
   glue,
