@@ -3,8 +3,11 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 import plotly.express as px
-
+import pandas as pd
 from validmind import tags, tasks
+from validmind.logging import get_logger
+
+logger = get_logger(__name__)
 
 
 @tags("data_validation", "visualization")
@@ -51,6 +54,9 @@ def TimeSeriesHistogram(dataset, nbins=30):
 
     df = dataset.df
 
+    if not pd.api.types.is_datetime64_any_dtype(df.index):
+        raise ValueError(f"Dataset {dataset.input_id} must have a datetime index")
+
     columns = list(dataset.df.columns)
 
     if not set(columns).issubset(set(df.columns)):
@@ -58,12 +64,26 @@ def TimeSeriesHistogram(dataset, nbins=30):
 
     figures = []
     for col in columns:
+        # Check for missing values and log if any are found
+        missing_count = df[col].isna().sum()
+        if missing_count > 0:
+            logger.info(
+                f"Column '{col}' contains {missing_count} missing values which will be excluded from the histogram."
+            )
+
+        # Drop missing values for the current column
+        valid_data = df[~df[col].isna()]
+
         fig = px.histogram(
-            df, x=col, marginal="violin", nbins=nbins, title=f"Histogram for {col}"
+            valid_data,
+            x=col,
+            marginal="violin",
+            nbins=nbins,
+            title=f"Histogram for {col}",
         )
         fig.update_layout(
             title={
-                "text": f"{col}",
+                "text": f"{col} (n={len(valid_data)})",
                 "y": 0.9,
                 "x": 0.5,
                 "xanchor": "center",
