@@ -10,6 +10,7 @@ import base64
 import json
 from dataclasses import dataclass
 from io import BytesIO
+from typing import Union
 
 import ipywidgets as widgets
 import matplotlib
@@ -39,7 +40,7 @@ class Figure:
     """
 
     key: str
-    figure: object
+    figure: Union[matplotlib.figure.Figure, go.Figure, go.FigureWidget, bytes]
     ref_id: str  # used to link figures to results
 
     _type: str = "plot"  # for now this is the only figure type

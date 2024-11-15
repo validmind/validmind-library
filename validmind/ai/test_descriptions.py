@@ -2,17 +2,20 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+import json
 import os
 import re
 from concurrent.futures import ThreadPoolExecutor
-from typing import Union
+from typing import List, Union
 
 from jinja2 import Template
 
-from validmind.utils import md_to_html
-
 from ..client_config import client_config
 from ..logging import get_logger
+from ..utils import NumpyEncoder, md_to_html, test_id_to_name
+from ..vm_models.figure import Figure
+from ..vm_models.result import ResultTable
+from .utils import DescriptionFuture, get_client_and_model
 
 __executor = ThreadPoolExecutor()
 __prompt = None
@@ -62,34 +65,12 @@ def prompt_to_message(role, prompt):
     return {"role": role, "content": content}
 
 
-class DescriptionFuture:
-    """This will be immediately returned from generate_description so that
-    the tests can continue to be run in parallel while the description is
-    retrieved asynchronously.
-
-    The value will be retrieved later and if its not ready yet, it should
-    block until it is.
-    """
-
-    def __init__(self, future):
-        self._future = future
-
-    def get_description(self):
-        if isinstance(self._future, str):
-            description = self._future
-        else:
-            # This will block until the future is completed
-            description = self._future.result()
-
-        return md_to_html(description, mathml=True)
-
-
 def generate_description(
     test_id: str,
     test_description: str,
-    tables: str,
+    tables: List[ResultTable] = None,
     metric: Union[float, int] = None,
-    figures: list = None,
+    figures: List[Figure] = None,
 ):
     """Generate the description for the test results"""
     if not tables and not figures and not metric:
@@ -97,44 +78,49 @@ def generate_description(
             "No tables, unit metric or figures provided - cannot generate description"
         )
 
-    # TODO: fix circular import
-    from validmind.ai.utils import get_client_and_model
+    # # TODO: fix circular import
+    # from validmind.ai.utils import get_client_and_model
 
     client, model = get_client_and_model()
 
     # get last part of test id
     test_name = test_id.split(".")[-1]
-    # truncate the test description to save time
-    test_description = (
-        f"{test_description[:500]}..."
-        if len(test_description) > 500
-        else test_description
+
+    # TODO: fully support metrics
+    if metric is not None:
+        tables = [] if not tables else tables
+        tables.append(
+            ResultTable(
+                data=[
+                    {"Metric": test_id_to_name(test_id), "Value": metric},
+                ],
+            )
+        )
+
+    summary = "\n---\n".join(
+        [
+            json.dumps(table.serialize(), cls=NumpyEncoder, separators=(",", ":"))
+            for table in tables
+        ]
     )
-
-    if metric:
-        metric_tables = f"**Metric Value**: {metric}"
-        if tables:
-            tables = metric_tables + "\n" + tables
-        else:
-            tables = metric_tables
-
-    figures = [] if tables else figures
 
     input_data = {
         "test_name": test_name,
         "test_description": test_description,
-        "tables": tables,
-        "figures": [figure._get_b64_url() for figure in figures],
+        "summary": summary,
+        "figures": [figure._get_b64_url() for figure in ([] if tables else figures)],
     }
     system, user = _load_prompt()
 
+    messages = [
+        prompt_to_message("system", system.render(input_data)),
+        prompt_to_message("user", user.render(input_data)),
+    ]
+    print(messages[1]["content"])
     response = client.chat.completions.create(
         model=model,
         temperature=0.0,
-        messages=[
-            prompt_to_message("system", system.render(input_data)),
-            prompt_to_message("user", user.render(input_data)),
-        ],
+        messages=messages,
     )
 
     return response.choices[0].message.content
@@ -143,8 +129,8 @@ def generate_description(
 def background_generate_description(
     test_id: str,
     test_description: str,
-    tables: str,
-    figures: list = None,
+    tables: List[ResultTable] = None,
+    figures: List[Figure] = None,
     metric: Union[int, float] = None,
 ):
     def wrapped():
@@ -165,12 +151,12 @@ def background_generate_description(
 
 
 def get_result_description(
-    test_id,
-    test_description,
-    tables=None,
-    figures=None,
-    metric=None,
-    should_generate=True,
+    test_id: str,
+    test_description: str,
+    tables: List[ResultTable] = None,
+    figures: List[Figure] = None,
+    metric: Union[int, float] = None,
+    should_generate: bool = True,
 ):
     """Get Metadata Dictionary for a Test or Metric Result
 

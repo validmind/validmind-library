@@ -3,32 +3,28 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 from inspect import getdoc
-from itertools import product
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List, Tuple, Union
+from uuid import uuid4
 
+from validmind.ai.test_descriptions import get_result_description
 from validmind.errors import MissingRequiredTestInputError
 from validmind.input_registry import input_registry
 from validmind.logging import get_logger
+from validmind.utils import test_id_to_name
 from validmind.vm_models.input import VMInput
-from validmind.vm_models.result import TestResult, build_test_result
+from validmind.vm_models.result import TestResult
 
 from .__types__ import TestID
-from .load import load_test
+from ._comparison import combine_results, get_comparison_test_configs
+from .load import _test_description, describe_test, load_test
+from .output import process_output
 
 logger = get_logger(__name__)
 
 
-def _cartesian_product(grid: Dict[str, List[Any]]):
-    """Get all possible combinations for a grid of inputs or params
-
-    Example:
-        _cartesian_product({"a": [1, 2], "b": [3, 4]})
-        >>> [{'a': 1, 'b': 3}, {'a': 1, 'b': 4}, {'a': 2, 'b': 3}, {'a': 2, 'b': 4}]
-    """
-    return [dict(zip(grid, values)) for values in product(*grid.values())]
-
-
-def _get_test_kwargs(test_func, inputs, params):
+def _get_test_kwargs(
+    test_func: callable, inputs: Dict[str, Any], params: Dict[str, Any]
+):
     input_kwargs = {}  # map function inputs (`dataset` etc) to actual objects
 
     for key in test_func.inputs.keys():
@@ -65,22 +61,39 @@ def _get_test_kwargs(test_func, inputs, params):
     return input_kwargs, param_kwargs
 
 
-def _combine_tables(results: List[TestResult]):
-    tables = []
+def build_test_result(
+    outputs: Union[Any, Tuple[Any, ...]],
+    test_id: str,
+    inputs: Dict[str, Union[VMInput, List[VMInput]]],
+    params: Dict[str, Any],
+    description: str,
+    generate_description: bool = True,
+):
+    ref_id = str(uuid4())
 
-    for result in results:
-        tables.extend(result.tables)
+    result = TestResult(
+        result_id=test_id,
+        ref_id=ref_id,
+        inputs=inputs,
+        params=params,
+    )
 
-    return tables
+    if not isinstance(outputs, tuple):
+        outputs = (outputs,)
 
+    for item in outputs:
+        process_output(item, result)
 
-def _combine_figures(results: List[TestResult]):
-    figures = []
+    result.description = get_result_description(
+        test_id=test_id,
+        test_description=description,
+        tables=result.tables,
+        figures=result.figures,
+        metric=result.metric,
+        should_generate=generate_description,
+    )
 
-    for result in results:
-        figures.extend(result.figures)
-
-    return figures
+    return result
 
 
 def _run_composite_test(
@@ -88,7 +101,6 @@ def _run_composite_test(
     metric_ids: List[TestID],
     inputs: Dict[str, Union[VMInput, List[VMInput]]],
     params: Dict[str, Any],
-    show: bool = True,
     generate_description: bool = True,
 ):
     results = [
@@ -96,75 +108,72 @@ def _run_composite_test(
             test_id=metric_id,
             inputs=inputs,
             params=params,
-            show=show,
-            generate_description=generate_description,
+            show=False,
+            generate_description=False,
         )
         for metric_id in metric_ids
     ]
 
-    result = build_test_result(
-        outputs=[result.metric for result in results],
+    # make sure to use is not None to handle for falsy values
+    if not all(result.metric is not None for result in results):
+        raise ValueError("All tests must return a metric when used as a composite test")
+
+    return build_test_result(
+        outputs=[
+            {
+                "Metric": test_id_to_name(result.result_id),
+                "Value": result.metric,
+            }
+            for result in results
+        ],  # pass in a single table with metric values as our 'outputs'
         test_id=test_id,
-        inputs=inputs,
-        params=params,
-        description="\n---\n".join([result.description for result in results]),
+        inputs=results[0].inputs,
+        params=results[0].params,
+        description="\n\n".join(
+            [_test_description(result.description, num_lines=1) for result in results]
+        ),  # join truncated (first line only) test descriptions
         generate_description=generate_description,
     )
-
-    if show:
-        result.show()
-
-    return result
 
 
 def _run_comparison_test(
     test_id: TestID,
-    input_grid: Union[Dict[str, List[Any]], List[Dict[str, Any]]],
-    param_grid: Union[Dict[str, List[Any]], List[Dict[str, Any]]],
-    inputs: Dict[str, Union[VMInput, List[VMInput]]],
-    params: Dict[str, Any],
-    show: bool = True,
+    input_grid: Union[Dict[str, List[Any]], List[Dict[str, Any]], None] = None,
+    param_grid: Union[Dict[str, List[Any]], List[Dict[str, Any]], None] = None,
+    inputs: Union[Dict[str, Union[VMInput, List[VMInput]]], None] = None,
+    params: Union[Dict[str, Any], None] = None,
     generate_description: bool = True,
 ):
-    if inputs:
-        input_grid = _cartesian_product(inputs)
-
-    if params:
-        param_grid = _cartesian_product(params)
-
-    full_grid = _cartesian_product(input_grid, param_grid)
-
-    print(full_grid)
+    run_test_configs = get_comparison_test_configs(
+        input_grid=input_grid,
+        param_grid=param_grid,
+        inputs=inputs,
+        params=params,
+    )
 
     results = [
         run_test(
             test_id=test_id,
-            inputs=group,
-            params=params,
-            show=show,
-            generate_description=generate_description,
+            inputs=config["inputs"],
+            params=config["params"],
+            show=False,
+            generate_description=False,
         )
-        for group in full_grid
+        for config in run_test_configs
     ]
 
-    combined_tables = _combine_tables(results)
-    combined_figures = _combine_figures(results)
+    combined_outputs, combined_inputs, combined_params = combine_results(results)
 
-    combined_outputs = tuple(*combined_tables, *combined_figures)
-
-    result = build_test_result(
-        outputs=combined_outputs,
+    return build_test_result(
+        outputs=tuple(combined_outputs),
         test_id=test_id,
-        inputs=inputs,
-        params=params,
-        description=results[0].description,
+        inputs=combined_inputs,
+        params=combined_params,
+        description=describe_test(test_id, raw=True)[
+            "Description"
+        ],  # get description from test directly
         generate_description=generate_description,
     )
-
-    if show:
-        result.show()
-
-    return result
 
 
 def run_test(
@@ -207,6 +216,9 @@ def run_test(
         ValueError: If the test inputs are invalid
         LoadTestError: If the test class fails to load
     """
+    # legacy support for passing inputs as kwargs
+    inputs = inputs or kwargs
+
     if not test_id and not (name and unit_metrics):
         raise ValueError(
             "`test_id` or both `name` and `unit_metrics` must be provided to run a test"
@@ -215,7 +227,7 @@ def run_test(
     if bool(unit_metrics) != bool(name):
         raise ValueError("`name` and `unit_metrics` must be provided together")
 
-    if input_grid and (kwargs or inputs):
+    if input_grid and inputs:
         raise ValueError("Cannot provide `input_grid` along with `inputs`")
 
     if param_grid and params:
@@ -231,7 +243,6 @@ def run_test(
             metric_ids=unit_metrics,
             inputs=inputs,
             params=params,
-            show=show,
             generate_description=generate_description,
         )
 
@@ -240,31 +251,27 @@ def run_test(
             test_id=test_id,
             inputs=inputs,
             input_grid=input_grid,
-            param_grid=param_grid,
-            name=name,
-            unit_metrics=unit_metrics,
             params=params,
-            show=show,
+            param_grid=param_grid,
             generate_description=generate_description,
         )
 
     else:
         test_func = load_test(test_id)
 
-        inputs = inputs or kwargs or {}
-        params = params or {}
-
-        input_kwargs, param_kwargs = _get_test_kwargs(test_func, inputs, params)
+        input_kwargs, param_kwargs = _get_test_kwargs(
+            test_func, inputs or {}, params or {}
+        )
 
         raw_result = test_func(**input_kwargs, **param_kwargs)
 
         result = build_test_result(
-            raw_result,
-            test_id,
-            input_kwargs,
-            param_kwargs,
-            getdoc(test_func),
-            generate_description,
+            outputs=raw_result,
+            test_id=test_id,
+            inputs=input_kwargs,
+            params=param_kwargs,
+            description=getdoc(test_func),
+            generate_description=generate_description,
         )
 
     if show:

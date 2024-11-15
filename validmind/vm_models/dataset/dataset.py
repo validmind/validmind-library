@@ -48,6 +48,9 @@ class VMDataset(VMInput):
         extra_columns (Dict): Extra columns to include in the dataset.
     """
 
+    def __repr__(self):
+        return f"VMDataset(input_id={self.input_id})"
+
     def __init__(
         self,
         raw_dataset: np.ndarray,

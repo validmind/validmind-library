@@ -77,16 +77,21 @@ class FigureOutputHandler(OutputHandler):
 
 class TableOutputHandler(OutputHandler):
     def can_handle(self, item: Any) -> bool:
-        return isinstance(item, (list, pd.DataFrame, dict))
+        return isinstance(item, (list, pd.DataFrame, dict, ResultTable))
 
     def process(
         self,
-        item: Union[List[Dict[str, Any]], pd.DataFrame, Dict[str, Any]],
+        item: Union[List[Dict[str, Any]], pd.DataFrame, Dict[str, Any], ResultTable],
         result: TestResult,
     ) -> None:
         tables = item if isinstance(item, dict) else {"": item}
 
         for table_name, table_data in tables.items():
+            # if already a ResultTable, add it directly
+            if isinstance(table_data, ResultTable):
+                result.add_table(table_data)
+                continue
+
             if not isinstance(table_data, (list, pd.DataFrame)):
                 raise ValueError(
                     "Invalid table format: must be a list of dictionaries or a DataFrame"

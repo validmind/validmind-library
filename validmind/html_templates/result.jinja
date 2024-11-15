@@ -1,0 +1,21 @@
+<h2>{{ test_name }} {{ passed_icon }}</h2>
+
+{{ description }}
+
+{% if inputs %}
+<h3>Test Inputs</h3>
+<pre>
+{{ inputs }}
+</pre>
+{% endif %}
+
+{% if params %}
+<h3>Test Parameters</h3>
+<pre>
+{{ params }}
+</pre>
+{% endif %}
+
+{% if show_metric %}
+<h3>Metric: <code language="json">{{ metric }}</code></h3>
+{% endif %}

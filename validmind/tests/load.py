@@ -142,10 +142,10 @@ def _load_tests(test_ids):
     return tests
 
 
-def _test_description(test_func):
-    description = inspect.getdoc(test_func).strip()
+def _test_description(test_description: str, num_lines: int = 5):
+    description = test_description.strip("\n").strip()
 
-    if len(description.split("\n")) > 5:
+    if len(description.split("\n")) > num_lines:
         return description.strip().split("\n")[0] + "..."
 
     return description
@@ -156,7 +156,10 @@ def _pretty_list_tests(tests, truncate=True):
         {
             "ID": test_id,
             "Name": test_id_to_name(test_id),
-            "Description": _test_description(test),
+            "Description": _test_description(
+                inspect.getdoc(test),
+                num_lines=(5 if truncate else 999999),
+            ),
             "Required Inputs": test.inputs,
             "Params": test.params,
         }
