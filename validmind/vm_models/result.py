@@ -384,9 +384,9 @@ class TestResult(Result):
             "test_name": self.result_id,
             "ref_id": self.ref_id,
             "params": self.params,
-            "inputs": [input.input_id for input in self._get_flat_inputs()],
+            "inputs": [_input.input_id for _input in self._get_flat_inputs()],
             "passed": self.passed,
-            "summary": [table.serialize() for table in self.tables],
+            "summary": [table.serialize() for table in (self.tables or [])],
         }
 
     async def log_async(
