@@ -15,7 +15,7 @@ from validmind.vm_models.input import VMInput
 from validmind.vm_models.result import TestResult
 
 from .__types__ import TestID
-from ._comparison import combine_results, get_comparison_test_configs
+from .comparison import combine_results, get_comparison_test_configs
 from .load import _test_description, describe_test, load_test
 from .output import process_output
 
