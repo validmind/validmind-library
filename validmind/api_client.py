@@ -489,7 +489,7 @@ def log_metric(
     Unit metrics are key-value pairs where the key is the metric name and the value is
     a scalar (int or float). These key-value pairs are associated with the currently
     selected model (inventory model in the ValidMind Platform) and keys can be logged
-    to over time to create a history of the metric. On the platform, these metrics
+    to over time to create a history of the metric. On the ValidMind Platform, these metrics
     will be used to create plots/visualizations for documentation and dashboards etc.
 
     Args:

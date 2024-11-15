@@ -1,6 +1,6 @@
 #' Register a Custom Test Function in ValidMind
 #'
-#' Registers an R function as a custom test within the ValidMind testing framework, allowing it to be used as a custom metric for model validation.
+#' Registers an R function as a custom test within the ValidMind Library, allowing it to be used as a custom metric for model validation.
 #'
 #' @param func An R function to be registered as a custom test.
 #' @param test_id A unique identifier for the test. If \code{NULL}, a default ID is generated based on the function name.
@@ -10,7 +10,7 @@
 #' @details
 #' The provided R function is converted into a Python callable using \code{\link[reticulate]{r_to_py}}. 
 #' A Python class is then defined, inheriting from ValidMind's \code{Metric} class, which wraps this callable.
-#' This custom test is registered within ValidMind's test store and can be used in the framework for model validation purposes.
+#' This custom test is registered within ValidMind's test store and can be used in the library for model validation purposes.
 #'
 #' @return The test store object containing the newly registered custom test.
 #'
@@ -93,7 +93,7 @@ class CustomMetric(Metric):
 
 #' Run a Custom Test using the ValidMind Framework
 #'
-#' This function runs a custom test using the ValidMind framework through Python's 
+#' This function runs a custom test using the ValidMind Library through Python's 
 #' `validmind.vm_models`. It retrieves a custom test by `test_id`, executes it with the provided 
 #' `inputs`, and optionally displays the result. The result is also logged.
 #'

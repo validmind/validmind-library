@@ -35,10 +35,18 @@ test-integration:
 
 docs:
 	rm -rf docs/_build
+ifeq ($(shell uname),Darwin)
+	poetry run pdoc validmind !validmind.tests.data_validation.Protected* -d google -t docs/templates --no-show-source --logo https://vmai.s3.us-west-1.amazonaws.com/vm-logo.svg --favicon https://vmai.s3.us-west-1.amazonaws.com/favicon.ico -o docs/_build
+else
 	poetry run pdoc validmind -d google -t docs/templates --no-show-source --logo https://vmai.s3.us-west-1.amazonaws.com/vm-logo.svg --favicon https://vmai.s3.us-west-1.amazonaws.com/favicon.ico -o docs/_build
+endif
 
 docs-serve:
+ifeq ($(shell uname),Darwin)
+	poetry run pdoc validmind !validmind.tests.data_validation.Protected* -d google -t docs/templates --no-show-source --logo https://vmai.s3.us-west-1.amazonaws.com/vm-logo.svg --favicon https://vmai.s3.us-west-1.amazonaws.com/favicon.ico
+else
 	poetry run pdoc validmind -d google -t docs/templates --no-show-source --logo https://vmai.s3.us-west-1.amazonaws.com/vm-logo.svg --favicon https://vmai.s3.us-west-1.amazonaws.com/favicon.ico
+endif
 
 version:
 	@:$(call check_defined, tag, new semver version tag to use on pyproject.toml)

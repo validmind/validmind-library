@@ -125,7 +125,7 @@ def AnswerCorrectness(
 
     return (
         {
-            # "Scores (will not be uploaded to UI)": result_df[
+            # "Scores (will not be uploaded to ValidMind Platform)": result_df[
             #     ["question", "answer", "ground_truth", "answer_correctness"]
             # ],
             "Aggregate Scores": [

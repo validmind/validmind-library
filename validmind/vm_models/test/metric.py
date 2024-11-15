@@ -40,7 +40,7 @@ class Metric(Test):
     def summary(self, metric_value: Optional[Union[dict, list, pd.DataFrame]] = None):
         """
         Return the metric summary. Should be overridden by subclasses. Defaults to None.
-        The metric summary allows renderers (e.g. Word and ValidMind UI) to display a
+        The metric summary allows renderers (e.g. Word and ValidMind Platform) to display a
         short summary of the metric results.
 
         We return None here because the metric summary is optional.

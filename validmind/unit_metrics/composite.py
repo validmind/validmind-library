@@ -118,10 +118,10 @@ def run_metrics(
     works by running individual unit metrics and then combining the results into a
     single "MetricResult" object that can be logged and displayed just like any other
     metric result. The special thing about composite metrics is that when they are
-    logged to the platform, metadata describing the unit metrics and output template
+    logged to the ValidMind Platform, metadata describing the unit metrics and output template
     used to generate the composite metric is also logged. This means that by grabbing
     the metadata for a composite metric (identified by the test ID
-    `validmind.composite_metric.<name>`) the framework can rebuild and rerun it at
+    `validmind.composite_metric.<name>`) the ValidMind Library can rebuild and rerun it at
     any time.
 
     Args:

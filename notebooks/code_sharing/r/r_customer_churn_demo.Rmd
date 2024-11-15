@@ -7,7 +7,7 @@ output: html_document
 
 # **Quickstart - Customer Churn Full Suite Model Documentation**
 
-This interactive notebook will guide you through documenting a model using the ValidMind Developer framework. We will use sample datasets provided by the library and train a simple classification model.
+This interactive notebook will guide you through documenting a model using the ValidMind Library. We will use sample datasets provided by the library and train a simple classification model.
 
 For this simple demonstration, we will use the following bank customer churn dataset from Kaggle: <https://www.kaggle.com/code/kmalit/bank-customer-churn-prediction/data.>
 
@@ -38,7 +38,7 @@ knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 
 ## **Initializing the ValidMind Client Library**
 
-Log in to the ValidMind platform with your registered email address, and navigate to the Documentation Projects page.
+Log in to the ValidMind Platform with your registered email address, and navigate to the Documentation Projects page.
 
 ### **Creating a new Documentation Project**
 

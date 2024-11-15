@@ -114,7 +114,7 @@ def SemanticSimilarity(
 
     return (
         {
-            # "Scores (will not be uploaded to UI)": result_df[
+            # "Scores (will not be uploaded to ValidMind Platform)": result_df[
             #     ["response", "reference", "semantic_similarity"]
             # ],
             "Aggregate Scores": [

@@ -24,12 +24,12 @@ register_custom_test(
 The test store object containing the newly registered custom test.
 }
 \description{
-Registers an R function as a custom test within the ValidMind testing framework, allowing it to be used as a custom metric for model validation.
+Registers an R function as a custom test within the ValidMind Library, allowing it to be used as a custom metric for model validation.
 }
 \details{
 The provided R function is converted into a Python callable using \code{\link[reticulate]{r_to_py}}. 
 A Python class is then defined, inheriting from ValidMind's \code{Metric} class, which wraps this callable.
-This custom test is registered within ValidMind's test store and can be used in the framework for model validation purposes.
+This custom test is registered within ValidMind's test store and can be used in the library for model validation purposes.
 }
 \examples{
 \dontrun{

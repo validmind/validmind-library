@@ -1,4 +1,4 @@
-"""Script to run notebooks for integration testing the library.
+"""Script to run notebooks for integration testing the ValidMind Library.
 
 Usage:
     python scripts/run_e2e_notebooks.py

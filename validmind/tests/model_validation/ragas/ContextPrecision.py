@@ -116,7 +116,7 @@ def ContextPrecision(
 
     return (
         {
-            # "Scores (will not be uploaded to UI)": result_df[
+            # "Scores (will not be uploaded to ValidMind Platform)": result_df[
             #     ["user_input", "retrieved_contexts", "reference", "llm_context_precision_with_reference"]
             # ],
             "Aggregate Scores": [

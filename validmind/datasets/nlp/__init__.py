@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 """
-Example datasets that can be used with the library.
+Example datasets that can be used with the ValidMind Library.
 """
 
 __all__ = [
