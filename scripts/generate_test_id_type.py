@@ -21,6 +21,7 @@ for d in [p for p in base_path.iterdir() if p.is_dir()]:
         )
         tests += f'        "{test_id}",\n'
 
+tests = tests.rstrip("\n")
 
 source = f'''# Copyright © 2023-2024 ValidMind Inc. All rights reserved.
 # See the LICENSE file in the root of this repository for details.
@@ -36,7 +37,7 @@ from typing import Literal, Union
 
 TestID = Union[
     Literal[
-        {tests}
+{tests}
     ],
     str,
 ]
