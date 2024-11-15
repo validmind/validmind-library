@@ -57,6 +57,10 @@ def CommonWords(dataset):
     applicability.
     """
 
+    # Check text column
+    if not dataset.text_column:
+        raise ValueError("Please set text_column name in the Validmind Dataset object")
+
     def create_corpus(df, text_column):
         corpus = []
         for x in df[text_column].str.split():

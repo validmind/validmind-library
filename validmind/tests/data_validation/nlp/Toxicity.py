@@ -49,6 +49,11 @@ def Toxicity(dataset):
     - Does not provide context-specific insights, which may be necessary for nuanced understanding.
     - May not capture all forms of subtle or indirect toxic language.
     """
+    
+    # Check text column
+    if not dataset.text_column:
+        raise ValueError("Please set text_column name in the Validmind Dataset object")
+    
     toxicity = evaluate.load("toxicity")
     input_text = dataset.df[dataset.text_column]
     toxicity_scores = toxicity.compute(predictions=list(input_text.values))["toxicity"]

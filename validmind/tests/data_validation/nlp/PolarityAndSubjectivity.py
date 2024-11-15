@@ -51,6 +51,10 @@ def PolarityAndSubjectivity(dataset, threshold_subjectivity=0.5, threshold_polar
     - Visualization could become cluttered with very large datasets, making interpretation difficult.
     """
 
+    # Check text column
+    if not dataset.text_column:
+        raise ValueError("Please set text_column name in the Validmind Dataset object")
+    
     # Function to calculate sentiment and subjectivity
     def analyze_sentiment(text):
         analysis = TextBlob(text)

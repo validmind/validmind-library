@@ -54,6 +54,10 @@ def Punctuations(dataset, count_mode="token"):
     - Less effective with languages that use non-standard or different punctuation.
     - Visualization may lack interpretability when there are many unique punctuation marks in the dataset.
     """
+    # Check text column
+    if not dataset.text_column:
+        raise ValueError("Please set text_column name in the Validmind Dataset object")
+    
     if count_mode not in ["token", "word"]:
         raise ValueError("count_mode parameter must be either 'token' or 'word'")
 
