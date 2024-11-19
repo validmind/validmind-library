@@ -4,7 +4,7 @@
 <!-- [![Code Quality](https://github.com/validmind/validmind-library/actions/workflows/python.yaml/badge.svg)](https://github.com/validmind/validmind-library/actions/workflows/python.yaml)
 [![Integration Tests](https://github.com/validmind/validmind-library/actions/workflows/integration.yaml/badge.svg)](https://github.com/validmind/validmind-library/actions/workflows/integration.yaml) -->
 
-![ValidMind logo](images/ValidMind-logo-color.svg "ValidMind logo")
+![ValidMind logo](https://vmai.s3.us-west-1.amazonaws.com/validmind-logo.svg "ValidMind logo")
 
 The ValidMind Library is a suite of developer tools and methods designed to run validation tests and automate the documentation of your models. 
 
