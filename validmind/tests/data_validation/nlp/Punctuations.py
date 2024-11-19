@@ -9,23 +9,61 @@ Metrics functions for any Pandas-compatible datasets
 import string
 from collections import defaultdict
 
-import matplotlib.pyplot as plt
+import plotly.graph_objects as go
 
 from validmind import tags, tasks
-from validmind.vm_models import VMDataset
 
 
-def create_corpus(df, text_column):
+def _create_punctuation_plot(punctuation_counts):
+    """Create a bar plot visualization of punctuation frequencies."""
+    fig = go.Figure(
+        data=[
+            go.Bar(
+                x=list(punctuation_counts.keys()),
+                y=list(punctuation_counts.values()),
+                marker_color="#17C37B",
+            )
+        ]
+    )
+    fig.update_layout(
+        title="Punctuation Distribution",
+        xaxis_title="Punctuation Marks",
+        yaxis_title="Frequency",
+        showlegend=False,
+    )
+    return fig
+
+
+def _create_corpus(df, text_column):
+    """Create a corpus from the dataset's text column."""
     corpus = []
     for x in df[text_column].str.split():
         for i in x:
             corpus.append(i)
-        return corpus
+    return corpus
 
 
-@tags("nlp", "text_data", "frequency_analysis", "visualization")
-@tasks("text_classification", "text_summarization")
-def Punctuations(dataset: VMDataset):
+def _count_punctuations(corpus, count_mode="token"):
+    """Count punctuation marks in the corpus based on the specified mode."""
+    special = string.punctuation
+    dic = defaultdict(int, {key: 0 for key in special})
+
+    if count_mode == "token":
+        for i in corpus:
+            if i in special:
+                dic[i] += 1
+    else:  # count_mode == "word"
+        for word in corpus:
+            for char in word:
+                if char in special:
+                    dic[char] += 1
+
+    return dic
+
+
+@tags("nlp", "text_data", "visualization", "frequency_analysis")
+@tasks("text_classification", "text_summarization", "nlp")
+def Punctuations(dataset, count_mode="token"):
     """
     Analyzes and visualizes the frequency distribution of punctuation usage in a given text dataset.
 
@@ -37,10 +75,11 @@ def Punctuations(dataset: VMDataset):
 
     ### Test Mechanism
 
-    The test begins by verifying that the input "dataset" is of the type VMDataset. Following that, a corpus is created
-    from the dataset by splitting its text on spaces. Each unique punctuation character in the text corpus is then
-    tallied. The frequency distribution of each punctuation symbol is visualized as a bar graph, with these results
-    being stored as Figures and associated with the main Punctuations object.
+    The test begins by verifying that the input "dataset" is of the type VMDataset. The count_mode parameter must be
+    either "token" (counts punctuation marks as individual tokens) or "word" (counts punctuation marks within words).
+    Following that, a corpus is created from the dataset by splitting its text on spaces. Each unique punctuation
+    character in the text corpus is then tallied. The frequency distribution of each punctuation symbol is visualized
+    as a bar graph, with these results being stored as Figures and associated with the main Punctuations object.
 
     ### Signs of High Risk
 
@@ -62,18 +101,10 @@ def Punctuations(dataset: VMDataset):
     - Less effective with languages that use non-standard or different punctuation.
     - Visualization may lack interpretability when there are many unique punctuation marks in the dataset.
     """
-    text_column = dataset.text_column
-    corpus = create_corpus(dataset.df, text_column=text_column)
+    if count_mode not in ["token", "word"]:
+        raise ValueError("count_mode parameter must be either 'token' or 'word'")
 
-    special = string.punctuation
+    corpus = _create_corpus(dataset.df, dataset.text_column)
+    punctuation_counts = _count_punctuations(corpus, count_mode)
 
-    dic = defaultdict(int, {key: 0 for key in special})
-    for i in corpus:
-        if i in special:
-            dic[i] += 1
-
-    fig = plt.figure()
-    x, y = zip(*dic.items())
-    plt.bar(x, y, color="#17C37B")
-
-    return fig
+    return _create_punctuation_plot(punctuation_counts)

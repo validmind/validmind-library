@@ -4,8 +4,8 @@
 
 from collections import Counter
 
-import matplotlib.pyplot as plt
 import nltk
+import plotly.graph_objects as go
 from nltk.corpus import stopwords
 
 from validmind import tags, tasks
@@ -28,8 +28,8 @@ def CommonWords(dataset: VMDataset):
 
     The test methodology involves splitting the specified text column's entries into words, collating them into a
     corpus, and then counting the frequency of each word using the Counter. The forty most frequently occurring
-    non-stopwords are then visualized in a bar chart, where the x-axis represents the words, and the y-axis indicates
-    their frequency of occurrence.
+    non-stopwords are then visualized in an interactive bar chart using Plotly, where the x-axis represents the words,
+    and the y-axis indicates their frequency of occurrence.
 
     ### Signs of High Risk
 
@@ -43,7 +43,7 @@ def CommonWords(dataset: VMDataset):
     - The metric provides clear insights into the language features – specifically word frequency – of unstructured
     text data.
     - It can reveal prominent vocabulary and language patterns, which prove vital for feature extraction in NLP tasks.
-    - The visualization helps in quickly capturing the patterns and understanding the data intuitively.
+    - The interactive visualization helps in quickly capturing the patterns and understanding the data intuitively.
 
     ### Limitations
 
@@ -54,24 +54,39 @@ def CommonWords(dataset: VMDataset):
     - The metric requires a valid Dataset object, indicating a dependency condition that limits its broader
     applicability.
     """
+    nltk.download("stopwords", quiet=True)
+
     counter = Counter(
         [word for x in dataset.df[dataset.text_column].str.split() for word in x]
     )
     most = counter.most_common()
 
+    def create_corpus(df, text_column):
+        corpus = []
+        for x in df[text_column].str.split():
+            for i in x:
+                corpus.append(i)
+        return corpus
+
+    corpus = create_corpus(dataset.df, text_column=dataset.text_column)
+    counter = Counter(corpus)
+    most = counter.most_common()
+
     x = []
     y = []
 
-    nltk.download("stopwords")
     stop = set(stopwords.words("english"))
-
     for word, count in most[:40]:
         if word not in stop:
             x.append(word)
             y.append(count)
 
-    fig = plt.figure()
-    plt.bar(x, y, color="#17C37B")
-    plt.xticks(rotation=90)
+    fig = go.Figure(data=[go.Bar(x=x, y=y, marker_color="#17C37B")])
+    fig.update_layout(
+        title="Most Common Words",
+        xaxis_title="Words",
+        yaxis_title="Frequency",
+        xaxis_tickangle=-45,
+    )
 
     return fig

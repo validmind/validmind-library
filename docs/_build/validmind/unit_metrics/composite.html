@@ -29,7 +29,7 @@
                    pattern=".+" required>
 
 
-            <h3>High Level API</h3>
+            <h3>Python Library API</h3>
                 <ul class="memberlist">
             <li>
                     <a class="class" href="#CompositeMetric">CompositeMetric</a>
@@ -125,7 +125,7 @@
     <a class="headerlink" href="#CompositeMetric.summary"></a>
     
             <div class="docstring"><p>Return the metric summary. Should be overridden by subclasses. Defaults to None.
-The metric summary allows renderers (e.g. Word and ValidMind UI) to display a
+The metric summary allows renderers (e.g. Word and ValidMind Platform) to display a
 short summary of the metric results.</p>
 
 <p>We return None here because the metric summary is optional.</p>
@@ -185,10 +185,10 @@ short summary of the metric results.</p>
 works by running individual unit metrics and then combining the results into a
 single "MetricResult" object that can be logged and displayed just like any other
 metric result. The special thing about composite metrics is that when they are
-logged to the platform, metadata describing the unit metrics and output template
+logged to the ValidMind Platform, metadata describing the unit metrics and output template
 used to generate the composite metric is also logged. This means that by grabbing
 the metadata for a composite metric (identified by the test ID
-<code>validmind.composite_metric.&lt;name&gt;</code>) the framework can rebuild and rerun it at
+<code>validmind.composite_metric.&lt;name&gt;</code>) the ValidMind Library can rebuild and rerun it at
 any time.</p>
 
 <h6 id="arguments">Arguments:</h6>

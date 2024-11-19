@@ -9,6 +9,7 @@ import json
 import math
 import re
 import sys
+from datetime import date, datetime, time
 from platform import python_version
 from typing import Any, Dict, List
 
@@ -17,6 +18,7 @@ import mistune
 import nest_asyncio
 import numpy as np
 import pandas as pd
+import QuantLib as ql
 import seaborn as sns
 from IPython.core import getipython
 from IPython.display import HTML
@@ -94,6 +96,8 @@ def nan_to_none(obj):
 
 class NumpyEncoder(json.JSONEncoder):
     def default(self, obj):
+        if isinstance(obj, (datetime, date, time)):
+            return obj.isoformat()
         if isinstance(obj, pd.Interval):
             return f"[{obj.left}, {obj.right}]"
         if isinstance(obj, np.integer):
@@ -106,6 +110,9 @@ class NumpyEncoder(json.JSONEncoder):
             return bool(obj)
         if isinstance(obj, pd.Timestamp):
             return str(obj)
+        if isinstance(obj, ql.Date):
+            # Convert QuantLib Date to ISO string format
+            return obj.ISO()
         if isinstance(obj, set):
             return list(obj)
         return super().default(obj)

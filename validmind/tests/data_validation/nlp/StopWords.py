@@ -8,9 +8,9 @@ Threshold based tests
 
 from collections import defaultdict
 
-import matplotlib.pyplot as plt
 import nltk
 import pandas as pd
+import plotly.graph_objects as go
 from nltk.corpus import stopwords
 
 from validmind import tags, tasks
@@ -103,17 +103,22 @@ def StopWords(
         :num_words
     ]
 
-    if results:
-        fig, _ = plt.subplots()
-        x, y = zip(*results)
-        plt.bar(x, y)
-        plt.xticks(rotation=90)
-    else:
-        fig = None
+    if not results:
+        return passed
+
+    x, y = zip(*results)
+
+    fig = go.Figure(data=[go.Bar(x=x, y=y)])
+    fig.update_layout(
+        title=f"Stop Words Frequency in '{text_column}'",
+        xaxis_title="Stop Words",
+        yaxis_title="Percentage (%)",
+        xaxis_tickangle=-45,
+    )
 
     return (
         {
-            f"Stop words results for column '{dataset.target_column}'": pd.DataFrame(
+            f"Stop words results for column '{text_column}'": pd.DataFrame(
                 results[0].values, columns=["Word", "Percentage"]
             )
         },

@@ -2,7 +2,7 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-"""Decorators for creating and registering metrics with the ValidMind framework."""
+"""Decorators for creating and registering metrics with the ValidMind Library."""
 
 import inspect
 import os
@@ -82,7 +82,7 @@ def _get_save_func(func, test_id):
 
 
 def test(func_or_id):
-    """Decorator for creating and registering metrics with the ValidMind framework.
+    """Decorator for creating and registering metrics with the ValidMind Library.
 
     Creates a metric object and registers it with ValidMind under the provided ID. If
     no ID is provided, the function name will be used as to build one. So if the
