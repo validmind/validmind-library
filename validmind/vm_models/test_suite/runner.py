@@ -29,15 +29,21 @@ class TestSuiteRunner:
     pbar_description: widgets.Label = None
     pbar_box: widgets.HBox = None
 
-    def __init__(self, suite: TestSuite, config: dict = None):
+    def __init__(self, suite: TestSuite, config: dict = None, inputs: dict = None):
         self.suite = suite
         self.config = config or {}
 
-        self._load_config()
+        self._load_config(inputs)
 
-    def _load_config(self):
+    def _load_config(self, inputs: dict = None):
         """Splits the config into a global config and test configs"""
         self._test_configs = {}
+
+        for test in self.suite.get_tests():
+            self._test_configs[test.test_id] = {
+                "inputs": inputs or {},
+                "params": {},
+            }
 
         for key, value in self.config.items():
             test_ids = [test.test_id for test in self.suite.get_tests()]
@@ -52,7 +58,23 @@ class TestSuiteRunner:
                     "\n\tThe configuration for this test will be ignored."
                 )
             else:
-                self._test_configs[key] = value
+                # override the global inputs and default params with the test specific ones
+                # input grid and param grid are mutually exclusive to inputs and params
+                if value.get("input_grid"):
+                    del self._test_configs[key]["inputs"]
+                    self._test_configs[key]["input_grid"] = value["input_grid"]
+                else:
+                    self._test_configs[key]["inputs"].update(value.get("inputs", {}))
+
+                if value.get("param_grid"):
+                    self._test_configs[key]["param_grid"] = value["param_grid"]
+                else:
+                    self._test_configs[key]["params"] = value.get("params", {})
+
+                # add any other config options that are not inputs or params
+                for key, value in value.items():
+                    if key not in ["inputs", "params", "input_grid", "param_grid"]:
+                        self._test_configs[key][key] = value
 
     def _start_progress_bar(self, send: bool = True):
         """
@@ -136,8 +158,8 @@ class TestSuiteRunner:
 
         for section in self.suite.sections:
             for test in section.tests:
-                self.pbar_description.value = f"Running {test.test_type}: {test.name}"
-                test.run(fail_fast=fail_fast)
+                self.pbar_description.value = f"Running {test.name}"
+                test.run(fail_fast=fail_fast, config=self._test_configs[test.test_id])
                 self.pbar.value += 1
 
         if send:

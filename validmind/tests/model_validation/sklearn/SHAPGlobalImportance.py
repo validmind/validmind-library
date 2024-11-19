@@ -96,7 +96,11 @@ def generate_shap_plot(type_, shap_values, x_test):
     else:
         shap.summary_plot(shap_values, x_test, show=False)
 
-    return plt.gcf()
+    fig = plt.gcf()
+
+    plt.close()
+
+    return fig
 
 
 @tags(

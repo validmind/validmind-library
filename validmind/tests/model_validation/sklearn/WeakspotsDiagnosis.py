@@ -141,6 +141,8 @@ def _plot_weak_spots(
         ncol=len(handles) - 1,
     )
 
+    plt.close()
+
     return fig, df
 
 

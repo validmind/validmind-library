@@ -103,6 +103,8 @@ def SilhouettePlot(model: VMModel, dataset: VMDataset):
     # The vertical line represents the average silhouette score
     ax.axvline(x=silhouette_avg, color="red", linestyle="--")
 
+    plt.close()
+
     return [
         {
             "Silhouette Score": silhouette_avg,

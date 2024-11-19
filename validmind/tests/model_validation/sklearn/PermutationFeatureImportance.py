@@ -96,7 +96,7 @@ def PermutationFeatureImportance(
     fig = go.Figure()
     fig.add_trace(
         go.Bar(
-            y=dataset.feature_columns[sorted_idx],
+            y=[dataset.feature_columns[i] for i in sorted_idx],
             x=pfi_values.importances[sorted_idx].mean(axis=1).T,
             orientation="h",
         )

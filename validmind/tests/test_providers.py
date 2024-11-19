@@ -4,6 +4,7 @@
 
 import importlib.util
 import os
+import re
 import sys
 from pathlib import Path
 from typing import List, Protocol
@@ -99,11 +100,12 @@ class LocalTestProvider:
                 if path.name.startswith("__"):
                     continue  # skip __init__.py and other special files
 
-                # to confirm if its a test, check if there is a function with the same name as the file
+                # if the file name is capitalized or it contains a function with the
+                # same name as the file, then we can assume it is a test file
                 if not path.name[0].isupper():
                     with open(path, "r") as f:
                         source = f.read()
-                    if f"{path.stem}(" not in source:
+                    if not re.search(r"def\s*" + re.escape(path.stem), source):
                         continue
 
                 test_ids.append(
@@ -151,6 +153,7 @@ class LocalTestProvider:
         # execute the module
         spec.loader.exec_module(module)
 
+        # test function should match the module (file) name exactly
         return getattr(module, module_name)
 
 

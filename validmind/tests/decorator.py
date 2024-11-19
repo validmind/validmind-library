@@ -4,9 +4,6 @@
 
 """Decorators for creating and registering metrics with the ValidMind framework."""
 
-# TODO: as we move entirely to a functional approach a lot of this logic
-# should be moved into the __init__ to replace the old class-based stuff
-
 import inspect
 import os
 from functools import wraps

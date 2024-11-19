@@ -48,6 +48,14 @@ def _close_session():
                 loop.create_task(__api_session.close())
             else:
                 loop.run_until_complete(__api_session.close())
+        except RuntimeError as e:
+            # ignore RuntimeError when closing the session from the main thread
+            if "no current event loop in thread" in str(e):
+                pass
+            elif "Event loop is closed" in str(e):
+                pass
+            else:
+                raise e
         except Exception as e:
             logger.exception("Error closing aiohttp session at exit: %s", e)
 

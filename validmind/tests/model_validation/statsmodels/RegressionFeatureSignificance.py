@@ -88,4 +88,6 @@ def RegressionFeatureSignificance(
     legend_label = f"p_threshold {p_threshold}"
     ax.legend([threshold_line], [legend_label])
 
+    plt.close()
+
     return fig

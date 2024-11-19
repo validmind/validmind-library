@@ -25,6 +25,24 @@ logger = get_logger(__name__)
 def _get_test_kwargs(
     test_func: callable, inputs: Dict[str, Any], params: Dict[str, Any]
 ):
+    """Insepect function signature to build kwargs to pass the inputs and params
+    that the test function expects
+
+    Args:
+        test_func (callable): Test function to inspect
+        inputs (dict): Test inputs... different formats are supported
+            e.g. {"dataset": dataset, "model": "model_id"}
+                 {"datasets": [dataset1, "dataset2_id"]}
+                 {"datasets": ("dataset1_id", "dataset2_id")}
+                 {"dataset": {
+                     "input_id": "dataset2_id",
+                     "options": {"columns": ["col1", "col2"]},
+                 }}
+        params (dict): Test parameters e.g. {"param1": 1, "param2": 2}
+
+    Returns:
+        tuple: Tuple of input and param kwargs
+    """
     input_kwargs = {}  # map function inputs (`dataset` etc) to actual objects
 
     for key in test_func.inputs.keys():
@@ -43,19 +61,26 @@ def _get_test_kwargs(
                 input_registry.get(key=v) if isinstance(v, str) else v for v in _input
             ]
         elif isinstance(_input, dict):
-            assert "input_id" in _input, (
-                "Input dictionary must contain an 'input_id' key "
-                "to retrieve the input object from the input registry."
-            )
-            _input = input_registry.get(key=_input["input_id"]).with_options(
-                **{k: v for k, v in _input.items() if k != "input_id"}
-            )
+            try:
+                _input = input_registry.get(key=_input["input_id"]).with_options(
+                    **{k: v for k, v in _input.items() if k != "input_id"}
+                )
+            except KeyError as e:
+                print("\n\n\n\n\n")
+                print(test_func)
+                print(key)
+                print(inputs)
+                print(_input)
+                print("\n\n\n\n\n")
+                raise ValueError(
+                    "Input dictionary must contain an 'input_id' key "
+                    "to retrieve the input object from the input registry."
+                ) from e
 
         input_kwargs[key] = _input
 
     param_kwargs = {
-        key: params.get(key, test_func.params[key]["default"])
-        for key in test_func.params.keys()
+        key: value for key, value in params.items() if key in test_func.params
     }
 
     return input_kwargs, param_kwargs
@@ -69,6 +94,7 @@ def build_test_result(
     description: str,
     generate_description: bool = True,
 ):
+    """Build a TestResult object from a set of raw test function outputs"""
     ref_id = str(uuid4())
 
     result = TestResult(
@@ -103,6 +129,7 @@ def _run_composite_test(
     params: Dict[str, Any],
     generate_description: bool = True,
 ):
+    """Run a composite test i.e. a test made up of multiple metrics"""
     results = [
         run_test(
             test_id=metric_id,
@@ -144,6 +171,8 @@ def _run_comparison_test(
     params: Union[Dict[str, Any], None] = None,
     generate_description: bool = True,
 ):
+    """Run a comparison test i.e. a test that compares multiple outputs of a test across
+    different input and/or param combinations"""
     run_test_configs = get_comparison_test_configs(
         input_grid=input_grid,
         param_grid=param_grid,

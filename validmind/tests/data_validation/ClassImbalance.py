@@ -99,5 +99,5 @@ def ClassImbalance(dataset: VMDataset, min_percent_threshold: int = 10):
             f"{dataset.target_column} Class Imbalance": imbalanced_classes,
         },
         go.Figure(data=[trace], layout=layout),
-        all(imbalanced_classes["Pass/Fail"] == "Pass"),
+        all(row["Pass/Fail"] == "Pass" for row in imbalanced_classes),
     )

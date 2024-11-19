@@ -88,4 +88,6 @@ def RegressionModelForecastPlotLevels(
     axs[1].set_title("Integrated Forecast vs Observed")
     axs[1].legend()
 
+    plt.close()
+
     return fig

@@ -207,6 +207,7 @@ class Result:
     """Base Class for test suite results"""
 
     result_id: str = None
+    name: str = None
 
     def __str__(self) -> str:
         """May be overridden by subclasses"""
@@ -231,6 +232,7 @@ class Result:
 class ErrorResult(Result):
     """Result for test suites that fail to load or run properly"""
 
+    name: str = "Failed Test"
     error: Exception = None
     message: str = None
 
@@ -248,6 +250,7 @@ class ErrorResult(Result):
 class TestResult(Result):
     """Test result"""
 
+    name: str = "Test Result"
     ref_id: str = None
     description: Optional[Union[str, DescriptionFuture]] = None
     metric: Optional[Union[int, float]] = None

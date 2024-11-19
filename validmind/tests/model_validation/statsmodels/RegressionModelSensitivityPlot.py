@@ -109,4 +109,5 @@ def RegressionModelSensitivityPlot(
 
     plt.legend()
 
+    plt.close()
     return fig

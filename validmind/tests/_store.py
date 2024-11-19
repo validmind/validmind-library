@@ -76,21 +76,6 @@ class TestStore:
         """
         return self.tests.get(test_id)
 
-    def get_custom_test(self, test_id: str):
-        """Get a custom test by test ID
-
-        Args:
-            test_id (str): The test ID
-
-        Returns:
-            object: The test class or function
-        """
-        return self.custom_tests.get(test_id)
-
-    def get_test_ids(self) -> list:
-        """Get all registered test IDs"""
-        return list(self.tests.keys())
-
     def register_test(self, test_id: str, test: object = None):
         """Register a test"""
         self.tests[test_id] = test

@@ -58,8 +58,11 @@ def ClassifierPerformance(dataset: VMDataset, model: VMModel, average: str = "ma
     - Specifically designed for classification models and not suitable for regression models.
     - May provide limited insights if the test dataset does not represent real-world scenarios adequately.
     """
-    y_true = dataset.y
     y_pred = dataset.y_pred(model)
+    y_true = dataset.y
+
+    labels = np.unique(y_true)
+    labels = sorted(labels.tolist())
 
     report = classification_report(
         y_true=y_true,
@@ -68,7 +71,7 @@ def ClassifierPerformance(dataset: VMDataset, model: VMModel, average: str = "ma
         zero_division=0,
     )
 
-    if len(np.unique(y_true)) > 2:
+    if len(labels) > 2:
         y_true = y_true.astype(y_pred.dtype)
         roc_auc = multiclass_roc_auc_score(y_true, y_pred, average=average)
     else:
@@ -80,12 +83,12 @@ def ClassifierPerformance(dataset: VMDataset, model: VMModel, average: str = "ma
 
     pr_f1_table = [
         {
-            "Class": class_name,
-            "Precision": report[class_name]["precision"],
-            "Recall": report[class_name]["recall"],
-            "F1": report[class_name]["f1-score"],
+            "Class": f"{class_name}",
+            "Precision": report[f"{class_name}"]["precision"],
+            "Recall": report[f"{class_name}"]["recall"],
+            "F1": report[f"{class_name}"]["f1-score"],
         }
-        for class_name in {str(i) for i in np.unique(y_true)}
+        for class_name in labels
     ]
 
     for avg in ["weighted avg", "macro avg"]:

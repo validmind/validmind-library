@@ -70,7 +70,7 @@ def ConfusionMatrix(dataset: VMDataset, model: VMModel):
     y_true = dataset.y.astype(y_pred.dtype)
 
     labels = np.unique(y_true)
-    labels = np.array(labels.sort()).T.tolist()
+    labels = sorted(labels.tolist())
 
     cm = confusion_matrix(y_true, y_pred, labels=labels)
 

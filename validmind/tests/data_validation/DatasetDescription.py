@@ -39,6 +39,84 @@ def infer_datatypes(df):
     return list(column_type_mappings.values())
 
 
+def get_numerical_histograms(df, column):
+    """
+    Returns a collection of histograms for a numerical column, each one
+    with a different bin size
+    """
+    values = df[column].to_numpy()
+    values_cleaned = values[~np.isnan(values)]
+
+    # bins='sturges'. Cannot use 'auto' until we review and fix its performance
+    #  on datasets with too many unique values
+    #
+    # 'sturges': R’s default method, only accounts for data size. Only optimal
+    # for gaussian data and underestimates number of bins for large non-gaussian datasets.
+    default_hist = np.histogram(values_cleaned, bins="sturges")
+
+    histograms = {
+        "default": {
+            "bin_size": len(default_hist[0]),
+            "histogram": {
+                "bin_edges": default_hist[1].tolist(),
+                "counts": default_hist[0].tolist(),
+            },
+        }
+    }
+
+    for bin_size in DEFAULT_HISTOGRAM_BIN_SIZES:
+        hist = np.histogram(values_cleaned, bins=bin_size)
+        histograms[f"bins_{bin_size}"] = {
+            "bin_size": bin_size,
+            "histogram": {
+                "bin_edges": hist[1].tolist(),
+                "counts": hist[0].tolist(),
+            },
+        }
+
+    return histograms
+
+
+def get_column_histograms(df, column, type_):
+    """
+    Returns a collection of histograms for a numerical or categorical column.
+    We store different combinations of bin sizes to allow analyzing the data better
+
+    Will be used in favor of _get_histogram in the future
+    """
+    # Set the minimum number of bins to nunique if it's less than the default
+    if type_ == "Numeric":
+        return get_numerical_histograms(df, column)
+    elif type_ == "Categorical" or type_ == "Boolean":
+        value_counts = df[column].value_counts()
+        return {
+            "default": {
+                "bin_size": len(value_counts),
+                "histogram": value_counts.to_dict(),
+            }
+        }
+    elif type_ == "Text":
+        # Combine all the text in the specified column
+        text_data = " ".join(df[column].astype(str))
+        # Split the text into words (tokens) using a regular expression
+        words = re.findall(r"\w+", text_data)
+        # Use Counter to count the frequency of each word
+        word_counts = Counter(words)
+
+        return {
+            "default": {
+                "bin_size": len(word_counts),
+                "histogram": dict(word_counts),
+            }
+        }
+    elif type_ == "Null":
+        logger.info(f"Ignoring histogram generation for null column {column}")
+    else:
+        raise ValueError(
+            f"Unsupported column type found when computing its histogram: {type_}"
+        )
+
+
 def describe_column(df, column):
     """
     Gets descriptive statistics for a single column in a Pandas DataFrame.
@@ -82,83 +160,7 @@ def describe_column(df, column):
 
     column["histograms"] = get_column_histograms(df, column["id"], column_type)
 
-
-def get_column_histograms(df, column, type_):
-    """
-    Returns a collection of histograms for a numerical or categorical column.
-    We store different combinations of bin sizes to allow analyzing the data better
-
-    Will be used in favor of _get_histogram in the future
-    """
-    # Set the minimum number of bins to nunique if it's less than the default
-    if type_ == "Numeric":
-        return get_numerical_histograms(df, column)
-    elif type_ == "Categorical" or type_ == "Boolean":
-        value_counts = df[column].value_counts()
-        return {
-            "default": {
-                "bin_size": len(value_counts),
-                "histogram": value_counts.to_dict(),
-            }
-        }
-    elif type_ == "Text":
-        # Combine all the text in the specified column
-        text_data = " ".join(df[column].astype(str))
-        # Split the text into words (tokens) using a regular expression
-        words = re.findall(r"\w+", text_data)
-        # Use Counter to count the frequency of each word
-        word_counts = Counter(words)
-
-        return {
-            "default": {
-                "bin_size": len(word_counts),
-                "histogram": dict(word_counts),
-            }
-        }
-    elif type_ == "Null":
-        logger.info(f"Ignoring histogram generation for null column {column}")
-    else:
-        raise ValueError(
-            f"Unsupported column type found when computing its histogram: {type_}"
-        )
-
-
-def get_numerical_histograms(df, column):
-    """
-    Returns a collection of histograms for a numerical column, each one
-    with a different bin size
-    """
-    values = df[column].to_numpy()
-    values_cleaned = values[~np.isnan(values)]
-
-    # bins='sturges'. Cannot use 'auto' until we review and fix its performance
-    #  on datasets with too many unique values
-    #
-    # 'sturges': R’s default method, only accounts for data size. Only optimal
-    # for gaussian data and underestimates number of bins for large non-gaussian datasets.
-    default_hist = np.histogram(values_cleaned, bins="sturges")
-
-    histograms = {
-        "default": {
-            "bin_size": len(default_hist[0]),
-            "histogram": {
-                "bin_edges": default_hist[1].tolist(),
-                "counts": default_hist[0].tolist(),
-            },
-        }
-    }
-
-    for bin_size in DEFAULT_HISTOGRAM_BIN_SIZES:
-        hist = np.histogram(values_cleaned, bins=bin_size)
-        histograms[f"bins_{bin_size}"] = {
-            "bin_size": bin_size,
-            "histogram": {
-                "bin_edges": hist[1].tolist(),
-                "counts": hist[0].tolist(),
-            },
-        }
-
-    return histograms
+    return column
 
 
 @tags("tabular_data", "time_series_data", "text_data")
