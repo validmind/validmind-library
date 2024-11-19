@@ -91,4 +91,6 @@ def IsolationForestOutliers(
 
         figures.append(fig)
 
+        plt.close()
+
     return tuple(figures)

@@ -57,7 +57,7 @@ def RegardScore(dataset, model):
     y_pred = dataset.y_pred(model)
 
     # Load the regard evaluation metric
-    regard_tool = evaluate.load("regard")
+    regard_tool = evaluate.load("regard", module_type="measurement")
 
     # Function to calculate regard scores
     def compute_regard_scores(texts):

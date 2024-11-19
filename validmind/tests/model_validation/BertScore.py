@@ -11,7 +11,11 @@ from validmind import tags, tasks
 
 @tags("nlp", "text_data", "visualization")
 @tasks("text_classification", "text_summarization")
-def BertScore(dataset, model):
+def BertScore(
+    dataset,
+    model,
+    evaluation_model="distilbert-base-uncased",
+):
     """
     Assesses the quality of machine-generated text using BERTScore metrics and visualizes results through histograms
     and bar charts, alongside compiling a comprehensive table of descriptive statistics.
@@ -29,7 +33,10 @@ def BertScore(dataset, model):
     BERTScore metrics and compiles them into a dataframe. Histograms and bar charts are generated for each BERTScore
     metric (Precision, Recall, and F1 Score) to visualize their distribution. Additionally, a table of descriptive
     statistics (mean, median, standard deviation, minimum, and maximum) is compiled for each metric, providing a
-    comprehensive summary of the model's performance.
+    comprehensive summary of the model's performance. The test uses the `evaluation_model` param to specify the
+    huggingface model to use for evaluation. `microsoft/deberta-xlarge-mnli` is the best-performing model but is
+    very large and may be slow without a GPU. `microsoft/deberta-large-mnli` is a smaller model that is faster to
+    run and `distilbert-base-uncased` is much lighter and can run on a CPU but is less accurate.
 
     ### Signs of High Risk
 
@@ -75,6 +82,7 @@ def BertScore(dataset, model):
         predictions=y_pred,
         references=y_true,
         lang="en",
+        model_type=evaluation_model,
     )
 
     # Convert scores to a dataframe

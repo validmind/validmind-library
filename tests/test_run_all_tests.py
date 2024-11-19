@@ -40,6 +40,15 @@ KNOWN_FAILING_TESTS = [
     "validmind.model_validation.sklearn.ClusterPerformance",
     # ValueError: The `cluster_column` parameter must be provided
     "validmind.model_validation.embeddings.EmbeddingsVisualization2D",
+    # These tests have dependencies that are not installed by default
+    "validmind.data_validation.ProtectedClassesCombination",
+    "validmind.data_validation.ProtectedClassesDisparity",
+    "validmind.data_validation.ProtectedClassesThresholdOptimizer",
+    # these tests hang when run for some reason
+    "validmind.data_validation.nlp.Toxicity",
+    "validmind.model_validation.BertScore",
+    "validmind.model_validation.RegardScore",
+    "validmind.model_validation.ToxicityScore",
 ]
 SKIPPED_TESTS = []
 SUCCESSFUL_TESTS = []
@@ -76,22 +85,22 @@ class TestRunTest(unittest.TestCase):
     pass
 
 
-def create_unit_test_func(vm_test_id, vm_test_class):
+def create_unit_test_func(vm_test_id, test_func):
     def unit_test_func(self):
         self.assertTrue(
-            hasattr(vm_test_class, "required_inputs"),
-            f"{vm_test_id} missing required_inputs",
+            hasattr(test_func, "inputs"),
+            f"{vm_test_id} missing required inputs",
         )
         self.assertTrue(
-            len(vm_test_class.tasks) > 0,
+            hasattr(test_func, "__tasks__"),
             f"{vm_test_id} missing tasks in metadata",
         )
         self.assertTrue(
-            len(vm_test_class.tags) > 0,
+            hasattr(test_func, "__tags__"),
             f"{vm_test_id} missing tags in metadata",
         )
 
-        required_inputs = sorted(vm_test_class.required_inputs)
+        required_inputs = sorted(test_func.inputs)
         if required_inputs == ["datasets", "models"]:
             logger.debug(
                 "Skipping test - multi-(dataset,model) tests are not supported at the moment %s",
@@ -100,7 +109,7 @@ def create_unit_test_func(vm_test_id, vm_test_class):
             SKIPPED_TESTS.append(vm_test_id)
             return
 
-        if "llm" in vm_test_class.tags and "embeddings" not in vm_test_class.tags:
+        if "llm" in test_func.__tags__ and "embeddings" not in test_func.__tags__:
             logger.debug(
                 "--- Skipping test - LLM tests not supported yet %s",
                 vm_test_id,
@@ -116,15 +125,15 @@ def create_unit_test_func(vm_test_id, vm_test_class):
 
         if custom_test_input_assignment:
             selected_test_inputs = custom_test_input_assignment
-        elif "clustering" in vm_test_class.tasks:
+        elif "clustering" in test_func.__tasks__:
             selected_test_inputs = "clustering"
-        elif "embeddings" in vm_test_class.tags:
+        elif "embeddings" in test_func.__tags__:
             selected_test_inputs = "embeddings"
         elif (
-            "text_summarization" in vm_test_class.tasks or "nlp" in vm_test_class.tasks
+            "text_summarization" in test_func.__tasks__ or "nlp" in test_func.__tasks__
         ):
             selected_test_inputs = "text_summarization"
-        elif "time_series_data" in vm_test_class.tags:
+        elif "time_series_data" in test_func.__tags__:
             selected_test_inputs = "time_series"
         else:
             selected_test_inputs = "classification"
@@ -151,8 +160,8 @@ def create_unit_test_func(vm_test_id, vm_test_class):
         test_kwargs = {
             "test_id": vm_test_id,
             "inputs": single_test_inputs,
-            "__log": False,
             "show": False,
+            "generate_description": False,
         }
 
         # Check if the test requires a specific configuration
@@ -172,6 +181,7 @@ def create_unit_test_func(vm_test_id, vm_test_class):
                 SKIPPED_TESTS.append(vm_test_id)
                 return
 
+        print(f"Running test {vm_test_id}...")
         start_time = time.time()
         result = run_test(**test_kwargs)
         end_time = time.time()
@@ -282,10 +292,10 @@ def create_unit_test_funcs_from_vm_tests():
             continue
 
         # load the test class
-        vm_test_class = load_test(vm_test_id)
+        test_func = load_test(vm_test_id)
 
         # create a unit test function for the test class
-        unit_test_func = create_unit_test_func(vm_test_id, vm_test_class)
+        unit_test_func = create_unit_test_func(vm_test_id, test_func)
         unit_test_func_name = f'test_{vm_test_id.replace(".", "_")}'
 
         # add the unit test function to the unit test class
