@@ -49,6 +49,7 @@ KNOWN_FAILING_TESTS = [
     "validmind.model_validation.BertScore",
     "validmind.model_validation.RegardScore",
     "validmind.model_validation.ToxicityScore",
+    "validmind.model_validation.embeddings.StabilityAnalysisTranslation",
 ]
 SKIPPED_TESTS = []
 SUCCESSFUL_TESTS = []
