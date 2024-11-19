@@ -83,7 +83,7 @@ def KPSS(dataset: VMDataset):
         )
 
     if not kpss_table:
-        raise SkipTestError("No valid KPSS results found.")
+        raise SkipTestError(f"No KPSS results found for dataset: {dataset.input_id}")
 
     return {
         "KPSS Test Results": kpss_table,
