@@ -75,8 +75,9 @@ encoding = encoding_for_model("gpt-4o-mini")
 tokens = encoding.encode(prompt)
 print(f"Number of tokens: {len(tokens)}")
 # 128k is max tokens for gpt-4o-mini
-if len(tokens) > 128000:
-    tokens = tokens[:128000]
+num_output_tokens = 1000
+if len(tokens) > 128000 - num_output_tokens:
+    tokens = tokens[: 128000 - num_output_tokens]
     prompt = encoding.decode(tokens)
 
 # Call OpenAI API
