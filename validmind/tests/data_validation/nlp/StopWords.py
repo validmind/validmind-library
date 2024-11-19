@@ -119,7 +119,7 @@ def StopWords(
     return (
         {
             f"Stop words results for column '{text_column}'": pd.DataFrame(
-                results[0].values, columns=["Word", "Percentage"]
+                results, columns=["Word", "Percentage"]
             )
         },
         fig,

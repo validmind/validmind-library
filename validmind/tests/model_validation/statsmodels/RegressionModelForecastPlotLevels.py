@@ -59,7 +59,7 @@ def RegressionModelForecastPlotLevels(
     - Relies heavily on visual interpretation, which may vary between individuals.
     - Does not provide a numerical metric to quantify forecast accuracy, relying solely on visual assessment.
     """
-    if dataset.index.empty:
+    if not dataset.index or dataset.index.empty:
         raise ValueError(
             "No dates in the data. Unable to determine start and end dates."
         )

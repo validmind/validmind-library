@@ -8,6 +8,7 @@ import numpy as np
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from scipy.spatial.distance import cdist
+from sklearn import clone
 from sklearn.metrics import silhouette_score
 
 from validmind import tags, tasks
@@ -75,8 +76,7 @@ def KMeansClustersOptimization(
     silhouette_avg = {}
 
     for k in n_clusters:
-        kmeanModel = model.set_params(n_clusters=k)
-        kmeanModel = kmeanModel.fit(dataset.x)
+        kmeanModel = clone(model.model).set_params(n_clusters=k).fit(dataset.x)
 
         silhouette_avg[k] = silhouette_score(
             dataset.x,

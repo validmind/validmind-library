@@ -58,9 +58,9 @@ def SpreadPlot(dataset: VMDataset):
 
     # Get all unique pairs of feature columns
     feature_pairs = [
-        (df.feature_columns[i], df.feature_columns[j])
-        for i in range(len(df.feature_columns))
-        for j in range(i + 1, len(df.feature_columns))
+        (dataset.feature_columns[i], dataset.feature_columns[j])
+        for i in range(len(dataset.feature_columns))
+        for j in range(i + 1, len(dataset.feature_columns))
     ]
 
     figures = []

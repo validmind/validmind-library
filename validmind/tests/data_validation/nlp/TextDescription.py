@@ -75,29 +75,6 @@ def create_metrics_df(df, text_column, unwanted_tokens, lang):
     )
 
 
-def create_text_description_plots(df, params):
-    combinations_to_plot = params["combinations_to_plot"]
-    figures = []
-
-    # Create hist plots for each column
-    for column in df.columns:
-        fig = px.histogram(df, x=column)
-        fig.update_layout(bargap=0.2)
-        figures.append(fig)
-
-    for metric1, metric2 in combinations_to_plot:
-        figures.append(
-            px.scatter(
-                df,
-                x=metric1,
-                y=metric2,
-                title=f"Scatter Plot: {metric1} vs {metric2}",
-            )
-        )
-
-    return figures
-
-
 @tags("nlp", "text_data", "visualization")
 @tasks("text_classification", "text_summarization")
 def TextDescription(
@@ -167,7 +144,7 @@ def TextDescription(
 
     nltk.download("punkt_tab", quiet=True)
 
-    text_description_df = create_metrics_df(
+    metrics_df = create_metrics_df(
         dataset.df, dataset.text_column, unwanted_tokens, lang
     )
 
@@ -178,6 +155,22 @@ def TextDescription(
         ("Total Unique Words", "Lexical Diversity"),
     ]
 
-    return tuple(
-        create_text_description_plots(text_description_df, combinations_to_plot)
-    )
+    figures = []
+
+    # Create hist plots for each column
+    for column in metrics_df.columns:
+        fig = px.histogram(metrics_df, x=column)
+        fig.update_layout(bargap=0.2)
+        figures.append(fig)
+
+    for metric1, metric2 in combinations_to_plot:
+        figures.append(
+            px.scatter(
+                metrics_df,
+                x=metric1,
+                y=metric2,
+                title=f"Scatter Plot: {metric1} vs {metric2}",
+            )
+        )
+
+    return tuple(figures)

@@ -17,9 +17,7 @@ logger = get_logger(__name__)
 
 @tags("feature_importance", "AUC", "visualization")
 @tasks("classification")
-def FeaturesAUC(
-    model: VMModel, dataset: VMDataset, fontsize: int = 12, figure_height: int = 500
-):
+def FeaturesAUC(dataset: VMDataset, fontsize: int = 12, figure_height: int = 500):
     """
     Evaluates the discriminatory power of each individual feature within a binary classification model by calculating
     the Area Under the Curve (AUC) for each feature separately.
@@ -59,18 +57,15 @@ def FeaturesAUC(
     - This metric is applicable only to binary classification tasks and cannot be directly extended to multiclass
     classification or regression without modifications.
     """
-    x = dataset.x_df()
-    y = dataset.y_df()
-
-    if y.nunique() != 2:
+    if dataset.y.nunique() != 2:
         raise SkipTestError("FeaturesAUC metric requires a binary target variable.")
 
-    aucs = pd.DataFrame(index=x.columns, columns=["AUC"])
+    aucs = pd.DataFrame(index=dataset.feature_columns, columns=["AUC"])
 
-    for column in x.columns:
-        feature_values = x[column]
+    for column in dataset.feature_columns:
+        feature_values = dataset.df[column]
         if feature_values.nunique() > 1:
-            aucs.loc[column, "AUC"] = roc_auc_score(y, feature_values)
+            aucs.loc[column, "AUC"] = roc_auc_score(dataset.y, feature_values)
         else:
             # Not enough unique values to calculate AUC
             aucs.loc[column, "AUC"] = np.nan

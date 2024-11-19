@@ -77,7 +77,7 @@ def Mentions(dataset: VMDataset, top_mentions: int = 25):
 
     return px.treemap(
         mention_frequencies_df,
-        path=["Scenari"],
+        path=["Scenario"],
         values="Percentage",
         title="Tree of Mentions",
     )

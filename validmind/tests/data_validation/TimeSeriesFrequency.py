@@ -103,4 +103,4 @@ def TimeSeriesFrequency(dataset: VMDataset):
         ),
     )
 
-    return frequencies, fig, len(frequencies["Frequency"].unique()) == 1
+    return frequencies, fig, len(set(item["Frequency"] for item in frequencies)) == 1
