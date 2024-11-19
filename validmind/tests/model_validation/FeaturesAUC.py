@@ -10,7 +10,7 @@ from sklearn.metrics import roc_auc_score
 from validmind import tags, tasks
 from validmind.errors import SkipTestError
 from validmind.logging import get_logger
-from validmind.vm_models import VMDataset, VMModel
+from validmind.vm_models import VMDataset
 
 logger = get_logger(__name__)
 
