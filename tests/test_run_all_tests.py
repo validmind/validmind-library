@@ -44,15 +44,6 @@ KNOWN_FAILING_TESTS = [
     "validmind.data_validation.ProtectedClassesCombination",
     "validmind.data_validation.ProtectedClassesDisparity",
     "validmind.data_validation.ProtectedClassesThresholdOptimizer",
-    # these tests hang when run for some reason
-    "validmind.data_validation.nlp.Toxicity",
-    "validmind.model_validation.BertScore",
-    "validmind.model_validation.RegardScore",
-    "validmind.model_validation.ToxicityScore",
-    "validmind.model_validation.embeddings.StabilityAnalysisTranslation",
-    # TODO: unset these:
-    "validmind.model_validation.sklearn.FeatureImportance",
-    "validmind.model_validation.sklearn.PermutationFeatureImportance",
 ]
 SKIPPED_TESTS = []
 SUCCESSFUL_TESTS = []
