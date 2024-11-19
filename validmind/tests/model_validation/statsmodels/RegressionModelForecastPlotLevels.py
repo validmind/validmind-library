@@ -17,7 +17,7 @@ def integrate_diff(series_diff, start_value):
     return series_orig
 
 
-@tags("forecasting", "visualization")
+@tags("time_series_data", "forecasting", "visualization")
 @tasks("regression")
 def RegressionModelForecastPlotLevels(
     model: VMModel,
@@ -59,7 +59,7 @@ def RegressionModelForecastPlotLevels(
     - Relies heavily on visual interpretation, which may vary between individuals.
     - Does not provide a numerical metric to quantify forecast accuracy, relying solely on visual assessment.
     """
-    if not dataset.index or dataset.index.empty:
+    if dataset.index is None or dataset.index.empty:
         raise ValueError(
             "No dates in the data. Unable to determine start and end dates."
         )

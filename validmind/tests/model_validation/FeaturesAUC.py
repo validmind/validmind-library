@@ -57,7 +57,7 @@ def FeaturesAUC(dataset: VMDataset, fontsize: int = 12, figure_height: int = 500
     - This metric is applicable only to binary classification tasks and cannot be directly extended to multiclass
     classification or regression without modifications.
     """
-    if dataset.y.nunique() != 2:
+    if dataset.y_df().nunique() != 2:
         raise SkipTestError("FeaturesAUC metric requires a binary target variable.")
 
     aucs = pd.DataFrame(index=dataset.feature_columns, columns=["AUC"])
