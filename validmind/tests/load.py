@@ -43,7 +43,11 @@ def _inspect_signature(test_func: callable):
             continue
         else:
             params[name] = {
-                "type": arg.annotation.__name__ if arg.annotation else None,
+                "type": (
+                    arg.annotation.__name__
+                    if arg.annotation and hasattr(arg.annotation, "__name__")
+                    else None
+                ),
                 "default": (
                     arg.default if arg.default is not inspect.Parameter.empty else None
                 ),
@@ -69,7 +73,7 @@ def load_test(test_id: str, test_func: callable = None, reload: bool = False):
     namespace = test_id.split(".", 1)[0]
 
     # if not already loaded, load it from appropriate provider
-    if test_id not in test_store.tests:
+    if test_id not in test_store.tests or reload:
         if test_id.startswith("validmind.composite_metric"):
             # TODO: add composite metric loading
             pass

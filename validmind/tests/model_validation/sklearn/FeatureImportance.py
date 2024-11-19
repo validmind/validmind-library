@@ -53,20 +53,18 @@ def FeatureImportance(dataset, model, num_features=3):
     """
     results_list = []
 
-    x = dataset.x_df()
-    y = dataset.y_df()
-
     pfi_values = permutation_importance(
-        model.model,
-        x,
-        y,
+        estimator=model.model,
+        X=dataset.x,
+        y=dataset.y,
         random_state=0,
         n_jobs=-2,
     )
 
     # Create a dictionary to store PFI scores
     pfi = {
-        column: pfi_values["importances_mean"][i] for i, column in enumerate(x.columns)
+        column: pfi_values["importances_mean"][i]
+        for i, column in enumerate(dataset.columns)
     }
 
     # Sort features by their importance
