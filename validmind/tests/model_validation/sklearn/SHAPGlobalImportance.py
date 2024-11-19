@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 import warnings
+from warnings import filters as _warnings_filters
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -223,7 +224,7 @@ def SHAPGlobalImportance(
     shap_values = select_shap_values(shap_values, class_of_interest)
 
     # restore warnings
-    warnings.filterwarnings("default", category=UserWarning)
+    _warnings_filters.pop(0)
 
     return (
         generate_shap_plot("mean", shap_values, shap_sample),

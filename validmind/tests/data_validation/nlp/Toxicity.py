@@ -5,8 +5,6 @@
 import evaluate
 import matplotlib.pyplot as plt
 import seaborn as sns
-import torch
-from transformers import pipeline
 
 from validmind import tags, tasks
 
@@ -51,14 +49,10 @@ def Toxicity(dataset):
     - Does not provide context-specific insights, which may be necessary for nuanced understanding.
     - May not capture all forms of subtle or indirect toxic language.
     """
-    pipe = pipeline(
-        "text-classification",
-        model="facebook/roberta-hate-speech-dynabench-r4-target",
-        device="mps" if torch.backends.mps.is_available() else None,
-    )
-    toxicity = evaluate.load(pipe, module_type="measurement")
-    input_text = dataset.df[dataset.text_column]
-    toxicity_scores = toxicity.compute(predictions=list(input_text.values))["toxicity"]
+    text_inputs = dataset.df[dataset.text_column].tolist()
+
+    toxicity = evaluate.load("toxicity")
+    toxicity_scores = toxicity.compute(predictions=text_inputs)["toxicity"]
 
     fig = plt.figure()
     ax = sns.kdeplot(
@@ -71,5 +65,7 @@ def Toxicity(dataset):
     )
     ax.set_title(f"Toxicity score of {dataset.text_column}")
     ax.set_xlabel("Toxicity score")
+
+    plt.close()
 
     return fig

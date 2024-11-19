@@ -97,12 +97,15 @@ def generate_description(
             )
         )
 
-    summary = "\n---\n".join(
-        [
-            json.dumps(table.serialize(), cls=NumpyEncoder, separators=(",", ":"))
-            for table in tables
-        ]
-    )
+    if tables:
+        summary = "\n---\n".join(
+            [
+                json.dumps(table.serialize(), cls=NumpyEncoder, separators=(",", ":"))
+                for table in tables
+            ]
+        )
+    else:
+        summary = None
 
     input_data = {
         "test_name": test_name,
@@ -116,7 +119,6 @@ def generate_description(
         prompt_to_message("system", system.render(input_data)),
         prompt_to_message("user", user.render(input_data)),
     ]
-    print(messages[1]["content"])
     response = client.chat.completions.create(
         model=model,
         temperature=0.0,

@@ -105,7 +105,7 @@ def RegressionModelSensitivityPlot(
     plt.plot(target_df.index, transformed_target, label="Observed")
 
     for label, pred in transformed_predictions.items():
-        plt.plot(dataset.index, pred, label=label)
+        plt.plot(target_df.index, pred, label=label)
 
     plt.legend()
 

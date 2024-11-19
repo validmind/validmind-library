@@ -4,6 +4,7 @@
 
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 
 from validmind import tags, tasks
 from validmind.vm_models import VMDataset, VMModel
@@ -59,18 +60,18 @@ def RegressionModelForecastPlotLevels(
     - Relies heavily on visual interpretation, which may vary between individuals.
     - Does not provide a numerical metric to quantify forecast accuracy, relying solely on visual assessment.
     """
-    if dataset.index is None or dataset.index.empty:
-        raise ValueError(
-            "No dates in the data. Unable to determine start and end dates."
-        )
+    index = dataset.df.index
+
+    if not pd.api.types.is_datetime64_any_dtype(index):
+        raise ValueError("Test requires a time series dataset")
 
     fig, axs = plt.subplots(2, 1)
 
     y_pred = dataset.y_pred(model)
 
     # raw data vs forecast
-    axs[0].plot(dataset.index, dataset.y, label="Observed", color="grey")
-    axs[0].plot(dataset.index, y_pred, label="Forecast")
+    axs[0].plot(index, dataset.y, label="Observed", color="grey")
+    axs[0].plot(index, y_pred, label="Forecast")
     axs[0].set_title("Forecast vs Observed")
     axs[0].legend()
 
@@ -79,12 +80,12 @@ def RegressionModelForecastPlotLevels(
     y_pred_transformed = integrate_diff(y_pred, start_value=dataset_y_transformed[0])
 
     axs[1].plot(
-        dataset.index,
+        index,
         dataset_y_transformed,
         label="Observed",
         color="grey",
     )
-    axs[1].plot(dataset.index, y_pred_transformed, label="Forecast")
+    axs[1].plot(index, y_pred_transformed, label="Forecast")
     axs[1].set_title("Integrated Forecast vs Observed")
     axs[1].legend()
 

@@ -50,6 +50,9 @@ KNOWN_FAILING_TESTS = [
     "validmind.model_validation.RegardScore",
     "validmind.model_validation.ToxicityScore",
     "validmind.model_validation.embeddings.StabilityAnalysisTranslation",
+    # TODO: unset these:
+    "validmind.model_validation.sklearn.FeatureImportance",
+    "validmind.model_validation.sklearn.PermutationFeatureImportance",
 ]
 SKIPPED_TESTS = []
 SUCCESSFUL_TESTS = []

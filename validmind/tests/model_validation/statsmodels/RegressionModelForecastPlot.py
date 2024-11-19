@@ -14,7 +14,7 @@ from validmind.vm_models import VMDataset, VMModel
 logger = get_logger(__name__)
 
 
-@tags("forecasting", "visualization")
+@tags("time_series_data", "forecasting", "visualization")
 @tasks("regression")
 def RegressionModelForecastPlot(
     model: VMModel,
@@ -63,18 +63,20 @@ def RegressionModelForecastPlot(
     - Inapplicability: Limited to cases where the order of data points (time-series) matters, it might not be of much
     use in problems that are not related to time series prediction.
     """
-    start_date = dataset.index.min() if start_date is None else pd.Timestamp(start_date)
-    end_date = dataset.index.max() if end_date is None else pd.Timestamp(end_date)
+    index = dataset.df.index
 
-    if start_date < dataset.index.min() or end_date > dataset.index.max():
+    start_date = index.min() if start_date is None else pd.Timestamp(start_date)
+    end_date = index.max() if end_date is None else pd.Timestamp(end_date)
+
+    if start_date < index.min() or end_date > index.max():
         raise ValueError(
             "start_date and end_date must be within the range of dates in the data"
         )
 
     fig, ax = plt.subplots()
 
-    ax.plot(dataset.index, dataset.y, label="Observed")
-    ax.plot(dataset.index, dataset.y_pred(model), label="Forecast", color="grey")
+    ax.plot(index, dataset.y, label="Observed")
+    ax.plot(index, dataset.y_pred(model), label="Forecast", color="grey")
 
     plt.title("Forecast vs Observed")
 

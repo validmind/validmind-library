@@ -66,12 +66,7 @@ def KPSS(dataset: VMDataset):
     kpss_table = []
 
     for col in dataset.columns:
-        try:
-            kpss_stat, pvalue, usedlag, critical_values = kpss(dataset[col].values)
-        except Exception as e:
-            logger.error(f"Error processing column '{col}': {e}")
-            continue
-
+        kpss_stat, pvalue, usedlag, critical_values = kpss(df[col].values)
         kpss_table.append(
             {
                 "Variable": col,
