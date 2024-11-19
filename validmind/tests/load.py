@@ -52,7 +52,7 @@ def _inspect_signature(test_func: callable):
     return inputs, params
 
 
-def load_test(test_id: str):
+def load_test(test_id: str, test_func: callable = None, reload: bool = False):
     """Load a test by test ID
 
     Test IDs are in the format `namespace.path_to_module.TestClassOrFuncName[:tag]`.
@@ -61,6 +61,8 @@ def load_test(test_id: str):
 
     Args:
         test_id (str): The test ID in the format `namespace.path_to_module.TestName[:tag]`
+        test_func (callable, optional): The test function to load. If not provided, the
+            test will be loaded from the test provider. Defaults to None.
     """
     # remove tag if present
     test_id = test_id.split(":", 1)[0]
@@ -72,18 +74,21 @@ def load_test(test_id: str):
             # TODO: add composite metric loading
             pass
 
-        if not test_provider_store.has_test_provider(namespace):
-            raise LoadTestError(f"No test provider found for namespace: {namespace}")
+        if not test_func:
+            if not test_provider_store.has_test_provider(namespace):
+                raise LoadTestError(
+                    f"No test provider found for namespace: {namespace}"
+                )
 
-        provider = test_provider_store.get_test_provider(namespace)
+            provider = test_provider_store.get_test_provider(namespace)
 
-        try:
-            test_func = provider.load_test(test_id.split(".", 1)[1])
-        except Exception as e:
-            raise LoadTestError(
-                f"Unable to load test '{test_id}' from {namespace} test provider",
-                original_error=e,
-            ) from e
+            try:
+                test_func = provider.load_test(test_id.split(".", 1)[1])
+            except Exception as e:
+                raise LoadTestError(
+                    f"Unable to load test '{test_id}' from {namespace} test provider",
+                    original_error=e,
+                ) from e
 
         # add test_id as an attribute to the test function
         test_func.test_id = test_id

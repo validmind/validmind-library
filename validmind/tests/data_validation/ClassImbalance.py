@@ -5,6 +5,8 @@
 """
 Threshold based tests
 """
+from typing import Any, Dict, Tuple
+
 import plotly.graph_objs as go
 
 from validmind import tags, tasks
@@ -14,7 +16,9 @@ from validmind.vm_models import VMDataset
 
 @tags("tabular_data", "binary_classification", "multiclass_classification")
 @tasks("classification")
-def ClassImbalance(dataset: VMDataset, min_percent_threshold: int = 10):
+def ClassImbalance(
+    dataset: VMDataset, min_percent_threshold: int = 10
+) -> Tuple[Dict[str, Any], go.Figure, bool]:
     """
     Evaluates and quantifies class distribution imbalance in a dataset used by a machine learning model.
 

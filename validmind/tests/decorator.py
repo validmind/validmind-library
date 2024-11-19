@@ -11,6 +11,7 @@ from functools import wraps
 from validmind.logging import get_logger
 
 from ._store import test_store
+from .load import load_test
 
 logger = get_logger(__name__)
 
@@ -111,14 +112,15 @@ def test(func_or_id):
 
     def decorator(func):
         test_id = func_or_id or f"validmind.custom_metrics.{func.__name__}"
-        test_store.register_test(test_id, func)
+        test_func = load_test(test_id, func, reload=True)
+        test_store.register_test(test_id, test_func)
 
-        @wraps(func)
+        @wraps(test_func)
         def wrapper(*args, **kwargs):
-            return func(*args, **kwargs)
+            return test_func(*args, **kwargs)
 
         # special function to allow the function to be saved to a file
-        wrapper.save = _get_save_func(func, test_id)
+        wrapper.save = _get_save_func(test_func, test_id)
 
         return wrapper
 

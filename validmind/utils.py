@@ -18,7 +18,6 @@ import mistune
 import nest_asyncio
 import numpy as np
 import pandas as pd
-import QuantLib as ql
 import seaborn as sns
 from IPython.core import getipython
 from IPython.display import HTML
@@ -110,11 +109,11 @@ class NumpyEncoder(json.JSONEncoder):
             return bool(obj)
         if isinstance(obj, pd.Timestamp):
             return str(obj)
-        if isinstance(obj, ql.Date):
-            # Convert QuantLib Date to ISO string format
-            return obj.ISO()
         if isinstance(obj, set):
             return list(obj)
+        if "QuantLib.Date" in str(type(obj)):
+            # Convert QuantLib Date to ISO string format
+            return obj.ISO()
         return super().default(obj)
 
     def encode(self, obj):

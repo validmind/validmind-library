@@ -66,12 +66,6 @@ def _get_test_kwargs(
                     **{k: v for k, v in _input.items() if k != "input_id"}
                 )
             except KeyError as e:
-                print("\n\n\n\n\n")
-                print(test_func)
-                print(key)
-                print(inputs)
-                print(_input)
-                print("\n\n\n\n\n")
                 raise ValueError(
                     "Input dictionary must contain an 'input_id' key "
                     "to retrieve the input object from the input registry."

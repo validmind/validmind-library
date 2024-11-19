@@ -16,12 +16,15 @@ try:
     from ragas import evaluate
     from ragas.metrics import SemanticSimilarity as semantic_similarity
 except ImportError as e:
-    raise MissingDependencyError(
-        "Missing required package `ragas` for AnswerSimilarity. "
-        "Please run `pip install validmind[llm]` to use LLM tests",
-        required_dependencies=["ragas"],
-        extra="llm",
-    ) from e
+    if "ragas" in str(e):
+        raise MissingDependencyError(
+            "Missing required package `ragas` for AnswerSimilarity. "
+            "Please run `pip install validmind[llm]` to use LLM tests",
+            required_dependencies=["ragas"],
+            extra="llm",
+        ) from e
+
+    raise e
 
 
 @tags("ragas", "llm")
