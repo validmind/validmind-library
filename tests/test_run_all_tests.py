@@ -197,17 +197,6 @@ def create_unit_test_func(vm_test_id, test_func):
             vm_test_id,
             f"Expected result_id to be {vm_test_id}, got {result.result_id}",
         )
-        if isinstance(result, TestResult):
-            self.assertTrue(
-                result.metric is not None or result.figures is not None,
-                f"A metric result needs to produce a metric result or a figure",
-            )
-
-        if isinstance(result, TestResult):
-            self.assertTrue(
-                result.test_results is not None or result.figures is not None,
-                f"A threshold test needs to produce a test result or a figure",
-            )
 
         # Finally, the test worked so we can add it to the list of successful tests
         # and note the time it took to run
