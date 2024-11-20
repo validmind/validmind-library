@@ -74,14 +74,14 @@ def StabilityAnalysisTranslation(
 
     try:
         # Initialize the Marian tokenizer and model for the source language
-        model_name = f"Helsinki-NLP/opus-mt-{source_lang}-{target_lang}"
-        model = MarianMTModel.from_pretrained(model_name)
-        tokenizer = MarianTokenizer.from_pretrained(model_name)
+        translate_model_name = f"Helsinki-NLP/opus-mt-{source_lang}-{target_lang}"
+        translate_model = MarianMTModel.from_pretrained(translate_model_name)
+        translate_tokenizer = MarianTokenizer.from_pretrained(translate_model_name)
 
         # Initialize the Marian tokenizer and model for the target language
-        model_name_reverse = f"Helsinki-NLP/opus-mt-{target_lang}-{source_lang}"
-        model_reverse = MarianMTModel.from_pretrained(model_name_reverse)
-        tokenizer_reverse = MarianTokenizer.from_pretrained(model_name_reverse)
+        reverse_model_name = f"Helsinki-NLP/opus-mt-{target_lang}-{source_lang}"
+        reverse_model = MarianMTModel.from_pretrained(reverse_model_name)
+        reverse_tokenizer = MarianTokenizer.from_pretrained(reverse_model_name)
     except Exception as e:
         logger.error(f"Error initializing translation models: {str(e)}")
         raise e
@@ -90,30 +90,30 @@ def StabilityAnalysisTranslation(
     max_length = 512
 
     def translate_data(data: str):
-        encoded = tokenizer.encode(
+        encoded = translate_tokenizer.encode(
             data[:1024],  # Truncate input text to avoid extremely long sequences
             return_tensors="pt",
             max_length=max_length,
             truncation=True,
             padding=True,
         )
-        translated = model.generate(
+        translated = translate_model.generate(
             encoded, max_length=max_length, num_beams=2, early_stopping=True
         )
-        decoded = tokenizer.decode(translated[0], skip_special_tokens=True)
+        decoded = translate_tokenizer.decode(translated[0], skip_special_tokens=True)
 
-        reverse_encoded = tokenizer_reverse.encode(
+        reverse_encoded = reverse_tokenizer.encode(
             decoded,
             return_tensors="pt",
             max_length=max_length,
             truncation=True,
             padding=True,
         )
-        reverse_translated = model_reverse.generate(
+        reverse_translated = reverse_model.generate(
             reverse_encoded, max_length=max_length, num_beams=2, early_stopping=True
         )
 
-        return tokenizer_reverse.decode(reverse_translated[0], skip_special_tokens=True)
+        return reverse_tokenizer.decode(reverse_translated[0], skip_special_tokens=True)
 
     def perturb_data(data):
         try:
