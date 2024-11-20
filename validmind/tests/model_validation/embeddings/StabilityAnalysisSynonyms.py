@@ -97,8 +97,8 @@ def StabilityAnalysisSynonyms(
 
     original_df = dataset.df[[dataset.text_column]]
     perturbed_df = original_df.copy()
-    perturbed_df.update(
-        perturbed_df.select_dtypes(include="object").applymap(perturb_data)
+    perturbed_df[dataset.text_column] = perturbed_df[dataset.text_column].map(
+        perturb_data
     )
 
     return create_stability_analysis_result(
