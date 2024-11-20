@@ -89,7 +89,7 @@ def StabilityAnalysisTranslation(
     # Truncate input if too long (Marian models typically have max length of 512)
     max_length = 512
 
-    def perturb_data(data: str):
+    def translate_data(data: str):
         encoded = tokenizer.encode(
             data[:1024],  # Truncate input text to avoid extremely long sequences
             return_tensors="pt",
@@ -114,6 +114,13 @@ def StabilityAnalysisTranslation(
         )
 
         return tokenizer_reverse.decode(reverse_translated[0], skip_special_tokens=True)
+
+    def perturb_data(data):
+        try:
+            return translate_data(data)
+        except Exception as e:
+            logger.error(f"Error translating data: {str(e)}")
+            return data
 
     original_df = dataset.df[[dataset.text_column]]
     perturbed_df = original_df.copy()
