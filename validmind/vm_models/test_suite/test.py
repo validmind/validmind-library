@@ -4,9 +4,9 @@
 
 from typing import Any, Dict, Union
 
-from ...errors import should_raise_on_fail_fast
+from ...errors import LoadTestError, should_raise_on_fail_fast
 from ...logging import get_logger, log_performance
-from ...tests.load import describe_test
+from ...tests.load import load_test
 from ...tests.run import run_test
 from ...utils import test_id_to_name
 from ..result import ErrorResult, Result, TestResult
@@ -25,6 +25,8 @@ class TestSuiteTest:
     description: Union[Dict[str, Any], None] = None
     result: Union[Result, None] = None
 
+    _load_failed: bool = False
+
     def __init__(self, test_id_or_obj):
         """Load the test class from the test id
 
@@ -38,10 +40,36 @@ class TestSuiteTest:
             self.output_template = test_id_or_obj.get("output_template")
 
         self.name = test_id_to_name(self.test_id)
-        self.description = describe_test(self.test_id, raw=True)
 
-    def run(self, fail_fast: bool = False, config: dict = {}):
+    def get_default_config(self):
+        """Returns the default configuration for the test"""
+        try:
+            test_func = load_test(self.test_id)
+        except LoadTestError as e:
+            logger.error(f"Failed to load test '{self.test_id}': {e}")
+
+            self._load_failed = True
+            self.result = ErrorResult(
+                error=e,
+                message=f"Failed to load test '{self.name}'",
+                result_id=self.test_id,
+            )
+
+            return None
+
+        config = {
+            # we use the input name ('dataset', 'model') as the key and the value
+            "inputs": {k: k for k in test_func.inputs},
+            "params": {k: v.get("default") for k, v in test_func.params.items()},
+        }
+
+        return config
+
+    def run(self, fail_fast: bool = False, config: dict = None):
         """Run the test"""
+        if self._load_failed:
+            return
+
         try:
             # run the test and log the performance if LOG_LEVEL is set to DEBUG
             @log_performance(name=self.test_id, logger=logger)
@@ -50,7 +78,7 @@ class TestSuiteTest:
                     self.test_id,
                     generate_description=False,
                     show=False,
-                    **config,
+                    **(config or {}),
                 )
 
             self.result = run_test_with_logging()

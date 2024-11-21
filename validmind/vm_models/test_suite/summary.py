@@ -96,7 +96,7 @@ class TestSuiteSummary:
         from ...api_client import get_api_host, get_api_model
 
         ui_host = get_api_host().replace("/api/v1/tracking", "").replace("api", "app")
-        link = f"{ui_host}/projects/{get_api_model()}/project-overview"
+        link = f"{ui_host}model-inventory/{get_api_model()}"
         results_link = f"""
         <h3>
             Check out the updated documentation in your

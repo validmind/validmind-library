@@ -120,7 +120,8 @@ def tables_to_widgets(tables: List["ResultTable"]):
             html += f"<h4>{table.title}</h4>"
 
         html += (
-            table.data.style.format(precision=4)
+            table.data.reset_index(drop=True)
+            .style.format(precision=4)
             .hide(axis="index")
             .set_table_styles(
                 [

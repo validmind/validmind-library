@@ -9,6 +9,7 @@ import json
 import math
 import re
 import sys
+import warnings
 from datetime import date, datetime, time
 from platform import python_version
 from typing import Any, Dict, List
@@ -25,6 +26,7 @@ from IPython.display import display as ipy_display
 from latex2mathml.converter import convert
 from matplotlib.axes._axes import _log as matplotlib_axes_logger
 from numpy import ndarray
+from sklearn.exceptions import UndefinedMetricWarning
 from tabulate import tabulate
 
 from .html_templates.content_blocks import math_jax_snippet, python_syntax_highlighting
@@ -33,6 +35,8 @@ from .logging import get_logger
 DEFAULT_BIG_NUMBER_DECIMALS = 2
 DEFAULT_SMALL_NUMBER_DECIMALS = 4
 
+# Suppress some common warnings
+warnings.filterwarnings("ignore", category=UndefinedMetricWarning)
 
 # SETUP SOME DEFAULTS FOR PLOTS #
 # Silence this warning: *c* argument looks like a single numeric RGB or

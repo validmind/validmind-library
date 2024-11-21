@@ -54,12 +54,10 @@ class TestSuiteSection:
         section_default_config = {}
 
         for test in self.tests:
-            section_default_config[test.test_id] = {
-                "inputs": test.description["Required Inputs"],
-                "params": {
-                    k: v["default"] for k, v in test.description["Params"].items()
-                },
-            }
+            default_config = test.get_default_config()
+
+            if default_config:
+                section_default_config[test.test_id] = default_config
 
         return section_default_config
 
