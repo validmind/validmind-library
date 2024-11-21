@@ -65,16 +65,24 @@ def _get_unique_inputs(results: List[TestResult]) -> Dict[str, set]:
     return unique_inputs
 
 
-def _get_unique_params(results: List[TestResult]) -> Dict[str, set]:
+def _get_unique_params(results: List[TestResult]) -> Dict[str, List[Any]]:
     """Get only the params that are not the same across all results"""
-    unique_params = {}
-
+    param_values = {}
     for result in results:
         if not result.params:
             continue
 
         for name, value in result.params.items():
-            unique_params.setdefault(name, set()).add(value)
+            param_values.setdefault(name, []).append(value)
+
+    unique_params = {}
+    for name, values in param_values.items():
+        unique_values = []
+        for value in values:
+            if not any(value == x for x in unique_values):
+                unique_values.append(value)
+
+        unique_params[name] = unique_values
 
     return unique_params
 
@@ -141,23 +149,36 @@ def _build_input_param_string(result: TestResult, results: List[TestResult]) -> 
     """Build a string repr of unique inputs + params for a figure title"""
     parts = []
     unique_inputs = _get_unique_inputs(results)
-    unique_params = _get_unique_params(results)
 
+    # if theres only one unique value for an input or param, don't show it
+    # however, if there is only one unique value for all inputs then show it
     if result.inputs:
+        should_show = all(
+            len(unique_inputs[input_name]) == 1 for input_name in unique_inputs
+        )
         for input_name, input_obj in result.inputs.items():
-            if len(unique_inputs[input_name]) > 1:
+            if should_show or len(unique_inputs[input_name]) > 1:
                 input_val = _get_input_key(input_obj)
                 parts.append(f"{input_name}={input_val}")
 
-    if result.params:
-        for param_name, param_value in result.params.items():
-            if len(unique_params[param_name]) > 1:
-                parts.append(f"{param_name}={param_value}")
+    # TODO: revisit this when we can create a value/title to show for params
+    # unique_params = _get_unique_params(results)
+    # # if theres only one unique value for a param, don't show it
+    # # however, if there is only one unique value for all params then show it as
+    # # long as there is no existing inputs in the parts list
+    # if result.params:
+    #     should_show = (
+    #         all(len(unique_params[param_name]) == 1 for param_name in unique_params)
+    #         and not parts
+    #     )
+    #     for param_name, param_value in result.params.items():
+    #         if should_show or len(unique_params[param_name]) > 1:
+    #             parts.append(f"{param_name}={param_value}")
 
     return ", ".join(parts)
 
 
-def _update_figure_title(figure, input_param_str: str):
+def _update_figure_title(figure: Any, input_param_str: str) -> None:
     """
     Update the title of a figure with input and parameter information.
 
@@ -168,6 +189,9 @@ def _update_figure_title(figure, input_param_str: str):
     Raises:
         ValueError: If the figure type is unsupported.
     """
+    if not input_param_str:
+        return
+
     new_title = f"{{curr_title}} (for {input_param_str})"
 
     if is_matplotlib_figure(figure):
@@ -182,8 +206,8 @@ def _update_figure_title(figure, input_param_str: str):
         raise ValueError(f"Unsupported figure type: {type(figure)}")
 
 
-def _combine_figures(results: List[TestResult]):
-    """Combine figures from multiple test results"""
+def _combine_figures(results: List[TestResult]) -> List[Any]:
+    """Combine figures from multiple test results (gets raw figure objects, not vm Figures)"""
     combined_figures = []
 
     for result in results:
@@ -198,12 +222,18 @@ def _combine_figures(results: List[TestResult]):
     return combined_figures
 
 
-def _combine_dict_values(items_dict):
+def _combine_dict_values(items_dict: Dict[str, Any]) -> Dict[str, Any]:
+    """Combine values for each key in a dictionary, keeping only unique values"""
     combined = {}
 
     for name, value in items_dict.items():
         values = value if isinstance(value, list) else [value]
-        unique_values = list(set(values))
+
+        unique_values = []
+        for v in values:
+            if not any(v == x for x in unique_values):
+                unique_values.append(v)
+
         combined[name] = unique_values[0] if len(unique_values) == 1 else unique_values
 
     return combined
@@ -217,6 +247,8 @@ def get_comparison_test_configs(
 ) -> List[Dict[str, Any]]:
     """
     Generate test configurations based on input and parameter grids.
+
+    Function inputs should be validated before calling this.
 
     Args:
         input_grid: A dictionary or list defining the grid of inputs.

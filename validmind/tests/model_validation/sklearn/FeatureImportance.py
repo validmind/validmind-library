@@ -56,8 +56,8 @@ def FeatureImportance(dataset: VMDataset, model: VMModel, num_features: int = 3)
 
     pfi_values = permutation_importance(
         estimator=model.model,
-        X=dataset.x,
-        y=dataset.y,
+        X=dataset.x_df(),
+        y=dataset.y_df(),
         random_state=0,
         n_jobs=-2,
     )

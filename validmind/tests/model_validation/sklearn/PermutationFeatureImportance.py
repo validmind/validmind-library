@@ -78,9 +78,9 @@ def PermutationFeatureImportance(
         raise SkipTestError(f"Skipping PFI for {model.library} models")
 
     pfi_values = permutation_importance(
-        model.model,
-        dataset.x,
-        dataset.y,
+        estimator=model.model,
+        X=dataset.x_df(),
+        y=dataset.y_df(),
         random_state=0,
         n_jobs=-2,
     )
