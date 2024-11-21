@@ -37,6 +37,9 @@ DEFAULT_SMALL_NUMBER_DECIMALS = 4
 
 # Suppress some common warnings
 warnings.filterwarnings("ignore", category=UndefinedMetricWarning)
+warnings.filterwarnings(
+    "ignore", category=UserWarning, message=".*valid feature names.*"
+)
 
 # SETUP SOME DEFAULTS FOR PLOTS #
 # Silence this warning: *c* argument looks like a single numeric RGB or
