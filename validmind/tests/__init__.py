@@ -11,7 +11,7 @@ from .decorator import tags, tasks, test
 from .load import describe_test, list_tests, load_test
 from .metadata import list_tags, list_tasks, list_tasks_and_tags
 from .run import run_test
-from .test_providers import TestProvider
+from .test_providers import LocalTestProvider, TestProvider
 
 logger = get_logger(__name__)
 
