@@ -286,11 +286,16 @@ class TestResult(Result):
             self.ref_id = str(uuid4())
 
     def _get_flat_inputs(self):
-        return {
-            _input
-            for _item in self.inputs.values()
-            for _input in (_item if isinstance(_item, list) else [_item])
-        }
+        # remove duplicates by `input_id`
+        inputs = {}
+
+        for input_or_list in self.inputs.values():
+            if isinstance(input_or_list, list):
+                inputs.update({input.input_id: input for input in input_or_list})
+            else:
+                inputs[input_or_list.input_id] = input_or_list
+
+        return list(inputs.values())
 
     def add_table(self, table: ResultTable):
         if self.tables is None:
