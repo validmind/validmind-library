@@ -178,6 +178,56 @@ def _pretty_list_tests(tests, truncate=True):
     return format_dataframe(pd.DataFrame(table))
 
 
+def list_tags():
+    """
+    List unique tags from all test classes.
+    """
+
+    unique_tags = set()
+
+    for test in _load_tests(list_tests(pretty=False)):
+        unique_tags.update(test.__tags__)
+
+    return list(unique_tags)
+
+
+def list_tasks_and_tags():
+    """
+    List all task types and their associated tags, with one row per task type and
+    all tags for a task type in one row.
+
+    Returns:
+        pandas.DataFrame: A DataFrame with 'Task Type' and concatenated 'Tags'.
+    """
+    task_tags_dict = {}
+
+    for test in _load_tests(list_tests(pretty=False)):
+        for task in test.__tasks__:
+            task_tags_dict.setdefault(task, set()).update(test.__tags__)
+
+    return format_dataframe(
+        pd.DataFrame(
+            [
+                {"Task": task, "Tags": ", ".join(tags)}
+                for task, tags in task_tags_dict.items()
+            ]
+        )
+    )
+
+
+def list_tasks():
+    """
+    List unique tasks from all test classes.
+    """
+
+    unique_tasks = set()
+
+    for test in _load_tests(list_tests(pretty=False)):
+        unique_tasks.update(test.__tasks__)
+
+    return list(unique_tasks)
+
+
 def list_tests(filter=None, task=None, tags=None, pretty=True, truncate=True):
     """List all tests in the tests directory.
 
