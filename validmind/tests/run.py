@@ -2,11 +2,7 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-import getpass
-import os
 import platform
-import socket
-import sys
 from datetime import datetime
 from inspect import getdoc
 from typing import Any, Dict, List, Tuple, Union
