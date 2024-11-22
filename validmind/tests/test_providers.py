@@ -14,6 +14,12 @@ from validmind.logging import get_logger
 logger = get_logger(__name__)
 
 
+def _is_test_file(path: Path) -> bool:
+    return path.name[0].isupper() or re.search(
+        r"def\s*" + re.escape(path.stem), path.read_text()
+    )
+
+
 class TestProvider(Protocol):
     """Protocol for user-defined test providers"""
 
@@ -93,28 +99,22 @@ class LocalTestProvider:
         """
         test_ids = []
 
-        directories = [p.name for p in Path(self.root_folder).iterdir() if p.is_dir()]
+        for root, _, files in os.walk(self.root_folder):
+            for filename in files:
+                if not filename.endswith(".py") or filename.startswith("__"):
+                    continue
 
-        for d in directories:
-            for path in Path(self.root_folder).joinpath(d).glob("**/**/*.py"):
-                if path.name.startswith("__"):
-                    continue  # skip __init__.py and other special files
+                path = Path(root) / filename
+                if not _is_test_file(path):
+                    continue
 
-                # if the file name is capitalized or it contains a function with the
-                # same name as the file, then we can assume it is a test file
-                if not path.name[0].isupper():
-                    with open(path, "r") as f:
-                        source = f.read()
-                    if not re.search(r"def\s*" + re.escape(path.stem), source):
-                        continue
+                rel_path = path.relative_to(self.root_folder)
 
-                test_ids.append(
-                    f"{d}.{path.parent.stem}.{path.stem}"
-                    if path.parent.parent.stem == d
-                    else f"{d}.{path.stem}"
-                )
+                test_id_parts = [p.stem for p in rel_path.parents if p.stem][::-1]
+                test_id_parts.append(path.stem)
+                test_ids.append(".".join(test_id_parts))
 
-        return test_ids
+        return sorted(test_ids)
 
     def load_test(self, test_id: str):
         """
