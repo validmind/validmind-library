@@ -8,8 +8,14 @@ from ..errors import LoadTestError
 from ..logging import get_logger
 from ._store import test_provider_store
 from .decorator import tags, tasks, test
-from .load import describe_test, list_tests, load_test
-from .metadata import list_tags, list_tasks, list_tasks_and_tags
+from .load import (
+    describe_test,
+    list_tags,
+    list_tasks,
+    list_tasks_and_tags,
+    list_tests,
+    load_test,
+)
 from .run import run_test
 from .test_providers import LocalTestProvider, TestProvider
 
