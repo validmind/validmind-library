@@ -16,12 +16,15 @@ try:
     from ragas import evaluate
     from ragas.metrics import LLMContextPrecisionWithoutReference as context_precision
 except ImportError as e:
-    raise MissingDependencyError(
-        "Missing required package `ragas` for ContextPrecision. "
-        "Please run `pip install validmind[llm]` to use LLM tests",
-        required_dependencies=["ragas"],
-        extra="llm",
-    ) from e
+    if "ragas" in str(e):
+        raise MissingDependencyError(
+            "Missing required package `ragas` for ContextPrecision. "
+            "Please run `pip install validmind[llm]` to use LLM tests",
+            required_dependencies=["ragas"],
+            extra="llm",
+        ) from e
+
+    raise e
 
 
 @tags("ragas", "llm", "retrieval_performance")

@@ -2,20 +2,18 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-"""
-Threshold based tests
-"""
-
 import re
-from dataclasses import dataclass
 
 import plotly.graph_objects as go
 
-from validmind.vm_models import Figure, ThresholdTest, VMDataset
+from validmind import tags, tasks
+from validmind.errors import SkipTestError
+from validmind.vm_models import VMDataset
 
 
-@dataclass
-class Hashtags(ThresholdTest):
+@tags("nlp", "text_data", "visualization", "frequency_analysis")
+@tasks("text_classification", "text_summarization")
+def Hashtags(dataset: VMDataset, top_hashtags: int = 25):
     """
     Assesses hashtag frequency in a text column, highlighting usage trends and potential dataset bias or spam.
 
@@ -58,44 +56,24 @@ class Hashtags(ThresholdTest):
     - Does not provide context or sentiment associated with the hashtags, so the information provided may have limited
     utility on its own.
     """
+    hashtags = (
+        dataset.df[dataset.text_column]
+        .apply(lambda x: re.findall(r"(?<=#)\w+", str(x)))
+        .explode()
+    )
+    top_hashtag_counts = hashtags.value_counts().head(top_hashtags)
 
-    name = "hashtags"
-    required_inputs = ["dataset"]
-    default_params = {"top_hashtags": 25}
-    tasks = ["text_classification", "text_summarization"]
-    tags = ["nlp", "text_data", "visualization", "frequency_analysis"]
+    if top_hashtag_counts.empty:
+        raise SkipTestError("No hashtags found in the dataset")
 
-    def run(self):
-        # Can only run this test if we have a Dataset object
-        if not isinstance(self.inputs.dataset, VMDataset):
-            raise ValueError("Hashtags requires a validmind Dataset object")
+    fig = go.Figure(
+        data=[go.Bar(x=top_hashtag_counts.index, y=top_hashtag_counts.values)]
+    )
+    fig.update_layout(
+        title="Top Hashtags",
+        xaxis_title="Hashtag",
+        yaxis_title="Count",
+        xaxis_tickangle=-45,
+    )
 
-        text_column = self.inputs.dataset.text_column
-
-        def find_hash(text):
-            return re.findall(r"(?<=#)\w+", str(text))
-
-        # Extract hashtags from the text column and count occurrences
-        hashtags = self.inputs.dataset.df[text_column].apply(find_hash).explode()
-        temp = hashtags.value_counts().head(self.params["top_hashtags"])
-
-        print(f"temp: {temp}")
-
-        figures = []
-        if not temp.empty:
-            fig = go.Figure(data=[go.Bar(x=temp.index, y=temp.values)])
-            fig.update_layout(
-                title="Top Hashtags",
-                xaxis_title="Hashtag",
-                yaxis_title="Count",
-                xaxis_tickangle=-45,
-            )
-            figures.append(
-                Figure(
-                    for_object=self,
-                    key=self.name,
-                    figure=fig,
-                )
-            )
-
-        return self.cache_results([], passed=True, figures=figures)
+    return fig

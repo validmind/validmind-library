@@ -2,23 +2,18 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from dataclasses import dataclass
-from typing import List
-
-from ydata_profiling.config import Settings
-from ydata_profiling.model.typeset import ProfilingTypeSet
-
-from validmind.vm_models import (
-    ResultSummary,
-    ResultTable,
-    ResultTableMetadata,
-    ThresholdTest,
-    ThresholdTestResult,
-)
+from validmind import tags, tasks
+from validmind.vm_models import VMDataset
 
 
-@dataclass
-class HighCardinality(ThresholdTest):
+@tags("tabular_data", "data_quality", "categorical_data")
+@tasks("classification", "regression")
+def HighCardinality(
+    dataset: VMDataset,
+    num_threshold: int = 100,
+    percent_threshold: float = 0.1,
+    threshold_type: str = "percent",
+):
     """
     Assesses the number of unique values in categorical columns to detect high cardinality and potential overfitting.
 
@@ -56,72 +51,29 @@ class HighCardinality(ThresholdTest):
     - The threshold (both number and percent) used for the test is static and may not be optimal for diverse datasets
     and varied applications. Further mechanisms to adjust and refine this threshold could enhance its effectiveness.
     """
+    df = dataset.df
 
-    name = "cardinality"
-    required_inputs = ["dataset"]
-    default_params = {
-        "num_threshold": 100,
-        "percent_threshold": 0.1,
-        "threshold_type": "percent",  # or "num"
-    }
-    tasks = ["classification", "regression"]
-    tags = ["tabular_data", "data_quality", "categorical_data"]
+    if threshold_type == "percent":
+        num_threshold = int(percent_threshold * df.shape[0])
 
-    def summary(self, results: List[ThresholdTestResult], all_passed: bool):
-        """
-        The high cardinality test returns results like these:
-        [{"values": {"n_distinct": 0, "p_distinct": 0.0}, "column": "Exited", "passed": true}]
-        """
-        results_table = [
+    table = []
+    all_passed = True
+
+    for col in dataset.feature_columns_categorical:
+        n_distinct = df[col].nunique()
+        p_distinct = n_distinct / df.shape[0]
+        passed = n_distinct < num_threshold
+
+        table.append(
             {
-                "Column": result.column,
-                "Number of Distinct Values": result.values["n_distinct"],
-                "Percentage of Distinct Values (%)": result.values["p_distinct"] * 100,
-                "Pass/Fail": "Pass" if result.passed else "Fail",
+                "Column": col,
+                "Number of Distinct Values": n_distinct,
+                "Percentage of Distinct Values (%)": p_distinct * 100,
+                "Pass/Fail": "Pass" if passed else "Fail",
             }
-            for result in results
-        ]
-        return ResultSummary(
-            results=[
-                ResultTable(
-                    data=results_table,
-                    metadata=ResultTableMetadata(
-                        title="High Cardinality Results for Dataset"
-                    ),
-                )
-            ]
         )
 
-    def run(self):
-        typeset = ProfilingTypeSet(Settings())
-        dataset_types = typeset.infer_type(self.inputs.dataset.df)
+        if not passed:
+            all_passed = False
 
-        results = []
-        rows = self.inputs.dataset.df.shape[0]
-
-        num_threshold = self.params["num_threshold"]
-        if self.params["threshold_type"] == "percent":
-            num_threshold = int(self.params["percent_threshold"] * rows)
-
-        for col in self.inputs.dataset.df.columns:
-            # Only calculate high cardinality for categorical columns
-            if str(dataset_types[col]) != "Categorical":
-                continue
-
-            n_distinct = self.inputs.dataset.df[col].nunique()
-            p_distinct = n_distinct / rows
-
-            passed = n_distinct < num_threshold
-
-            results.append(
-                ThresholdTestResult(
-                    column=col,
-                    passed=passed,
-                    values={
-                        "n_distinct": n_distinct,
-                        "p_distinct": p_distinct,
-                    },
-                )
-            )
-
-        return self.cache_results(results, passed=all([r.passed for r in results]))
+    return table, all_passed

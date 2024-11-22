@@ -2,19 +2,20 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from dataclasses import dataclass
-
 import pandas as pd
 from statsmodels.tsa.stattools import kpss
 
+from validmind import tags, tasks
+from validmind.errors import SkipTestError
 from validmind.logging import get_logger
-from validmind.vm_models import Metric, ResultSummary, ResultTable, ResultTableMetadata
+from validmind.vm_models import VMDataset
 
 logger = get_logger(__name__)
 
 
-@dataclass
-class KPSS(Metric):
+@tags("time_series_data", "stationarity", "unit_root_test", "statsmodels")
+@tasks("data_validation")
+def KPSS(dataset: VMDataset):
     """
     Assesses the stationarity of time-series data in a machine learning model using the KPSS unit root test.
 
@@ -53,81 +54,32 @@ class KPSS(Metric):
     - The reliability of the test is contingent on the number of lags selected, which introduces potential bias in the
     measurement.
     """
+    df = dataset.df.dropna()
 
-    name = "kpss"
-    required_inputs = ["dataset"]
-    tasks = ["regression"]
-    tags = [
-        "time_series_data",
-        "forecasting",
-        "stationarity",
-        "unit_root_test",
-        "statsmodels",
-    ]
-
-    def run(self):
-        """
-        Calculates KPSS for each of the dataset features
-        """
-        dataset = self.inputs.dataset.df
-
-        # Check if the dataset is a time series
-        if not isinstance(dataset.index, (pd.DatetimeIndex, pd.PeriodIndex)):
-            raise ValueError(
-                "Dataset index must be a datetime or period index for time series analysis."
-            )
-
-        # Preprocessing: Drop rows with any NaN values
-        if dataset.isnull().values.any():
-            logger.warning(
-                "Dataset contains missing values. Rows with NaNs will be dropped."
-            )
-            dataset = dataset.dropna()
-
-        # Convert to numeric and handle non-numeric data
-        dataset = dataset.apply(pd.to_numeric, errors="coerce")
-
-        # Initialize a list to store KPSS results
-        kpss_values = []
-
-        for col in dataset.columns:
-            try:
-                kpss_stat, pvalue, usedlag, critical_values = kpss(dataset[col].values)
-                kpss_values.append(
-                    {
-                        "Variable": col,
-                        "stat": kpss_stat,
-                        "pvalue": pvalue,
-                        "usedlag": usedlag,
-                        "critical_values": critical_values,
-                    }
-                )
-            except Exception as e:
-                logger.error(f"Error processing column '{col}': {e}")
-                kpss_values.append(
-                    {
-                        "Variable": col,
-                        "stat": None,
-                        "pvalue": None,
-                        "usedlag": None,
-                        "critical_values": None,
-                        "error": str(e),
-                    }
-                )
-
-        return self.cache_results({"kpss_results": kpss_values})
-
-    def summary(self, metric_value):
-        """
-        Build a table for summarizing the KPSS results
-        """
-        kpss_results = metric_value["kpss_results"]
-
-        return ResultSummary(
-            results=[
-                ResultTable(
-                    data=kpss_results,
-                    metadata=ResultTableMetadata(title="KPSS Test Results"),
-                )
-            ]
+    if not isinstance(df.index, (pd.DatetimeIndex, pd.PeriodIndex)):
+        raise SkipTestError(
+            "Dataset index must be a datetime or period index for time series analysis."
         )
+
+    df = df.apply(pd.to_numeric, errors="coerce")
+
+    kpss_table = []
+
+    for col in dataset.columns:
+        kpss_stat, pvalue, usedlag, critical_values = kpss(df[col].values)
+        kpss_table.append(
+            {
+                "Variable": col,
+                "stat": kpss_stat,
+                "pvalue": pvalue,
+                "usedlag": usedlag,
+                "critical_values": critical_values,
+            }
+        )
+
+    if not kpss_table:
+        raise SkipTestError(f"No KPSS results found for dataset: {dataset.input_id}")
+
+    return {
+        "KPSS Test Results": kpss_table,
+    }

@@ -101,6 +101,9 @@ class VMModel(VMInput):
         name (str, optional): The name of the model. Defaults to the class name.
     """
 
+    def __repr__(self):
+        return f"VMModel(input_id={self.input_id})"
+
     def __init__(
         self,
         input_id: str = None,

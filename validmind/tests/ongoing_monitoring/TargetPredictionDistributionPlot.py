@@ -62,4 +62,6 @@ def TargetPredictionDistributionPlot(datasets, model):
     )
     plot.legend()
 
+    plt.close()
+
     return fig

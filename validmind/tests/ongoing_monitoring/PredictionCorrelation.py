@@ -92,6 +92,8 @@ def PredictionCorrelation(datasets, model):
     plt.legend()
     plt.tight_layout()
 
+    plt.close()
+
     corr_final["Features"] = corr_final.index
     corr_final = corr_final[
         ["Features", "Reference Predictions", "Monitoring Predictions"]

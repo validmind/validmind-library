@@ -50,21 +50,20 @@ def PolarityAndSubjectivity(dataset, threshold_subjectivity=0.5, threshold_polar
     - Reliance on TextBlob which may not be accurate for all domains or contexts.
     - Visualization could become cluttered with very large datasets, making interpretation difficult.
     """
-
-    # Function to calculate sentiment and subjectivity
-    def analyze_sentiment(text):
-        analysis = TextBlob(text)
-        return analysis.sentiment.polarity, analysis.sentiment.subjectivity
-
-    data = pd.DataFrame()
-    # Apply the function to each row
-    data[["polarity", "subjectivity"]] = dataset.df[dataset.text_column].apply(
-        lambda x: pd.Series(analyze_sentiment(x))
+    sentiments = dataset.df[dataset.text_column].apply(lambda x: TextBlob(x).sentiment)
+    data = pd.DataFrame(
+        {
+            "polarity": [s.polarity for s in sentiments],
+            "subjectivity": [s.subjectivity for s in sentiments],
+        }
     )
 
     # Create a Plotly scatter plot
     fig = px.scatter(
-        data, x="polarity", y="subjectivity", title="Polarity vs Subjectivity"
+        data_frame=data,
+        x="polarity",
+        y="subjectivity",
+        title="Polarity vs Subjectivity",
     )
     fig.update_traces(textposition="top center")
 

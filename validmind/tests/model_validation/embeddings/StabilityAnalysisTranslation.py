@@ -4,14 +4,24 @@
 
 from transformers import MarianMTModel, MarianTokenizer
 
+from validmind import tags, tasks
 from validmind.logging import get_logger
+from validmind.vm_models import VMDataset, VMModel
 
-from .StabilityAnalysis import StabilityAnalysis
+from .utils import create_stability_analysis_result
 
 logger = get_logger(__name__)
 
 
-class StabilityAnalysisTranslation(StabilityAnalysis):
+@tags("llm", "text_data", "embeddings", "visualization")
+@tasks("feature_extraction")
+def StabilityAnalysisTranslation(
+    dataset: VMDataset,
+    model: VMModel,
+    source_lang: str = "en",
+    target_lang: str = "fr",
+    mean_similarity_threshold: float = 0.7,
+):
     """
     Evaluates robustness of text embeddings models to noise introduced by translating the original text to another
     language and back.
@@ -45,10 +55,10 @@ class StabilityAnalysisTranslation(StabilityAnalysis):
 
     ### Strengths
 
-    - An effective way to assess the model’s sensitivity and robustness to language translation noise.
+    - An effective way to assess the model's sensitivity and robustness to language translation noise.
     - Provides a realistic scenario which the model might encounter in real-world applications by using translation to
     introduce noise.
-    - Tests the model’s capacity to maintain semantic meaning under translational perturbations, extending beyond
+    - Tests the model's capacity to maintain semantic meaning under translational perturbations, extending beyond
     simple lexical changes.
 
     ### Limitations
@@ -60,47 +70,66 @@ class StabilityAnalysisTranslation(StabilityAnalysis):
     - Predominantly language-dependent, thus might not fully capture robustness for languages with fewer resources or
     those highly dissimilar to the source language.
     """
+    # TODO: make the models and tokenizers configurable along with the max length
 
-    name = "Text Embeddings Stability Analysis to Translation"
-    default_params = {
-        "source_lang": "en",
-        "target_lang": "fr",
-        **StabilityAnalysis.default_params,
-    }
-
-    def perturb_data(self, data: str):
-        if len(data) > 512:
-            logger.info(
-                "Data length exceeds 512 tokens. Truncating data to 512 tokens."
-            )
-            data = data[:512]
-
-        source_lang = self.params["source_lang"]
-        target_lang = self.params["target_lang"]
-
+    try:
         # Initialize the Marian tokenizer and model for the source language
-        model_name = f"Helsinki-NLP/opus-mt-{source_lang}-{target_lang}"
-        model = MarianMTModel.from_pretrained(model_name)
-        tokenizer = MarianTokenizer.from_pretrained(model_name)
+        translate_model_name = f"Helsinki-NLP/opus-mt-{source_lang}-{target_lang}"
+        translate_model = MarianMTModel.from_pretrained(translate_model_name)
+        translate_tokenizer = MarianTokenizer.from_pretrained(translate_model_name)
 
         # Initialize the Marian tokenizer and model for the target language
-        model_name_reverse = f"Helsinki-NLP/opus-mt-{target_lang}-{source_lang}"
-        model_reverse = MarianMTModel.from_pretrained(model_name_reverse)
-        tokenizer_reverse = MarianTokenizer.from_pretrained(model_name_reverse)
+        reverse_model_name = f"Helsinki-NLP/opus-mt-{target_lang}-{source_lang}"
+        reverse_model = MarianMTModel.from_pretrained(reverse_model_name)
+        reverse_tokenizer = MarianTokenizer.from_pretrained(reverse_model_name)
+    except Exception as e:
+        logger.error(f"Error initializing translation models: {str(e)}")
+        raise e
 
-        # Translate to the target language
-        encoded = tokenizer.encode(data, return_tensors="pt", add_special_tokens=True)
-        decoded = tokenizer.decode(model.generate(encoded)[0], skip_special_tokens=True)
+    # Truncate input if too long (Marian models typically have max length of 512)
+    max_length = 512
 
-        # Translate back to the source language
-        reverse_encoded = tokenizer_reverse.encode(
+    def translate_data(data: str):
+        encoded = translate_tokenizer.encode(
+            data[:1024],  # Truncate input text to avoid extremely long sequences
+            return_tensors="pt",
+            max_length=max_length,
+            truncation=True,
+            padding=True,
+        )
+        translated = translate_model.generate(
+            encoded, max_length=max_length, num_beams=2, early_stopping=True
+        )
+        decoded = translate_tokenizer.decode(translated[0], skip_special_tokens=True)
+
+        reverse_encoded = reverse_tokenizer.encode(
             decoded,
             return_tensors="pt",
-            add_special_tokens=True,
+            max_length=max_length,
+            truncation=True,
+            padding=True,
         )
-        reverse_decoded = tokenizer_reverse.decode(
-            model_reverse.generate(reverse_encoded)[0],
-            skip_special_tokens=True,
+        reverse_translated = reverse_model.generate(
+            reverse_encoded, max_length=max_length, num_beams=2, early_stopping=True
         )
 
-        return reverse_decoded
+        return reverse_tokenizer.decode(reverse_translated[0], skip_special_tokens=True)
+
+    def perturb_data(data):
+        try:
+            return translate_data(data)
+        except Exception as e:
+            logger.error(f"Error translating data: {str(e)}")
+            return data
+
+    original_df = dataset.df[[dataset.text_column]]
+    perturbed_df = original_df.copy()
+    perturbed_df[dataset.text_column] = perturbed_df[dataset.text_column].map(
+        perturb_data
+    )
+
+    return create_stability_analysis_result(
+        dataset.y_pred(model),
+        model.predict(perturbed_df),
+        mean_similarity_threshold,
+    )

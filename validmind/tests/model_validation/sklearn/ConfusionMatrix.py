@@ -2,17 +2,24 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from dataclasses import dataclass
 
 import numpy as np
 import plotly.figure_factory as ff
-from sklearn import metrics
+from sklearn.metrics import confusion_matrix
 
-from validmind.vm_models import Figure, Metric
+from validmind import tags, tasks
+from validmind.vm_models import VMDataset, VMModel
 
 
-@dataclass
-class ConfusionMatrix(Metric):
+@tags(
+    "sklearn",
+    "binary_classification",
+    "multiclass_classification",
+    "model_performance",
+    "visualization",
+)
+@tasks("classification", "text_classification")
+def ConfusionMatrix(dataset: VMDataset, model: VMModel):
     """
     Evaluates and visually represents the classification ML model's predictive performance using a Confusion Matrix
     heatmap.
@@ -59,95 +66,56 @@ class ConfusionMatrix(Metric):
     - Risks of misinterpretation exist because the matrix doesn't directly provide precision, recall, or F1-score data.
     These metrics have to be computed separately.
     """
+    y_pred = dataset.y_pred(model)
+    y_true = dataset.y.astype(y_pred.dtype)
 
-    name = "confusion_matrix"
-    required_inputs = ["model", "dataset"]
-    tasks = ["classification", "text_classification"]
-    tags = [
-        "sklearn",
-        "binary_classification",
-        "multiclass_classification",
-        "model_performance",
-        "visualization",
-    ]
+    labels = np.unique(y_true)
+    labels = sorted(labels.tolist())
 
-    def run(self):
-        y_true = self.inputs.dataset.y
-        labels = np.unique(y_true)
-        labels.sort()
-        labels = np.array(labels).T.tolist()
+    cm = confusion_matrix(y_true, y_pred, labels=labels)
 
-        y_pred = self.inputs.dataset.y_pred(self.inputs.model)
-        y_true = y_true.astype(y_pred.dtype)
-
-        cm = metrics.confusion_matrix(y_true, y_pred, labels=labels)
-
-        text = None
-        if len(labels) == 2:
-            tn, fp, fn, tp = cm.ravel()
-
-            # Custom text to display on the heatmap cells
-            text = [
-                [
-                    f"<b>True Negatives (TN)</b><br />{tn}",
-                    f"<b>False Positives (FP)</b><br />{fp}",
-                ],
-                [
-                    f"<b>False Negatives (FN)</b><br />{fn}",
-                    f"<b>True Positives (TP)</b><br />{tp}",
-                ],
-            ]
-
-        fig = ff.create_annotated_heatmap(
-            z=cm,
-            colorscale="Blues",
-            x=labels,
-            y=labels,
-            annotation_text=text,
-        )
-
-        fig["data"][0][
-            "hovertemplate"
-        ] = "True Label:%{y}<br>Predicted Label:%{x}<br>Count:%{z}<extra></extra>"
-
-        fig.update_layout(
-            xaxis=dict(title="Predicted label"),
-            yaxis=dict(title="True label"),
-            autosize=False,
-            width=600,
-            height=600,
-        )
-
-        # Add an annotation at the bottom of the heatmap
-        fig.add_annotation(
-            x=0.5,
-            y=-0.1,
-            xref="paper",
-            yref="paper",
-            text=f"Confusion Matrix for {self.inputs.model.input_id} on {self.inputs.dataset.input_id}",
-            showarrow=False,
-            font=dict(size=14),
-        )
-
-        return self.cache_results(
-            metric_value={
-                "confusion_matrix": cm,
-            },
-            figures=[
-                Figure(
-                    for_object=self,
-                    key="confusion_matrix",
-                    figure=fig,
-                )
+    text = None
+    if len(labels) == 2:
+        tn, fp, fn, tp = cm.ravel()
+        text = [
+            [
+                f"<b>True Negatives (TN)</b><br />{tn}",
+                f"<b>False Positives (FP)</b><br />{fp}",
             ],
-        )
+            [
+                f"<b>False Negatives (FN)</b><br />{fn}",
+                f"<b>True Positives (TP)</b><br />{tp}",
+            ],
+        ]
 
-    def test(self):
-        """Unit Test for Confusion Matrix Metric"""
-        assert self.result is not None
+    fig = ff.create_annotated_heatmap(
+        z=cm,
+        colorscale="Blues",
+        x=labels,
+        y=labels,
+        annotation_text=text,
+    )
 
-        assert self.result.metric is not None
-        assert isinstance(self.result.metric.value, dict)
-        assert "confusion_matrix" in self.result.metric.value
+    fig["data"][0][
+        "hovertemplate"
+    ] = "True Label:%{y}<br>Predicted Label:%{x}<br>Count:%{z}<extra></extra>"
 
-        assert len(self.result.figures) == 1
+    fig.update_layout(
+        xaxis=dict(title="Predicted label"),
+        yaxis=dict(title="True label"),
+        autosize=False,
+        width=600,
+        height=600,
+    )
+
+    fig.add_annotation(
+        x=0.5,
+        y=-0.1,
+        xref="paper",
+        yref="paper",
+        text=f"Confusion Matrix for {model.input_id} on {dataset.input_id}",
+        showarrow=False,
+        font=dict(size=14),
+    )
+
+    return fig

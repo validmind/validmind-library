@@ -5,10 +5,13 @@
 import pandas as pd
 from statsmodels.tsa.stattools import coint
 
-from validmind.vm_models import Metric, ResultSummary, ResultTable, ResultTableMetadata
+from validmind import tags, tasks
+from validmind.vm_models import VMDataset
 
 
-class EngleGrangerCoint(Metric):
+@tags("time_series_data", "statistical_test", "forecasting")
+@tasks("regression")
+def EngleGrangerCoint(dataset: VMDataset, threshold: float = 0.05):
     """
     Assesses the degree of co-movement between pairs of time series data using the Engle-Granger cointegration test.
 
@@ -49,79 +52,46 @@ class EngleGrangerCoint(Metric):
     other predictive indicators for a more robust model evaluation.
     """
 
-    type = "dataset"
-    name = "engle_granger_coint"
-    required_inputs = ["dataset"]
-    default_params = {"threshold": 0.05}
-    tasks = ["regression"]
-    tags = ["time_series_data", "statistical_test", "forecasting"]
+    df = dataset.df.dropna()
 
-    def run(self):
-        threshold = self.params["threshold"]
-        df = self.inputs.dataset.df.dropna()
+    summary_cointegration = pd.DataFrame()
 
-        # Create an empty DataFrame to store the results
-        summary_cointegration = pd.DataFrame()
+    columns = df.columns
+    num_vars = len(columns)
 
-        columns = df.columns
-        num_vars = len(columns)
+    for i in range(num_vars):
+        for j in range(i + 1, num_vars):
+            var1 = columns[i]
+            var2 = columns[j]
 
-        for i in range(num_vars):
-            for j in range(i + 1, num_vars):
-                var1 = columns[i]
-                var2 = columns[j]
+            # Perform the Engle-Granger cointegration test
+            _, p_value, _ = coint(df[var1], df[var2])
 
-                # Perform the Engle-Granger cointegration test
-                _, p_value, _ = coint(df[var1], df[var2])
+            # Determine the decision based on the p-value and the significance level
+            decision = "Cointegrated" if p_value <= threshold else "Not cointegrated"
+            pass_fail = "Pass" if p_value <= threshold else "Fail"
 
-                # Determine the decision based on the p-value and the significance level
-                decision = (
-                    "Cointegrated" if p_value <= threshold else "Not cointegrated"
-                )
-                pass_fail = "Pass" if p_value <= threshold else "Fail"
-
-                # Append the result of each test directly into the DataFrame
-                summary_cointegration = pd.concat(
-                    [
-                        summary_cointegration,
-                        pd.DataFrame(
-                            [
-                                {
-                                    "Variable 1": var1,
-                                    "Variable 2": var2,
-                                    "Test": "Engle-Granger",
-                                    "p-value": p_value,
-                                    "Threshold": threshold,
-                                    "Pass/Fail": pass_fail,
-                                    "Decision": decision,
-                                }
-                            ]
-                        ),
-                    ],
-                    ignore_index=True,
-                )
-
-        return self.cache_results(
-            {
-                "cointegration_analysis": summary_cointegration.to_dict(
-                    orient="records"
-                ),
-            }
-        )
-
-    def summary(self, metric_value):
-        """
-        Build one table for summarizing the cointegration results
-        """
-        summary_cointegration = metric_value["cointegration_analysis"]
-
-        return ResultSummary(
-            results=[
-                ResultTable(
-                    data=summary_cointegration,
-                    metadata=ResultTableMetadata(
-                        title="Cointegration Analysis Results"
+            # Append the result of each test directly into the DataFrame
+            summary_cointegration = pd.concat(
+                [
+                    summary_cointegration,
+                    pd.DataFrame(
+                        [
+                            {
+                                "Variable 1": var1,
+                                "Variable 2": var2,
+                                "Test": "Engle-Granger",
+                                "p-value": p_value,
+                                "Threshold": threshold,
+                                "Pass/Fail": pass_fail,
+                                "Decision": decision,
+                            }
+                        ]
                     ),
-                ),
-            ]
-        )
+                ],
+                ignore_index=True,
+            )
+
+    return {
+        "Cointegration Analysis Results": summary_cointegration,
+    }

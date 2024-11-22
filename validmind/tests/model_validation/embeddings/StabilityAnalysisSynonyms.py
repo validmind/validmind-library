@@ -7,10 +7,20 @@ import random
 import nltk
 from nltk.corpus import wordnet as wn
 
-from .StabilityAnalysis import StabilityAnalysis
+from validmind import tags, tasks
+from validmind.vm_models import VMDataset, VMModel
+
+from .utils import create_stability_analysis_result
 
 
-class StabilityAnalysisSynonyms(StabilityAnalysis):
+@tags("llm", "text_data", "embeddings", "visualization")
+@tasks("feature_extraction")
+def StabilityAnalysisSynonyms(
+    dataset: VMDataset,
+    model: VMModel,
+    probability: float = 0.02,
+    mean_similarity_threshold: float = 0.7,
+):
     """
     Evaluates the stability of text embeddings models when words in test data are replaced by their synonyms randomly.
 
@@ -55,26 +65,19 @@ class StabilityAnalysisSynonyms(StabilityAnalysis):
     - Does not consider the semantic role of the words in the sentence, meaning the swapped synonym could potentially
     alter the overall meaning of the sentence, leading to a false perception of the model's stability.
     """
+    # download the nltk wordnet
+    nltk.download("wordnet", quiet=True)
 
-    name = "Text Embeddings Stability Analysis to Synonym Swaps"
-    default_params = {
-        "probability": 0.02,  # probability of swapping a word with a synonym
-        **StabilityAnalysis.default_params,
-    }
-
-    def perturb_data(self, data):
+    def perturb_data(data):
         if not isinstance(data, str):
             return data
-
-        # download the nltk wordnet
-        nltk.download("wordnet", quiet=True)
 
         words = nltk.word_tokenize(data)
         modified_words = []
 
         # For each word, check the probability and swap if needed
         for word in words:
-            if random.random() <= self.params["probability"]:
+            if random.random() <= probability:
                 # get synonyms for the word
                 synonyms = [
                     lemma.name() for syn in wn.synsets(word) for lemma in syn.lemmas()
@@ -91,3 +94,15 @@ class StabilityAnalysisSynonyms(StabilityAnalysis):
             modified_words.append(word)
 
         return " ".join(modified_words)
+
+    original_df = dataset.df[[dataset.text_column]]
+    perturbed_df = original_df.copy()
+    perturbed_df[dataset.text_column] = perturbed_df[dataset.text_column].map(
+        perturb_data
+    )
+
+    return create_stability_analysis_result(
+        dataset.y_pred(model),
+        model.predict(perturbed_df),
+        mean_similarity_threshold,
+    )

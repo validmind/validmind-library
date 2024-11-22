@@ -10,6 +10,7 @@ from validmind import tags, tasks
 @tags("regression")
 @tasks("regression")
 def HuberLoss(model, dataset):
+    """Calculates the Huber loss for a regression model."""
     y_true = dataset.y
     y_pred = dataset.y_pred(model)
 

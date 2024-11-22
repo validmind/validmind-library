@@ -16,12 +16,15 @@ try:
     from ragas import evaluate
     from ragas.metrics import AnswerCorrectness as answer_correctness
 except ImportError as e:
-    raise MissingDependencyError(
-        "Missing required package `ragas` for AnswerCorrectness. "
-        "Please run `pip install validmind[llm]` to use LLM tests",
-        required_dependencies=["ragas"],
-        extra="llm",
-    ) from e
+    if "ragas" in str(e):
+        raise MissingDependencyError(
+            "Missing required package `ragas` for AnswerCorrectness. "
+            "Please run `pip install validmind[llm]` to use LLM tests",
+            required_dependencies=["ragas"],
+            extra="llm",
+        ) from e
+
+    raise e
 
 
 @tags("ragas", "llm")

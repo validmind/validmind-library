@@ -2,11 +2,6 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-"""
-Metrics functions for any Pandas-compatible datasets
-"""
-
-
 import plotly.express as px
 from langdetect import LangDetectException, detect
 
@@ -55,24 +50,23 @@ def LanguageDetection(dataset):
     - The test returns "Unknown" for entries where language detection fails, which might mask underlying issues with
     certain languages or text formats.
     """
-    # check text column
     if not dataset.text_column:
-        raise ValueError("Please set text_column name in the Validmind Dataset object")
+        raise ValueError(
+            "Please set the `text_column` option when "
+            "initializing your Dataset object to use this test"
+        )
 
-    # Function to detect language
     def detect_language(text):
         try:
             return detect(text)
         except LangDetectException:
-            return "Unknown"  # Return 'Unknown' if language detection fails
+            return "Unknown"
 
-    # Applying the language detection function to each text entry
     languages = dataset.df[dataset.text_column].apply(detect_language)
-    fig = px.histogram(
+
+    return px.histogram(
         languages,
         x=languages,
         title="Language Distribution",
         labels={"x": "Language Codes"},
     )
-
-    return fig

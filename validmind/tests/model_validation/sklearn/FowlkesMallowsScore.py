@@ -2,15 +2,15 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from dataclasses import dataclass
-
 from sklearn import metrics
 
-from .ClusterPerformance import ClusterPerformance
+from validmind import tags, tasks
+from validmind.vm_models import VMDataset, VMModel
 
 
-@dataclass
-class FowlkesMallowsScore(ClusterPerformance):
+@tags("sklearn", "model_performance")
+@tasks("clustering")
+def FowlkesMallowsScore(dataset: VMDataset, model: VMModel):
     """
     Evaluates the similarity between predicted and actual cluster assignments in a model using the Fowlkes-Mallows
     score.
@@ -52,14 +52,11 @@ class FowlkesMallowsScore(ClusterPerformance):
     - It does not handle mismatching numbers of clusters between the true and predicted labels. As such, it may return
     misleading results if the predicted labels suggest a different number of clusters than what is in the true labels.
     """
-
-    name = "fowlkes_mallows_score"
-    required_inputs = ["model", "dataset"]
-    tasks = ["clustering"]
-    tags = [
-        "sklearn",
-        "model_performance",
+    return [
+        {
+            "Fowlkes-Mallows score": metrics.fowlkes_mallows_score(
+                labels_true=dataset.y,
+                labels_pred=dataset.y_pred(model),
+            )
+        }
     ]
-
-    def metric_info(self):
-        return {"Fowlkes-Mallows score": metrics.fowlkes_mallows_score}

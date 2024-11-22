@@ -2,24 +2,18 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from dataclasses import dataclass
-from typing import List
+import numpy as np
+from sklearn.metrics import f1_score
 
-import pandas as pd
-from numpy import unique
-from sklearn import metrics
+from validmind.tests import tags, tasks
+from validmind.vm_models import VMDataset, VMModel
 
-from validmind.vm_models import (
-    ResultSummary,
-    ResultTable,
-    ResultTableMetadata,
-    ThresholdTest,
-    ThresholdTestResult,
+
+@tags(
+    "sklearn", "binary_classification", "multiclass_classification", "model_performance"
 )
-
-
-@dataclass
-class MinimumF1Score(ThresholdTest):
+@tasks("classification", "text_classification")
+def MinimumF1Score(dataset: VMDataset, model: VMModel, min_threshold: float = 0.5):
     """
     Assesses if the model's F1 score on the validation set meets a predefined minimum threshold, ensuring balanced
     performance between precision and recall.
@@ -59,59 +53,15 @@ class MinimumF1Score(ThresholdTest):
     closely with specific requirements.
     """
 
-    name = "f1_score"
-    required_inputs = ["model", "dataset"]
-    default_params = {"min_threshold": 0.5}
-    tasks = ["classification", "text_classification"]
-    tags = [
-        "sklearn",
-        "binary_classification",
-        "multiclass_classification",
-        "model_performance",
-    ]
+    if len(np.unique(dataset.y)) > 2:
+        score = f1_score(dataset.y, dataset.y_pred(model), average="macro")
+    else:
+        score = f1_score(dataset.y, dataset.y_pred(model))
 
-    def summary(self, results: List[ThresholdTestResult], all_passed: bool):
-        """
-        The f1 score test returns results like these:
-        [{"values": {"score": 0.734375, "threshold": 0.7}, "passed": true}]
-        """
-        result = results[0]
-        results_table = [
-            {
-                "Score": result.values["score"],
-                "Threshold": result.values["threshold"],
-                "Pass/Fail": "Pass" if result.passed else "Fail",
-            }
-        ]
-
-        return ResultSummary(
-            results=[
-                ResultTable(
-                    data=pd.DataFrame(results_table),
-                    metadata=ResultTableMetadata(title="Minimum F1 Score Test"),
-                )
-            ]
-        )
-
-    def run(self):
-        y_true = self.inputs.dataset.y
-        class_pred = self.inputs.dataset.y_pred(self.inputs.model)
-        y_true = y_true.astype(class_pred.dtype)
-
-        if len(unique(y_true)) > 2:
-            f1_score = metrics.f1_score(y_true, class_pred, average="macro")
-        else:
-            f1_score = metrics.f1_score(y_true, class_pred)
-
-        passed = f1_score > self.params["min_threshold"]
-        results = [
-            ThresholdTestResult(
-                passed=passed,
-                values={
-                    "score": f1_score,
-                    "threshold": self.params["min_threshold"],
-                },
-            )
-        ]
-
-        return self.cache_results(results, passed=all([r.passed for r in results]))
+    return [
+        {
+            "Score": score,
+            "Threshold": min_threshold,
+            "Pass/Fail": "Pass" if score > min_threshold else "Fail",
+        }
+    ], score > min_threshold

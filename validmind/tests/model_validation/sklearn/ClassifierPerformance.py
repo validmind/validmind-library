@@ -2,24 +2,25 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from dataclasses import dataclass
-
 import numpy as np
 from sklearn.metrics import classification_report, roc_auc_score
 from sklearn.preprocessing import LabelBinarizer
 
-from validmind.vm_models import Metric, ResultSummary, ResultTable, ResultTableMetadata
+from validmind import tags, tasks
+from validmind.vm_models import VMDataset, VMModel
 
 
 def multiclass_roc_auc_score(y_test, y_pred, average="macro"):
     lb = LabelBinarizer()
     lb.fit(y_test)
-
     return roc_auc_score(lb.transform(y_test), lb.transform(y_pred), average=average)
 
 
-@dataclass
-class ClassifierPerformance(Metric):
+@tags(
+    "sklearn", "binary_classification", "multiclass_classification", "model_performance"
+)
+@tasks("classification", "text_classification")
+def ClassifierPerformance(dataset: VMDataset, model: VMModel, average: str = "macro"):
     """
     Evaluates performance of binary or multiclass classification models using precision, recall, F1-Score, accuracy,
     and ROC AUC scores.
@@ -57,92 +58,53 @@ class ClassifierPerformance(Metric):
     - Specifically designed for classification models and not suitable for regression models.
     - May provide limited insights if the test dataset does not represent real-world scenarios adequately.
     """
+    y_pred = dataset.y_pred(model)
+    y_true = dataset.y
 
-    name = "classifier_performance"
-    required_inputs = ["model", "dataset"]
-    tasks = ["classification", "text_classification"]
-    tags = [
-        "sklearn",
-        "binary_classification",
-        "multiclass_classification",
-        "model_performance",
+    labels = np.unique(y_true)
+    labels = sorted(labels.tolist())
+
+    report = classification_report(
+        y_true=y_true,
+        y_pred=y_pred,
+        output_dict=True,
+        zero_division=0,
+    )
+
+    if len(labels) > 2:
+        y_true = y_true.astype(y_pred.dtype)
+        roc_auc = multiclass_roc_auc_score(y_true, y_pred, average=average)
+    else:
+        y_prob = dataset.y_prob(model)
+        y_true = y_true.astype(y_prob.dtype).flatten()
+        roc_auc = roc_auc_score(y_true, y_prob, average=average)
+
+    report["roc_auc"] = roc_auc
+
+    pr_f1_table = [
+        {
+            "Class": f"{class_name}",
+            "Precision": report[f"{class_name}"]["precision"],
+            "Recall": report[f"{class_name}"]["recall"],
+            "F1": report[f"{class_name}"]["f1-score"],
+        }
+        for class_name in labels
     ]
-    default_params = {"average": "macro"}
 
-    def summary(self, metric_value: dict):
-        """
-        When building a multi-class summary we need to calculate weighted average,
-        macro average and per class metrics.
-        """
-        classes = {str(i) for i in np.unique(self.inputs.dataset.y)}
-        pr_f1_table = [
+    for avg in ["weighted avg", "macro avg"]:
+        pr_f1_table.append(
             {
-                "Class": class_name,
-                "Precision": metric_value[class_name]["precision"],
-                "Recall": metric_value[class_name]["recall"],
-                "F1": metric_value[class_name]["f1-score"],
+                "Class": avg.replace("avg", "Average").title(),
+                "Precision": report[avg]["precision"],
+                "Recall": report[avg]["recall"],
+                "F1": report[avg]["f1-score"],
             }
-            for class_name in classes
-        ]
-        pr_f1_table.extend(
-            [
-                {
-                    "Class": "Weighted Average",
-                    "Precision": metric_value["weighted avg"]["precision"],
-                    "Recall": metric_value["weighted avg"]["recall"],
-                    "F1": metric_value["weighted avg"]["f1-score"],
-                },
-                {
-                    "Class": "Macro Average",
-                    "Precision": metric_value["macro avg"]["precision"],
-                    "Recall": metric_value["macro avg"]["recall"],
-                    "F1": metric_value["macro avg"]["f1-score"],
-                },
-            ]
         )
 
-        acc_roc_auc_table = [
-            {
-                "Metric": "Accuracy" if metric_name == "accuracy" else "ROC AUC",
-                "Value": metric_value[metric_name],
-            }
-            for metric_name in ["accuracy", "roc_auc"]
-        ]
-
-        return ResultSummary(
-            results=[
-                ResultTable(
-                    data=pr_f1_table,
-                    metadata=ResultTableMetadata(title="Precision, Recall, and F1"),
-                ),
-                ResultTable(
-                    data=acc_roc_auc_table,
-                    metadata=ResultTableMetadata(title="Accuracy and ROC AUC"),
-                ),
-            ]
-        )
-
-    def run(self):
-        report = classification_report(
-            self.inputs.dataset.y,
-            self.inputs.dataset.y_pred(self.inputs.model),
-            output_dict=True,
-            zero_division=0,
-        )
-
-        y_true = self.inputs.dataset.y
-
-        if len(np.unique(y_true)) > 2:
-            y_pred = self.inputs.dataset.y_pred(self.inputs.model)
-            y_true = y_true.astype(y_pred.dtype)
-            roc_auc = multiclass_roc_auc_score(
-                y_true, y_pred, average=self.params["average"]
-            )
-        else:
-            y_prob = self.inputs.dataset.y_prob(self.inputs.model)
-            y_true = y_true.astype(y_prob.dtype).flatten()
-            roc_auc = roc_auc_score(y_true, y_prob, average=self.params["average"])
-
-        report["roc_auc"] = roc_auc
-
-        return self.cache_results(report)
+    return {
+        "Precision, Recall, and F1": pr_f1_table,
+        "Accuracy and ROC AUC": [
+            {"Metric": m, "Value": report[k]}
+            for m, k in [("Accuracy", "accuracy"), ("ROC AUC", "roc_auc")]
+        ],
+    }

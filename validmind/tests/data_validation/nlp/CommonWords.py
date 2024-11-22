@@ -2,21 +2,19 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-"""
-Metrics functions for any Pandas-compatible datasets
-"""
+from collections import Counter
+
 import nltk
 import plotly.graph_objects as go
-
-from collections import Counter
 from nltk.corpus import stopwords
 
 from validmind import tags, tasks
+from validmind.vm_models import VMDataset
 
 
 @tags("nlp", "text_data", "visualization", "frequency_analysis")
-@tasks("nlp", "text_classification", "text_summarization")
-def CommonWords(dataset):
+@tasks("text_classification", "text_summarization")
+def CommonWords(dataset: VMDataset):
     """
     Assesses the most frequent non-stopwords in a text column for identifying prevalent language patterns.
 
@@ -56,6 +54,12 @@ def CommonWords(dataset):
     - The metric requires a valid Dataset object, indicating a dependency condition that limits its broader
     applicability.
     """
+    nltk.download("stopwords", quiet=True)
+
+    counter = Counter(
+        [word for x in dataset.df[dataset.text_column].str.split() for word in x]
+    )
+    most = counter.most_common()
 
     def create_corpus(df, text_column):
         corpus = []
@@ -65,12 +69,12 @@ def CommonWords(dataset):
         return corpus
 
     corpus = create_corpus(dataset.df, text_column=dataset.text_column)
-
     counter = Counter(corpus)
     most = counter.most_common()
+
     x = []
     y = []
-    nltk.download("stopwords")
+
     stop = set(stopwords.words("english"))
     for word, count in most[:40]:
         if word not in stop:
@@ -84,4 +88,5 @@ def CommonWords(dataset):
         yaxis_title="Frequency",
         xaxis_tickangle=-45,
     )
+
     return fig

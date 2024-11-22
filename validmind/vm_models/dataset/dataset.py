@@ -48,6 +48,9 @@ class VMDataset(VMInput):
         extra_columns (Dict): Extra columns to include in the dataset.
     """
 
+    def __repr__(self):
+        return f"VMDataset(input_id={self.input_id})"
+
     def __init__(
         self,
         raw_dataset: np.ndarray,
@@ -430,7 +433,12 @@ class VMDataset(VMInput):
         Returns:
             np.ndarray: The predictions for the model
         """
-        return np.stack(self._df[self.prediction_column(model)].values)
+        pred_col = self.prediction_column(model)
+
+        if pred_col is None:
+            raise ValueError(f"No prediction column found for model `{model.input_id}`")
+
+        return np.stack(self._df[pred_col].values)
 
     def y_prob(self, model) -> np.ndarray:
         """Returns the probabilities for a given model.
@@ -441,7 +449,14 @@ class VMDataset(VMInput):
         Returns:
             np.ndarray: The probability variables.
         """
-        return self._df[self.probability_column(model)].values
+        prob_col = self.probability_column(model)
+
+        if prob_col is None:
+            raise ValueError(
+                f"No probability column found for model `{model.input_id}`"
+            )
+
+        return self._df[prob_col].values
 
     def x_df(self):
         """Returns a dataframe containing only the feature columns"""
@@ -453,11 +468,23 @@ class VMDataset(VMInput):
 
     def y_pred_df(self, model) -> pd.DataFrame:
         """Returns a dataframe containing the predictions for a given model"""
-        return as_df(self._df[self.prediction_column(model)])
+        pred_col = self.prediction_column(model)
+
+        if pred_col is None:
+            raise ValueError(f"No prediction column found for model `{model.input_id}`")
+
+        return as_df(self._df[pred_col])
 
     def y_prob_df(self, model) -> pd.DataFrame:
         """Returns a dataframe containing the probabilities for a given model"""
-        return as_df(self._df[self.probability_column(model)])
+        prob_col = self.probability_column(model)
+
+        if prob_col is None:
+            raise ValueError(
+                f"No probability column found for model `{model.input_id}`"
+            )
+
+        return as_df(self._df[prob_col])
 
     def target_classes(self):
         """Returns the target class labels or unique values of the target column."""

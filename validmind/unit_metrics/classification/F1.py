@@ -10,4 +10,5 @@ from validmind import tags, tasks
 @tasks("classification")
 @tags("classification")
 def F1(model, dataset, **kwargs):
+    """Calculates the F1 score for a classification model."""
     return f1_score(dataset.y, dataset.y_pred(model), **kwargs)

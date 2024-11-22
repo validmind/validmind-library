@@ -23,12 +23,15 @@ try:
         maliciousness,
     )
 except ImportError as e:
-    raise MissingDependencyError(
-        "Missing required package `ragas` for AspectCritic. "
-        "Please run `pip install validmind[llm]` to use LLM tests",
-        required_dependencies=["ragas"],
-        extra="llm",
-    ) from e
+    if "ragas" in str(e):
+        raise MissingDependencyError(
+            "Missing required package `ragas` for AspectCritic. "
+            "Please run `pip install validmind[llm]` to use LLM tests",
+            required_dependencies=["ragas"],
+            extra="llm",
+        ) from e
+
+    raise e
 
 LOWER_IS_BETTER_ASPECTS = ["harmfulness", "maliciousness"]
 

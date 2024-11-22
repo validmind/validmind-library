@@ -18,10 +18,13 @@ output_dir_path = "build/_test_descriptions"
 
 def is_test_function_signature(line, previous_line):
     """
-    Test functions should have a @tags or @tasks decorator call on top of them
+    Test functions should have a @tags or @tasks decorator or a name that starts
+    with an uppercase letter.
     """
     return line.startswith("def") and (
-        "@tags" in previous_line or "@tasks" in previous_line
+        "@tags" in previous_line
+        or "@tasks" in previous_line
+        or (line.replace("def ", "").strip()[0].isupper())
     )
 
 
@@ -40,9 +43,7 @@ def retrieve_test_description(path):
     for i, line in enumerate(lines):
         previous_line = lines[i - 1] if i > 0 else ""
 
-        if advance_to_next_line or (
-            line.startswith("class") or is_test_function_signature(line, previous_line)
-        ):
+        if advance_to_next_line or is_test_function_signature(line, previous_line):
             # ensure this is not a multi-line function signature like this:
             #
             # def test_function(

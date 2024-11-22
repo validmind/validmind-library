@@ -2,20 +2,13 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from dataclasses import dataclass
-from typing import List
-
-from validmind.vm_models import (
-    ResultSummary,
-    ResultTable,
-    ResultTableMetadata,
-    ThresholdTest,
-    ThresholdTestResult,
-)
+from validmind import tags, tasks
+from validmind.vm_models import VMDataset
 
 
-@dataclass
-class UniqueRows(ThresholdTest):
+@tags("tabular_data")
+@tasks("regression", "classification")
+def UniqueRows(dataset: VMDataset, min_percent_threshold: float = 1):
     """
     Verifies the diversity of the dataset by ensuring that the count of unique rows exceeds a prescribed threshold.
 
@@ -57,53 +50,21 @@ class UniqueRows(ThresholdTest):
     - This test may not be suitable or useful for categorical variables, where the count of unique categories is
     inherently limited.
     """
+    df = dataset.df
 
-    name = "unique"
-    required_inputs = ["dataset"]
-    default_params = {"min_percent_threshold": 1}
+    rows = df.shape[0]
+    unique_rows = df.nunique()
 
-    tasks = ["regression", "classification"]
-    tags = ["tabular_data"]
+    table = [
+        {
+            "Column": col,
+            "Number of Unique Values": unique_rows[col],
+            "Percentage of Unique Values (%)": unique_rows[col] / rows * 100,
+            "Pass/Fail": (
+                "Pass" if unique_rows[col] / rows >= min_percent_threshold else "Fail"
+            ),
+        }
+        for col in unique_rows.index
+    ]
 
-    def summary(self, results: List[ThresholdTestResult], all_passed: bool):
-        """
-        The unique rows test returns results like these:
-        [{"values": {"n_unique": 10000, "p_unique": 1.0}, "column": "Exited", "passed": true}]
-        """
-        results_table = [
-            {
-                "Column": result.column,
-                "Number of Unique Values": result.values["n_unique"],
-                "Percentage of Unique Values (%)": result.values["p_unique"] * 100,
-                "Pass/Fail": "Pass" if result.passed else "Fail",
-            }
-            for result in results
-        ]
-        return ResultSummary(
-            results=[
-                ResultTable(
-                    data=results_table,
-                    metadata=ResultTableMetadata(
-                        title="Unique Rows Results for Dataset"
-                    ),
-                )
-            ]
-        )
-
-    def run(self):
-        rows = self.inputs.dataset.df.shape[0]
-
-        unique_rows = self.inputs.dataset.df.nunique()
-        results = [
-            ThresholdTestResult(
-                column=col,
-                passed=(unique_rows[col] / rows) < self.params["min_percent_threshold"],
-                values={
-                    "n_unique": unique_rows[col],
-                    "p_unique": unique_rows[col] / rows,
-                },
-            )
-            for col in unique_rows.index
-        ]
-
-        return self.cache_results(results, passed=all([r.passed for r in results]))
+    return table, all(row["Pass/Fail"] == "Pass" for row in table)

@@ -11,10 +11,7 @@ from tabulate import tabulate
 from tqdm import tqdm
 from validmind.logging import get_logger
 from validmind.tests import list_tests, load_test, run_test
-from validmind.vm_models.test.result_wrapper import (
-    MetricResultWrapper,
-    ThresholdTestResultWrapper,
-)
+from validmind.vm_models.result import TestResult
 
 from run_test_utils import (
     setup_clustering_test_inputs,
@@ -43,6 +40,10 @@ KNOWN_FAILING_TESTS = [
     "validmind.model_validation.sklearn.ClusterPerformance",
     # ValueError: The `cluster_column` parameter must be provided
     "validmind.model_validation.embeddings.EmbeddingsVisualization2D",
+    # These tests have dependencies that are not installed by default
+    "validmind.data_validation.ProtectedClassesCombination",
+    "validmind.data_validation.ProtectedClassesDisparity",
+    "validmind.data_validation.ProtectedClassesThresholdOptimizer",
 ]
 SKIPPED_TESTS = []
 SUCCESSFUL_TESTS = []
@@ -79,22 +80,22 @@ class TestRunTest(unittest.TestCase):
     pass
 
 
-def create_unit_test_func(vm_test_id, vm_test_class):
+def create_unit_test_func(vm_test_id, test_func):
     def unit_test_func(self):
         self.assertTrue(
-            hasattr(vm_test_class, "required_inputs"),
-            f"{vm_test_id} missing required_inputs",
+            hasattr(test_func, "inputs"),
+            f"{vm_test_id} missing required inputs",
         )
         self.assertTrue(
-            len(vm_test_class.tasks) > 0,
+            hasattr(test_func, "__tasks__"),
             f"{vm_test_id} missing tasks in metadata",
         )
         self.assertTrue(
-            len(vm_test_class.tags) > 0,
+            hasattr(test_func, "__tags__"),
             f"{vm_test_id} missing tags in metadata",
         )
 
-        required_inputs = sorted(vm_test_class.required_inputs)
+        required_inputs = sorted(test_func.inputs)
         if required_inputs == ["datasets", "models"]:
             logger.debug(
                 "Skipping test - multi-(dataset,model) tests are not supported at the moment %s",
@@ -103,7 +104,7 @@ def create_unit_test_func(vm_test_id, vm_test_class):
             SKIPPED_TESTS.append(vm_test_id)
             return
 
-        if "llm" in vm_test_class.tags and "embeddings" not in vm_test_class.tags:
+        if "llm" in test_func.__tags__ and "embeddings" not in test_func.__tags__:
             logger.debug(
                 "--- Skipping test - LLM tests not supported yet %s",
                 vm_test_id,
@@ -119,15 +120,15 @@ def create_unit_test_func(vm_test_id, vm_test_class):
 
         if custom_test_input_assignment:
             selected_test_inputs = custom_test_input_assignment
-        elif "clustering" in vm_test_class.tasks:
+        elif "clustering" in test_func.__tasks__:
             selected_test_inputs = "clustering"
-        elif "embeddings" in vm_test_class.tags:
+        elif "embeddings" in test_func.__tags__:
             selected_test_inputs = "embeddings"
         elif (
-            "text_summarization" in vm_test_class.tasks or "nlp" in vm_test_class.tasks
+            "text_summarization" in test_func.__tasks__ or "nlp" in test_func.__tasks__
         ):
             selected_test_inputs = "text_summarization"
-        elif "time_series_data" in vm_test_class.tags:
+        elif "time_series_data" in test_func.__tags__:
             selected_test_inputs = "time_series"
         else:
             selected_test_inputs = "classification"
@@ -154,8 +155,8 @@ def create_unit_test_func(vm_test_id, vm_test_class):
         test_kwargs = {
             "test_id": vm_test_id,
             "inputs": single_test_inputs,
-            "__log": False,
             "show": False,
+            "generate_description": False,
         }
 
         # Check if the test requires a specific configuration
@@ -175,31 +176,21 @@ def create_unit_test_func(vm_test_id, vm_test_class):
                 SKIPPED_TESTS.append(vm_test_id)
                 return
 
+        print(f"Running test {vm_test_id}...")
         start_time = time.time()
-        results = run_test(**test_kwargs)
+        result = run_test(**test_kwargs)
         end_time = time.time()
         execution_time = round(end_time - start_time, 2)
 
         self.assertTrue(
-            isinstance(results, (MetricResultWrapper, ThresholdTestResultWrapper)),
-            f"Expected MetricResultWrapper or ThresholdTestResultWrapper, got {type(results)}",
+            isinstance(result, TestResult),
+            f"Expected TestResult, got {type(result)}",
         )
         self.assertEqual(
-            results.result_id,
+            result.result_id,
             vm_test_id,
-            f"Expected result_id to be {vm_test_id}, got {results.result_id}",
+            f"Expected result_id to be {vm_test_id}, got {result.result_id}",
         )
-        if isinstance(results, MetricResultWrapper):
-            self.assertTrue(
-                results.metric is not None or results.figures is not None,
-                f"A metric result needs to produce a metric result or a figure",
-            )
-
-        if isinstance(results, ThresholdTestResultWrapper):
-            self.assertTrue(
-                results.test_results is not None or results.figures is not None,
-                f"A threshold test needs to produce a test result or a figure",
-            )
 
         # Finally, the test worked so we can add it to the list of successful tests
         # and note the time it took to run
@@ -285,10 +276,10 @@ def create_unit_test_funcs_from_vm_tests():
             continue
 
         # load the test class
-        vm_test_class = load_test(vm_test_id)
+        test_func = load_test(vm_test_id)
 
         # create a unit test function for the test class
-        unit_test_func = create_unit_test_func(vm_test_id, vm_test_class)
+        unit_test_func = create_unit_test_func(vm_test_id, test_func)
         unit_test_func_name = f'test_{vm_test_id.replace(".", "_")}'
 
         # add the unit test function to the unit test class

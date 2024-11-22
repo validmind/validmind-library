@@ -5,6 +5,9 @@
 """Module for storing loaded tests and test providers"""
 
 
+from .test_providers import TestProvider, ValidMindTestProvider
+
+
 def singleton(cls):
     """Decorator to make a class a singleton"""
     instances = {}
@@ -35,7 +38,7 @@ class TestProviderStore:
         """
         return namespace in self.test_providers
 
-    def get_test_provider(self, namespace: str):
+    def get_test_provider(self, namespace: str) -> TestProvider:
         """Get a test provider by namespace
 
         Args:
@@ -61,7 +64,6 @@ class TestStore:
 
     def __init__(self):
         self.tests = {}
-        self.custom_tests = {}
 
     def get_test(self, test_id: str):
         """Get a test by test ID
@@ -74,29 +76,13 @@ class TestStore:
         """
         return self.tests.get(test_id)
 
-    def get_custom_test(self, test_id: str):
-        """Get a custom test by test ID
-
-        Args:
-            test_id (str): The test ID
-
-        Returns:
-            object: The test class or function
-        """
-        return self.custom_tests.get(test_id)
-
-    def get_test_ids(self) -> list:
-        """Get all registered test IDs"""
-        return list(self.tests.keys())
-
     def register_test(self, test_id: str, test: object = None):
         """Register a test"""
         self.tests[test_id] = test
 
-    def register_custom_test(self, test_id: str, test: object):
-        """Register a single one-off custom test"""
-        self.custom_tests[test_id] = test
-
 
 test_store = TestStore()
 test_provider_store = TestProviderStore()
+
+# setup built-in test providers
+test_provider_store.register_test_provider("validmind", ValidMindTestProvider())

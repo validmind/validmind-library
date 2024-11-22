@@ -3,17 +3,23 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 import itertools
-from dataclasses import dataclass
 
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.ensemble import IsolationForest
 
-from validmind.vm_models import Figure, Metric
+from validmind import tags, tasks
+from validmind.vm_models import VMDataset
 
 
-@dataclass
-class IsolationForestOutliers(Metric):
+@tags("tabular_data", "anomaly_detection")
+@tasks("classification")
+def IsolationForestOutliers(
+    dataset: VMDataset,
+    random_state: int = 0,
+    contamination: float = 0.1,
+    feature_columns: list = None,
+):
     """
     Detects outliers in a dataset using the Isolation Forest algorithm and visualizes results through scatter plots.
 
@@ -55,64 +61,36 @@ class IsolationForestOutliers(Metric):
     - Potential failure in detecting collective anomalies if they behave similarly to normal data
     - Potential lack of precision in identifying which features contribute most to the anomalous behavior
     """
-
-    name = "isolation_forest"
-    default_params = {
-        "random_state": 0,
-        "contamination": 0.1,
-        "features_columns": None,
-    }
-    tasks = ["classification"]
-    tags = ["tabular_data", "anomaly_detection"]
-
-    required_inputs = ["dataset"]
-
-    def run(self):
-        if self.params["features_columns"] is None:
-            features_list = self.inputs.dataset.feature_columns_numeric
-        else:
-            features_list = self.params["features_columns"]
-
-        # Check if all elements from features_list are present in the feature columns
-        all_present = all(
-            elem in self.inputs.dataset.feature_columns for elem in features_list
+    if feature_columns and not all(elem in dataset.columns for elem in feature_columns):
+        raise ValueError(
+            "The list of feature columns provided do not match with training dataset feature columns"
         )
-        if not all_present:
-            raise ValueError(
-                "The list of feature columns provided do not match with "
-                + "training dataset feature columns"
-            )
 
-        dataset = self.inputs.dataset.df[features_list]
+    feature_columns = feature_columns or dataset.feature_columns_numeric
 
-        # Training with isolation forest algorithm
-        clf = IsolationForest(
-            random_state=self.params["random_state"],
-            contamination=self.params["contamination"],
+    df = dataset.df[feature_columns]
+
+    clf = IsolationForest(
+        random_state=random_state,
+        contamination=contamination,
+    )
+    clf.fit(df)
+    y_pred = clf.predict(df)
+
+    figures = []
+
+    for feature1, feature2 in itertools.combinations(feature_columns, 2):
+        fig = plt.figure()
+        ax = sns.scatterplot(
+            data=df, x=feature1, y=feature2, hue=y_pred, palette="bright"
         )
-        clf.fit(dataset)
-        y_pred = clf.predict(dataset)
+        handles, labels = ax.get_legend_handles_labels()
+        labels = list(map(lambda x: x.replace("-1", "Outliers"), labels))
+        labels = list(map(lambda x: x.replace("1", "Inliers"), labels))
+        ax.legend(handles, labels)
 
-        test_figures = []
-        combination_pairs = list(itertools.combinations(features_list, 2))
-        for feature1, feature2 in combination_pairs:
-            fig = plt.figure()
-            ax = sns.scatterplot(
-                data=dataset, x=feature1, y=feature2, hue=y_pred, palette="bright"
-            )
-            handles, labels = ax.get_legend_handles_labels()
-            labels = list(map(lambda x: x.replace("-1", "Outliers"), labels))
-            labels = list(map(lambda x: x.replace("1", "Inliers"), labels))
-            ax.legend(handles, labels)
-            # Do this if you want to prevent the figure from being displayed
-            plt.close("all")
+        figures.append(fig)
 
-            test_figures.append(
-                Figure(
-                    for_object=self,
-                    key=f"{self.name}:{feature1}_{feature2}",
-                    figure=fig,
-                )
-            )
+        plt.close()
 
-        return self.cache_results(figures=test_figures)
+    return tuple(figures)

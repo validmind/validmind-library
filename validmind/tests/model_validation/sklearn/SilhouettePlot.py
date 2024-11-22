@@ -2,23 +2,17 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from dataclasses import dataclass
-
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.metrics import silhouette_samples, silhouette_score
 
-from validmind.vm_models import (
-    Figure,
-    Metric,
-    ResultSummary,
-    ResultTable,
-    ResultTableMetadata,
-)
+from validmind import tags, tasks
+from validmind.vm_models import VMDataset, VMModel
 
 
-@dataclass
-class SilhouettePlot(Metric):
+@tags("sklearn", "model_performance")
+@tasks("clustering")
+def SilhouettePlot(model: VMModel, dataset: VMDataset):
     """
     Calculates and visualizes Silhouette Score, assessing the degree of data point suitability to its cluster in ML
     models.
@@ -65,93 +59,54 @@ class SilhouettePlot(Metric):
     assignment nuances, so potentially relevant details may be omitted.
     - Computationally expensive for large datasets, as it requires pairwise distance computations.
     """
+    y_pred = dataset.y_pred(model)
 
-    name = "silhouette_plot"
-    required_inputs = ["model", "dataset"]
-    tasks = ["clustering"]
-    tags = [
-        "sklearn",
-        "model_performance",
-    ]
+    silhouette_avg = silhouette_score(
+        X=dataset.x,
+        labels=y_pred,
+        metric="euclidean",
+    )
 
-    def run(self):
-        y_pred_train = self.inputs.dataset.y_pred(self.inputs.model)
-        # Calculate the silhouette score
-        silhouette_avg = silhouette_score(
-            self.inputs.dataset.x,
-            y_pred_train,
-            metric="euclidean",
-        )
-        num_clusters = len(np.unique(y_pred_train))
-        # Calculate silhouette coefficients for each data point
-        sample_silhouette_values = silhouette_samples(
-            self.inputs.dataset.x, y_pred_train
-        )
-        # Create a silhouette plot
-        fig, ax = plt.subplots()
-        y_lower = 10
+    # Calculate silhouette coefficients for each data point
+    sample_silhouette_values = silhouette_samples(dataset.x, y_pred)
+    # Create a silhouette plot
+    fig, ax = plt.subplots()
 
-        for i in range(num_clusters):
-            # Aggregate the silhouette scores for samples belonging to cluster i
-            ith_cluster_silhouette_values = sample_silhouette_values[y_pred_train == i]
-            ith_cluster_silhouette_values.sort()
+    y_lower = 10
+    num_clusters = len(np.unique(y_pred))
+    for i in range(num_clusters):
+        # Aggregate the silhouette scores for samples belonging to cluster i
+        ith_cluster_silhouette_values = sample_silhouette_values[y_pred == i]
+        ith_cluster_silhouette_values.sort()
 
-            size_cluster_i = ith_cluster_silhouette_values.shape[0]
-            y_upper = y_lower + size_cluster_i
-            color = plt.cm.viridis(float(i) / num_clusters)
-            ax.fill_betweenx(
-                np.arange(y_lower, y_upper),
-                0,
-                ith_cluster_silhouette_values,
-                facecolor=color,
-                edgecolor=color,
-                alpha=0.7,
-            )
-
-            # Label the silhouette plots with their cluster numbers at the middle
-            ax.text(-0.05, y_lower + 0.5 * size_cluster_i, str(i))
-            # Compute the new y_lower for the next plot
-            y_lower = y_upper + 10
-
-        ax.set_title("Silhouette Plot for Clusters")
-        ax.set_xlabel("Silhouette Coefficient Values")
-        ax.set_ylabel("Cluster Label")
-
-        # The vertical line represents the average silhouette score
-        ax.axvline(x=silhouette_avg, color="red", linestyle="--")
-
-        figures = [
-            Figure(
-                for_object=self,
-                key=self.key,
-                figure=fig,
-            )
-        ]
-        # Close the figure to prevent it from displaying
-        plt.close(fig)
-
-        return self.cache_results(
-            metric_value={
-                "silhouette_score": {
-                    "silhouette_score": silhouette_avg,
-                },
-            },
-            figures=figures,
+        size_cluster_i = ith_cluster_silhouette_values.shape[0]
+        y_upper = y_lower + size_cluster_i
+        color = plt.cm.viridis(float(i) / num_clusters)
+        ax.fill_betweenx(
+            np.arange(y_lower, y_upper),
+            0,
+            ith_cluster_silhouette_values,
+            facecolor=color,
+            edgecolor=color,
+            alpha=0.7,
         )
 
-    def summary(self, metric_value):
-        """
-        Build one table for summarizing the Silhouette score results
-        """
-        silhouette_score = metric_value["silhouette_score"]
+        # Label the silhouette plots with their cluster numbers at the middle
+        ax.text(-0.05, y_lower + 0.5 * size_cluster_i, str(i))
+        # Compute the new y_lower for the next plot
+        y_lower = y_upper + 10
 
-        table = []
-        table.append(silhouette_score)
-        return ResultSummary(
-            results=[
-                ResultTable(
-                    data=table,
-                    metadata=ResultTableMetadata(title="Silhouette Score"),
-                ),
-            ]
-        )
+    ax.set_title("Silhouette Plot for Clusters")
+    ax.set_xlabel("Silhouette Coefficient Values")
+    ax.set_ylabel("Cluster Label")
+
+    # The vertical line represents the average silhouette score
+    ax.axvline(x=silhouette_avg, color="red", linestyle="--")
+
+    plt.close()
+
+    return [
+        {
+            "Silhouette Score": silhouette_avg,
+        },
+    ], fig

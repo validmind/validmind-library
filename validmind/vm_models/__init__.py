@@ -10,13 +10,7 @@ from .dataset.dataset import VMDataset
 from .figure import Figure
 from .input import VMInput
 from .model import R_MODEL_TYPES, ModelAttributes, VMModel
-from .test.metric import Metric
-from .test.metric_result import MetricResult
-from .test.result_summary import ResultSummary, ResultTable, ResultTableMetadata
-from .test.test import Test
-from .test.threshold_test import ThresholdTest
-from .test.threshold_test_result import ThresholdTestResult, ThresholdTestResults
-from .test_context import TestContext, TestInput
+from .result import ResultTable, TestResult
 from .test_suite.runner import TestSuiteRunner
 from .test_suite.test_suite import TestSuite
 
@@ -27,17 +21,8 @@ __all__ = [
     "Figure",
     "ModelAttributes",
     "R_MODEL_TYPES",
-    "ResultSummary",
     "ResultTable",
-    "ResultTableMetadata",
-    "Test",
-    "Metric",
-    "MetricResult",
-    "ThresholdTest",
-    "ThresholdTestResult",
-    "ThresholdTestResults",
-    "TestContext",
-    "TestInput",
+    "TestResult",
     "TestSuite",
     "TestSuiteRunner",
 ]

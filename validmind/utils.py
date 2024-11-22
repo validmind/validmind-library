@@ -9,16 +9,16 @@ import json
 import math
 import re
 import sys
+import warnings
 from datetime import date, datetime, time
 from platform import python_version
-from typing import Any
+from typing import Any, Dict, List
 
 import matplotlib.pylab as pylab
 import mistune
 import nest_asyncio
 import numpy as np
 import pandas as pd
-import QuantLib as ql
 import seaborn as sns
 from IPython.core import getipython
 from IPython.display import HTML
@@ -26,6 +26,7 @@ from IPython.display import display as ipy_display
 from latex2mathml.converter import convert
 from matplotlib.axes._axes import _log as matplotlib_axes_logger
 from numpy import ndarray
+from sklearn.exceptions import UndefinedMetricWarning
 from tabulate import tabulate
 
 from .html_templates.content_blocks import math_jax_snippet, python_syntax_highlighting
@@ -34,6 +35,11 @@ from .logging import get_logger
 DEFAULT_BIG_NUMBER_DECIMALS = 2
 DEFAULT_SMALL_NUMBER_DECIMALS = 4
 
+# Suppress some common warnings
+warnings.filterwarnings("ignore", category=UndefinedMetricWarning)
+warnings.filterwarnings(
+    "ignore", category=UserWarning, message=".*valid feature names.*"
+)
 
 # SETUP SOME DEFAULTS FOR PLOTS #
 # Silence this warning: *c* argument looks like a single numeric RGB or
@@ -110,11 +116,11 @@ class NumpyEncoder(json.JSONEncoder):
             return bool(obj)
         if isinstance(obj, pd.Timestamp):
             return str(obj)
-        if isinstance(obj, ql.Date):
-            # Convert QuantLib Date to ISO string format
-            return obj.ISO()
         if isinstance(obj, set):
             return list(obj)
+        if "QuantLib.Date" in str(type(obj)):
+            # Convert QuantLib Date to ISO string format
+            return obj.ISO()
         return super().default(obj)
 
     def encode(self, obj):
@@ -165,7 +171,7 @@ def precision_and_scale(x):
     return (magnitude + scale, scale)
 
 
-def format_records(df):
+def format_records(df: pd.DataFrame) -> List[Dict[str, Any]]:
     """
     Round the values on each dataframe's column to a given number of decimal places.
     The returned value is converted to a dict in "records" with Pandas's to_dict() function.
@@ -198,7 +204,7 @@ def format_records(df):
     return df.to_dict("records")
 
 
-def format_key_values(key_values):
+def format_key_values(key_values: Dict[str, Any]) -> Dict[str, Any]:
     """
     Round the values on each dict's value to a given number of decimal places.
 

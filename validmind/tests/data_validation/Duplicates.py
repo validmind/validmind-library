@@ -2,22 +2,14 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from dataclasses import dataclass
-from typing import List
-
 import pandas as pd
 
-from validmind.vm_models import (
-    ResultSummary,
-    ResultTable,
-    ResultTableMetadata,
-    ThresholdTest,
-    ThresholdTestResult,
-)
+from validmind import tags, tasks
 
 
-@dataclass
-class Duplicates(ThresholdTest):
+@tags("tabular_data", "data_quality", "text_data")
+@tasks("classification", "regression")
+def Duplicates(dataset, min_threshold=1):
     """
     Tests dataset for duplicate entries, ensuring model reliability via data quality verification.
 
@@ -59,82 +51,21 @@ class Duplicates(ThresholdTest):
     for very large datasets.
     - Can only check for exact duplicates and may miss semantically similar information packaged differently.
     """
+    df = dataset.df[dataset.text_column or dataset.feature_columns]
 
-    name = "duplicates"
-    required_inputs = ["dataset"]
-    default_params = {"min_threshold": 1}
-    tasks = ["classification", "regression"]
-    tags = ["tabular_data", "data_quality", "text_data"]
+    duplicate_rows_count = df.duplicated().sum()
+    percentage_duplicate_rows = (duplicate_rows_count / len(df)) * 100
 
-    def summary(self, results: List[ThresholdTestResult], all_passed: bool):
-        """
-        The duplicates test returns results like these:
-        [{"values": {"n_duplicates": 0, "p_duplicates": 0.0}, "passed": true}]
-        So we build a table with 1 row and show number of duplicates and percentage of duplicates.
-        """
-        result = results[0]
-        results_table = [{k: v for k, v in row.items()} for row in result.values]
+    result_df = pd.DataFrame(
+        {
+            "Number of Duplicates": [duplicate_rows_count],
+            "Percentage of Rows (%)": [percentage_duplicate_rows],
+        }
+    )
 
-        return ResultSummary(
-            results=[
-                ResultTable(
-                    data=results_table,
-                    metadata=ResultTableMetadata(
-                        title="Duplicate Rows Results for Dataset"
-                    ),
-                )
-            ]
-        )
+    # test has passed if the total sum of duplicates is less than the threshold
+    passed = result_df["Number of Duplicates"].sum() < min_threshold
 
-    def run(self):
-        if self.inputs.dataset.text_column:
-            columns = self.inputs.dataset.text_column
-        else:
-            columns = self.inputs.dataset.feature_columns
-
-        df = self.inputs.dataset.df[columns]
-        # Find duplicate rows
-        duplicate_rows = df.duplicated()
-
-        # Calculate number of duplicate rows
-        duplicate_rows_count = duplicate_rows.sum()
-
-        # Calculate total number of rows
-        total_rows = len(df)
-
-        # Calculate percentage of duplicate rows
-        percentage_duplicate_rows = (duplicate_rows_count / total_rows) * 100
-
-        # Create a DataFrame with results
-        result_df = pd.DataFrame(
-            {
-                "Number of Duplicates": [duplicate_rows_count],
-                "Percentage of Rows (%)": [percentage_duplicate_rows],
-            }
-        )
-
-        # test has passed if the total sum of duplicates is less than the threshold
-        n_duplicates = result_df["Number of Duplicates"].sum()
-        passed = n_duplicates < self.params["min_threshold"]
-
-        results = [
-            ThresholdTestResult(
-                passed=passed,
-                values=result_df.to_dict(orient="records"),
-            )
-        ]
-
-        return self.cache_results(results, passed=all([r.passed for r in results]))
-
-    def test(self):
-        # Check that result object is not None
-        assert self.result is not None
-        # Check that we have a list of test results
-        assert isinstance(self.result.test_results.results, list)
-        # Check if the 'passed' variable in results reflects the test correctly
-        for result in self.result.test_results.results[1:]:
-            assert result.passed == (
-                result.values["n_duplicates"] < self.params["min_threshold"]
-            )
-        expected_results_count = 1
-        assert len(self.result.test_results.results) == expected_results_count
+    return {
+        "Duplicate Rows Results for Dataset": result_df.to_dict(orient="records")
+    }, passed

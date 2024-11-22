@@ -36,8 +36,8 @@ def call_model(
         client.chat.completions.create(
             model=model,
             messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_prompt},
+                {"role": "system", "content": system_prompt.strip("\n").strip()},
+                {"role": "user", "content": user_prompt.strip("\n").strip()},
             ],
             temperature=temperature,
             seed=seed,

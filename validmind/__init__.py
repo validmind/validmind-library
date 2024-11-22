@@ -52,7 +52,7 @@ from .client import (  # noqa: E402
     run_documentation_tests,
     run_test_suite,
 )
-from .tests.decorator import metric, tags, tasks, test
+from .tests.decorator import tags, tasks, test
 
 __all__ = [  # noqa
     "__version__",
@@ -64,7 +64,6 @@ __all__ = [  # noqa
     "init_dataset",
     "init_model",
     "init_r_model",
-    "metric",
     "preview_template",
     "reload",
     "run_documentation_tests",
