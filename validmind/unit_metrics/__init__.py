@@ -22,7 +22,7 @@ def describe_metric(metric_id: str, **kwargs):
 
 def run_metric(metric_id: str, **kwargs):
     """Run a metric"""
-    return run_test(metric_id, **kwargs).metric
+    return run_test(metric_id, **kwargs)
 
 
 __all__ = ["list_metrics", "describe_metric", "run_metric"]
