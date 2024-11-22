@@ -3,6 +3,8 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 import platform
+import subprocess
+import time
 from datetime import datetime
 from inspect import getdoc
 from typing import Any, Dict, List, Tuple, Union
@@ -29,6 +31,25 @@ logger = get_logger(__name__)
 _run_metadata = {}
 
 
+def _get_pip_freeze():
+    """Get a dict of package names and versions"""
+    output = subprocess.check_output(["pip", "freeze"]).decode("utf-8")
+    parsed = {}
+
+    for line in output.split("\n"):
+        if not line:
+            continue
+
+        if "==" in line:
+            package, version = line.split("==")
+            parsed[package] = version
+        elif " @ " in line:
+            package = line.split(" @ ")[0]
+            parsed[package] = "__editable__"
+
+    return parsed
+
+
 def _get_run_metadata(**metadata: Dict[str, Any]) -> Dict[str, Any]:
     """Get metadata for a test run result"""
     if not _run_metadata:
@@ -39,6 +60,11 @@ def _get_run_metadata(**metadata: Dict[str, Any]) -> Dict[str, Any]:
             "compiler": platform.python_compiler(),
         }
         _run_metadata["platform"] = platform.platform()
+
+        try:
+            _run_metadata["pip"] = _get_pip_freeze()
+        except Exception:
+            pass
 
     return {
         **_run_metadata,
@@ -281,6 +307,8 @@ def run_test(
     if param_grid and params:
         raise ValueError("Cannot provide `param_grid` along with `params`")
 
+    start_time = time.perf_counter()
+
     if unit_metrics:
         name = "".join(word.capitalize() for word in name.split())
         test_id = f"validmind.composite_metric.{name}"
@@ -321,7 +349,8 @@ def run_test(
             generate_description=generate_description,
         )
 
-    result.metadata = _get_run_metadata()
+    end_time = time.perf_counter()
+    result.metadata = _get_run_metadata(duration_seconds=end_time - start_time)
 
     if show:
         result.show()
