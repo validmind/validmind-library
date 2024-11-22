@@ -13,11 +13,15 @@ from validmind.logging import get_logger
 
 logger = get_logger(__name__)
 
+# list all files in directory of this file
+__private_files = [f.name for f in Path(__file__).parent.glob("*.py")]
+
 
 def _is_test_file(path: Path) -> bool:
-    return path.name[0].isupper() or re.search(
-        r"def\s*" + re.escape(path.stem), path.read_text()
-    )
+    return (
+        path.name[0].isupper()
+        or re.search(r"def\s*" + re.escape(path.stem), path.read_text())
+    ) and path.name not in __private_files
 
 
 class TestProvider(Protocol):
