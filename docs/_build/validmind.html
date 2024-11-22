@@ -45,9 +45,6 @@
                     <a class="function" href="#init_r_model">init_r_model</a>
             </li>
             <li>
-                    <a class="function" href="#metric">metric</a>
-            </li>
-            <li>
                     <a class="function" href="#preview_template">preview_template</a>
             </li>
             <li>
@@ -139,7 +136,7 @@ and to upload to the ValidMind Platform.</p>
                 <section id="__version__">
                     <div class="attr variable">
             <span class="name">__version__</span>        =
-<span class="default_value">&#39;2.5.30&#39;</span>
+<span class="default_value">&#39;2.6.0&#39;</span>
 
         
     </div>
@@ -185,7 +182,7 @@ Defaults to None.</li>
                     <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">init</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">project</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">api_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">api_secret</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">api_host</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">model</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">monitoring</span><span class="o">=</span><span class="kc">False</span></span><span class="return-annotation">):</span></span>
+        <span class="name">init</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">project</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">api_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">api_secret</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">api_host</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">model</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">monitoring</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span></span><span class="return-annotation">):</span></span>
 
         
     </div>
@@ -205,7 +202,7 @@ retrieve them from the environment variables <code>VM_API_KEY</code> and <code>V
 <li><strong>api_key (str, optional):</strong>  The API key. Defaults to None.</li>
 <li><strong>api_secret (str, optional):</strong>  The API secret. Defaults to None.</li>
 <li><strong>api_host (str, optional):</strong>  The API host. Defaults to None.</li>
-<li><strong>monitoring (str, optional):</strong>  The ongoing monitoring flag. Defaults to False.</li>
+<li><strong>monitoring (bool):</strong>  The ongoing monitoring flag. Defaults to False.</li>
 </ul>
 
 <h6 id="raises">Raises:</h6>
@@ -353,21 +350,6 @@ since xgb models saved in .json or .bin format can be loaded directly with eithe
 <blockquote>
   <p>vm.vm.Model: A VM Model instance</p>
 </blockquote>
-</div>
-
-
-                </section>
-                <section id="metric">
-                    <div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">metric</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">func_or_id</span></span><span class="return-annotation">):</span></span>
-
-        
-    </div>
-    <a class="headerlink" href="#metric"></a>
-    
-            <div class="docstring"><p>DEPRECATED, use @vm.test instead</p>
 </div>
 
 

@@ -32,19 +32,10 @@
             <h3>Python Library API</h3>
                 <ul class="memberlist">
             <li>
-                    <a class="class" href="#AutoSeasonality">AutoSeasonality</a>
-                            <ul class="memberlist">
-                        <li>
-                                <a class="function" href="#AutoSeasonality.evaluate_seasonal_periods">evaluate_seasonal_periods</a>
-                        </li>
-                        <li>
-                                <a class="function" href="#AutoSeasonality.run">run</a>
-                        </li>
-                        <li>
-                                <a class="function" href="#AutoSeasonality.summary">summary</a>
-                        </li>
-                </ul>
-
+                    <a class="function" href="#evaluate_seasonal_periods">evaluate_seasonal_periods</a>
+            </li>
+            <li>
+                    <a class="function" href="#AutoSeasonality">AutoSeasonality</a>
             </li>
     </ul>
 
@@ -68,11 +59,26 @@
                 
                 
             </section>
-                <section id="AutoSeasonality">
-                    <div class="attr class">
+                <section id="evaluate_seasonal_periods">
+                    <div class="attr function">
             
-    <span class="def">class</span>
-    <span class="name">AutoSeasonality</span><wbr>(<span class="base">validmind.vm_models.test.metric.Metric</span>):
+        <span class="def">def</span>
+        <span class="name">evaluate_seasonal_periods</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">series</span>, </span><span class="param"><span class="n">min_period</span>, </span><span class="param"><span class="n">max_period</span></span><span class="return-annotation">):</span></span>
+
+        
+    </div>
+    <a class="headerlink" href="#evaluate_seasonal_periods"></a>
+    
+    
+
+                </section>
+                <section id="AutoSeasonality">
+                    <div class="attr function">
+                    <div class="decorator">@tags(&#39;time_series_data&#39;, &#39;statsmodels&#39;, &#39;forecasting&#39;, &#39;statistical_test&#39;)</div>
+        <div class="decorator">@tasks(&#39;regression&#39;)</div>
+
+        <span class="def">def</span>
+        <span class="name">AutoSeasonality</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">dataset</span><span class="p">:</span> <span class="n"><a href="../../vm_models.html#VMDataset">validmind.vm_models.VMDataset</a></span>,</span><span class="param">	<span class="n">min_period</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>,</span><span class="param">	<span class="n">max_period</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span></span><span class="return-annotation">):</span></span>
 
         
     </div>
@@ -131,73 +137,6 @@ period range.</li>
 </div>
 
 
-                            <div id="AutoSeasonality.evaluate_seasonal_periods" class="classattr">
-                                <div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">evaluate_seasonal_periods</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">series</span>, </span><span class="param"><span class="n">min_period</span>, </span><span class="param"><span class="n">max_period</span></span><span class="return-annotation">):</span></span>
-
-        
-    </div>
-    <a class="headerlink" href="#AutoSeasonality.evaluate_seasonal_periods"></a>
-    
-    
-
-                            </div>
-                            <div id="AutoSeasonality.run" class="classattr">
-                                <div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">run</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">):</span></span>
-
-        
-    </div>
-    <a class="headerlink" href="#AutoSeasonality.run"></a>
-    
-            <div class="docstring"><p>Run the calculation and cache its results</p>
-</div>
-
-
-                            </div>
-                            <div id="AutoSeasonality.summary" class="classattr">
-                                <div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">summary</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">metric_value</span></span><span class="return-annotation">):</span></span>
-
-        
-    </div>
-    <a class="headerlink" href="#AutoSeasonality.summary"></a>
-    
-            <div class="docstring"><p>Build one table for summarizing the auto seasonality results
-and another for the best seasonality period results</p>
-</div>
-
-
-                            </div>
-                            <div class="inherited">
-                                <h5>Inherited Members</h5>
-                                <dl>
-                                    <div><dt>validmind.vm_models.test.metric.Metric</dt>
-                                <dd id="AutoSeasonality.__init__" class="function">Metric</dd>
-                <dd id="AutoSeasonality.cache_results" class="function">cache_results</dd>
-
-            </div>
-            <div><dt>validmind.vm_models.test.test.Test</dt>
-                                <dd id="AutoSeasonality.description" class="function">description</dd>
-                <dd id="AutoSeasonality.log" class="function">log</dd>
-
-            </div>
-            <div><dt>validmind.vm_models.test_context.TestUtils</dt>
-                                <dd id="AutoSeasonality.get_accessed_inputs" class="function">get_accessed_inputs</dd>
-                <dd id="AutoSeasonality.dataset" class="variable">dataset</dd>
-                <dd id="AutoSeasonality.model" class="variable">model</dd>
-                <dd id="AutoSeasonality.models" class="variable">models</dd>
-                <dd id="AutoSeasonality.validate_inputs" class="function">validate_inputs</dd>
-
-            </div>
-                                </dl>
-                            </div>
                 </section>
     </main>
 <script>
