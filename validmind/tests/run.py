@@ -84,7 +84,7 @@ def build_test_result(
     outputs: Union[Any, Tuple[Any, ...]],
     test_id: str,
     inputs: Dict[str, Union[VMInput, List[VMInput]]],
-    params: Dict[str, Any],
+    params: Union[Dict[str, Any], None],
     description: str,
     generate_description: bool = True,
 ):
@@ -95,7 +95,7 @@ def build_test_result(
         result_id=test_id,
         ref_id=ref_id,
         inputs=inputs,
-        params=params,
+        params=params if params else None,  # None if empty dict or None
     )
 
     if not isinstance(outputs, tuple):
