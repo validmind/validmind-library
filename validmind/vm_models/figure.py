@@ -105,7 +105,7 @@ class Figure:
         return {
             "type": self._type,
             "key": self.key,
-            "metadata": json.dumps({"ref_id": self.ref_id}, allow_nan=False),
+            "metadata": json.dumps({"_ref_id": self.ref_id}, allow_nan=False),
         }
 
     def _get_b64_url(self):
