@@ -2,10 +2,15 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+import platform
+import subprocess
+import time
+from datetime import datetime
 from inspect import getdoc
 from typing import Any, Dict, List, Tuple, Union
 from uuid import uuid4
 
+from validmind import __version__
 from validmind.ai.test_descriptions import get_result_description
 from validmind.errors import MissingRequiredTestInputError
 from validmind.input_registry import input_registry
@@ -20,6 +25,52 @@ from .load import _test_description, describe_test, load_test
 from .output import process_output
 
 logger = get_logger(__name__)
+
+
+# shouldn't change once initialized
+_run_metadata = {}
+
+
+def _get_pip_freeze():
+    """Get a dict of package names and versions"""
+    output = subprocess.check_output(["pip", "freeze"]).decode("utf-8")
+    parsed = {}
+
+    for line in output.split("\n"):
+        if not line:
+            continue
+
+        if "==" in line:
+            package, version = line.split("==")
+            parsed[package] = version
+        elif " @ " in line:
+            package = line.split(" @ ")[0]
+            parsed[package] = "__editable__"
+
+    return parsed
+
+
+def _get_run_metadata(**metadata: Dict[str, Any]) -> Dict[str, Any]:
+    """Get metadata for a test run result"""
+    if not _run_metadata:
+        _run_metadata["validmind"] = {"version": __version__}
+        _run_metadata["python"] = {
+            "version": platform.python_version(),
+            "implementation": platform.python_implementation(),
+            "compiler": platform.python_compiler(),
+        }
+        _run_metadata["platform"] = platform.platform()
+
+        try:
+            _run_metadata["pip"] = _get_pip_freeze()
+        except Exception:
+            pass
+
+    return {
+        **_run_metadata,
+        **metadata,
+        "timestamp": datetime.now().isoformat(),
+    }
 
 
 def _get_test_kwargs(
@@ -218,7 +269,7 @@ def run_test(
     tests made up of multiple tests.
 
     Args:
-        test_id (TestID, optional): Test ID to run. Not required if `unit_metrics` provided.
+        test_id (TestID, optional): Test ID to run. Not required if `name` and `unit_metrics` provided.
         params (dict, optional): Parameters to customize test behavior. See test details for available parameters.
         param_grid (Union[Dict[str, List[Any]], List[Dict[str, Any]]], optional): For comparison tests, either:
             - Dict mapping parameter names to lists of values (creates Cartesian product)
@@ -244,7 +295,7 @@ def run_test(
 
     if not test_id and not (name and unit_metrics):
         raise ValueError(
-            "`test_id` or both `name` and `unit_metrics` must be provided to run a test"
+            "`test_id` or `name` and `unit_metrics` must be provided to run a test"
         )
 
     if bool(unit_metrics) != bool(name):
@@ -256,10 +307,11 @@ def run_test(
     if param_grid and params:
         raise ValueError("Cannot provide `param_grid` along with `params`")
 
+    start_time = time.perf_counter()
+
     if unit_metrics:
-        if not test_id:
-            name = "".join(word.capitalize() for word in name.split())
-            test_id = f"validmind.composite_metric.{name}"
+        name = "".join(word.capitalize() for word in name.split())
+        test_id = f"validmind.composite_metric.{name}"
 
         result = _run_composite_test(
             test_id=test_id,
@@ -296,6 +348,9 @@ def run_test(
             description=getdoc(test_func),
             generate_description=generate_description,
         )
+
+    end_time = time.perf_counter()
+    result.metadata = _get_run_metadata(duration_seconds=end_time - start_time)
 
     if show:
         result.show()
