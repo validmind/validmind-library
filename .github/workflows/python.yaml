@@ -6,8 +6,16 @@ name: Code Quality and Unit Testing
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - 'docs/_build/**'
+      - 'notebooks/**'
+      - 'scripts/**'
   pull_request:
     branches: ['*']
+    paths-ignore:
+      - 'docs/_build/**'
+      - 'notebooks/**'
+      - 'scripts/**'
 
 permissions:
   contents: read
