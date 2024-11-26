@@ -76,9 +76,8 @@ class TestSuiteTest:
             def run_test_with_logging():
                 return run_test(
                     self.test_id,
-                    generate_description=False,
-                    show=False,
                     **(config or {}),
+                    show=False,
                 )
 
             self.result = run_test_with_logging()
