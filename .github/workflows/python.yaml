@@ -13,7 +13,6 @@ on:
   pull_request:
     branches: ['*']
     paths-ignore:
-      - '.github/**'
       - 'docs/_build/**'
       - 'notebooks/**'
       - 'scripts/**'
