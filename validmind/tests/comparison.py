@@ -328,8 +328,10 @@ def combine_results(
                 if isinstance(input_obj_or_list, list)
                 else [input_obj_or_list]
             )
-        for param_name, param_value in result.params.items():
-            combined_params.setdefault(param_name, []).append(param_value)
+        # Handle when there are no params
+        if result.params:
+            for param_name, param_value in result.params.items():
+                combined_params.setdefault(param_name, []).append(param_value)
 
     combined_inputs = _combine_dict_values(combined_inputs)
     combined_params = _combine_dict_values(combined_params)
