@@ -8,13 +8,14 @@ from typing import Any, Dict, List, Tuple, Union
 import pandas as pd
 
 from validmind.logging import get_logger
+from validmind.utils import test_id_to_name
 from validmind.vm_models.figure import (
     is_matplotlib_figure,
     is_plotly_figure,
     is_png_image,
 )
 from validmind.vm_models.input import VMInput
-from validmind.vm_models.result import TestResult
+from validmind.vm_models.result import ResultTable, TestResult
 
 logger = get_logger(__name__)
 
@@ -222,6 +223,24 @@ def _combine_figures(results: List[TestResult]) -> List[Any]:
     return combined_figures
 
 
+def _handle_metrics(results: List[TestResult]) -> List[Any]:
+    """Combine metrics from multiple test results"""
+    # add a table with the metric value so it is combined into a single table
+    for result in results:
+        if result.metric:
+            result.add_table(
+                ResultTable(
+                    data=[
+                        {
+                            "Metric": test_id_to_name(result.result_id),
+                            "Value": result.metric,
+                        }
+                    ],
+                    title=None,
+                )
+            )
+
+
 def _combine_dict_values(items_dict: Dict[str, Any]) -> Dict[str, Any]:
     """Combine values for each key in a dictionary, keeping only unique values"""
     combined = {}
@@ -308,6 +327,9 @@ def combine_results(
             - A dictionary of inputs with lists of all values.
             - A dictionary of parameters with lists of all values.
     """
+    # metrics are added as a table to each result so later they can be combined
+    _handle_metrics(results)
+
     combined_outputs = []
     # handle tables (if any)
     combined_outputs.extend(_combine_tables(results))
@@ -322,13 +344,14 @@ def combine_results(
     combined_params = {}
 
     for result in results:
-        for input_name, input_obj_or_list in result.inputs.items():
-            combined_inputs.setdefault(input_name, []).extend(
-                input_obj_or_list
-                if isinstance(input_obj_or_list, list)
-                else [input_obj_or_list]
-            )
-        # Handle when there are no params
+        if result.inputs:
+            for input_name, input_obj_or_list in result.inputs.items():
+                combined_inputs.setdefault(input_name, []).extend(
+                    input_obj_or_list
+                    if isinstance(input_obj_or_list, list)
+                    else [input_obj_or_list]
+                )
+
         if result.params:
             for param_name, param_value in result.params.items():
                 combined_params.setdefault(param_name, []).append(param_value)

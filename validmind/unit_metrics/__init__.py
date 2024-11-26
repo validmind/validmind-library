@@ -12,7 +12,11 @@ def list_metrics(**kwargs):
     vm_provider = test_provider_store.get_test_provider("validmind")
     vm_metrics_provider = vm_provider.metrics_provider
 
-    return vm_metrics_provider.list_tests(**kwargs)
+    prefix = "validmind.unit_metrics."
+
+    return [
+        f"{prefix}{test_id}" for test_id in vm_metrics_provider.list_tests(**kwargs)
+    ]
 
 
 def describe_metric(metric_id: str, **kwargs):
