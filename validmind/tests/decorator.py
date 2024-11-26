@@ -2,7 +2,7 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-"""Decorators for creating and registering metrics with the ValidMind Library."""
+"""Decorators for creating and registering tests with the ValidMind Library."""
 
 import inspect
 import os
@@ -83,21 +83,25 @@ def _get_save_func(func, test_id):
 
 
 def test(func_or_id):
-    """Decorator for creating and registering metrics with the ValidMind Library.
+    """Decorator for creating and registering custom tests
 
-    Creates a metric object and registers it with ValidMind under the provided ID. If
-    no ID is provided, the function name will be used as to build one. So if the
-    function name is `my_metric`, the metric will be registered under the ID
-    `validmind.custom_metrics.my_metric`.
+    This decorator registers the function it wraps as a test function within ValidMind
+    under the provided ID. Once decorated, the function can be run using the
+    `validmind.tests.run_test` function.
 
-    This decorator works by creating a new `Metric` class will be created whose `run`
-    method calls the decorated function. This function should take as arguments the
-    inputs it requires (`dataset`, `datasets`, `model`, `models`) followed by any
-    parameters. It can return any number of the following types:
+    The function can take two different types of arguments:
+
+    - Inputs: ValidMind model or dataset (or list of models/datasets). These arguments
+      must use the following names: `model`, `models`, `dataset`, `datasets`.
+    - Parameters: Any additional keyword arguments of any type (must have a default
+      value) that can have any name.
+
+    The function should return one of the following types:
 
     - Table: Either a list of dictionaries or a pandas DataFrame
     - Plot: Either a matplotlib figure or a plotly figure
-    - Scalar: A single number or string
+    - Scalar: A single number (int or float)
+    - Boolean: A single boolean value indicating whether the test passed or failed
 
     The function may also include a docstring. This docstring will be used and logged
     as the metric's description.
@@ -131,10 +135,10 @@ def test(func_or_id):
 
 
 def tasks(*tasks):
-    """Decorator for specifying the task types that a metric is designed for.
+    """Decorator for specifying the task types that a test is designed for.
 
     Args:
-        *tasks: The task types that the metric is designed for.
+        *tasks: The task types that the test is designed for.
     """
 
     def decorator(func):
@@ -145,10 +149,10 @@ def tasks(*tasks):
 
 
 def tags(*tags):
-    """Decorator for specifying tags for a metric.
+    """Decorator for specifying tags for a test.
 
     Args:
-        *tags: The tags to apply to the metric.
+        *tags: The tags to apply to the test.
     """
 
     def decorator(func):

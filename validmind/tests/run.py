@@ -170,16 +170,20 @@ def build_test_result(
 def _run_composite_test(
     test_id: TestID,
     metric_ids: List[TestID],
-    inputs: Dict[str, Union[VMInput, List[VMInput]]],
-    params: Dict[str, Any],
-    generate_description: bool = True,
+    inputs: Union[Dict[str, Any], None],
+    input_grid: Union[Dict[str, List[Any]], List[Dict[str, Any]], None],
+    params: Union[Dict[str, Any], None],
+    param_grid: Union[Dict[str, List[Any]], List[Dict[str, Any]], None],
+    generate_description: bool,
 ):
     """Run a composite test i.e. a test made up of multiple metrics"""
     results = [
         run_test(
             test_id=metric_id,
             inputs=inputs,
+            input_grid=input_grid,
             params=params,
+            param_grid=param_grid,
             show=False,
             generate_description=False,
         )
@@ -209,12 +213,14 @@ def _run_composite_test(
 
 
 def _run_comparison_test(
-    test_id: TestID,
-    input_grid: Union[Dict[str, List[Any]], List[Dict[str, Any]], None] = None,
-    param_grid: Union[Dict[str, List[Any]], List[Dict[str, Any]], None] = None,
-    inputs: Union[Dict[str, Union[VMInput, List[VMInput]]], None] = None,
-    params: Union[Dict[str, Any], None] = None,
-    generate_description: bool = True,
+    test_id: Union[TestID, None],
+    name: Union[str, None],
+    unit_metrics: Union[List[TestID], None],
+    inputs: Union[Dict[str, Any], None],
+    input_grid: Union[Dict[str, List[Any]], List[Dict[str, Any]], None],
+    params: Union[Dict[str, Any], None],
+    param_grid: Union[Dict[str, List[Any]], List[Dict[str, Any]], None],
+    generate_description: bool,
 ):
     """Run a comparison test i.e. a test that compares multiple outputs of a test across
     different input and/or param combinations"""
@@ -228,6 +234,8 @@ def _run_comparison_test(
     results = [
         run_test(
             test_id=test_id,
+            name=name,
+            unit_metrics=unit_metrics,
             inputs=config["inputs"],
             params=config["params"],
             show=False,
@@ -236,6 +244,13 @@ def _run_comparison_test(
         for config in run_test_configs
     ]
 
+    # composite tests have a test_id thats built from the name
+    if not test_id:
+        test_id = results[0].result_id
+        description = results[0].description
+    else:
+        description = describe_test(test_id, raw=True)["Description"]
+
     combined_outputs, combined_inputs, combined_params = combine_results(results)
 
     return build_test_result(
@@ -243,21 +258,19 @@ def _run_comparison_test(
         test_id=test_id,
         inputs=combined_inputs,
         params=combined_params,
-        description=describe_test(test_id, raw=True)[
-            "Description"
-        ],  # get description from test directly
+        description=description,
         generate_description=generate_description,
     )
 
 
 def run_test(
     test_id: Union[TestID, None] = None,
-    params: Union[Dict[str, Any], None] = None,
-    param_grid: Union[Dict[str, List[Any]], List[Dict[str, Any]], None] = None,
-    inputs: Union[Dict[str, Any], None] = None,
-    input_grid: Union[Dict[str, List[Any]], List[Dict[str, Any]], None] = None,
     name: Union[str, None] = None,
     unit_metrics: Union[List[TestID], None] = None,
+    inputs: Union[Dict[str, Any], None] = None,
+    input_grid: Union[Dict[str, List[Any]], List[Dict[str, Any]], None] = None,
+    params: Union[Dict[str, Any], None] = None,
+    param_grid: Union[Dict[str, List[Any]], List[Dict[str, Any]], None] = None,
     show: bool = True,
     generate_description: bool = True,
     **kwargs,
@@ -309,21 +322,25 @@ def run_test(
 
     start_time = time.perf_counter()
 
-    if unit_metrics:
+    if input_grid or param_grid:
+        result = _run_comparison_test(
+            test_id=test_id,
+            name=name,
+            unit_metrics=unit_metrics,
+            inputs=inputs,
+            input_grid=input_grid,
+            params=params,
+            param_grid=param_grid,
+            generate_description=generate_description,
+        )
+
+    elif unit_metrics:
         name = "".join(word.capitalize() for word in name.split())
         test_id = f"validmind.composite_metric.{name}"
 
         result = _run_composite_test(
             test_id=test_id,
             metric_ids=unit_metrics,
-            inputs=inputs,
-            params=params,
-            generate_description=generate_description,
-        )
-
-    elif input_grid or param_grid:
-        result = _run_comparison_test(
-            test_id=test_id,
             inputs=inputs,
             input_grid=input_grid,
             params=params,
