@@ -136,7 +136,7 @@ and to upload to the ValidMind Platform.</p>
                 <section id="__version__">
                     <div class="attr variable">
             <span class="name">__version__</span>        =
-<span class="default_value">&#39;2.6.0&#39;</span>
+<span class="default_value">&#39;2.6.1&#39;</span>
 
         
     </div>
@@ -491,12 +491,12 @@ documentation or <code>vm.describe_test()</code> for more details on the inputs 
     </div>
     <a class="headerlink" href="#tags"></a>
     
-            <div class="docstring"><p>Decorator for specifying tags for a metric.</p>
+            <div class="docstring"><p>Decorator for specifying tags for a test.</p>
 
 <h6 id="arguments">Arguments:</h6>
 
 <ul>
-<li><strong>*tags:</strong>  The tags to apply to the metric.</li>
+<li><strong>*tags:</strong>  The tags to apply to the test.</li>
 </ul>
 </div>
 
@@ -512,12 +512,12 @@ documentation or <code>vm.describe_test()</code> for more details on the inputs 
     </div>
     <a class="headerlink" href="#tasks"></a>
     
-            <div class="docstring"><p>Decorator for specifying the task types that a metric is designed for.</p>
+            <div class="docstring"><p>Decorator for specifying the task types that a test is designed for.</p>
 
 <h6 id="arguments">Arguments:</h6>
 
 <ul>
-<li><strong>*tasks:</strong>  The task types that the metric is designed for.</li>
+<li><strong>*tasks:</strong>  The task types that the test is designed for.</li>
 </ul>
 </div>
 
@@ -533,22 +533,28 @@ documentation or <code>vm.describe_test()</code> for more details on the inputs 
     </div>
     <a class="headerlink" href="#test"></a>
     
-            <div class="docstring"><p>Decorator for creating and registering metrics with the ValidMind Library.</p>
+            <div class="docstring"><p>Decorator for creating and registering custom tests</p>
 
-<p>Creates a metric object and registers it with ValidMind under the provided ID. If
-no ID is provided, the function name will be used as to build one. So if the
-function name is <code>my_metric</code>, the metric will be registered under the ID
-<code>validmind.custom_metrics.my_metric</code>.</p>
+<p>This decorator registers the function it wraps as a test function within ValidMind
+under the provided ID. Once decorated, the function can be run using the
+<code><a href="validmind/tests.html#run_test">validmind.tests.run_test</a></code> function.</p>
 
-<p>This decorator works by creating a new <code>Metric</code> class will be created whose <code>run</code>
-method calls the decorated function. This function should take as arguments the
-inputs it requires (<code>dataset</code>, <code>datasets</code>, <code>model</code>, <code>models</code>) followed by any
-parameters. It can return any number of the following types:</p>
+<p>The function can take two different types of arguments:</p>
+
+<ul>
+<li>Inputs: ValidMind model or dataset (or list of models/datasets). These arguments
+must use the following names: <code>model</code>, <code>models</code>, <code>dataset</code>, <code>datasets</code>.</li>
+<li>Parameters: Any additional keyword arguments of any type (must have a default
+value) that can have any name.</li>
+</ul>
+
+<p>The function should return one of the following types:</p>
 
 <ul>
 <li>Table: Either a list of dictionaries or a pandas DataFrame</li>
 <li>Plot: Either a matplotlib figure or a plotly figure</li>
-<li>Scalar: A single number or string</li>
+<li>Scalar: A single number (int or float)</li>
+<li>Boolean: A single boolean value indicating whether the test passed or failed</li>
 </ul>
 
 <p>The function may also include a docstring. This docstring will be used and logged
