@@ -137,8 +137,8 @@ def PopulationStabilityIndex(
         raise SkipTestError(f"Skiping PSI for {model.library} models")
 
     psi_results = calculate_psi(
-        datasets[0].y_prob(model),
-        datasets[1].y_prob(model),
+        datasets[0].y_prob(model).copy(),
+        datasets[1].y_prob(model).copy(),
         num_bins=num_bins,
         mode=mode,
     )
