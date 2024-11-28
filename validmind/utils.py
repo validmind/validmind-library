@@ -117,6 +117,25 @@ class NumpyEncoder(json.JSONEncoder):
         }
 
     def default(self, obj):
+        if isinstance(obj, (datetime, date, time)):
+            return obj.isoformat()
+        if isinstance(obj, pd.Interval):
+            return f"[{obj.left}, {obj.right}]"
+        if isinstance(obj, np.integer):
+            return int(obj)
+        if isinstance(obj, np.floating):
+            return float(obj)
+        if isinstance(obj, np.ndarray):
+            return obj.tolist()
+        if isinstance(obj, np.bool_):
+            return bool(obj)
+        if isinstance(obj, pd.Timestamp):
+            return str(obj)
+        if isinstance(obj, set):
+            return list(obj)
+        if "QuantLib.Date" in str(type(obj)):
+            # Convert QuantLib Date to ISO string format
+            return obj.ISO()
         for type_check, handler in self.type_handlers.items():
             if type_check(obj):
                 return handler(obj)
