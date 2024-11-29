@@ -114,6 +114,7 @@ class TestResult(Result):
 
     name: str = "Test Result"
     ref_id: str = None
+    title: Optional[str] = None
     description: Optional[Union[str, DescriptionFuture]] = None
     metric: Optional[Union[int, float]] = None
     tables: Optional[List[ResultTable]] = None
@@ -125,6 +126,11 @@ class TestResult(Result):
 
     _was_description_generated: bool = False
     _unsafe: bool = False
+
+    @property
+    def test_name(self) -> str:
+        """Get the test name, using custom title if available."""
+        return self.title or test_id_to_name(self.result_id)
 
     def __repr__(self) -> str:
         attrs = [
@@ -182,10 +188,9 @@ class TestResult(Result):
             return HTML(f"<h3>{self.result_id}: <code>{self.metric}</code></h3>")
 
         template_data = {
-            "test_name": test_id_to_name(self.result_id),
+            "test_name": self.title or test_id_to_name(self.result_id),
             "passed_icon": "" if self.passed is None else "✅" if self.passed else "❌",
             "description": self.description.replace("h3", "strong"),
-            # TODO: add inputs
             "params": (
                 json.dumps(self.params, cls=NumpyEncoder, indent=2)
                 if self.params
@@ -254,6 +259,7 @@ class TestResult(Result):
         return {
             "test_name": self.result_id,
             "ref_id": self.ref_id,
+            "title": self.title,
             "params": self.params,
             "inputs": [_input.input_id for _input in self._get_flat_inputs()],
             "passed": self.passed,
