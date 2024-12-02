@@ -92,8 +92,10 @@ def TimeSeriesMissingValues(dataset: VMDataset, min_threshold: int = 1):
         y=y,
         colorscale="Reds",
         showscale=False,
-        layout=dict(title="Missing Values Heatmap"),
     )
+
+    # Update the layout after creation
+    heatmap.update_layout(title="Missing Values Heatmap")
 
     return (
         [

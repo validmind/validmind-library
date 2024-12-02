@@ -30,6 +30,9 @@ else
 	poetry run python -m unittest discover tests
 endif
 
+test-unit:
+	poetry run python -m unittest "tests.test_unit_tests"
+
 test-integration:
 	poetry run python scripts/run_e2e_notebooks.py
 

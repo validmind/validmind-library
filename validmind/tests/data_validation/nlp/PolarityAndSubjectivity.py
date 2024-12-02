@@ -50,6 +50,10 @@ def PolarityAndSubjectivity(dataset, threshold_subjectivity=0.5, threshold_polar
     - Reliance on TextBlob which may not be accurate for all domains or contexts.
     - Visualization could become cluttered with very large datasets, making interpretation difficult.
     """
+    # Check text column
+    if not dataset.text_column:
+        raise ValueError("Please set text_column name in the Validmind Dataset object")
+
     sentiments = dataset.df[dataset.text_column].apply(lambda x: TextBlob(x).sentiment)
     data = pd.DataFrame(
         {
