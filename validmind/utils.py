@@ -116,21 +116,6 @@ class NumpyEncoder(json.JSONEncoder):
             self.is_generic_object: self.handle_generic_object,
         }
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.type_handlers = {
-            self.is_datetime: lambda obj: obj.isoformat(),
-            self.is_pandas_interval: lambda obj: f"[{obj.left}, {obj.right}]",
-            self.is_numpy_integer: lambda obj: int(obj),
-            self.is_numpy_floating: lambda obj: float(obj),
-            self.is_numpy_ndarray: lambda obj: obj.tolist(),
-            self.is_numpy_bool: lambda obj: bool(obj),
-            self.is_pandas_timestamp: lambda obj: str(obj),
-            self.is_set: lambda obj: list(obj),
-            self.is_quantlib_date: lambda obj: obj.ISO(),
-            self.is_generic_object: self.handle_generic_object,
-        }
-
     def default(self, obj):
         for type_check, handler in self.type_handlers.items():
             if type_check(obj):
