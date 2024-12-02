@@ -9,7 +9,6 @@ from datetime import datetime
 from inspect import getdoc
 from typing import Any, Dict, List, Tuple, Union
 from uuid import uuid4
-import os
 
 from validmind import __version__
 from validmind.ai.test_descriptions import get_result_description
