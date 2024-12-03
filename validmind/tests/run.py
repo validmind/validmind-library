@@ -134,7 +134,6 @@ def _get_test_kwargs(
 def build_test_result(
     outputs: Union[Any, Tuple[Any, ...]],
     test_id: str,
-    title: Union[str, None],
     inputs: Dict[str, Union[VMInput, List[VMInput]]],
     params: Union[Dict[str, Any], None],
     description: str,
@@ -174,7 +173,6 @@ def build_test_result(
 
 def _run_composite_test(
     test_id: TestID,
-    title: Union[str, None],
     metric_ids: List[TestID],
     inputs: Union[Dict[str, Any], None],
     input_grid: Union[Dict[str, List[Any]], List[Dict[str, Any]], None],
@@ -224,7 +222,6 @@ def _run_composite_test(
 
 def _run_comparison_test(
     test_id: Union[TestID, None],
-    title: Union[str, None],
     name: Union[str, None],
     unit_metrics: Union[List[TestID], None],
     inputs: Union[Dict[str, Any], None],
@@ -281,7 +278,6 @@ def _run_comparison_test(
 
 def run_test(
     test_id: Union[TestID, None] = None,
-    title: Union[str, None] = None,
     name: Union[str, None] = None,
     unit_metrics: Union[List[TestID], None] = None,
     inputs: Union[Dict[str, Any], None] = None,

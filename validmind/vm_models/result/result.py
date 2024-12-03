@@ -262,7 +262,6 @@ class TestResult(Result):
             "test_name": self.result_id,
             "title": self.title,
             "ref_id": self.ref_id,
-            "title": self.title,
             "params": self.params,
             "inputs": [_input.input_id for _input in self._get_flat_inputs()],
             "passed": self.passed,
