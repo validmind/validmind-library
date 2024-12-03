@@ -123,7 +123,7 @@ class TestResult(Result):
     params: Optional[Dict[str, Any]] = None
     inputs: Optional[Dict[str, Union[List[VMInput], VMInput]]] = None
     metadata: Optional[Dict[str, Any]] = None
-
+    title: Optional[str] = None
     _was_description_generated: bool = False
     _unsafe: bool = False
 
@@ -185,7 +185,9 @@ class TestResult(Result):
             self._was_description_generated = True
 
         if self.metric is not None and not self.tables and not self.figures:
-            return HTML(f"<h3>{self.result_id}: <code>{self.metric}</code></h3>")
+            return HTML(
+                f"<h3>{self.title or test_id_to_name(self.result_id)}: <code>{self.metric}</code></h3>"
+            )
 
         template_data = {
             "test_name": self.title or test_id_to_name(self.result_id),
@@ -258,6 +260,7 @@ class TestResult(Result):
         """Serialize the result for the API"""
         return {
             "test_name": self.result_id,
+            "title": self.title,
             "ref_id": self.ref_id,
             "title": self.title,
             "params": self.params,

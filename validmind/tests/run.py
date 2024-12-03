@@ -134,6 +134,7 @@ def _get_test_kwargs(
 def build_test_result(
     outputs: Union[Any, Tuple[Any, ...]],
     test_id: str,
+    title: Union[str, None],
     inputs: Dict[str, Union[VMInput, List[VMInput]]],
     params: Union[Dict[str, Any], None],
     description: str,
@@ -145,6 +146,7 @@ def build_test_result(
 
     result = TestResult(
         result_id=test_id,
+        title=title,
         ref_id=ref_id,
         inputs=inputs,
         params=params if params else None,  # None if empty dict or None
@@ -172,6 +174,7 @@ def build_test_result(
 
 def _run_composite_test(
     test_id: TestID,
+    title: Union[str, None],
     metric_ids: List[TestID],
     inputs: Union[Dict[str, Any], None],
     input_grid: Union[Dict[str, List[Any]], List[Dict[str, Any]], None],
@@ -184,6 +187,7 @@ def _run_composite_test(
     results = [
         run_test(
             test_id=metric_id,
+            title=title,
             inputs=inputs,
             input_grid=input_grid,
             params=params,
@@ -220,6 +224,7 @@ def _run_composite_test(
 
 def _run_comparison_test(
     test_id: Union[TestID, None],
+    title: Union[str, None],
     name: Union[str, None],
     unit_metrics: Union[List[TestID], None],
     inputs: Union[Dict[str, Any], None],
@@ -241,6 +246,7 @@ def _run_comparison_test(
     results = [
         run_test(
             test_id=test_id,
+            title=title,
             name=name,
             unit_metrics=unit_metrics,
             inputs=config["inputs"],
@@ -264,6 +270,7 @@ def _run_comparison_test(
     return build_test_result(
         outputs=tuple(combined_outputs),
         test_id=test_id,
+        title=title,
         inputs=combined_inputs,
         params=combined_params,
         description=description,
@@ -274,6 +281,7 @@ def _run_comparison_test(
 
 def run_test(
     test_id: Union[TestID, None] = None,
+    title: Union[str, None] = None,
     name: Union[str, None] = None,
     unit_metrics: Union[List[TestID], None] = None,
     inputs: Union[Dict[str, Any], None] = None,
@@ -336,6 +344,7 @@ def run_test(
     if input_grid or param_grid:
         result = _run_comparison_test(
             test_id=test_id,
+            title=title,
             name=name,
             unit_metrics=unit_metrics,
             inputs=inputs,
@@ -351,6 +360,7 @@ def run_test(
 
         result = _run_composite_test(
             test_id=test_id,
+            title=title,
             metric_ids=unit_metrics,
             inputs=inputs,
             params=params,
@@ -381,6 +391,7 @@ def run_test(
         result = build_test_result(
             outputs=raw_result,
             test_id=test_id,
+            title=title,
             inputs=input_kwargs,
             params=param_kwargs,
             description=getdoc(test_func),
