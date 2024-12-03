@@ -149,7 +149,6 @@ def build_test_result(
         ref_id=ref_id,
         inputs=inputs,
         params=params if params else None,  # None if empty dict or None
-        title=title,
     )
 
     if not isinstance(outputs, tuple):
@@ -185,7 +184,6 @@ def _run_composite_test(
     results = [
         run_test(
             test_id=metric_id,
-            title=title,
             inputs=inputs,
             input_grid=input_grid,
             params=params,
@@ -243,7 +241,6 @@ def _run_comparison_test(
     results = [
         run_test(
             test_id=test_id,
-            title=title,
             name=name,
             unit_metrics=unit_metrics,
             inputs=config["inputs"],
@@ -267,7 +264,6 @@ def _run_comparison_test(
     return build_test_result(
         outputs=tuple(combined_outputs),
         test_id=test_id,
-        title=title,
         inputs=combined_inputs,
         params=combined_params,
         description=description,
@@ -356,7 +352,6 @@ def run_test(
 
         result = _run_composite_test(
             test_id=test_id,
-            title=title,
             metric_ids=unit_metrics,
             inputs=inputs,
             params=params,
@@ -387,7 +382,6 @@ def run_test(
         result = build_test_result(
             outputs=raw_result,
             test_id=test_id,
-            title=title,
             inputs=input_kwargs,
             params=param_kwargs,
             description=getdoc(test_func),
