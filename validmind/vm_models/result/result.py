@@ -186,7 +186,7 @@ class TestResult(Result):
 
         if self.metric is not None and not self.tables and not self.figures:
             return HTML(
-                f"<h3>{self.title or test_id_to_name(self.result_id)}: <code>{self.metric}</code></h3>"
+                f"<h3>{self.test_name}: <code>{self.metric}</code></h3>"
             )
 
         template_data = {
