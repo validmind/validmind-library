@@ -114,6 +114,7 @@ class TestResult(Result):
 
     name: str = "Test Result"
     ref_id: str = None
+    title: Optional[str] = None
     description: Optional[Union[str, DescriptionFuture]] = None
     metric: Optional[Union[int, float]] = None
     tables: Optional[List[ResultTable]] = None
@@ -122,9 +123,14 @@ class TestResult(Result):
     params: Optional[Dict[str, Any]] = None
     inputs: Optional[Dict[str, Union[List[VMInput], VMInput]]] = None
     metadata: Optional[Dict[str, Any]] = None
-
+    title: Optional[str] = None
     _was_description_generated: bool = False
     _unsafe: bool = False
+
+    @property
+    def test_name(self) -> str:
+        """Get the test name, using custom title if available."""
+        return self.title or test_id_to_name(self.result_id)
 
     def __repr__(self) -> str:
         attrs = [
@@ -179,13 +185,14 @@ class TestResult(Result):
             self._was_description_generated = True
 
         if self.metric is not None and not self.tables and not self.figures:
-            return HTML(f"<h3>{self.result_id}: <code>{self.metric}</code></h3>")
+            return HTML(
+                f"<h3>{self.test_name}: <code>{self.metric}</code></h3>"
+            )
 
         template_data = {
-            "test_name": test_id_to_name(self.result_id),
+            "test_name": self.test_name,
             "passed_icon": "" if self.passed is None else "✅" if self.passed else "❌",
             "description": self.description.replace("h3", "strong"),
-            # TODO: add inputs
             "params": (
                 json.dumps(self.params, cls=NumpyEncoder, indent=2)
                 if self.params
@@ -253,6 +260,7 @@ class TestResult(Result):
         """Serialize the result for the API"""
         return {
             "test_name": self.result_id,
+            "title": self.title,
             "ref_id": self.ref_id,
             "params": self.params,
             "inputs": [_input.input_id for _input in self._get_flat_inputs()],
