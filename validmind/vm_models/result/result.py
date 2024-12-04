@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 """
-Result Wrappers for test and metric results
+Result Objects for test results
 """
 import asyncio
 import json
