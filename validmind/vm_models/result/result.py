@@ -190,7 +190,7 @@ class TestResult(Result):
             )
 
         template_data = {
-            "test_name": self.title or test_id_to_name(self.result_id),
+            "test_name": self.test_name,
             "passed_icon": "" if self.passed is None else "✅" if self.passed else "❌",
             "description": self.description.replace("h3", "strong"),
             "params": (
