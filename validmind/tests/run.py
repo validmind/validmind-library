@@ -7,7 +7,7 @@ import subprocess
 import time
 from datetime import datetime
 from inspect import getdoc
-from typing import Any, Dict, List, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 from uuid import uuid4
 
 from validmind import __version__
@@ -138,12 +138,14 @@ def build_test_result(
     params: Union[Dict[str, Any], None],
     description: str,
     generate_description: bool = True,
+    title: Optional[str] = None,
 ):
     """Build a TestResult object from a set of raw test function outputs"""
     ref_id = str(uuid4())
 
     result = TestResult(
         result_id=test_id,
+        title=title,
         ref_id=ref_id,
         inputs=inputs,
         params=params if params else None,  # None if empty dict or None
@@ -162,6 +164,7 @@ def build_test_result(
         figures=result.figures,
         metric=result.metric,
         should_generate=generate_description,
+        title=title,
     )
 
     return result
@@ -175,6 +178,7 @@ def _run_composite_test(
     params: Union[Dict[str, Any], None],
     param_grid: Union[Dict[str, List[Any]], List[Dict[str, Any]], None],
     generate_description: bool,
+    title: Optional[str] = None,
 ):
     """Run a composite test i.e. a test made up of multiple metrics"""
     results = [
@@ -186,6 +190,7 @@ def _run_composite_test(
             param_grid=param_grid,
             show=False,
             generate_description=False,
+            title=title,
         )
         for metric_id in metric_ids
     ]
@@ -209,6 +214,7 @@ def _run_composite_test(
             [_test_description(result.description, num_lines=1) for result in results]
         ),  # join truncated (first line only) test descriptions
         generate_description=generate_description,
+        title=title,
     )
 
 
@@ -221,6 +227,7 @@ def _run_comparison_test(
     params: Union[Dict[str, Any], None],
     param_grid: Union[Dict[str, List[Any]], List[Dict[str, Any]], None],
     generate_description: bool,
+    title: Optional[str] = None,
 ):
     """Run a comparison test i.e. a test that compares multiple outputs of a test across
     different input and/or param combinations"""
@@ -240,6 +247,7 @@ def _run_comparison_test(
             params=config["params"],
             show=False,
             generate_description=False,
+            title=title,
         )
         for config in run_test_configs
     ]
@@ -260,6 +268,7 @@ def _run_comparison_test(
         params=combined_params,
         description=description,
         generate_description=generate_description,
+        title=title,
     )
 
 
@@ -273,6 +282,7 @@ def run_test(
     param_grid: Union[Dict[str, List[Any]], List[Dict[str, Any]], None] = None,
     show: bool = True,
     generate_description: bool = True,
+    title: Optional[str] = None,
     **kwargs,
 ) -> TestResult:
     """Run a ValidMind or custom test
@@ -295,6 +305,7 @@ def run_test(
         unit_metrics (list, optional): Unit metric IDs to run as composite metric
         show (bool, optional): Whether to display results. Defaults to True.
         generate_description (bool, optional): Whether to generate a description. Defaults to True.
+        title (str, optional): Custom title for the test result
 
     Returns:
         TestResult: A TestResult object containing the test results
@@ -325,6 +336,7 @@ def run_test(
     if input_grid or param_grid:
         result = _run_comparison_test(
             test_id=test_id,
+            title=title,
             name=name,
             unit_metrics=unit_metrics,
             inputs=inputs,
@@ -342,10 +354,20 @@ def run_test(
             test_id=test_id,
             metric_ids=unit_metrics,
             inputs=inputs,
+            params=params,
+            generate_description=generate_description,
+            title=title,
+        )
+
+    elif input_grid or param_grid:
+        result = _run_comparison_test(
+            test_id=test_id,
+            inputs=inputs,
             input_grid=input_grid,
             params=params,
             param_grid=param_grid,
             generate_description=generate_description,
+            title=title,
         )
 
     else:
@@ -364,6 +386,7 @@ def run_test(
             params=param_kwargs,
             description=getdoc(test_func),
             generate_description=generate_description,
+            title=title,
         )
 
     end_time = time.perf_counter()

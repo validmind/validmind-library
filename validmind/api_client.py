@@ -348,7 +348,6 @@ async def alog_test_result(
         request_params["section_id"] = section_id
     if position is not None:
         request_params["position"] = position
-
     try:
         return await _post(
             "log_test_results",
