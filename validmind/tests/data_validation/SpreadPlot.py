@@ -3,9 +3,11 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 import matplotlib.pyplot as plt
+import pandas as pd
 import seaborn as sns
 
 from validmind import tags, tasks
+from validmind.errors import SkipTestError
 from validmind.vm_models import VMDataset
 
 
@@ -54,6 +56,10 @@ def SpreadPlot(dataset: VMDataset):
     plots.
     - Might not completely capture intricate non-linear relationships between the variables.
     """
+    # Validate that the index is datetime
+    if not isinstance(dataset.df.index, pd.DatetimeIndex):
+        raise SkipTestError("Index must be a datetime type for time series analysis")
+
     df = dataset.df.dropna()
 
     # Get all unique pairs of feature columns

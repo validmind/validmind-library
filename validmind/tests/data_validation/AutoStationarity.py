@@ -73,7 +73,7 @@ def AutoStationarity(dataset: VMDataset, max_order: int = 5, threshold: float = 
             if order == 0:
                 adf_result = adfuller(series)
             else:
-                adf_result = adfuller(np.diff(series, n=order - 1))
+                adf_result = adfuller(np.diff(series, n=order))
 
             adf_pvalue = adf_result[1]
             adf_pass_fail = adf_pvalue < threshold

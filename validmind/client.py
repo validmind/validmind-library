@@ -100,7 +100,6 @@ def init_dataset(
 
     # Instantiate supported dataset types here
     if isinstance(dataset, pd.DataFrame):
-        logger.info("Pandas dataset detected. Initializing VM Dataset instance...")
         vm_dataset = DataFrameDataset(
             input_id=input_id,
             raw_dataset=dataset,
@@ -113,7 +112,6 @@ def init_dataset(
             date_time_index=date_time_index,
         )
     elif isinstance(dataset, pl.DataFrame):
-        logger.info("Polars dataset detected. Initializing VM Dataset instance...")
         vm_dataset = PolarsDataset(
             input_id=input_id,
             raw_dataset=dataset,
@@ -126,7 +124,6 @@ def init_dataset(
             date_time_index=date_time_index,
         )
     elif dataset_class == "ndarray":
-        logger.info("Numpy ndarray detected. Initializing VM Dataset instance...")
         vm_dataset = VMDataset(
             input_id=input_id,
             raw_dataset=dataset,
@@ -143,7 +140,6 @@ def init_dataset(
             date_time_index=date_time_index,
         )
     elif dataset_class == "TensorDataset":
-        logger.info("Torch TensorDataset detected. Initializing VM Dataset instance...")
         vm_dataset = TorchDataset(
             input_id=input_id,
             raw_dataset=dataset,

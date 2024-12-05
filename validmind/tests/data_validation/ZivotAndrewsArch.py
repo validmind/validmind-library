@@ -66,9 +66,9 @@ def ZivotAndrewsArch(dataset: VMDataset):
 
     za_values = []
 
-    for col in dataset.columns:
+    for col in df.columns:
         try:
-            za = ZivotAndrews(dataset[col].values)
+            za = ZivotAndrews(df[col].values)
         except (LinAlgError, ValueError) as e:
             logger.error(f"Error while processing column '{col}': {e}")
             continue

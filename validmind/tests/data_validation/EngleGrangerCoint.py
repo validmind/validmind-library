@@ -6,6 +6,7 @@ import pandas as pd
 from statsmodels.tsa.stattools import coint
 
 from validmind import tags, tasks
+from validmind.errors import SkipTestError
 from validmind.vm_models import VMDataset
 
 
@@ -51,6 +52,13 @@ def EngleGrangerCoint(dataset: VMDataset, threshold: float = 0.05):
     - May not perform well for small sample sizes due to lack of statistical power and should be supplemented with
     other predictive indicators for a more robust model evaluation.
     """
+    df = dataset.df
+
+    # Validate that the index is datetime
+    if not isinstance(df.index, (pd.DatetimeIndex, pd.PeriodIndex)):
+        raise SkipTestError(
+            "Dataset index must be a datetime or period index for cointegration analysis."
+        )
 
     df = dataset.df.dropna()
 

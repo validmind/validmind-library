@@ -7,6 +7,7 @@ import pandas as pd
 import plotly.graph_objects as go
 
 from validmind import tags, tasks
+from validmind.tests.utils import validate_prediction
 
 
 @tags("nlp", "text_data", "visualization")
@@ -68,11 +69,8 @@ def BertScore(
     y_true = dataset.y
     y_pred = dataset.y_pred(model)
 
-    # Ensure y_true and y_pred have the same length
-    if len(y_true) != len(y_pred):
-        min_length = min(len(y_true), len(y_pred))
-        y_true = y_true[:min_length]
-        y_pred = y_pred[:min_length]
+    # Ensure equal lengths and get truncated data if necessary
+    y_true, y_pred = validate_prediction(y_true, y_pred)
 
     # Load the BERT evaluation metric
     bert = evaluate.load("bertscore")
