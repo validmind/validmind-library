@@ -185,9 +185,7 @@ class TestResult(Result):
             self._was_description_generated = True
 
         if self.metric is not None and not self.tables and not self.figures:
-            return HTML(
-                f"<h3>{self.test_name}: <code>{self.metric}</code></h3>"
-            )
+            return HTML(f"<h3>{self.test_name}: <code>{self.metric}</code></h3>")
 
         template_data = {
             "test_name": self.test_name,
