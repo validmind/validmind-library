@@ -2,6 +2,7 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+import numpy as np
 import pandas as pd
 from arch.unitroot import PhillipsPerron
 from numpy.linalg import LinAlgError
@@ -63,26 +64,44 @@ def PhillipsPerronArch(dataset: VMDataset):
             "Dataset index must be a datetime or period index for time series analysis."
         )
 
-    df = df.apply(pd.to_numeric, errors="coerce")
+    # Filter numeric columns first
+    numeric_columns = df.select_dtypes(include=np.number).columns
+    if not any(col in numeric_columns for col in dataset.feature_columns):
+        raise SkipTestError("No numeric columns found for Phillips-Perron test.")
 
     pp_table = []
 
     for col in dataset.feature_columns:
+        # Skip non-numeric columns
+        if col not in numeric_columns:
+            logger.warning(f"Skipping non-numeric column: {col}")
+            continue
+
         try:
-            pp = PhillipsPerron(df[col].values)
+            # Drop any NaN values for this column
+            series = df[col].dropna()
+            if len(series) == 0:
+                logger.warning(
+                    f"Skipping column '{col}': No valid data after dropping NaN values"
+                )
+                continue
+
+            pp = PhillipsPerron(series.values)
+            pp_table.append(
+                {
+                    "Variable": col,
+                    "stat": pp.stat,
+                    "pvalue": pp.pvalue,
+                    "usedlag": pp.lags,
+                    "nobs": pp.nobs,
+                }
+            )
         except LinAlgError as e:
             logger.error(f"Error processing column '{col}': {e}")
             continue
-
-        pp_table.append(
-            {
-                "Variable": col,
-                "stat": pp.stat,
-                "pvalue": pp.pvalue,
-                "usedlag": pp.lags,
-                "nobs": pp.nobs,
-            }
-        )
+        except Exception as e:
+            logger.error(f"Unexpected error processing column '{col}': {e}")
+            continue
 
     if not pp_table:
         raise SkipTestError("No valid columns found for Phillips-Perron test.")

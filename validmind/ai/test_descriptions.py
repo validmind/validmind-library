@@ -6,7 +6,7 @@ import json
 import os
 import re
 from concurrent.futures import ThreadPoolExecutor
-from typing import List, Union
+from typing import List, Optional, Union
 
 from jinja2 import Template
 
@@ -88,6 +88,7 @@ def generate_description(
     tables: List[ResultTable] = None,
     metric: Union[float, int] = None,
     figures: List[Figure] = None,
+    title: Optional[str] = None,
 ):
     """Generate the description for the test results"""
     if not tables and not figures and not metric:
@@ -101,7 +102,7 @@ def generate_description(
     client, model = get_client_and_model()
 
     # get last part of test id
-    test_name = test_id.split(".")[-1]
+    test_name = title or test_id.split(".")[-1]
 
     # TODO: fully support metrics
     if metric is not None:
@@ -129,6 +130,7 @@ def generate_description(
     input_data = {
         "test_name": test_name,
         "test_description": test_description,
+        "title": title,
         "summary": summary,
         "figures": [figure._get_b64_url() for figure in ([] if tables else figures)],
         "context": context,
@@ -154,6 +156,7 @@ def background_generate_description(
     tables: List[ResultTable] = None,
     figures: List[Figure] = None,
     metric: Union[int, float] = None,
+    title: Optional[str] = None,
 ):
     def wrapped():
         try:
@@ -163,6 +166,7 @@ def background_generate_description(
                 tables=tables,
                 figures=figures,
                 metric=metric,
+                title=title,
             )
         except Exception as e:
             logger.error(f"Failed to generate description: {e}")
@@ -179,6 +183,7 @@ def get_result_description(
     figures: List[Figure] = None,
     metric: Union[int, float] = None,
     should_generate: bool = True,
+    title: Optional[str] = None,
 ):
     """Get Metadata Dictionary for a Test or Metric Result
 
@@ -227,6 +232,7 @@ def get_result_description(
             tables=tables,
             figures=figures,
             metric=metric,
+            title=title,
         )
 
     else:

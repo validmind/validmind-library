@@ -99,12 +99,12 @@ def _get_table_metadata(
     if result.inputs:
         for input_name, input_obj in result.inputs.items():
             if len(unique_inputs[input_name]) > 1:
-                metadata[f"Input: `{input_name}`"] = _get_input_key(input_obj)
+                metadata[input_name] = _get_input_key(input_obj)
 
     if result.params:
         for param_name, param_value in result.params.items():
             if len(unique_params[param_name]) > 1:
-                metadata[f"Param: `{param_name}`"] = param_value
+                metadata[param_name] = param_value
 
     return metadata
 

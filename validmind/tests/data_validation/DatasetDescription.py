@@ -123,42 +123,40 @@ def describe_column(df, column):
     """
     column_type = column["type"]
 
-    # - When we call describe on one column at a time, Pandas will
-    #   know better if it needs to report on numerical or categorical statistics
-    # - Boolean (binary) columns should be reported as categorical
-    #       (force to categorical when nunique == 2)
-    if column_type == ["Boolean"] or df[column["id"]].nunique() == 2:
-        top_value = df[column["id"]].value_counts().nlargest(1)
+    # Initialize statistics with count for all column types
+    column["statistics"] = {
+        "count": df[column["id"]].count(),
+        "n_missing": df[column["id"]].isna().sum(),
+        "missing": df[column["id"]].isna().sum() / len(df[column["id"]]),
+        "n_distinct": df[column["id"]].nunique(),
+        "distinct": df[column["id"]].nunique() / len(df[column["id"]]),
+    }
 
-        column["statistics"] = {
-            "count": df[column["id"]].count(),
-            "unique": df[column["id"]].nunique(),
-            "top": top_value.index[0],
-            "freq": top_value.values[0],
-        }
+    # Boolean (binary) columns should be reported as categorical
+    if column_type == "Boolean" or df[column["id"]].nunique() == 2:
+        column["type"] = "Categorical"  # Change the type to Categorical
+        top_value = df[column["id"]].value_counts().nlargest(1)
+        column["statistics"].update(
+            {
+                "unique": df[column["id"]].nunique(),
+                "top": top_value.index[0],
+                "freq": top_value.values[0],
+            }
+        )
     elif column_type == "Numeric":
-        column["statistics"] = (
+        column["statistics"].update(
             df[column["id"]]
             .describe(percentiles=[0.25, 0.5, 0.75, 0.9, 0.95])
             .to_dict()
         )
     elif column_type == "Categorical" or column_type == "Text":
-        column["statistics"] = df[column["id"]].astype("category").describe().to_dict()
+        column["statistics"].update(
+            df[column["id"]].astype("category").describe().to_dict()
+        )
 
-    # Initialize statistics object for non-numeric or categorical columns
-    if "statistics" not in column:
-        column["statistics"] = {}
-
-    column["statistics"]["n_missing"] = df[column["id"]].isna().sum()
-    column["statistics"]["missing"] = column["statistics"]["n_missing"] / len(
-        df[column["id"]]
-    )
-    column["statistics"]["n_distinct"] = df[column["id"]].nunique()
-    column["statistics"]["distinct"] = column["statistics"]["n_distinct"] / len(
-        df[column["id"]]
-    )
-
-    column["histograms"] = get_column_histograms(df, column["id"], column_type)
+    column["histograms"] = get_column_histograms(
+        df, column["id"], column["type"]
+    )  # Use updated type
 
     return column
 

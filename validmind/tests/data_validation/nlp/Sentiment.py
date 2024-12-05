@@ -47,6 +47,10 @@ def Sentiment(dataset):
     - Relies heavily on the accuracy of the VADER sentiment analysis tool.
     - Visualization alone may not provide comprehensive insights into underlying causes of sentiment distribution.
     """
+    # Check text column
+    if not dataset.text_column:
+        raise ValueError("Please set text_column name in the Validmind Dataset object")
+
     nltk.download("vader_lexicon", quiet=True)
     # Initialize VADER
     sia = SentimentIntensityAnalyzer()

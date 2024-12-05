@@ -54,6 +54,11 @@ def CommonWords(dataset: VMDataset):
     - The metric requires a valid Dataset object, indicating a dependency condition that limits its broader
     applicability.
     """
+
+    # Check text column
+    if not dataset.text_column:
+        raise ValueError("Please set text_column name in the Validmind Dataset object")
+
     nltk.download("stopwords", quiet=True)
 
     counter = Counter(

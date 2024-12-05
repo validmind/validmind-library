@@ -16,7 +16,6 @@ TestID = Union[
         "validmind.data_validation.ADF",
         "validmind.data_validation.AutoAR",
         "validmind.data_validation.AutoMA",
-        "validmind.data_validation.AutoSeasonality",
         "validmind.data_validation.AutoStationarity",
         "validmind.data_validation.BivariateScatterPlots",
         "validmind.data_validation.BoxPierce",
