@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="generator" content="pdoc 14.7.0"/>
-    <title>validmind.tests.data_validation API documentation</title>
+    <title>validmind.tests.data_validation.ProtectedClassesDisparity API documentation</title>
             <link rel="icon" href="https://vmai.s3.us-west-1.amazonaws.com/favicon.ico"/>
 
     <style>/*! * Bootstrap Reboot v5.0.0 (https://getbootstrap.com/) * Copyright 2011-2021 The Bootstrap Authors * Copyright 2011-2021 Twitter, Inc. * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE) * Forked from Normalize.css, licensed MIT (https://github.com/necolas/normalize.css/blob/master/LICENSE.md) */*,::after,::before{box-sizing:border-box}@media (prefers-reduced-motion:no-preference){:root{scroll-behavior:smooth}}body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";font-size:1rem;font-weight:400;line-height:1.5;color:#212529;background-color:#fff;-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}hr{margin:1rem 0;color:inherit;background-color:currentColor;border:0;opacity:.25}hr:not([size]){height:1px}h1,h2,h3,h4,h5,h6{margin-top:0;margin-bottom:.5rem;font-weight:500;line-height:1.2}h1{font-size:calc(1.375rem + 1.5vw)}@media (min-width:1200px){h1{font-size:2.5rem}}h2{font-size:calc(1.325rem + .9vw)}@media (min-width:1200px){h2{font-size:2rem}}h3{font-size:calc(1.3rem + .6vw)}@media (min-width:1200px){h3{font-size:1.75rem}}h4{font-size:calc(1.275rem + .3vw)}@media (min-width:1200px){h4{font-size:1.5rem}}h5{font-size:1.25rem}h6{font-size:1rem}p{margin-top:0;margin-bottom:1rem}abbr[data-bs-original-title],abbr[title]{-webkit-text-decoration:underline dotted;text-decoration:underline dotted;cursor:help;-webkit-text-decoration-skip-ink:none;text-decoration-skip-ink:none}address{margin-bottom:1rem;font-style:normal;line-height:inherit}ol,ul{padding-left:2rem}dl,ol,ul{margin-top:0;margin-bottom:1rem}ol ol,ol ul,ul ol,ul ul{margin-bottom:0}dt{font-weight:700}dd{margin-bottom:.5rem;margin-left:0}blockquote{margin:0 0 1rem}b,strong{font-weight:bolder}small{font-size:.875em}mark{padding:.2em;background-color:#fcf8e3}sub,sup{position:relative;font-size:.75em;line-height:0;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}a{color:#0d6efd;text-decoration:underline}a:hover{color:#0a58ca}a:not([href]):not([class]),a:not([href]):not([class]):hover{color:inherit;text-decoration:none}code,kbd,pre,samp{font-family:SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;font-size:1em;direction:ltr;unicode-bidi:bidi-override}pre{display:block;margin-top:0;margin-bottom:1rem;overflow:auto;font-size:.875em}pre code{font-size:inherit;color:inherit;word-break:normal}code{font-size:.875em;color:#d63384;word-wrap:break-word}a>code{color:inherit}kbd{padding:.2rem .4rem;font-size:.875em;color:#fff;background-color:#212529;border-radius:.2rem}kbd kbd{padding:0;font-size:1em;font-weight:700}figure{margin:0 0 1rem}img,svg{vertical-align:middle}table{caption-side:bottom;border-collapse:collapse}caption{padding-top:.5rem;padding-bottom:.5rem;color:#6c757d;text-align:left}th{text-align:inherit;text-align:-webkit-match-parent}tbody,td,tfoot,th,thead,tr{border-color:inherit;border-style:solid;border-width:0}label{display:inline-block}button{border-radius:0}button:focus:not(:focus-visible){outline:0}button,input,optgroup,select,textarea{margin:0;font-family:inherit;font-size:inherit;line-height:inherit}button,select{text-transform:none}[role=button]{cursor:pointer}select{word-wrap:normal}select:disabled{opacity:1}[list]::-webkit-calendar-picker-indicator{display:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}[type=button]:not(:disabled),[type=reset]:not(:disabled),[type=submit]:not(:disabled),button:not(:disabled){cursor:pointer}::-moz-focus-inner{padding:0;border-style:none}textarea{resize:vertical}fieldset{min-width:0;padding:0;margin:0;border:0}legend{float:left;width:100%;padding:0;margin-bottom:.5rem;font-size:calc(1.275rem + .3vw);line-height:inherit}@media (min-width:1200px){legend{font-size:1.5rem}}legend+*{clear:left}::-webkit-datetime-edit-day-field,::-webkit-datetime-edit-fields-wrapper,::-webkit-datetime-edit-hour-field,::-webkit-datetime-edit-minute,::-webkit-datetime-edit-month-field,::-webkit-datetime-edit-text,::-webkit-datetime-edit-year-field{padding:0}::-webkit-inner-spin-button{height:auto}[type=search]{outline-offset:-2px;-webkit-appearance:textfield}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-color-swatch-wrapper{padding:0}::file-selector-button{font:inherit}::-webkit-file-upload-button{font:inherit;-webkit-appearance:button}output{display:inline-block}iframe{border:0}summary{display:list-item;cursor:pointer}progress{vertical-align:baseline}[hidden]{display:none!important}</style>
@@ -17,11 +17,11 @@
     <nav class="pdoc">
         <label id="navtoggle" for="togglestate" class="pdoc-button"><svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'><path stroke-linecap='round' stroke="currentColor" stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/></svg></label>
         <input id="togglestate" type="checkbox" aria-hidden="true" tabindex="-1">
-        <div>            <a class="pdoc-button module-list-button" href="../tests.html">
+        <div>            <a class="pdoc-button module-list-button" href="../data_validation.html">
 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-in-left" viewBox="0 0 16 16">
   <path fill-rule="evenodd" d="M10 3.5a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-2a.5.5 0 0 1 1 0v2A1.5 1.5 0 0 1 9.5 14h-8A1.5 1.5 0 0 1 0 12.5v-9A1.5 1.5 0 0 1 1.5 2h8A1.5 1.5 0 0 1 11 3.5v2a.5.5 0 0 1-1 0v-2z"/>
   <path fill-rule="evenodd" d="M4.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H14.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"/>
-</svg>                &nbsp;validmind.tests</a>
+</svg>                &nbsp;validmind.tests.data_validation</a>
 
             <img src="https://vmai.s3.us-west-1.amazonaws.com/validmind-logo.svg" class="logo" alt="project logo"/>
 
@@ -29,68 +29,14 @@
                    pattern=".+" required>
 
 
+            <h3>Python Library API</h3>
+                <ul class="memberlist">
+            <li>
+                    <a class="function" href="#ProtectedClassesDisparity">ProtectedClassesDisparity</a>
+            </li>
+    </ul>
 
-            <h3>Submodules</h3>
-            <ul>
-                    <li><a href="data_validation/ACFandPACFPlot.html">ACFandPACFPlot</a></li>
-                    <li><a href="data_validation/ADF.html">ADF</a></li>
-                    <li><a href="data_validation/AutoAR.html">AutoAR</a></li>
-                    <li><a href="data_validation/AutoMA.html">AutoMA</a></li>
-                    <li><a href="data_validation/AutoStationarity.html">AutoStationarity</a></li>
-                    <li><a href="data_validation/BivariateScatterPlots.html">BivariateScatterPlots</a></li>
-                    <li><a href="data_validation/BoxPierce.html">BoxPierce</a></li>
-                    <li><a href="data_validation/ChiSquaredFeaturesTable.html">ChiSquaredFeaturesTable</a></li>
-                    <li><a href="data_validation/ClassImbalance.html">ClassImbalance</a></li>
-                    <li><a href="data_validation/DatasetDescription.html">DatasetDescription</a></li>
-                    <li><a href="data_validation/DatasetSplit.html">DatasetSplit</a></li>
-                    <li><a href="data_validation/DescriptiveStatistics.html">DescriptiveStatistics</a></li>
-                    <li><a href="data_validation/DickeyFullerGLS.html">DickeyFullerGLS</a></li>
-                    <li><a href="data_validation/Duplicates.html">Duplicates</a></li>
-                    <li><a href="data_validation/EngleGrangerCoint.html">EngleGrangerCoint</a></li>
-                    <li><a href="data_validation/FeatureTargetCorrelationPlot.html">FeatureTargetCorrelationPlot</a></li>
-                    <li><a href="data_validation/HighCardinality.html">HighCardinality</a></li>
-                    <li><a href="data_validation/HighPearsonCorrelation.html">HighPearsonCorrelation</a></li>
-                    <li><a href="data_validation/IQROutliersBarPlot.html">IQROutliersBarPlot</a></li>
-                    <li><a href="data_validation/IQROutliersTable.html">IQROutliersTable</a></li>
-                    <li><a href="data_validation/IsolationForestOutliers.html">IsolationForestOutliers</a></li>
-                    <li><a href="data_validation/JarqueBera.html">JarqueBera</a></li>
-                    <li><a href="data_validation/KPSS.html">KPSS</a></li>
-                    <li><a href="data_validation/LJungBox.html">LJungBox</a></li>
-                    <li><a href="data_validation/LaggedCorrelationHeatmap.html">LaggedCorrelationHeatmap</a></li>
-                    <li><a href="data_validation/MissingValues.html">MissingValues</a></li>
-                    <li><a href="data_validation/MissingValuesBarPlot.html">MissingValuesBarPlot</a></li>
-                    <li><a href="data_validation/PearsonCorrelationMatrix.html">PearsonCorrelationMatrix</a></li>
-                    <li><a href="data_validation/PhillipsPerronArch.html">PhillipsPerronArch</a></li>
-                    <li><a href="data_validation/ProtectedClassesCombination.html">ProtectedClassesCombination</a></li>
-                    <li><a href="data_validation/ProtectedClassesDescription.html">ProtectedClassesDescription</a></li>
-                    <li><a href="data_validation/ProtectedClassesDisparity.html">ProtectedClassesDisparity</a></li>
-                    <li><a href="data_validation/ProtectedClassesThresholdOptimizer.html">ProtectedClassesThresholdOptimizer</a></li>
-                    <li><a href="data_validation/RollingStatsPlot.html">RollingStatsPlot</a></li>
-                    <li><a href="data_validation/RunsTest.html">RunsTest</a></li>
-                    <li><a href="data_validation/ScatterPlot.html">ScatterPlot</a></li>
-                    <li><a href="data_validation/SeasonalDecompose.html">SeasonalDecompose</a></li>
-                    <li><a href="data_validation/ShapiroWilk.html">ShapiroWilk</a></li>
-                    <li><a href="data_validation/Skewness.html">Skewness</a></li>
-                    <li><a href="data_validation/SpreadPlot.html">SpreadPlot</a></li>
-                    <li><a href="data_validation/TabularCategoricalBarPlots.html">TabularCategoricalBarPlots</a></li>
-                    <li><a href="data_validation/TabularDateTimeHistograms.html">TabularDateTimeHistograms</a></li>
-                    <li><a href="data_validation/TabularDescriptionTables.html">TabularDescriptionTables</a></li>
-                    <li><a href="data_validation/TabularNumericalHistograms.html">TabularNumericalHistograms</a></li>
-                    <li><a href="data_validation/TargetRateBarPlots.html">TargetRateBarPlots</a></li>
-                    <li><a href="data_validation/TimeSeriesDescription.html">TimeSeriesDescription</a></li>
-                    <li><a href="data_validation/TimeSeriesDescriptiveStatistics.html">TimeSeriesDescriptiveStatistics</a></li>
-                    <li><a href="data_validation/TimeSeriesFrequency.html">TimeSeriesFrequency</a></li>
-                    <li><a href="data_validation/TimeSeriesHistogram.html">TimeSeriesHistogram</a></li>
-                    <li><a href="data_validation/TimeSeriesLinePlot.html">TimeSeriesLinePlot</a></li>
-                    <li><a href="data_validation/TimeSeriesMissingValues.html">TimeSeriesMissingValues</a></li>
-                    <li><a href="data_validation/TimeSeriesOutliers.html">TimeSeriesOutliers</a></li>
-                    <li><a href="data_validation/TooManyZeroValues.html">TooManyZeroValues</a></li>
-                    <li><a href="data_validation/UniqueRows.html">UniqueRows</a></li>
-                    <li><a href="data_validation/WOEBinPlots.html">WOEBinPlots</a></li>
-                    <li><a href="data_validation/WOEBinTable.html">WOEBinTable</a></li>
-                    <li><a href="data_validation/ZivotAndrewsArch.html">ZivotAndrewsArch</a></li>
-                    <li><a href="data_validation/nlp.html">nlp</a></li>
-            </ul>
+
 
 
         <a class="attribution" title="pdoc: Python API documentation generator" href="https://pdoc.dev" target="_blank">
@@ -103,13 +49,73 @@
     <main class="pdoc">
             <section class="module-info">
                     <h1 class="modulename">
-<a href="./../../validmind.html">validmind</a><wbr>.<a href="./../tests.html">tests</a><wbr>.data_validation    </h1>
+<a href="./../../../validmind.html">validmind</a><wbr>.<a href="./../../tests.html">tests</a><wbr>.<a href="./../data_validation.html">data_validation</a><wbr>.ProtectedClassesDisparity    </h1>
 
                 
                 
                 
                 
             </section>
+                <section id="ProtectedClassesDisparity">
+                    <div class="attr function">
+                    <div class="decorator">@tags(&#39;bias_and_fairness&#39;)</div>
+        <div class="decorator">@tasks(&#39;classification&#39;, &#39;regression&#39;)</div>
+
+        <span class="def">def</span>
+        <span class="name">ProtectedClassesDisparity</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">dataset</span>,</span><span class="param">	<span class="n">model</span>,</span><span class="param">	<span class="n">protected_classes</span><span class="o">=</span><span class="kc">None</span>,</span><span class="param">	<span class="n">disparity_tolerance</span><span class="o">=</span><span class="mf">1.25</span>,</span><span class="param">	<span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;fnr&#39;</span><span class="p">,</span> <span class="s1">&#39;fpr&#39;</span><span class="p">,</span> <span class="s1">&#39;tpr&#39;</span><span class="p">]</span></span><span class="return-annotation">):</span></span>
+
+        
+    </div>
+    <a class="headerlink" href="#ProtectedClassesDisparity"></a>
+    
+            <div class="docstring"><p>Investigates disparities in model performance across different protected class segments.</p>
+
+<h3 id="purpose">Purpose</h3>
+
+<p>This test aims to identify and quantify potential biases in model outcomes by comparing various performance metrics
+across different segments of protected classes. It helps in assessing whether the model produces discriminatory
+outcomes for certain groups, which is crucial for ensuring fairness in machine learning models.</p>
+
+<h3 id="test-mechanism">Test Mechanism</h3>
+
+<p>The test performs the following steps:</p>
+
+<ol>
+<li>Calculates performance metrics (e.g., false negative rate, false positive rate, true positive rate) for each segment
+of the specified protected classes.</li>
+<li>Computes disparity ratios by comparing these metrics between different segments and a reference group.</li>
+<li>Generates visualizations showing the disparities and their relation to a user-defined disparity tolerance threshold.</li>
+<li>Produces a comprehensive table with various disparity metrics for detailed analysis.</li>
+</ol>
+
+<h3 id="signs-of-high-risk">Signs of High Risk</h3>
+
+<ul>
+<li>Disparity ratios exceeding the specified disparity tolerance threshold.</li>
+<li>Consistent patterns of higher error rates or lower performance for specific protected class segments.</li>
+<li>Statistically significant differences in performance metrics across segments.</li>
+</ul>
+
+<h3 id="strengths">Strengths</h3>
+
+<ul>
+<li>Provides a comprehensive view of model fairness across multiple protected attributes and metrics.</li>
+<li>Allows for easy identification of problematic disparities through visual and tabular representations.</li>
+<li>Customizable disparity tolerance threshold to align with specific use-case requirements.</li>
+<li>Applicable to various performance metrics, offering a multi-faceted analysis of model fairness.</li>
+</ul>
+
+<h3 id="limitations">Limitations</h3>
+
+<ul>
+<li>Relies on a predefined reference group for each protected class, which may not always be the most appropriate choice.</li>
+<li>Does not account for intersectionality between different protected attributes.</li>
+<li>The interpretation of results may require domain expertise to understand the implications of observed disparities.</li>
+</ul>
+</div>
+
+
+                </section>
     </main>
 <script>
     function escapeHTML(html) {
@@ -163,7 +169,7 @@
                 script.async = true;
                 script.onload = () => resolve(window.pdocSearch);
                 script.onerror = (e) => reject(e);
-                script.src = "../../search.js";
+                script.src = "../../../search.js";
                 document.getElementsByTagName("head")[0].appendChild(script);
             });
         } catch (e) {
@@ -205,7 +211,7 @@
             }
             for (let result of results.slice(0, 10)) {
                 let doc = result.doc;
-                let url = `../../${doc.modulename.replaceAll(".", "/")}.html`;
+                let url = `../../../${doc.modulename.replaceAll(".", "/")}.html`;
                 if (doc.qualname) {
                     url += `#${doc.qualname}`;
                 }

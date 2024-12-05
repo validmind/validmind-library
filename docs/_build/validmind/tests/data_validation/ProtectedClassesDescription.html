@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="generator" content="pdoc 14.7.0"/>
-    <title>validmind.tests.data_validation.AutoSeasonality API documentation</title>
+    <title>validmind.tests.data_validation.ProtectedClassesDescription API documentation</title>
             <link rel="icon" href="https://vmai.s3.us-west-1.amazonaws.com/favicon.ico"/>
 
     <style>/*! * Bootstrap Reboot v5.0.0 (https://getbootstrap.com/) * Copyright 2011-2021 The Bootstrap Authors * Copyright 2011-2021 Twitter, Inc. * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE) * Forked from Normalize.css, licensed MIT (https://github.com/necolas/normalize.css/blob/master/LICENSE.md) */*,::after,::before{box-sizing:border-box}@media (prefers-reduced-motion:no-preference){:root{scroll-behavior:smooth}}body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";font-size:1rem;font-weight:400;line-height:1.5;color:#212529;background-color:#fff;-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}hr{margin:1rem 0;color:inherit;background-color:currentColor;border:0;opacity:.25}hr:not([size]){height:1px}h1,h2,h3,h4,h5,h6{margin-top:0;margin-bottom:.5rem;font-weight:500;line-height:1.2}h1{font-size:calc(1.375rem + 1.5vw)}@media (min-width:1200px){h1{font-size:2.5rem}}h2{font-size:calc(1.325rem + .9vw)}@media (min-width:1200px){h2{font-size:2rem}}h3{font-size:calc(1.3rem + .6vw)}@media (min-width:1200px){h3{font-size:1.75rem}}h4{font-size:calc(1.275rem + .3vw)}@media (min-width:1200px){h4{font-size:1.5rem}}h5{font-size:1.25rem}h6{font-size:1rem}p{margin-top:0;margin-bottom:1rem}abbr[data-bs-original-title],abbr[title]{-webkit-text-decoration:underline dotted;text-decoration:underline dotted;cursor:help;-webkit-text-decoration-skip-ink:none;text-decoration-skip-ink:none}address{margin-bottom:1rem;font-style:normal;line-height:inherit}ol,ul{padding-left:2rem}dl,ol,ul{margin-top:0;margin-bottom:1rem}ol ol,ol ul,ul ol,ul ul{margin-bottom:0}dt{font-weight:700}dd{margin-bottom:.5rem;margin-left:0}blockquote{margin:0 0 1rem}b,strong{font-weight:bolder}small{font-size:.875em}mark{padding:.2em;background-color:#fcf8e3}sub,sup{position:relative;font-size:.75em;line-height:0;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}a{color:#0d6efd;text-decoration:underline}a:hover{color:#0a58ca}a:not([href]):not([class]),a:not([href]):not([class]):hover{color:inherit;text-decoration:none}code,kbd,pre,samp{font-family:SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;font-size:1em;direction:ltr;unicode-bidi:bidi-override}pre{display:block;margin-top:0;margin-bottom:1rem;overflow:auto;font-size:.875em}pre code{font-size:inherit;color:inherit;word-break:normal}code{font-size:.875em;color:#d63384;word-wrap:break-word}a>code{color:inherit}kbd{padding:.2rem .4rem;font-size:.875em;color:#fff;background-color:#212529;border-radius:.2rem}kbd kbd{padding:0;font-size:1em;font-weight:700}figure{margin:0 0 1rem}img,svg{vertical-align:middle}table{caption-side:bottom;border-collapse:collapse}caption{padding-top:.5rem;padding-bottom:.5rem;color:#6c757d;text-align:left}th{text-align:inherit;text-align:-webkit-match-parent}tbody,td,tfoot,th,thead,tr{border-color:inherit;border-style:solid;border-width:0}label{display:inline-block}button{border-radius:0}button:focus:not(:focus-visible){outline:0}button,input,optgroup,select,textarea{margin:0;font-family:inherit;font-size:inherit;line-height:inherit}button,select{text-transform:none}[role=button]{cursor:pointer}select{word-wrap:normal}select:disabled{opacity:1}[list]::-webkit-calendar-picker-indicator{display:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}[type=button]:not(:disabled),[type=reset]:not(:disabled),[type=submit]:not(:disabled),button:not(:disabled){cursor:pointer}::-moz-focus-inner{padding:0;border-style:none}textarea{resize:vertical}fieldset{min-width:0;padding:0;margin:0;border:0}legend{float:left;width:100%;padding:0;margin-bottom:.5rem;font-size:calc(1.275rem + .3vw);line-height:inherit}@media (min-width:1200px){legend{font-size:1.5rem}}legend+*{clear:left}::-webkit-datetime-edit-day-field,::-webkit-datetime-edit-fields-wrapper,::-webkit-datetime-edit-hour-field,::-webkit-datetime-edit-minute,::-webkit-datetime-edit-month-field,::-webkit-datetime-edit-text,::-webkit-datetime-edit-year-field{padding:0}::-webkit-inner-spin-button{height:auto}[type=search]{outline-offset:-2px;-webkit-appearance:textfield}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-color-swatch-wrapper{padding:0}::file-selector-button{font:inherit}::-webkit-file-upload-button{font:inherit;-webkit-appearance:button}output{display:inline-block}iframe{border:0}summary{display:list-item;cursor:pointer}progress{vertical-align:baseline}[hidden]{display:none!important}</style>
@@ -32,10 +32,7 @@
             <h3>Python Library API</h3>
                 <ul class="memberlist">
             <li>
-                    <a class="function" href="#evaluate_seasonal_periods">evaluate_seasonal_periods</a>
-            </li>
-            <li>
-                    <a class="function" href="#AutoSeasonality">AutoSeasonality</a>
+                    <a class="function" href="#ProtectedClassesDescription">ProtectedClassesDescription</a>
             </li>
     </ul>
 
@@ -52,87 +49,74 @@
     <main class="pdoc">
             <section class="module-info">
                     <h1 class="modulename">
-<a href="./../../../validmind.html">validmind</a><wbr>.<a href="./../../tests.html">tests</a><wbr>.<a href="./../data_validation.html">data_validation</a><wbr>.AutoSeasonality    </h1>
+<a href="./../../../validmind.html">validmind</a><wbr>.<a href="./../../tests.html">tests</a><wbr>.<a href="./../data_validation.html">data_validation</a><wbr>.ProtectedClassesDescription    </h1>
 
                 
                 
                 
                 
             </section>
-                <section id="evaluate_seasonal_periods">
+                <section id="ProtectedClassesDescription">
                     <div class="attr function">
-            
+                    <div class="decorator">@tags(&#39;bias_and_fairness&#39;, &#39;descriptive_statistics&#39;)</div>
+        <div class="decorator">@tasks(&#39;classification&#39;, &#39;regression&#39;)</div>
+
         <span class="def">def</span>
-        <span class="name">evaluate_seasonal_periods</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">series</span>, </span><span class="param"><span class="n">min_period</span>, </span><span class="param"><span class="n">max_period</span></span><span class="return-annotation">):</span></span>
+        <span class="name">ProtectedClassesDescription</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">dataset</span>, </span><span class="param"><span class="n">protected_classes</span><span class="o">=</span><span class="kc">None</span></span><span class="return-annotation">):</span></span>
 
         
     </div>
-    <a class="headerlink" href="#evaluate_seasonal_periods"></a>
+    <a class="headerlink" href="#ProtectedClassesDescription"></a>
     
-    
-
-                </section>
-                <section id="AutoSeasonality">
-                    <div class="attr function">
-                    <div class="decorator">@tags(&#39;time_series_data&#39;, &#39;statsmodels&#39;, &#39;forecasting&#39;, &#39;statistical_test&#39;)</div>
-        <div class="decorator">@tasks(&#39;regression&#39;)</div>
-
-        <span class="def">def</span>
-        <span class="name">AutoSeasonality</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">dataset</span><span class="p">:</span> <span class="n"><a href="../../vm_models.html#VMDataset">validmind.vm_models.VMDataset</a></span>,</span><span class="param">	<span class="n">min_period</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>,</span><span class="param">	<span class="n">max_period</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span></span><span class="return-annotation">):</span></span>
-
-        
-    </div>
-    <a class="headerlink" href="#AutoSeasonality"></a>
-    
-            <div class="docstring"><p>Automatically identifies and quantifies optimal seasonality in time series data to improve forecasting model
-performance.</p>
+            <div class="docstring"><p>Visualizes the distribution of protected classes in the dataset relative to the target variable
+and provides descriptive statistics.</p>
 
 <h3 id="purpose">Purpose</h3>
 
-<p>The AutoSeasonality test aims to automatically detect and identify the best seasonal order or period for each
-variable in a time series dataset. This detection helps to quantify periodic patterns and seasonality that reoccur
-at fixed intervals in the data. Understanding the seasonality component can drastically improve prediction
-accuracy, which is especially significant for forecasting-based models.</p>
+<p>The ProtectedClassesDescription test aims to identify potential biases or significant differences in the
+distribution of target outcomes across different protected classes. This visualization and statistical summary
+help in understanding the relationship between protected attributes and the target variable, which is crucial
+for assessing fairness in machine learning models.</p>
 
 <h3 id="test-mechanism">Test Mechanism</h3>
 
-<p>This test uses the seasonal decomposition method from the Statsmodels Python library. The function takes the
-'additive' model type for each variable and applies it within the prescribed range of 'min_period' and
-'max_period'. It decomposes the seasonality for each period in the range and calculates the mean residual error for
-each period. The seasonal period that results in the minimum residuals is marked as the 'Best Period'. The test
-results include the 'Best Period', the calculated residual errors, and a determination of 'Seasonality' or 'No
-Seasonality'.</p>
+<p>The function creates interactive stacked bar charts for each specified protected class using Plotly.
+Additionally, it generates a single table of descriptive statistics for all protected classes, including:</p>
+
+<ul>
+<li>Protected class and category</li>
+<li>Count and percentage of each category within the protected class</li>
+<li>Mean, median, and mode of the target variable for each category</li>
+<li>Standard deviation of the target variable for each category</li>
+<li>Minimum and maximum values of the target variable for each category</li>
+</ul>
 
 <h3 id="signs-of-high-risk">Signs of High Risk</h3>
 
 <ul>
-<li>If the optimal seasonal period (or 'Best Period') is consistently at the maximum or minimum limit of the offered
-range for a majority of variables, it may suggest that the range set does not adequately capture the true seasonal
-pattern in the series.</li>
-<li>A high average 'Residual Error' for the selected 'Best Period' could indicate issues with the model's performance.</li>
+<li>Significant imbalances in the distribution of target outcomes across different categories of a protected class.</li>
+<li>Large disparities in mean, median, or mode of the target variable across categories.</li>
+<li>Underrepresentation or overrepresentation of certain groups within protected classes.</li>
+<li>High standard deviations in certain categories, indicating potential volatility or outliers.</li>
 </ul>
 
 <h3 id="strengths">Strengths</h3>
 
 <ul>
-<li>The metric offers an automatic approach to identifying and quantifying the optimal seasonality, providing a
-robust method for analyzing time series datasets.</li>
-<li>It is applicable to multiple variables in a dataset, providing a comprehensive evaluation of each variable's
-seasonality.</li>
-<li>The use of concrete and measurable statistical methods improves the objectivity and reproducibility of the model.</li>
+<li>Provides both visual and statistical representation of potential biases in the dataset.</li>
+<li>Allows for easy identification of imbalances in target variable distribution across protected classes.</li>
+<li>Interactive plots enable detailed exploration of the data.</li>
+<li>Consolidated statistical summary provides quantitative measures to complement visual analysis.</li>
+<li>Applicable to both classification and regression tasks.</li>
 </ul>
 
 <h3 id="limitations">Limitations</h3>
 
 <ul>
-<li>This AutoSeasonality metric may not be suitable if the time series data exhibits random walk behavior or lacks
-clear seasonality, as the seasonal decomposition model may not be appropriate.</li>
-<li>The defined range for the seasonal period (min_period and max_period) can influence the outcomes. If the actual
-seasonality period lies outside this range, this method will not be able to identify the true seasonal order.</li>
-<li>This metric may not be able to fully interpret complex patterns that go beyond the simple additive model for
-seasonal decomposition.</li>
-<li>The tool may incorrectly infer seasonality if random fluctuations in the data match the predefined seasonal
-period range.</li>
+<li>Does not provide advanced statistical measures of bias or fairness.</li>
+<li>May become cluttered if there are many categories within a protected class or many unique target values.</li>
+<li>Interpretation may require domain expertise to understand the implications of observed disparities.</li>
+<li>Does not account for intersectionality or complex interactions between multiple protected attributes.</li>
 </ul>
 </div>
 
