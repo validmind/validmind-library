@@ -354,7 +354,9 @@ def run_test(
             test_id=test_id,
             metric_ids=unit_metrics,
             inputs=inputs,
+            input_grid=input_grid,
             params=params,
+            param_grid=param_grid,
             generate_description=generate_description,
             title=title,
         )
