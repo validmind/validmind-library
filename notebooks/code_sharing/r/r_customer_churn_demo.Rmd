@@ -36,7 +36,7 @@ library(dplyr)
 knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 ```
 
-## **Initializing the ValidMind Client Library**
+## **Initializing the ValidMind Library**
 
 Log in to the ValidMind Platform with your registered email address, and navigate to the Documentation Projects page.
 
@@ -50,7 +50,7 @@ Select "Customer Churn model" from the Model drop-down, and "Initial Validation"
 
 ### **Finding the project API key and secret**
 
-In the "Client Integration" page of the newly created project, you will find the initialization code that allows the client library to associate documentation and tests with the appropriate project. The initialization code configures the following arguments:
+In the "Client Integration" page of the newly created project, you will find the initialization code that allows the ValidMind Library to associate documentation and tests with the appropriate project. The initialization code configures the following arguments:
 
 -   api_host: Location of the ValidMind API.
 
