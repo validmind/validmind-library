@@ -15,8 +15,7 @@ To install the ValidMind Library:
 pip install validmind
 ```
 
-To initialize the ValidMind Library, paste the code snippet with the model identifier credentials directly into your
-development source code, replacing this example with your own:
+To initialize the ValidMind Library, paste the code snippet with the model identifier credentials directly into your development source code, replacing this example with your own:
 
 ```python
 import validmind as vm
@@ -29,9 +28,7 @@ vm.init(
 )
 ```
 
-After you have pasted the code snippet into your development source code and executed the code, the Python Library 
-API will register with ValidMind. You can now use the ValidMind Library to document and test your models,
-and to upload to the ValidMind Platform.
+After you have pasted the code snippet into your development source code and executed the code, the Python Library API will register with ValidMind. You can now use the ValidMind Library to document and test your models, and to upload to the ValidMind Platform.
 """
 import warnings
 
