@@ -6,11 +6,11 @@
 
 ![ValidMind logo](https://vmai.s3.us-west-1.amazonaws.com/validmind-logo.svg "ValidMind logo")
 
-The ValidMind Library is a suite of developer tools and methods designed to run validation tests and automate the documentation of your models. 
+The ValidMind Library is a suite of developer tools and methods designed to run validation tests and automate the documentation of your models.
 
 Designed to be model agnostic, the ValidMind Library provides all the standard functionality without requiring you to rewrite any functions as long as your model is built in Python.
 
-With a rich array of documentation tools and test suites, from documenting descriptions of your datasets to testing your models for weak spots and overfit areas, the ValidMind Library helps you automate model documentation by feeding the ValidMind Platform with documentation artifacts and test results. 
+With a rich array of documentation tools and test suites, from documenting descriptions of your datasets to testing your models for weak spots and overfit areas, the ValidMind Library helps you automate model documentation by feeding the ValidMind Platform with documentation artifacts and test results.
 
 ## Contributing to the ValidMind Library
 
@@ -24,7 +24,7 @@ We believe in the power of collaboration and welcome contributions to the ValidM
 
 ### Install from PyPI
 
-To install the ValidMind Library and all optional dependencies, run:
+To install the library and all optional dependencies, run:
 
 ```bash
 pip install validmind[all]
