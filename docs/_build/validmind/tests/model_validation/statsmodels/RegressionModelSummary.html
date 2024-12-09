@@ -23,28 +23,16 @@
   <path fill-rule="evenodd" d="M4.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H14.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"/>
 </svg>                &nbsp;validmind.tests.model_validation.statsmodels</a>
 
-            <img src="https://vmai.s3.us-west-1.amazonaws.com/vm-logo.svg" class="logo" alt="project logo"/>
+            <img src="https://vmai.s3.us-west-1.amazonaws.com/validmind-logo.svg" class="logo" alt="project logo"/>
 
             <input type="search" placeholder="Search..." role="searchbox" aria-label="search"
                    pattern=".+" required>
 
 
-            <h3>High Level API</h3>
+            <h3>Python Library API</h3>
                 <ul class="memberlist">
             <li>
-                    <a class="class" href="#RegressionModelSummary">RegressionModelSummary</a>
-                            <ul class="memberlist">
-                        <li>
-                                <a class="function" href="#RegressionModelSummary.__init__">RegressionModelSummary</a>
-                        </li>
-                        <li>
-                                <a class="function" href="#RegressionModelSummary.run">run</a>
-                        </li>
-                        <li>
-                                <a class="function" href="#RegressionModelSummary.summary">summary</a>
-                        </li>
-                </ul>
-
+                    <a class="function" href="#RegressionModelSummary">RegressionModelSummary</a>
             </li>
     </ul>
 
@@ -69,11 +57,12 @@
                 
             </section>
                 <section id="RegressionModelSummary">
-                    <div class="attr class">
-                    <div class="decorator">@dataclass</div>
+                    <div class="attr function">
+                    <div class="decorator">@tags(&#39;model_performance&#39;, &#39;regression&#39;)</div>
+        <div class="decorator">@tasks(&#39;regression&#39;)</div>
 
-    <span class="def">class</span>
-    <span class="name">RegressionModelSummary</span><wbr>(<span class="base">validmind.vm_models.test.metric.Metric</span>):
+        <span class="def">def</span>
+        <span class="name">RegressionModelSummary</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">dataset</span><span class="p">:</span> <span class="n"><a href="../../../vm_models.html#VMDataset">validmind.vm_models.VMDataset</a></span>,</span><span class="param">	<span class="n">model</span><span class="p">:</span> <span class="n"><a href="../../../vm_models.html#VMModel">validmind.vm_models.VMModel</a></span></span><span class="return-annotation">):</span></span>
 
         
     </div>
@@ -90,11 +79,8 @@ assess the model's accuracy and fit.</p>
 
 <h3 id="test-mechanism">Test Mechanism</h3>
 
-<p>This test employs the 'train_ds' attribute of the model to gather and analyze the training data. Initially, it
-fetches the independent variables and uses the model to make predictions on these given features. Subsequently, it
-calculates several standard regression performance metrics including R-Squared, Adjusted R-Squared, Mean Squared
-Error (MSE), and Root Mean Squared Error (RMSE), which quantify the approximation of the predicted responses to the
-actual responses.</p>
+<p>This test uses the sklearn library to calculate the R-Squared, Adjusted R-Squared, MSE, and RMSE. It outputs a
+table with the results of these metrics along with the feature columns used by the model.</p>
 
 <h3 id="signs-of-high-risk">Signs of High Risk</h3>
 
@@ -114,7 +100,6 @@ actual responses.</p>
 <h3 id="limitations">Limitations</h3>
 
 <ul>
-<li>Applicable exclusively to regression models.</li>
 <li>RMSE and MSE might be sensitive to outliers.</li>
 <li>A high R-Squared or Adjusted R-Squared may not necessarily indicate a good model, especially in cases of
 overfitting.</li>
@@ -122,70 +107,6 @@ overfitting.</li>
 </div>
 
 
-                            <div id="RegressionModelSummary.__init__" class="classattr">
-                                <div class="attr function">
-            
-        <span class="name">RegressionModelSummary</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">context</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n"><a href="../../../vm_models.html#TestContext">validmind.vm_models.TestContext</a></span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">inputs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n"><a href="../../../vm_models.html#TestInput">validmind.vm_models.TestInput</a></span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">tasks</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">_ref_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">_section_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">test_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">result</span><span class="p">:</span> <span class="n">validmind</span><span class="o">.</span><span class="n">vm_models</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">result_wrapper</span><span class="o">.</span><span class="n">MetricResultWrapper</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">params</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">output_template</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">generate_description</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span></span>)</span>
-
-        
-    </div>
-    <a class="headerlink" href="#RegressionModelSummary.__init__"></a>
-    
-    
-
-                            </div>
-                            <div id="RegressionModelSummary.run" class="classattr">
-                                <div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">run</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">):</span></span>
-
-        
-    </div>
-    <a class="headerlink" href="#RegressionModelSummary.run"></a>
-    
-            <div class="docstring"><p>Run the calculation and cache its results</p>
-</div>
-
-
-                            </div>
-                            <div id="RegressionModelSummary.summary" class="classattr">
-                                <div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">summary</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">metric_value</span></span><span class="return-annotation">):</span></span>
-
-        
-    </div>
-    <a class="headerlink" href="#RegressionModelSummary.summary"></a>
-    
-            <div class="docstring"><p>Build one table for summarizing the regression analysis results</p>
-</div>
-
-
-                            </div>
-                            <div class="inherited">
-                                <h5>Inherited Members</h5>
-                                <dl>
-                                    <div><dt>validmind.vm_models.test.metric.Metric</dt>
-                                <dd id="RegressionModelSummary.cache_results" class="function">cache_results</dd>
-
-            </div>
-            <div><dt>validmind.vm_models.test.test.Test</dt>
-                                <dd id="RegressionModelSummary.description" class="function">description</dd>
-                <dd id="RegressionModelSummary.log" class="function">log</dd>
-
-            </div>
-            <div><dt>validmind.vm_models.test_context.TestUtils</dt>
-                                <dd id="RegressionModelSummary.get_accessed_inputs" class="function">get_accessed_inputs</dd>
-                <dd id="RegressionModelSummary.dataset" class="variable">dataset</dd>
-                <dd id="RegressionModelSummary.model" class="variable">model</dd>
-                <dd id="RegressionModelSummary.models" class="variable">models</dd>
-                <dd id="RegressionModelSummary.validate_inputs" class="function">validate_inputs</dd>
-
-            </div>
-                                </dl>
-                            </div>
                 </section>
     </main>
 <script>

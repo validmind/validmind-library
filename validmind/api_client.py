@@ -23,9 +23,7 @@ from .client_config import client_config
 from .errors import MissingAPICredentialsError, MissingModelIdError, raise_api_error
 from .logging import get_logger, init_sentry, send_single_error
 from .utils import NumpyEncoder, run_async
-from .vm_models import Figure, MetricResult, ThresholdTestResults
-
-# TODO: can't import types from vm_models because of circular dependency
+from .vm_models import Figure
 
 logger = get_logger(__name__)
 
@@ -50,6 +48,14 @@ def _close_session():
                 loop.create_task(__api_session.close())
             else:
                 loop.run_until_complete(__api_session.close())
+        except RuntimeError as e:
+            # ignore RuntimeError when closing the session from the main thread
+            if "no current event loop in thread" in str(e):
+                pass
+            elif "Event loop is closed" in str(e):
+                pass
+            else:
+                raise e
         except Exception as e:
             logger.exception("Error closing aiohttp session at exit: %s", e)
 
@@ -187,7 +193,7 @@ def init(
     api_secret: Optional[str] = None,
     api_host: Optional[str] = None,
     model: Optional[str] = None,
-    monitoring=False,
+    monitoring: bool = False,
 ):
     """
     Initializes the API client instances and calls the /ping endpoint to ensure
@@ -202,7 +208,7 @@ def init(
         api_key (str, optional): The API key. Defaults to None.
         api_secret (str, optional): The API secret. Defaults to None.
         api_host (str, optional): The API host. Defaults to None.
-        monitoring (str, optional): The ongoing monitoring flag. Defaults to False.
+        monitoring (bool): The ongoing monitoring flag. Defaults to False.
 
     Raises:
         ValueError: If the API key and secret are not provided
@@ -212,7 +218,7 @@ def init(
     if api_key == "...":
         # special case to detect when running a notebook placeholder (...)
         # will override with environment variables for easier local development
-        api_host = api_key = api_secret = project = None
+        api_host = api_key = api_secret = project = model = None
 
     _model_cuid = project or model or os.getenv("VM_API_MODEL")
     if _model_cuid is None:
@@ -244,30 +250,7 @@ def reload():
         raise e
 
 
-async def log_figure(figure: Figure) -> Dict[str, Any]:
-    """Logs a figure
-
-    Args:
-        figure (Figure): The Figure object wrapper
-
-    Raises:
-        Exception: If the API call fails
-
-    Returns:
-        dict: The response from the API
-    """
-    try:
-        return await _post(
-            "log_figure",
-            data=figure.serialize(),
-            files=figure.serialize_files(),
-        )
-    except Exception as e:
-        logger.error("Error logging figure to ValidMind API")
-        raise e
-
-
-async def get_metadata(content_id: str) -> Dict[str, Any]:
+async def aget_metadata(content_id: str) -> Dict[str, Any]:
     """Gets a metadata object from ValidMind API.
 
     Args:
@@ -279,11 +262,10 @@ async def get_metadata(content_id: str) -> Dict[str, Any]:
     Returns:
         dict: Metadata object
     """
-    # TODO: add a more accurate type hint/documentation
     return await _get(f"get_metadata/{content_id}")
 
 
-async def log_metadata(
+async def alog_metadata(
     content_id: str,
     text: Optional[str] = None,
     _json: Optional[Dict[str, Any]] = None,
@@ -317,21 +299,11 @@ async def log_metadata(
         raise e
 
 
-async def log_metric_result(
-    metric: MetricResult,
-    inputs: List[str],
-    output_template: str = None,
-    section_id: str = None,
-    position: int = None,
-) -> Dict[str, Any]:
-    """Logs metrics to ValidMind API.
+async def alog_figure(figure: Figure) -> Dict[str, Any]:
+    """Logs a figure
 
     Args:
-        metric (MetricResult): A MetricResult object
-        inputs (list): A list of input keys (names) that were used to run the test
-        output_template (str): The optional output template for the test
-        section_id (str): The section ID add a test driven block to the documentation
-        position (int): The position in the section to add the test driven block
+        figure (Figure): The Figure object wrapper
 
     Raises:
         Exception: If the API call fails
@@ -339,33 +311,19 @@ async def log_metric_result(
     Returns:
         dict: The response from the API
     """
-    request_params = {}
-    if section_id:
-        request_params["section_id"] = section_id
-    if position is not None:
-        request_params["position"] = position
-
-    metric_data = {
-        **metric.serialize(),
-        "inputs": inputs,
-    }
-    if output_template:
-        metric_data["output_template"] = output_template
-
     try:
         return await _post(
-            "log_metrics",
-            params=request_params,
-            data=json.dumps([metric_data], cls=NumpyEncoder, allow_nan=False),
+            "log_figure",
+            data=figure.serialize(),
+            files=figure.serialize_files(),
         )
     except Exception as e:
-        logger.error("Error logging metrics to ValidMind API")
+        logger.error("Error logging figure to ValidMind API")
         raise e
 
 
-async def log_test_result(
-    result: ThresholdTestResults,
-    inputs: List[str],
+async def alog_test_result(
+    result: Dict[str, Any],
     section_id: str = None,
     position: int = None,
 ) -> Dict[str, Any]:
@@ -375,8 +333,7 @@ async def log_test_result(
     can also be called directly if the user wants to run tests on their own.
 
     Args:
-        result (validmind.ThresholdTestResults): A ThresholdTestResults object
-        inputs (list): A list of input keys (names) that were used to run the test
+        result (dict): A dictionary representing the test result
         section_id (str, optional): The section ID add a test driven block to the documentation
         position (int): The position in the section to add the test driven block
 
@@ -391,16 +348,12 @@ async def log_test_result(
         request_params["section_id"] = section_id
     if position is not None:
         request_params["position"] = position
-
     try:
         return await _post(
             "log_test_results",
             params=request_params,
             data=json.dumps(
-                {
-                    **result.serialize(),
-                    "inputs": inputs,
-                },
+                result,
                 cls=NumpyEncoder,
                 allow_nan=False,
             ),
@@ -410,7 +363,9 @@ async def log_test_result(
         raise e
 
 
-def log_input(input_id: str, type: str, metadata: Dict[str, Any]) -> Dict[str, Any]:
+async def alog_input(
+    input_id: str, type: str, metadata: Dict[str, Any]
+) -> Dict[str, Any]:
     """Logs input information - internal use for now (don't expose via public API)
 
     Args:
@@ -425,8 +380,7 @@ def log_input(input_id: str, type: str, metadata: Dict[str, Any]) -> Dict[str, A
         dict: The response from the API
     """
     try:
-        return run_async(
-            _post,
+        return await _post(
             "log_input",
             data=json.dumps(
                 {
@@ -443,9 +397,13 @@ def log_input(input_id: str, type: str, metadata: Dict[str, Any]) -> Dict[str, A
         raise e
 
 
+def log_input(input_id: str, type: str, metadata: Dict[str, Any]) -> Dict[str, Any]:
+    return run_async(alog_input, input_id, type, metadata)
+
+
 async def alog_metric(
     key: str,
-    value: float,
+    value: Union[int, float],
     inputs: Optional[List[str]] = None,
     params: Optional[Dict[str, Any]] = None,
     recorded_at: Optional[str] = None,
@@ -454,8 +412,14 @@ async def alog_metric(
     if not key or not isinstance(key, str):
         raise ValueError("`key` must be a non-empty string")
 
-    if not value or not isinstance(value, (int, float)):
-        raise ValueError("`value` must be a scalar (int or float)")
+    if value is None:
+        raise ValueError("Must provide a value for the metric")
+
+    if not isinstance(value, (int, float)):
+        try:
+            value = float(value)
+        except (ValueError, TypeError):
+            raise ValueError("`value` must be a scalar (int or float)")
 
     try:
         return await _post(
@@ -489,7 +453,7 @@ def log_metric(
     Unit metrics are key-value pairs where the key is the metric name and the value is
     a scalar (int or float). These key-value pairs are associated with the currently
     selected model (inventory model in the ValidMind Platform) and keys can be logged
-    to over time to create a history of the metric. On the platform, these metrics
+    to over time to create a history of the metric. On the ValidMind Platform, these metrics
     will be used to create plots/visualizations for documentation and dashboards etc.
 
     Args:

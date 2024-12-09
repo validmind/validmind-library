@@ -10,6 +10,7 @@ from validmind import tags, tasks
 @tags("regression")
 @tasks("regression")
 def MeanAbsolutePercentageError(model, dataset):
+    """Calculates the mean absolute percentage error for a regression model."""
     y_true = dataset.y
     y_pred = dataset.y_pred(model)
 

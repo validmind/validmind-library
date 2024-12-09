@@ -10,4 +10,5 @@ from validmind import tags, tasks
 @tasks("classification")
 @tags("classification")
 def Recall(model, dataset, **kwargs):
+    """Calculates the recall for a classification model."""
     return recall_score(dataset.y, dataset.y_pred(model), **kwargs)

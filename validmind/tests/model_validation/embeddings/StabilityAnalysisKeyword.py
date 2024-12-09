@@ -3,11 +3,22 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 import re
+from typing import Dict
 
-from .StabilityAnalysis import StabilityAnalysis
+from validmind import tags, tasks
+from validmind.vm_models import VMDataset, VMModel
+
+from .utils import create_stability_analysis_result
 
 
-class StabilityAnalysisKeyword(StabilityAnalysis):
+@tags("llm", "text_data", "embeddings", "visualization")
+@tasks("feature_extraction")
+def StabilityAnalysisKeyword(
+    dataset: VMDataset,
+    model: VMModel,
+    keyword_dict: Dict[str, str],
+    mean_similarity_threshold: float = 0.7,
+):
     """
     Evaluates robustness of embedding models to keyword swaps in the test dataset.
 
@@ -49,13 +60,9 @@ class StabilityAnalysisKeyword(StabilityAnalysis):
     which might not always be the case.
     """
 
-    name = "Text Embeddings Stability Analysis to Keyword Swaps"
-    default_params = {
-        "keyword_dict": None,  # set to none by default... this must be overridden
-        **StabilityAnalysis.default_params,
-    }
+    keyword_dict = {k.lower(): v for k, v in keyword_dict.items()}
 
-    def perturb_data(self, data: str):
+    def perturb_data(data: str):
         if not isinstance(data, str):
             return data
 
@@ -63,22 +70,29 @@ class StabilityAnalysisKeyword(StabilityAnalysis):
         tokens = re.findall(r"[\w']+[.,!?;]?|[\w']+", data)
         modified_tokens = []
 
-        # lowercase all keys in the keword_dict
-        self.params["keyword_dict"] = {
-            k.lower(): v for k, v in self.params["keyword_dict"].items()
-        }
-
         for token in tokens:
             # Separate word and punctuation
             word_part = re.match(r"([\w']+)", token).group()
             punctuation_part = token[len(word_part) :]
 
             # Check if the token is a word and if it's in the dictionary
-            if token.lower() in self.params["keyword_dict"]:
+            if token.lower() in keyword_dict:
                 modified_tokens.append(
-                    self.params["keyword_dict"][word_part.lower()] + punctuation_part
+                    keyword_dict[word_part.lower()] + punctuation_part
                 )
             else:
                 modified_tokens.append(token)
 
         return " ".join(modified_tokens)
+
+    original_df = dataset.df[[dataset.text_column]]
+    perturbed_df = original_df.copy()
+    perturbed_df[dataset.text_column] = perturbed_df[dataset.text_column].map(
+        perturb_data
+    )
+
+    return create_stability_analysis_result(
+        dataset.y_pred(model),
+        model.predict(perturbed_df),
+        mean_similarity_threshold,
+    )

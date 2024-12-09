@@ -1,0 +1,266 @@
+---
+title: "Implement Custom Tests in R"
+author: "Validmind"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(validmind)
+```
+
+<a id='toc2_'></a>
+
+## About ValidMind
+
+ValidMind is a suite of tools for managing model risk, including risk associated with AI and statistical models.
+
+You use the ValidMind Library to automate documentation and validation tests, and then use the ValidMind Platform to collaborate on model documentation. Together, these products simplify model risk management, facilitate compliance with regulations and institutional standards, and enhance collaboration between yourself and model validators.
+
+<a id='toc2_1_'></a>
+
+### Before you begin
+
+This notebook assumes you have basic familiarity with Python, including an understanding of how functions work. If you are new to Python, you can still run the notebook but we recommend further familiarizing yourself with the language.
+
+If you encounter errors due to missing modules in your Python environment, install the modules with `pip install`, and then re-run the notebook. For more help, refer to [Installing Python Modules](https://docs.python.org/3/installing/index.html).
+
+<a id='toc2_2_'></a>
+
+### New to ValidMind?
+
+If you haven't already seen our [Get started with the ValidMind Library](https://docs.validmind.ai/developer/get-started-validmind-library.html), we recommend you explore the available resources for developers at some point. There, you can learn more about documenting models, find code samples, or read our developer reference.
+
+<div class="alert alert-block alert-info" style="background-color: #B5B5B510; color: black; border: 1px solid #083E44; border-left-width: 5px; box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);border-radius: 5px;"><span style="color: #083E44;"><b>For access to all features available in this notebook, create a free ValidMind account.</b></span>
+<br></br>
+Signing up is FREE — <a href="https://docs.validmind.ai/guide/configuration/register-with-validmind.html" style="color: #DE257E;"><b>Register with ValidMind</b></a></div>
+
+<a id='toc2_3_'></a>
+
+### Key concepts
+
+**Model documentation**: A structured and detailed record pertaining to a model, encompassing key components such as its underlying assumptions, methodologies, data sources, inputs, performance metrics, evaluations, limitations, and intended uses. It serves to ensure transparency, adherence to regulatory requirements, and a clear understanding of potential risks associated with the model’s application.
+
+**Documentation template**: Functions as a test suite and lays out the structure of model documentation, segmented into various sections and sub-sections. Documentation templates define the structure of your model documentation, specifying the tests that should be run, and how the results should be displayed.
+
+**Tests**: A function contained in the ValidMind Library, designed to run a specific quantitative test on the dataset or model. Tests are the building blocks of ValidMind, used to evaluate and document models and datasets, and can be run individually or as part of a suite defined by your model documentation template.
+
+**Custom tests**: Custom tests are functions that you define to evaluate your model or dataset. These functions can be registered via the ValidMind Library to be used with the ValidMind Platform.
+
+**Inputs**: Objects to be evaluated and documented in the ValidMind Library. They can be any of the following:
+
+  - **model**: A single model that has been initialized in ValidMind with [`vm.init_model()`](https://docs.validmind.ai/validmind/validmind.html#init_model).
+  - **dataset**: Single dataset that has been initialized in ValidMind with [`vm.init_dataset()`](https://docs.validmind.ai/validmind/validmind.html#init_dataset).
+  - **models**: A list of ValidMind models - usually this is used when you want to compare multiple models in your custom test.
+  - **datasets**: A list of ValidMind datasets - usually this is used when you want to compare multiple datasets in your custom test. See this [example](https://docs.validmind.ai/notebooks/how_to/run_tests_that_require_multiple_datasets.html) for more information.
+
+**Parameters**: Additional arguments that can be passed when running a ValidMind test, used to pass additional information to a test, customize its behavior, or provide additional context.
+
+**Outputs**: Custom test can return elements like tables or plots. Tables may be a list of dictionaries (each representing a row) or a pandas DataFrame. Plots may be matplotlib or plotly figures.
+
+**Test suites**: Collections of tests designed to run together to automate and generate model documentation end-to-end for specific use-cases.
+
+Example: the [`classifier_full_suite`](https://docs.validmind.ai/validmind/validmind/test_suites/classifier.html#ClassifierFullSuite) test suite runs tests from the [`tabular_dataset`](https://docs.validmind.ai/validmind/validmind/test_suites/tabular_datasets.html) and [`classifier`](https://docs.validmind.ai/validmind/validmind/test_suites/classifier.html) test suites to fully document the data and model sections for binary classification model use-cases.
+
+<a id='toc3_'></a>
+
+## Before you begin
+
+::: {.callout-tip}
+
+<a id='toc3_1_'></a>
+
+### New to ValidMind?
+
+<div class="alert alert-block alert-info" style="background-color: #B5B5B510; color: black; border: 1px solid #083E44; border-left-width: 5px; box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);border-radius: 5px;"><span style="color: #083E44;"><b>To access the ValidMind Platform, you'll need an account.</b></span>
+<br></br>
+Signing up is FREE — <a href="https://docs.validmind.ai/guide/configuration/register-with-validmind.html" style="color: #DE257E;"><b>Register with ValidMind</b></a></div>
+
+If you encounter errors due to missing modules in your Python environment, install the modules with `pip install`, and then re-run the notebook. For more help, refer to [Installing Python Modules](https://docs.python.org/3/installing/index.html).
+
+<a id='toc4_'></a>
+
+## Install the ValidMind Library
+
+To install the library:
+
+```{r, eval=FALSE}
+install.packages("validmind")
+```
+
+<a id='toc5_'></a>
+
+## Initialize the ValidMind Library
+
+ValidMind generates a unique _code snippet_ for each registered model to connect with your developer environment. You initialize the ValidMind Library with this code snippet, which ensures that your documentation and tests are uploaded to the correct model when you run the notebook.
+
+Get your code snippet:
+
+1. In a browser, [log in to ValidMind](https://docs.validmind.ai/guide/configuration/log-in-to-validmind.html).
+
+2. In the left sidebar, navigate to **Model Inventory** and click **+ Register new model**.
+
+3. Enter the model details, making sure to select **Binary classification** as the template and **Marketing/Sales - Attrition/Churn Management** as the use case, and click **Continue**. ([Need more help?](https://docs.validmind.ai/guide/model-inventory/register-models-in-inventory.html))
+
+4. Go to **Getting Started** and click **Copy snippet to clipboard**.
+
+Next, replace this placeholder with your own code snippet:
+
+```{r}
+# Find the path to your Python runtime by running `python -V` in your terminal
+# python_version <- "<path_to_python_version>"
+
+vm_r <- vm(
+  api_host = "https://api.prod.validmind.ai/api/v1/tracking",
+  api_key = "...",
+  api_secret = "...",
+  model = "...",
+  python_version = python_version
+)
+```
+
+<a id='toc6_'></a>
+
+## Implement a Custom Test
+
+Let's start off by creating a simple custom test that creates a Confusion Matrix for a binary classification model. First, we will build the model itself.
+
+### **Load the Demo Dataset**
+
+For the purpose of this demonstration, we will use a sample dataset provided by the ValidMind library.
+
+```{r}
+# Read the dataset
+data <- read.csv('../../code_sharing/datasets/bank_customer_churn.csv')
+```
+
+We will need to preprocess the dataset and produce the training, test and validation splits first.
+
+### Preprocess the Raw Dataset
+
+```{r}
+library(dplyr)
+library(caTools)
+library(xgboost)
+
+# Handle categorical variables using one-hot encoding and remove unnecessary columns
+data <- data %>% select(-RowNumber, -CustomerId, -Surname)
+geo_dummies <- model.matrix(~Geography - 1, data=data)
+gender_dummies <- model.matrix(~Gender - 1, data=data)
+data <- data %>% select(-Geography, -Gender)
+data <- cbind(data, geo_dummies, gender_dummies)
+```
+
+```{r}
+# Split the dataset into training and testing sets
+set.seed(123) # Setting seed for reproducibility
+split <- sample.split(data$Exited, SplitRatio = 0.7)
+train_data <- subset(data, split == TRUE)
+test_data <- subset(data, split == FALSE)
+```
+
+### Train the GLM model
+
+```{r, results='hide'}
+model <- glm(Exited ~ ., data = train_data, family = binomial)
+model$test_ds <- test_data
+
+model_path <- save_model(model)
+```
+
+```{r}
+vm_test_ds = vm_r$init_dataset(
+    dataset=test_data,
+    target_column="Exited",
+    input_id="test_dataset"
+)
+
+vm_model = vm_r$init_r_model(
+    model_path=model_path,
+    input_id="model"
+)
+
+# link the model to the dataset
+vm_test_ds$assign_predictions(
+    model=vm_model,
+    prediction_values=round(predict(model, test_data, type = "response")),
+    probability_values=predict(model, test_data, type = "response")
+)
+```
+
+### Register a Test Provider
+
+```{r}
+# initialize the test provider with the tests folder we created earlier
+my_test_provider = vm_r$tests$LocalTestProvider(tempdir())
+
+vm_r$tests$register_test_provider(
+    namespace="my_test_provider",
+    test_provider=my_test_provider
+)
+```
+
+<a id='toc7_2_'></a>
+
+### Run a Built-In Test
+
+```{r}
+descriptive_stats <- vm_r$tests$run_test(
+    test_id = "validmind.data_validation.DescriptiveStatistics",
+    inputs = list("dataset" = vm_test_ds),
+    show = FALSE
+)
+
+descriptive_stats$log()
+
+descriptive_summary <- validmind:::summarize_metric_result(descriptive_stats)
+bind_rows(descriptive_summary$results[[1]]$data)
+```
+
+### Run the Custom Test
+
+Now that we have our model and dataset setup, we have everything we need to run our custom test. We can do this by importing the `run_test` function from the `validmind.tests` module and passing in the test ID of our custom test along with the model and dataset we want to run it against.
+
+>Notice how the `inputs` dictionary is used to map an `input_id` which we set above to the `model` and `dataset` keys that are expected by our custom test function. This is how the ValidMind Library knows which inputs to pass to different tests and is key when using many different datasets and models.
+
+```{r}
+library(reticulate)
+
+# Import necessary Python modules
+Metric <- reticulate::import("validmind.vm_models", as = "vm")$Metric
+metrics <- import("sklearn.metrics")
+plt <- import("matplotlib.pyplot")
+
+# Define your confusion_matrix function in R
+confusion_matrix <- function(dataset, model) {
+    y_true <- dataset$y
+    y_pred <- dataset$y_pred(model)
+
+    confusion_matrix <- metrics$confusion_matrix(y_true, y_pred)
+
+    cm_display <- metrics$ConfusionMatrixDisplay(
+        confusion_matrix=confusion_matrix, display_labels=c(FALSE, TRUE)
+    )
+    cm_display$plot()
+    plt$close()
+
+    return(cm_display$figure_)
+}
+
+# Register your confusion_matrix function
+register_result <- register_custom_test(
+    confusion_matrix,
+    test_id = "my_custom_tests.ConfusionMatrix",
+    required_inputs = c("dataset", "model")
+)
+
+test_result <- run_custom_test(
+  "my_custom_tests.ConfusionMatrix",
+  inputs = list(dataset = vm_test_ds, model = vm_model),
+  test_registry = register_result
+)
+
+test_result$log()
+```

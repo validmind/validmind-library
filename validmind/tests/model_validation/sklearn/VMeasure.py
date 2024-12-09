@@ -2,15 +2,15 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from dataclasses import dataclass
-
 from sklearn import metrics
 
-from .ClusterPerformance import ClusterPerformance
+from validmind import tags, tasks
+from validmind.vm_models import VMDataset, VMModel
 
 
-@dataclass
-class VMeasure(ClusterPerformance):
+@tags("sklearn", "model_performance")
+@tasks("clustering")
+def VMeasure(dataset: VMDataset, model: VMModel):
     """
     Evaluates homogeneity and completeness of a clustering model using the V Measure Score.
 
@@ -48,14 +48,11 @@ class VMeasure(ClusterPerformance):
     the other. The V Measure Score does not provide flexibility in assigning different weights to homogeneity and
     completeness.
     """
-
-    name = "v_measure_score"
-    required_inputs = ["model", "dataset"]
-    tasks = ["clustering"]
-    tags = [
-        "sklearn",
-        "model_performance",
+    return [
+        {
+            "V Measure": metrics.v_measure_score(
+                labels_true=dataset.y,
+                labels_pred=dataset.y_pred(model),
+            )
+        }
     ]
-
-    def metric_info(self):
-        return {"V Measure": metrics.v_measure_score}

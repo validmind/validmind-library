@@ -7,7 +7,7 @@ output: html_document
 
 # **Quickstart - Customer Churn Full Suite Model Documentation**
 
-This interactive notebook will guide you through documenting a model using the ValidMind Developer framework. We will use sample datasets provided by the library and train a simple classification model.
+This interactive notebook will guide you through documenting a model using the ValidMind Library. We will use sample datasets provided by the library and train a simple classification model.
 
 For this simple demonstration, we will use the following bank customer churn dataset from Kaggle: <https://www.kaggle.com/code/kmalit/bank-customer-churn-prediction/data.>
 
@@ -37,9 +37,9 @@ library(xgboost)
 knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 ```
 
-## **Initializing the ValidMind Client Library**
+## **Initializing the ValidMind Library**
 
-Log in to the ValidMind platform with your registered email address, and navigate to the Documentation Projects page.
+Log in to the ValidMind Platform with your registered email address, and navigate to the Documentation Projects page.
 
 ### **Creating a new Documentation Project**
 
@@ -51,7 +51,7 @@ Select "Customer Churn model" from the Model drop-down, and "Initial Validation"
 
 ### **Finding the project API key and secret**
 
-In the "Client Integration" page of the newly created project, you will find the initialization code that allows the client library to associate documentation and tests with the appropriate project. The initialization code configures the following arguments:
+In the "Client Integration" page of the newly created project, you will find the initialization code that allows the ValidMind Library to associate documentation and tests with the appropriate project. The initialization code configures the following arguments:
 
 -   api_host: Location of the ValidMind API.
 
@@ -67,7 +67,7 @@ The code snippet can be copied and pasted directly in the cell below to initiali
 vm_r <- vm(
   api_key="<your_api_key_here>",
   api_secret="<your_api_secret_here>",
-  model="<your_project_id_here>",
+  model="<your_model_id_here>",
   python_version=python_version,
   api_host="https://api.dev.vm.validmind.ai/api/v1/tracking"
 )

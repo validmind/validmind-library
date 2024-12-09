@@ -9,8 +9,10 @@ import json
 import math
 import re
 import sys
+import warnings
+from datetime import date, datetime, time
 from platform import python_version
-from typing import Any
+from typing import Any, Dict, List
 
 import matplotlib.pylab as pylab
 import mistune
@@ -24,6 +26,7 @@ from IPython.display import display as ipy_display
 from latex2mathml.converter import convert
 from matplotlib.axes._axes import _log as matplotlib_axes_logger
 from numpy import ndarray
+from sklearn.exceptions import UndefinedMetricWarning
 from tabulate import tabulate
 
 from .html_templates.content_blocks import math_jax_snippet, python_syntax_highlighting
@@ -32,6 +35,11 @@ from .logging import get_logger
 DEFAULT_BIG_NUMBER_DECIMALS = 2
 DEFAULT_SMALL_NUMBER_DECIMALS = 4
 
+# Suppress some common warnings
+warnings.filterwarnings("ignore", category=UndefinedMetricWarning)
+warnings.filterwarnings(
+    "ignore", category=UserWarning, message=".*valid feature names.*"
+)
 
 # SETUP SOME DEFAULTS FOR PLOTS #
 # Silence this warning: *c* argument looks like a single numeric RGB or
@@ -93,22 +101,63 @@ def nan_to_none(obj):
 
 
 class NumpyEncoder(json.JSONEncoder):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.type_handlers = {
+            self.is_datetime: lambda obj: obj.isoformat(),
+            self.is_pandas_interval: lambda obj: f"[{obj.left}, {obj.right}]",
+            self.is_numpy_integer: lambda obj: int(obj),
+            self.is_numpy_floating: lambda obj: float(obj),
+            self.is_numpy_ndarray: lambda obj: obj.tolist(),
+            self.is_numpy_bool: lambda obj: bool(obj),
+            self.is_pandas_timestamp: lambda obj: str(obj),
+            self.is_set: lambda obj: list(obj),
+            self.is_quantlib_date: lambda obj: obj.ISO(),
+            self.is_generic_object: self.handle_generic_object,
+        }
+
     def default(self, obj):
-        if isinstance(obj, pd.Interval):
-            return f"[{obj.left}, {obj.right}]"
-        if isinstance(obj, np.integer):
-            return int(obj)
-        if isinstance(obj, np.floating):
-            return float(obj)
-        if isinstance(obj, np.ndarray):
-            return obj.tolist()
-        if isinstance(obj, np.bool_):
-            return bool(obj)
-        if isinstance(obj, pd.Timestamp):
-            return str(obj)
-        if isinstance(obj, set):
-            return list(obj)
+        for type_check, handler in self.type_handlers.items():
+            if type_check(obj):
+                return handler(obj)
         return super().default(obj)
+
+    def is_datetime(self, obj):
+        return isinstance(obj, (datetime, date, time))
+
+    def is_pandas_interval(self, obj):
+        return isinstance(obj, pd.Interval)
+
+    def is_numpy_integer(self, obj):
+        return isinstance(obj, np.integer)
+
+    def is_numpy_floating(self, obj):
+        return isinstance(obj, np.floating)
+
+    def is_numpy_ndarray(self, obj):
+        return isinstance(obj, np.ndarray)
+
+    def is_numpy_bool(self, obj):
+        return isinstance(obj, np.bool_)
+
+    def is_pandas_timestamp(self, obj):
+        return isinstance(obj, pd.Timestamp)
+
+    def is_set(self, obj):
+        return isinstance(obj, set)
+
+    def is_quantlib_date(self, obj):
+        return "QuantLib.Date" in str(type(obj))
+
+    def is_generic_object(self, obj):
+        return isinstance(obj, object)
+
+    def handle_generic_object(self, obj):
+        return (
+            obj.__str__()
+            if type(obj).__dict__.get("__str__")
+            else str(obj).split(".")[1].split(" ")[0]
+        )
 
     def encode(self, obj):
         obj = nan_to_none(obj)
@@ -158,7 +207,7 @@ def precision_and_scale(x):
     return (magnitude + scale, scale)
 
 
-def format_records(df):
+def format_records(df: pd.DataFrame) -> List[Dict[str, Any]]:
     """
     Round the values on each dataframe's column to a given number of decimal places.
     The returned value is converted to a dict in "records" with Pandas's to_dict() function.
@@ -191,7 +240,7 @@ def format_records(df):
     return df.to_dict("records")
 
 
-def format_key_values(key_values):
+def format_key_values(key_values: Dict[str, Any]) -> Dict[str, Any]:
     """
     Round the values on each dict's value to a given number of decimal places.
 

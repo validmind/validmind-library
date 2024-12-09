@@ -2,13 +2,13 @@
 
 ## 1. Introduction
 
-The Time Series Data Validation Full Suite notebook aims to demonstrate the application of various data validation tests using the **ValidMind MRM Platform** and **Library**.
+The Time Series Data Validation Full Suite notebook aims to demonstrate the application of various data validation tests using the **ValidMind MRM Platform** and **ValidMind Library**.
 
 In this demo, we will use the `time_series_model_validation` **test suite** to run multiple model validation tests on several pre-trained time series models.
 
 ## 2. Setup
 
-Prepare the environment for our analysis. First, **import** all necessary libraries and modules required for our analysis. Next, **connect** to the ValidMind MRM platform, which provides a comprehensive suite of tools and services for model validation.
+Prepare the environment for our analysis. First, **import** all necessary libraries and modules required for our analysis. Next, **connect** to the ValidMind Platform, which provides a comprehensive suite of tools and services for model validation.
 
 Finally, define and **configure** the specific use case we are working on by setting up any required parameters, data sources, or other settings that will be used throughout the analysis.
 
@@ -47,9 +47,9 @@ custom_print_table_hook <- function(x) {
 knitr::knit_hooks$set(print_table = custom_print_table_hook)
 ```
 
-## Initializing the ValidMind Client Library
+## Initializing the ValidMind Library
 
-Log in to the ValidMind platform with your registered email address, and navigate to the Documentation Projects page.
+Log in to the ValidMind Platform with your registered email address, and navigate to the Documentation Projects page.
 
 ### Creating a new Documentation Project
 
@@ -61,7 +61,7 @@ Select "Customer Churn model" from the Model drop-down, and "Initial Validation"
 
 ### Finding the project API key and secret
 
-In the "Client Integration" page of the newly created project, you will find the initialization code that allows the client library to associate documentation and tests with the appropriate project. The initialization code configures the following arguments:
+In the "Client Integration" page of the newly created project, you will find the initialization code that allows the ValidMind Library to associate documentation and tests with the appropriate project. The initialization code configures the following arguments:
 
 -   api_host: Location of the ValidMind API.
 

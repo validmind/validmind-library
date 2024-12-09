@@ -23,31 +23,16 @@
   <path fill-rule="evenodd" d="M4.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H14.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"/>
 </svg>                &nbsp;validmind.tests.model_validation.sklearn</a>
 
-            <img src="https://vmai.s3.us-west-1.amazonaws.com/vm-logo.svg" class="logo" alt="project logo"/>
+            <img src="https://vmai.s3.us-west-1.amazonaws.com/validmind-logo.svg" class="logo" alt="project logo"/>
 
             <input type="search" placeholder="Search..." role="searchbox" aria-label="search"
                    pattern=".+" required>
 
 
-            <h3>High Level API</h3>
+            <h3>Python Library API</h3>
                 <ul class="memberlist">
             <li>
-                    <a class="class" href="#RegressionPerformance">RegressionPerformance</a>
-                            <ul class="memberlist">
-                        <li>
-                                <a class="function" href="#RegressionPerformance.__init__">RegressionPerformance</a>
-                        </li>
-                        <li>
-                                <a class="function" href="#RegressionPerformance.regression_errors">regression_errors</a>
-                        </li>
-                        <li>
-                                <a class="function" href="#RegressionPerformance.summary">summary</a>
-                        </li>
-                        <li>
-                                <a class="function" href="#RegressionPerformance.run">run</a>
-                        </li>
-                </ul>
-
+                    <a class="function" href="#RegressionPerformance">RegressionPerformance</a>
             </li>
     </ul>
 
@@ -72,33 +57,30 @@
                 
             </section>
                 <section id="RegressionPerformance">
-                    <div class="attr class">
-                    <div class="decorator">@dataclass</div>
+                    <div class="attr function">
+                    <div class="decorator">@tags(&#39;sklearn&#39;, &#39;model_performance&#39;)</div>
+        <div class="decorator">@tasks(&#39;regression&#39;)</div>
 
-    <span class="def">class</span>
-    <span class="name">RegressionPerformance</span><wbr>(<span class="base">validmind.vm_models.test.metric.Metric</span>):
+        <span class="def">def</span>
+        <span class="name">RegressionPerformance</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">model</span><span class="p">:</span> <span class="n"><a href="../../../vm_models.html#VMModel">validmind.vm_models.VMModel</a></span>,</span><span class="param">	<span class="n">dataset</span><span class="p">:</span> <span class="n"><a href="../../../vm_models.html#VMDataset">validmind.vm_models.VMDataset</a></span></span><span class="return-annotation">):</span></span>
 
         
     </div>
     <a class="headerlink" href="#RegressionPerformance"></a>
     
-            <div class="docstring"><p>Compares and evaluates the performance of multiple regression models using five different metrics: MAE, MSE, RMSE,
-MAPE, and MBD.</p>
+            <div class="docstring"><p>Evaluates the performance of a regression model using five different metrics: MAE, MSE, RMSE, MAPE, and MBD.</p>
 
 <h3 id="purpose">Purpose</h3>
 
-<p>The Regression Models Performance Comparison metric is used to measure and compare the performance of regression
-models. It calculates multiple evaluation metrics, including Mean Absolute Error (MAE), Mean Squared Error (MSE),
+<p>The Regression Models Performance Comparison metric is used to measure the performance of regression models. It
+calculates multiple evaluation metrics, including Mean Absolute Error (MAE), Mean Squared Error (MSE),
 Root Mean Squared Error (RMSE), Mean Absolute Percentage Error (MAPE), and Mean Bias Deviation (MBD), thereby
 enabling a comprehensive view of model performance.</p>
 
 <h3 id="test-mechanism">Test Mechanism</h3>
 
-<p>The test starts by sourcing the true and predicted values from the models. It then computes the MAE, MSE, RMSE,
-MAPE, and MBD. These calculations encapsulate both the direction and the magnitude of error in predictions, thereby
-providing a multi-faceted view of model accuracy. It captures these results in a dictionary and compares the
-performance of all models using these metrics. The results are then appended to a table for presenting a
-comparative summary.</p>
+<p>The test uses the sklearn library to calculate the MAE, MSE, RMSE, MAPE, and MBD. These calculations encapsulate both
+the direction and the magnitude of error in predictions, thereby providing a multi-faceted view of model accuracy.</p>
 
 <h3 id="signs-of-high-risk">Signs of High Risk</h3>
 
@@ -106,15 +88,12 @@ comparative summary.</p>
 <li>High values of MAE, MSE, RMSE, and MAPE, which indicate a high error rate and imply a larger departure of the
 model's predictions from the true values.</li>
 <li>A large value of MBD, which shows a consistent bias in the model’s predictions.</li>
-<li>If the test returns an error citing that no models were provided for comparison, it implies a risk in the
-evaluation process itself.</li>
 </ul>
 
 <h3 id="strengths">Strengths</h3>
 
 <ul>
 <li>The metric evaluates models on five different metrics offering a comprehensive analysis of model performance.</li>
-<li>It compares multiple models simultaneously, aiding in the selection of the best-performing models.</li>
 <li>It is designed to handle regression tasks and can be seamlessly integrated with libraries like sklearn.</li>
 </ul>
 
@@ -124,90 +103,10 @@ evaluation process itself.</li>
 <li>The metric only evaluates regression models and does not evaluate classification models.</li>
 <li>The test assumes that the models have been trained and tested appropriately prior to evaluation. It does not
 handle pre-processing, feature selection, or other stages in the model lifecycle.</li>
-<li>It may fail to run if it doesn't receive valid models as inputs. The models are passed externally and the test
-doesn't have an internal mechanism to verify their validity.</li>
-<li>The test could exhibit performance limitations if a large number of models is input for comparison.</li>
 </ul>
 </div>
 
 
-                            <div id="RegressionPerformance.__init__" class="classattr">
-                                <div class="attr function">
-            
-        <span class="name">RegressionPerformance</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">context</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n"><a href="../../../vm_models.html#TestContext">validmind.vm_models.TestContext</a></span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">inputs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n"><a href="../../../vm_models.html#TestInput">validmind.vm_models.TestInput</a></span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">tasks</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">_ref_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">_section_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">test_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">result</span><span class="p">:</span> <span class="n">validmind</span><span class="o">.</span><span class="n">vm_models</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">result_wrapper</span><span class="o">.</span><span class="n">MetricResultWrapper</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">params</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">output_template</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">generate_description</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span></span>)</span>
-
-        
-    </div>
-    <a class="headerlink" href="#RegressionPerformance.__init__"></a>
-    
-    
-
-                            </div>
-                            <div id="RegressionPerformance.regression_errors" class="classattr">
-                                <div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">regression_errors</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">y_true_test</span>, </span><span class="param"><span class="n">y_pred_test</span></span><span class="return-annotation">):</span></span>
-
-        
-    </div>
-    <a class="headerlink" href="#RegressionPerformance.regression_errors"></a>
-    
-    
-
-                            </div>
-                            <div id="RegressionPerformance.summary" class="classattr">
-                                <div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">summary</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">metric_value</span><span class="p">:</span> <span class="nb">dict</span></span><span class="return-annotation">):</span></span>
-
-        
-    </div>
-    <a class="headerlink" href="#RegressionPerformance.summary"></a>
-    
-            <div class="docstring"><p>This summary varies depending if we're evaluating a binary or multi-class model</p>
-</div>
-
-
-                            </div>
-                            <div id="RegressionPerformance.run" class="classattr">
-                                <div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">run</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">):</span></span>
-
-        
-    </div>
-    <a class="headerlink" href="#RegressionPerformance.run"></a>
-    
-            <div class="docstring"><p>Run the calculation and cache its results</p>
-</div>
-
-
-                            </div>
-                            <div class="inherited">
-                                <h5>Inherited Members</h5>
-                                <dl>
-                                    <div><dt>validmind.vm_models.test.metric.Metric</dt>
-                                <dd id="RegressionPerformance.cache_results" class="function">cache_results</dd>
-
-            </div>
-            <div><dt>validmind.vm_models.test.test.Test</dt>
-                                <dd id="RegressionPerformance.description" class="function">description</dd>
-                <dd id="RegressionPerformance.log" class="function">log</dd>
-
-            </div>
-            <div><dt>validmind.vm_models.test_context.TestUtils</dt>
-                                <dd id="RegressionPerformance.get_accessed_inputs" class="function">get_accessed_inputs</dd>
-                <dd id="RegressionPerformance.dataset" class="variable">dataset</dd>
-                <dd id="RegressionPerformance.model" class="variable">model</dd>
-                <dd id="RegressionPerformance.models" class="variable">models</dd>
-                <dd id="RegressionPerformance.validate_inputs" class="function">validate_inputs</dd>
-
-            </div>
-                                </dl>
-                            </div>
                 </section>
     </main>
 <script>

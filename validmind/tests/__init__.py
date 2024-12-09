@@ -6,13 +6,37 @@
 
 from ..errors import LoadTestError
 from ..logging import get_logger
-from .decorator import metric, tags, tasks, test
-from .load import describe_test, list_tests, load_test
-from .metadata import list_tags, list_tasks, list_tasks_and_tags
+from ._store import test_provider_store
+from .decorator import tags, tasks, test
+from .load import (
+    describe_test,
+    list_tags,
+    list_tasks,
+    list_tasks_and_tags,
+    list_tests,
+    load_test,
+)
 from .run import run_test
-from .test_providers import LocalTestProvider, TestProvider, register_test_provider
+from .test_providers import LocalTestProvider, TestProvider
 
 logger = get_logger(__name__)
+
+
+# public-facing function for registering test providers
+def register_test_provider(namespace: str, test_provider: TestProvider) -> None:
+    """Register an external test provider
+
+    Args:
+        namespace (str): The namespace of the test provider
+        test_provider (TestProvider): The test provider
+    """
+    if not hasattr(test_provider, "list_tests"):
+        raise ValueError("test_provider must implement `list_tests` method")
+
+    if not hasattr(test_provider, "load_test"):
+        raise ValueError("test_provider must implement `load_test` method")
+
+    test_provider_store.register_test_provider(namespace, test_provider)
 
 
 __all__ = [
@@ -33,7 +57,6 @@ __all__ = [
     "list_tasks_and_tags",
     # Decorators for functional metrics
     "test",
-    "metric",  # DEPRECATED
     "tags",
     "tasks",
 ]

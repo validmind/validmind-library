@@ -10,6 +10,7 @@ from validmind import tags, tasks
 @tags("regression")
 @tasks("regression")
 def AdjustedRSquaredScore(model, dataset):
+    """Calculates the adjusted R-squared score for a regression model."""
     r2_score = _r2_score(
         dataset.y,
         dataset.y_pred(model),

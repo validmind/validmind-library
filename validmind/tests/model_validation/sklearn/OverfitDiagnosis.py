@@ -2,7 +2,6 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from dataclasses import dataclass
 from typing import List
 
 import matplotlib.pyplot as plt
@@ -11,17 +10,9 @@ import pandas as pd
 import seaborn as sns
 from sklearn import metrics
 
+from validmind import tags, tasks
 from validmind.logging import get_logger
-from validmind.vm_models import (
-    Figure,
-    ResultSummary,
-    ResultTable,
-    ResultTableMetadata,
-    ThresholdTest,
-    ThresholdTestResult,
-    VMDataset,
-    VMModel,
-)
+from validmind.vm_models import VMDataset, VMModel
 
 logger = get_logger(__name__)
 
@@ -173,56 +164,69 @@ def _plot_overfit_regions(
     return fig
 
 
-# TODO: make this a functional test instead of class-based when appropriate
-# simply have to remove the class and rename this func to OverfitDiagnosis
-def overfit_diagnosis(  # noqa: C901
+@tags(
+    "sklearn",
+    "binary_classification",
+    "multiclass_classification",
+    "linear_regression",
+    "model_diagnosis",
+)
+@tasks("classification", "regression")
+def OverfitDiagnosis(
     model: VMModel,
     datasets: List[VMDataset],
     metric: str = None,
     cut_off_threshold: float = DEFAULT_THRESHOLD,
 ):
-    """Identify overfit regions in a model's predictions.
-
-    This test compares the model's performance on training versus test data, grouped by
-    feature columns. It calculates the difference between the training and test performance
-    for each group and identifies regions where the difference exceeds a specified threshold.
-
-    ## Test Methodology
-
-    This test works for both classification and regression models and with a variety of
-    performance metrics. By default, it uses the AUC metric for classification models and
-    the MSE metric for regression models. The threshold for identifying overfit regions
-    defaults to 0.04 but should be adjusted based on the specific use case.
-
-    ## Inputs
-    - `model` (VMModel): The ValidMind model object to evaluate.
-    - `datasets` (List[VMDataset]): A list of two VMDataset objects where the first dataset
-        is the training data and the second dataset is the test data.
-
-    ## Parameters
-    - `metric` (str, optional): The performance metric to use for evaluation. Choose from:
-        'accuracy', 'auc', 'f1', 'precision', 'recall', 'mse', 'mae', 'r2', 'mape'.
-        Defaults to 'auc' for classification models and 'mse' for regression models.
-    - `cut_off_threshold` (float, optional): The threshold for identifying overfit regions.
-        Defaults to 0.04.
     """
+    Assesses potential overfitting in a model's predictions, identifying regions where performance between training and
+    testing sets deviates significantly.
 
-    # Determine if it's a classification or regression model
+    ### Purpose
+
+    The Overfit Diagnosis test aims to identify areas in a model's predictions where there is a significant difference
+    in performance between the training and testing sets. This test helps to pinpoint specific regions or feature
+    segments where the model may be overfitting.
+
+    ### Test Mechanism
+
+    This test compares the model's performance on training versus test data, grouped by feature columns. It calculates
+    the difference between the training and test performance for each group and identifies regions where this
+    difference exceeds a specified threshold:
+
+    - The test works for both classification and regression models.
+    - It defaults to using the AUC metric for classification models and the MSE metric for regression models.
+    - The threshold for identifying overfitting regions is set to 0.04 by default.
+    - The test calculates the performance metrics for each feature segment and plots regions where the performance gap
+    exceeds the threshold.
+
+    ### Signs of High Risk
+
+    - Significant gaps between training and test performance metrics for specific feature segments.
+    - Multiple regions with performance gaps exceeding the defined threshold.
+    - Higher than expected differences in predicted versus actual values in the test set compared to the training set.
+
+    ### Strengths
+
+    - Identifies specific areas where overfitting occurs.
+    - Supports multiple performance metrics, providing flexibility.
+    - Applicable to both classification and regression models.
+    - Visualization of overfitting segments aids in better understanding and debugging.
+
+    ### Limitations
+
+    - The default threshold may not be suitable for all use cases and requires tuning.
+    - May not capture more subtle forms of overfitting that do not exceed the threshold.
+    - Assumes that the binning of features adequately represents the data segments.
+    """
     is_classification = bool(datasets[0].probability_column(model))
 
-    # Set default metric if not provided
     if not metric:
         metric = (
             DEFAULT_CLASSIFICATION_METRIC
             if is_classification
             else DEFAULT_REGRESSION_METRIC
         )
-        logger.info(
-            f"Using default {'classification' if is_classification else 'regression'} metric: {metric}"
-        )
-
-    if id(cut_off_threshold) == id(DEFAULT_THRESHOLD):
-        logger.info("Using default cut-off threshold of 0.04")
 
     train_df = datasets[0].df
     test_df = datasets[1].df
@@ -279,18 +283,8 @@ def overfit_diagnosis(  # noqa: C901
             )
 
         results = _prepare_results(results_train, results_test, metric)
-
-        fig = _plot_overfit_regions(results, feature_column, cut_off_threshold, metric)
         test_figures.append(
-            Figure(
-                key=f"overfit_diagnosis:{metric}:{feature_column}",
-                figure=fig,
-                metadata={
-                    "metric": metric,
-                    "cut_off_threshold": cut_off_threshold,
-                    "feature": feature_column,
-                },
-            )
+            _plot_overfit_regions(results, feature_column, cut_off_threshold, metric)
         )
 
         for _, row in results[results["gap"] > cut_off_threshold].iterrows():
@@ -306,91 +300,3 @@ def overfit_diagnosis(  # noqa: C901
             )
 
     return {"Overfit Diagnosis": test_results}, *test_figures
-
-
-@dataclass
-class OverfitDiagnosis(ThresholdTest):
-    """
-    Assesses potential overfitting in a model's predictions, identifying regions where performance between training and
-    testing sets deviates significantly.
-
-    ### Purpose
-
-    The Overfit Diagnosis test aims to identify areas in a model's predictions where there is a significant difference
-    in performance between the training and testing sets. This test helps to pinpoint specific regions or feature
-    segments where the model may be overfitting.
-
-    ### Test Mechanism
-
-    This test compares the model's performance on training versus test data, grouped by feature columns. It calculates
-    the difference between the training and test performance for each group and identifies regions where this
-    difference exceeds a specified threshold:
-
-    - The test works for both classification and regression models.
-    - It defaults to using the AUC metric for classification models and the MSE metric for regression models.
-    - The threshold for identifying overfitting regions is set to 0.04 by default.
-    - The test calculates the performance metrics for each feature segment and plots regions where the performance gap
-    exceeds the threshold.
-
-    ### Signs of High Risk
-
-    - Significant gaps between training and test performance metrics for specific feature segments.
-    - Multiple regions with performance gaps exceeding the defined threshold.
-    - Higher than expected differences in predicted versus actual values in the test set compared to the training set.
-
-    ### Strengths
-
-    - Identifies specific areas where overfitting occurs.
-    - Supports multiple performance metrics, providing flexibility.
-    - Applicable to both classification and regression models.
-    - Visualization of overfitting segments aids in better understanding and debugging.
-
-    ### Limitations
-
-    - The default threshold may not be suitable for all use cases and requires tuning.
-    - May not capture more subtle forms of overfitting that do not exceed the threshold.
-    - Assumes that the binning of features adequately represents the data segments.
-    """
-
-    required_inputs = ["model", "datasets"]
-    default_params = {"metric": None, "cut_off_threshold": DEFAULT_THRESHOLD}
-    tasks = ["classification", "regression"]
-    tags = [
-        "sklearn",
-        "binary_classification",
-        "multiclass_classification",
-        "linear_regression",
-        "model_diagnosis",
-    ]
-
-    def run(self):
-        func_result = overfit_diagnosis(
-            self.inputs.model,
-            self.inputs.datasets,
-            metric=self.params["metric"],
-            cut_off_threshold=self.params["cut_off_threshold"],
-        )
-
-        return self.cache_results(
-            test_results_list=[
-                ThresholdTestResult(
-                    test_name=self.params["metric"],
-                    column=row["Feature"],
-                    passed=False,
-                    values={k: v for k, v in row.items()},
-                )
-                for row in func_result[0]["Overfit Diagnosis"]
-            ],
-            passed=(not func_result[0]["Overfit Diagnosis"]),
-            figures=func_result[1:],
-        )
-
-    def summary(self, results, _):
-        return ResultSummary(
-            results=[
-                ResultTable(
-                    data=[result.values for result in results],
-                    metadata=ResultTableMetadata(title="Overfit Diagnosis"),
-                )
-            ],
-        )

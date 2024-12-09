@@ -2,17 +2,23 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from dataclasses import dataclass
+from typing import Union
 
-import pandas as pd
 from sklearn.model_selection import GridSearchCV
 
+from validmind import tags, tasks
 from validmind.errors import SkipTestError
-from validmind.vm_models import Metric, ResultSummary, ResultTable, ResultTableMetadata
+from validmind.vm_models import VMDataset, VMModel
 
 
-@dataclass
-class HyperParametersTuning(Metric):
+@tags("sklearn", "model_performance")
+@tasks("classification", "clustering")
+def HyperParametersTuning(
+    model: VMModel,
+    dataset: VMDataset,
+    param_grid: Union[dict, None] = None,
+    scoring: Union[str, None] = None,
+):
     """
     Exerts exhaustive grid search to identify optimal hyperparameters for the model, improving performance.
 
@@ -54,51 +60,15 @@ class HyperParametersTuning(Metric):
     - There's a potential risk of overfitting the model if the training set is not representative of the data that the
     model will be applied to.
     """
+    if not param_grid:
+        raise SkipTestError("'param_grid' dictionary must be provided to run this test")
 
-    name = "hyper_parameters_tuning"
-    required_inputs = ["model", "dataset"]
-    tasks = ["classification", "clustering"]
-    tags = ["sklearn", "model_performance"]
-    default_params = {"param_grid": None, "scoring": None}
+    estimators = GridSearchCV(model.model, param_grid=param_grid, scoring=scoring)
+    estimators.fit(dataset.x, dataset.y)
 
-    def run(self):
-        param_grid = self.params["param_grid"]
-        if param_grid is None:
-            raise SkipTestError(
-                "param_grid in dictonary format must be provided to run this test"
-            )
-
-        model = self.inputs.model.model
-        estimators = GridSearchCV(
-            model, param_grid=param_grid, scoring=self.params["scoring"]
-        )
-        estimators.fit(self.inputs.dataset.x, self.inputs.dataset.y)
-
-        results = [
-            {
-                "Best Model": f"{estimators.best_estimator_}",
-                "Best Parameters": estimators.best_params_,
-            }
-        ]
-        return self.cache_results(
-            {
-                "parameters_tuning": pd.DataFrame(results).to_dict(orient="records"),
-            }
-        )
-
-    def summary(self, metric_value):
-        """
-        Build one table for summarizing the hyper parameters tunning
-        """
-        summary_regression = metric_value["parameters_tuning"]
-
-        return ResultSummary(
-            results=[
-                ResultTable(
-                    data=summary_regression,
-                    metadata=ResultTableMetadata(
-                        title="Hyper Parameters Tuning Results"
-                    ),
-                ),
-            ]
-        )
+    return [
+        {
+            "Best Model": estimators.best_estimator_,
+            "Best Parameters": estimators.best_params_,
+        }
+    ]

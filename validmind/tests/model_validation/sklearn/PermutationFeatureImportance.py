@@ -2,20 +2,33 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from dataclasses import dataclass
+from typing import Union
 
 import plotly.graph_objects as go
 from sklearn.inspection import permutation_importance
 
+from validmind import tags, tasks
 from validmind.errors import SkipTestError
 from validmind.logging import get_logger
-from validmind.vm_models import Figure, Metric
+from validmind.vm_models import VMDataset, VMModel
 
 logger = get_logger(__name__)
 
 
-@dataclass
-class PermutationFeatureImportance(Metric):
+@tags(
+    "sklearn",
+    "binary_classification",
+    "multiclass_classification",
+    "feature_importance",
+    "visualization",
+)
+@tasks("classification", "text_classification")
+def PermutationFeatureImportance(
+    model: VMModel,
+    dataset: VMDataset,
+    fontsize: Union[int, None] = None,
+    figure_height: Union[int, None] = None,
+):
     """
     Assesses the significance of each feature in a model by evaluating the impact on model performance when feature
     values are randomly rearranged.
@@ -55,78 +68,47 @@ class PermutationFeatureImportance(Metric):
     allocate importance to one and not the other.
     - Cannot interact with certain libraries like statsmodels, pytorch, catboost, etc., thus limiting its applicability.
     """
+    if model.library in [
+        "statsmodels",
+        "pytorch",
+        "catboost",
+        "transformers",
+        "R",
+    ]:
+        raise SkipTestError(f"Skipping PFI for {model.library} models")
 
-    name = "pfi"
-    required_inputs = ["model", "dataset"]
-    default_params = {
-        "fontsize": None,
-        "figure_height": 1000,
-    }
-    tasks = ["classification", "text_classification"]
-    tags = [
-        "sklearn",
-        "binary_classification",
-        "multiclass_classification",
-        "feature_importance",
-        "visualization",
-    ]
+    pfi_values = permutation_importance(
+        estimator=model.model,
+        X=dataset.x_df(),
+        y=dataset.y_df(),
+        random_state=0,
+        n_jobs=-2,
+    )
 
-    def run(self):
-        x = self.inputs.dataset.x_df()
-        y = self.inputs.dataset.y_df()
+    pfi = {}
+    for i, column in enumerate(dataset.feature_columns):
+        pfi[column] = [pfi_values["importances_mean"][i]], [
+            pfi_values["importances_std"][i]
+        ]
 
-        if self.inputs.model.library in [
-            "statsmodels",
-            "pytorch",
-            "catboost",
-            "transformers",
-            "R",
-        ]:
-            raise SkipTestError(f"Skipping PFI for {self.inputs.model.library} models")
+    sorted_idx = pfi_values.importances_mean.argsort()
 
-        pfi_values = permutation_importance(
-            self.inputs.model.model,
-            x,
-            y,
-            random_state=0,
-            n_jobs=-2,
+    fig = go.Figure()
+    fig.add_trace(
+        go.Bar(
+            y=[dataset.feature_columns[i] for i in sorted_idx],
+            x=pfi_values.importances[sorted_idx].mean(axis=1).T,
+            orientation="h",
         )
+    )
+    fig.update_layout(
+        title_text="Permutation Importances",
+        yaxis=dict(
+            tickmode="linear",
+            dtick=1,
+            tickfont=dict(size=fontsize),
+        ),
+        height=figure_height,
+    )
 
-        pfi = {}
-        for i, column in enumerate(x.columns):
-            pfi[column] = [pfi_values["importances_mean"][i]], [
-                pfi_values["importances_std"][i]
-            ]
-
-        sorted_idx = pfi_values.importances_mean.argsort()
-
-        fig = go.Figure()
-        fig.add_trace(
-            go.Bar(
-                y=x.columns[sorted_idx],
-                x=pfi_values.importances[sorted_idx].mean(axis=1).T,
-                orientation="h",
-            )
-        )
-        fig.update_layout(
-            title_text="Permutation Importances",
-            yaxis=dict(
-                tickmode="linear",  # set tick mode to linear
-                dtick=1,  # set interval between ticks
-                tickfont=dict(
-                    size=self.params["fontsize"]
-                ),  # set the tick label font size
-            ),
-            height=self.params["figure_height"],  # use figure_height parameter here
-        )
-
-        return self.cache_results(
-            metric_value=pfi,
-            figures=[
-                Figure(
-                    for_object=self,
-                    key=f"pfi_{self.inputs.dataset.input_id}_{self.inputs.model.input_id}",
-                    figure=fig,
-                ),
-            ],
-        )
+    return fig

@@ -23,34 +23,16 @@
   <path fill-rule="evenodd" d="M4.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H14.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"/>
 </svg>                &nbsp;validmind.tests.data_validation</a>
 
-            <img src="https://vmai.s3.us-west-1.amazonaws.com/vm-logo.svg" class="logo" alt="project logo"/>
+            <img src="https://vmai.s3.us-west-1.amazonaws.com/validmind-logo.svg" class="logo" alt="project logo"/>
 
             <input type="search" placeholder="Search..." role="searchbox" aria-label="search"
                    pattern=".+" required>
 
 
-            <h3>High Level API</h3>
+            <h3>Python Library API</h3>
                 <ul class="memberlist">
             <li>
-                    <a class="class" href="#TimeSeriesOutliers">TimeSeriesOutliers</a>
-                            <ul class="memberlist">
-                        <li>
-                                <a class="function" href="#TimeSeriesOutliers.__init__">TimeSeriesOutliers</a>
-                        </li>
-                        <li>
-                                <a class="function" href="#TimeSeriesOutliers.summary">summary</a>
-                        </li>
-                        <li>
-                                <a class="function" href="#TimeSeriesOutliers.run">run</a>
-                        </li>
-                        <li>
-                                <a class="function" href="#TimeSeriesOutliers.z_score_with_na">z_score_with_na</a>
-                        </li>
-                        <li>
-                                <a class="function" href="#TimeSeriesOutliers.identify_outliers">identify_outliers</a>
-                        </li>
-                </ul>
-
+                    <a class="function" href="#TimeSeriesOutliers">TimeSeriesOutliers</a>
             </li>
     </ul>
 
@@ -75,11 +57,12 @@
                 
             </section>
                 <section id="TimeSeriesOutliers">
-                    <div class="attr class">
-                    <div class="decorator">@dataclass</div>
+                    <div class="attr function">
+                    <div class="decorator">@tags(&#39;time_series_data&#39;)</div>
+        <div class="decorator">@tasks(&#39;regression&#39;)</div>
 
-    <span class="def">class</span>
-    <span class="name">TimeSeriesOutliers</span><wbr>(<span class="base">validmind.vm_models.test.threshold_test.ThresholdTest</span>):
+        <span class="def">def</span>
+        <span class="name">TimeSeriesOutliers</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">dataset</span><span class="p">:</span> <span class="n"><a href="../../vm_models.html#VMDataset">validmind.vm_models.VMDataset</a></span>,</span><span class="param">	<span class="n">zscore_threshold</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span></span><span class="return-annotation">):</span></span>
 
         
     </div>
@@ -135,115 +118,6 @@ always be suitable depending on the dataset and use case.</li>
 </div>
 
 
-                            <div id="TimeSeriesOutliers.__init__" class="classattr">
-                                <div class="attr function">
-            
-        <span class="name">TimeSeriesOutliers</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">context</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n"><a href="../../vm_models.html#TestContext">validmind.vm_models.TestContext</a></span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">inputs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n"><a href="../../vm_models.html#TestInput">validmind.vm_models.TestInput</a></span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">tasks</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">_ref_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">_section_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">test_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">result</span><span class="p">:</span> <span class="n"><a href="../../vm_models.html#ThresholdTestResults">validmind.vm_models.ThresholdTestResults</a></span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">params</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">output_template</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">generate_description</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span></span>)</span>
-
-        
-    </div>
-    <a class="headerlink" href="#TimeSeriesOutliers.__init__"></a>
-    
-    
-
-                            </div>
-                            <div id="TimeSeriesOutliers.summary" class="classattr">
-                                <div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">summary</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">results</span>, </span><span class="param"><span class="n">all_passed</span><span class="p">:</span> <span class="nb">bool</span></span><span class="return-annotation">):</span></span>
-
-        
-    </div>
-    <a class="headerlink" href="#TimeSeriesOutliers.summary"></a>
-    
-            <div class="docstring"><p>Example output:
-[
-    {
-        "values": {
-            "Variable": [...],
-            "z-score": [...],
-            "Threshold": [3, 3, 3, 3, 3, 3],
-            "Date": [...]
-        },
-        "test_name": "outliers",
-        "passed": false
-    }
-]</p>
-</div>
-
-
-                            </div>
-                            <div id="TimeSeriesOutliers.run" class="classattr">
-                                <div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">run</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">):</span></span>
-
-        
-    </div>
-    <a class="headerlink" href="#TimeSeriesOutliers.run"></a>
-    
-            <div class="docstring"><p>Run the calculation and cache its results</p>
-</div>
-
-
-                            </div>
-                            <div id="TimeSeriesOutliers.z_score_with_na" class="classattr">
-                                <div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">z_score_with_na</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">df</span></span><span class="return-annotation">):</span></span>
-
-        
-    </div>
-    <a class="headerlink" href="#TimeSeriesOutliers.z_score_with_na"></a>
-    
-    
-
-                            </div>
-                            <div id="TimeSeriesOutliers.identify_outliers" class="classattr">
-                                <div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">identify_outliers</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">df</span>, </span><span class="param"><span class="n">threshold</span></span><span class="return-annotation">):</span></span>
-
-        
-    </div>
-    <a class="headerlink" href="#TimeSeriesOutliers.identify_outliers"></a>
-    
-            <div class="docstring"><p>Identifies and returns outliers in a pandas DataFrame using the z-score method.
-Args:
-df (pandas.DataFrame): A pandas DataFrame containing the data to be analyzed.
-threshold (float): The absolute value of the z-score above which a value is considered an outlier.
-Returns:
-pandas.DataFrame: A DataFrame containing the variables, z-scores, threshold, and dates of the identified outliers.</p>
-</div>
-
-
-                            </div>
-                            <div class="inherited">
-                                <h5>Inherited Members</h5>
-                                <dl>
-                                    <div><dt>validmind.vm_models.test.threshold_test.ThresholdTest</dt>
-                                <dd id="TimeSeriesOutliers.cache_results" class="function">cache_results</dd>
-
-            </div>
-            <div><dt>validmind.vm_models.test.test.Test</dt>
-                                <dd id="TimeSeriesOutliers.description" class="function">description</dd>
-                <dd id="TimeSeriesOutliers.log" class="function">log</dd>
-
-            </div>
-            <div><dt>validmind.vm_models.test_context.TestUtils</dt>
-                                <dd id="TimeSeriesOutliers.get_accessed_inputs" class="function">get_accessed_inputs</dd>
-                <dd id="TimeSeriesOutliers.dataset" class="variable">dataset</dd>
-                <dd id="TimeSeriesOutliers.model" class="variable">model</dd>
-                <dd id="TimeSeriesOutliers.models" class="variable">models</dd>
-                <dd id="TimeSeriesOutliers.validate_inputs" class="function">validate_inputs</dd>
-
-            </div>
-                                </dl>
-                            </div>
                 </section>
     </main>
 <script>

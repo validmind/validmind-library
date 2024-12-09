@@ -23,13 +23,13 @@
   <path fill-rule="evenodd" d="M4.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H14.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"/>
 </svg>                &nbsp;validmind.tests.model_validation</a>
 
-            <img src="https://vmai.s3.us-west-1.amazonaws.com/vm-logo.svg" class="logo" alt="project logo"/>
+            <img src="https://vmai.s3.us-west-1.amazonaws.com/validmind-logo.svg" class="logo" alt="project logo"/>
 
             <input type="search" placeholder="Search..." role="searchbox" aria-label="search"
                    pattern=".+" required>
 
 
-            <h3>High Level API</h3>
+            <h3>Python Library API</h3>
                 <ul class="memberlist">
             <li>
                     <a class="function" href="#BertScore">BertScore</a>
@@ -62,7 +62,7 @@
         <div class="decorator">@tasks(&#39;text_classification&#39;, &#39;text_summarization&#39;)</div>
 
         <span class="def">def</span>
-        <span class="name">BertScore</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">dataset</span>, </span><span class="param"><span class="n">model</span></span><span class="return-annotation">):</span></span>
+        <span class="name">BertScore</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">dataset</span>, </span><span class="param"><span class="n">model</span>, </span><span class="param"><span class="n">evaluation_model</span><span class="o">=</span><span class="s1">&#39;distilbert-base-uncased&#39;</span></span><span class="return-annotation">):</span></span>
 
         
     </div>
@@ -84,7 +84,10 @@ initializes the BERTScore evaluator. For each pair of true and predicted texts, 
 BERTScore metrics and compiles them into a dataframe. Histograms and bar charts are generated for each BERTScore
 metric (Precision, Recall, and F1 Score) to visualize their distribution. Additionally, a table of descriptive
 statistics (mean, median, standard deviation, minimum, and maximum) is compiled for each metric, providing a
-comprehensive summary of the model's performance.</p>
+comprehensive summary of the model's performance. The test uses the <code>evaluation_model</code> param to specify the
+huggingface model to use for evaluation. <code>microsoft/deberta-xlarge-mnli</code> is the best-performing model but is
+very large and may be slow without a GPU. <code>microsoft/deberta-large-mnli</code> is a smaller model that is faster to
+run and <code>distilbert-base-uncased</code> is much lighter and can run on a CPU but is less accurate.</p>
 
 <h3 id="signs-of-high-risk">Signs of High Risk</h3>
 

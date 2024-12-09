@@ -1,24 +1,17 @@
 # Copyright © 2023-2024 ValidMind Inc. All rights reserved.
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
+from sklearn.metrics import accuracy_score
 
-from dataclasses import dataclass
-from typing import List
+from validmind.tests import tags, tasks
+from validmind.vm_models import VMDataset, VMModel
 
-import pandas as pd
-from sklearn import metrics
 
-from validmind.vm_models import (
-    ResultSummary,
-    ResultTable,
-    ResultTableMetadata,
-    ThresholdTest,
-    ThresholdTestResult,
+@tags(
+    "sklearn", "binary_classification", "multiclass_classification", "model_performance"
 )
-
-
-@dataclass
-class MinimumAccuracy(ThresholdTest):
+@tasks("classification", "text_classification")
+def MinimumAccuracy(dataset: VMDataset, model: VMModel, min_threshold: float = 0.7):
     """
     Checks if the model's prediction accuracy meets or surpasses a specified threshold.
 
@@ -55,73 +48,12 @@ class MinimumAccuracy(ThresholdTest):
     - Inability to measure the model's precision, recall, or capacity to manage false positives or false negatives.
     - Focused on overall correctness and may not be sufficient for all types of model analytics.
     """
+    accuracy = accuracy_score(dataset.y, dataset.y_pred(model))
 
-    name = "accuracy_score"
-    required_inputs = ["model", "dataset"]
-    default_params = {"min_threshold": 0.7}
-    tasks = ["classification", "text_classification"]
-    tags = [
-        "sklearn",
-        "binary_classification",
-        "multiclass_classification",
-        "model_performance",
-    ]
-
-    def summary(self, results: List[ThresholdTestResult], all_passed: bool):
-        """
-        The accuracy score test returns results like these:
-        [{"values": {"score": 0.734375, "threshold": 0.7}, "passed": true}]
-        """
-        result = results[0]
-        results_table = [
-            {
-                "Score": result.values["score"],
-                "Threshold": result.values["threshold"],
-                "Pass/Fail": "Pass" if result.passed else "Fail",
-            }
-        ]
-
-        return ResultSummary(
-            results=[
-                ResultTable(
-                    data=pd.DataFrame(results_table),
-                    metadata=ResultTableMetadata(
-                        title="Minimum Accuracy Test on Test Data"
-                    ),
-                )
-            ]
-        )
-
-    def run(self):
-        y_true = self.inputs.dataset.y
-        class_pred = self.inputs.dataset.y_pred(self.inputs.model)
-        y_true = y_true.astype(class_pred.dtype)
-
-        accuracy_score = metrics.accuracy_score(y_true, class_pred)
-
-        passed = accuracy_score > self.params["min_threshold"]
-        results = [
-            ThresholdTestResult(
-                passed=passed,
-                values={
-                    "score": accuracy_score,
-                    "threshold": self.params["min_threshold"],
-                },
-            )
-        ]
-
-        return self.cache_results(results, passed=all([r.passed for r in results]))
-
-    def test(self):
-        # Test that there is a result and it's not None
-        assert self.result is not None
-        # Test that results are contained in a list
-        assert isinstance(self.result.test_results.results, list)
-        # Verify that there is exactly one result
-        assert len(self.result.test_results.results) == 1
-        # Extract the single result for clarity
-        test_result = self.result.test_results.results[0]
-        # Check the 'passed' condition logic against the test outcome
-        assert test_result.passed == (
-            test_result.values["score"] >= test_result.values["threshold"]
-        )
+    return [
+        {
+            "Score": accuracy,
+            "Threshold": min_threshold,
+            "Pass/Fail": "Pass" if accuracy > min_threshold else "Fail",
+        }
+    ], accuracy > min_threshold

@@ -14,7 +14,24 @@ non_test_content_block_html = """
 test_content_block_html = """
 <div>
   <h2>{title}</h2>
-  {description}
+  <div style="border: 1px solid #ddd; border-radius: 4px; padding: 10px; margin: 10px 0;">
+    {description}
+  </div>
+</div>
+
+<h4 class="vm_required_context">
+  Required Inputs: <span style="font-size: 13px"><i>{required_inputs}</i></span>
+</h4>
+
+<div style="display: {table_display};">
+  <h4>Parameters:</h4>
+  <table class="vm_params_table" style="display: {table_display};">
+      <tr>
+          <th>Parameter</th>
+          <th>Default Value</th>
+      </tr>
+      {params_table}
+  </table>
 </div>
 
 <div class="unset">
@@ -44,21 +61,6 @@ result = vm.tests.run_test(
 # To see the result of the test, ensure that you have called `vm.init()` and then run:
 result.log()</code>
     </pre>
-
-    <h4 class="vm_required_context">
-      Required Inputs: <span style="font-size: 13px"><i>{required_inputs}</i></span>
-    </h4>
-
-    <div style="display: {table_display};">
-      <h4>Parameters:</h4>
-      <table class="vm_params_table" style="display: {table_display};">
-          <tr>
-              <th>Parameter</th>
-              <th>Default Value</th>
-          </tr>
-          {params_table}
-      </table>
-    </div>
   </div>
 </div>
 

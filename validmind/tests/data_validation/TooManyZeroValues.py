@@ -2,23 +2,13 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from dataclasses import dataclass
-from typing import List
-
-from ydata_profiling.config import Settings
-from ydata_profiling.model.typeset import ProfilingTypeSet
-
-from validmind.vm_models import (
-    ResultSummary,
-    ResultTable,
-    ResultTableMetadata,
-    ThresholdTest,
-    ThresholdTestResult,
-)
+from validmind.tests import tags, tasks
+from validmind.vm_models import VMDataset
 
 
-@dataclass
-class TooManyZeroValues(ThresholdTest):
+@tags("tabular_data")
+@tasks("regression", "classification")
+def TooManyZeroValues(dataset: VMDataset, max_percent_threshold: float = 0.03):
     """
     Identifies numerical columns in a dataset that contain an excessive number of zero values, defined by a threshold
     percentage.
@@ -70,65 +60,26 @@ class TooManyZeroValues(ThresholdTest):
     - Cannot evaluate non-numerical or categorical columns, which might bring with them different types of concerns or
     issues.
     """
+    df = dataset.df
 
-    name = "zeros"
-    required_inputs = ["dataset"]
-    default_params = {"max_percent_threshold": 0.03}
+    table = []
 
-    tasks = ["regression", "classification"]
-    tags = ["tabular_data"]
+    for col in dataset.feature_columns_numeric:
+        value_counts = df[col].value_counts()
 
-    def summary(self, results: List[ThresholdTestResult], all_passed: bool):
-        """
-        The zeros test returns results like these:
-        [{"values": {"n_zeros": 10000, "p_zeros": 1.0}, "column": "Exited", "passed": true}]
-        """
-        results_table = [
+        if 0 not in value_counts.index:
+            continue
+
+        n_zeros = value_counts[0]
+        p_zeros = n_zeros / df.shape[0]
+
+        table.append(
             {
-                "Column": result.column,
-                "Number of Zero Values": result.values["n_zeros"],
-                "Percentage of Zero Values (%)": result.values["p_zeros"] * 100,
-                "Pass/Fail": "Pass" if result.passed else "Fail",
+                "Column": col,
+                "Number of Zero Values": n_zeros,
+                "Percentage of Zero Values (%)": p_zeros * 100,
+                "Pass/Fail": "Pass" if p_zeros < max_percent_threshold else "Fail",
             }
-            for result in results
-        ]
-        return ResultSummary(
-            results=[
-                ResultTable(
-                    data=results_table,
-                    metadata=ResultTableMetadata(title="Zeros Results for Dataset"),
-                )
-            ]
         )
 
-    def run(self):
-        rows = self.inputs.dataset.df.shape[0]
-        typeset = ProfilingTypeSet(Settings())
-        dataset_types = typeset.infer_type(self.inputs.dataset.df)
-        results = []
-
-        for col in self.inputs.dataset.df.columns:
-            # Only calculate zeros for numerical columns
-            if str(dataset_types[col]) != "Numeric":
-                continue
-
-            value_counts = self.inputs.dataset.df[col].value_counts()
-
-            if 0 not in value_counts.index:
-                continue
-
-            n_zeros = value_counts[0]
-            p_zeros = n_zeros / rows
-
-            results.append(
-                ThresholdTestResult(
-                    column=col,
-                    passed=p_zeros < self.params["max_percent_threshold"],
-                    values={
-                        "n_zeros": n_zeros,
-                        "p_zeros": p_zeros,
-                    },
-                )
-            )
-
-        return self.cache_results(results, passed=all([r.passed for r in results]))
+    return table, all(row["Pass/Fail"] == "Pass" for row in table)

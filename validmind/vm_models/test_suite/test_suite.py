@@ -48,48 +48,16 @@ class TestSuiteSection:
     section_id: str = None
     description: Optional[str] = None
 
-    def get_required_inputs_for_test(self, test: TestSuiteTest) -> List[str]:
-        """
-        Returns the required inputs for a specific test. Returns an input
-        dictionary that can be passed directly to run_test() or run_documentation_test()
-
-        Args:
-            test (TestSuiteTest): The test to get the required inputs for
-
-        Returns:
-            dict: A dictionary of required inputs
-        """
-        test_class = test._test_class
-        inputs_dict = {}
-        if (
-            not hasattr(test_class, "required_inputs")
-            or test_class.required_inputs is None
-        ):
-            return inputs_dict
-
-        for input_name in test_class.required_inputs:
-            # This required input is not valid but the behavior in this function
-            # is consistent with required_inputs as defined in the test class so
-            # we will ignore it for now
-            #
-            # if input_name == "model.train_ds" or input_name == "model.test_ds":
-            #     continue
-
-            # Assign None to the input to indicate that it is required
-            inputs_dict[input_name] = None
-
-        return inputs_dict
-
     def get_default_config(self):
         """Returns the default configuration for the test suite section"""
         # TODO: configuration across sections/tests needs more work
         section_default_config = {}
 
         for test in self.tests:
-            section_default_config[test.test_id] = {
-                "inputs": self.get_required_inputs_for_test(test),
-                "params": test.get_default_params() or {},
-            }
+            default_config = test.get_default_config()
+
+            if default_config:
+                section_default_config[test.test_id] = default_config
 
         return section_default_config
 
@@ -162,13 +130,13 @@ class TestSuite:
         return self.suite_id.title().replace("_", " ")
 
     def get_tests(self) -> List[str]:
-        """Get all test IDs from all sections"""
-        test_ids = []
+        """Get all test suite test objects from all sections"""
+        tests = []
 
         for section in self.sections:
-            test_ids.extend(section.tests)
+            tests.extend(section.tests)
 
-        return test_ids
+        return tests
 
     def num_tests(self) -> int:
         """Returns the total number of tests in the test suite"""

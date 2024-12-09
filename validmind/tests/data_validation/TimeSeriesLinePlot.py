@@ -5,10 +5,14 @@
 import pandas as pd
 import plotly.graph_objects as go
 
-from validmind.vm_models import Figure, Metric
+from validmind import tags, tasks
+from validmind.errors import SkipTestError
+from validmind.vm_models import VMDataset
 
 
-class TimeSeriesLinePlot(Metric):
+@tags("time_series_data", "visualization")
+@tasks("regression")
+def TimeSeriesLinePlot(dataset: VMDataset):
     """
     Generates and analyses time-series data through line plots revealing trends, patterns, anomalies over time.
 
@@ -51,49 +55,27 @@ class TimeSeriesLinePlot(Metric):
     - The metric has an inherent limitation in that it cannot extract deeper statistical insights from the time series
     data, which can limit its efficacy with complex data structures and phenomena.
     """
+    df = dataset.df
 
-    name = "time_series_line_plot"
-    required_inputs = ["dataset"]
-    tasks = ["regression"]
-    tags = ["time_series_data", "visualization"]
+    if not pd.api.types.is_datetime64_any_dtype(df.index):
+        raise SkipTestError("Index must be a datetime type")
 
-    def run(self):
-        # Check if index is datetime
-        if not pd.api.types.is_datetime64_any_dtype(self.inputs.dataset.df.index):
-            raise ValueError("Index must be a datetime type")
+    figures = []
 
-        columns = list(self.inputs.dataset.df.columns)
-        df = self.inputs.dataset.df
-
-        if not set(columns).issubset(set(df.columns)):
-            raise ValueError("Provided 'columns' must exist in the dataset")
-
-        figures = []
-        for col in columns:
-            # Creating the figure using Plotly
-            fig = go.Figure()
-
-            fig.add_trace(go.Scatter(x=df.index, y=df[col], mode="lines", name=col))
-
-            fig.update_layout(
-                title={
-                    "text": f"{col}",
-                    "y": 0.95,
-                    "x": 0.5,
-                    "xanchor": "center",
-                    "yanchor": "top",
-                },
-                font=dict(size=16),
-            )
-
-            figures.append(
-                Figure(
-                    for_object=self,
-                    key=f"{self.key}:{col}",
-                    figure=fig,
-                )
-            )
-
-        return self.cache_results(
-            figures=figures,
+    for col in dataset.feature_columns_numeric:
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(x=df.index, y=df[col], mode="lines", name=col))
+        fig.update_layout(
+            title={
+                "text": col,
+                "y": 0.95,
+                "x": 0.5,
+                "xanchor": "center",
+                "yanchor": "top",
+            },
+            font=dict(size=16),
         )
+
+        figures.append(fig)
+
+    return tuple(figures)

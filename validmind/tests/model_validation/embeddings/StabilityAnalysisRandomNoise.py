@@ -5,7 +5,10 @@
 import random
 import string
 
-from .StabilityAnalysis import StabilityAnalysis
+from validmind import tags, tasks
+from validmind.vm_models import VMDataset, VMModel
+
+from .utils import create_stability_analysis_result
 
 
 def random_swap(word_list):
@@ -59,7 +62,14 @@ def random_insertion(word_list):
     return word_list[:index] + [random_word] + word_list[index:]
 
 
-class StabilityAnalysisRandomNoise(StabilityAnalysis):
+@tags("llm", "text_data", "embeddings", "visualization")
+@tasks("feature_extraction")
+def StabilityAnalysisRandomNoise(
+    dataset: VMDataset,
+    model: VMModel,
+    probability: float = 0.02,
+    mean_similarity_threshold: float = 0.7,
+):
     """
     Assesses the robustness of text embeddings models to random noise introduced via text perturbations.
 
@@ -106,17 +116,9 @@ class StabilityAnalysisRandomNoise(StabilityAnalysis):
     - Does not guarantee model performance on new, unseen, real-world data beyond the generated noisy test data.
     """
 
-    name = "Text Embeddings Stability Analysis to Random Noise"
-    default_params = {
-        **StabilityAnalysis.default_params,
-        "probability": 0.02,
-    }
-
-    def perturb_data(self, data):
+    def perturb_data(data):
         if not isinstance(data, str):
             return data
-
-        probability = self.params["probability"]
 
         # Tokenize the string based on spaces
         words = data.split()
@@ -136,3 +138,15 @@ class StabilityAnalysisRandomNoise(StabilityAnalysis):
                     words = random_insertion(words)
 
         return " ".join(words)
+
+    original_df = dataset.df[[dataset.text_column]]
+    perturbed_df = original_df.copy()
+    perturbed_df[dataset.text_column] = perturbed_df[dataset.text_column].map(
+        perturb_data
+    )
+
+    return create_stability_analysis_result(
+        dataset.y_pred(model),
+        model.predict(perturbed_df),
+        mean_similarity_threshold,
+    )

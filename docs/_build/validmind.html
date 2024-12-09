@@ -18,13 +18,13 @@
         <label id="navtoggle" for="togglestate" class="pdoc-button"><svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'><path stroke-linecap='round' stroke="currentColor" stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/></svg></label>
         <input id="togglestate" type="checkbox" aria-hidden="true" tabindex="-1">
         <div>
-            <img src="https://vmai.s3.us-west-1.amazonaws.com/vm-logo.svg" class="logo" alt="project logo"/>
+            <img src="https://vmai.s3.us-west-1.amazonaws.com/validmind-logo.svg" class="logo" alt="project logo"/>
 
             <input type="search" placeholder="Search..." role="searchbox" aria-label="search"
                    pattern=".+" required>
 
 
-            <h3>High Level API</h3>
+            <h3>Python Library API</h3>
                 <ul class="memberlist">
             <li>
                     <a class="variable" href="#__version__">__version__</a>
@@ -43,9 +43,6 @@
             </li>
             <li>
                     <a class="function" href="#init_r_model">init_r_model</a>
-            </li>
-            <li>
-                    <a class="function" href="#metric">metric</a>
             </li>
             <li>
                     <a class="function" href="#preview_template">preview_template</a>
@@ -99,26 +96,20 @@
             ValidMind Library
     </h1>
 
-                        <div class="docstring"><p>ValidMind’s Python Library is a library of developer tools and methods designed to automate
-the documentation and validation of your models.</p>
+                        <div class="docstring"><p>The ValidMind Library is a suite of developer tools and methods designed to automate the documentation and validation of your models.</p>
 
-<p>The Library is designed to be model agnostic. If your model is built in Python, ValidMind's
-Python library will provide all the standard functionality without requiring your developers to rewrite any functions.</p>
+<p>Designed to be model agnostic, the ValidMind Library provides all the standard functionality without requiring you to rewrite any functions as long as your model is built in Python.</p>
 
-<p>The Library provides a rich suite of documentation tools and test suites, from documenting
-descriptions of your dataset to testing your models for weak spots and overfit areas. The Library
-helps you automate the generation of model documentation by feeding the ValidMind platform with documentation
-artifacts and test results to the ValidMind platform.</p>
+<p>With a rich array of documentation tools and test suites, from documenting descriptions of your datasets to testing your models for weak spots and overfit areas, the ValidMind Library helps you automate model documentation by feeding the ValidMind Platform with documentation artifacts and test results.</p>
 
-<p>To install the client library:</p>
+<p>To install the ValidMind Library:</p>
 
 <div class="pdoc-code codehilite">
 <pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>validmind
 </code></pre>
 </div>
 
-<p>To initialize the client library, paste the code snippet with the client integration details directly into your
-development source code, replacing this example with your own:</p>
+<p>To initialize the ValidMind Library, paste the code snippet with the model identifier credentials directly into your development source code, replacing this example with your own:</p>
 
 <div class="pdoc-code codehilite">
 <pre><span></span><code><span class="kn">import</span> <span class="nn">validmind</span> <span class="k">as</span> <span class="nn">vm</span>
@@ -132,9 +123,7 @@ development source code, replacing this example with your own:</p>
 </code></pre>
 </div>
 
-<p>After you have pasted the code snippet into your development source code and executed the code, the Python client
-library will register with ValidMind. You can now use the Library to document and test your models,
-and to upload to the ValidMind Platform.</p>
+<p>After you have pasted the code snippet into your development source code and executed the code, the Python Library API will register with ValidMind. You can now use the ValidMind Library to document and test your models, and to upload to the ValidMind Platform.</p>
 </div>
 
                 
@@ -144,7 +133,7 @@ and to upload to the ValidMind Platform.</p>
                 <section id="__version__">
                     <div class="attr variable">
             <span class="name">__version__</span>        =
-<span class="default_value">&#39;2.5.23&#39;</span>
+<span class="default_value">&#39;2.6.7&#39;</span>
 
         
     </div>
@@ -190,7 +179,7 @@ Defaults to None.</li>
                     <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">init</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">project</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">api_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">api_secret</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">api_host</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">model</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">monitoring</span><span class="o">=</span><span class="kc">False</span></span><span class="return-annotation">):</span></span>
+        <span class="name">init</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">project</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">api_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">api_secret</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">api_host</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">model</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">monitoring</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span></span><span class="return-annotation">):</span></span>
 
         
     </div>
@@ -210,7 +199,7 @@ retrieve them from the environment variables <code>VM_API_KEY</code> and <code>V
 <li><strong>api_key (str, optional):</strong>  The API key. Defaults to None.</li>
 <li><strong>api_secret (str, optional):</strong>  The API secret. Defaults to None.</li>
 <li><strong>api_host (str, optional):</strong>  The API host. Defaults to None.</li>
-<li><strong>monitoring (str, optional):</strong>  The ongoing monitoring flag. Defaults to False.</li>
+<li><strong>monitoring (bool):</strong>  The ongoing monitoring flag. Defaults to False.</li>
 </ul>
 
 <h6 id="raises">Raises:</h6>
@@ -324,7 +313,7 @@ this to the same key.</li>
                     <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">init_r_model</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">model_path</span><span class="p">:</span> <span class="nb">str</span></span><span class="return-annotation">) -> <span class="n"><a href="validmind/vm_models.html#VMModel">validmind.vm_models.VMModel</a></span>:</span></span>
+        <span class="name">init_r_model</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">model_path</span><span class="p">:</span> <span class="nb">str</span>,</span><span class="param">	<span class="n">input_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;model&#39;</span></span><span class="return-annotation">) -> <span class="n"><a href="validmind/vm_models.html#VMModel">validmind.vm_models.VMModel</a></span>:</span></span>
 
         
     </div>
@@ -358,21 +347,6 @@ since xgb models saved in .json or .bin format can be loaded directly with eithe
 <blockquote>
   <p>vm.vm.Model: A VM Model instance</p>
 </blockquote>
-</div>
-
-
-                </section>
-                <section id="metric">
-                    <div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">metric</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">func_or_id</span></span><span class="return-annotation">):</span></span>
-
-        
-    </div>
-    <a class="headerlink" href="#metric"></a>
-    
-            <div class="docstring"><p>DEPRECATED, use @vm.test instead</p>
 </div>
 
 
@@ -514,12 +488,12 @@ documentation or <code>vm.describe_test()</code> for more details on the inputs 
     </div>
     <a class="headerlink" href="#tags"></a>
     
-            <div class="docstring"><p>Decorator for specifying tags for a metric.</p>
+            <div class="docstring"><p>Decorator for specifying tags for a test.</p>
 
 <h6 id="arguments">Arguments:</h6>
 
 <ul>
-<li><strong>*tags:</strong>  The tags to apply to the metric.</li>
+<li><strong>*tags:</strong>  The tags to apply to the test.</li>
 </ul>
 </div>
 
@@ -535,12 +509,12 @@ documentation or <code>vm.describe_test()</code> for more details on the inputs 
     </div>
     <a class="headerlink" href="#tasks"></a>
     
-            <div class="docstring"><p>Decorator for specifying the task types that a metric is designed for.</p>
+            <div class="docstring"><p>Decorator for specifying the task types that a test is designed for.</p>
 
 <h6 id="arguments">Arguments:</h6>
 
 <ul>
-<li><strong>*tasks:</strong>  The task types that the metric is designed for.</li>
+<li><strong>*tasks:</strong>  The task types that the test is designed for.</li>
 </ul>
 </div>
 
@@ -556,22 +530,28 @@ documentation or <code>vm.describe_test()</code> for more details on the inputs 
     </div>
     <a class="headerlink" href="#test"></a>
     
-            <div class="docstring"><p>Decorator for creating and registering metrics with the ValidMind framework.</p>
+            <div class="docstring"><p>Decorator for creating and registering custom tests</p>
 
-<p>Creates a metric object and registers it with ValidMind under the provided ID. If
-no ID is provided, the function name will be used as to build one. So if the
-function name is <code>my_metric</code>, the metric will be registered under the ID
-<code>validmind.custom_metrics.my_metric</code>.</p>
+<p>This decorator registers the function it wraps as a test function within ValidMind
+under the provided ID. Once decorated, the function can be run using the
+<code><a href="validmind/tests.html#run_test">validmind.tests.run_test</a></code> function.</p>
 
-<p>This decorator works by creating a new <code>Metric</code> class will be created whose <code>run</code>
-method calls the decorated function. This function should take as arguments the
-inputs it requires (<code>dataset</code>, <code>datasets</code>, <code>model</code>, <code>models</code>) followed by any
-parameters. It can return any number of the following types:</p>
+<p>The function can take two different types of arguments:</p>
+
+<ul>
+<li>Inputs: ValidMind model or dataset (or list of models/datasets). These arguments
+must use the following names: <code>model</code>, <code>models</code>, <code>dataset</code>, <code>datasets</code>.</li>
+<li>Parameters: Any additional keyword arguments of any type (must have a default
+value) that can have any name.</li>
+</ul>
+
+<p>The function should return one of the following types:</p>
 
 <ul>
 <li>Table: Either a list of dictionaries or a pandas DataFrame</li>
 <li>Plot: Either a matplotlib figure or a plotly figure</li>
-<li>Scalar: A single number or string</li>
+<li>Scalar: A single number (int or float)</li>
+<li>Boolean: A single boolean value indicating whether the test passed or failed</li>
 </ul>
 
 <p>The function may also include a docstring. This docstring will be used and logged
@@ -608,7 +588,7 @@ as the metric's description.</p>
 <p>Unit metrics are key-value pairs where the key is the metric name and the value is
 a scalar (int or float). These key-value pairs are associated with the currently
 selected model (inventory model in the ValidMind Platform) and keys can be logged
-to over time to create a history of the metric. On the platform, these metrics
+to over time to create a history of the metric. On the ValidMind Platform, these metrics
 will be used to create plots/visualizations for documentation and dashboards etc.</p>
 
 <h6 id="arguments">Arguments:</h6>

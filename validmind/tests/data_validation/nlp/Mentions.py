@@ -2,21 +2,19 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-"""
-Threshold based tests
-"""
 import re
-from dataclasses import dataclass
 
-import matplotlib.pyplot as plt
 import pandas as pd
 import plotly.express as px
 
-from validmind.vm_models import Figure, ThresholdTest, VMDataset
+from validmind import tags, tasks
+from validmind.errors import SkipTestError
+from validmind.vm_models import VMDataset
 
 
-@dataclass
-class Mentions(ThresholdTest):
+@tags("nlp", "text_data", "visualization", "frequency_analysis")
+@tasks("text_classification", "text_summarization")
+def Mentions(dataset: VMDataset, top_mentions: int = 25):
     """
     Calculates and visualizes frequencies of '@' prefixed mentions in a text-based dataset for NLP model analysis.
 
@@ -57,58 +55,29 @@ class Mentions(ThresholdTest):
     - It does not provide insights on less frequently occurring data or outliers, which means potentially significant
     patterns could be overlooked.
     """
+    mention_counts = (
+        dataset.df[dataset.text_column]
+        .apply(lambda x: " ".join(re.findall(r"(?<=@)\w+", x)))
+        .value_counts()
+    )
 
-    name = "mentions"
+    if mention_counts.empty:
+        raise SkipTestError("No mentions found in the dataset")
 
-    required_inputs = ["dataset"]
-    default_params = {"top_mentions": 25}
-    tasks = ["text_classification", "text_summarization"]
-    tags = ["nlp", "text_data", "visualization", "frequency_analysis"]
+    start_index = 1 if mention_counts.iloc[0] == "" else 0
+    end_index = top_mentions + start_index
+    mention_counts = mention_counts[start_index:end_index]
 
-    def run(self):
-        # Can only run this test if we have a Dataset object
-        if not isinstance(self.inputs.dataset, VMDataset):
-            raise ValueError("Mentions requires a validmind Dataset object")
+    mention_frequencies_df = pd.DataFrame(
+        {
+            "Scenario": mention_counts.index.tolist(),
+            "Percentage": mention_counts.tolist(),
+        }
+    )
 
-        text_column = self.inputs.dataset.text_column
-
-        def mentions(text):
-            line = re.findall(r"(?<=@)\w+", text)
-            return " ".join(line)
-
-        b = (
-            self.inputs.dataset.df[text_column]
-            .apply(lambda x: mentions(x))
-            .value_counts()[:][1 : self.params["top_mentions"]]
-            .index.tolist()
-        )
-        a = (
-            self.inputs.dataset.df[text_column]
-            .apply(lambda x: mentions(x))
-            .value_counts()[:][1 : self.params["top_mentions"]]
-            .tolist()
-        )
-        row = pd.DataFrame({"scenario": []})
-        row["scenario"] = b
-        row["Percentage"] = a
-        figures = []
-        if not row.empty:
-            fig = px.treemap(
-                row, path=["scenario"], values="Percentage", title="Tree of Mentions"
-            )
-            figures.append(
-                Figure(
-                    for_object=self,
-                    key=self.name,
-                    figure=fig,
-                )
-            )
-
-        # Do this if you want to prevent the figure from being displayed
-        plt.close("all")
-
-        return self.cache_results(
-            [],
-            passed=True,
-            figures=figures,
-        )
+    return px.treemap(
+        mention_frequencies_df,
+        path=["Scenario"],
+        values="Percentage",
+        title="Tree of Mentions",
+    )

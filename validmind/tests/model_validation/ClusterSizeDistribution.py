@@ -2,16 +2,16 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from dataclasses import dataclass
-
 import pandas as pd
 import plotly.graph_objects as go
 
-from validmind.vm_models import Figure, Metric
+from validmind import tags, tasks
+from validmind.vm_models import VMDataset, VMModel
 
 
-@dataclass
-class ClusterSizeDistribution(Metric):
+@tags("sklearn", "model_performance")
+@tasks("clustering")
+def ClusterSizeDistribution(dataset: VMDataset, model: VMModel):
     """
     Assesses the performance of clustering models by comparing the distribution of cluster sizes in model predictions
     with the actual data.
@@ -52,47 +52,24 @@ class ClusterSizeDistribution(Metric):
     - May not fully capture other important aspects of clustering, such as cluster density, distances between clusters,
     and the shape of clusters.
     """
+    y_pred = dataset.y_pred(model)
+    y_true = dataset.y.astype(y_pred.dtype)
 
-    name = "cluster_size_distribution"
-    required_inputs = ["model", "dataset"]
-    tasks = ["clustering"]
-    tags = [
-        "sklearn",
-        "model_performance",
-    ]
+    df = pd.DataFrame({"Actual": y_true.ravel(), "Prediction": y_pred.ravel()})
+    df_counts = df.apply(pd.value_counts)
 
-    def run(self):
-        y_true_train = self.inputs.dataset.y
-        y_pred_train = self.inputs.dataset.y_pred(self.inputs.model)
-        y_true_train = y_true_train.astype(y_pred_train.dtype)
-        df = pd.DataFrame(
-            {"Actual": y_true_train.ravel(), "Prediction": y_pred_train.ravel()}
-        )
-        df_counts = df.apply(pd.value_counts)
-
-        fig = go.Figure(
-            data=[
-                go.Bar(name="Actual", x=df_counts.index, y=df_counts["Actual"].values),
-                go.Bar(
-                    name="Prediction",
-                    x=df_counts.index,
-                    y=df_counts["Prediction"].values,
-                ),
-            ]
-        )
-        # Change the bar mode
-        fig.update_xaxes(title_text="Number of clusters", showgrid=False)
-        fig.update_yaxes(title_text="Counts", showgrid=False)
-        fig.update_layout(
-            title_text="Cluster distribution", title_x=0.5, barmode="group"
-        )
-
-        figures = [
-            Figure(
-                for_object=self,
-                key=self.key,
-                figure=fig,
-            )
+    fig = go.Figure(
+        data=[
+            go.Bar(name="Actual", x=df_counts.index, y=df_counts["Actual"].values),
+            go.Bar(
+                name="Prediction",
+                x=df_counts.index,
+                y=df_counts["Prediction"].values,
+            ),
         ]
+    )
+    fig.update_xaxes(title_text="Number of clusters", showgrid=False)
+    fig.update_yaxes(title_text="Counts", showgrid=False)
+    fig.update_layout(title_text="Cluster distribution", title_x=0.5, barmode="group")
 
-        return self.cache_results(figures=figures)
+    return fig

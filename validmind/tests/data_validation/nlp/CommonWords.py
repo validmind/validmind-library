@@ -2,22 +2,19 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-"""
-Metrics functions for any Pandas-compatible datasets
-"""
-
 from collections import Counter
-from dataclasses import dataclass
 
-import matplotlib.pyplot as plt
 import nltk
+import plotly.graph_objects as go
 from nltk.corpus import stopwords
 
-from ....vm_models import Figure, Metric, VMDataset
+from validmind import tags, tasks
+from validmind.vm_models import VMDataset
 
 
-@dataclass
-class CommonWords(Metric):
+@tags("nlp", "text_data", "visualization", "frequency_analysis")
+@tasks("text_classification", "text_summarization")
+def CommonWords(dataset: VMDataset):
     """
     Assesses the most frequent non-stopwords in a text column for identifying prevalent language patterns.
 
@@ -31,8 +28,8 @@ class CommonWords(Metric):
 
     The test methodology involves splitting the specified text column's entries into words, collating them into a
     corpus, and then counting the frequency of each word using the Counter. The forty most frequently occurring
-    non-stopwords are then visualized in a bar chart, where the x-axis represents the words, and the y-axis indicates
-    their frequency of occurrence.
+    non-stopwords are then visualized in an interactive bar chart using Plotly, where the x-axis represents the words,
+    and the y-axis indicates their frequency of occurrence.
 
     ### Signs of High Risk
 
@@ -46,7 +43,7 @@ class CommonWords(Metric):
     - The metric provides clear insights into the language features – specifically word frequency – of unstructured
     text data.
     - It can reveal prominent vocabulary and language patterns, which prove vital for feature extraction in NLP tasks.
-    - The visualization helps in quickly capturing the patterns and understanding the data intuitively.
+    - The interactive visualization helps in quickly capturing the patterns and understanding the data intuitively.
 
     ### Limitations
 
@@ -58,48 +55,43 @@ class CommonWords(Metric):
     applicability.
     """
 
-    name = "common_words"
-    required_inputs = ["dataset"]
-    tasks = ["text_classification", "text_summarization"]
-    tags = ["nlp", "text_data", "visualization", "frequency_analysis"]
+    # Check text column
+    if not dataset.text_column:
+        raise ValueError("Please set text_column name in the Validmind Dataset object")
 
-    def run(self):
-        # Can only run this test if we have a Dataset object
-        if not isinstance(self.inputs.dataset, VMDataset):
-            raise ValueError("CommonWords requires a validmind Dataset object")
+    nltk.download("stopwords", quiet=True)
 
-        def create_corpus(df, text_column):
-            corpus = []
-            for x in df[text_column].str.split():
-                for i in x:
-                    corpus.append(i)
-            return corpus
+    counter = Counter(
+        [word for x in dataset.df[dataset.text_column].str.split() for word in x]
+    )
+    most = counter.most_common()
 
-        text_column = self.inputs.dataset.text_column
-        corpus = create_corpus(self.inputs.dataset.df, text_column=text_column)
+    def create_corpus(df, text_column):
+        corpus = []
+        for x in df[text_column].str.split():
+            for i in x:
+                corpus.append(i)
+        return corpus
 
-        counter = Counter(corpus)
-        most = counter.most_common()
-        x = []
-        y = []
-        nltk.download("stopwords")
-        stop = set(stopwords.words("english"))
-        for word, count in most[:40]:
-            if word not in stop:
-                x.append(word)
-                y.append(count)
-        fig = plt.figure()
-        plt.bar(x, y, color="#17C37B")
-        plt.xticks(rotation=90)
-        # Do this if you want to prevent the figure from being displayed
-        plt.close("all")
+    corpus = create_corpus(dataset.df, text_column=dataset.text_column)
+    counter = Counter(corpus)
+    most = counter.most_common()
 
-        return self.cache_results(
-            figures=[
-                Figure(
-                    for_object=self,
-                    key=self.key,
-                    figure=fig,
-                )
-            ]
-        )
+    x = []
+    y = []
+
+    stop = set(stopwords.words("english"))
+    for word, count in most[:40]:
+        if word not in stop:
+            x.append(word)
+            y.append(count)
+
+    fig = go.Figure(data=[go.Bar(x=x, y=y, marker_color="#17C37B")])
+    fig.update_layout(
+        title="Most Common Words",
+        xaxis_title="Words",
+        yaxis_title="Frequency",
+        xaxis_tickangle=-45,
+    )
+
+    return fig

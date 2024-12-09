@@ -23,13 +23,13 @@
   <path fill-rule="evenodd" d="M4.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H14.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"/>
 </svg>                &nbsp;validmind</a>
 
-            <img src="https://vmai.s3.us-west-1.amazonaws.com/vm-logo.svg" class="logo" alt="project logo"/>
+            <img src="https://vmai.s3.us-west-1.amazonaws.com/validmind-logo.svg" class="logo" alt="project logo"/>
 
             <input type="search" placeholder="Search..." role="searchbox" aria-label="search"
                    pattern=".+" required>
 
 
-            <h3>High Level API</h3>
+            <h3>Python Library API</h3>
                 <ul class="memberlist">
             <li>
                     <a class="class" href="#BaseError">BaseError</a>
@@ -84,12 +84,6 @@
             </li>
             <li>
                     <a class="class" href="#InvalidContentIdPrefixError">InvalidContentIdPrefixError</a>
-                            <ul class="memberlist">
-                </ul>
-
-            </li>
-            <li>
-                    <a class="class" href="#InvalidFigureForObjectError">InvalidFigureForObjectError</a>
                             <ul class="memberlist">
                 </ul>
 
@@ -154,6 +148,9 @@
             <li>
                     <a class="class" href="#LoadTestError">LoadTestError</a>
                             <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#LoadTestError.__init__">LoadTestError</a>
+                        </li>
                 </ul>
 
             </li>
@@ -300,7 +297,7 @@
                     <h1 class="modulename">
 <a href="./../validmind.html">validmind</a><wbr>.errors    </h1>
 
-                        <div class="docstring"><p>This module contains all the custom errors that are used in the library.</p>
+                        <div class="docstring"><p>This module contains all the custom errors that are used in the ValidMind Library.</p>
 
 <p>The following base errors are defined for others:</p>
 
@@ -582,36 +579,6 @@ method does not have the expected arguments.</p>
             <div><dt>builtins.BaseException</dt>
                                 <dd id="InvalidContentIdPrefixError.with_traceback" class="function">with_traceback</dd>
                 <dd id="InvalidContentIdPrefixError.add_note" class="function">add_note</dd>
-
-            </div>
-                                </dl>
-                            </div>
-                </section>
-                <section id="InvalidFigureForObjectError">
-                    <div class="attr class">
-            
-    <span class="def">class</span>
-    <span class="name">InvalidFigureForObjectError</span><wbr>(<span class="base"><a href="#BaseError">BaseError</a></span>):
-
-        
-    </div>
-    <a class="headerlink" href="#InvalidFigureForObjectError"></a>
-    
-            <div class="docstring"><p>When a figure was constructed with an unsupported for_object value.</p>
-</div>
-
-
-                            <div class="inherited">
-                                <h5>Inherited Members</h5>
-                                <dl>
-                                    <div><dt><a href="#BaseError">BaseError</a></dt>
-                                <dd id="InvalidFigureForObjectError.__init__" class="function"><a href="#BaseError.__init__">BaseError</a></dd>
-                <dd id="InvalidFigureForObjectError.description" class="function"><a href="#BaseError.description">description</a></dd>
-
-            </div>
-            <div><dt>builtins.BaseException</dt>
-                                <dd id="InvalidFigureForObjectError.with_traceback" class="function">with_traceback</dd>
-                <dd id="InvalidFigureForObjectError.add_note" class="function">add_note</dd>
 
             </div>
                                 </dl>
@@ -913,12 +880,23 @@ method does not have the expected arguments.</p>
 </div>
 
 
+                            <div id="LoadTestError.__init__" class="classattr">
+                                <div class="attr function">
+            
+        <span class="name">LoadTestError</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">message</span><span class="p">:</span> <span class="nb">str</span>, </span><span class="param"><span class="n">original_error</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></span>)</span>
+
+        
+    </div>
+    <a class="headerlink" href="#LoadTestError.__init__"></a>
+    
+    
+
+                            </div>
                             <div class="inherited">
                                 <h5>Inherited Members</h5>
                                 <dl>
                                     <div><dt><a href="#BaseError">BaseError</a></dt>
-                                <dd id="LoadTestError.__init__" class="function"><a href="#BaseError.__init__">BaseError</a></dd>
-                <dd id="LoadTestError.description" class="function"><a href="#BaseError.description">description</a></dd>
+                                <dd id="LoadTestError.description" class="function"><a href="#BaseError.description">description</a></dd>
 
             </div>
             <div><dt>builtins.BaseException</dt>

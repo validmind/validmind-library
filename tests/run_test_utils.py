@@ -51,7 +51,7 @@ def string_to_numpy_array(array_string):
         return None
 
 
-def setup_tabular_test_inputs(test_inputs={}, test_config={}):
+def setup_tabular_test_inputs(test_inputs, test_config):
     """
     Setup test inputs for tabular datasets
 
@@ -153,7 +153,7 @@ def setup_tabular_test_inputs(test_inputs={}, test_config={}):
     }
 
 
-def setup_time_series_test_inputs(test_inputs={}, test_config={}):
+def setup_time_series_test_inputs(test_inputs, test_config):
     """
     Setup test inputs for time series datasets
 
@@ -251,7 +251,7 @@ def setup_time_series_test_inputs(test_inputs={}, test_config={}):
     }
 
 
-def setup_summarization_test_inputs(test_inputs={}, test_config={}):
+def setup_summarization_test_inputs(test_inputs, test_config):
     """
     Setup test inputs for summarization tests
 
@@ -263,8 +263,8 @@ def setup_summarization_test_inputs(test_inputs={}, test_config={}):
 
     # Dataset
     vm_test_ds = vm.init_dataset(
-        dataset=test_df,
-        input_id="test_dataset",
+        dataset=test_df.reset_index(drop=True),
+        input_id="test_dataset_summarization",
         text_column="article",
         target_column="highlights",
         __log=False,
@@ -329,7 +329,7 @@ def setup_summarization_test_inputs(test_inputs={}, test_config={}):
     }
 
 
-def setup_embeddings_test_inputs(test_inputs={}, test_config={}):
+def setup_embeddings_test_inputs(test_inputs, test_config):
     """
     Setup test inputs for embeddings
 
@@ -393,7 +393,7 @@ def setup_embeddings_test_inputs(test_inputs={}, test_config={}):
     }
 
 
-def setup_clustering_test_inputs(test_inputs={}, test_config={}):
+def setup_clustering_test_inputs(test_inputs, test_config):
     """
     Setup test inputs for clustering
 

@@ -23,31 +23,16 @@
   <path fill-rule="evenodd" d="M4.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H14.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"/>
 </svg>                &nbsp;validmind.tests.model_validation.sklearn</a>
 
-            <img src="https://vmai.s3.us-west-1.amazonaws.com/vm-logo.svg" class="logo" alt="project logo"/>
+            <img src="https://vmai.s3.us-west-1.amazonaws.com/validmind-logo.svg" class="logo" alt="project logo"/>
 
             <input type="search" placeholder="Search..." role="searchbox" aria-label="search"
                    pattern=".+" required>
 
 
-            <h3>High Level API</h3>
+            <h3>Python Library API</h3>
                 <ul class="memberlist">
             <li>
-                    <a class="function" href="#multiclass_roc_auc_score">multiclass_roc_auc_score</a>
-            </li>
-            <li>
-                    <a class="class" href="#TrainingTestDegradation">TrainingTestDegradation</a>
-                            <ul class="memberlist">
-                        <li>
-                                <a class="function" href="#TrainingTestDegradation.__init__">TrainingTestDegradation</a>
-                        </li>
-                        <li>
-                                <a class="function" href="#TrainingTestDegradation.summary">summary</a>
-                        </li>
-                        <li>
-                                <a class="function" href="#TrainingTestDegradation.run">run</a>
-                        </li>
-                </ul>
-
+                    <a class="function" href="#TrainingTestDegradation">TrainingTestDegradation</a>
             </li>
     </ul>
 
@@ -71,25 +56,13 @@
                 
                 
             </section>
-                <section id="multiclass_roc_auc_score">
-                    <div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">multiclass_roc_auc_score</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">y_test</span>, </span><span class="param"><span class="n">y_pred</span>, </span><span class="param"><span class="n">average</span><span class="o">=</span><span class="s1">&#39;macro&#39;</span></span><span class="return-annotation">):</span></span>
-
-        
-    </div>
-    <a class="headerlink" href="#multiclass_roc_auc_score"></a>
-    
-    
-
-                </section>
                 <section id="TrainingTestDegradation">
-                    <div class="attr class">
-                    <div class="decorator">@dataclass</div>
+                    <div class="attr function">
+                    <div class="decorator">@tags(&#39;sklearn&#39;, &#39;binary_classification&#39;, &#39;multiclass_classification&#39;, &#39;model_performance&#39;, &#39;visualization&#39;)</div>
+        <div class="decorator">@tasks(&#39;classification&#39;, &#39;text_classification&#39;)</div>
 
-    <span class="def">class</span>
-    <span class="name">TrainingTestDegradation</span><wbr>(<span class="base">validmind.vm_models.test.threshold_test.ThresholdTest</span>):
+        <span class="def">def</span>
+        <span class="name">TrainingTestDegradation</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">datasets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n"><a href="../../../vm_models.html#VMDataset">validmind.vm_models.VMDataset</a></span><span class="p">]</span>,</span><span class="param">	<span class="n">model</span><span class="p">:</span> <span class="n"><a href="../../../vm_models.html#VMModel">validmind.vm_models.VMModel</a></span>,</span><span class="param">	<span class="n">max_threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span></span><span class="return-annotation">):</span></span>
 
         
     </div>
@@ -143,72 +116,6 @@ not always be available.</li>
 </div>
 
 
-                            <div id="TrainingTestDegradation.__init__" class="classattr">
-                                <div class="attr function">
-            
-        <span class="name">TrainingTestDegradation</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">context</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n"><a href="../../../vm_models.html#TestContext">validmind.vm_models.TestContext</a></span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">inputs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n"><a href="../../../vm_models.html#TestInput">validmind.vm_models.TestInput</a></span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">tasks</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">_ref_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">_section_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">test_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">result</span><span class="p">:</span> <span class="n"><a href="../../../vm_models.html#ThresholdTestResults">validmind.vm_models.ThresholdTestResults</a></span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">params</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">output_template</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">generate_description</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span></span>)</span>
-
-        
-    </div>
-    <a class="headerlink" href="#TrainingTestDegradation.__init__"></a>
-    
-    
-
-                            </div>
-                            <div id="TrainingTestDegradation.summary" class="classattr">
-                                <div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">summary</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">results</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n"><a href="../../../vm_models.html#ThresholdTestResult">validmind.vm_models.ThresholdTestResult</a></span><span class="p">]</span>,</span><span class="param">	<span class="n">all_passed</span><span class="p">:</span> <span class="nb">bool</span></span><span class="return-annotation">):</span></span>
-
-        
-    </div>
-    <a class="headerlink" href="#TrainingTestDegradation.summary"></a>
-    
-            <div class="docstring"><p>The training test degradation test returns results like these:
-[{"values":
-    {"test_score": 0.7225, "train_score": 0.7316666666666667, "degradation": 0.012528473804100214}, "test_name": "accuracy", "passed": true}, ...]</p>
-</div>
-
-
-                            </div>
-                            <div id="TrainingTestDegradation.run" class="classattr">
-                                <div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">run</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">):</span></span>
-
-        
-    </div>
-    <a class="headerlink" href="#TrainingTestDegradation.run"></a>
-    
-            <div class="docstring"><p>Run the calculation and cache its results</p>
-</div>
-
-
-                            </div>
-                            <div class="inherited">
-                                <h5>Inherited Members</h5>
-                                <dl>
-                                    <div><dt>validmind.vm_models.test.threshold_test.ThresholdTest</dt>
-                                <dd id="TrainingTestDegradation.cache_results" class="function">cache_results</dd>
-
-            </div>
-            <div><dt>validmind.vm_models.test.test.Test</dt>
-                                <dd id="TrainingTestDegradation.description" class="function">description</dd>
-                <dd id="TrainingTestDegradation.log" class="function">log</dd>
-
-            </div>
-            <div><dt>validmind.vm_models.test_context.TestUtils</dt>
-                                <dd id="TrainingTestDegradation.get_accessed_inputs" class="function">get_accessed_inputs</dd>
-                <dd id="TrainingTestDegradation.dataset" class="variable">dataset</dd>
-                <dd id="TrainingTestDegradation.model" class="variable">model</dd>
-                <dd id="TrainingTestDegradation.models" class="variable">models</dd>
-                <dd id="TrainingTestDegradation.validate_inputs" class="function">validate_inputs</dd>
-
-            </div>
-                                </dl>
-                            </div>
                 </section>
     </main>
 <script>

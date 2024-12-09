@@ -9,7 +9,6 @@ from IPython.display import display
 
 from ...logging import get_logger
 from ...utils import is_notebook, run_async, run_async_check
-from ..test_context import TestContext, TestInput
 from .summary import TestSuiteSummary
 from .test_suite import TestSuite
 
@@ -22,8 +21,6 @@ class TestSuiteRunner:
     """
 
     suite: TestSuite = None
-    context: TestContext = None
-    input: TestInput = None
     config: dict = None
 
     _test_configs: dict = None
@@ -32,67 +29,33 @@ class TestSuiteRunner:
     pbar_description: widgets.Label = None
     pbar_box: widgets.HBox = None
 
-    def __init__(self, suite: TestSuite, input: TestInput, config: dict = None):
+    def __init__(self, suite: TestSuite, config: dict = None, inputs: dict = None):
         self.suite = suite
-        self.input = input
         self.config = config or {}
 
-        self.context = TestContext()
+        self._load_config(inputs)
 
-        self._load_config()
-        self._init_tests()
-
-    def _load_config(self):
+    def _load_config(self, inputs: dict = None):
         """Splits the config into a global config and test configs"""
-        self._test_configs = {}
+        self._test_configs = {
+            test.test_id: {"inputs": inputs or {}} for test in self.suite.get_tests()
+        }
 
         for key, value in self.config.items():
-            test_ids = [test.test_id for test in self.suite.get_tests()]
-
             # If the key does not exist in the test suite, we need to
             # inform the user the config is probably wrong but we will
             # keep running all tests
-            if key not in test_ids:
+            if key not in self._test_configs:
                 logger.warning(
                     f"Config key '{key}' does not match a test_id in the template."
                     "\n\tEnsure you registered a content block with the correct content_id in the template"
                     "\n\tThe configuration for this test will be ignored."
                 )
-            else:
-                self._test_configs[key] = value
+                continue
 
-    def _init_tests(self):
-        """
-        Loads the tests in a test suite
-        """
-        for section in self.suite.sections:
-            for test in section.tests:
-                # use local inputs from config if provided
-                test_configs = self._test_configs.get(test.test_id, {})
-                inputs = self.input
-                if (
-                    test.test_id in self.config
-                    and "inputs" in self.config[test.test_id]
-                ):
-                    inputs = TestInput(self.config[test.test_id]["inputs"])
-                    test_configs = {
-                        key: value
-                        for key, value in test_configs.items()
-                        if key != "inputs"
-                    }
-                    test_configs = test_configs.get("params", {})
-                else:
-                    if (test_configs) and ("params" not in test_configs):
-                        # [DEPRECATED] This is the old way of setting test parameters
-                        msg = (
-                            "Setting test parameters directly in the 'config' parameter"
-                            " of the run_documentation_tests() method is deprecated. "
-                            "Instead, use the new format of the config: "
-                            'config = {"test_id": {"params": {...}, "inputs": {...}}}'
-                        )
-                        logger.warning(msg)
-
-                test.load(inputs=inputs, context=self.context, config=test_configs)
+            # override the global config (inputs) with the test-specific config
+            # TODO: better configuration would make for a better DX
+            self._test_configs[key] = value
 
     def _start_progress_bar(self, send: bool = True):
         """
@@ -176,12 +139,11 @@ class TestSuiteRunner:
 
         for section in self.suite.sections:
             for test in section.tests:
-                if test._test_class is None:
-                    self.pbar.value += 1
-                    continue
-
-                self.pbar_description.value = f"Running {test.test_type}: {test.name}"
-                test.run(fail_fast=fail_fast)
+                self.pbar_description.value = f"Running {test.name}"
+                test.run(
+                    fail_fast=fail_fast,
+                    config=self._test_configs.get(test.test_id, {}),
+                )
                 self.pbar.value += 1
 
         if send:

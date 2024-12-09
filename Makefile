@@ -30,15 +30,26 @@ else
 	poetry run python -m unittest discover tests
 endif
 
+test-unit:
+	poetry run python -m unittest "tests.test_unit_tests"
+
 test-integration:
 	poetry run python scripts/run_e2e_notebooks.py
 
 docs:
 	rm -rf docs/_build
-	poetry run pdoc validmind -d google -t docs/templates --no-show-source --logo https://vmai.s3.us-west-1.amazonaws.com/vm-logo.svg --favicon https://vmai.s3.us-west-1.amazonaws.com/favicon.ico -o docs/_build
+ifeq ($(shell uname),Darwin)
+	poetry run pdoc validmind !validmind.tests.data_validation.Protected* -d google -t docs/templates --no-show-source --logo https://vmai.s3.us-west-1.amazonaws.com/validmind-logo.svg --favicon https://vmai.s3.us-west-1.amazonaws.com/favicon.ico -o docs/_build
+else
+	poetry run pdoc validmind -d google -t docs/templates --no-show-source --logo https://vmai.s3.us-west-1.amazonaws.com/validmind-logo.svg --favicon https://vmai.s3.us-west-1.amazonaws.com/favicon.ico -o docs/_build
+endif
 
 docs-serve:
-	poetry run pdoc validmind -d google -t docs/templates --no-show-source --logo https://vmai.s3.us-west-1.amazonaws.com/vm-logo.svg --favicon https://vmai.s3.us-west-1.amazonaws.com/favicon.ico
+ifeq ($(shell uname),Darwin)
+	poetry run pdoc validmind !validmind.tests.data_validation.Protected* -d google -t docs/templates --no-show-source --logo https://vmai.s3.us-west-1.amazonaws.com/validmind-logo.svg --favicon https://vmai.s3.us-west-1.amazonaws.com/favicon.ico
+else
+	poetry run pdoc validmind -d google -t docs/templates --no-show-source --logo https://vmai.s3.us-west-1.amazonaws.com/validmind-logo.svg --favicon https://vmai.s3.us-west-1.amazonaws.com/favicon.ico
+endif
 
 version:
 	@:$(call check_defined, tag, new semver version tag to use on pyproject.toml)

@@ -2,20 +2,22 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from dataclasses import dataclass
-
+import numpy as np
 import pandas as pd
 from arch.unitroot import PhillipsPerron
 from numpy.linalg import LinAlgError
 
+from validmind import tags, tasks
+from validmind.errors import SkipTestError
 from validmind.logging import get_logger
-from validmind.vm_models import Metric, ResultSummary, ResultTable, ResultTableMetadata
+from validmind.vm_models import VMDataset
 
 logger = get_logger(__name__)
 
 
-@dataclass
-class PhillipsPerronArch(Metric):
+@tags("time_series_data", "forecasting", "statistical_test", "unit_root_test")
+@tasks("regression")
+def PhillipsPerronArch(dataset: VMDataset):
     """
     Assesses the stationarity of time series data in each feature of the ML model using the Phillips-Perron test.
 
@@ -55,80 +57,55 @@ class PhillipsPerronArch(Metric):
     - Non-stationary time series must be converted to stationary series through differencing, potentially leading to
     loss of important data points.
     """
+    df = dataset.df.dropna()
 
-    name = "phillips_perron"
-    required_inputs = ["dataset"]
-    tasks = ["regression"]
-    tags = [
-        "time_series_data",
-        "forecasting",
-        "statistical_test",
-        "unit_root_test",
-    ]
-
-    def run(self):
-        """
-        Calculates PP metric for each of the dataset features
-        """
-        dataset = self.inputs.dataset.df
-
-        # Check if the dataset is a time series
-        if not isinstance(dataset.index, (pd.DatetimeIndex, pd.PeriodIndex)):
-            raise ValueError(
-                "Dataset index must be a datetime or period index for time series analysis."
-            )
-
-        # Preprocessing: Drop rows with any NaN values
-        if dataset.isnull().values.any():
-            logger.warning(
-                "Dataset contains missing values. Rows with NaNs will be dropped."
-            )
-            dataset = dataset.dropna()
-
-        # Convert to numeric and handle non-numeric data
-        dataset = dataset.apply(pd.to_numeric, errors="coerce")
-
-        # Initialize a list to store Phillips-Perron results
-        pp_values = []
-
-        for col in dataset.columns:
-            try:
-                pp = PhillipsPerron(dataset[col].values)
-                pp_values.append(
-                    {
-                        "Variable": col,
-                        "stat": pp.stat,
-                        "pvalue": pp.pvalue,
-                        "usedlag": pp.lags,
-                        "nobs": pp.nobs,
-                    }
-                )
-            except LinAlgError as e:
-                logger.error(f"Error processing column '{col}': {e}")
-                pp_values.append(
-                    {
-                        "Variable": col,
-                        "stat": None,
-                        "pvalue": None,
-                        "usedlag": None,
-                        "nobs": None,
-                        "error": str(e),
-                    }
-                )
-
-        return self.cache_results({"phillips_perron_results": pp_values})
-
-    def summary(self, metric_value):
-        """
-        Build a table for summarizing the Phillips-Perron results
-        """
-        pp_results = metric_value["phillips_perron_results"]
-
-        return ResultSummary(
-            results=[
-                ResultTable(
-                    data=pp_results,
-                    metadata=ResultTableMetadata(title="Phillips-Perron Test Results"),
-                )
-            ]
+    if not isinstance(df.index, (pd.DatetimeIndex, pd.PeriodIndex)):
+        raise ValueError(
+            "Dataset index must be a datetime or period index for time series analysis."
         )
+
+    # Filter numeric columns first
+    numeric_columns = df.select_dtypes(include=np.number).columns
+    if not any(col in numeric_columns for col in dataset.feature_columns):
+        raise SkipTestError("No numeric columns found for Phillips-Perron test.")
+
+    pp_table = []
+
+    for col in dataset.feature_columns:
+        # Skip non-numeric columns
+        if col not in numeric_columns:
+            logger.warning(f"Skipping non-numeric column: {col}")
+            continue
+
+        try:
+            # Drop any NaN values for this column
+            series = df[col].dropna()
+            if len(series) == 0:
+                logger.warning(
+                    f"Skipping column '{col}': No valid data after dropping NaN values"
+                )
+                continue
+
+            pp = PhillipsPerron(series.values)
+            pp_table.append(
+                {
+                    "Variable": col,
+                    "stat": pp.stat,
+                    "pvalue": pp.pvalue,
+                    "usedlag": pp.lags,
+                    "nobs": pp.nobs,
+                }
+            )
+        except LinAlgError as e:
+            logger.error(f"Error processing column '{col}': {e}")
+            continue
+        except Exception as e:
+            logger.error(f"Unexpected error processing column '{col}': {e}")
+            continue
+
+    if not pp_table:
+        raise SkipTestError("No valid columns found for Phillips-Perron test.")
+
+    return {
+        "Phillips-Perron Test Results": pp_table,
+    }

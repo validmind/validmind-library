@@ -7,8 +7,8 @@ from urllib.parse import urljoin
 
 from openai import AzureOpenAI, Client, OpenAI
 
-from ..api_client import get_ai_key, get_api_host
 from ..logging import get_logger
+from ..utils import md_to_html
 
 logger = get_logger(__name__)
 
@@ -17,6 +17,28 @@ __client = None
 __model = None
 # can be None, True or False (ternary to represent initial state, ack and failed ack)
 __ack = None
+
+
+class DescriptionFuture:
+    """This will be immediately returned from generate_description so that
+    the tests can continue to be run in parallel while the description is
+    retrieved asynchronously.
+
+    The value will be retrieved later and if its not ready yet, it should
+    block until it is.
+    """
+
+    def __init__(self, future):
+        self._future = future
+
+    def get_description(self):
+        if isinstance(self._future, str):
+            description = self._future
+        else:
+            # This will block until the future is completed
+            description = self._future.result()
+
+        return md_to_html(description, mathml=True)
 
 
 def get_client_and_model():
@@ -58,6 +80,9 @@ def get_client_and_model():
 
     else:
         try:
+            # TODO: fix circular import
+            from ..api_client import get_ai_key, get_api_host
+
             response = get_ai_key()
             __client = Client(
                 base_url=(
