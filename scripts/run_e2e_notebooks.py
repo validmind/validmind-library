@@ -143,10 +143,7 @@ def main(kernel, log_output=False, progress_bar=True, update_data_template=False
     for notebook_file in notebooks:
         if isinstance(notebook_file, dict):
             notebook_path = os.path.join(os.getcwd(), notebook_file["path"])
-            if notebook_file["model"] is None:
-                model = DEFAULT_MODEL_CUID
-            else:
-                model = notebook_file["model"]
+            model = notebook_file["model"]
         else:
             notebook_path = os.path.join(os.getcwd(), notebook_file)
             model = DEFAULT_MODEL_CUID
