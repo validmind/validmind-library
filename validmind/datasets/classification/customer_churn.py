@@ -86,16 +86,18 @@ def get_demo_test_config(test_suite=None):
     for _, test_config in default_config.items():
         if "model" in test_config["inputs"]:
             test_config["inputs"]["model"] = "model"
+        if "models" in test_config["inputs"]:
+            test_config["inputs"]["models"] = ["model"]
+        if "dataset" in test_config["inputs"]:
+            if "model" in test_config["inputs"] or "models" in test_config["inputs"]:
+                test_config["inputs"]["dataset"] = "test_dataset"
+            else:
+                test_config["inputs"]["dataset"] = "raw_dataset"
         if "datasets" in test_config["inputs"]:
             test_config["inputs"]["datasets"] = [
                 "train_dataset",
                 "test_dataset",
             ]
-        if "dataset" in test_config["inputs"]:
-            if "model" in test_config["inputs"]:
-                test_config["inputs"]["dataset"] = "test_dataset"
-            else:
-                test_config["inputs"]["dataset"] = "raw_dataset"
 
     # ClassifierPerformance is a special case since we run an in-sample and out-of-sample
     # test with two different datasets: train_dataset and test_dataset

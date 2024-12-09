@@ -11,6 +11,7 @@ from validmind import tags, tasks
 @tags("regression")
 @tasks("regression")
 def RootMeanSquaredError(model, dataset, **kwargs):
+    """Calculates the root mean squared error for a regression model."""
     return np.sqrt(
         mean_squared_error(
             dataset.y,

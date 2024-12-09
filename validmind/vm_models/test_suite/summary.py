@@ -9,7 +9,7 @@ import ipywidgets as widgets
 
 from ...logging import get_logger
 from ...utils import display, md_to_html
-from ..test.result_wrapper import FailedResultWrapper
+from ..result import ErrorResult
 from .test_suite import TestSuiteSection, TestSuiteTest
 
 logger = get_logger(__name__)
@@ -52,7 +52,7 @@ class TestSuiteSectionSummary:
             children.append(test.result.to_widget())
             titles.append(
                 f"❌ {test.result.name}: {test.name} ({test.test_id})"
-                if isinstance(test.result, FailedResultWrapper)
+                if isinstance(test.result, ErrorResult)
                 else f"{test.result.name}: {test.name} ({test.test_id})"
             )
 
@@ -96,7 +96,7 @@ class TestSuiteSummary:
         from ...api_client import get_api_host, get_api_model
 
         ui_host = get_api_host().replace("/api/v1/tracking", "").replace("api", "app")
-        link = f"{ui_host}/projects/{get_api_model()}/project-overview"
+        link = f"{ui_host}model-inventory/{get_api_model()}"
         results_link = f"""
         <h3>
             Check out the updated documentation in your

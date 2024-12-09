@@ -12,10 +12,9 @@ from validmind.datasets.classification import customer_churn
 class TestFullTestSuite(unittest.TestCase):
     @patch.multiple(
         "validmind.api_client",
-        log_figure=unittest.mock.DEFAULT,
-        log_metadata=unittest.mock.DEFAULT,
-        log_metric_result=unittest.mock.DEFAULT,
-        log_test_result=unittest.mock.DEFAULT,
+        alog_figure=unittest.mock.DEFAULT,
+        alog_metadata=unittest.mock.DEFAULT,
+        alog_test_result=unittest.mock.DEFAULT,
         log_input=unittest.mock.DEFAULT,
     )
     @patch("validmind.client.log_input", return_value="1234")

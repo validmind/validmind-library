@@ -23,28 +23,19 @@
   <path fill-rule="evenodd" d="M4.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H14.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"/>
 </svg>                &nbsp;validmind.tests.model_validation.statsmodels</a>
 
-            <img src="https://vmai.s3.us-west-1.amazonaws.com/vm-logo.svg" class="logo" alt="project logo"/>
+            <img src="https://vmai.s3.us-west-1.amazonaws.com/validmind-logo.svg" class="logo" alt="project logo"/>
 
             <input type="search" placeholder="Search..." role="searchbox" aria-label="search"
                    pattern=".+" required>
 
 
-            <h3>High Level API</h3>
+            <h3>Python Library API</h3>
                 <ul class="memberlist">
             <li>
-                    <a class="class" href="#RegressionModelForecastPlotLevels">RegressionModelForecastPlotLevels</a>
-                            <ul class="memberlist">
-                        <li>
-                                <a class="function" href="#RegressionModelForecastPlotLevels.__init__">RegressionModelForecastPlotLevels</a>
-                        </li>
-                        <li>
-                                <a class="function" href="#RegressionModelForecastPlotLevels.run">run</a>
-                        </li>
-                        <li>
-                                <a class="function" href="#RegressionModelForecastPlotLevels.integrate_diff">integrate_diff</a>
-                        </li>
-                </ul>
-
+                    <a class="function" href="#integrate_diff">integrate_diff</a>
+            </li>
+            <li>
+                    <a class="function" href="#RegressionModelForecastPlotLevels">RegressionModelForecastPlotLevels</a>
             </li>
     </ul>
 
@@ -68,45 +59,55 @@
                 
                 
             </section>
-                <section id="RegressionModelForecastPlotLevels">
-                    <div class="attr class">
-                    <div class="decorator">@dataclass</div>
+                <section id="integrate_diff">
+                    <div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">integrate_diff</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">series_diff</span>, </span><span class="param"><span class="n">start_value</span></span><span class="return-annotation">):</span></span>
 
-    <span class="def">class</span>
-    <span class="name">RegressionModelForecastPlotLevels</span><wbr>(<span class="base">validmind.vm_models.test.metric.Metric</span>):
+        
+    </div>
+    <a class="headerlink" href="#integrate_diff"></a>
+    
+    
+
+                </section>
+                <section id="RegressionModelForecastPlotLevels">
+                    <div class="attr function">
+                    <div class="decorator">@tags(&#39;time_series_data&#39;, &#39;forecasting&#39;, &#39;visualization&#39;)</div>
+        <div class="decorator">@tasks(&#39;regression&#39;)</div>
+
+        <span class="def">def</span>
+        <span class="name">RegressionModelForecastPlotLevels</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">model</span><span class="p">:</span> <span class="n"><a href="../../../vm_models.html#VMModel">validmind.vm_models.VMModel</a></span>,</span><span class="param">	<span class="n">dataset</span><span class="p">:</span> <span class="n"><a href="../../../vm_models.html#VMDataset">validmind.vm_models.VMDataset</a></span></span><span class="return-annotation">):</span></span>
 
         
     </div>
     <a class="headerlink" href="#RegressionModelForecastPlotLevels"></a>
     
-            <div class="docstring"><p>Assesses the alignment between forecasted and observed values in regression models through visual plots, including
-handling data transformations.</p>
+            <div class="docstring"><p>Assesses the alignment between forecasted and observed values in regression models through visual plots</p>
 
 <h3 id="purpose">Purpose</h3>
 
-<p>The <code><a href="#RegressionModelForecastPlotLevels">RegressionModelForecastPlotLevels</a></code> test aims to visually assess the performance of a series of regression
-models by comparing their forecasted values against the actual observed values in both training and test datasets.
-This test helps determine the accuracy of the models and can handle specific data transformations before making the
-comparison, providing a comprehensive evaluation of model performance.</p>
+<p>This test aims to visually assess the performance of a regression model by comparing its forecasted values against
+the actual observed values for both the raw and transformed (integrated) data. This helps determine the accuracy
+of the model and can help identify overfitting or underfitting. The integration is applied to highlight the trend
+rather than the absolute level.</p>
 
 <h3 id="test-mechanism">Test Mechanism</h3>
 
-<p>The test mechanism involves initializing the <code><a href="#RegressionModelForecastPlotLevels">RegressionModelForecastPlotLevels</a></code> class with an optional
-<code>transformation</code> parameter. The class then:</p>
+<p>This test generates two plots:</p>
 
 <ul>
-<li>Checks for the presence of model objects and raises a <code>ValueError</code> if none are found.</li>
-<li>Processes each model to generate predictive forecasts for both training and testing datasets.</li>
-<li>Contrasts these forecasts with the actual observed values.</li>
-<li>Produces plots to visually compare forecasted and observed values for both raw and transformed datasets.</li>
-<li>Handles specified transformations (e.g., "integrate") by performing cumulative sums to create a new series before
-plotting.</li>
+<li>Raw data vs forecast</li>
+<li>Transformed data vs forecast</li>
 </ul>
+
+<p>The transformed data is created by performing a cumulative sum on the raw data.</p>
 
 <h3 id="signs-of-high-risk">Signs of High Risk</h3>
 
 <ul>
-<li>Significant deviation between forecasted and observed values in training or testing datasets.</li>
+<li>Significant deviation between forecasted and observed values.</li>
 <li>Patterns suggesting overfitting or underfitting.</li>
 <li>Large discrepancies in the plotted forecasts, indicating potential issues with model generalizability and
 precision.</li>
@@ -115,90 +116,19 @@ precision.</li>
 <h3 id="strengths">Strengths</h3>
 
 <ul>
-<li><strong>Visual Evaluations</strong>: Provides an intuitive, visual way to assess multiple regression models, aiding in easier
-interpretation and evaluation of forecast accuracy.</li>
-<li><strong>Transformation Handling</strong>: Can process specified data transformations such as "integrate," enhancing
-flexibility.</li>
-<li><strong>Detailed Perspective</strong>: Assesses performance on both training and testing datasets, offering a comprehensive
-view of model behavior.</li>
+<li>Provides an intuitive, visual way to assess multiple regression models, aiding in easier interpretation and
+evaluation of forecast accuracy.</li>
 </ul>
 
 <h3 id="limitations">Limitations</h3>
 
 <ul>
-<li><strong>Subjectivity</strong>: Relies heavily on visual interpretation, which may vary between individuals.</li>
-<li><strong>Limited Transformation Capability</strong>: Supports only the "integrate" transformation; other complex
-transformations might not be handled.</li>
-<li><strong>Overhead</strong>: Plotting can be computationally intensive for large datasets, increasing runtime.</li>
-<li><strong>Numerical Measurement</strong>: Does not provide a numerical metric to quantify forecast accuracy, relying solely on
-visual assessment.</li>
+<li>Relies heavily on visual interpretation, which may vary between individuals.</li>
+<li>Does not provide a numerical metric to quantify forecast accuracy, relying solely on visual assessment.</li>
 </ul>
 </div>
 
 
-                            <div id="RegressionModelForecastPlotLevels.__init__" class="classattr">
-                                <div class="attr function">
-            
-        <span class="name">RegressionModelForecastPlotLevels</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">context</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n"><a href="../../../vm_models.html#TestContext">validmind.vm_models.TestContext</a></span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">inputs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n"><a href="../../../vm_models.html#TestInput">validmind.vm_models.TestInput</a></span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">tasks</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">_ref_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">_section_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">test_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">result</span><span class="p">:</span> <span class="n">validmind</span><span class="o">.</span><span class="n">vm_models</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">result_wrapper</span><span class="o">.</span><span class="n">MetricResultWrapper</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">params</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">output_template</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">generate_description</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span></span>)</span>
-
-        
-    </div>
-    <a class="headerlink" href="#RegressionModelForecastPlotLevels.__init__"></a>
-    
-    
-
-                            </div>
-                            <div id="RegressionModelForecastPlotLevels.run" class="classattr">
-                                <div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">run</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">):</span></span>
-
-        
-    </div>
-    <a class="headerlink" href="#RegressionModelForecastPlotLevels.run"></a>
-    
-            <div class="docstring"><p>Run the calculation and cache its results</p>
-</div>
-
-
-                            </div>
-                            <div id="RegressionModelForecastPlotLevels.integrate_diff" class="classattr">
-                                <div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">integrate_diff</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">series_diff</span>, </span><span class="param"><span class="n">start_value</span></span><span class="return-annotation">):</span></span>
-
-        
-    </div>
-    <a class="headerlink" href="#RegressionModelForecastPlotLevels.integrate_diff"></a>
-    
-    
-
-                            </div>
-                            <div class="inherited">
-                                <h5>Inherited Members</h5>
-                                <dl>
-                                    <div><dt>validmind.vm_models.test.metric.Metric</dt>
-                                <dd id="RegressionModelForecastPlotLevels.summary" class="function">summary</dd>
-                <dd id="RegressionModelForecastPlotLevels.cache_results" class="function">cache_results</dd>
-
-            </div>
-            <div><dt>validmind.vm_models.test.test.Test</dt>
-                                <dd id="RegressionModelForecastPlotLevels.description" class="function">description</dd>
-                <dd id="RegressionModelForecastPlotLevels.log" class="function">log</dd>
-
-            </div>
-            <div><dt>validmind.vm_models.test_context.TestUtils</dt>
-                                <dd id="RegressionModelForecastPlotLevels.get_accessed_inputs" class="function">get_accessed_inputs</dd>
-                <dd id="RegressionModelForecastPlotLevels.dataset" class="variable">dataset</dd>
-                <dd id="RegressionModelForecastPlotLevels.model" class="variable">model</dd>
-                <dd id="RegressionModelForecastPlotLevels.models" class="variable">models</dd>
-                <dd id="RegressionModelForecastPlotLevels.validate_inputs" class="function">validate_inputs</dd>
-
-            </div>
-                                </dl>
-                            </div>
                 </section>
     </main>
 <script>

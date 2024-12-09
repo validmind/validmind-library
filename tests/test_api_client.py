@@ -29,7 +29,7 @@ loop = asyncio.new_event_loop()
 def mock_figure():
     fig = plt.figure()
     plt.plot([1, 2, 3])
-    return Figure(key="key", figure=fig, metadata={"asdf": 1234})
+    return Figure(key="key", figure=fig, ref_id="asdf")
 
 
 class MockResponse:
@@ -150,7 +150,7 @@ class TestAPIClient(unittest.TestCase):
         res_json = [{"cuid": "1234"}]
         mock_get.return_value = MockAsyncResponse(200, json=res_json)
 
-        response = self.run_async(api_client.get_metadata, "content_id")
+        response = self.run_async(api_client.aget_metadata, "content_id")
 
         url = f"{os.environ['VM_API_HOST']}/get_metadata/content_id"
         url += f""
@@ -162,7 +162,7 @@ class TestAPIClient(unittest.TestCase):
     def test_log_figure_matplot(self, mock_post: MagicMock):
         mock_post.return_value = MockAsyncResponse(200, json={"cuid": "1234"})
 
-        self.run_async(api_client.log_figure, mock_figure())
+        self.run_async(api_client.alog_figure, mock_figure())
 
         url = f"{os.environ['VM_API_HOST']}/log_figure"
         mock_post.assert_called_once()
@@ -174,7 +174,7 @@ class TestAPIClient(unittest.TestCase):
         mock_post.return_value = MockAsyncResponse(200, json={"cuid": "abc1234"})
 
         self.run_async(
-            api_client.log_metadata,
+            api_client.alog_metadata,
             "1234",
             text="Some Text",
             _json={"key": "value"},
@@ -193,31 +193,23 @@ class TestAPIClient(unittest.TestCase):
         )
 
     @patch("aiohttp.ClientSession.post")
-    def test_log_metric_result(self, mock_post):
-        metric = Mock(serialize=MagicMock(return_value={"key": "value"}))
-
-        mock_post.return_value = MockAsyncResponse(200, json={"cuid": "abc1234"})
-
-        self.run_async(api_client.log_metric_result, metric, inputs=["input1"])
-
-        url = f"{os.environ['VM_API_HOST']}/log_metrics"
-        mock_post.assert_called_with(
-            url, data=json.dumps([{"key": "value", "inputs": ["input1"]}])
-        )
-
-    @patch("aiohttp.ClientSession.post")
     def test_log_test_result(self, mock_post):
-        result = Mock(serialize=MagicMock(return_value={"key": "value"}))
+        result = {
+            "test_name": "test_name",
+            "ref_id": "asdf",
+            "params": {"a": 1},
+            "inputs": ["input1"],
+            "passed": True,
+            "summary": [{"key": "value"}],
+        }
 
         mock_post.return_value = MockAsyncResponse(200, json={"cuid": "abc1234"})
 
-        self.run_async(api_client.log_test_result, result, ["input1"])
+        self.run_async(api_client.alog_test_result, result)
 
         url = f"{os.environ['VM_API_HOST']}/log_test_results"
 
-        mock_post.assert_called_with(
-            url, data=json.dumps({"key": "value", "inputs": ["input1"]})
-        )
+        mock_post.assert_called_with(url, data=json.dumps(result))
 
 
 if __name__ == "__main__":

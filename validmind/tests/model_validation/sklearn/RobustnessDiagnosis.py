@@ -3,7 +3,6 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 from collections import defaultdict
-from dataclasses import dataclass
 from operator import add
 from typing import List, Tuple
 
@@ -15,16 +14,8 @@ from sklearn import metrics
 
 from validmind.errors import MissingOrInvalidModelPredictFnError
 from validmind.logging import get_logger
-from validmind.vm_models import (
-    Figure,
-    ResultSummary,
-    ResultTable,
-    ResultTableMetadata,
-    ThresholdTest,
-    ThresholdTestResult,
-    VMDataset,
-    VMModel,
-)
+from validmind.tests import tags, tasks
+from validmind.vm_models import VMDataset, VMModel
 
 logger = get_logger(__name__)
 
@@ -222,31 +213,58 @@ def _plot_robustness(
     return fig
 
 
-# TODO: make this a functional test instead of class-based when appropriate
-# simply have to remove the class and rename this func to OverfitDiagnosis
-def robustness_diagnosis(
-    model: VMModel,
+@tags("sklearn", "model_diagnosis", "visualization")
+@tasks("classification", "regression")
+def RobustnessDiagnosis(
     datasets: List[VMDataset],
+    model: VMModel,
     metric: str = None,
     scaling_factor_std_dev_list: List[float] = DEFAULT_STD_DEV_LIST,
     performance_decay_threshold: float = DEFAULT_DECAY_THRESHOLD,
 ):
+    """
+    Assesses the robustness of a machine learning model by evaluating performance decay under noisy conditions.
+
+    ### Purpose
+
+    The Robustness Diagnosis test aims to evaluate the resilience of a machine learning model when subjected to
+    perturbations or noise in its input data. This is essential for understanding the model's ability to handle
+    real-world scenarios where data may be imperfect or corrupted.
+
+    ### Test Mechanism
+
+    This test introduces Gaussian noise to the numeric input features of the datasets at varying scales of standard
+    deviation. The performance of the model is then measured using a specified metric. The process includes:
+
+    - Adding Gaussian noise to numerical input features based on scaling factors.
+    - Evaluating the model's performance on the perturbed data using metrics like AUC for classification tasks and MSE
+    for regression tasks.
+    - Aggregating and plotting the results to visualize performance decay relative to perturbation size.
+
+    ### Signs of High Risk
+
+    - A significant drop in performance metrics with minimal noise.
+    - Performance decay values exceeding the specified threshold.
+    - Consistent failure to meet performance standards across multiple perturbation scales.
+
+    ### Strengths
+
+    - Provides insights into the model's robustness against noisy or corrupted data.
+    - Utilizes a variety of performance metrics suitable for both classification and regression tasks.
+    - Visualization helps in understanding the extent of performance degradation.
+
+    ### Limitations
+
+    - Gaussian noise might not adequately represent all types of real-world data perturbations.
+    - Performance thresholds are somewhat arbitrary and might need tuning.
+    - The test may not account for more complex or unstructured noise patterns that could affect model robustness.
+    """
+    # TODO: use single dataset
     if not metric:
         metric = (
             DEFAULT_CLASSIFICATION_METRIC
             if datasets[0].probability_column(model)
             else DEFAULT_REGRESSION_METRIC
-        )
-        logger.info(f"Using default metric ({metric.upper()}) for robustness diagnosis")
-
-    if id(scaling_factor_std_dev_list) == id(DEFAULT_STD_DEV_LIST):
-        logger.info(
-            f"Using default scaling factors for the standard deviation of the noise: {DEFAULT_STD_DEV_LIST}"
-        )
-
-    if id(performance_decay_threshold) == id(DEFAULT_DECAY_THRESHOLD):
-        logger.info(
-            f"Using default performance decay threshold of {DEFAULT_DECAY_THRESHOLD}"
         )
 
     results = [{} for _ in range(len(datasets))]
@@ -304,116 +322,9 @@ def robustness_diagnosis(
         columns=datasets[0].feature_columns_numeric,
         model=model.input_id,
     )
-
     # rename perturbation size for baseline
-    results_df["Perturbation Size"][
-        results_df["Perturbation Size"] == 0.0
+    results_df.loc[
+        results_df["Perturbation Size"] == 0.0, "Perturbation Size"
     ] = "Baseline (0.0)"
 
-    return results_df, fig
-
-
-@dataclass
-class RobustnessDiagnosis(ThresholdTest):
-    """
-    Assesses the robustness of a machine learning model by evaluating performance decay under noisy conditions.
-
-    ### Purpose
-
-    The Robustness Diagnosis test aims to evaluate the resilience of a machine learning model when subjected to
-    perturbations or noise in its input data. This is essential for understanding the model's ability to handle
-    real-world scenarios where data may be imperfect or corrupted.
-
-    ### Test Mechanism
-
-    This test introduces Gaussian noise to the numeric input features of the datasets at varying scales of standard
-    deviation. The performance of the model is then measured using a specified metric. The process includes:
-
-    - Adding Gaussian noise to numerical input features based on scaling factors.
-    - Evaluating the model's performance on the perturbed data using metrics like AUC for classification tasks and MSE
-    for regression tasks.
-    - Aggregating and plotting the results to visualize performance decay relative to perturbation size.
-
-    ### Signs of High Risk
-
-    - A significant drop in performance metrics with minimal noise.
-    - Performance decay values exceeding the specified threshold.
-    - Consistent failure to meet performance standards across multiple perturbation scales.
-
-    ### Strengths
-
-    - Provides insights into the model's robustness against noisy or corrupted data.
-    - Utilizes a variety of performance metrics suitable for both classification and regression tasks.
-    - Visualization helps in understanding the extent of performance degradation.
-
-    ### Limitations
-
-    - Gaussian noise might not adequately represent all types of real-world data perturbations.
-    - Performance thresholds are somewhat arbitrary and might need tuning.
-    - The test may not account for more complex or unstructured noise patterns that could affect model robustness.
-    """
-
-    name = "robustness"
-    required_inputs = ["model", "datasets"]
-    default_params = {
-        "metric": None,
-        "scaling_factor_std_dev_list": DEFAULT_STD_DEV_LIST,
-        "performance_decay_threshold": DEFAULT_DECAY_THRESHOLD,
-    }
-    tasks = ["classification", "regression"]
-    tags = [
-        "sklearn",
-        "model_diagnosis",
-        "visualization",
-    ]
-
-    def run(self):
-        results, fig = robustness_diagnosis(
-            model=self.inputs.model,
-            datasets=self.inputs.datasets,
-            metric=self.params["metric"],
-            scaling_factor_std_dev_list=self.params["scaling_factor_std_dev_list"],
-            performance_decay_threshold=self.params["performance_decay_threshold"],
-        )
-
-        return self.cache_results(
-            passed=results["Passed"].all(),
-            test_results_list=[
-                ThresholdTestResult(
-                    test_name=self.params["metric"],
-                    passed=results["Passed"].all(),
-                    values=results.to_dict(orient="records"),
-                )
-            ],
-            figures=[
-                Figure(
-                    for_object=self,
-                    key=f"{self.name}:{self.params['metric']}",
-                    figure=fig,
-                )
-            ],
-        )
-
-    def summary(self, results: List[ThresholdTestResult], _):
-        return ResultSummary(
-            results=[
-                ResultTable(
-                    data=results[0].values,
-                    metadata=ResultTableMetadata(title="Robustness Diagnosis Results"),
-                )
-            ]
-        )
-
-    def test(self):
-        """Unit Test for Robustness Diagnosis Threshold Test"""
-        # Verify the result object is present
-        assert self.result is not None
-
-        # Verify test results and their type
-        assert isinstance(self.result.test_results.results, list)
-
-        # Check for presence and validity of 'values' and 'passed' flag in each result
-        for test_result in self.result.test_results.results:
-            assert "values" in test_result.__dict__
-            assert "passed" in test_result.__dict__
-            assert isinstance(test_result.values, list)
+    return results_df, fig, all(results_df["Passed"])

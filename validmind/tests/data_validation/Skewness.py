@@ -2,23 +2,15 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from dataclasses import dataclass
-from typing import List
-
 from ydata_profiling.config import Settings
 from ydata_profiling.model.typeset import ProfilingTypeSet
 
-from validmind.vm_models import (
-    ResultSummary,
-    ResultTable,
-    ResultTableMetadata,
-    ThresholdTest,
-    ThresholdTestResult,
-)
+from validmind import tags, tasks
 
 
-@dataclass
-class Skewness(ThresholdTest):
+@tags("data_quality", "tabular_data")
+@tasks("classification", "regression")
+def Skewness(dataset, max_threshold=1):
     """
     Evaluates the skewness of numerical data in a dataset to check against a defined threshold, aiming to ensure data
     quality and optimize model performance.
@@ -57,59 +49,30 @@ class Skewness(ThresholdTest):
     - Subjective threshold for risk grading, requiring expert input and recurrent iterations for refinement.
     """
 
-    name = "skewness"
-    required_inputs = ["dataset"]
-    default_params = {"max_threshold": 1}
-    tasks = ["classification", "regression"]
-    tags = ["tabular_data", "data_quality"]
+    typeset = ProfilingTypeSet(Settings())
+    dataset_types = typeset.infer_type(dataset.df)
 
-    def summary(self, results: List[ThresholdTestResult], all_passed: bool):
-        """
-        The skewness test returns results like these:
-        [{"values": {"skewness": 1.0}, "column": "NumOfProducts", "passed": false}]
-        """
-        results_table = [
+    skewness = dataset.df.skew(numeric_only=True)
+
+    results_table = []
+    passed = True
+
+    for col in skewness.index:
+        if str(dataset_types[col]) != "Numeric":
+            continue
+
+        col_skewness = skewness[col]
+        col_passed = abs(col_skewness) < max_threshold
+        passed = passed and col_passed
+
+        results_table.append(
             {
-                "Column": result.column,
-                "Skewness": result.values["skewness"],
-                "Pass/Fail": "Pass" if result.passed else "Fail",
+                "Column": col,
+                "Skewness": col_skewness,
+                "Pass/Fail": "Pass" if col_passed else "Fail",
             }
-            for result in results
-        ]
-        return ResultSummary(
-            results=[
-                ResultTable(
-                    data=results_table,
-                    metadata=ResultTableMetadata(title="Skewness Results for Dataset"),
-                )
-            ]
         )
 
-    def run(self):
-        typeset = ProfilingTypeSet(Settings())
-        dataset_types = typeset.infer_type(self.inputs.dataset.df)
-
-        skewness = self.inputs.dataset.df.skew(numeric_only=True)
-
-        results = []
-        passed = []
-
-        for col in skewness.index:
-            # Only calculate skewness for numerical columns
-            if str(dataset_types[col]) != "Numeric":
-                continue
-
-            col_skewness = skewness[col]
-            col_pass = abs(col_skewness) < self.params["max_threshold"]
-            passed.append(col_pass)
-            results.append(
-                ThresholdTestResult(
-                    column=col,
-                    passed=col_pass,
-                    values={
-                        "skewness": col_skewness,
-                    },
-                )
-            )
-
-        return self.cache_results(results, passed=all(passed))
+    return {
+        "Skewness Results for Dataset": results_table,
+    }, passed

@@ -23,28 +23,16 @@
   <path fill-rule="evenodd" d="M4.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H14.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"/>
 </svg>                &nbsp;validmind.tests.prompt_validation</a>
 
-            <img src="https://vmai.s3.us-west-1.amazonaws.com/vm-logo.svg" class="logo" alt="project logo"/>
+            <img src="https://vmai.s3.us-west-1.amazonaws.com/validmind-logo.svg" class="logo" alt="project logo"/>
 
             <input type="search" placeholder="Search..." role="searchbox" aria-label="search"
                    pattern=".+" required>
 
 
-            <h3>High Level API</h3>
+            <h3>Python Library API</h3>
                 <ul class="memberlist">
             <li>
-                    <a class="class" href="#Delimitation">Delimitation</a>
-                            <ul class="memberlist">
-                        <li>
-                                <a class="function" href="#Delimitation.__init__">Delimitation</a>
-                        </li>
-                        <li>
-                                <a class="function" href="#Delimitation.summary">summary</a>
-                        </li>
-                        <li>
-                                <a class="function" href="#Delimitation.run">run</a>
-                        </li>
-                </ul>
-
+                    <a class="function" href="#Delimitation">Delimitation</a>
             </li>
     </ul>
 
@@ -69,11 +57,12 @@
                 
             </section>
                 <section id="Delimitation">
-                    <div class="attr class">
-                    <div class="decorator">@dataclass</div>
+                    <div class="attr function">
+                    <div class="decorator">@tags(&#39;llm&#39;, &#39;zero_shot&#39;, &#39;few_shot&#39;)</div>
+        <div class="decorator">@tasks(&#39;text_classification&#39;, &#39;text_summarization&#39;)</div>
 
-    <span class="def">class</span>
-    <span class="name">Delimitation</span><wbr>(<span class="base">validmind.vm_models.test.threshold_test.ThresholdTest</span>):
+        <span class="def">def</span>
+        <span class="name">Delimitation</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">model</span>, </span><span class="param"><span class="n">min_threshold</span><span class="o">=</span><span class="mi">7</span></span><span class="return-annotation">):</span></span>
 
         
     </div>
@@ -123,74 +112,6 @@ adjustment.</li>
 </div>
 
 
-                            <div id="Delimitation.__init__" class="classattr">
-                                <div class="attr function">
-            
-        <span class="name">Delimitation</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">context</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n"><a href="../../vm_models.html#TestContext">validmind.vm_models.TestContext</a></span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">inputs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n"><a href="../../vm_models.html#TestInput">validmind.vm_models.TestInput</a></span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">tasks</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">_ref_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">_section_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">test_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">result</span><span class="p">:</span> <span class="n"><a href="../../vm_models.html#ThresholdTestResults">validmind.vm_models.ThresholdTestResults</a></span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">params</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">output_template</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">generate_description</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span></span>)</span>
-
-        
-    </div>
-    <a class="headerlink" href="#Delimitation.__init__"></a>
-    
-    
-
-                            </div>
-                            <div id="Delimitation.summary" class="classattr">
-                                <div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">summary</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">results</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n"><a href="../../vm_models.html#ThresholdTestResult">validmind.vm_models.ThresholdTestResult</a></span><span class="p">]</span>,</span><span class="param">	<span class="n">all_passed</span><span class="p">:</span> <span class="nb">bool</span></span><span class="return-annotation">):</span></span>
-
-        
-    </div>
-    <a class="headerlink" href="#Delimitation.summary"></a>
-    
-            <div class="docstring"><p>Return the threshold test summary. May be overridden by subclasses. Defaults to showing
-a table with test_name(optional), column and passed.</p>
-
-<p>The test summary allows renderers (e.g. Word and ValidMind UI) to display a
-short summary of the test results.</p>
-</div>
-
-
-                            </div>
-                            <div id="Delimitation.run" class="classattr">
-                                <div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">run</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">):</span></span>
-
-        
-    </div>
-    <a class="headerlink" href="#Delimitation.run"></a>
-    
-            <div class="docstring"><p>Run the calculation and cache its results</p>
-</div>
-
-
-                            </div>
-                            <div class="inherited">
-                                <h5>Inherited Members</h5>
-                                <dl>
-                                    <div><dt>validmind.vm_models.test.threshold_test.ThresholdTest</dt>
-                                <dd id="Delimitation.cache_results" class="function">cache_results</dd>
-
-            </div>
-            <div><dt>validmind.vm_models.test.test.Test</dt>
-                                <dd id="Delimitation.description" class="function">description</dd>
-                <dd id="Delimitation.log" class="function">log</dd>
-
-            </div>
-            <div><dt>validmind.vm_models.test_context.TestUtils</dt>
-                                <dd id="Delimitation.get_accessed_inputs" class="function">get_accessed_inputs</dd>
-                <dd id="Delimitation.dataset" class="variable">dataset</dd>
-                <dd id="Delimitation.model" class="variable">model</dd>
-                <dd id="Delimitation.models" class="variable">models</dd>
-                <dd id="Delimitation.validate_inputs" class="function">validate_inputs</dd>
-
-            </div>
-                                </dl>
-                            </div>
                 </section>
     </main>
 <script>

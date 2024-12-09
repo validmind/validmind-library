@@ -6,11 +6,12 @@ import pandas as pd
 from sklearn.inspection import permutation_importance
 
 from validmind import tags, tasks
+from validmind.vm_models import VMDataset, VMModel
 
 
 @tags("model_explainability", "sklearn")
 @tasks("regression", "time_series_forecasting")
-def FeatureImportance(dataset, model, num_features=3):
+def FeatureImportance(dataset: VMDataset, model: VMModel, num_features: int = 3):
     """
     Compute feature importance scores for a given model and generate a summary table
     with the top important features.
@@ -53,20 +54,18 @@ def FeatureImportance(dataset, model, num_features=3):
     """
     results_list = []
 
-    x = dataset.x_df()
-    y = dataset.y_df()
-
     pfi_values = permutation_importance(
-        model.model,
-        x,
-        y,
+        estimator=model.model,
+        X=dataset.x_df(),
+        y=dataset.y_df(),
         random_state=0,
         n_jobs=-2,
     )
 
     # Create a dictionary to store PFI scores
     pfi = {
-        column: pfi_values["importances_mean"][i] for i, column in enumerate(x.columns)
+        column: pfi_values["importances_mean"][i]
+        for i, column in enumerate(dataset.feature_columns)
     }
 
     # Sort features by their importance

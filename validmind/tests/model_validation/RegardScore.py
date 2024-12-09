@@ -7,6 +7,7 @@ import pandas as pd
 import plotly.graph_objects as go
 
 from validmind import tags, tasks
+from validmind.tests.utils import validate_prediction
 
 
 @tags("nlp", "text_data", "visualization")
@@ -56,8 +57,11 @@ def RegardScore(dataset, model):
     y_true = dataset.y
     y_pred = dataset.y_pred(model)
 
+    # Ensure equal lengths and get truncated data if necessary
+    y_true, y_pred = validate_prediction(y_true, y_pred)
+
     # Load the regard evaluation metric
-    regard_tool = evaluate.load("regard")
+    regard_tool = evaluate.load("regard", module_type="measurement")
 
     # Function to calculate regard scores
     def compute_regard_scores(texts):

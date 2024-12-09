@@ -23,25 +23,16 @@
   <path fill-rule="evenodd" d="M4.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H14.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"/>
 </svg>                &nbsp;validmind.tests.data_validation.nlp</a>
 
-            <img src="https://vmai.s3.us-west-1.amazonaws.com/vm-logo.svg" class="logo" alt="project logo"/>
+            <img src="https://vmai.s3.us-west-1.amazonaws.com/validmind-logo.svg" class="logo" alt="project logo"/>
 
             <input type="search" placeholder="Search..." role="searchbox" aria-label="search"
                    pattern=".+" required>
 
 
-            <h3>High Level API</h3>
+            <h3>Python Library API</h3>
                 <ul class="memberlist">
             <li>
-                    <a class="class" href="#CommonWords">CommonWords</a>
-                            <ul class="memberlist">
-                        <li>
-                                <a class="function" href="#CommonWords.__init__">CommonWords</a>
-                        </li>
-                        <li>
-                                <a class="function" href="#CommonWords.run">run</a>
-                        </li>
-                </ul>
-
+                    <a class="function" href="#CommonWords">CommonWords</a>
             </li>
     </ul>
 
@@ -60,19 +51,18 @@
                     <h1 class="modulename">
 <a href="./../../../../validmind.html">validmind</a><wbr>.<a href="./../../../tests.html">tests</a><wbr>.<a href="./../../data_validation.html">data_validation</a><wbr>.<a href="./../nlp.html">nlp</a><wbr>.CommonWords    </h1>
 
-                        <div class="docstring"><p>Metrics functions for any Pandas-compatible datasets</p>
-</div>
-
+                
                 
                 
                 
             </section>
                 <section id="CommonWords">
-                    <div class="attr class">
-                    <div class="decorator">@dataclass</div>
+                    <div class="attr function">
+                    <div class="decorator">@tags(&#39;nlp&#39;, &#39;text_data&#39;, &#39;visualization&#39;, &#39;frequency_analysis&#39;)</div>
+        <div class="decorator">@tasks(&#39;text_classification&#39;, &#39;text_summarization&#39;)</div>
 
-    <span class="def">class</span>
-    <span class="name">CommonWords</span><wbr>(<span class="base">validmind.vm_models.test.metric.Metric</span>):
+        <span class="def">def</span>
+        <span class="name">CommonWords</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">dataset</span><span class="p">:</span> <span class="n"><a href="../../../vm_models.html#VMDataset">validmind.vm_models.VMDataset</a></span></span><span class="return-annotation">):</span></span>
 
         
     </div>
@@ -90,8 +80,8 @@ Language Processing (NLP) tasks such as text classification and text summarizati
 
 <p>The test methodology involves splitting the specified text column's entries into words, collating them into a
 corpus, and then counting the frequency of each word using the Counter. The forty most frequently occurring
-non-stopwords are then visualized in a bar chart, where the x-axis represents the words, and the y-axis indicates
-their frequency of occurrence.</p>
+non-stopwords are then visualized in an interactive bar chart using Plotly, where the x-axis represents the words,
+and the y-axis indicates their frequency of occurrence.</p>
 
 <h3 id="signs-of-high-risk">Signs of High Risk</h3>
 
@@ -108,7 +98,7 @@ effectively implemented without it.</li>
 <li>The metric provides clear insights into the language features – specifically word frequency – of unstructured
 text data.</li>
 <li>It can reveal prominent vocabulary and language patterns, which prove vital for feature extraction in NLP tasks.</li>
-<li>The visualization helps in quickly capturing the patterns and understanding the data intuitively.</li>
+<li>The interactive visualization helps in quickly capturing the patterns and understanding the data intuitively.</li>
 </ul>
 
 <h3 id="limitations">Limitations</h3>
@@ -124,56 +114,6 @@ applicability.</li>
 </div>
 
 
-                            <div id="CommonWords.__init__" class="classattr">
-                                <div class="attr function">
-            
-        <span class="name">CommonWords</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">context</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n"><a href="../../../vm_models.html#TestContext">validmind.vm_models.TestContext</a></span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">inputs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n"><a href="../../../vm_models.html#TestInput">validmind.vm_models.TestInput</a></span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">tasks</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">_ref_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">_section_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">test_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">result</span><span class="p">:</span> <span class="n">validmind</span><span class="o">.</span><span class="n">vm_models</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">result_wrapper</span><span class="o">.</span><span class="n">MetricResultWrapper</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">params</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">output_template</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">generate_description</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span></span>)</span>
-
-        
-    </div>
-    <a class="headerlink" href="#CommonWords.__init__"></a>
-    
-    
-
-                            </div>
-                            <div id="CommonWords.run" class="classattr">
-                                <div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">run</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">):</span></span>
-
-        
-    </div>
-    <a class="headerlink" href="#CommonWords.run"></a>
-    
-            <div class="docstring"><p>Run the calculation and cache its results</p>
-</div>
-
-
-                            </div>
-                            <div class="inherited">
-                                <h5>Inherited Members</h5>
-                                <dl>
-                                    <div><dt>validmind.vm_models.test.metric.Metric</dt>
-                                <dd id="CommonWords.summary" class="function">summary</dd>
-                <dd id="CommonWords.cache_results" class="function">cache_results</dd>
-
-            </div>
-            <div><dt>validmind.vm_models.test.test.Test</dt>
-                                <dd id="CommonWords.description" class="function">description</dd>
-                <dd id="CommonWords.log" class="function">log</dd>
-
-            </div>
-            <div><dt>validmind.vm_models.test_context.TestUtils</dt>
-                                <dd id="CommonWords.get_accessed_inputs" class="function">get_accessed_inputs</dd>
-                <dd id="CommonWords.dataset" class="variable">dataset</dd>
-                <dd id="CommonWords.model" class="variable">model</dd>
-                <dd id="CommonWords.models" class="variable">models</dd>
-                <dd id="CommonWords.validate_inputs" class="function">validate_inputs</dd>
-
-            </div>
-                                </dl>
-                            </div>
                 </section>
     </main>
 <script>

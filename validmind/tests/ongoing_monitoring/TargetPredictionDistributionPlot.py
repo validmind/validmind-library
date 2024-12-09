@@ -52,14 +52,16 @@ def TargetPredictionDistributionPlot(datasets, model):
 
     fig = plt.figure()
     plot = sns.kdeplot(
-        pred_ref["Reference Prediction"], shade=True, label="Reference Prediction"
+        pred_ref["Reference Prediction"], fill=True, label="Reference Prediction"
     )
     plot = sns.kdeplot(
-        pred_monitor["Monitoring Prediction"], shade=True, label="Monitor Prediction"
+        pred_monitor["Monitoring Prediction"], fill=True, label="Monitor Prediction"
     )
     plot.set(
         xlabel="Prediction", title="Distribution of Reference & Monitor Predictions"
     )
     plot.legend()
+
+    plt.close()
 
     return fig

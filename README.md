@@ -1,16 +1,16 @@
 # ValidMind Library
 
 <!-- TODO: put back in when workflows are working properly -->
-<!-- [![Code Quality](https://github.com/validmind/developer-framework/actions/workflows/python.yaml/badge.svg)](https://github.com/validmind/developer-framework/actions/workflows/python.yaml)
-[![Integration Tests](https://github.com/validmind/developer-framework/actions/workflows/integration.yaml/badge.svg)](https://github.com/validmind/developer-framework/actions/workflows/integration.yaml) -->
+<!-- [![Code Quality](https://github.com/validmind/validmind-library/actions/workflows/python.yaml/badge.svg)](https://github.com/validmind/validmind-library/actions/workflows/python.yaml)
+[![Integration Tests](https://github.com/validmind/validmind-library/actions/workflows/integration.yaml/badge.svg)](https://github.com/validmind/validmind-library/actions/workflows/integration.yaml) -->
 
-![ValidMind logo](images/ValidMind-logo-color.svg "ValidMind logo")
+![ValidMind logo](https://vmai.s3.us-west-1.amazonaws.com/validmind-logo.svg "ValidMind logo")
 
-ValidMind's Python library automates the documentation and validation of your models through a comprehensive suite of developer tools and methods.
+The ValidMind Library is a suite of developer tools and methods designed to run validation tests and automate the documentation of your models.
 
-Built to be model agnostic, it works seamlessly with any Python model without requiring developers to rewrite existing code.
+Designed to be model agnostic, the ValidMind Library provides all the standard functionality without requiring you to rewrite any functions as long as your model is built in Python.
 
-It includes a suite of rich documentation and model testing capabilities - from dataset descriptions to identifying model weak spots and overfit areas. Through this library, you can automate documentation generation by feeding artifacts and test results to the ValidMind platform.
+With a rich array of documentation tools and test suites, from documenting descriptions of your datasets to testing your models for weak spots and overfit areas, the ValidMind Library helps you automate model documentation by feeding the ValidMind Platform with documentation artifacts and test results.
 
 ## Contributing to the ValidMind Library
 
@@ -18,13 +18,13 @@ We believe in the power of collaboration and welcome contributions to the ValidM
 
 - Interested in connecting with fellow AI model risk practitioners? Join our [Community Slack](https://docs.validmind.ai/about/contributing/join-community.html)!
 
-- For more information about ValidMind's open source tests and Jupyter notebooks, read the [Library docs](https://docs.validmind.ai/developer/get-started-developer-framework.html).
+- For more information about ValidMind's open-source tests and Jupyter Notebooks, read the [ValidMind Library docs](https://docs.validmind.ai/developer/get-started-validmind-library.html).
 
 ## Getting started
 
 ### Install from PyPI
 
-To install the library and all optional dependencies, run:
+To install the ValidMind Library and all optional dependencies, run:
 
 ```bash
 pip install validmind[all]
@@ -80,7 +80,7 @@ This will install the dependencies and git hooks for the project.
 a new kernel with Jupyter:
 
 ```bash
-poetry run python -m ipykernel install --user --name dev-framework --display-name "Library"
+poetry run python -m ipykernel install --user --name validmind --display-name "ValidMind Library"
 ```
 
 ### Installing LLM validation dependencies
@@ -143,7 +143,7 @@ Single file:
 poetry run python scripts/add_test_description.py review validmind/tests/ongoing_monitoring/FeatureDrift.py
 ```
 
-## Adding a Copyright Header
+## Adding a copyright header
 
 When adding new files to the project, you can add the ValidMind copyright header to any files that
 are missing it by running:
@@ -152,7 +152,7 @@ are missing it by running:
 make copyright
 ```
 
-## Known Issues
+## Known issues
 
 ### ValidMind wheel errors
 

@@ -3,6 +3,7 @@ import json
 
 from openai import OpenAI
 from github import Github
+from tiktoken import encoding_for_model
 
 # Initialize GitHub and OpenAI clients
 github_token = os.getenv("GITHUB_TOKEN")
@@ -68,6 +69,16 @@ diff:
 
 # Prepare OpenAI prompt
 prompt = prompt_template.format(diff=diff)
+
+# check number of tokens
+encoding = encoding_for_model("gpt-4o-mini")
+tokens = encoding.encode(prompt)
+print(f"Number of tokens: {len(tokens)}")
+# 128k is max tokens for gpt-4o-mini
+num_output_tokens = 1000
+if len(tokens) > 128000 - num_output_tokens:
+    tokens = tokens[: 128000 - num_output_tokens]
+    prompt = encoding.decode(tokens)
 
 # Call OpenAI API
 client = OpenAI()

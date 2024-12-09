@@ -3,25 +3,19 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 """
-ValidMind’s Python Library is a library of developer tools and methods designed to automate
-the documentation and validation of your models.
+The ValidMind Library is a suite of developer tools and methods designed to automate the documentation and validation of your models.
 
-The Library is designed to be model agnostic. If your model is built in Python, ValidMind's
-Python library will provide all the standard functionality without requiring your developers to rewrite any functions.
+Designed to be model agnostic, the ValidMind Library provides all the standard functionality without requiring you to rewrite any functions as long as your model is built in Python.
 
-The Library provides a rich suite of documentation tools and test suites, from documenting
-descriptions of your dataset to testing your models for weak spots and overfit areas. The Library
-helps you automate the generation of model documentation by feeding the ValidMind platform with documentation
-artifacts and test results to the ValidMind platform.
+With a rich array of documentation tools and test suites, from documenting descriptions of your datasets to testing your models for weak spots and overfit areas, the ValidMind Library helps you automate model documentation by feeding the ValidMind Platform with documentation artifacts and test results.
 
-To install the client library:
+To install the ValidMind Library:
 
 ```bash
 pip install validmind
 ```
 
-To initialize the client library, paste the code snippet with the client integration details directly into your
-development source code, replacing this example with your own:
+To initialize the ValidMind Library, paste the code snippet with the model identifier credentials directly into your development source code, replacing this example with your own:
 
 ```python
 import validmind as vm
@@ -34,9 +28,7 @@ vm.init(
 )
 ```
 
-After you have pasted the code snippet into your development source code and executed the code, the Python client
-library will register with ValidMind. You can now use the Library to document and test your models,
-and to upload to the ValidMind Platform.
+After you have pasted the code snippet into your development source code and executed the code, the Python Library API will register with ValidMind. You can now use the ValidMind Library to document and test your models, and to upload to the ValidMind Platform.
 """
 import warnings
 
@@ -57,11 +49,11 @@ from .client import (  # noqa: E402
     run_documentation_tests,
     run_test_suite,
 )
-from .tests.decorator import metric, tags, tasks, test
+from .tests.decorator import tags, tasks, test
 
 __all__ = [  # noqa
     "__version__",
-    # Framework High Level API
+    # Python Library API
     "datasets",
     "errors",
     "get_test_suite",
@@ -69,7 +61,6 @@ __all__ = [  # noqa
     "init_dataset",
     "init_model",
     "init_r_model",
-    "metric",
     "preview_template",
     "reload",
     "run_documentation_tests",

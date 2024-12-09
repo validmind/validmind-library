@@ -88,11 +88,10 @@ def init_sentry(server_config):
         logger.debug(f"Sentry error: {str(e)}")
 
 
-def log_performance(func, name=None, logger=None, force=False):
+def log_performance(name=None, logger=None, force=False):
     """Decorator to log the time it takes to run a function
 
     Args:
-        func (function): The function to decorate
         name (str, optional): The name of the function. Defaults to None.
         logger (logging.Logger, optional): The logger to use. Defaults to None.
         force (bool, optional): Whether to force logging even if env var is off
@@ -100,26 +99,32 @@ def log_performance(func, name=None, logger=None, force=False):
     Returns:
         function: The decorated function
     """
-    # check if log level is set to debug
-    if _get_log_level() != logging.DEBUG and not force:
-        return func
 
-    if logger is None:
-        logger = get_logger()
+    def decorator(func):
+        # check if log level is set to debug
+        if _get_log_level() != logging.DEBUG and not force:
+            return func
 
-    if name is None:
-        name = func.__name__
+        nonlocal logger
+        if logger is None:
+            logger = get_logger()
 
-    def wrap(*args, **kwargs):
-        time1 = time.perf_counter()
-        return_val = func(*args, **kwargs)
-        time2 = time.perf_counter()
+        nonlocal name
+        if name is None:
+            name = func.__name__
 
-        logger.debug("%s function took %0.3f ms" % (name, (time2 - time1) * 1000.0))
+        def wrapped(*args, **kwargs):
+            time1 = time.perf_counter()
+            return_val = func(*args, **kwargs)
+            time2 = time.perf_counter()
 
-        return return_val
+            logger.debug("%s function took %0.3f ms" % (name, (time2 - time1) * 1000.0))
 
-    return wrap
+            return return_val
+
+        return wrapped
+
+    return decorator
 
 
 async def log_performance_async(func, name=None, logger=None, force=False):

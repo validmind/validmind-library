@@ -23,40 +23,28 @@
   <path fill-rule="evenodd" d="M4.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H14.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"/>
 </svg>                &nbsp;validmind.tests.data_validation</a>
 
-            <img src="https://vmai.s3.us-west-1.amazonaws.com/vm-logo.svg" class="logo" alt="project logo"/>
+            <img src="https://vmai.s3.us-west-1.amazonaws.com/validmind-logo.svg" class="logo" alt="project logo"/>
 
             <input type="search" placeholder="Search..." role="searchbox" aria-label="search"
                    pattern=".+" required>
 
 
-            <h3>High Level API</h3>
+            <h3>Python Library API</h3>
                 <ul class="memberlist">
             <li>
-                    <a class="class" href="#DatasetDescription">DatasetDescription</a>
-                            <ul class="memberlist">
-                        <li>
-                                <a class="function" href="#DatasetDescription.__init__">DatasetDescription</a>
-                        </li>
-                        <li>
-                                <a class="function" href="#DatasetDescription.summary">summary</a>
-                        </li>
-                        <li>
-                                <a class="function" href="#DatasetDescription.run">run</a>
-                        </li>
-                        <li>
-                                <a class="function" href="#DatasetDescription.infer_datatype">infer_datatype</a>
-                        </li>
-                        <li>
-                                <a class="function" href="#DatasetDescription.describe_dataset_field">describe_dataset_field</a>
-                        </li>
-                        <li>
-                                <a class="function" href="#DatasetDescription.get_field_histograms">get_field_histograms</a>
-                        </li>
-                        <li>
-                                <a class="function" href="#DatasetDescription.get_numerical_histograms">get_numerical_histograms</a>
-                        </li>
-                </ul>
-
+                    <a class="function" href="#infer_datatypes">infer_datatypes</a>
+            </li>
+            <li>
+                    <a class="function" href="#get_numerical_histograms">get_numerical_histograms</a>
+            </li>
+            <li>
+                    <a class="function" href="#get_column_histograms">get_column_histograms</a>
+            </li>
+            <li>
+                    <a class="function" href="#describe_column">describe_column</a>
+            </li>
+            <li>
+                    <a class="function" href="#DatasetDescription">DatasetDescription</a>
             </li>
     </ul>
 
@@ -80,46 +68,109 @@
                 
                 
             </section>
-                <section id="DatasetDescription">
-                    <div class="attr class">
-                    <div class="decorator">@dataclass</div>
+                <section id="infer_datatypes">
+                    <div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">infer_datatypes</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">df</span></span><span class="return-annotation">):</span></span>
 
-    <span class="def">class</span>
-    <span class="name">DatasetDescription</span><wbr>(<span class="base">validmind.vm_models.test.metric.Metric</span>):
+        
+    </div>
+    <a class="headerlink" href="#infer_datatypes"></a>
+    
+    
+
+                </section>
+                <section id="get_numerical_histograms">
+                    <div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">get_numerical_histograms</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">df</span>, </span><span class="param"><span class="n">column</span></span><span class="return-annotation">):</span></span>
+
+        
+    </div>
+    <a class="headerlink" href="#get_numerical_histograms"></a>
+    
+            <div class="docstring"><p>Returns a collection of histograms for a numerical column, each one
+with a different bin size</p>
+</div>
+
+
+                </section>
+                <section id="get_column_histograms">
+                    <div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">get_column_histograms</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">df</span>, </span><span class="param"><span class="n">column</span>, </span><span class="param"><span class="n">type_</span></span><span class="return-annotation">):</span></span>
+
+        
+    </div>
+    <a class="headerlink" href="#get_column_histograms"></a>
+    
+            <div class="docstring"><p>Returns a collection of histograms for a numerical or categorical column.
+We store different combinations of bin sizes to allow analyzing the data better</p>
+
+<p>Will be used in favor of _get_histogram in the future</p>
+</div>
+
+
+                </section>
+                <section id="describe_column">
+                    <div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">describe_column</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">df</span>, </span><span class="param"><span class="n">column</span></span><span class="return-annotation">):</span></span>
+
+        
+    </div>
+    <a class="headerlink" href="#describe_column"></a>
+    
+            <div class="docstring"><p>Gets descriptive statistics for a single column in a Pandas DataFrame.</p>
+</div>
+
+
+                </section>
+                <section id="DatasetDescription">
+                    <div class="attr function">
+                    <div class="decorator">@tags(&#39;tabular_data&#39;, &#39;time_series_data&#39;, &#39;text_data&#39;)</div>
+        <div class="decorator">@tasks(&#39;classification&#39;, &#39;regression&#39;, &#39;text_classification&#39;, &#39;text_summarization&#39;)</div>
+
+        <span class="def">def</span>
+        <span class="name">DatasetDescription</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">dataset</span><span class="p">:</span> <span class="n"><a href="../../vm_models.html#VMDataset">validmind.vm_models.VMDataset</a></span></span><span class="return-annotation">):</span></span>
 
         
     </div>
     <a class="headerlink" href="#DatasetDescription"></a>
     
-            <div class="docstring"><p>Provides comprehensive analysis and statistical summaries of each field in a machine learning model's dataset.</p>
+            <div class="docstring"><p>Provides comprehensive analysis and statistical summaries of each column in a machine learning model's dataset.</p>
 
 <h3 id="purpose">Purpose</h3>
 
 <p>The test depicted in the script is meant to run a comprehensive analysis on a Machine Learning model's datasets.
-The test or metric is implemented to obtain a complete summary of the fields in the dataset, including vital
-statistics of each field such as count, distinct values, missing values, histograms for numerical, categorical,
-boolean, and text fields. This summary gives a comprehensive overview of the dataset to better understand the
+The test or metric is implemented to obtain a complete summary of the columns in the dataset, including vital
+statistics of each column such as count, distinct values, missing values, histograms for numerical, categorical,
+boolean, and text columns. This summary gives a comprehensive overview of the dataset to better understand the
 characteristics of the data that the model is trained on or evaluates.</p>
 
 <h3 id="test-mechanism">Test Mechanism</h3>
 
 <p>The DatasetDescription class accomplishes the purpose as follows: firstly, the test method "run" infers the data
-type of each column in the dataset and stores the details (id, column type). For each field, the
-"describe_dataset_field" method is invoked to collect statistical information about the field, including count,
+type of each column in the dataset and stores the details (id, column type). For each column, the
+"describe_column" method is invoked to collect statistical information about the column, including count,
 missing value count and its proportion to the total, unique value count, and its proportion to the total. Depending
-on the data type of a field, histograms are generated that reflect the distribution of data within the field.
-Numerical fields use the "get_numerical_histograms" method to calculate histogram distribution, whereas for
-categorical, boolean and text fields, a histogram is computed with frequencies of each unique value in the
+on the data type of a column, histograms are generated that reflect the distribution of data within the column.
+Numerical columns use the "get_numerical_histograms" method to calculate histogram distribution, whereas for
+categorical, boolean and text columns, a histogram is computed with frequencies of each unique value in the
 datasets. For unsupported types, an error is raised. Lastly, a summary table is built to aggregate all the
-statistical insights and histograms of the fields in a dataset.</p>
+statistical insights and histograms of the columns in a dataset.</p>
 
 <h3 id="signs-of-high-risk">Signs of High Risk</h3>
 
 <ul>
-<li>High ratio of missing values to total values in one or more fields which may impact the quality of the
+<li>High ratio of missing values to total values in one or more columns which may impact the quality of the
 predictions.</li>
-<li>Unsupported data types in dataset fields.</li>
-<li>Large number of unique values in the dataset's fields which might make it harder for the model to establish
+<li>Unsupported data types in dataset columns.</li>
+<li>Large number of unique values in the dataset's columns which might make it harder for the model to establish
 patterns.</li>
 <li>Extreme skewness or irregular distribution of data as reflected in the histograms.</li>
 </ul>
@@ -138,146 +189,16 @@ decisions.</li>
 <h3 id="limitations">Limitations</h3>
 
 <ul>
-<li>The computation can be expensive from a resource standpoint, particularly for large datasets with numerous fields.</li>
+<li>The computation can be expensive from a resource standpoint, particularly for large datasets with numerous columns.</li>
 <li>The histograms use an arbitrary number of bins which may not be the optimal number of bins for specific data
 distribution.</li>
 <li>Unsupported data types for columns will raise an error which may limit evaluating the dataset.</li>
-<li>Fields with all null or missing values are not included in histogram computation.</li>
+<li>Columns with all null or missing values are not included in histogram computation.</li>
 <li>This test only validates the quality of the dataset but doesn't address the model's performance directly.</li>
 </ul>
 </div>
 
 
-                            <div id="DatasetDescription.__init__" class="classattr">
-                                <div class="attr function">
-            
-        <span class="name">DatasetDescription</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">context</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n"><a href="../../vm_models.html#TestContext">validmind.vm_models.TestContext</a></span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">inputs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n"><a href="../../vm_models.html#TestInput">validmind.vm_models.TestInput</a></span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">tasks</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">_ref_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">_section_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">test_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">result</span><span class="p">:</span> <span class="n">validmind</span><span class="o">.</span><span class="n">vm_models</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">result_wrapper</span><span class="o">.</span><span class="n">MetricResultWrapper</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">params</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">output_template</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">generate_description</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span></span>)</span>
-
-        
-    </div>
-    <a class="headerlink" href="#DatasetDescription.__init__"></a>
-    
-    
-
-                            </div>
-                            <div id="DatasetDescription.summary" class="classattr">
-                                <div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">summary</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">metric_value</span></span><span class="return-annotation">):</span></span>
-
-        
-    </div>
-    <a class="headerlink" href="#DatasetDescription.summary"></a>
-    
-            <div class="docstring"><p>Build a dataset summary table. metric_value is a list of fields where each field
-has an id, type (Numeric or Categorical), and statistics. The statistics object
-depends on the type being Numeric or Categorical. For Numeric fields, it has
-the following keys: count, mean, std, min, 25%, 50%, 75%, 90%, 95%, max. For
-categorical fields, it has the following keys: count, unique, top, freq.</p>
-</div>
-
-
-                            </div>
-                            <div id="DatasetDescription.run" class="classattr">
-                                <div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">run</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">):</span></span>
-
-        
-    </div>
-    <a class="headerlink" href="#DatasetDescription.run"></a>
-    
-            <div class="docstring"><p>Run the calculation and cache its results</p>
-</div>
-
-
-                            </div>
-                            <div id="DatasetDescription.infer_datatype" class="classattr">
-                                <div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">infer_datatype</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">df</span></span><span class="return-annotation">):</span></span>
-
-        
-    </div>
-    <a class="headerlink" href="#DatasetDescription.infer_datatype"></a>
-    
-    
-
-                            </div>
-                            <div id="DatasetDescription.describe_dataset_field" class="classattr">
-                                <div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">describe_dataset_field</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">df</span>, </span><span class="param"><span class="n">field</span></span><span class="return-annotation">):</span></span>
-
-        
-    </div>
-    <a class="headerlink" href="#DatasetDescription.describe_dataset_field"></a>
-    
-            <div class="docstring"><p>Gets descriptive statistics for a single field in a Pandas DataFrame.</p>
-</div>
-
-
-                            </div>
-                            <div id="DatasetDescription.get_field_histograms" class="classattr">
-                                <div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">get_field_histograms</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">df</span>, </span><span class="param"><span class="n">field</span>, </span><span class="param"><span class="n">type_</span></span><span class="return-annotation">):</span></span>
-
-        
-    </div>
-    <a class="headerlink" href="#DatasetDescription.get_field_histograms"></a>
-    
-            <div class="docstring"><p>Returns a collection of histograms for a numerical or categorical field.
-We store different combinations of bin sizes to allow analyzing the data better</p>
-
-<p>Will be used in favor of _get_histogram in the future</p>
-</div>
-
-
-                            </div>
-                            <div id="DatasetDescription.get_numerical_histograms" class="classattr">
-                                <div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">get_numerical_histograms</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">df</span>, </span><span class="param"><span class="n">field</span></span><span class="return-annotation">):</span></span>
-
-        
-    </div>
-    <a class="headerlink" href="#DatasetDescription.get_numerical_histograms"></a>
-    
-            <div class="docstring"><p>Returns a collection of histograms for a numerical field, each one
-with a different bin size</p>
-</div>
-
-
-                            </div>
-                            <div class="inherited">
-                                <h5>Inherited Members</h5>
-                                <dl>
-                                    <div><dt>validmind.vm_models.test.metric.Metric</dt>
-                                <dd id="DatasetDescription.cache_results" class="function">cache_results</dd>
-
-            </div>
-            <div><dt>validmind.vm_models.test.test.Test</dt>
-                                <dd id="DatasetDescription.description" class="function">description</dd>
-                <dd id="DatasetDescription.log" class="function">log</dd>
-
-            </div>
-            <div><dt>validmind.vm_models.test_context.TestUtils</dt>
-                                <dd id="DatasetDescription.get_accessed_inputs" class="function">get_accessed_inputs</dd>
-                <dd id="DatasetDescription.dataset" class="variable">dataset</dd>
-                <dd id="DatasetDescription.model" class="variable">model</dd>
-                <dd id="DatasetDescription.models" class="variable">models</dd>
-                <dd id="DatasetDescription.validate_inputs" class="function">validate_inputs</dd>
-
-            </div>
-                                </dl>
-                            </div>
                 </section>
     </main>
 <script>

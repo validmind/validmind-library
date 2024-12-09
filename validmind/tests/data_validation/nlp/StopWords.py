@@ -7,26 +7,21 @@ Threshold based tests
 """
 
 from collections import defaultdict
-from dataclasses import dataclass
-from typing import List
 
-import matplotlib.pyplot as plt
 import nltk
 import pandas as pd
+import plotly.graph_objects as go
 from nltk.corpus import stopwords
 
-from validmind.vm_models import (
-    Figure,
-    ResultSummary,
-    ResultTable,
-    ResultTableMetadata,
-    ThresholdTest,
-    ThresholdTestResult,
-)
+from validmind import tags, tasks
+from validmind.vm_models import VMDataset
 
 
-@dataclass
-class StopWords(ThresholdTest):
+@tags("nlp", "text_data", "frequency_analysis", "visualization")
+@tasks("text_classification", "text_summarization")
+def StopWords(
+    dataset: VMDataset, min_percent_threshold: float = 0.5, num_words: int = 25
+):
     """
     Evaluates and visualizes the frequency of English stop words in a text dataset against a defined threshold.
 
@@ -75,82 +70,58 @@ class StopWords(ThresholdTest):
     or predictive accuracy.
     """
 
-    name = "stop_words"
-    required_inputs = ["dataset"]
-    default_params = {"min_percent_threshold": 0.5, "num_words": 25}
-    tasks = ["text_classification", "text_summarization"]
-    tags = ["nlp", "text_data", "visualization", "frequency_analysis"]
+    text_column = dataset.text_column
 
-    def summary(self, results: List[ThresholdTestResult], all_passed: bool):
-        # Create a DataFrame from the data
-        df = pd.DataFrame(results[0].values, columns=["Word", "Percentage"])
+    def create_corpus(df, text_column):
+        corpus = []
+        for x in df[text_column].str.split():
+            for i in x:
+                corpus.append(i)
+        return corpus
 
-        return ResultSummary(
-            results=[
-                ResultTable(
-                    data=df,
-                    metadata=ResultTableMetadata(
-                        title=f"Stop words results for column '{self.inputs.dataset.target_column}'"
-                    ),
-                )
-            ]
-        )
+    corpus = create_corpus(dataset.df, text_column=text_column)
 
-    def run(self):
-        text_column = self.inputs.dataset.text_column
+    nltk.download("stopwords", quiet=True)
 
-        def create_corpus(df, text_column):
-            corpus = []
-            for x in df[text_column].str.split():
-                for i in x:
-                    corpus.append(i)
-            return corpus
+    stop = set(stopwords.words("english"))
+    dic = defaultdict(int)
+    for word in corpus:
+        if word in stop:
+            dic[word] += 1
 
-        corpus = create_corpus(self.inputs.dataset.df, text_column=text_column)
+    # Calculate the total number of words in the corpus
+    total_words = len(corpus)
 
-        nltk.download("stopwords")
-        stop = set(stopwords.words("english"))
-        dic = defaultdict(int)
-        for word in corpus:
-            if word in stop:
-                dic[word] += 1
-        # Calculate the total number of words in the corpus
-        total_words = len(corpus)
+    # Calculate the percentage of each word in the corpus
+    word_percentages = {}
+    for word, count in dic.items():
+        percentage = (count / total_words) * 100
+        word_percentages[word] = percentage
 
-        # Calculate the percentage of each word in the corpus
-        word_percentages = {}
-        for word, count in dic.items():
-            percentage = (count / total_words) * 100
-            word_percentages[word] = percentage
+    passed = all(word_percentages.values()) < min_percent_threshold
+    results = sorted(word_percentages.items(), key=lambda x: x[1], reverse=True)[
+        :num_words
+    ]
 
-        passed = all(word_percentages.values()) < self.params["min_percent_threshold"]
-        top = sorted(word_percentages.items(), key=lambda x: x[1], reverse=True)[
-            : self.params["num_words"]
-        ]
+    if not results:
+        return passed
 
-        test_results = [
-            ThresholdTestResult(
-                passed=passed,
-                values=top,
+    x, y = zip(*results)
+
+    fig = go.Figure(data=[go.Bar(x=x, y=y)])
+    fig.update_layout(
+        title=f"Stop Words Frequency in '{text_column}'",
+        xaxis_title="Stop Words",
+        yaxis_title="Percentage (%)",
+        xaxis_tickangle=-45,
+    )
+
+    return (
+        {
+            f"Stop words results for column '{text_column}'": pd.DataFrame(
+                results, columns=["Word", "Percentage"]
             )
-        ]
-        figures = []
-        if top:
-            fig, _ = plt.subplots()
-            x, y = zip(*top)
-            plt.bar(x, y)
-            plt.xticks(rotation=90)
-
-            # Do this if you want to prevent the figure from being displayed
-            plt.close("all")
-
-            figures = []
-            figures.append(
-                Figure(
-                    for_object=self,
-                    key=f"{self.name}",
-                    figure=fig,
-                )
-            )
-
-        return self.cache_results(test_results, passed=passed, figures=figures)
+        },
+        fig,
+        passed,
+    )

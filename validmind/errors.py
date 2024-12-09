@@ -3,13 +3,15 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 """
-This module contains all the custom errors that are used in the library.
+This module contains all the custom errors that are used in the ValidMind Library.
 
 The following base errors are defined for others:
 - BaseError
 - APIRequestError
 """
+
 import json
+from typing import Optional
 
 
 class BaseError(Exception):
@@ -77,14 +79,6 @@ class InvalidContentIdPrefixError(APIRequestError):
     """
     When an invalid text content_id is sent to the API.
     """
-
-
-class InvalidFigureForObjectError(BaseError):
-    """
-    When a figure was constructed with an unsupported for_object value.
-    """
-
-    pass
 
 
 class InvalidMetricResultsError(APIRequestError):
@@ -164,7 +158,9 @@ class LoadTestError(BaseError):
     Exception raised when an error occurs while loading a test
     """
 
-    pass
+    def __init__(self, message: str, original_error: Optional[Exception] = None):
+        super().__init__(message)
+        self.original_error = original_error
 
 
 class MismatchingClassLabelsError(BaseError):

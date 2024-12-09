@@ -27,7 +27,7 @@ from .template import get_template_test_suite
 from .template import preview_template as _preview_template
 from .test_suites import get_by_id as get_test_suite_by_id
 from .utils import get_dataset_info, get_model_info
-from .vm_models import TestInput, TestSuite, TestSuiteRunner
+from .vm_models import TestSuite, TestSuiteRunner
 from .vm_models.dataset import DataFrameDataset, PolarsDataset, TorchDataset, VMDataset
 from .vm_models.model import (
     ModelAttributes,
@@ -100,7 +100,6 @@ def init_dataset(
 
     # Instantiate supported dataset types here
     if isinstance(dataset, pd.DataFrame):
-        logger.info("Pandas dataset detected. Initializing VM Dataset instance...")
         vm_dataset = DataFrameDataset(
             input_id=input_id,
             raw_dataset=dataset,
@@ -113,7 +112,6 @@ def init_dataset(
             date_time_index=date_time_index,
         )
     elif isinstance(dataset, pl.DataFrame):
-        logger.info("Polars dataset detected. Initializing VM Dataset instance...")
         vm_dataset = PolarsDataset(
             input_id=input_id,
             raw_dataset=dataset,
@@ -126,7 +124,6 @@ def init_dataset(
             date_time_index=date_time_index,
         )
     elif dataset_class == "ndarray":
-        logger.info("Numpy ndarray detected. Initializing VM Dataset instance...")
         vm_dataset = VMDataset(
             input_id=input_id,
             raw_dataset=dataset,
@@ -143,7 +140,6 @@ def init_dataset(
             date_time_index=date_time_index,
         )
     elif dataset_class == "TensorDataset":
-        logger.info("Torch TensorDataset detected. Initializing VM Dataset instance...")
         vm_dataset = TorchDataset(
             input_id=input_id,
             raw_dataset=dataset,
@@ -277,6 +273,7 @@ def init_model(
 
 def init_r_model(
     model_path: str,
+    input_id: str = "model",
 ) -> VMModel:
     """
     Initializes a VM Model for an R model
@@ -325,6 +322,7 @@ def init_r_model(
     vm_model = RModel(
         r=r,
         model=model,
+        input_id=input_id,
     )
 
     return vm_model
@@ -409,7 +407,7 @@ def run_test_suite(
 
     TestSuiteRunner(
         suite=suite,
-        input=TestInput({**kwargs, **(inputs or {})}),
+        inputs={**kwargs, **(inputs or {})},
         config=config or {},
     ).run(fail_fast=fail_fast, send=send)
 
@@ -512,7 +510,7 @@ def _run_documentation_section(
 
     TestSuiteRunner(
         suite=test_suite,
-        input=TestInput({**kwargs, **(inputs or {})}),
+        inputs={**kwargs, **(inputs or {})},
         config=config,
     ).run(send=send, fail_fast=fail_fast)
 

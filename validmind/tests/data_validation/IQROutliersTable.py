@@ -2,15 +2,23 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from dataclasses import dataclass
-
-import pandas as pd
-
-from validmind.vm_models import Metric, ResultSummary, ResultTable, ResultTableMetadata
+from validmind import tags, tasks
+from validmind.vm_models import VMDataset
 
 
-@dataclass
-class IQROutliersTable(Metric):
+def compute_outliers(series, threshold=1.5):
+    Q1 = series.quantile(0.25)
+    Q3 = series.quantile(0.75)
+    IQR = Q3 - Q1
+    lower_bound = Q1 - threshold * IQR
+    upper_bound = Q3 + threshold * IQR
+
+    return series[(series < lower_bound) | (series > upper_bound)]
+
+
+@tags("tabular_data", "numerical_data")
+@tasks("classification", "regression")
+def IQROutliersTable(dataset: VMDataset, threshold: float = 1.5):
     """
     Determines and summarizes outliers in numerical features using the Interquartile Range method.
 
@@ -53,80 +61,32 @@ class IQROutliersTable(Metric):
     - Default thresholds may not be optimal for data with heavy pre-processing, manipulation, or inherently high
     kurtosis (heavy tails).
     """
+    df = dataset.df
 
-    name = "iqr_outliers_table"
-    required_inputs = ["dataset"]
-    default_params = {"threshold": 1.5}
-    tasks = ["classification", "regression"]
-    tags = ["tabular_data", "numerical_data"]
+    outliers_table = []
 
-    def run(self):
+    for col in dataset.feature_columns_numeric:
+        # Skip binary features
+        if len(df[col].unique()) <= 2:
+            continue
 
-        # Select numerical features
-        features = self.inputs.dataset.feature_columns_numeric
+        outliers = compute_outliers(df[col], threshold)
+        if outliers.empty:
+            continue
 
-        # Select non-binary features
-        features = [
-            feature
-            for feature in features
-            if len(self.inputs.dataset.df[feature].unique()) > 2
-        ]
-
-        threshold = self.params["threshold"]
-
-        df = self.inputs.dataset.df
-
-        outliers_summary_table = self.detect_and_analyze_outliers(
-            df, features, threshold
+        outliers_table.append(
+            {
+                "Variable": col,
+                "Total Count of Outliers": outliers.count(),
+                "Mean Value of Variable": df[col].mean(),
+                "Minimum Outlier Value": outliers.min(),
+                "Outlier Value at 25th Percentile": outliers.quantile(0.25),
+                "Outlier Value at 50th Percentile": outliers.median(),
+                "Outlier Value at 75th Percentile": outliers.quantile(0.75),
+                "Maximum Outlier Value": outliers.max(),
+            }
         )
 
-        return self.cache_results(
-            {"outliers_summary_table": outliers_summary_table.to_dict(orient="records")}
-        )
-
-    @staticmethod
-    def compute_outliers(series, threshold=1.5):
-        Q1 = series.quantile(0.25)
-        Q3 = series.quantile(0.75)
-        IQR = Q3 - Q1
-        lower_bound = Q1 - threshold * IQR
-        upper_bound = Q3 + threshold * IQR
-        return series[(series < lower_bound) | (series > upper_bound)]
-
-    def detect_and_analyze_outliers(self, df, features, threshold=1.5):
-
-        outliers_summary = []
-        for feature in features:
-            outliers_series = self.compute_outliers(df[feature], threshold)
-            if not outliers_series.empty:
-                outliers_summary.append(
-                    {
-                        "Variable": feature,
-                        "Total Count of Outliers": outliers_series.count(),
-                        "Mean Value of Variable": df[feature].mean(),
-                        "Minimum Outlier Value": outliers_series.min(),
-                        "Outlier Value at 25th Percentile": outliers_series.quantile(
-                            0.25
-                        ),
-                        "Outlier Value at 50th Percentile": outliers_series.median(),
-                        "Outlier Value at 75th Percentile": outliers_series.quantile(
-                            0.75
-                        ),
-                        "Maximum Outlier Value": outliers_series.max(),
-                    }
-                )
-        outliers_summary_table = pd.DataFrame(outliers_summary)
-        return outliers_summary_table
-
-    def summary(self, metric_value):
-        outliers_summary_table = pd.DataFrame(metric_value["outliers_summary_table"])
-        return ResultSummary(
-            results=[
-                ResultTable(
-                    data=outliers_summary_table,
-                    metadata=ResultTableMetadata(
-                        title="Summary of Outliers Detected by IQR Method"
-                    ),
-                ),
-            ]
-        )
+    return {
+        "Summary of Outliers Detected by IQR Method": outliers_table,
+    }

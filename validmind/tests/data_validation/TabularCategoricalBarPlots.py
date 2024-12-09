@@ -2,13 +2,16 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-import pandas as pd
 import plotly.graph_objs as go
 
-from validmind.vm_models import Figure, Metric
+from validmind import tags, tasks
+from validmind.errors import SkipTestError
+from validmind.vm_models import VMDataset
 
 
-class TabularCategoricalBarPlots(Metric):
+@tags("tabular_data", "visualization")
+@tasks("classification", "regression")
+def TabularCategoricalBarPlots(dataset: VMDataset):
     """
     Generates and visualizes bar plots for each category in categorical features to evaluate the dataset's composition.
 
@@ -46,67 +49,45 @@ class TabularCategoricalBarPlots(Metric):
     - Offers no insights into the model's performance or precision, but rather provides a descriptive analysis of the
     input.
     """
+    if not dataset.feature_columns_categorical:
+        raise SkipTestError("No categorical columns found in the dataset")
 
-    name = "tabular_categorical_bar_plots"
-    required_inputs = ["dataset"]
-    tasks = ["classification", "regression"]
-    tags = ["tabular_data", "visualization"]
+    color_sequence = [
+        "#636EFA",
+        "#EF553B",
+        "#00CC96",
+        "#AB63FA",
+        "#FFA15A",
+        "#19D3F3",
+        "#FF6692",
+        "#B6E880",
+        "#FF97FF",
+        "#FECB52",
+    ]
 
-    def run(self):
-        df = self.inputs.dataset.df
+    figures = []
 
-        # Extract categorical columns from the dataset
-        categorical_columns = df.select_dtypes(
-            include=[object, pd.Categorical]
-        ).columns.tolist()
+    for col in dataset.feature_columns_categorical:
+        counts = dataset.df[col].value_counts()
 
-        if len(categorical_columns) == 0:
-            raise ValueError("No categorical columns found in the dataset")
-
-        # Define a color sequence for the categories
-        color_sequence = [
-            "#636EFA",
-            "#EF553B",
-            "#00CC96",
-            "#AB63FA",
-            "#FFA15A",
-            "#19D3F3",
-            "#FF6692",
-            "#B6E880",
-            "#FF97FF",
-            "#FECB52",
-        ]
-
-        figures = []
-        for col in categorical_columns:
-            counts = df[col].value_counts()
-
-            fig = go.Figure()
-            fig.add_trace(
-                go.Bar(
-                    x=counts.index,
-                    y=counts.values,
-                    name=col,
-                    marker_color=color_sequence[: len(counts)],
-                )
-            )  # add colored bar plot trace
-            fig.update_layout(
-                title_text=f"{col}",  # title of plot
-                xaxis_title_text="",  # xaxis label
-                yaxis_title_text="",  # yaxis label
-                autosize=False,
-                width=500,
-                height=500,
-                margin=dict(l=50, r=50, b=100, t=100, pad=4),
+        fig = go.Figure()
+        fig.add_trace(
+            go.Bar(
+                x=counts.index,
+                y=counts.values,
+                name=col,
+                marker_color=color_sequence[: len(counts)],
             )
-            figures.append(
-                Figure(
-                    for_object=self,
-                    key=f"{self.key}:{col}",
-                    figure=fig,
-                )
-            )
-
-        return self.cache_results(
-            figures=figures,
         )
+        fig.update_layout(
+            title_text=f"{col}",
+            xaxis_title_text="",
+            yaxis_title_text="",
+            autosize=False,
+            width=500,
+            height=500,
+            margin=dict(l=50, r=50, b=100, t=100, pad=4),
+        )
+        figures.append(fig)
+
+    return tuple(figures)

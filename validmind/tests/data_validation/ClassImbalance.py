@@ -5,26 +5,20 @@
 """
 Threshold based tests
 """
-from dataclasses import dataclass
-from typing import List
+from typing import Any, Dict, Tuple
 
-import pandas as pd
 import plotly.graph_objs as go
 
+from validmind import tags, tasks
 from validmind.errors import SkipTestError
-from validmind.vm_models import (
-    Figure,
-    ResultSummary,
-    ResultTable,
-    ResultTableMetadata,
-    ThresholdTest,
-    ThresholdTestResult,
-    VMDataset,
-)
+from validmind.vm_models import VMDataset
 
 
-@dataclass
-class ClassImbalance(ThresholdTest):
+@tags("tabular_data", "binary_classification", "multiclass_classification")
+@tasks("classification")
+def ClassImbalance(
+    dataset: VMDataset, min_percent_threshold: int = 10
+) -> Tuple[Dict[str, Any], go.Figure, bool]:
     """
     Evaluates and quantifies class distribution imbalance in a dataset used by a machine learning model.
 
@@ -71,106 +65,43 @@ class ClassImbalance(ThresholdTest):
     these imbalances.
     - The test is only applicable for classification operations and unsuitable for regression or clustering tasks.
     """
+    if not dataset.target_column:
+        raise SkipTestError("No target column provided")
 
-    # Changing the name test to avoid a name clash
-    name = "class_imbalance"
-    required_inputs = ["dataset"]
-    default_params = {"min_percent_threshold": 10}
-    tasks = ["classification"]
-    tags = ["tabular_data", "binary_classification", "multiclass_classification"]
+    imbalance_percentages = dataset.df[dataset.target_column].value_counts(
+        normalize=True
+    )
+    if len(imbalance_percentages) > 10:
+        raise SkipTestError("Skipping target column with more than 10 classes")
 
-    def summary(self, results: List[ThresholdTestResult], all_passed: bool):
-        return ResultSummary(
-            results=[
-                ResultTable(
-                    data=results[0].values,
-                    metadata=ResultTableMetadata(
-                        title=f"Class Imbalance Results for Column {self.inputs.dataset.target_column}"
-                    ),
-                )
-            ]
+    classes = list(imbalance_percentages.index)
+
+    imbalanced_classes = []
+    for i, percentage in enumerate(imbalance_percentages.values):
+        proportion = percentage * 100
+        imbalanced_classes.append(
+            {
+                dataset.target_column: classes[i],
+                "Percentage of Rows (%)": f"{proportion:.2f}%",
+                "Pass/Fail": "Pass" if proportion > min_percent_threshold else "Fail",
+            }
         )
 
-    def run(self):
-        # Can only run this test if we have a Dataset object
-        if not isinstance(self.inputs.dataset, VMDataset):
-            raise ValueError("ClassImbalance requires a validmind Dataset object")
+    trace = go.Bar(
+        x=imbalance_percentages.index,
+        y=imbalance_percentages.values,
+    )
 
-        if self.inputs.dataset.target_column is None:
-            print("Skipping class_imbalance test because no target column is defined")
-            return
+    layout = go.Layout(
+        title=f"{dataset.target_column} Class Imbalance",
+        xaxis=dict(title="Class"),
+        yaxis=dict(title="Percentage"),
+    )
 
-        target_column = self.inputs.dataset.target_column
-        imbalance_percentages = self.inputs.dataset.df[target_column].value_counts(
-            normalize=True
-        )
-        if len(imbalance_percentages) > 10:
-            raise SkipTestError(
-                f"Skipping {self.__class__.__name__} test as"
-                "target column as more than 10 classes"
-            )
-
-        classes = list(imbalance_percentages.index)
-        percentages = list(imbalance_percentages.values)
-
-        # Checking class imbalance
-        imbalanced_classes = []
-        for i, percentage in enumerate(percentages):
-            class_label = classes[i]
-            proportion = percentage * 100
-            passed = proportion > self.params["min_percent_threshold"]
-
-            imbalanced_classes.append(
-                {
-                    target_column: class_label,
-                    "Percentage of Rows (%)	": f"{proportion:.2f}%",
-                    "Pass/Fail": "Pass" if passed else "Fail",
-                }
-            )
-
-        resultset = pd.DataFrame(imbalanced_classes)
-        tests_failed = all(resultset["Pass/Fail"] == "Pass")
-        results = [
-            ThresholdTestResult(
-                column=target_column,
-                passed=tests_failed,
-                values=resultset.to_dict(orient="records"),
-            )
-        ]
-
-        # Create a bar chart trace
-        trace = go.Bar(
-            x=imbalance_percentages.index,
-            y=imbalance_percentages.values,
-        )
-
-        # Create a layout for the chart
-        layout = go.Layout(
-            title=f"Class Imbalance Results for Target Column {self.inputs.dataset.target_column}",
-            xaxis=dict(title="Class"),
-            yaxis=dict(title="Percentage"),
-        )
-
-        # Create a figure and add the trace and layout
-        fig = go.Figure(data=[trace], layout=layout)
-
-        return self.cache_results(
-            results,
-            passed=tests_failed,
-            figures=[
-                Figure(
-                    for_object=self,
-                    key=f"{self.name}",
-                    figure=fig,
-                )
-            ],
-        )
-
-    def test(self):
-        """Unit test for ClassImbalance"""
-        assert self.result is not None
-
-        assert self.result.test_results is not None
-        assert self.result.test_results.passed
-
-        assert self.result.figures is not None
+    return (
+        {
+            f"{dataset.target_column} Class Imbalance": imbalanced_classes,
+        },
+        go.Figure(data=[trace], layout=layout),
+        all(row["Pass/Fail"] == "Pass" for row in imbalanced_classes),
+    )

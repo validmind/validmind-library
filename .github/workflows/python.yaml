@@ -6,8 +6,16 @@ name: Code Quality and Unit Testing
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - 'docs/_build/**'
+      - 'notebooks/**'
+      - 'scripts/**'
   pull_request:
-    branches: ["*"]
+    branches: ['*']
+    paths-ignore:
+      - 'docs/_build/**'
+      - 'notebooks/**'
+      - 'scripts/**'
 
 permissions:
   contents: read
@@ -17,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # TODO figure out why dev-framework requires so much disk space and fix that
+      # TODO figure out why VM Library requires so much disk space and fix that
       # - name: Free Disk Space (Ubuntu)
       #   uses: jlumbroso/free-disk-space@main
       #   with:
@@ -42,8 +50,8 @@ jobs:
       - name: Set up Python 3.9
         uses: actions/setup-python@v5
         with:
-          python-version: "3.9"
-          cache: "poetry"
+          python-version: '3.9'
+          cache: 'poetry'
 
       - name: Install Dependencies
         run: |

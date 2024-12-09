@@ -10,14 +10,14 @@ import base64
 import json
 from dataclasses import dataclass
 from io import BytesIO
-from typing import Optional
+from typing import Union
 
 import ipywidgets as widgets
 import matplotlib
 import plotly.graph_objs as go
 
 from ..client_config import client_config
-from ..errors import InvalidFigureForObjectError, UnsupportedFigureError
+from ..errors import UnsupportedFigureError
 from ..utils import get_full_typename
 
 
@@ -40,25 +40,12 @@ class Figure:
     """
 
     key: str
-    figure: object
-    metadata: Optional[dict] = None
-    for_object: Optional[object] = None
-    extras: Optional[dict] = None
+    figure: Union[matplotlib.figure.Figure, go.Figure, go.FigureWidget, bytes]
+    ref_id: str  # used to link figures to results
 
-    _type: str = "plot"
+    _type: str = "plot"  # for now this is the only figure type
 
     def __post_init__(self):
-        """
-        Set default params if not provided
-        """
-        if self.for_object is not None:
-            metadata = self.metadata or {}
-            # Use underscore to avoid name collisions with user-defined metadata
-            metadata["_type"] = self._get_for_object_type()
-            metadata["_name"] = getattr(self.for_object, "test_id", None)
-            metadata["_ref_id"] = getattr(self.for_object, "_ref_id", None)
-            self.metadata = metadata
-
         # Wrap around with FigureWidget so that we can display interactive Plotly
         # plots in regular Jupyter notebooks. This is not supported on Google Colab.
         if (
@@ -67,23 +54,6 @@ class Figure:
             and is_plotly_figure(self.figure)
         ):
             self.figure = go.FigureWidget(self.figure)
-
-    def _get_for_object_type(self):
-        """
-        Returns the type of the object this figure is for
-        """
-        # Avoid circular imports
-        from .test.metric import Metric
-        from .test.threshold_test import ThresholdTest
-
-        if issubclass(self.for_object.__class__, Metric):
-            return "metric"
-        elif issubclass(self.for_object.__class__, ThresholdTest):
-            return "threshold_test"
-        else:
-            raise InvalidFigureForObjectError(
-                "Figure for_object must be a Metric or ThresholdTest object"
-            )
 
     def to_widget(self):
         """
@@ -135,7 +105,7 @@ class Figure:
         return {
             "type": self._type,
             "key": self.key,
-            "metadata": json.dumps(self.metadata, allow_nan=False),
+            "metadata": json.dumps({"_ref_id": self.ref_id}, allow_nan=False),
         }
 
     def _get_b64_url(self):
@@ -176,7 +146,7 @@ class Figure:
 
         elif is_plotly_figure(self.figure):
             # When using plotly, we need to use we will produce two files:
-            # - a JSON file that will be used to display the figure in the UI
+            # - a JSON file that will be used to display the figure in the ValidMind Platform
             # - a PNG file that will be used to display the figure in documents
             return {
                 "image": (

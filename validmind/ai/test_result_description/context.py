@@ -37,11 +37,11 @@ class Context:
         pass
 
     def load(self, input_data):
-        # this task can accept a dict or a test result object from the library
+        # this task can accept a dict or a test result object from the ValidMind Library
         if isinstance(input_data, dict):
             return input_data
 
-        # we are likely running outside of the library and need to convert
+        # we are likely running outside of the ValidMind Library and need to convert
         # the test result object to a dictionary
         test_result = input_data
 

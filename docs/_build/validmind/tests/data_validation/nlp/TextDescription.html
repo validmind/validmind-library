@@ -23,37 +23,19 @@
   <path fill-rule="evenodd" d="M4.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H14.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"/>
 </svg>                &nbsp;validmind.tests.data_validation.nlp</a>
 
-            <img src="https://vmai.s3.us-west-1.amazonaws.com/vm-logo.svg" class="logo" alt="project logo"/>
+            <img src="https://vmai.s3.us-west-1.amazonaws.com/validmind-logo.svg" class="logo" alt="project logo"/>
 
             <input type="search" placeholder="Search..." role="searchbox" aria-label="search"
                    pattern=".+" required>
 
 
-            <h3>High Level API</h3>
+            <h3>Python Library API</h3>
                 <ul class="memberlist">
             <li>
-                    <a class="class" href="#TextDescription">TextDescription</a>
-                            <ul class="memberlist">
-                        <li>
-                                <a class="function" href="#TextDescription.__init__">TextDescription</a>
-                        </li>
-                        <li>
-                                <a class="function" href="#TextDescription.general_text_metrics">general_text_metrics</a>
-                        </li>
-                        <li>
-                                <a class="function" href="#TextDescription.vocabulary_structure_metrics">vocabulary_structure_metrics</a>
-                        </li>
-                        <li>
-                                <a class="function" href="#TextDescription.text_description_table">text_description_table</a>
-                        </li>
-                        <li>
-                                <a class="function" href="#TextDescription.run">run</a>
-                        </li>
-                        <li>
-                                <a class="function" href="#TextDescription.text_description_plots">text_description_plots</a>
-                        </li>
-                </ul>
-
+                    <a class="function" href="#create_metrics_df">create_metrics_df</a>
+            </li>
+            <li>
+                    <a class="function" href="#TextDescription">TextDescription</a>
             </li>
     </ul>
 
@@ -77,12 +59,26 @@
                 
                 
             </section>
-                <section id="TextDescription">
-                    <div class="attr class">
-                    <div class="decorator">@dataclass</div>
+                <section id="create_metrics_df">
+                    <div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">create_metrics_df</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">df</span>, </span><span class="param"><span class="n">text_column</span>, </span><span class="param"><span class="n">unwanted_tokens</span>, </span><span class="param"><span class="n">lang</span></span><span class="return-annotation">):</span></span>
 
-    <span class="def">class</span>
-    <span class="name">TextDescription</span><wbr>(<span class="base">validmind.vm_models.test.metric.Metric</span>):
+        
+    </div>
+    <a class="headerlink" href="#create_metrics_df"></a>
+    
+    
+
+                </section>
+                <section id="TextDescription">
+                    <div class="attr function">
+                    <div class="decorator">@tags(&#39;nlp&#39;, &#39;text_data&#39;, &#39;visualization&#39;)</div>
+        <div class="decorator">@tasks(&#39;text_classification&#39;, &#39;text_summarization&#39;)</div>
+
+        <span class="def">def</span>
+        <span class="name">TextDescription</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">dataset</span><span class="p">:</span> <span class="n"><a href="../../../vm_models.html#VMDataset">validmind.vm_models.VMDataset</a></span>,</span><span class="param">	<span class="n">unwanted_tokens</span><span class="p">:</span> <span class="nb">set</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;us&#39;</span><span class="p">,</span> <span class="s1">&#39;ms&#39;</span><span class="p">,</span> <span class="s1">&#39;mrs&#39;</span><span class="p">,</span> <span class="s2">&quot;&#39;s&quot;</span><span class="p">,</span> <span class="s1">&#39;dollar&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;mr&#39;</span><span class="p">,</span> <span class="s2">&quot;&#39;&#39;&quot;</span><span class="p">,</span> <span class="s2">&quot;s&#39;&quot;</span><span class="p">,</span> <span class="s1">&#39;dr&#39;</span><span class="p">,</span> <span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="s1">&#39;``&#39;</span><span class="p">}</span>,</span><span class="param">	<span class="n">lang</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;english&#39;</span></span><span class="return-annotation">):</span></span>
 
         
     </div>
@@ -140,108 +136,6 @@ words, total punctuations, and lexical diversity.</li>
 </div>
 
 
-                            <div id="TextDescription.__init__" class="classattr">
-                                <div class="attr function">
-            
-        <span class="name">TextDescription</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">context</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n"><a href="../../../vm_models.html#TestContext">validmind.vm_models.TestContext</a></span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">inputs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n"><a href="../../../vm_models.html#TestInput">validmind.vm_models.TestInput</a></span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">tasks</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">_ref_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">_section_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">test_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">result</span><span class="p">:</span> <span class="n">validmind</span><span class="o">.</span><span class="n">vm_models</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">result_wrapper</span><span class="o">.</span><span class="n">MetricResultWrapper</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">params</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">output_template</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">generate_description</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span></span>)</span>
-
-        
-    </div>
-    <a class="headerlink" href="#TextDescription.__init__"></a>
-    
-    
-
-                            </div>
-                            <div id="TextDescription.general_text_metrics" class="classattr">
-                                <div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">general_text_metrics</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">df</span>, </span><span class="param"><span class="n">text_column</span></span><span class="return-annotation">):</span></span>
-
-        
-    </div>
-    <a class="headerlink" href="#TextDescription.general_text_metrics"></a>
-    
-    
-
-                            </div>
-                            <div id="TextDescription.vocabulary_structure_metrics" class="classattr">
-                                <div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">vocabulary_structure_metrics</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">df</span>, </span><span class="param"><span class="n">text_column</span>, </span><span class="param"><span class="n">unwanted_tokens</span>, </span><span class="param"><span class="n">num_top_words</span>, </span><span class="param"><span class="n">lang</span></span><span class="return-annotation">):</span></span>
-
-        
-    </div>
-    <a class="headerlink" href="#TextDescription.vocabulary_structure_metrics"></a>
-    
-    
-
-                            </div>
-                            <div id="TextDescription.text_description_table" class="classattr">
-                                <div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">text_description_table</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">df</span>, </span><span class="param"><span class="n">params</span></span><span class="return-annotation">):</span></span>
-
-        
-    </div>
-    <a class="headerlink" href="#TextDescription.text_description_table"></a>
-    
-    
-
-                            </div>
-                            <div id="TextDescription.run" class="classattr">
-                                <div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">run</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">):</span></span>
-
-        
-    </div>
-    <a class="headerlink" href="#TextDescription.run"></a>
-    
-            <div class="docstring"><p>Run the calculation and cache its results</p>
-</div>
-
-
-                            </div>
-                            <div id="TextDescription.text_description_plots" class="classattr">
-                                <div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">text_description_plots</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">df</span>, </span><span class="param"><span class="n">params</span></span><span class="return-annotation">):</span></span>
-
-        
-    </div>
-    <a class="headerlink" href="#TextDescription.text_description_plots"></a>
-    
-    
-
-                            </div>
-                            <div class="inherited">
-                                <h5>Inherited Members</h5>
-                                <dl>
-                                    <div><dt>validmind.vm_models.test.metric.Metric</dt>
-                                <dd id="TextDescription.summary" class="function">summary</dd>
-                <dd id="TextDescription.cache_results" class="function">cache_results</dd>
-
-            </div>
-            <div><dt>validmind.vm_models.test.test.Test</dt>
-                                <dd id="TextDescription.description" class="function">description</dd>
-                <dd id="TextDescription.log" class="function">log</dd>
-
-            </div>
-            <div><dt>validmind.vm_models.test_context.TestUtils</dt>
-                                <dd id="TextDescription.get_accessed_inputs" class="function">get_accessed_inputs</dd>
-                <dd id="TextDescription.dataset" class="variable">dataset</dd>
-                <dd id="TextDescription.model" class="variable">model</dd>
-                <dd id="TextDescription.models" class="variable">models</dd>
-                <dd id="TextDescription.validate_inputs" class="function">validate_inputs</dd>
-
-            </div>
-                                </dl>
-                            </div>
                 </section>
     </main>
 <script>

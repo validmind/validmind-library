@@ -5,10 +5,14 @@
 import pandas as pd
 import plotly.graph_objects as go
 
-from validmind.vm_models import Figure, Metric
+from validmind import tags, tasks
+from validmind.errors import SkipTestError
+from validmind.vm_models import VMDataset
 
 
-class TabularDateTimeHistograms(Metric):
+@tags("time_series_data", "visualization")
+@tasks("classification", "regression")
+def TabularDateTimeHistograms(dataset: VMDataset):
     """
     Generates histograms to provide graphical insight into the distribution of time intervals in a model's datetime
     data.
@@ -52,46 +56,20 @@ class TabularDateTimeHistograms(Metric):
     - The test is only applicable to datasets containing datetime columns and will fail if such columns are unavailable.
     - The interpretation of the histograms relies heavily on the domain expertise and experience of the reviewer.
     """
+    df = dataset.df
+    if not isinstance(df.index, (pd.DatetimeIndex, pd.PeriodIndex)):
+        raise SkipTestError("Index must be a datetime type")
 
-    name = "tabular_datetime_histograms"
-    required_inputs = ["dataset"]
+    date_diffs = df.index.to_series().sort_values().diff().dt.days.dropna()
+    date_diffs = date_diffs[date_diffs != 0]
 
-    tasks = ["classification", "regression"]
-    tags = ["time_series_data", "visualization"]
+    fig = go.Figure()
+    fig.add_trace(go.Histogram(x=date_diffs, nbinsx=30))
+    fig.update_layout(
+        title="Index",
+        xaxis_title="Days Between Consecutive Dates",
+        yaxis_title="Frequency",
+        font=dict(size=18),
+    )
 
-    def run(self):
-        df = self.inputs.dataset.df
-
-        # Check if the index is a datetime type
-        if not isinstance(df.index, (pd.DatetimeIndex, pd.PeriodIndex)):
-            raise ValueError("Index must be a datetime type")
-
-        figures = []
-
-        # Calculate the difference between consecutive dates in the index
-        date_diffs = df.index.to_series().sort_values().diff().dt.days.dropna()
-
-        # Filter out 0 values
-        date_diffs = date_diffs[date_diffs != 0]
-
-        # Create a histogram using Plotly
-        fig = go.Figure()
-        fig.add_trace(go.Histogram(x=date_diffs, nbinsx=30))
-        fig.update_layout(
-            title="Index",
-            xaxis_title="Days Between Consecutive Dates",
-            yaxis_title="Frequency",
-            font=dict(size=18),
-        )
-
-        figures.append(
-            Figure(
-                for_object=self,
-                key=f"{self.key}:index",
-                figure=fig,
-            )
-        )
-
-        return self.cache_results(
-            figures=figures,
-        )
+    return fig

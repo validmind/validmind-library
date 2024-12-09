@@ -2,15 +2,15 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from dataclasses import dataclass
+from sklearn.metrics import completeness_score
 
-from sklearn import metrics
+from validmind import tags, tasks
+from validmind.vm_models import VMDataset, VMModel
 
-from .ClusterPerformance import ClusterPerformance
 
-
-@dataclass
-class CompletenessScore(ClusterPerformance):
+@tags("sklearn", "model_performance", "clustering")
+@tasks("clustering")
+def CompletenessScore(model: VMModel, dataset: VMDataset):
     """
     Evaluates a clustering model's capacity to categorize instances from a single class into the same cluster.
 
@@ -47,14 +47,11 @@ class CompletenessScore(ClusterPerformance):
     - The Completeness Score only applies to clustering models; it cannot be used for other types of machine learning
     models.
     """
-
-    name = "homogeneity_score"
-    required_inputs = ["model", "dataset"]
-    tasks = ["clustering"]
-    tags = [
-        "sklearn",
-        "model_performance",
+    return [
+        {
+            "Completeness Score": completeness_score(
+                labels_true=dataset.y,
+                labels_pred=dataset.y_pred(model),
+            )
+        }
     ]
-
-    def metric_info(self):
-        return {"Completeness Score": metrics.completeness_score}

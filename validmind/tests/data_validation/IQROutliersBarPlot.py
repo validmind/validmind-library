@@ -2,15 +2,27 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from dataclasses import dataclass
-
 import plotly.graph_objects as go
 
-from validmind.vm_models import Figure, Metric
+from validmind import tags, tasks
+from validmind.vm_models import VMDataset
 
 
-@dataclass
-class IQROutliersBarPlot(Metric):
+def compute_outliers(series, threshold):
+    Q1 = series.quantile(0.25)
+    Q3 = series.quantile(0.75)
+    IQR = Q3 - Q1
+    lower_bound = Q1 - threshold * IQR
+    upper_bound = Q3 + threshold * IQR
+
+    return series[(series < lower_bound) | (series > upper_bound)]
+
+
+@tags("tabular_data", "visualization", "numerical_data")
+@tasks("classification", "regression")
+def IQROutliersBarPlot(
+    dataset: VMDataset, threshold: float = 1.5, fig_width: int = 800
+):
     """
     Visualizes outlier distribution across percentiles in numerical data using the Interquartile Range (IQR) method.
 
@@ -54,99 +66,56 @@ class IQROutliersBarPlot(Metric):
     ### Limitations
 
     - Its application is limited to numerical variables and does not extend to categorical ones.
-    - Relies on a predefined threshold (default being 1.5) for outlier identification, which may not be suitable for
-    all cases.
     - Only reveals the presence and distribution of outliers and does not provide insights into how these outliers
     might affect the model's predictive performance.
     - The assumption that data is unimodal and symmetric may not always hold true. In cases with non-normal
     distributions, the results can be misleading.
     """
+    df = dataset.df
 
-    name = "iqr_outliers_bar_plot"
-    required_inputs = ["dataset"]
-    default_params = {"threshold": 1.5, "fig_width": 800}
-    tasks = ["classification", "regression"]
-    tags = ["tabular_data", "visualization", "numerical_data"]
+    figures = []
 
-    def run(self):
-        df = self.inputs.dataset.df
+    for col in dataset.feature_columns_numeric:
+        # Skip binary features
+        if len(df[col].unique()) <= 2:
+            continue
 
-        # Select numerical features
-        features = self.inputs.dataset.feature_columns_numeric
+        outliers = compute_outliers(df[col], threshold)
+        if outliers.empty:
+            continue
 
-        # Select non-binary features
-        features = [
-            feature
-            for feature in features
-            if len(self.inputs.dataset.df[feature].unique()) > 2
+        Q1_count = outliers[
+            (outliers >= 0) & (outliers < outliers.quantile(0.25))
+        ].count()
+        Q2_count = outliers[
+            (outliers >= outliers.quantile(0.25)) & (outliers < outliers.median())
+        ].count()
+        Q3_count = outliers[
+            (outliers >= outliers.median()) & (outliers < outliers.quantile(0.75))
+        ].count()
+        Q4_count = outliers[
+            (outliers >= outliers.quantile(0.75)) & (outliers <= outliers.max())
+        ].count()
+
+        bar_data = [Q1_count, Q2_count, Q3_count, Q4_count]
+        percentile_labels = [
+            "0-25",
+            "25-50",
+            "50-75",
+            "75-100",
         ]
 
-        threshold = self.params["threshold"]
-        fig_width = self.params["fig_width"]
+        fig = go.Figure(
+            data=[go.Bar(x=percentile_labels, y=bar_data, marker_color="skyblue")]
+        )
+        fig.update_layout(
+            title_text=col,
+            width=fig_width,
+            height=400,
+            plot_bgcolor="white",
+            xaxis_title="Percentile",
+            yaxis_title="Outlier Count",
+        )
+        figures.append(fig)
 
-        df = df[features]
-
-        return self.detect_and_visualize_outliers(df, threshold, fig_width)
-
-    @staticmethod
-    def compute_outliers(series, threshold=1.5):
-        Q1 = series.quantile(0.25)
-        Q3 = series.quantile(0.75)
-        IQR = Q3 - Q1
-        lower_bound = Q1 - threshold * IQR
-        upper_bound = Q3 + threshold * IQR
-        return series[(series < lower_bound) | (series > upper_bound)]
-
-    def detect_and_visualize_outliers(self, df, threshold, fig_width):
-        num_cols = df.columns.tolist()
-        figures = []
-
-        for col in num_cols:
-            # Compute outliers
-            outliers = self.compute_outliers(df[col], threshold)
-
-            if outliers.empty:
-                continue  # Skip plotting if there are no outliers
-
-            Q1_count = outliers[
-                (outliers >= 0) & (outliers < outliers.quantile(0.25))
-            ].count()
-            Q2_count = outliers[
-                (outliers >= outliers.quantile(0.25)) & (outliers < outliers.median())
-            ].count()
-            Q3_count = outliers[
-                (outliers >= outliers.median()) & (outliers < outliers.quantile(0.75))
-            ].count()
-            Q4_count = outliers[
-                (outliers >= outliers.quantile(0.75)) & (outliers <= outliers.max())
-            ].count()
-
-            # Prepare data for bar plot
-            bar_data = [Q1_count, Q2_count, Q3_count, Q4_count]
-            percentile_labels = [
-                "0-25",
-                "25-50",
-                "50-75",
-                "75-100",
-            ]
-
-            # Create a bar plot
-            fig = go.Figure(
-                data=[go.Bar(x=percentile_labels, y=bar_data, marker_color="skyblue")]
-            )
-
-            # Set layout properties
-            fig.update_layout(
-                title_text=col,
-                width=fig_width,
-                height=400,
-                plot_bgcolor="white",
-                xaxis_title="Percentile",
-                yaxis_title="Outlier Count",
-            )
-
-            # Create a Figure object and append to figures list
-            figure = Figure(for_object=self, key=f"{self.key}:{col}", figure=fig)
-            figures.append(figure)
-
-        return self.cache_results(figures=figures)
+    return tuple(figures)

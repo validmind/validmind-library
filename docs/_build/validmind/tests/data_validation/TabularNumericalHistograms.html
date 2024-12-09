@@ -23,22 +23,16 @@
   <path fill-rule="evenodd" d="M4.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H14.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"/>
 </svg>                &nbsp;validmind.tests.data_validation</a>
 
-            <img src="https://vmai.s3.us-west-1.amazonaws.com/vm-logo.svg" class="logo" alt="project logo"/>
+            <img src="https://vmai.s3.us-west-1.amazonaws.com/validmind-logo.svg" class="logo" alt="project logo"/>
 
             <input type="search" placeholder="Search..." role="searchbox" aria-label="search"
                    pattern=".+" required>
 
 
-            <h3>High Level API</h3>
+            <h3>Python Library API</h3>
                 <ul class="memberlist">
             <li>
-                    <a class="class" href="#TabularNumericalHistograms">TabularNumericalHistograms</a>
-                            <ul class="memberlist">
-                        <li>
-                                <a class="function" href="#TabularNumericalHistograms.run">run</a>
-                        </li>
-                </ul>
-
+                    <a class="function" href="#TabularNumericalHistograms">TabularNumericalHistograms</a>
             </li>
     </ul>
 
@@ -63,10 +57,12 @@
                 
             </section>
                 <section id="TabularNumericalHistograms">
-                    <div class="attr class">
-            
-    <span class="def">class</span>
-    <span class="name">TabularNumericalHistograms</span><wbr>(<span class="base">validmind.vm_models.test.metric.Metric</span>):
+                    <div class="attr function">
+                    <div class="decorator">@tags(&#39;tabular_data&#39;, &#39;visualization&#39;)</div>
+        <div class="decorator">@tasks(&#39;classification&#39;, &#39;regression&#39;)</div>
+
+        <span class="def">def</span>
+        <span class="name">TabularNumericalHistograms</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">dataset</span><span class="p">:</span> <span class="n"><a href="../../vm_models.html#VMDataset">validmind.vm_models.VMDataset</a></span></span><span class="return-annotation">):</span></span>
 
         
     </div>
@@ -121,45 +117,6 @@ analysis tool.</li>
 </div>
 
 
-                            <div id="TabularNumericalHistograms.run" class="classattr">
-                                <div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">run</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">):</span></span>
-
-        
-    </div>
-    <a class="headerlink" href="#TabularNumericalHistograms.run"></a>
-    
-            <div class="docstring"><p>Run the calculation and cache its results</p>
-</div>
-
-
-                            </div>
-                            <div class="inherited">
-                                <h5>Inherited Members</h5>
-                                <dl>
-                                    <div><dt>validmind.vm_models.test.metric.Metric</dt>
-                                <dd id="TabularNumericalHistograms.__init__" class="function">Metric</dd>
-                <dd id="TabularNumericalHistograms.summary" class="function">summary</dd>
-                <dd id="TabularNumericalHistograms.cache_results" class="function">cache_results</dd>
-
-            </div>
-            <div><dt>validmind.vm_models.test.test.Test</dt>
-                                <dd id="TabularNumericalHistograms.description" class="function">description</dd>
-                <dd id="TabularNumericalHistograms.log" class="function">log</dd>
-
-            </div>
-            <div><dt>validmind.vm_models.test_context.TestUtils</dt>
-                                <dd id="TabularNumericalHistograms.get_accessed_inputs" class="function">get_accessed_inputs</dd>
-                <dd id="TabularNumericalHistograms.dataset" class="variable">dataset</dd>
-                <dd id="TabularNumericalHistograms.model" class="variable">model</dd>
-                <dd id="TabularNumericalHistograms.models" class="variable">models</dd>
-                <dd id="TabularNumericalHistograms.validate_inputs" class="function">validate_inputs</dd>
-
-            </div>
-                                </dl>
-                            </div>
                 </section>
     </main>
 <script>
