@@ -79,7 +79,7 @@ DATA_TEMPLATE_NOTEBOOKS = [
     {
         # [Demo] Foundation Model - Text Sentiment Analysis
         "path": "notebooks/code_samples/nlp_and_llm/llm_summarization_demo.ipynb",
-        "mode": "cm4buqjgy00bc2omjq3ejp3vf",
+        "model": "cm4buqjgy00bc2omjq3ejp3vf",
     },
     {
         # [Demo] Hugging Face - Text Sentiment Analysis
