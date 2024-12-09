@@ -29,23 +29,21 @@ That's right — you can run tests and log documentation even if you don't have 
 
 Our selection of Jupyter Notebooks showcase the capabilities and features of the ValidMind Library, while also providing you with useful examples that you can build on and adapt for your own use cases.
 
-## Getting started
+## Installation
 
-### Install from PyPI
-
-To install the library and all optional dependencies, run:
+To install the ValidMind Library and all optional dependencies, run:
 
 ```bash
 pip install validmind[all]
 ```
 
-To install the ValidMind Library without optional dependencies (core functionality only), run
+To install the ValidMind Library without optional dependencies (core functionality only), run:
 
 ```bash
 pip install validmind
 ```
 
-#### Extra dependencies
+### Extra dependencies
 
 The ValidMind Library has optional dependencies that can be installed separately to support additional model types and tests.
 

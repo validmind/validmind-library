@@ -24,7 +24,7 @@ We believe in the power of collaboration and welcome contributions to the ValidM
 
 ### Install from PyPI
 
-To install the library and all optional dependencies, run:
+To install the ValidMind Library and all optional dependencies, run:
 
 ```bash
 pip install validmind[all]
