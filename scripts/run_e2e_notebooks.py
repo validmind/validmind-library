@@ -39,12 +39,68 @@ DEFAULT_MODEL_CUID = os.getenv(
 )  # Demo Account Dev Customer Churn Model
 
 NOTEBOOKS_TO_RUN = [
-    "notebooks/code_samples/quickstart_customer_churn_full_suite.ipynb",
-    "notebooks/code_samples/time_series/quickstart_time_series_full_suite.ipynb",
-    "notebooks/code_samples/regression/quickstart_regression_full_suite.ipynb",
-    "notebooks/how_to/run_unit_metrics.ipynb",
-    "notebooks/code_samples/custom_tests/integrate_external_test_providers.ipynb",
-    "notebooks/code_samples/custom_tests/implement_custom_tests.ipynb",
+    {
+        "path": "notebooks/code_samples/quickstart_customer_churn_full_suite.ipynb",
+        "model": None,
+    },
+    {
+        "path": "notebooks/code_samples/time_series/quickstart_time_series_full_suite.ipynb",
+        "model": None,
+    },
+    {
+        "path": "notebooks/code_samples/regression/quickstart_regression_full_suite.ipynb",
+        "model": None,
+    },
+    {
+        "path": "notebooks/how_to/run_unit_metrics.ipynb",
+        "model": None,
+    },
+    {
+        "path": "notebooks/code_samples/custom_tests/integrate_external_test_providers.ipynb",
+        "model": None,
+    },
+    {
+        "path": "notebooks/code_samples/custom_tests/implement_custom_tests.ipynb",
+        "model": None,
+    },
+]
+
+DATA_TEMPLATE_NOTEBOOKS = [
+    {
+        # [Demo] Foundation Model - Text Summarization
+        "path": "notebooks/code_samples/nlp_and_llm/llm_summarization_demo.ipynb",
+        "model": "cm4buqjok00c52omjs9pjpqos",
+    },
+    {
+        # [Demo] Hugging Face - Text Summarization
+        "path": "notebooks/code_samples/nlp_and_llm/hugging_face_summarization_demo.ipynb",
+        "model": "cm4buqjkq00br2omjlv1f4w0j",
+    },
+    {
+        # [Demo] Foundation Model - Text Sentiment Analysis
+        "path": "notebooks/code_samples/nlp_and_llm/llm_summarization_demo.ipynb",
+        "mode": "cm4buqjgy00bc2omjq3ejp3vf",
+    },
+    {
+        # [Demo] Hugging Face - Text Sentiment Analysis
+        "path": "notebooks/code_samples/nlp_and_llm/hugging_face_summarization_demo.ipynb",
+        "model": "cm4buqjd500ax2omjqxl085bb"
+    },
+    {
+        # [Demo] Customer Churn Model
+        "path": "notebooks/code_samples/quickstart_customer_churn_full_suite.ipynb",
+        "model": "cm4buqj51009r2omjn9vcl88f"
+    },
+    {
+        # [Demo] Credit Risk Model
+        "path": "notebooks/code_samples/credit_risk/application_scorecard_demo.ipynb",
+        "model": "cm4buqj0i009h2omjndxdw3k2",
+    },
+    {
+        # [Demo] Interest Rate Time Series Forecasting Model
+        "path": "notebooks/code_samples/time_series/quickstart_time_series_full_suite.ipynb",
+        "model": "cm4buqj9300ac2omji6ss6h4e",
+    },
 ]
 
 INIT_CELL_CODE = """
@@ -90,12 +146,25 @@ logger.info("Site-packages path: " + str(site.getsitepackages()))
     default=True,
     help="Show the progress bar when executing notebooks.",
 )
-def main(kernel, log_output=False, progress_bar=True):
+@click.option(
+    "--update-data-template",
+    is_flag=True,
+    default=False,
+    help="Run notebooks for purpose of updating model data templates in backend.",
+)
+def main(kernel, log_output=False, progress_bar=True, update_data_template=False):
     """Run notebooks from the specified directory for end-to-end testing."""
-    for notebook_file in NOTEBOOKS_TO_RUN:
+    if update_data_template:
+        notebooks = DATA_TEMPLATE_NOTEBOOKS
+    else:
+        notebooks = NOTEBOOKS_TO_RUN
+    for notebook_file in notebooks:
         if isinstance(notebook_file, dict):
             notebook_path = os.path.join(os.getcwd(), notebook_file["path"])
-            model = notebook_file["model"]
+            if notebook_file["model"] is None:
+                model = DEFAULT_MODEL_CUID
+            else:
+                model = notebook_file["model"]
         else:
             notebook_path = os.path.join(os.getcwd(), notebook_file)
             model = DEFAULT_MODEL_CUID
