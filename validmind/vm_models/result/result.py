@@ -34,6 +34,29 @@ from .utils import (
 logger = get_logger(__name__)
 
 
+class RawData:
+    """Holds raw data for a test result"""
+
+    def __init__(self, log: bool = False, **kwargs):
+        """Create a new RawData object
+
+        Args:
+            log (bool): If True, log the raw data to ValidMind
+            **kwargs: Keyword arguments to set as attributes e.g.
+                `RawData(log=True, dataset_duplicates=df_duplicates)`
+        """
+        self.log = log
+
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+
+    def __repr__(self) -> str:
+        return f"RawData({', '.join(self.__dict__.keys())})"
+
+    def serialize(self):
+        return {key: getattr(self, key) for key in self.__dict__}
+
+
 @dataclass
 class ResultTable:
     """
@@ -118,6 +141,7 @@ class TestResult(Result):
     description: Optional[Union[str, DescriptionFuture]] = None
     metric: Optional[Union[int, float]] = None
     tables: Optional[List[ResultTable]] = None
+    raw_data: Optional[RawData] = None
     figures: Optional[List[Figure]] = None
     passed: Optional[bool] = None
     params: Optional[Dict[str, Any]] = None

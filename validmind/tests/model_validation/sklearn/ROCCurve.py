@@ -6,7 +6,7 @@ import numpy as np
 import plotly.graph_objects as go
 from sklearn.metrics import roc_auc_score, roc_curve
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.errors import SkipTestError
 from validmind.vm_models import VMDataset, VMModel
 
@@ -77,28 +77,31 @@ def ROCCurve(model: VMModel, dataset: VMDataset):
     fpr, tpr, _ = roc_curve(y_true, y_prob, drop_intermediate=False)
     auc = roc_auc_score(y_true, y_prob)
 
-    return go.Figure(
-        data=[
-            go.Scatter(
-                x=fpr,
-                y=tpr,
-                mode="lines",
-                name=f"ROC curve (AUC = {auc:.2f})",
-                line=dict(color="#DE257E"),
+    return (
+        RawData(fpr=fpr, tpr=tpr, auc=auc),
+        go.Figure(
+            data=[
+                go.Scatter(
+                    x=fpr,
+                    y=tpr,
+                    mode="lines",
+                    name=f"ROC curve (AUC = {auc:.2f})",
+                    line=dict(color="#DE257E"),
+                ),
+                go.Scatter(
+                    x=[0, 1],
+                    y=[0, 1],
+                    mode="lines",
+                    name="Random (AUC = 0.5)",
+                    line=dict(color="grey", dash="dash"),
+                ),
+            ],
+            layout=go.Layout(
+                title=f"ROC Curve for {model.input_id} on {dataset.input_id}",
+                xaxis=dict(title="False Positive Rate"),
+                yaxis=dict(title="True Positive Rate"),
+                width=700,
+                height=500,
             ),
-            go.Scatter(
-                x=[0, 1],
-                y=[0, 1],
-                mode="lines",
-                name="Random (AUC = 0.5)",
-                line=dict(color="grey", dash="dash"),
-            ),
-        ],
-        layout=go.Layout(
-            title=f"ROC Curve for {model.input_id} on {dataset.input_id}",
-            xaxis=dict(title="False Positive Rate"),
-            yaxis=dict(title="True Positive Rate"),
-            width=700,
-            height=500,
         ),
     )
