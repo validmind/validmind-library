@@ -1,0 +1,31 @@
+website:
+  sidebar:
+  - contents:
+    - docs/validmind/index.qmd
+    - contents:
+      - docs/validmind/__version__.qmd
+      - docs/validmind/get_test_suite.qmd
+      - docs/validmind/init.qmd
+      - docs/validmind/init_dataset.qmd
+      - docs/validmind/init_model.qmd
+      - docs/validmind/init_r_model.qmd
+      - docs/validmind/preview_template.qmd
+      - docs/validmind/reload.qmd
+      - docs/validmind/run_documentation_tests.qmd
+      - docs/validmind/run_test_suite.qmd
+      - docs/validmind/tags.qmd
+      - docs/validmind/tasks.qmd
+      - docs/validmind/test.qmd
+      - docs/validmind/log_metric.qmd
+      section: Python Library API
+    - contents:
+      - docs/validmind/__version__.qmd
+      - docs/validmind/datasets.qmd
+      - docs/validmind/errors.qmd
+      - docs/validmind/tests.qmd
+      - docs/validmind/test_suites.qmd
+      - docs/validmind/vm_models.qmd
+      - docs/validmind/unit_metrics.qmd
+      section: Submodules
+    id: docs/validmind
+  - id: dummy-sidebar

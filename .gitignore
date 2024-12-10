@@ -214,3 +214,6 @@ my_tests/
 *.sqlite
 *.db
 *.db-journal
+
+# Quarto docs
+docs/validmind.json

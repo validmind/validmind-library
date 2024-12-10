@@ -48,6 +48,23 @@ else
 	poetry run pdoc validmind -d google -t docs/templates --no-show-source --logo https://vmai.s3.us-west-1.amazonaws.com/validmind-logo.svg --favicon https://vmai.s3.us-west-1.amazonaws.com/favicon.ico
 endif
 
+quarto-docs: clean-quarto docs/validmind.json docs/validmind/validmind.qmd $(patsubst %,docs/validmind/_%.qmd,$(SUBMODULES))
+
+clean-quarto:
+	rm -f docs/validmind.json
+	rm -rf docs/validmind
+	mkdir -p docs/validmind
+
+docs/validmind.json:
+	rm -f $@
+	poetry run python -m griffe dump validmind > $@
+
+docs/validmind/validmind.qmd: docs/templates/module.qmd.jinja2 docs/validmind.json
+	jinja2 docs/templates/module.qmd.jinja2 docs/validmind.json > $@
+
+docs/validmind/_%.qmd: docs/templates/submodule.qmd.jinja2 docs/validmind.json
+	jinja2 docs/templates/submodule.qmd.jinja2 docs/validmind.json -D module=$* > $@
+
 version:
 	@:$(call check_defined, tag, new semver version tag to use on pyproject.toml)
 	@poetry version $(tag)
@@ -75,4 +92,4 @@ ensure-clean-notebooks:
 # Quick target to run all checks
 check: copyright format lint test verify-copyright verify-exposed-credentials ensure-clean-notebooks
 
-.PHONY: docs
+.PHONY: docs quarto-docs

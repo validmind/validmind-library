@@ -6,6 +6,7 @@
 This module contains all the custom errors that are used in the ValidMind Library.
 
 The following base errors are defined for others:
+
 - BaseError
 - APIRequestError
 """

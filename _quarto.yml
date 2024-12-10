@@ -1,0 +1,50 @@
+metadata-files:
+- _sidebar.yml
+
+quartodoc:
+  package: validmind
+  dir: docs/validmind
+  out_index: validmind.qmd
+  sidebar: _sidebar.yml
+  parser: google
+  rewrite_all_pages: true
+  dynamic: false
+  options:
+    # children: separate
+    member_order: source
+    include_attributes: true
+    include_classes: true
+    include_functions: true
+    include_inherited: true
+    include_private: false
+  sections:
+    - title: "Python Library API"
+      desc: "Key functions and entry points in the ValidMind Library."
+      contents:
+        - name: __version__
+          dynamic: true
+        - get_test_suite
+        - init
+        - init_dataset
+        - init_model
+        - init_r_model
+        - preview_template
+        - reload
+        - run_documentation_tests
+        - run_test_suite
+        - tags
+        - tasks
+        - test
+        - log_metric
+
+    - title: "Submodules"
+      desc: "Submodules in the ValidMind package."
+      contents:
+        - name: __version__
+          dynamic: true
+        - datasets
+        - errors
+        - tests
+        - test_suites
+        - vm_models
+        - unit_metrics
