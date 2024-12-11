@@ -55,6 +55,9 @@ class Figure:
         ):
             self.figure = go.FigureWidget(self.figure)
 
+    def __repr__(self):
+        return f"Figure(key={self.key}, ref_id={self.ref_id})"
+
     def to_widget(self):
         """
         Returns the ipywidget compatible representation of the figure. Ideally

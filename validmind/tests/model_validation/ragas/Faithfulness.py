@@ -123,6 +123,7 @@ def Faithfulness(
     fig_box = px.box(x=result_df[score_column].to_list())
 
     return (
+        RawData(scores=result_df),
         {
             # "Scores (will not be uploaded to ValidMind Platform)": result_df[
             #     ["retrieved_contexts", "response", "faithfulness"]

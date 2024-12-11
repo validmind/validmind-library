@@ -147,7 +147,6 @@ class TestResult(Result):
     params: Optional[Dict[str, Any]] = None
     inputs: Optional[Dict[str, Union[List[VMInput], VMInput]]] = None
     metadata: Optional[Dict[str, Any]] = None
-    title: Optional[str] = None
     _was_description_generated: bool = False
     _unsafe: bool = False
 
@@ -168,6 +167,11 @@ class TestResult(Result):
                 "passed",
             ]
             if getattr(self, attr) is not None
+            and (
+                len(getattr(self, attr)) > 0
+                if isinstance(getattr(self, attr), list)
+                else True
+            )
         ]
 
         return f'TestResult("{self.result_id}", {", ".join(attrs)})'
