@@ -4,16 +4,16 @@ The ValidMind Library is a suite of developer tools and methods designed to auto
 
 Designed to be model agnostic, the ValidMind Library provides all the standard functionality without requiring you to rewrite any functions as long as your model is built in Python.
 
-With a rich array of documentation tools and test suites, from documenting descriptions of your datasets to testing your models for weak spots and overfit areas, the ValidMind Library helps you automate model documentation by feeding the ValidMind Platform with documentation artifacts and test results. 
+With a rich array of documentation tools and test suites, from documenting descriptions of your datasets to testing your models for weak spots and overfit areas, the ValidMind Library helps you automate model documentation by feeding the ValidMind Platform with documentation artifacts and test results.
 
 ## What is ValidMind?
 
 ValidMind helps developers, data scientists and risk and compliance stakeholders identify potential risks in their AI and large language models, and generate robust, high-quality model documentation that meets regulatory requirements.
 
-[The ValidMind AI risk platform](https://docs.validmind.ai/about/overview.html) consists of two intertwined product offerings: 
+[The ValidMind AI risk platform](https://docs.validmind.ai/about/overview.html) consists of two intertwined product offerings:
 
 - **The ValidMind Library** — Designed to be incorporated into your existing model development environment, you use the ValidMind Library to run tests and log documentation to the ValidMind Platform. Driven by the power of open-source, the ValidMind Library welcomes contributions to our code and developer samples: [`validmind-library` @ GitHub](https://github.com/validmind/validmind-library)
-- **The ValidMind Platform** — A cloud-hosted user interface allowing you to comprehensively track your model inventory throughout the entire model lifecycle according to the unique requirements of your organization. You use the ValidMind Platform to oversee your model risk management process via the customizable model inventory. 
+- **The ValidMind Platform** — A cloud-hosted user interface allowing you to comprehensively track your model inventory throughout the entire model lifecycle according to the unique requirements of your organization. You use the ValidMind Platform to oversee your model risk management process via the customizable model inventory.
 
 ### What do I need to get started with ValidMind?
 
@@ -25,7 +25,7 @@ That's right — you can run tests and log documentation even if you don't have 
 
 ### How do I do more with the ValidMind Library?
 
-**[Explore our code samples!](https://docs.validmind.ai/developer/samples-jupyter-notebooks.html)** 
+**[Explore our code samples!](https://docs.validmind.ai/developer/samples-jupyter-notebooks.html)**
 
 Our selection of Jupyter Notebooks showcase the capabilities and features of the ValidMind Library, while also providing you with useful examples that you can build on and adapt for your own use cases.
 
