@@ -51,37 +51,37 @@ DATA_TEMPLATE_NOTEBOOKS = [
     {
         # [Demo] Foundation Model - Text Summarization
         "path": "notebooks/code_samples/nlp_and_llm/llm_summarization_demo.ipynb",
-        "model": "cm4buqjok00c52omjs9pjpqos",
+        "model": "cm4lr52wy00ck0jpbw6kqhyjl",
     },
     {
         # [Demo] Hugging Face - Text Summarization
         "path": "notebooks/code_samples/nlp_and_llm/hugging_face_summarization_demo.ipynb",
-        "model": "cm4buqjkq00br2omjlv1f4w0j",
+        "model": "cm4lr52ut00c60jpbe2fxt8ss",
     },
     {
         # [Demo] Foundation Model - Text Sentiment Analysis
         "path": "notebooks/code_samples/nlp_and_llm/llm_summarization_demo.ipynb",
-        "model": "cm4buqjgy00bc2omjq3ejp3vf",
+        "model": "cm4lr52ss00br0jpbtgxxe8w8",
     },
     {
         # [Demo] Hugging Face - Text Sentiment Analysis
         "path": "notebooks/code_samples/nlp_and_llm/hugging_face_summarization_demo.ipynb",
-        "model": "cm4buqjd500ax2omjqxl085bb"
+        "model": "cm4lr52qo00bc0jpbm0vmxxhy"
     },
     {
         # [Demo] Customer Churn Model
         "path": "notebooks/code_samples/quickstart_customer_churn_full_suite.ipynb",
-        "model": "cm4buqj51009r2omjn9vcl88f"
+        "model": "cm4lr52lw00a60jpbhmzh8cah"
     },
     {
         # [Demo] Credit Risk Model
         "path": "notebooks/code_samples/credit_risk/application_scorecard_demo.ipynb",
-        "model": "cm4buqj0i009h2omjndxdw3k2",
+        "model": "cm4lr52j9009w0jpb4gr7z5o0",
     },
     {
         # [Demo] Interest Rate Time Series Forecasting Model
         "path": "notebooks/code_samples/time_series/quickstart_time_series_full_suite.ipynb",
-        "model": "cm4buqj9300ac2omji6ss6h4e",
+        "model": "cm4lr52od00ar0jpb9dyra8v8",
     },
 ]
 
@@ -167,6 +167,10 @@ def main(kernel, log_output=False, progress_bar=True, update_data_template=False
             raise e
 
         restore_notebook(notebook_path)
+
+    if update_data_template:
+        print("USED MODEL CUIDS")
+        print([notebook_file["model"] for notebook_file in notebooks])
 
 
 def run_notebook(notebook_path, kernel_name, log_output=False, progress_bar=True):
