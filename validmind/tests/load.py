@@ -169,7 +169,7 @@ def _pretty_list_tests(tests, truncate=True):
                 inspect.getdoc(test),
                 num_lines=(5 if truncate else 999999),
             ),
-            "Required Inputs": test.inputs,
+            "Required Inputs": list(test.inputs.keys()),
             "Params": test.params,
         }
         for test_id, test in tests.items()
