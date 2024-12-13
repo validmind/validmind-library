@@ -11,7 +11,7 @@ from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 from uuid import uuid4
 
 from validmind import __version__
-from validmind.ai.test_descriptions import DescriptionFuture, get_result_description
+from validmind.ai.test_descriptions import get_result_description
 from validmind.errors import MissingRequiredTestInputError
 from validmind.input_registry import input_registry
 from validmind.logging import get_logger
