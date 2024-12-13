@@ -171,10 +171,9 @@ class TestResult(Result):
     _was_description_generated: bool = False
     _unsafe: bool = False
 
-    @property
-    def test_name(self) -> str:
-        """Get the test name, using custom title if available."""
-        return self.title or test_id_to_name(self.result_id)
+    def __post_init__(self):
+        if self.ref_id is None:
+            self.ref_id = str(uuid4())
 
     def __repr__(self) -> str:
         attrs = [
@@ -197,9 +196,19 @@ class TestResult(Result):
 
         return f'TestResult("{self.result_id}", {", ".join(attrs)})'
 
-    def __post_init__(self):
-        if self.ref_id is None:
-            self.ref_id = str(uuid4())
+    # add special handling for result.description so it can be lazily retrieved
+    def __getattribute__(self, name):
+        if name == "description":
+            if isinstance(self.description, DescriptionFuture):
+                self._was_description_generated = True
+                return self.description.get_description()
+
+        return super().__getattribute__(name)
+
+    @property
+    def test_name(self) -> str:
+        """Get the test name, using custom title if available."""
+        return self.title or test_id_to_name(self.result_id)
 
     def _get_flat_inputs(self):
         # remove duplicates by `input_id`
@@ -290,10 +299,6 @@ class TestResult(Result):
         self.figures.pop(index)
 
     def to_widget(self):
-        if isinstance(self.description, DescriptionFuture):
-            self.description = self.description.get_description()
-            self._was_description_generated = True
-
         if self.metric is not None and not self.tables and not self.figures:
             return HTML(f"<h3>{self.test_name}: <code>{self.metric}</code></h3>")
 
@@ -308,8 +313,6 @@ class TestResult(Result):
             ),
             "show_metric": self.metric is not None,
             "metric": self.metric,
-            "tables": self.tables,
-            "figures": self.figures,
         }
         rendered = get_result_template().render(**template_data)
 
@@ -407,10 +410,6 @@ class TestResult(Result):
             )
 
             if self.description:
-                if isinstance(self.description, DescriptionFuture):
-                    self.description = self.description.get_description()
-                    self._was_description_generated = True
-
                 revision_name = (
                     AI_REVISION_NAME
                     if self._was_description_generated

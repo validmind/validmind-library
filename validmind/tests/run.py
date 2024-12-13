@@ -397,11 +397,6 @@ def run_test(
     result.metadata = _get_run_metadata(duration_seconds=end_time - start_time)
 
     if post_process_fn:
-        # wait for the description to be generated if necessary
-        if isinstance(result.description, DescriptionFuture):
-            result.description = result.description.get_description()
-            result._was_description_generated = True
-
         result = post_process_fn(result)
 
     if show:
