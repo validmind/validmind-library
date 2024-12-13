@@ -10,7 +10,7 @@ description = "ValidMind Library"
 license = "Commercial License"
 name = "validmind"
 readme = "README.pypi.md"
-version = "2.6.7"
+version = "2.6.11"
 
 [tool.poetry.dependencies]
 aiohttp = {extras = ["speedups"], version = "*"}
@@ -42,7 +42,7 @@ python-dotenv = "*"
 ragas = {version = ">=0.2.3", optional = true}
 rouge = ">=1"
 rpy2 = {version = "^3.5.10", optional = true}
-scikit-learn = "*"
+scikit-learn = "*,!=1.6.0"
 scipy = "*"
 scorecardpy = "^0.1.9.6"
 seaborn = "*"

@@ -15,7 +15,7 @@ from validmind.vm_models.figure import (
     is_plotly_figure,
     is_png_image,
 )
-from validmind.vm_models.result import ResultTable, TestResult
+from validmind.vm_models.result import RawData, ResultTable, TestResult
 
 
 class OutputHandler(ABC):
@@ -103,6 +103,14 @@ class TableOutputHandler(OutputHandler):
             result.add_table(ResultTable(data=table_data, title=table_name or None))
 
 
+class RawDataOutputHandler(OutputHandler):
+    def can_handle(self, item: Any) -> bool:
+        return isinstance(item, RawData)
+
+    def process(self, item: Any, result: TestResult) -> None:
+        result.raw_data = item
+
+
 def process_output(item: Any, result: TestResult) -> None:
     """Process a single test output item and update the TestResult."""
     handlers = [
@@ -110,6 +118,7 @@ def process_output(item: Any, result: TestResult) -> None:
         MetricOutputHandler(),
         FigureOutputHandler(),
         TableOutputHandler(),
+        RawDataOutputHandler(),
     ]
 
     for handler in handlers:

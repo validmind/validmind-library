@@ -12,14 +12,22 @@ from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Union
 from uuid import uuid4
 
+import matplotlib
 import pandas as pd
+import plotly.graph_objs as go
 from ipywidgets import HTML, VBox
 
 from ... import api_client
 from ...ai.utils import DescriptionFuture
 from ...logging import get_logger
-from ...utils import NumpyEncoder, display, run_async, test_id_to_name
-from ..figure import Figure
+from ...utils import (
+    HumanReadableEncoder,
+    NumpyEncoder,
+    display,
+    run_async,
+    test_id_to_name,
+)
+from ..figure import Figure, create_figure
 from ..input import VMInput
 from .utils import (
     AI_REVISION_NAME,
@@ -34,6 +42,42 @@ from .utils import (
 logger = get_logger(__name__)
 
 
+class RawData:
+    """Holds raw data for a test result"""
+
+    def __init__(self, log: bool = False, **kwargs):
+        """Create a new RawData object
+
+        Args:
+            log (bool): If True, log the raw data to ValidMind
+            **kwargs: Keyword arguments to set as attributes e.g.
+                `RawData(log=True, dataset_duplicates=df_duplicates)`
+        """
+        self.log = log
+
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+
+    def __repr__(self) -> str:
+        return f"RawData({', '.join(self.__dict__.keys())})"
+
+    def inspect(self, show: bool = True):
+        """Inspect the raw data"""
+        raw_data = {
+            key: getattr(self, key)
+            for key in self.__dict__
+            if not key.startswith("_") and key != "log"
+        }
+
+        if not show:
+            return raw_data
+
+        print(json.dumps(raw_data, indent=2, cls=HumanReadableEncoder))
+
+    def serialize(self):
+        return {key: getattr(self, key) for key in self.__dict__}
+
+
 @dataclass
 class ResultTable:
     """
@@ -41,7 +85,7 @@ class ResultTable:
     """
 
     data: Union[List[Any], pd.DataFrame]
-    title: str
+    title: Optional[str] = None
 
     def __repr__(self) -> str:
         return f'ResultTable(title="{self.title}")' if self.title else "ResultTable"
@@ -118,12 +162,12 @@ class TestResult(Result):
     description: Optional[Union[str, DescriptionFuture]] = None
     metric: Optional[Union[int, float]] = None
     tables: Optional[List[ResultTable]] = None
+    raw_data: Optional[RawData] = None
     figures: Optional[List[Figure]] = None
     passed: Optional[bool] = None
     params: Optional[Dict[str, Any]] = None
     inputs: Optional[Dict[str, Union[List[VMInput], VMInput]]] = None
     metadata: Optional[Dict[str, Any]] = None
-    title: Optional[str] = None
     _was_description_generated: bool = False
     _unsafe: bool = False
 
@@ -144,6 +188,11 @@ class TestResult(Result):
                 "passed",
             ]
             if getattr(self, attr) is not None
+            and (
+                len(getattr(self, attr)) > 0
+                if isinstance(getattr(self, attr), list)
+                else True
+            )
         ]
 
         return f'TestResult("{self.result_id}", {", ".join(attrs)})'
@@ -164,20 +213,81 @@ class TestResult(Result):
 
         return list(inputs.values())
 
-    def add_table(self, table: ResultTable):
+    def add_table(
+        self,
+        table: Union[ResultTable, pd.DataFrame, List[Dict[str, Any]]],
+        title: Optional[str] = None,
+    ):
+        """Add a new table to the result
+
+        Args:
+            table (Union[ResultTable, pd.DataFrame, List[Dict[str, Any]]]): The table to add
+            title (Optional[str]): The title of the table (can optionally be provided for
+                pd.DataFrame and List[Dict[str, Any]] tables)
+        """
         if self.tables is None:
             self.tables = []
 
+        if isinstance(table, (pd.DataFrame, list)):
+            table = ResultTable(data=table, title=title)
+
         self.tables.append(table)
 
-    def add_figure(self, figure: Figure):
+    def remove_table(self, index: int):
+        """Remove a table from the result by index
+
+        Args:
+            index (int): The index of the table to remove (default is 0)
+        """
+        if self.tables is None:
+            return
+
+        self.tables.pop(index)
+
+    def add_figure(
+        self,
+        figure: Union[
+            matplotlib.figure.Figure,
+            go.Figure,
+            go.FigureWidget,
+            bytes,
+            Figure,
+        ],
+    ):
+        """Add a new figure to the result
+
+        Args:
+            figure (Union[matplotlib.figure.Figure, go.Figure, go.FigureWidget,
+                bytes, Figure]): The figure to add (can be either a VM Figure object,
+                a raw figure object from the supported libraries, or a png image as
+                raw bytes)
+        """
         if self.figures is None:
             self.figures = []
+
+        if not isinstance(figure, Figure):
+            random_tag = str(uuid4())[:4]
+            figure = create_figure(
+                figure=figure,
+                ref_id=self.ref_id,
+                key=f"{self.result_id}:{random_tag}",
+            )
 
         if figure.ref_id != self.ref_id:
             figure.ref_id = self.ref_id
 
         self.figures.append(figure)
+
+    def remove_figure(self, index: int = 0):
+        """Remove a figure from the result by index
+
+        Args:
+            index (int): The index of the figure to remove (default is 0)
+        """
+        if self.figures is None:
+            return
+
+        self.figures.pop(index)
 
     def to_widget(self):
         if isinstance(self.description, DescriptionFuture):
