@@ -11,7 +11,7 @@ from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 from uuid import uuid4
 
 from validmind import __version__
-from validmind.ai.test_descriptions import get_result_description
+from validmind.ai.test_descriptions import DescriptionFuture, get_result_description
 from validmind.errors import MissingRequiredTestInputError
 from validmind.input_registry import input_registry
 from validmind.logging import get_logger
@@ -397,6 +397,11 @@ def run_test(
     result.metadata = _get_run_metadata(duration_seconds=end_time - start_time)
 
     if post_process_fn:
+        # wait for the description to be generated if necessary
+        if isinstance(result.description, DescriptionFuture):
+            result.description = result.description.get_description()
+            result._was_description_generated = True
+
         result = post_process_fn(result)
 
     if show:
