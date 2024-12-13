@@ -33,6 +33,18 @@ def is_png_image(figure) -> bool:
     return isinstance(figure, bytes)
 
 
+def create_figure(
+    figure: Union[matplotlib.figure.Figure, go.Figure, go.FigureWidget, bytes],
+    key: str,
+    ref_id: str,
+) -> "Figure":
+    """Create a VM Figure object from a raw figure object"""
+    if is_matplotlib_figure(figure) or is_plotly_figure(figure) or is_png_image(figure):
+        return Figure(key=key, figure=figure, ref_id=ref_id)
+
+    raise ValueError(f"Unsupported figure type: {type(figure)}")
+
+
 @dataclass
 class Figure:
     """
@@ -54,6 +66,9 @@ class Figure:
             and is_plotly_figure(self.figure)
         ):
             self.figure = go.FigureWidget(self.figure)
+
+    def __repr__(self):
+        return f"Figure(key={self.key}, ref_id={self.ref_id})"
 
     def to_widget(self):
         """
