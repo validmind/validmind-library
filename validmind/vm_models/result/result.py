@@ -199,9 +199,11 @@ class TestResult(Result):
     # add special handling for result.description so it can be lazily retrieved
     def __getattribute__(self, name):
         if name == "description":
-            if isinstance(self.description, DescriptionFuture):
+            description = super().__getattribute__("description")
+
+            if isinstance(description, DescriptionFuture):
                 self._was_description_generated = True
-                return self.description.get_description()
+                self.description = description.get_description()
 
         return super().__getattribute__(name)
 
