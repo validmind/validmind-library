@@ -196,8 +196,8 @@ class TestResult(Result):
 
         return f'TestResult("{self.result_id}", {", ".join(attrs)})'
 
-    # add special handling for result.description so it can be lazily retrieved
     def __getattribute__(self, name):
+        # lazy load description if its a DescriptionFuture (generated in background)
         if name == "description":
             description = super().__getattribute__("description")
 
