@@ -168,6 +168,17 @@ class NumpyEncoder(json.JSONEncoder):
         return super().iterencode(obj, _one_shot)
 
 
+class HumanReadableEncoder(NumpyEncoder):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # truncate ndarrays to 10 items
+        self.type_handlers[self.is_numpy_ndarray] = lambda obj: (
+            obj.tolist()[:5] + ["..."] + obj.tolist()[-5:]
+            if len(obj) > 10
+            else obj.tolist()
+        )
+
+
 def get_full_typename(o: Any) -> Any:
     """We determine types based on type names so we don't have to import
     (and therefore depend on) PyTorch, TensorFlow, etc.

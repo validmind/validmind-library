@@ -48,6 +48,21 @@
                     <a class="function" href="#preview_template">preview_template</a>
             </li>
             <li>
+                    <a class="class" href="#RawData">RawData</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#RawData.__init__">RawData</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#RawData.inspect">inspect</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#RawData.serialize">serialize</a>
+                        </li>
+                </ul>
+
+            </li>
+            <li>
                     <a class="function" href="#reload">reload</a>
             </li>
             <li>
@@ -133,7 +148,7 @@
                 <section id="__version__">
                     <div class="attr variable">
             <span class="name">__version__</span>        =
-<span class="default_value">&#39;2.6.10&#39;</span>
+<span class="default_value">&#39;2.6.11&#39;</span>
 
         
     </div>
@@ -374,6 +389,71 @@ the project has not been initialized, then an error will be raised.</p>
 </div>
 
 
+                </section>
+                <section id="RawData">
+                    <div class="attr class">
+            
+    <span class="def">class</span>
+    <span class="name">RawData</span>:
+
+        
+    </div>
+    <a class="headerlink" href="#RawData"></a>
+    
+            <div class="docstring"><p>Holds raw data for a test result</p>
+</div>
+
+
+                            <div id="RawData.__init__" class="classattr">
+                                <div class="attr function">
+            
+        <span class="name">RawData</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">log</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>, </span><span class="param"><span class="o">**</span><span class="n">kwargs</span></span>)</span>
+
+        
+    </div>
+    <a class="headerlink" href="#RawData.__init__"></a>
+    
+            <div class="docstring"><p>Create a new RawData object</p>
+
+<h6 id="arguments">Arguments:</h6>
+
+<ul>
+<li><strong>log (bool):</strong>  If True, log the raw data to ValidMind</li>
+<li><strong>**kwargs:</strong>  Keyword arguments to set as attributes e.g.
+<code>RawData(log=True, dataset_duplicates=df_duplicates)</code></li>
+</ul>
+</div>
+
+
+                            </div>
+                            <div id="RawData.inspect" class="classattr">
+                                <div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">inspect</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">show</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span></span><span class="return-annotation">):</span></span>
+
+        
+    </div>
+    <a class="headerlink" href="#RawData.inspect"></a>
+    
+            <div class="docstring"><p>Inspect the raw data</p>
+</div>
+
+
+                            </div>
+                            <div id="RawData.serialize" class="classattr">
+                                <div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">serialize</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">):</span></span>
+
+        
+    </div>
+    <a class="headerlink" href="#RawData.serialize"></a>
+    
+    
+
+                            </div>
                 </section>
                 <section id="reload">
                     <div class="attr function">

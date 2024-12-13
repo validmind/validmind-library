@@ -7,7 +7,7 @@ import subprocess
 import time
 from datetime import datetime
 from inspect import getdoc
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 from uuid import uuid4
 
 from validmind import __version__
@@ -294,6 +294,7 @@ def run_test(
     show: bool = True,
     generate_description: bool = True,
     title: Optional[str] = None,
+    post_process_fn: Union[Callable[[TestResult], None], None] = None,
     **kwargs,
 ) -> TestResult:
     """Run a ValidMind or custom test
@@ -317,6 +318,7 @@ def run_test(
         show (bool, optional): Whether to display results. Defaults to True.
         generate_description (bool, optional): Whether to generate a description. Defaults to True.
         title (str, optional): Custom title for the test result
+        post_process_fn (Callable[[TestResult], None], optional): Function to post-process the test result
 
     Returns:
         TestResult: A TestResult object containing the test results
@@ -407,6 +409,9 @@ def run_test(
 
     end_time = time.perf_counter()
     result.metadata = _get_run_metadata(duration_seconds=end_time - start_time)
+
+    if post_process_fn:
+        result = post_process_fn(result)
 
     if show:
         result.show()
