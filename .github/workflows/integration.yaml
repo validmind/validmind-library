@@ -32,13 +32,18 @@ jobs:
           python-version: '3.11'
           cache: 'poetry'
 
-      - name: Install Dependencies
+      - name: Install Python Dependencies
         run: |
           poetry config virtualenvs.in-project true
           poetry env use python3.11
           poetry install -E huggingface -E llm
           poetry run pip install torch==2.0.1 --extra-index-url https://download.pytorch.org/whl/cpu
           poetry run pip install aequitas fairlearn vl-convert-python
+
+      - name: Install R Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt install r-base r-base-dev
 
       - name: Build the package
         run: poetry build
@@ -51,6 +56,13 @@ jobs:
 
       - name: Install Built Package
         run: sdist-venv/bin/pip install --no-cache-dir "$(ls dist/validmind*.whl | head -n 1)[llm,huggingface]"
+
+      - name: 'Setup Virtual Environment for [all]'
+        run: python -m venv all-venv
+
+        # This proves that the [all] install target works
+      - name: 'Install Built Package for [all]'
+        run: all-venv/bin/pip install --no-cache-dir "$(ls dist/validmind*.whl | head -n 1)[all]"
 
       - name: Install Additional Dependencies
         run: sdist-venv/bin/pip install nbformat papermill jupyter
