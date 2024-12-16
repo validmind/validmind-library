@@ -155,4 +155,26 @@ print_coverage_statistics()
 
 # Exit with failure if any tests failed
 if not all_tests_passed:
-    sys.exit(1)  # Add this line to exit with error code
+    logger.error("\n=== FAILED TESTS SUMMARY ===")
+    for test_file in FAILED_TESTS:
+        logger.error(f"\nTest file that failed: {test_file}")
+        try:
+            # Load and run the failed test again to get detailed error output
+            suite = unittest.TestLoader().loadTestsFromName(f"tests.{test_file}")
+            result = unittest.TextTestRunner(verbosity=2).run(suite)
+
+            # Output specific test failures
+            for failure in result.failures:
+                logger.error(f"\nFailed test: {failure[0]}")
+                logger.error(f"Error message:\n{failure[1]}")
+
+            # Output specific test errors
+            for error in result.errors:
+                logger.error(f"\nTest error: {error[0]}")
+                logger.error(f"Error message:\n{error[1]}")
+
+        except Exception as e:
+            logger.error(f"Error re-running test {test_file}: {str(e)}")
+
+    logger.error("\nSome tests failed. Check the detailed errors above.")
+    sys.exit(1)
