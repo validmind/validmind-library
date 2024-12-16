@@ -269,7 +269,15 @@ def _run_comparison_test(
 
     combined_outputs, combined_inputs, combined_params = combine_results(results)
 
-    doc = getdoc(load_test(test_id))
+    if unit_metrics:
+        doc = "\n\n".join(
+            [
+                f"{test_id_to_name(unit_metric)}:\n{getdoc(load_test(unit_metric))}"
+                for unit_metric in unit_metrics
+            ]
+        )
+    else:
+        doc = getdoc(load_test(test_id))
 
     return build_test_result(
         outputs=tuple(combined_outputs),
