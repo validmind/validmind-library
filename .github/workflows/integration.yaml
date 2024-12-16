@@ -52,6 +52,12 @@ jobs:
       - name: Install Built Package
         run: sdist-venv/bin/pip install --no-cache-dir "$(ls dist/validmind*.whl | head -n 1)[llm,huggingface]"
 
+      - name: 'Setup Virtual Environment for [all]'
+        run: python -m venv all-venv
+
+      - name: 'Install Built Package for [all]'
+        run: all-venv/bin/pip install --no-cache-dir "$(ls dist/validmind*.whl | head -n 1)[all]"
+
       - name: Install Additional Dependencies
         run: sdist-venv/bin/pip install nbformat papermill jupyter
 
