@@ -159,6 +159,7 @@ class TestResult(Result):
     name: str = "Test Result"
     ref_id: str = None
     title: Optional[str] = None
+    doc: Optional[str] = None
     description: Optional[Union[str, DescriptionFuture]] = None
     metric: Optional[Union[int, float]] = None
     tables: Optional[List[ResultTable]] = None
@@ -180,6 +181,7 @@ class TestResult(Result):
         attrs = [
             attr
             for attr in [
+                "doc",
                 "description",
                 "params",
                 "tables",
