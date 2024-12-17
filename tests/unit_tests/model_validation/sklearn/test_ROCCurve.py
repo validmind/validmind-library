@@ -65,10 +65,16 @@ class TestROCCurve(unittest.TestCase):
         self.vm_test_ds.assign_predictions(self.vm_model)
 
     def test_roc_curve_structure(self):
-        fig = ROCCurve(self.vm_model, self.vm_test_ds)
+        result = ROCCurve(self.vm_model, self.vm_test_ds)
 
-        # Check return type
-        self.assertIsInstance(fig, go.Figure)
+        # Check return type is tuple with RawData and Figure
+        self.assertIsInstance(result, tuple)
+        self.assertEqual(len(result), 2)
+        self.assertIsInstance(result[0], vm.RawData)
+        self.assertIsInstance(result[1], go.Figure)
+
+        # Get the figure from the tuple
+        fig = result[1]
 
         # Check figure has two traces (ROC curve and random baseline)
         self.assertEqual(len(fig.data), 2)
@@ -81,6 +87,11 @@ class TestROCCurve(unittest.TestCase):
         # Check AUC score is better than random
         auc = float(fig.data[0].name.split("=")[1].strip().rstrip(")"))
         self.assertGreater(auc, 0.5)
+
+        # Check RawData contains expected fields
+        self.assertTrue(hasattr(result[0], "fpr"))
+        self.assertTrue(hasattr(result[0], "tpr"))
+        self.assertTrue(hasattr(result[0], "auc"))
 
     def test_perfect_separation(self):
         # Create perfectly separable dataset
@@ -132,8 +143,14 @@ class TestROCCurve(unittest.TestCase):
         vm_train_ds.assign_predictions(vm_perfect_model)
         vm_test_ds.assign_predictions(vm_perfect_model)
 
-        fig = ROCCurve(vm_perfect_model, vm_test_ds)
+        result = ROCCurve(vm_perfect_model, vm_test_ds)
+
+        # Get the figure from the tuple
+        fig = result[1]
 
         # Check AUC score (should be very close to 1.0)
         auc = float(fig.data[0].name.split("=")[1].strip().rstrip(")"))
         self.assertGreater(auc, 0.95)
+
+        # Verify RawData AUC matches figure
+        self.assertAlmostEqual(result[0].auc, auc, places=2)

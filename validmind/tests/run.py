@@ -7,7 +7,7 @@ import subprocess
 import time
 from datetime import datetime
 from inspect import getdoc
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 from uuid import uuid4
 
 from validmind import __version__
@@ -136,6 +136,7 @@ def build_test_result(
     test_id: str,
     inputs: Dict[str, Union[VMInput, List[VMInput]]],
     params: Union[Dict[str, Any], None],
+    doc: str,
     description: str,
     generate_description: bool = True,
     title: Optional[str] = None,
@@ -149,6 +150,7 @@ def build_test_result(
         ref_id=ref_id,
         inputs=inputs,
         params=params if params else None,  # None if empty dict or None
+        doc=doc,
     )
 
     if not isinstance(outputs, tuple):
@@ -199,6 +201,11 @@ def _run_composite_test(
     if not all(result.metric is not None for result in results):
         raise ValueError("All tests must return a metric when used as a composite test")
 
+    # Create composite doc from all test results
+    composite_doc = "\n\n".join(
+        [f"{test_id_to_name(result.result_id)}:\n{result.doc}" for result in results]
+    )
+
     return build_test_result(
         outputs=[
             {
@@ -210,6 +217,7 @@ def _run_composite_test(
         test_id=test_id,
         inputs=results[0].inputs,
         params=results[0].params,
+        doc=composite_doc,
         description="\n\n".join(
             [_test_description(result.description, num_lines=1) for result in results]
         ),  # join truncated (first line only) test descriptions
@@ -261,11 +269,22 @@ def _run_comparison_test(
 
     combined_outputs, combined_inputs, combined_params = combine_results(results)
 
+    if unit_metrics:
+        doc = "\n\n".join(
+            [
+                f"{test_id_to_name(unit_metric)}:\n{getdoc(load_test(unit_metric))}"
+                for unit_metric in unit_metrics
+            ]
+        )
+    else:
+        doc = getdoc(load_test(test_id))
+
     return build_test_result(
         outputs=tuple(combined_outputs),
         test_id=test_id,
         inputs=combined_inputs,
         params=combined_params,
+        doc=doc,
         description=description,
         generate_description=generate_description,
         title=title,
@@ -283,6 +302,7 @@ def run_test(
     show: bool = True,
     generate_description: bool = True,
     title: Optional[str] = None,
+    post_process_fn: Union[Callable[[TestResult], None], None] = None,
     **kwargs,
 ) -> TestResult:
     """Run a ValidMind or custom test
@@ -306,6 +326,7 @@ def run_test(
         show (bool, optional): Whether to display results. Defaults to True.
         generate_description (bool, optional): Whether to generate a description. Defaults to True.
         title (str, optional): Custom title for the test result
+        post_process_fn (Callable[[TestResult], None], optional): Function to post-process the test result
 
     Returns:
         TestResult: A TestResult object containing the test results
@@ -381,18 +402,24 @@ def run_test(
 
         raw_result = test_func(**input_kwargs, **param_kwargs)
 
+        doc = getdoc(test_func)
+
         result = build_test_result(
             outputs=raw_result,
             test_id=test_id,
             inputs=input_kwargs,
             params=param_kwargs,
-            description=getdoc(test_func),
+            doc=doc,
+            description=doc,
             generate_description=generate_description,
             title=title,
         )
 
     end_time = time.perf_counter()
     result.metadata = _get_run_metadata(duration_seconds=end_time - start_time)
+
+    if post_process_fn:
+        result = post_process_fn(result)
 
     if show:
         result.show()
