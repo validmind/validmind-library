@@ -1,6 +1,7 @@
 import unittest
 import time
 import os
+import sys
 
 from tabulate import tabulate
 
@@ -151,3 +152,7 @@ print_uncovered_tests_summary()
 
 # Print coverage statistics
 print_coverage_statistics()
+
+# Exit with failure if any tests failed
+if not all_tests_passed:
+    sys.exit(1)
