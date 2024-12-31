@@ -8,7 +8,7 @@ def create_notebook():
     
     # Ensure the filename is valid
     if not filename:
-        print("Filename cannot be empty.")
+        print("Filename cannot be empty")
         return
     
     # Add the .ipynb extension if not provided
@@ -46,10 +46,48 @@ def create_notebook():
     try:
         with open(filepath, "w") as f:
             nbformat.write(notebook, f)
-        print(f"Notebook '{filepath}' created successfully.")
+        print(f"'{filepath}' created successfully")
     except Exception as e:
         print(f"Error creating notebook: {e}")
 
+    return filepath
+
+def add_title(filepath):
+    """Adds a markdown cell with a title to the specified notebook."""
+    if not os.path.exists(filepath):
+        print("The specified notebook file does not exist")
+        return
+
+    # Load the existing notebook
+    try:
+        with open(filepath, "r") as f:
+            notebook = nbformat.read(f, as_version=4)
+    except Exception as e:
+        print(f"Error reading notebook: {e}")
+        return
+
+    # Prompt the user for a title
+    title = input("Enter the title for the notebook: ").strip()
+    if not title:
+        print("Title cannot be empty")
+        return
+
+    # Create a markdown cell with the title
+    markdown_cell = nbformat.v4.new_markdown_cell(f"# {title}")
+
+    # Add the markdown cell at the beginning of the notebook
+    notebook.cells.insert(0, markdown_cell)
+
+    # Write the updated notebook back to the file
+    try:
+        with open(filepath, "w") as f:
+            nbformat.write(notebook, f)
+        print(f"'{title}' added to '{filepath}' as title")
+    except Exception as e:
+        print(f"Error updating notebook: {e}")
+
 # Example usage
 if __name__ == "__main__":
-    create_notebook()
+    filepath = create_notebook()
+    if filepath:
+        add_title(filepath)
