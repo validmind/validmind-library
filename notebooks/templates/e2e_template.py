@@ -86,8 +86,46 @@ def add_title(filepath):
     except Exception as e:
         print(f"Error updating notebook: {e}")
 
+def add_about(filepath):
+    """Appends the contents of 'about-validmind.ipynb' to the specified notebook if the user agrees."""
+    source_notebook_path = os.path.join(os.path.dirname(__file__), "about-validmind.ipynb")
+
+    # Check if the source notebook exists
+    if not os.path.exists(source_notebook_path):
+        print(f"Source notebook '{source_notebook_path}' does not exist")
+        return
+
+    # Ask the user if they want to append the source notebook
+    user_input = input("Do you want to include 'about-validmind.ipynb'? (yes/no): ").strip().lower()
+    if user_input not in ("yes", "y"):
+        print("Skipping appending 'about-validmind.ipynb'")
+        return
+
+    # Load the target and source notebooks
+    try:
+        with open(filepath, "r") as target_file:
+            target_notebook = nbformat.read(target_file, as_version=4)
+
+        with open(source_notebook_path, "r") as source_file:
+            source_notebook = nbformat.read(source_file, as_version=4)
+    except Exception as e:
+        print(f"Error reading notebooks: {e}")
+        return
+
+    # Append the cells from the source notebook to the target notebook
+    target_notebook.cells.extend(source_notebook.cells)
+
+    # Write the updated target notebook back to the file
+    try:
+        with open(filepath, "w") as target_file:
+            nbformat.write(target_notebook, target_file)
+        print(f"Contents of 'about-validmind.ipynb' appended to '{filepath}' successfully.")
+    except Exception as e:
+        print(f"Error appending notebooks: {e}")
+
 # Example usage
 if __name__ == "__main__":
     filepath = create_notebook()
     if filepath:
         add_title(filepath)
+        add_about(filepath)
