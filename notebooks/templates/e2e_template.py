@@ -114,7 +114,42 @@ def add_about(filepath):
     try:
         with open(filepath, "w") as target_file:
             nbformat.write(target_notebook, target_file)
-        print(f"Contents of 'about-validmind.ipynb' appended to '{filepath}' successfully")
+        print(f"'about-validmind.ipynb' appended to '{filepath}' successfully")
+    except Exception as e:
+        print(f"Error appending notebooks: {e}")
+
+def add_install(filepath):
+    """Appends the contents of 'install-initialize-validmind.ipynb' to the specified notebook if the user agrees."""
+    source_notebook_path = os.path.join(os.path.dirname(__file__), "install-initialize-validmind.ipynb")
+
+    if not os.path.exists(source_notebook_path):
+        print(f"Source notebook '{source_notebook_path}' does not exist")
+        return
+
+    user_input = input("Do you want to include 'install-initialize-validmind.ipynb'? (yes/no): ").strip().lower()
+    if user_input not in ("yes", "y"):
+        print("Skipping appending 'install-initialize-validmind.ipynb'")
+        return
+
+    try:
+        with open(filepath, "r") as target_file:
+            target_notebook = nbformat.read(target_file, as_version=4)
+
+        with open(source_notebook_path, "r") as source_file:
+            source_notebook = nbformat.read(source_file, as_version=4)
+    except Exception as e:
+        print(f"Error reading notebooks: {e}")
+        return
+
+    target_notebook.cells.extend(source_notebook.cells)
+
+    # Ensure all cells have IDs
+    target_notebook = ensure_cell_ids(target_notebook)
+
+    try:
+        with open(filepath, "w") as target_file:
+            nbformat.write(target_notebook, target_file)
+        print(f"'install-initialize-validmind.ipynb' appended to '{filepath}' successfully")
     except Exception as e:
         print(f"Error appending notebooks: {e}")
 
@@ -124,3 +159,4 @@ if __name__ == "__main__":
     if filepath:
         add_title(filepath)
         add_about(filepath)
+        add_install(filepath)
