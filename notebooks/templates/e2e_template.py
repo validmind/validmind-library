@@ -52,7 +52,7 @@ def create_notebook():
 
     return filepath
 
-def add_title(filepath):
+def set_title(filepath):
     """Adds a markdown cell with a title to the specified notebook."""
     if not os.path.exists(filepath):
         print("The specified notebook file does not exist")
@@ -153,10 +153,82 @@ def add_install(filepath):
     except Exception as e:
         print(f"Error appending notebooks: {e}")
 
+def next_steps(filepath):
+    """Appends the contents of 'next-steps.ipynb' to the specified notebook if the user agrees."""
+    source_notebook_path = os.path.join(os.path.dirname(__file__), "next-steps.ipynb")
+
+    if not os.path.exists(source_notebook_path):
+        print(f"Source notebook '{source_notebook_path}' does not exist")
+        return
+
+    user_input = input("Do you want to include 'next-steps.ipynb'? (yes/no): ").strip().lower()
+    if user_input not in ("yes", "y"):
+        print("Skipping appending 'next-steps.ipynb'")
+        return
+
+    try:
+        with open(filepath, "r") as target_file:
+            target_notebook = nbformat.read(target_file, as_version=4)
+
+        with open(source_notebook_path, "r") as source_file:
+            source_notebook = nbformat.read(source_file, as_version=4)
+    except Exception as e:
+        print(f"Error reading notebooks: {e}")
+        return
+
+    target_notebook.cells.extend(source_notebook.cells)
+
+    # Ensure all cells have IDs
+    target_notebook = ensure_cell_ids(target_notebook)
+
+    try:
+        with open(filepath, "w") as target_file:
+            nbformat.write(target_notebook, target_file)
+        print(f"'next-steps.ipynb' appended to '{filepath}' successfully")
+    except Exception as e:
+        print(f"Error appending notebooks: {e}")
+
+def add_upgrade(filepath):
+    """Appends the contents of 'upgrade-validmind.ipynb' to the specified notebook if the user agrees."""
+    source_notebook_path = os.path.join(os.path.dirname(__file__), "upgrade-validmind.ipynb")
+
+    if not os.path.exists(source_notebook_path):
+        print(f"Source notebook '{source_notebook_path}' does not exist")
+        return
+
+    user_input = input("Do you want to include 'upgrade-validmind.ipynb'? (yes/no): ").strip().lower()
+    if user_input not in ("yes", "y"):
+        print("Skipping appending 'upgrade-validmind.ipynb'")
+        return
+
+    try:
+        with open(filepath, "r") as target_file:
+            target_notebook = nbformat.read(target_file, as_version=4)
+
+        with open(source_notebook_path, "r") as source_file:
+            source_notebook = nbformat.read(source_file, as_version=4)
+    except Exception as e:
+        print(f"Error reading notebooks: {e}")
+        return
+
+    target_notebook.cells.extend(source_notebook.cells)
+
+    # Ensure all cells have IDs
+    target_notebook = ensure_cell_ids(target_notebook)
+
+    try:
+        with open(filepath, "w") as target_file:
+            nbformat.write(target_notebook, target_file)
+        print(f"'upgrade-validmind.ipynb' appended to '{filepath}' successfully")
+    except Exception as e:
+        print(f"Error appending notebooks: {e}")
+
 # Example usage
 if __name__ == "__main__":
     filepath = create_notebook()
     if filepath:
-        add_title(filepath)
+        set_title(filepath)
         add_about(filepath)
         add_install(filepath)
+        next_steps(filepath)
+        add_upgrade(filepath)
