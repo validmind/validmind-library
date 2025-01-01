@@ -10,7 +10,6 @@ Sample notebooks are organized into the following folders:
 * `notebooks/code_sharing` — Share your own notebooks or document code internally
 * `notebooks/templates` — Template notebooks to help you create your own custom ValidMind code samples
 
-
 ## Getting started
 
 ValidMind enables organizations to identify, document, and manage model risks for all types of models, including AI/ML models, LLMs, and statistical models. As a model developer, you use the ValidMind Library to automate documentation and validation tests, and then use the ValidMind Platform to collaborate on documentation projects. Together, these products simplify model risk management, facilitate compliance with regulations and institutional standards, and enhance collaboration between yourself and model validators.
@@ -19,3 +18,7 @@ If this is your first time trying out ValidMind, you can make use of the followi
 
 - [Get started](https://docs.validmind.ai/get-started/get-started.html) — The basics, including key concepts, and how our products work
 - [Get started with the ValidMind Library](https://docs.validmind.ai/developer/get-started-validmind-library.html) —  The path for developers, more code samples, and our developer reference
+
+## Contributing code samples
+
+Want to create some code samples for ValidMind? Our [End-to-end notebook template generation](templates/e2e-notebook.ipynb) notebook will generate a new file with all the bits and pieces of a standard ValidMind notebook to get you started.
