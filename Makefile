@@ -82,3 +82,4 @@ check: copyright format lint test verify-copyright verify-exposed-credentials en
 
 notebook:
 	@python notebooks/templates/e2e_template.py
+	git status | grep -v 'notebooks/templates'
