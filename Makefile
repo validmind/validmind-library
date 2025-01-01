@@ -1,4 +1,4 @@
-# https://stackoverflow.com/questions/10858261/how-to-abort-makefile-if-variable-not-set
+	# https://stackoverflow.com/questions/10858261/how-to-abort-makefile-if-variable-not-set
 check_defined = \
     $(strip $(foreach 1,$1, \
         $(call __check_defined,$1,$(strip $(value 2)))))
@@ -79,3 +79,6 @@ ensure-clean-notebooks:
 check: copyright format lint test verify-copyright verify-exposed-credentials ensure-clean-notebooks
 
 .PHONY: docs
+
+notebook:
+	@python notebooks/templates/e2e_template.py

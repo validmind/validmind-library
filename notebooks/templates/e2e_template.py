@@ -1,8 +1,9 @@
 import nbformat
 import os
 import uuid
+import subprocess
 
-def ensure_cell_ids(notebook):
+def ensure_ids(notebook):
     """Ensure every cell in the notebook has a unique id."""
     for cell in notebook.cells:
         if "id" not in cell:
@@ -10,7 +11,7 @@ def ensure_cell_ids(notebook):
     return notebook
 
 def create_notebook():
-    """Creates a new Jupyter Notebook file by asking the user for a filename."""
+    """Creates a new Jupyter Notebook file by asking the user for a filename and opens it in VS Code."""
     filename = input("Enter the name for the new notebook (without .ipynb extension): ").strip()
     if not filename:
         print("Filename cannot be empty")
@@ -40,20 +41,21 @@ def create_notebook():
         }
     }
 
-    # Ensure cells have IDs
-    notebook = ensure_cell_ids(notebook)
+    notebook = ensure_ids(notebook)
 
     try:
         with open(filepath, "w") as f:
             nbformat.write(notebook, f)
-        print(f"'{filepath}' created successfully")
+        print(f"Created '{filepath}'")
+        
+        subprocess.run(["code", filepath], check=True)
     except Exception as e:
-        print(f"Error creating notebook: {e}")
+        print(f"Error creating or opening notebook: {e}")
 
     return filepath
 
 def set_title(filepath):
-    """Adds a markdown cell with a title to the specified notebook."""
+    """Adds a markdown cell with a h1 title to the specified notebook."""
     if not os.path.exists(filepath):
         print("The specified notebook file does not exist")
         return
@@ -73,13 +75,12 @@ def set_title(filepath):
     markdown_cell = nbformat.v4.new_markdown_cell(f"# {title}")
     notebook.cells.insert(0, markdown_cell)
 
-    # Ensure all cells have IDs
-    notebook = ensure_cell_ids(notebook)
+    notebook = ensure_ids(notebook)
 
     try:
         with open(filepath, "w") as f:
             nbformat.write(notebook, f)
-        print(f"'{title}' added to '{filepath}' as title")
+        print(f"Set title for '{filepath}': '{title}'")
     except Exception as e:
         print(f"Error updating notebook: {e}")
 
@@ -91,7 +92,7 @@ def add_about(filepath):
         print(f"Source notebook '{source_notebook_path}' does not exist")
         return
 
-    user_input = input("Do you want to include 'about-validmind.ipynb'? (yes/no): ").strip().lower()
+    user_input = input("Do you want to include information about ValidMind? (yes/no): ").strip().lower()
     if user_input not in ("yes", "y"):
         print("Skipping appending 'about-validmind.ipynb'")
         return
@@ -108,13 +109,12 @@ def add_about(filepath):
 
     target_notebook.cells.extend(source_notebook.cells)
 
-    # Ensure all cells have IDs
-    target_notebook = ensure_cell_ids(target_notebook)
+    target_notebook = ensure_ids(target_notebook)
 
     try:
         with open(filepath, "w") as target_file:
             nbformat.write(target_notebook, target_file)
-        print(f"'about-validmind.ipynb' appended to '{filepath}' successfully")
+        print(f"'about-validmind.ipynb' appended to '{filepath}'")
     except Exception as e:
         print(f"Error appending notebooks: {e}")
 
@@ -126,7 +126,7 @@ def add_install(filepath):
         print(f"Source notebook '{source_notebook_path}' does not exist")
         return
 
-    user_input = input("Do you want to include 'install-initialize-validmind.ipynb'? (yes/no): ").strip().lower()
+    user_input = input("Do you want to include installation and initialization instructions? (yes/no): ").strip().lower()
     if user_input not in ("yes", "y"):
         print("Skipping appending 'install-initialize-validmind.ipynb'")
         return
@@ -143,13 +143,12 @@ def add_install(filepath):
 
     target_notebook.cells.extend(source_notebook.cells)
 
-    # Ensure all cells have IDs
-    target_notebook = ensure_cell_ids(target_notebook)
+    target_notebook = ensure_ids(target_notebook)
 
     try:
         with open(filepath, "w") as target_file:
             nbformat.write(target_notebook, target_file)
-        print(f"'install-initialize-validmind.ipynb' appended to '{filepath}' successfully")
+        print(f"'install-initialize-validmind.ipynb' appended to '{filepath}'")
     except Exception as e:
         print(f"Error appending notebooks: {e}")
 
@@ -161,7 +160,7 @@ def next_steps(filepath):
         print(f"Source notebook '{source_notebook_path}' does not exist")
         return
 
-    user_input = input("Do you want to include 'next-steps.ipynb'? (yes/no): ").strip().lower()
+    user_input = input("Do you want to include next steps? (yes/no): ").strip().lower()
     if user_input not in ("yes", "y"):
         print("Skipping appending 'next-steps.ipynb'")
         return
@@ -178,13 +177,12 @@ def next_steps(filepath):
 
     target_notebook.cells.extend(source_notebook.cells)
 
-    # Ensure all cells have IDs
-    target_notebook = ensure_cell_ids(target_notebook)
+    target_notebook = ensure_ids(target_notebook)
 
     try:
         with open(filepath, "w") as target_file:
             nbformat.write(target_notebook, target_file)
-        print(f"'next-steps.ipynb' appended to '{filepath}' successfully")
+        print(f"'next-steps.ipynb' appended to '{filepath}'")
     except Exception as e:
         print(f"Error appending notebooks: {e}")
 
@@ -196,7 +194,7 @@ def add_upgrade(filepath):
         print(f"Source notebook '{source_notebook_path}' does not exist")
         return
 
-    user_input = input("Do you want to include 'upgrade-validmind.ipynb'? (yes/no): ").strip().lower()
+    user_input = input("Do you want to include information about upgrading ValidMind? (yes/no): ").strip().lower()
     if user_input not in ("yes", "y"):
         print("Skipping appending 'upgrade-validmind.ipynb'")
         return
@@ -212,19 +210,20 @@ def add_upgrade(filepath):
         return
 
     target_notebook.cells.extend(source_notebook.cells)
-
-    # Ensure all cells have IDs
-    target_notebook = ensure_cell_ids(target_notebook)
+    target_notebook = ensure_ids(target_notebook)
 
     try:
         with open(filepath, "w") as target_file:
             nbformat.write(target_notebook, target_file)
-        print(f"'upgrade-validmind.ipynb' appended to '{filepath}' successfully")
+        print(f"'upgrade-validmind.ipynb' appended to '{filepath}'")
     except Exception as e:
         print(f"Error appending notebooks: {e}")
 
-# Example usage
 if __name__ == "__main__":
+
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    os.chdir(script_dir)
+
     filepath = create_notebook()
     if filepath:
         set_title(filepath)
