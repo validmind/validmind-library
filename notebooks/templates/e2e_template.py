@@ -14,7 +14,7 @@ def create_notebook():
     """Creates a new Jupyter Notebook file by asking the user for a filename and opens it in VS Code."""
     filename = input("Enter the name for the new notebook (without .ipynb extension): ").strip()
     if not filename:
-        print("Filename cannot be empty")
+        print("Filename cannot be empty, file not created")
         return
     
     if not filename.endswith(".ipynb"):
@@ -69,7 +69,7 @@ def set_title(filepath):
 
     title = input("Enter the title for the notebook: ").strip()
     if not title:
-        print("Title cannot be empty")
+        print("No title inputted, skipped insertion")
         return
 
     markdown_cell = nbformat.v4.new_markdown_cell(f"# {title}")
