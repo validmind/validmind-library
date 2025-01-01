@@ -1,3 +1,18 @@
-# Jupyter Notebook templates
+# Jupyter Notebook template QuickStart
 
-The easiest way to get started is to run the 
+**The easiest way to get started with creating code samples for ValidMind is to run the [End-to-end notebook template generation](e2e-notebook.ipynb) notebook.** 
+
+The same functionality is also accesible [in our root folder Makefile](../../Makefile) as a command:
+
+```bash
+make notebook
+```
+
+## Mini-templates
+
+The template generation script/notebook draws from the following mini-templates, should you need to revise them or grab the information from them manually:
+
+- [`about-validmind.ipynb`](about-validmind.ipynb): Conceptual overview of ValidMind & prerequisites.
+- [`install-initialize-validmind.ipynb`](install-initialize-validmind.ipynb): ValidMind Library installation & initialization instructions.
+- [`next-steps.ipynb`](next-steps.ipynb): Directions to review the generated documentation within the ValidMind Platform & additional learning resources.
+- [`upgrade-validmind.ipynb`](upgrade-validmind.ipynb): Instructions for comparing & upgrading versions of the ValidMind Library.
