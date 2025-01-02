@@ -264,7 +264,22 @@ def _run_comparison_test(
     )
 
 
-def run_test(
+def _run_test(test_id: TestID, inputs: Dict[str, Any], params: Dict[str, Any]):
+    """Run a standard test and return a TestResult object"""
+    test_func = load_test(test_id)
+    input_kwargs, param_kwargs = _get_test_kwargs(test_func, inputs, params)
+    raw_result = test_func(**input_kwargs, **param_kwargs)
+
+    return build_test_result(
+        outputs=raw_result,
+        test_id=test_id,
+        test_doc=getdoc(test_func),
+        inputs=input_kwargs,
+        params=param_kwargs,
+    )
+
+
+def run_test(  # noqa: C901
     test_id: Union[TestID, None] = None,
     name: Union[str, None] = None,
     unit_metrics: Union[List[TestID], None] = None,
@@ -367,22 +382,7 @@ def run_test(
         )
 
     else:
-        test_func = load_test(test_id)
-
-        input_kwargs, param_kwargs = _get_test_kwargs(
-            test_func, inputs or {}, params or {}
-        )
-
-        raw_result = test_func(**input_kwargs, **param_kwargs)
-
-        result = build_test_result(
-            outputs=raw_result,
-            test_id=test_id,
-            test_doc=getdoc(test_func),
-            inputs=input_kwargs,
-            params=param_kwargs,
-            title=title,
-        )
+        result = _run_test(test_id, inputs, params)
 
     end_time = time.perf_counter()
     result.metadata = _get_run_metadata(duration_seconds=end_time - start_time)
