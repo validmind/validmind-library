@@ -153,7 +153,7 @@ def replace_variables(filepath):
             file.write(content)
 
         if replacements_made:
-            print(f"Replaced target variables in '{filepath}'")
+            print(f"Replaced template and use case variables in '{filepath}'")
     except Exception as e:
         print(f"Error replacing variables in file: {e}")
 
