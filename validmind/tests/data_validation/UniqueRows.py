@@ -61,7 +61,9 @@ def UniqueRows(dataset: VMDataset, min_percent_threshold: float = 1):
             "Number of Unique Values": unique_rows[col],
             "Percentage of Unique Values (%)": unique_rows[col] / rows * 100,
             "Pass/Fail": (
-                "Pass" if unique_rows[col] / rows >= min_percent_threshold else "Fail"
+                "Pass"
+                if (unique_rows[col] / rows * 100) >= min_percent_threshold
+                else "Fail"
             ),
         }
         for col in unique_rows.index

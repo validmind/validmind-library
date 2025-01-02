@@ -2,13 +2,19 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from typing import Union
-
+from typing import Union, Dict, List
 from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import make_scorer, recall_score
 
 from validmind import tags, tasks
-from validmind.errors import SkipTestError
 from validmind.vm_models import VMDataset, VMModel
+
+
+@tags("sklearn", "model_performance")
+@tasks("classification", "clustering")
+def custom_recall(y_true, y_pred_proba, threshold=0.5):
+    y_pred = (y_pred_proba >= threshold).astype(int)
+    return recall_score(y_true, y_pred)
 
 
 @tags("sklearn", "model_performance")
@@ -16,59 +22,113 @@ from validmind.vm_models import VMDataset, VMModel
 def HyperParametersTuning(
     model: VMModel,
     dataset: VMDataset,
-    param_grid: Union[dict, None] = None,
-    scoring: Union[str, None] = None,
+    param_grid: dict,
+    scoring: Union[str, List, Dict],
+    thresholds: Union[float, List[float]] = 0.5,
+    fit_params: dict = None,
 ):
     """
-    Exerts exhaustive grid search to identify optimal hyperparameters for the model, improving performance.
+    Performs exhaustive grid search over specified parameter ranges to find optimal model configurations
+    across different metrics and decision thresholds.
 
-    ### Purpose:
+    ### Purpose
 
-    The "HyperParametersTuning" metric aims to find the optimal set of hyperparameters for a given model. The test is
-    designed to enhance the performance of the model by determining the best configuration of hyperparameters. The
-    parameters that are being optimized are defined by the parameter grid provided to the metric.
+    The Hyperparameter Tuning test systematically explores the model's parameter space to identify optimal
+    configurations. It supports multiple optimization metrics and decision thresholds, providing a comprehensive
+    view of how different parameter combinations affect various aspects of model performance.
 
-    ### Test Mechanism:
+    ### Test Mechanism
 
-    The HyperParametersTuning test employs a grid search mechanism using the GridSearchCV function from the
-    scikit-learn library. The grid search algorithm systematically works through multiple combinations of parameter
-    values, cross-validating to determine which combination gives the best model performance. The chosen model and the
-    parameter grid passed for tuning are necessary inputs. Once the grid search is complete, the test caches and
-    returns details of the best model and its associated parameters.
+    The test uses scikit-learn's GridSearchCV to perform cross-validation for each parameter combination.
+    For each specified threshold and optimization metric, it creates a scoring dictionary with
+    threshold-adjusted metrics, performs grid search with cross-validation, records best parameters and
+    corresponding scores, and combines results into a comparative table. This process is repeated for each
+    optimization metric to provide a comprehensive view of model performance under different configurations.
 
-    ### Signs of High Risk:
+    ### Signs of High Risk
 
-    - The test raises a SkipTestError if the param_grid is not supplied, indicating a lack of specific parameters to
-    optimize, which can be risky for certain model types reliant on parameter tuning.
-    - Poorly chosen scoring metrics that do not align well with the specific model or problem at hand could reflect
-    potential risks or failures in achieving optimal performance.
+    - Large performance variations across different parameter combinations
+    - Significant discrepancies between different optimization metrics
+    - Best parameters at the edges of the parameter grid
+    - Unstable performance across different thresholds
+    - Overly complex model configurations (risk of overfitting)
+    - Very different optimal parameters for different metrics
+    - Cross-validation scores showing high variance
+    - Extreme parameter values in best configurations
 
-    ### Strengths:
+    ### Strengths
 
-    - Provides a comprehensive exploration mechanism to identify the best set of hyperparameters for the supplied
-    model, thereby enhancing its performance.
-    - Implements GridSearchCV, simplifying and automating the time-consuming task of hyperparameter tuning.
+    - Comprehensive exploration of parameter space
+    - Supports multiple optimization metrics
+    - Allows threshold optimization
+    - Provides comparative view across different configurations
+    - Uses cross-validation for robust evaluation
+    - Helps understand trade-offs between different metrics
+    - Enables systematic parameter selection
+    - Supports both classification and clustering tasks
 
-    ### Limitations:
+    ### Limitations
 
-    - The grid search algorithm can be computationally expensive, especially with large datasets or complex models, and
-    can be time-consuming as it tests all possible combinations within the specified parameter grid.
-    - The effectiveness of the tuning is heavily dependent on the quality of data and only accepts datasets with
-    numerical or ordered categories.
-    - Assumes that the same set of hyperparameters is optimal for all problem sets, which may not be true in every
-    scenario.
-    - There's a potential risk of overfitting the model if the training set is not representative of the data that the
-    model will be applied to.
+    - Computationally expensive for large parameter grids
+    - May not find global optimum (limited to grid points)
+    - Cannot handle dependencies between parameters
+    - Memory intensive for large datasets
+    - Limited to scikit-learn compatible models
+    - Cross-validation splits may not preserve time series structure
+    - Grid search may miss optimal values between grid points
+    - Resource intensive for high-dimensional parameter spaces
     """
-    if not param_grid:
-        raise SkipTestError("'param_grid' dictionary must be provided to run this test")
+    results = []
+    metrics = (
+        scoring
+        if isinstance(scoring, list)
+        else list(scoring.keys()) if isinstance(scoring, dict) else [scoring]
+    )
 
-    estimators = GridSearchCV(model.model, param_grid=param_grid, scoring=scoring)
-    estimators.fit(dataset.x, dataset.y)
+    # Convert single threshold to list
+    if isinstance(thresholds, (int, float)):
+        thresholds = [thresholds]
 
-    return [
-        {
-            "Best Model": estimators.best_estimator_,
-            "Best Parameters": estimators.best_params_,
-        }
-    ]
+    # For each threshold
+    for threshold in thresholds:
+        # Create scoring dict with current threshold
+        scoring_dict = {}
+        for metric in metrics:
+            if metric == "recall":
+                scoring_dict[metric] = make_scorer(
+                    custom_recall, needs_proba=True, threshold=threshold
+                )
+            elif metric == "roc_auc":
+                scoring_dict[metric] = "roc_auc"  # threshold independent
+            # Add other metrics as needed
+
+        # Run GridSearchCV for each optimization metric
+        for optimize_for in metrics:
+            estimators = GridSearchCV(
+                model.model,
+                param_grid=param_grid,
+                scoring=scoring_dict,
+                refit=optimize_for,  # Optimize for current metric
+            )
+
+            # Fit model
+            fit_params = fit_params or {}
+            estimators.fit(dataset.x_df(), dataset.y, **fit_params)
+
+            # Get results for this optimization
+            best_index = estimators.best_index_
+            row_result = {
+                "Optimized for": optimize_for,
+                "Threshold": threshold,
+                "Best Parameters": estimators.best_params_,
+            }
+
+            # Add scores for all metrics
+            for metric in metrics:
+                row_result[f"{metric}"] = estimators.cv_results_[f"mean_test_{metric}"][
+                    best_index
+                ]
+
+            results.append(row_result)
+
+    return results
