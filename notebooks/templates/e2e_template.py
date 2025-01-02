@@ -111,7 +111,6 @@ def add_about(filepath):
         cell["id"] = f"about-{uuid.uuid4()}"
 
     target_notebook.cells.extend(source_notebook.cells)
-
     target_notebook = ensure_ids(target_notebook)
 
     try:
@@ -143,9 +142,11 @@ def add_install(filepath):
     except Exception as e:
         print(f"Error reading notebooks: {e}")
         return
+    
+    for cell in source_notebook.cells:
+        cell["id"] = f"install-{uuid.uuid4()}"
 
     target_notebook.cells.extend(source_notebook.cells)
-
     target_notebook = ensure_ids(target_notebook)
 
     try:
@@ -177,9 +178,11 @@ def next_steps(filepath):
     except Exception as e:
         print(f"Error reading notebooks: {e}")
         return
+    
+    for cell in source_notebook.cells:
+        cell["id"] = f"next-{uuid.uuid4()}"
 
     target_notebook.cells.extend(source_notebook.cells)
-
     target_notebook = ensure_ids(target_notebook)
 
     try:
@@ -211,6 +214,9 @@ def add_upgrade(filepath):
     except Exception as e:
         print(f"Error reading notebooks: {e}")
         return
+    
+    for cell in source_notebook.cells:
+        cell["id"] = f"upgrade-{uuid.uuid4()}"
 
     target_notebook.cells.extend(source_notebook.cells)
     target_notebook = ensure_ids(target_notebook)
