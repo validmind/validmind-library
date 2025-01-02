@@ -120,6 +120,29 @@ def add_about(filepath):
     except Exception as e:
         print(f"Error appending notebooks: {e}")
 
+def replace_variables(filepath):
+    """Replaces target variables in the open file based on user input."""
+    try:
+        with open(filepath, "r") as file:
+            content = file.read()
+
+        # Locate and replace {template}
+        if "{template}" in content:
+            template_value = input("Enter a value to replace {template}: ").strip()
+            content = content.replace("{template}", template_value)
+
+        # Locate and replace {use-case}
+        if "{use-case}" in content:
+            use_case_value = input("Enter a value to replace {use-case}: ").strip()
+            content = content.replace("{use-case}", use_case_value)
+
+        with open(filepath, "w") as file:
+            file.write(content)
+
+        print(f"Replaced target variables in '{filepath}'")
+    except Exception as e:
+        print(f"Error replacing variables in file: {e}")
+
 def add_install(filepath):
     """Appends the contents of 'install-initialize-validmind.ipynb' to the specified notebook if the user agrees."""
     source_notebook_path = os.path.join(os.path.dirname(__file__), "install-initialize-validmind.ipynb")
@@ -155,6 +178,8 @@ def add_install(filepath):
         print(f"'install-initialize-validmind.ipynb' appended to '{filepath}'")
     except Exception as e:
         print(f"Error appending notebooks: {e}")
+
+    replace_variables(filepath)
 
 def next_steps(filepath):
     """Appends the contents of 'next-steps.ipynb' to the specified notebook if the user agrees."""
