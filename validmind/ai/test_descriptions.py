@@ -96,15 +96,11 @@ def generate_description(
             "No tables, unit metric or figures provided - cannot generate description"
         )
 
-    # # TODO: fix circular import
-    # from validmind.ai.utils import get_client_and_model
-
     client, model = get_client_and_model()
 
     # get last part of test id
     test_name = title or test_id.split(".")[-1]
 
-    # TODO: fully support metrics
     if metric is not None:
         tables = [] if not tables else tables
         tables.append(

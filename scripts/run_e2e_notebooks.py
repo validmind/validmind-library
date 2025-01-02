@@ -47,6 +47,44 @@ NOTEBOOKS_TO_RUN = [
     "notebooks/code_samples/custom_tests/implement_custom_tests.ipynb",
 ]
 
+DATA_TEMPLATE_NOTEBOOKS = [
+    {
+        # [Demo] Foundation Model - Text Summarization
+        "path": "notebooks/code_samples/nlp_and_llm/llm_summarization_demo.ipynb",
+        "model": "cm4lr52wy00ck0jpbw6kqhyjl",
+    },
+    {
+        # [Demo] Hugging Face - Text Summarization
+        "path": "notebooks/code_samples/nlp_and_llm/hugging_face_summarization_demo.ipynb",
+        "model": "cm4lr52ut00c60jpbe2fxt8ss",
+    },
+    {
+        # [Demo] Foundation Model - Text Sentiment Analysis
+        "path": "notebooks/code_samples/nlp_and_llm/llm_summarization_demo.ipynb",
+        "model": "cm4lr52ss00br0jpbtgxxe8w8",
+    },
+    {
+        # [Demo] Hugging Face - Text Sentiment Analysis
+        "path": "notebooks/code_samples/nlp_and_llm/hugging_face_summarization_demo.ipynb",
+        "model": "cm4lr52qo00bc0jpbm0vmxxhy"
+    },
+    {
+        # [Demo] Customer Churn Model
+        "path": "notebooks/code_samples/quickstart_customer_churn_full_suite.ipynb",
+        "model": "cm4lr52lw00a60jpbhmzh8cah"
+    },
+    {
+        # [Demo] Credit Risk Model
+        "path": "notebooks/code_samples/credit_risk/application_scorecard_demo.ipynb",
+        "model": "cm4lr52j9009w0jpb4gr7z5o0",
+    },
+    {
+        # [Demo] Interest Rate Time Series Forecasting Model
+        "path": "notebooks/code_samples/time_series/quickstart_time_series_full_suite.ipynb",
+        "model": "cm4lr52od00ar0jpb9dyra8v8",
+    },
+]
+
 INIT_CELL_CODE = """
 import os
 os.environ["VALIDMIND_LLM_DESCRIPTIONS_ENABLED"] = "0"
@@ -90,9 +128,19 @@ logger.info("Site-packages path: " + str(site.getsitepackages()))
     default=True,
     help="Show the progress bar when executing notebooks.",
 )
-def main(kernel, log_output=False, progress_bar=True):
+@click.option(
+    "--update-data-template",
+    is_flag=True,
+    default=False,
+    help="Run notebooks for purpose of updating model data templates in backend.",
+)
+def main(kernel, log_output=False, progress_bar=True, update_data_template=False):
     """Run notebooks from the specified directory for end-to-end testing."""
-    for notebook_file in NOTEBOOKS_TO_RUN:
+    if update_data_template:
+        notebooks = DATA_TEMPLATE_NOTEBOOKS
+    else:
+        notebooks = NOTEBOOKS_TO_RUN
+    for notebook_file in notebooks:
         if isinstance(notebook_file, dict):
             notebook_path = os.path.join(os.getcwd(), notebook_file["path"])
             model = notebook_file["model"]
@@ -119,6 +167,10 @@ def main(kernel, log_output=False, progress_bar=True):
             raise e
 
         restore_notebook(notebook_path)
+
+    if update_data_template:
+        print("USED MODEL CUIDS")
+        print([notebook_file["model"] for notebook_file in notebooks])
 
 
 def run_notebook(notebook_path, kernel_name, log_output=False, progress_bar=True):
