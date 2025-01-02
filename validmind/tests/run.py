@@ -248,7 +248,7 @@ def _run_comparison_test(
     # composite tests have a test_id thats built from the name
     if not test_id:
         test_id = results[0].result_id
-        test_doc = results[0].test_doc
+        test_doc = results[0].doc
     else:
         test_doc = describe_test(test_id, raw=True)["Description"]
 
