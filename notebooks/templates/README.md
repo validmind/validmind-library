@@ -1,6 +1,6 @@
 # Jupyter Notebook template QuickStart
 
-**The easiest way to get started with creating code samples for ValidMind is to run the [End-to-end notebook template generation](e2e-notebook.ipynb) notebook.** 
+Want to create some code samples for ValidMind? Our **[End-to-end notebook template generation](e2e-notebook.ipynb) notebook** will generate a new file with all the bits and pieces of a standard ValidMind notebook to get you started.
 
 The same functionality is also accesible [in our root folder Makefile](../../Makefile) as a command:
 

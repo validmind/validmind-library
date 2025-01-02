@@ -8,7 +8,6 @@ Sample notebooks are organized into the following folders:
 * `notebooks/how_to` — Learn how to use specific ValidMind features, e.g. how to list all test suites
 * `notebooks/tutorials` — Get step-by-step instructions and learn about ValidMind concepts in depth
 * `notebooks/code_sharing` — Share your own notebooks or document code internally
-* `notebooks/templates` — Template notebooks to help you create your own custom ValidMind code samples
 
 ## Getting started
 
@@ -21,4 +20,4 @@ If this is your first time trying out ValidMind, you can make use of the followi
 
 ## Contributing code samples
 
-Want to create some code samples for ValidMind? Our [End-to-end notebook template generation](templates/e2e-notebook.ipynb) notebook will generate a new file with all the bits and pieces of a standard ValidMind notebook to get you started.
+Head over to [`notebooks/templates`](templates/) to find templates to help you create your own custom ValidMind code samples.
