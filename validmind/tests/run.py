@@ -384,6 +384,12 @@ def run_test(
             title=title,
         )
 
+    end_time = time.perf_counter()
+    result.metadata = _get_run_metadata(duration_seconds=end_time - start_time)
+
+    if post_process_fn:
+        result = post_process_fn(result)
+
     if generate_description:
         result.description = get_result_description(
             test_id=test_id,
@@ -394,12 +400,6 @@ def run_test(
             should_generate=generate_description,
             title=title,
         )
-
-    end_time = time.perf_counter()
-    result.metadata = _get_run_metadata(duration_seconds=end_time - start_time)
-
-    if post_process_fn:
-        result = post_process_fn(result)
 
     if show:
         result.show()
