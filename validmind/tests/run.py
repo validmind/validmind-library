@@ -125,7 +125,7 @@ def _get_test_kwargs(
         input_kwargs[key] = _input
 
     if not test_func.params:
-        return input_kwargs, None
+        return input_kwargs, {}
 
     param_kwargs = {
         key: value for key, value in params.items() if key in test_func.params
