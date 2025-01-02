@@ -136,6 +136,7 @@ def replace_variables(filepath):
                 print("No value entered for {template}, skipping replacement")
             else:
                 content = content.replace("{template}", template_value)
+                print(f"Template: {template_value}")
                 replacements_made = True
 
         # Locate and replace {use-case}
@@ -145,6 +146,7 @@ def replace_variables(filepath):
                 print("No value entered for {use-case}, skipping replacement")
             else:
                 content = content.replace("{use-case}", use_case_value)
+                print(f"Use case: {use_case_value}")
                 replacements_made = True
 
         with open(filepath, "w") as file:
