@@ -106,6 +106,9 @@ def add_about(filepath):
     except Exception as e:
         print(f"Error reading notebooks: {e}")
         return
+    
+    for cell in source_notebook.cells:
+        cell["id"] = f"about-{uuid.uuid4()}"
 
     target_notebook.cells.extend(source_notebook.cells)
 
