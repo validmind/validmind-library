@@ -108,7 +108,9 @@ def add_about(filepath):
         return
     
     for cell in source_notebook.cells:
-        cell["id"] = f"about-{uuid.uuid4()}"
+        original_id = cell.get("id", f"cell-{uuid.uuid4()}")
+        new_id = f"{original_id}-{uuid.uuid4()}"
+        cell["id"] = new_id
 
     target_notebook.cells.extend(source_notebook.cells)
     target_notebook = ensure_ids(target_notebook)
