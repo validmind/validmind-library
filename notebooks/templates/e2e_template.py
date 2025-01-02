@@ -126,6 +126,9 @@ def replace_variables(filepath):
         with open(filepath, "r") as file:
             content = file.read()
 
+        # Track if any replacements were made
+        replacements_made = False
+
         # Locate and replace {template}
         if "{template}" in content:
             template_value = input("Enter a value to replace {template}: ").strip()
@@ -133,6 +136,7 @@ def replace_variables(filepath):
                 print("No value entered for {template}, skipping replacement")
             else:
                 content = content.replace("{template}", template_value)
+                replacements_made = True
 
         # Locate and replace {use-case}
         if "{use-case}" in content:
@@ -141,11 +145,13 @@ def replace_variables(filepath):
                 print("No value entered for {use-case}, skipping replacement")
             else:
                 content = content.replace("{use-case}", use_case_value)
+                replacements_made = True
 
         with open(filepath, "w") as file:
             file.write(content)
 
-        print(f"Replaced target variables in '{filepath}'")
+        if replacements_made:
+            print(f"Replaced target variables in '{filepath}'")
     except Exception as e:
         print(f"Error replacing variables in file: {e}")
 
