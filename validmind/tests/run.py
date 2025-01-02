@@ -124,9 +124,6 @@ def _get_test_kwargs(
 
         input_kwargs[key] = _input
 
-    if not test_func.params:
-        return input_kwargs, {}
-
     param_kwargs = {
         key: value for key, value in params.items() if key in test_func.params
     }
@@ -270,7 +267,12 @@ def _run_comparison_test(
 def _run_test(test_id: TestID, inputs: Dict[str, Any], params: Dict[str, Any]):
     """Run a standard test and return a TestResult object"""
     test_func = load_test(test_id)
-    input_kwargs, param_kwargs = _get_test_kwargs(test_func, inputs, params)
+    input_kwargs, param_kwargs = _get_test_kwargs(
+        test_func=test_func,
+        inputs=inputs or {},
+        params=params or {},
+    )
+
     raw_result = test_func(**input_kwargs, **param_kwargs)
 
     return build_test_result(
