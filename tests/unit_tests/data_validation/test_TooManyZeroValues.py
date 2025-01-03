@@ -37,7 +37,7 @@ class TestTooManyZeroValues(unittest.TestCase):
         )
 
     def test_too_many_zeros_default_threshold(self):
-        # Test with default threshold (3%)
+        # Test with default threshold (0.03 or 0.03%)
         results, passed = TooManyZeroValues(self.vm_dataset)
 
         # Check return types
@@ -47,22 +47,25 @@ class TestTooManyZeroValues(unittest.TestCase):
         # Check results structure
         self.assertEqual(len(results), 2)  # Should only check numeric columns
         for result in results:
-            self.assertIn("Column", result)
+            self.assertIn("Variable", result)
+            self.assertIn("Row Count", result)
             self.assertIn("Number of Zero Values", result)
             self.assertIn("Percentage of Zero Values (%)", result)
             self.assertIn("Pass/Fail", result)
 
         # Verify specific results
-        few_zeros_result = next(r for r in results if r["Column"] == "few_zeros")
-        many_zeros_result = next(r for r in results if r["Column"] == "many_zeros")
+        few_zeros_result = next(r for r in results if r["Variable"] == "few_zeros")
+        many_zeros_result = next(r for r in results if r["Variable"] == "many_zeros")
 
-        self.assertEqual(few_zeros_result["Pass/Fail"], "Pass")  # 1% should pass
-        self.assertEqual(many_zeros_result["Pass/Fail"], "Fail")  # 5% should fail
-        self.assertFalse(passed)  # Overall test should fail due to many_zeros
+        # 1% should fail as it's > 0.03%
+        self.assertEqual(few_zeros_result["Pass/Fail"], "Fail")
+        # 5% should fail as it's > 0.03%
+        self.assertEqual(many_zeros_result["Pass/Fail"], "Fail")
+        self.assertFalse(passed)  # Overall test should fail as both columns fail
 
     def test_custom_threshold(self):
         # Test with higher threshold (6%)
-        results, passed = TooManyZeroValues(self.vm_dataset, max_percent_threshold=0.06)
+        results, passed = TooManyZeroValues(self.vm_dataset, max_percent_threshold=6)
 
         # Both columns should pass with higher threshold
         self.assertTrue(passed)

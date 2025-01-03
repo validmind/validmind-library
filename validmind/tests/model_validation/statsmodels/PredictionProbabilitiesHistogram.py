@@ -9,7 +9,7 @@ from matplotlib import cm
 from validmind import tags, tasks
 
 
-@tags("visualization", "credit_risk", "logistic_regression")
+@tags("visualization", "credit_risk")
 @tasks("classification")
 def PredictionProbabilitiesHistogram(
     dataset, model, title="Histogram of Predictive Probabilities"
@@ -22,7 +22,7 @@ def PredictionProbabilitiesHistogram(
 
     The Prediction Probabilities Histogram test is designed to generate histograms displaying the Probability of
     Default (PD) predictions for both positive and negative classes in training and testing datasets. This helps in
-    evaluating the performance of a logistic regression model, particularly for credit risk prediction.
+    evaluating the performance of a classification model.
 
     ### Test Mechanism
 
@@ -52,7 +52,6 @@ def PredictionProbabilitiesHistogram(
     ### Limitations
 
     - Specifically tailored for binary classification scenarios and not suited for multi-class classification tasks.
-    - Mainly applicable to logistic regression models, and may not be effective for other model types.
     - Provides a robust visual representation but lacks a quantifiable measure to assess model performance.
     """
 

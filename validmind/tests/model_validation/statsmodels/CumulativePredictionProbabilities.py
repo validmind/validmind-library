@@ -9,22 +9,21 @@ from matplotlib import cm
 from validmind import tags, tasks
 
 
-@tags("visualization", "credit_risk", "logistic_regression")
+@tags("visualization", "credit_risk")
 @tasks("classification")
 def CumulativePredictionProbabilities(dataset, model, title="Cumulative Probabilities"):
     """
-    Visualizes cumulative probabilities of positive and negative classes for both training and testing in logistic
-    regression models.
+    Visualizes cumulative probabilities of positive and negative classes for both training and testing in classification models.
 
     ### Purpose
 
     This metric is utilized to evaluate the distribution of predicted probabilities for positive and negative classes
-    in a logistic regression model. It provides a visual assessment of the model's behavior by plotting the cumulative
+    in a classification model. It provides a visual assessment of the model's behavior by plotting the cumulative
     probabilities for positive and negative classes across both the training and test datasets.
 
     ### Test Mechanism
 
-    The logistic regression model is evaluated by first computing the predicted probabilities for each instance in both
+    The classification model is evaluated by first computing the predicted probabilities for each instance in both
     the training and test datasets, which are then added as a new column in these sets. The cumulative probabilities
     for positive and negative classes are subsequently calculated and sorted in ascending order. Cumulative
     distributions of these probabilities are created for both positive and negative classes across both training and
@@ -51,7 +50,7 @@ def CumulativePredictionProbabilities(dataset, model, title="Cumulative Probabil
 
     ### Limitations
 
-    - Exclusive to classification tasks and specifically to logistic regression models.
+    - Exclusive to classification tasks and specifically to classification models.
     - Graphical results necessitate human interpretation and may not be directly applicable for automated risk
     detection.
     - The method does not give a solitary quantifiable measure of model risk, instead, it offers a visual

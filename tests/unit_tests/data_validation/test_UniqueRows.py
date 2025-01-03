@@ -55,7 +55,10 @@ class TestUniqueRows(unittest.TestCase):
 
     def test_low_uniqueness(self):
         # Test dataset with low uniqueness
-        results, passed = UniqueRows(self.vm_dataset_duplicates)
+        # Set threshold to 5% to make the test fail
+        results, passed = UniqueRows(
+            self.vm_dataset_duplicates, min_percent_threshold=5
+        )
 
         # Check return types
         self.assertIsInstance(results, list)
@@ -68,6 +71,6 @@ class TestUniqueRows(unittest.TestCase):
             self.assertIn("Percentage of Unique Values (%)", result)
             self.assertIn("Pass/Fail", result)
 
-        # Should fail with low uniqueness
+        # Should fail with uniqueness below 5%
         self.assertFalse(passed)
-        self.assertTrue(any(row["Pass/Fail"] == "Fail" for row in results))
+        self.assertTrue(all(row["Pass/Fail"] == "Fail" for row in results))
