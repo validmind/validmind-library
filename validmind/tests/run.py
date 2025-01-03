@@ -357,7 +357,6 @@ def run_test(  # noqa: C901
             input_grid=input_grid,
             params=params,
             param_grid=param_grid,
-            generate_description=generate_description,
         )
 
     elif unit_metrics:
@@ -371,18 +370,6 @@ def run_test(  # noqa: C901
             input_grid=input_grid,
             params=params,
             param_grid=param_grid,
-            generate_description=generate_description,
-            title=title,
-        )
-
-    elif input_grid or param_grid:
-        result = _run_comparison_test(
-            test_id=test_id,
-            inputs=inputs,
-            input_grid=input_grid,
-            params=params,
-            param_grid=param_grid,
-            generate_description=generate_description,
             title=title,
         )
 
