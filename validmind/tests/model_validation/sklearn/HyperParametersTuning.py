@@ -114,28 +114,37 @@ def HyperParametersTuning(
     - Grid search may miss optimal values between grid points
     - Resource intensive for high-dimensional parameter spaces
     """
+    fit_params = fit_params or {}
+
+    # Simple case: no scoring and no thresholds
+    if scoring is None and thresholds is None:
+        estimators = GridSearchCV(model.model, param_grid=param_grid, scoring=None)
+        estimators.fit(dataset.x_df(), dataset.y, **fit_params)
+        return [
+            {
+                "Best Model": estimators.best_estimator_,
+                "Best Parameters": estimators.best_params_,
+            }
+        ]
+
+    # Complex case: with scoring or thresholds
     results = []
     metrics = _get_metrics(scoring)
     thresholds = _get_thresholds(thresholds)
-    fit_params = fit_params or {}
 
-    # For each threshold
     for threshold in thresholds:
         scoring_dict = _create_scoring_dict(scoring, metrics, threshold)
 
-        # Run GridSearchCV for each optimization metric
         for optimize_for in metrics:
             estimators = GridSearchCV(
                 model.model,
                 param_grid=param_grid,
                 scoring=scoring_dict,
-                refit=optimize_for,
+                refit=optimize_for if scoring is not None else True,
             )
 
-            # Fit model
             estimators.fit(dataset.x_df(), dataset.y, **fit_params)
 
-            # Get results for this optimization
             best_index = estimators.best_index_
             row_result = {
                 "Optimized for": optimize_for,
@@ -143,11 +152,10 @@ def HyperParametersTuning(
                 "Best Parameters": estimators.best_params_,
             }
 
-            # Add scores for all metrics
-            for metric in metrics:
-                row_result[f"{metric}"] = estimators.cv_results_[f"mean_test_{metric}"][
-                    best_index
-                ]
+            score_key = (
+                "mean_test_score" if scoring is None else f"mean_test_{optimize_for}"
+            )
+            row_result[optimize_for] = estimators.cv_results_[score_key][best_index]
 
             results.append(row_result)
 
