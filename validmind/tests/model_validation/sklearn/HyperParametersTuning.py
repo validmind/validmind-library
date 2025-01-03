@@ -23,8 +23,8 @@ def HyperParametersTuning(
     model: VMModel,
     dataset: VMDataset,
     param_grid: dict,
-    scoring: Union[str, List, Dict],
-    thresholds: Union[float, List[float]] = 0.5,
+    scoring: Union[str, List, Dict] = None,
+    thresholds: Union[float, List[float]] = None,
     fit_params: dict = None,
 ):
     """
@@ -79,14 +79,21 @@ def HyperParametersTuning(
     - Resource intensive for high-dimensional parameter spaces
     """
     results = []
+
+    # Handle default scoring
+    if scoring is None:
+        scoring = "accuracy"  # Default to accuracy as the scoring metric
+
     metrics = (
         scoring
         if isinstance(scoring, list)
         else list(scoring.keys()) if isinstance(scoring, dict) else [scoring]
     )
 
-    # Convert single threshold to list
-    if isinstance(thresholds, (int, float)):
+    # Handle default threshold
+    if thresholds is None:
+        thresholds = [0.5]  # Default to standard 0.5 threshold
+    elif isinstance(thresholds, (int, float)):
         thresholds = [thresholds]
 
     # For each threshold

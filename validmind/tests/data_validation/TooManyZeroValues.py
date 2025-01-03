@@ -61,24 +61,25 @@ def TooManyZeroValues(dataset: VMDataset, max_percent_threshold: float = 0.03):
     issues.
     """
     df = dataset.df
-
     table = []
 
     for col in dataset.feature_columns_numeric:
         value_counts = df[col].value_counts()
+        row_count = df.shape[0]
 
         if 0 not in value_counts.index:
             continue
 
         n_zeros = value_counts[0]
-        p_zeros = (n_zeros / df.shape[0]) * 100
+        p_zeros = (n_zeros / row_count) * 100
 
         table.append(
             {
-                "Column": col,
+                "Variable": col,
+                "Row Count": row_count,
                 "Number of Zero Values": n_zeros,
                 "Percentage of Zero Values (%)": p_zeros,
-                "Pass/Fail": "Pass" if p_zeros < max_percent_threshold else "Fail",
+                "Pass/Fail": ("Pass" if p_zeros < (max_percent_threshold) else "Fail"),
             }
         )
 

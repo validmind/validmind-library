@@ -44,6 +44,11 @@ KNOWN_FAILING_TESTS = [
     "validmind.data_validation.ProtectedClassesCombination",
     "validmind.data_validation.ProtectedClassesDisparity",
     "validmind.data_validation.ProtectedClassesThresholdOptimizer",
+    # The customer churn classification dataset contains a string column 'Germany' which is not supported by the MutualInformation test
+    "validmind.data_validation.MutualInformation",
+    # The required column 'score' is not present in the dataset with input_id test_dataset
+    "validmind.data_validation.ScoreBandDefaultRates",
+    "validmind.data_validation.ScoreProbabilityAlignment",
 ]
 SKIPPED_TESTS = []
 SUCCESSFUL_TESTS = []
