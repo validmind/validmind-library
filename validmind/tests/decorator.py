@@ -122,7 +122,7 @@ def test(func_or_id):
         wrapper = wraps(func)(test_func)
 
         # special function to allow the function to be saved to a file
-        wrapper.save = _get_save_func(test_func, test_id)
+        wrapper.save = _get_save_func(func, test_id)
 
         # add the test ID to the function
         wrapper.test_id = test_id
