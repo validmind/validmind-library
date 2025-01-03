@@ -355,33 +355,76 @@ def _woebin(df):
         return bins_df
 
 
-def split(df, add_constant=False):
+def split(df, validation_size=None, test_size=0.2, add_constant=False):
+    """
+    Split dataset into train, validation (optional), and test sets.
+
+    Args:
+        df: Input DataFrame
+        validation_split: If None, returns train/test split. If float, returns train/val/test split
+        test_size: Proportion of data for test set (default: 0.2)
+        add_constant: Whether to add constant column for statsmodels (default: False)
+
+    Returns:
+        If validation_size is None:
+            train_df, test_df
+        If validation_size is float:
+            train_df, validation_df, test_df
+    """
     df = df.copy()
 
-    # Splitting the dataset into training and test sets
-    train_df, test_df = train_test_split(df, test_size=0.2, random_state=42)
+    # First split off the test set
+    train_val_df, test_df = train_test_split(df, test_size=test_size, random_state=42)
 
     if add_constant:
-        # Add a constant to the model for both training and testing datasets
-        train_df = sm.add_constant(train_df)
         test_df = sm.add_constant(test_df)
 
-    # Calculate and print details for the training dataset
-    print("After splitting the dataset into training and test sets:")
-    print(
-        f"Training Dataset:\nRows: {train_df.shape[0]}\nColumns: {train_df.shape[1]}\nMissing values: {train_df.isnull().sum().sum()}\n"
+    if validation_size is None:
+        if add_constant:
+            train_val_df = sm.add_constant(train_val_df)
+
+        # Print details for two-way split
+        print("After splitting the dataset into training and test sets:")
+        print(
+            f"Training Dataset:\nRows: {train_val_df.shape[0]}\nColumns: {train_val_df.shape[1]}\n"
+            f"Missing values: {train_val_df.isnull().sum().sum()}\n"
+        )
+        print(
+            f"Test Dataset:\nRows: {test_df.shape[0]}\nColumns: {test_df.shape[1]}\n"
+            f"Missing values: {test_df.isnull().sum().sum()}\n"
+        )
+
+        return train_val_df, test_df
+
+    # Calculate validation size as proportion of remaining data
+    val_size = validation_size / (1 - test_size)
+    train_df, validation_df = train_test_split(
+        train_val_df, test_size=val_size, random_state=42
     )
 
-    # Calculate and print details for the test dataset
+    if add_constant:
+        train_df = sm.add_constant(train_df)
+        validation_df = sm.add_constant(validation_df)
+
+    # Print details for three-way split
+    print("After splitting the dataset into training, validation, and test sets:")
     print(
-        f"Test Dataset:\nRows: {test_df.shape[0]}\nColumns: {test_df.shape[1]}\nMissing values: {test_df.isnull().sum().sum()}\n"
+        f"Training Dataset:\nRows: {train_df.shape[0]}\nColumns: {train_df.shape[1]}\n"
+        f"Missing values: {train_df.isnull().sum().sum()}\n"
+    )
+    print(
+        f"Validation Dataset:\nRows: {validation_df.shape[0]}\nColumns: {validation_df.shape[1]}\n"
+        f"Missing values: {validation_df.isnull().sum().sum()}\n"
+    )
+    print(
+        f"Test Dataset:\nRows: {test_df.shape[0]}\nColumns: {test_df.shape[1]}\n"
+        f"Missing values: {test_df.isnull().sum().sum()}\n"
     )
 
-    return train_df, test_df
+    return train_df, validation_df, test_df
 
 
 def compute_scores(probabilities):
-
     target_score = score_params["target_score"]
     target_odds = score_params["target_odds"]
     pdo = score_params["pdo"]
@@ -389,6 +432,393 @@ def compute_scores(probabilities):
     factor = pdo / np.log(2)
     offset = target_score - (factor * np.log(target_odds))
 
-    scores = offset + factor * np.log(probabilities / (1 - probabilities))
+    # Add negative sign to reverse the relationship
+    scores = offset - factor * np.log(probabilities / (1 - probabilities))
 
     return scores
+
+
+def get_demo_test_config(x_test=None, y_test=None):
+    """Get demo test configuration.
+
+    Args:
+        x_test: Test features DataFrame
+        y_test: Test target Series
+
+    Returns:
+        dict: Test configuration dictionary
+    """
+    default_config = {}
+
+    # RAW DATA TESTS
+    default_config["validmind.data_validation.DatasetDescription:raw_data"] = {
+        "inputs": {
+            "dataset": "raw_dataset",
+        }
+    }
+    default_config["validmind.data_validation.DescriptiveStatistics:raw_data"] = {
+        "inputs": {
+            "dataset": "raw_dataset",
+        }
+    }
+    default_config["validmind.data_validation.MissingValues:raw_data"] = {
+        "inputs": {
+            "dataset": "raw_dataset",
+        },
+        "params": {"min_threshold": 1},
+    }
+    default_config["validmind.data_validation.ClassImbalance:raw_data"] = {
+        "inputs": {
+            "dataset": "raw_dataset",
+        },
+        "params": {"min_percent_threshold": 10},
+    }
+    default_config["validmind.data_validation.Duplicates:raw_data"] = {
+        "inputs": {
+            "dataset": "raw_dataset",
+        },
+        "params": {"min_threshold": 1},
+    }
+    default_config["validmind.data_validation.HighCardinality:raw_data"] = {
+        "inputs": {
+            "dataset": "raw_dataset",
+        },
+        "params": {
+            "num_threshold": 100,
+            "percent_threshold": 0.1,
+            "threshold_type": "percent",
+        },
+    }
+    default_config["validmind.data_validation.Skewness:raw_data"] = {
+        "inputs": {
+            "dataset": "raw_dataset",
+        },
+        "params": {"max_threshold": 1},
+    }
+    default_config["validmind.data_validation.UniqueRows:raw_data"] = {
+        "inputs": {
+            "dataset": "raw_dataset",
+        },
+        "params": {"min_percent_threshold": 1},
+    }
+    default_config["validmind.data_validation.TooManyZeroValues:raw_data"] = {
+        "inputs": {
+            "dataset": "raw_dataset",
+        },
+        "params": {"max_percent_threshold": 0.03},
+    }
+    default_config["validmind.data_validation.IQROutliersTable:raw_data"] = {
+        "inputs": {
+            "dataset": "raw_dataset",
+        },
+        "params": {"threshold": 5},
+    }
+
+    # PREPROCESSED DATA TESTS
+    default_config[
+        "validmind.data_validation.DescriptiveStatistics:preprocessed_data"
+    ] = {
+        "inputs": {
+            "dataset": "preprocess_dataset",
+        }
+    }
+    default_config[
+        "validmind.data_validation.TabularDescriptionTables:preprocessed_data"
+    ] = {
+        "inputs": {
+            "dataset": "preprocess_dataset",
+        }
+    }
+    default_config["validmind.data_validation.MissingValues:preprocessed_data"] = {
+        "inputs": {
+            "dataset": "preprocess_dataset",
+        },
+        "params": {"min_threshold": 1},
+    }
+    default_config[
+        "validmind.data_validation.TabularNumericalHistograms:preprocessed_data"
+    ] = {
+        "inputs": {
+            "dataset": "preprocess_dataset",
+        }
+    }
+    default_config[
+        "validmind.data_validation.TabularCategoricalBarPlots:preprocessed_data"
+    ] = {
+        "inputs": {
+            "dataset": "preprocess_dataset",
+        }
+    }
+    default_config["validmind.data_validation.TargetRateBarPlots:preprocessed_data"] = {
+        "inputs": {
+            "dataset": "preprocess_dataset",
+        },
+        "params": {"default_column": "loan_status"},
+    }
+
+    # DEVELOPMENT DATA TESTS
+    default_config[
+        "validmind.data_validation.DescriptiveStatistics:development_data"
+    ] = {"input_grid": {"dataset": ["train_dataset", "test_dataset"]}}
+
+    default_config[
+        "validmind.data_validation.TabularDescriptionTables:development_data"
+    ] = {"input_grid": {"dataset": ["train_dataset", "test_dataset"]}}
+
+    default_config["validmind.data_validation.ClassImbalance:development_data"] = {
+        "input_grid": {"dataset": ["train_dataset", "test_dataset"]},
+        "params": {"min_percent_threshold": 10},
+    }
+
+    default_config["validmind.data_validation.UniqueRows:development_data"] = {
+        "input_grid": {"dataset": ["train_dataset", "test_dataset"]},
+        "params": {"min_percent_threshold": 1},
+    }
+
+    default_config[
+        "validmind.data_validation.TabularNumericalHistograms:development_data"
+    ] = {"input_grid": {"dataset": ["train_dataset", "test_dataset"]}}
+
+    # FEATURE SELECTION TESTS
+    default_config["validmind.data_validation.MutualInformation:development_data"] = {
+        "input_grid": {"dataset": ["train_dataset", "test_dataset"]},
+        "params": {"min_threshold": 0.01},
+    }
+
+    default_config[
+        "validmind.data_validation.PearsonCorrelationMatrix:development_data"
+    ] = {"input_grid": {"dataset": ["train_dataset", "test_dataset"]}}
+
+    default_config[
+        "validmind.data_validation.HighPearsonCorrelation:development_data"
+    ] = {
+        "input_grid": {"dataset": ["train_dataset", "test_dataset"]},
+        "params": {"max_threshold": 0.3, "top_n_correlations": 10},
+    }
+
+    default_config["validmind.data_validation.WOEBinTable"] = {
+        "input_grid": {"dataset": ["preprocess_dataset"]},
+        "params": {"breaks_adj": breaks_adj},
+    }
+
+    default_config["validmind.data_validation.WOEBinPlots"] = {
+        "input_grid": {"dataset": ["preprocess_dataset"]},
+        "params": {"breaks_adj": breaks_adj},
+    }
+
+    # MODEL TRAINING TESTS
+    default_config["validmind.data_validation.DatasetSplit"] = {
+        "inputs": {"datasets": ["train_dataset", "test_dataset"]}
+    }
+
+    default_config["validmind.model_validation.ModelMetadata"] = {
+        "input_grid": {"model": ["xgb_model", "rf_model"]}
+    }
+
+    default_config["validmind.model_validation.sklearn.ModelParameters"] = {
+        "input_grid": {"model": ["xgb_model", "rf_model"]}
+    }
+
+    # MODEL SELECTION TESTS
+    default_config["validmind.model_validation.statsmodels.GINITable"] = {
+        "input_grid": {
+            "dataset": ["train_dataset", "test_dataset"],
+            "model": ["xgb_model", "rf_model"],
+        }
+    }
+
+    default_config["validmind.model_validation.sklearn.ClassifierPerformance"] = {
+        "input_grid": {
+            "dataset": ["train_dataset", "test_dataset"],
+            "model": ["xgb_model", "rf_model"],
+        }
+    }
+
+    default_config[
+        "validmind.model_validation.sklearn.TrainingTestDegradation:XGBoost"
+    ] = {
+        "inputs": {"datasets": ["train_dataset", "test_dataset"], "model": "xgb_model"},
+        "params": {"max_threshold": 0.1},
+    }
+
+    default_config[
+        "validmind.model_validation.sklearn.TrainingTestDegradation:RandomForest"
+    ] = {
+        "inputs": {"datasets": ["train_dataset", "test_dataset"], "model": "rf_model"},
+        "params": {"max_threshold": 0.1},
+    }
+
+    default_config["validmind.model_validation.sklearn.HyperParametersTuning"] = {
+        "inputs": {"model": "xgb_model", "dataset": "train_dataset"},
+        "params": {
+            "param_grid": {"n_estimators": [50, 100]},
+            "scoring": ["roc_auc", "recall"],
+            "fit_params": {
+                "eval_set": [(x_test, y_test)],
+                "verbose": False,
+            },
+            "thresholds": [0.3, 0.5],
+        },
+    }
+
+    # MODEL PERFORMANCE - DISCRIMINATION TESTS
+    default_config["validmind.model_validation.sklearn.ROCCurve"] = {
+        "input_grid": {
+            "dataset": ["train_dataset", "test_dataset"],
+            "model": ["xgb_model"],
+        }
+    }
+
+    default_config["validmind.model_validation.sklearn.MinimumROCAUCScore"] = {
+        "input_grid": {
+            "dataset": ["train_dataset", "test_dataset"],
+            "model": ["xgb_model"],
+        },
+        "params": {"min_threshold": 0.5},
+    }
+
+    default_config[
+        "validmind.model_validation.statsmodels.PredictionProbabilitiesHistogram"
+    ] = {
+        "input_grid": {
+            "dataset": ["train_dataset", "test_dataset"],
+            "model": ["xgb_model"],
+        }
+    }
+
+    default_config[
+        "validmind.model_validation.statsmodels.CumulativePredictionProbabilities"
+    ] = {
+        "input_grid": {
+            "model": ["xgb_model"],
+            "dataset": ["train_dataset", "test_dataset"],
+        }
+    }
+
+    default_config["validmind.model_validation.sklearn.PopulationStabilityIndex"] = {
+        "inputs": {"datasets": ["train_dataset", "test_dataset"], "model": "xgb_model"},
+        "params": {"num_bins": 10, "mode": "fixed"},
+    }
+
+    # MODEL PERFORMANCE - ACCURACY TESTS
+    default_config["validmind.model_validation.sklearn.ConfusionMatrix"] = {
+        "input_grid": {
+            "dataset": ["train_dataset", "test_dataset"],
+            "model": ["xgb_model"],
+        }
+    }
+
+    default_config["validmind.model_validation.sklearn.MinimumAccuracy"] = {
+        "input_grid": {
+            "dataset": ["train_dataset", "test_dataset"],
+            "model": ["xgb_model"],
+        },
+        "params": {"min_threshold": 0.7},
+    }
+
+    default_config["validmind.model_validation.sklearn.MinimumF1Score"] = {
+        "input_grid": {
+            "dataset": ["train_dataset", "test_dataset"],
+            "model": ["xgb_model"],
+        },
+        "params": {"min_threshold": 0.5},
+    }
+
+    default_config["validmind.model_validation.sklearn.PrecisionRecallCurve"] = {
+        "input_grid": {
+            "dataset": ["train_dataset", "test_dataset"],
+            "model": ["xgb_model"],
+        }
+    }
+
+    default_config["validmind.model_validation.sklearn.CalibrationCurve"] = {
+        "input_grid": {
+            "dataset": ["train_dataset", "test_dataset"],
+            "model": ["xgb_model"],
+        }
+    }
+
+    default_config[
+        "validmind.model_validation.sklearn.ClassifierThresholdOptimization"
+    ] = {
+        "inputs": {"dataset": "train_dataset", "model": "xgb_model"},
+        "params": {
+            "target_recall": 0.8  # Find a threshold that achieves a recall of 80%
+        },
+    }
+
+    # MODEL PERFORMANCE - SCORING TESTS
+    default_config["validmind.model_validation.statsmodels.ScorecardHistogram"] = {
+        "input_grid": {"dataset": ["train_dataset", "test_dataset"]},
+        "params": {"score_column": "xgb_scores"},
+    }
+
+    default_config["validmind.data_validation.ScoreBandDefaultRates"] = {
+        "input_grid": {"dataset": ["train_dataset"], "model": ["xgb_model"]},
+        "params": {
+            "score_column": "xgb_scores",
+            "score_bands": [504, 537, 570],  # Creates four score bands
+        },
+    }
+
+    default_config["validmind.model_validation.sklearn.ScoreProbabilityAlignment"] = {
+        "input_grid": {"dataset": ["train_dataset"], "model": ["xgb_model"]},
+        "params": {"score_column": "xgb_scores"},
+    }
+
+    # MODEL DIAGNOSIS TESTS
+    default_config["validmind.model_validation.sklearn.WeakspotsDiagnosis"] = {
+        "inputs": {
+            "datasets": ["train_dataset", "test_dataset"],
+            "model": "xgb_model",
+        },
+    }
+
+    default_config["validmind.model_validation.sklearn.OverfitDiagnosis"] = {
+        "inputs": {
+            "model": "xgb_model",
+            "datasets": ["train_dataset", "test_dataset"],
+        },
+        "params": {"cut_off_threshold": 0.04},
+    }
+
+    default_config["validmind.model_validation.sklearn.RobustnessDiagnosis"] = {
+        "inputs": {
+            "datasets": ["train_dataset", "test_dataset"],
+            "model": "xgb_model",
+        },
+        "params": {
+            "scaling_factor_std_dev_list": [0.1, 0.2, 0.3, 0.4, 0.5],
+            "performance_decay_threshold": 0.05,
+        },
+    }
+
+    # EXPLAINABILITY TESTS
+    default_config[
+        "validmind.model_validation.sklearn.PermutationFeatureImportance"
+    ] = {
+        "input_grid": {
+            "dataset": ["train_dataset", "test_dataset"],
+            "model": ["xgb_model"],
+        }
+    }
+
+    default_config["validmind.model_validation.FeaturesAUC"] = {
+        "input_grid": {
+            "model": ["xgb_model"],
+            "dataset": ["train_dataset", "test_dataset"],
+        },
+    }
+
+    default_config["validmind.model_validation.sklearn.SHAPGlobalImportance"] = {
+        "input_grid": {
+            "model": ["xgb_model"],
+            "dataset": ["train_dataset", "test_dataset"],
+        },
+        "params": {
+            "kernel_explainer_samples": 10,
+            "tree_or_linear_explainer_samples": 200,
+        },
+    }
+
+    return default_config

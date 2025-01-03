@@ -65,6 +65,23 @@ def prompt_to_message(role, prompt):
     return {"role": role, "content": content}
 
 
+def _get_llm_global_context():
+
+    # Get the context from the environment variable
+    context = os.getenv("VALIDMIND_LLM_DESCRIPTIONS_CONTEXT", "")
+
+    # Check if context should be used (similar to descriptions enabled pattern)
+    context_enabled = os.getenv(
+        "VALIDMIND_LLM_DESCRIPTIONS_CONTEXT_ENABLED", "1"
+    ) not in [
+        "0",
+        "false",
+    ]
+
+    # Only use context if it's enabled and not empty
+    return context if context_enabled and context else None
+
+
 def generate_description(
     test_id: str,
     test_description: str,
@@ -79,15 +96,11 @@ def generate_description(
             "No tables, unit metric or figures provided - cannot generate description"
         )
 
-    # # TODO: fix circular import
-    # from validmind.ai.utils import get_client_and_model
-
     client, model = get_client_and_model()
 
     # get last part of test id
     test_name = title or test_id.split(".")[-1]
 
-    # TODO: fully support metrics
     if metric is not None:
         tables = [] if not tables else tables
         tables.append(
@@ -108,12 +121,15 @@ def generate_description(
     else:
         summary = None
 
+    context = _get_llm_global_context()
+
     input_data = {
         "test_name": test_name,
         "test_description": test_description,
         "title": title,
         "summary": summary,
         "figures": [figure._get_b64_url() for figure in ([] if tables else figures)],
+        "context": context,
     }
     system, user = _load_prompt()
 
