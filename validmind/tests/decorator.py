@@ -24,6 +24,11 @@ def _get_save_func(func, test_id):
     test library.
     """
 
+    # get og source before its wrapped by the test decorator
+    source = inspect.getsource(func)
+    # remove decorator line
+    source = source.split("\n", 1)[1]
+
     def save(root_folder=".", imports=None):
         parts = test_id.split(".")
 
@@ -41,35 +46,32 @@ def _get_save_func(func, test_id):
 
         full_path = os.path.join(path, f"{test_name}.py")
 
-        source = inspect.getsource(func)
-        # remove decorator line
-        source = source.split("\n", 1)[1]
+        _source = source.replace(f"def {func.__name__}", f"def {test_name}")
+
         if imports:
             imports = "\n".join(imports)
-            source = f"{imports}\n\n\n{source}"
+            _source = f"{imports}\n\n\n{_source}"
+
         # add comment to the top of the file
-        source = f"""
+        _source = f"""
 # Saved from {func.__module__}.{func.__name__}
 # Original Test ID: {test_id}
 # New Test ID: {new_test_id}
 
-{source}
+{_source}
 """
-
-        # ensure that the function name matches the test name
-        source = source.replace(f"def {func.__name__}", f"def {test_name}")
 
         # use black to format the code
         try:
             import black
 
-            source = black.format_str(source, mode=black.FileMode())
+            _source = black.format_str(_source, mode=black.FileMode())
         except ImportError:
             # ignore if not available
             pass
 
         with open(full_path, "w") as file:
-            file.writelines(source)
+            file.writelines(_source)
 
         logger.info(
             f"Saved to {os.path.abspath(full_path)}!"
@@ -119,13 +121,12 @@ def test(func_or_id):
         test_func = load_test(test_id, func, reload=True)
         test_store.register_test(test_id, test_func)
 
-        wrapper = wraps(func)(test_func)
-
         # special function to allow the function to be saved to a file
-        wrapper.save = _get_save_func(func, test_id)
+        save_func = _get_save_func(func, test_id)
 
-        # add the test ID to the function
+        wrapper = wraps(func)(test_func)
         wrapper.test_id = test_id
+        wrapper.save = save_func
 
         return wrapper
 
