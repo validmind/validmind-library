@@ -8,6 +8,11 @@
 
 Generate a description of the following result of the test using the instructions given in your system prompt.
 
+{%- if context %}
+**Context**:
+{{ context }}
+{%- endif %}
+
 {%- if summary %}
 **Test Result Tables** *(Raw Data)*:
 {{ summary }}
