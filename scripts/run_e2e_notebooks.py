@@ -45,6 +45,7 @@ NOTEBOOKS_TO_RUN = [
     "notebooks/how_to/run_unit_metrics.ipynb",
     "notebooks/code_samples/custom_tests/integrate_external_test_providers.ipynb",
     "notebooks/code_samples/custom_tests/implement_custom_tests.ipynb",
+    "notebooks/how_to/explore_tests.ipynb",
 ]
 
 DATA_TEMPLATE_NOTEBOOKS = [
@@ -66,12 +67,12 @@ DATA_TEMPLATE_NOTEBOOKS = [
     {
         # [Demo] Hugging Face - Text Sentiment Analysis
         "path": "notebooks/code_samples/nlp_and_llm/hugging_face_summarization_demo.ipynb",
-        "model": "cm4lr52qo00bc0jpbm0vmxxhy"
+        "model": "cm4lr52qo00bc0jpbm0vmxxhy",
     },
     {
         # [Demo] Customer Churn Model
         "path": "notebooks/code_samples/quickstart_customer_churn_full_suite.ipynb",
-        "model": "cm4lr52lw00a60jpbhmzh8cah"
+        "model": "cm4lr52lw00a60jpbhmzh8cah",
     },
     {
         # [Demo] Credit Risk Model
