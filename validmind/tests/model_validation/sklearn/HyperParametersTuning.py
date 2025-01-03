@@ -18,7 +18,7 @@ def custom_recall(y_true, y_pred_proba, threshold=0.5):
 
 
 @tags("sklearn", "model_performance")
-@tasks("classification", "clustering")
+@tasks("clustering", "classification")
 def HyperParametersTuning(
     model: VMModel,
     dataset: VMDataset,
@@ -100,22 +100,26 @@ def HyperParametersTuning(
     for threshold in thresholds:
         # Create scoring dict with current threshold
         scoring_dict = {}
-        for metric in metrics:
-            if metric == "recall":
-                scoring_dict[metric] = make_scorer(
-                    custom_recall, needs_proba=True, threshold=threshold
-                )
-            elif metric == "roc_auc":
-                scoring_dict[metric] = "roc_auc"  # threshold independent
-            # Add other metrics as needed
+        if scoring is not None:  # Only create scoring_dict if scoring was provided
+            for metric in metrics:
+                if metric == "recall":
+                    scoring_dict[metric] = make_scorer(
+                        custom_recall, needs_proba=True, threshold=threshold
+                    )
+                elif metric == "roc_auc":
+                    scoring_dict[metric] = "roc_auc"  # threshold independent
+                else:
+                    scoring_dict[metric] = metric
 
         # Run GridSearchCV for each optimization metric
         for optimize_for in metrics:
             estimators = GridSearchCV(
                 model.model,
                 param_grid=param_grid,
-                scoring=scoring_dict,
-                refit=optimize_for,  # Optimize for current metric
+                scoring=(
+                    scoring_dict if scoring_dict else None
+                ),  # Use None if no scoring provided
+                refit=optimize_for,
             )
 
             # Fit model

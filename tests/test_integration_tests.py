@@ -48,7 +48,7 @@ KNOWN_FAILING_TESTS = [
     "validmind.data_validation.MutualInformation",
     # The required column 'score' is not present in the dataset with input_id test_dataset
     "validmind.data_validation.ScoreBandDefaultRates",
-    "validmind.data_validation.ScoreProbabilityAlignment",
+    "validmind.model_validation.sklearn.ScoreProbabilityAlignment",
 ]
 SKIPPED_TESTS = []
 SUCCESSFUL_TESTS = []
