@@ -49,6 +49,9 @@
             <li>
                     <a class="function" href="#compute_scores">compute_scores</a>
             </li>
+            <li>
+                    <a class="function" href="#get_demo_test_config">get_demo_test_config</a>
+            </li>
     </ul>
 
 
@@ -141,13 +144,33 @@
                     <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">split</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">df</span>, </span><span class="param"><span class="n">add_constant</span><span class="o">=</span><span class="kc">False</span></span><span class="return-annotation">):</span></span>
+        <span class="name">split</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">df</span>, </span><span class="param"><span class="n">validation_size</span><span class="o">=</span><span class="kc">None</span>, </span><span class="param"><span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span>, </span><span class="param"><span class="n">add_constant</span><span class="o">=</span><span class="kc">False</span></span><span class="return-annotation">):</span></span>
 
         
     </div>
     <a class="headerlink" href="#split"></a>
     
-    
+            <div class="docstring"><p>Split dataset into train, validation (optional), and test sets.</p>
+
+<h6 id="arguments">Arguments:</h6>
+
+<ul>
+<li><strong>df:</strong>  Input DataFrame</li>
+<li><strong>validation_split:</strong>  If None, returns train/test split. If float, returns train/val/test split</li>
+<li><strong>test_size:</strong>  Proportion of data for test set (default: 0.2)</li>
+<li><strong>add_constant:</strong>  Whether to add constant column for statsmodels (default: False)</li>
+</ul>
+
+<h6 id="returns">Returns:</h6>
+
+<blockquote>
+  <p>If validation_size is None:
+      train_df, test_df
+  If validation_size is float:
+      train_df, validation_df, test_df</p>
+</blockquote>
+</div>
+
 
                 </section>
                 <section id="compute_scores">
@@ -161,6 +184,34 @@
     <a class="headerlink" href="#compute_scores"></a>
     
     
+
+                </section>
+                <section id="get_demo_test_config">
+                    <div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">get_demo_test_config</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">x_test</span><span class="o">=</span><span class="kc">None</span>, </span><span class="param"><span class="n">y_test</span><span class="o">=</span><span class="kc">None</span></span><span class="return-annotation">):</span></span>
+
+        
+    </div>
+    <a class="headerlink" href="#get_demo_test_config"></a>
+    
+            <div class="docstring"><p>Get demo test configuration.</p>
+
+<h6 id="arguments">Arguments:</h6>
+
+<ul>
+<li><strong>x_test:</strong>  Test features DataFrame</li>
+<li><strong>y_test:</strong>  Test target Series</li>
+</ul>
+
+<h6 id="returns">Returns:</h6>
+
+<blockquote>
+  <p>dict: Test configuration dictionary</p>
+</blockquote>
+</div>
+
 
                 </section>
     </main>
