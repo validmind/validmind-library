@@ -17,6 +17,42 @@ def custom_recall(y_true, y_pred_proba, threshold=0.5):
     return recall_score(y_true, y_pred)
 
 
+def _get_metrics(scoring):
+    """Convert scoring parameter to list of metrics."""
+    if scoring is None:
+        return ["accuracy"]
+    return (
+        scoring
+        if isinstance(scoring, list)
+        else list(scoring.keys()) if isinstance(scoring, dict) else [scoring]
+    )
+
+
+def _get_thresholds(thresholds):
+    """Convert thresholds parameter to list."""
+    if thresholds is None:
+        return [0.5]
+    return [thresholds] if isinstance(thresholds, (int, float)) else thresholds
+
+
+def _create_scoring_dict(scoring, metrics, threshold):
+    """Create scoring dictionary for GridSearchCV."""
+    if scoring is None:
+        return None
+
+    scoring_dict = {}
+    for metric in metrics:
+        if metric == "recall":
+            scoring_dict[metric] = make_scorer(
+                custom_recall, needs_proba=True, threshold=threshold
+            )
+        elif metric == "roc_auc":
+            scoring_dict[metric] = "roc_auc"
+        else:
+            scoring_dict[metric] = metric
+    return scoring_dict
+
+
 @tags("sklearn", "model_performance")
 @tasks("clustering", "classification")
 def HyperParametersTuning(
@@ -79,51 +115,24 @@ def HyperParametersTuning(
     - Resource intensive for high-dimensional parameter spaces
     """
     results = []
-
-    # Handle default scoring
-    if scoring is None:
-        scoring = "accuracy"  # Default to accuracy as the scoring metric
-
-    metrics = (
-        scoring
-        if isinstance(scoring, list)
-        else list(scoring.keys()) if isinstance(scoring, dict) else [scoring]
-    )
-
-    # Handle default threshold
-    if thresholds is None:
-        thresholds = [0.5]  # Default to standard 0.5 threshold
-    elif isinstance(thresholds, (int, float)):
-        thresholds = [thresholds]
+    metrics = _get_metrics(scoring)
+    thresholds = _get_thresholds(thresholds)
+    fit_params = fit_params or {}
 
     # For each threshold
     for threshold in thresholds:
-        # Create scoring dict with current threshold
-        scoring_dict = {}
-        if scoring is not None:  # Only create scoring_dict if scoring was provided
-            for metric in metrics:
-                if metric == "recall":
-                    scoring_dict[metric] = make_scorer(
-                        custom_recall, needs_proba=True, threshold=threshold
-                    )
-                elif metric == "roc_auc":
-                    scoring_dict[metric] = "roc_auc"  # threshold independent
-                else:
-                    scoring_dict[metric] = metric
+        scoring_dict = _create_scoring_dict(scoring, metrics, threshold)
 
         # Run GridSearchCV for each optimization metric
         for optimize_for in metrics:
             estimators = GridSearchCV(
                 model.model,
                 param_grid=param_grid,
-                scoring=(
-                    scoring_dict if scoring_dict else None
-                ),  # Use None if no scoring provided
+                scoring=scoring_dict,
                 refit=optimize_for,
             )
 
             # Fit model
-            fit_params = fit_params or {}
             estimators.fit(dataset.x_df(), dataset.y, **fit_params)
 
             # Get results for this optimization
