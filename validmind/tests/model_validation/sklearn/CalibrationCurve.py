@@ -2,10 +2,11 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from sklearn.calibration import calibration_curve
 import plotly.graph_objects as go
+from sklearn.calibration import calibration_curve
+
 from validmind import tags, tasks
-from validmind.vm_models import VMModel, VMDataset
+from validmind.vm_models import VMDataset, VMModel
 from validmind.vm_models.result import RawData
 
 
