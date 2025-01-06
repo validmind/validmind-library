@@ -459,18 +459,23 @@ def get_dataset_info(dataset):
 
 
 def preview_test_config(config):
-    formatted_json = json.dumps(config, indent=4)
+    """Preview test configuration in a collapsible HTML section.
 
-    # JavaScript + HTML for the collapsible section
+    Args:
+        config (dict): Test configuration dictionary
+    """
+
+    try:
+        formatted_json = json.dumps(serialize(config), indent=4)
+    except TypeError as e:
+        logger.error(f"JSON serialization failed: {e}")
+        return
+
     collapsible_html = f"""
     <script>
     function toggleOutput() {{
         var content = document.getElementById("collapsibleContent");
-        if (content.style.display === "none") {{
-            content.style.display = "block";
-        }} else {{
-            content.style.display = "none";
-        }}
+        content.style.display = content.style.display === "none" ? "block" : "none";
     }}
     </script>
     <button onclick="toggleOutput()">Preview Config</button>
@@ -556,3 +561,14 @@ def inspect_obj(obj):
         # Loop through the parameters and print detailed information
         for param_name, param in sig.parameters.items():
             print(f"{param_name} - ({param.default})")
+
+
+def serialize(obj):
+    """Convert objects to JSON-serializable format with readable descriptions."""
+    if isinstance(obj, dict):
+        return {k: serialize(v) for k, v in obj.items()}
+    elif isinstance(obj, (list, tuple)):
+        return [serialize(x) for x in obj]
+    elif isinstance(obj, (pd.DataFrame, pd.Series)):
+        return ""  # Simple empty string for non-serializable objects
+    return obj

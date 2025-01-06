@@ -382,16 +382,15 @@ def run_test(  # noqa: C901
     if post_process_fn:
         result = post_process_fn(result)
 
-    if generate_description:
-        result.description = get_result_description(
-            test_id=test_id,
-            test_description=result.doc,
-            tables=result.tables,
-            figures=result.figures,
-            metric=result.metric,
-            should_generate=generate_description,
-            title=title,
-        )
+    result.description = get_result_description(
+        test_id=test_id,
+        test_description=result.doc,
+        tables=result.tables,
+        figures=result.figures,
+        metric=result.metric,
+        should_generate=generate_description,
+        title=title,
+    )
 
     if show:
         result.show()

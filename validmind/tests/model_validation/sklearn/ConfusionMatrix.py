@@ -106,6 +106,7 @@ def ConfusionMatrix(dataset: VMDataset, model: VMModel):
         autosize=False,
         width=600,
         height=600,
+        title_text="Confusion Matrix",
     )
 
     fig.add_annotation(

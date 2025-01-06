@@ -32,6 +32,9 @@
             <h3>Python Library API</h3>
                 <ul class="memberlist">
             <li>
+                    <a class="function" href="#custom_recall">custom_recall</a>
+            </li>
+            <li>
                     <a class="function" href="#HyperParametersTuning">HyperParametersTuning</a>
             </li>
     </ul>
@@ -56,62 +59,87 @@
                 
                 
             </section>
-                <section id="HyperParametersTuning">
+                <section id="custom_recall">
                     <div class="attr function">
                     <div class="decorator">@tags(&#39;sklearn&#39;, &#39;model_performance&#39;)</div>
         <div class="decorator">@tasks(&#39;classification&#39;, &#39;clustering&#39;)</div>
 
         <span class="def">def</span>
-        <span class="name">HyperParametersTuning</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">model</span><span class="p">:</span> <span class="n"><a href="../../../vm_models.html#VMModel">validmind.vm_models.VMModel</a></span>,</span><span class="param">	<span class="n">dataset</span><span class="p">:</span> <span class="n"><a href="../../../vm_models.html#VMDataset">validmind.vm_models.VMDataset</a></span>,</span><span class="param">	<span class="n">param_grid</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">scoring</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></span><span class="return-annotation">):</span></span>
+        <span class="name">custom_recall</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">y_true</span>, </span><span class="param"><span class="n">y_pred_proba</span>, </span><span class="param"><span class="n">threshold</span><span class="o">=</span><span class="mf">0.5</span></span><span class="return-annotation">):</span></span>
+
+        
+    </div>
+    <a class="headerlink" href="#custom_recall"></a>
+    
+    
+
+                </section>
+                <section id="HyperParametersTuning">
+                    <div class="attr function">
+                    <div class="decorator">@tags(&#39;sklearn&#39;, &#39;model_performance&#39;)</div>
+        <div class="decorator">@tasks(&#39;clustering&#39;, &#39;classification&#39;)</div>
+
+        <span class="def">def</span>
+        <span class="name">HyperParametersTuning</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">model</span><span class="p">:</span> <span class="n"><a href="../../../vm_models.html#VMModel">validmind.vm_models.VMModel</a></span>,</span><span class="param">	<span class="n">dataset</span><span class="p">:</span> <span class="n"><a href="../../../vm_models.html#VMDataset">validmind.vm_models.VMDataset</a></span>,</span><span class="param">	<span class="n">param_grid</span><span class="p">:</span> <span class="nb">dict</span>,</span><span class="param">	<span class="n">scoring</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">thresholds</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">fit_params</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span></span><span class="return-annotation">):</span></span>
 
         
     </div>
     <a class="headerlink" href="#HyperParametersTuning"></a>
     
-            <div class="docstring"><p>Exerts exhaustive grid search to identify optimal hyperparameters for the model, improving performance.</p>
+            <div class="docstring"><p>Performs exhaustive grid search over specified parameter ranges to find optimal model configurations
+across different metrics and decision thresholds.</p>
 
-<h3 id="purpose">Purpose:</h3>
+<h3 id="purpose">Purpose</h3>
 
-<p>The "HyperParametersTuning" metric aims to find the optimal set of hyperparameters for a given model. The test is
-designed to enhance the performance of the model by determining the best configuration of hyperparameters. The
-parameters that are being optimized are defined by the parameter grid provided to the metric.</p>
+<p>The Hyperparameter Tuning test systematically explores the model's parameter space to identify optimal
+configurations. It supports multiple optimization metrics and decision thresholds, providing a comprehensive
+view of how different parameter combinations affect various aspects of model performance.</p>
 
-<h3 id="test-mechanism">Test Mechanism:</h3>
+<h3 id="test-mechanism">Test Mechanism</h3>
 
-<p>The HyperParametersTuning test employs a grid search mechanism using the GridSearchCV function from the
-scikit-learn library. The grid search algorithm systematically works through multiple combinations of parameter
-values, cross-validating to determine which combination gives the best model performance. The chosen model and the
-parameter grid passed for tuning are necessary inputs. Once the grid search is complete, the test caches and
-returns details of the best model and its associated parameters.</p>
+<p>The test uses scikit-learn's GridSearchCV to perform cross-validation for each parameter combination.
+For each specified threshold and optimization metric, it creates a scoring dictionary with
+threshold-adjusted metrics, performs grid search with cross-validation, records best parameters and
+corresponding scores, and combines results into a comparative table. This process is repeated for each
+optimization metric to provide a comprehensive view of model performance under different configurations.</p>
 
-<h3 id="signs-of-high-risk">Signs of High Risk:</h3>
+<h3 id="signs-of-high-risk">Signs of High Risk</h3>
 
 <ul>
-<li>The test raises a SkipTestError if the param_grid is not supplied, indicating a lack of specific parameters to
-optimize, which can be risky for certain model types reliant on parameter tuning.</li>
-<li>Poorly chosen scoring metrics that do not align well with the specific model or problem at hand could reflect
-potential risks or failures in achieving optimal performance.</li>
+<li>Large performance variations across different parameter combinations</li>
+<li>Significant discrepancies between different optimization metrics</li>
+<li>Best parameters at the edges of the parameter grid</li>
+<li>Unstable performance across different thresholds</li>
+<li>Overly complex model configurations (risk of overfitting)</li>
+<li>Very different optimal parameters for different metrics</li>
+<li>Cross-validation scores showing high variance</li>
+<li>Extreme parameter values in best configurations</li>
 </ul>
 
-<h3 id="strengths">Strengths:</h3>
+<h3 id="strengths">Strengths</h3>
 
 <ul>
-<li>Provides a comprehensive exploration mechanism to identify the best set of hyperparameters for the supplied
-model, thereby enhancing its performance.</li>
-<li>Implements GridSearchCV, simplifying and automating the time-consuming task of hyperparameter tuning.</li>
+<li>Comprehensive exploration of parameter space</li>
+<li>Supports multiple optimization metrics</li>
+<li>Allows threshold optimization</li>
+<li>Provides comparative view across different configurations</li>
+<li>Uses cross-validation for robust evaluation</li>
+<li>Helps understand trade-offs between different metrics</li>
+<li>Enables systematic parameter selection</li>
+<li>Supports both classification and clustering tasks</li>
 </ul>
 
-<h3 id="limitations">Limitations:</h3>
+<h3 id="limitations">Limitations</h3>
 
 <ul>
-<li>The grid search algorithm can be computationally expensive, especially with large datasets or complex models, and
-can be time-consuming as it tests all possible combinations within the specified parameter grid.</li>
-<li>The effectiveness of the tuning is heavily dependent on the quality of data and only accepts datasets with
-numerical or ordered categories.</li>
-<li>Assumes that the same set of hyperparameters is optimal for all problem sets, which may not be true in every
-scenario.</li>
-<li>There's a potential risk of overfitting the model if the training set is not representative of the data that the
-model will be applied to.</li>
+<li>Computationally expensive for large parameter grids</li>
+<li>May not find global optimum (limited to grid points)</li>
+<li>Cannot handle dependencies between parameters</li>
+<li>Memory intensive for large datasets</li>
+<li>Limited to scikit-learn compatible models</li>
+<li>Cross-validation splits may not preserve time series structure</li>
+<li>Grid search may miss optimal values between grid points</li>
+<li>Resource intensive for high-dimensional parameter spaces</li>
 </ul>
 </div>
 
