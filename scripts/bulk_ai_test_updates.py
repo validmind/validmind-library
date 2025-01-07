@@ -13,6 +13,7 @@ OPENAI_API_KEY=<your api key>
 """
 
 import os
+import subprocess
 
 import click
 import dotenv
@@ -135,6 +136,78 @@ For sections 4-6, the content should be a list of bullet points returned as a li
 """.strip()
 
 
+raw_data_prompt = """
+You are an expert Python engineer and data scientist with broad experience across many domains.
+ValidMind is a company that provides a Python SDK for building and running tests for the purposes of model risk management.
+You will be provided with the source code for a "test" that is run against an ML model or dataset.
+You will analyze the code to determine the details and implementation of the test.
+Then you will use the below example to implement changes to the test to make it use the new raw data mechanism offered by the ValidMind SDK.
+
+Example test without raw data:
+
+```
+... # existing code, imports, etc.
+from validmind import tags, tasks
+...
+
+def ExampleConfusionMatrix(model: VMModel, dataset: VMDataset):
+    y_pred = dataset.y_pred(model)
+    y_true = dataset.y.astype(y_pred.dtype)
+
+    labels = np.unique(y_true)
+    labels = sorted(labels.tolist())
+
+    cm = confusion_matrix(y_true, y_pred, labels=labels)
+
+    fig = ff.create_annotated_heatmap()
+    ..
+
+    return fig
+```
+
+Example test with raw data:
+
+```
+... # existing code, imports, etc.
+from validmind import tags, tasks, RawData
+...
+
+
+def ExampleConfusionMatrix(model: VMModel, dataset: VMDataset):
+
+    y_pred = dataset.y_pred(model)
+    y_true = dataset.y.astype(y_pred.dtype)
+
+    labels = np.unique(y_true)
+    labels = sorted(labels.tolist())
+
+    cm = confusion_matrix(y_true, y_pred, labels=labels)
+
+    fig = ff.create_annotated_heatmap()
+    ..
+
+    return fig, RawData(confusion_matrix=cm)
+```
+
+Notice that the test now returns a tuple of the figure and the raw data.
+Tests can return any number of objects (plots, tables, values, etc.) as part of a tuple or a single object.
+The new RawData object can be used to store any number of intermediate data objects that are used to generate the final output.
+The goal is to store these for later post-processing functions that may want to re-generate the final output in a different format.
+The RawData object is simply a class that can store any number of any type of objects using a key-value like interface where the key in the constructor is the name of the object and the value is the object itself.
+Also notice the import of the RawData object.
+
+You will return the updated test code (make sure to include all the existing imports, copyrights, comments, etc.).
+Return only the updated code and nothing else.
+Do not wrap the code in backticks, simply return valid Python code.
+If the test already uses the RawData object, simply return the original code without any changes and without backticks.
+
+Prefer dataframes over dictionaries or numpy arrays but don't force it if the test only uses dictionaries or some other format.
+Be intentional about the name of the key in the RawData object, it should be a short, descriptive name that is easy for developers to understand and use.
+Do not use vague names like "data", "results", "output", etc. Use something specific to the test and descriptive of the data being stored.
+Ideally, the raw data should end up containing anything needed to re-generate the final output (assuming that the original inputs and parameters are available).
+"""
+
+
 def add_description_to_test(path):
     """Generate a test description using gpt4
     You can switch to gpt3.5 if you don't have access but gpt4 should do a better job
@@ -189,7 +262,27 @@ def add_description_to_test(path):
 
 def add_raw_data_to_test(path):
     """Add raw data to a test file"""
-    pass
+    # get file contents from path
+    click.echo(f"> {path}")
+    with open(path, "r") as f:
+        file_contents = f.read()
+
+    response = client.chat.completions.create(
+        model=OPENAI_GPT_MODEL,
+        messages=[
+            {"role": "system", "content": raw_data_prompt},
+            {"role": "user", "content": f"```python\n{file_contents}```"},
+        ],
+    )
+
+    updated_file_contents = response.choices[0].message.content
+    # remove starting "```python" and ending "```"
+    updated_file_contents = (
+        updated_file_contents.lstrip("```python").rstrip("```").strip()
+    )
+
+    with open(path, "w") as f:
+        f.write(updated_file_contents)
 
 
 def _is_test_file(path):
@@ -219,7 +312,7 @@ def main(action, path):
             raise ValueError(f"File {path} is not a test file")
 
     elif os.path.isdir(path):
-        for root, dirs, files in os.walk(path):
+        for root, _, files in os.walk(path):
             for file in files:
                 if _is_test_file(file):
                     tests_to_process.append(os.path.join(root, file))
@@ -233,6 +326,9 @@ def main(action, path):
 
     for file in tests_to_process:
         func(file)
+
+    # run black on the tests directory
+    subprocess.run(["poetry", "run", "black", "validmind/tests"])
 
 
 if __name__ == "__main__":
