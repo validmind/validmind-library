@@ -2,15 +2,17 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-import matplotlib.pyplot as plt
-import seaborn as sns
-
+import plotly.graph_objects as go
+import plotly.figure_factory as ff
+import pandas as pd
+import numpy as np
+from scipy.stats import skew, kurtosis
 from validmind import tags, tasks
 
 
 @tags("visualization")
 @tasks("monitoring")
-def TargetPredictionDistributionPlot(datasets, model):
+def TargetPredictionDistributionPlot(datasets, model, drift_pct_threshold=20):
     """
     Assesses differences in prediction distributions between a reference dataset and a monitoring dataset to identify
     potential data drift.
@@ -45,23 +47,99 @@ def TargetPredictionDistributionPlot(datasets, model):
     - Less effective if the differences in distributions are subtle and not easily visible.
     """
 
+    # Get predictions
     pred_ref = datasets[0].y_prob_df(model)
     pred_ref.columns = ["Reference Prediction"]
     pred_monitor = datasets[1].y_prob_df(model)
     pred_monitor.columns = ["Monitoring Prediction"]
 
-    fig = plt.figure()
-    plot = sns.kdeplot(
-        pred_ref["Reference Prediction"], fill=True, label="Reference Prediction"
+    # Calculate distribution moments
+    moments = pd.DataFrame(
+        {
+            "Statistic": ["Mean", "Std", "Skewness", "Kurtosis"],
+            "Reference": [
+                pred_ref["Reference Prediction"].mean(),
+                pred_ref["Reference Prediction"].std(),
+                skew(pred_ref["Reference Prediction"]),
+                kurtosis(pred_ref["Reference Prediction"]),
+            ],
+            "Monitoring": [
+                pred_monitor["Monitoring Prediction"].mean(),
+                pred_monitor["Monitoring Prediction"].std(),
+                skew(pred_monitor["Monitoring Prediction"]),
+                kurtosis(pred_monitor["Monitoring Prediction"]),
+            ],
+        }
     )
-    plot = sns.kdeplot(
-        pred_monitor["Monitoring Prediction"], fill=True, label="Monitor Prediction"
-    )
-    plot.set(
-        xlabel="Prediction", title="Distribution of Reference & Monitor Predictions"
-    )
-    plot.legend()
 
-    plt.close()
+    # Calculate drift percentage with direction
+    moments["Drift (%)"] = (
+        (moments["Monitoring"] - moments["Reference"])
+        / moments["Reference"].abs()
+        * 100
+    ).round(2)
 
-    return fig
+    # Add Pass/Fail column based on absolute drift
+    moments["Pass/Fail"] = (
+        moments["Drift (%)"]
+        .abs()
+        .apply(lambda x: "Pass" if x < drift_pct_threshold else "Fail")
+    )
+
+    # Set Statistic as index but keep it as a column
+    moments = moments.set_index("Statistic", drop=False)
+
+    # Create KDE for both distributions
+    ref_kde = ff.create_distplot(
+        [pred_ref["Reference Prediction"].values],
+        ["Reference"],
+        show_hist=False,
+        show_rug=False,
+    )
+    monitor_kde = ff.create_distplot(
+        [pred_monitor["Monitoring Prediction"].values],
+        ["Monitoring"],
+        show_hist=False,
+        show_rug=False,
+    )
+
+    # Create new figure
+    fig = go.Figure()
+
+    # Add reference distribution
+    fig.add_trace(
+        go.Scatter(
+            x=ref_kde.data[0].x,
+            y=ref_kde.data[0].y,
+            fill="tozeroy",
+            name="Reference Prediction",
+            line=dict(color="blue", width=2),
+            opacity=0.6,
+        )
+    )
+
+    # Add monitoring distribution
+    fig.add_trace(
+        go.Scatter(
+            x=monitor_kde.data[0].x,
+            y=monitor_kde.data[0].y,
+            fill="tozeroy",
+            name="Monitor Prediction",
+            line=dict(color="red", width=2),
+            opacity=0.6,
+        )
+    )
+
+    # Update layout
+    fig.update_layout(
+        title="Distribution of Reference & Monitor Predictions",
+        xaxis_title="Prediction",
+        yaxis_title="Density",
+        showlegend=True,
+        template="plotly_white",
+        hovermode="x unified",
+    )
+
+    pass_fail_bool = (moments["Pass/Fail"] == "Pass").all()
+
+    return ({"Distribution Moments": moments}, fig, pass_fail_bool)
