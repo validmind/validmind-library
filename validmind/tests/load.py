@@ -191,7 +191,7 @@ def list_tags():
     return list(unique_tags)
 
 
-def list_tasks_and_tags():
+def list_tasks_and_tags(as_json=False):
     """
     List all task types and their associated tags, with one row per task type and
     all tags for a task type in one row.
@@ -204,6 +204,9 @@ def list_tasks_and_tags():
     for test in _load_tests(list_tests(pretty=False)).values():
         for task in test.__tasks__:
             task_tags_dict.setdefault(task, set()).update(test.__tags__)
+
+    if as_json:
+        return task_tags_dict
 
     return format_dataframe(
         pd.DataFrame(
