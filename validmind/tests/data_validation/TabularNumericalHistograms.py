@@ -4,7 +4,7 @@
 
 import plotly.graph_objs as go
 
-from validmind import RawData, tags, tasks
+from validmind import tags, tasks
 from validmind.vm_models import VMDataset
 
 
