@@ -5,7 +5,7 @@
 from statsmodels.stats.diagnostic import lilliefors
 
 from validmind import tags, tasks
-from validmind.vm_models import VMDataset, VMModel
+from validmind.vm_models import VMDataset
 
 
 @tags("tabular_data", "data_distribution", "statistical_test", "statsmodels")

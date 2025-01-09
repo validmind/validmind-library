@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import roc_auc_score, roc_curve
 
-from validmind import RawData, tags, tasks
+from validmind import tags, tasks
 
 
 @tags("model_performance")
