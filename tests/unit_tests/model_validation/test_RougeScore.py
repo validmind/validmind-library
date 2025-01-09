@@ -83,7 +83,7 @@ class TestRougeScore(unittest.TestCase):
 
     def test_score_ranges(self):
         """Test if ROUGE scores are within valid range (0 to 1)."""
-        result_df, *figures, _ = RougeScore(self.vm_dataset, self.vm_model)
+        result_df, *_ = RougeScore(self.vm_dataset, self.vm_model)
 
         score_columns = ["Mean Score", "Median Score", "Max Score", "Min Score"]
         for col in score_columns:
@@ -91,7 +91,7 @@ class TestRougeScore(unittest.TestCase):
 
     def test_metrics_present(self):
         """Test if all expected metrics are present."""
-        result_df, *figures, _ = RougeScore(self.vm_dataset, self.vm_model)
+        result_df, *_ = RougeScore(self.vm_dataset, self.vm_model)
 
         expected_metrics = ["Precision", "Recall", "F1 Score"]
         actual_metrics = result_df["Metric"].tolist()
@@ -136,7 +136,7 @@ class TestRougeScore(unittest.TestCase):
             self.vm_model, prediction_column="predictions"
         )
 
-        result_df, *figures, _ = RougeScore(vm_dataset_identical, self.vm_model)
+        result_df, *_ = RougeScore(vm_dataset_identical, self.vm_model)
 
         # For identical texts, F1 scores should be 1.0 or very close to 1.0
         f1_score = result_df[result_df["Metric"] == "F1 Score"]["Mean Score"].iloc[0]
@@ -151,7 +151,7 @@ class TestRougeScore(unittest.TestCase):
 
     def test_custom_metric(self):
         """Test if custom ROUGE metric parameter works."""
-        result_df, *figures, _ = RougeScore(
+        result_df, *figures, raw_data = RougeScore(
             self.vm_dataset, self.vm_model, metric="rouge-2"
         )
 
@@ -160,5 +160,4 @@ class TestRougeScore(unittest.TestCase):
         self.assertTrue(all(isinstance(fig, go.Figure) for fig in figures))
 
         # Check raw data instance
-        raw_data = raw_data
         self.assertIsInstance(raw_data, RawData)
