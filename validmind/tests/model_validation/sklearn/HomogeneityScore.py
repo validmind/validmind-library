@@ -4,7 +4,7 @@
 
 from sklearn import metrics
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 
 
@@ -50,11 +50,13 @@ def HomogeneityScore(dataset: VMDataset, model: VMModel):
     - The score does not address the actual number of clusters formed, or the evenness of cluster sizes. It only checks
     the homogeneity within the given clusters created by the model.
     """
-    return [
-        {
-            "Homogeneity Score": metrics.homogeneity_score(
-                labels_true=dataset.y,
-                labels_pred=dataset.y_pred(model),
-            )
-        }
-    ]
+
+    homogeneity_score = metrics.homogeneity_score(
+        labels_true=dataset.y,
+        labels_pred=dataset.y_pred(model),
+    )
+
+    return (
+        [{"Homogeneity Score": homogeneity_score}],
+        RawData(labels_true=dataset.y, labels_pred=dataset.y_pred(model)),
+    )

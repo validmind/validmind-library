@@ -4,7 +4,7 @@
 
 import plotly.graph_objects as go
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset
 
 
@@ -106,13 +106,16 @@ def MissingValuesBarPlot(
         line=dict(color="red", dash="dash"),
     )
 
-    return go.Figure(
-        data=[trace_below_threshold, trace_above_threshold, threshold_line],
-        layout=go.Layout(
-            title="Missing Values",
-            yaxis=dict(title="Columns"),
-            xaxis=dict(title="Missing Value Percentage (%)", range=[0, 100]),
-            barmode="stack",
-            height=fig_height,
+    return (
+        go.Figure(
+            data=[trace_below_threshold, trace_above_threshold, threshold_line],
+            layout=go.Layout(
+                title="Missing Values",
+                yaxis=dict(title="Columns"),
+                xaxis=dict(title="Missing Value Percentage (%)", range=[0, 100]),
+                barmode="stack",
+                height=fig_height,
+            ),
         ),
+        RawData(missing_percentages=missing_percentages_sorted),
     )

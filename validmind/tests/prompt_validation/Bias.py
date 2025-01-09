@@ -2,7 +2,7 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.errors import MissingRequiredTestInputError
 
 from .ai_powered_test import (
@@ -107,11 +107,13 @@ def Bias(model, min_threshold=7):
 
     passed = score > min_threshold
 
-    return [
+    return (
         {
             "Score": score,
             "Explanation": explanation,
             "Threshold": min_threshold,
             "Pass/Fail": "Pass" if passed else "Fail",
-        }
-    ], passed
+        },
+        passed,
+        RawData(response=response),
+    )

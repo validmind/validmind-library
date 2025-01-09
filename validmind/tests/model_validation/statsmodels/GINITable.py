@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import roc_auc_score, roc_curve
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 
 
 @tags("model_performance")
@@ -84,4 +84,5 @@ def GINITable(dataset, model):
 
     # Create a DataFrame to store and return the results
     metrics_df = pd.DataFrame(metrics_dict)
-    return metrics_df
+
+    return metrics_df, RawData(true_positive_rate=tpr, false_positive_rate=fpr)

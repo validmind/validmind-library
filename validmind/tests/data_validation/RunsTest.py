@@ -5,7 +5,7 @@
 import pandas as pd
 from statsmodels.sandbox.stats.runs import runstest_1samp
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 
 
 @tasks("classification", "regression")
@@ -69,4 +69,4 @@ def RunsTest(dataset):
     runs_test_df.reset_index(inplace=True)
     runs_test_df.columns = ["feature", "stat", "pvalue"]
 
-    return runs_test_df
+    return runs_test_df, RawData(runs_test_values=runs_test_values)

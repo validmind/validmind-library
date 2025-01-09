@@ -5,7 +5,7 @@
 import pandas as pd
 import scorecardpy as sc
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.errors import SkipTestError
 from validmind.vm_models import VMDataset
 
@@ -61,12 +61,14 @@ def WOEBinTable(dataset: VMDataset, breaks_adj: list = None):
     except Exception as e:
         raise SkipTestError(f"Error during binning: {e}")
 
+    result_table = (
+        pd.concat(bins.values(), keys=bins.keys())
+        .reset_index()
+        .drop(columns=["variable"])
+        .rename(columns={"level_0": "variable"})
+        .assign(bin_number=lambda x: x.groupby("variable").cumcount())
+    )
+
     return {
-        "Weight of Evidence (WoE) and Information Value (IV)": (
-            pd.concat(bins.values(), keys=bins.keys())
-            .reset_index()
-            .drop(columns=["variable"])
-            .rename(columns={"level_0": "variable"})
-            .assign(bin_number=lambda x: x.groupby("variable").cumcount())
-        )
-    }
+        "Weight of Evidence (WoE) and Information Value (IV)": result_table
+    }, RawData(bins=bins)

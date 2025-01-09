@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 
 
 @tags("visualization")
@@ -109,7 +109,11 @@ def FeatureDrift(
 
     final_psi = pd.DataFrame(psi_table)
 
-    return (final_psi, *save_fig)
+    return (
+        final_psi,
+        *save_fig,
+        RawData(psi_quantiles=PSI_QUANTILES, psi_bucket_frac=PSI_BUCKET_FRAC),
+    )
 
 
 def get_psi_buckets(x_test_df, x_train_df, feature_columns, bins, PSI_QUANTILES):

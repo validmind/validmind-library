@@ -2,7 +2,7 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset
 
 
@@ -71,4 +71,8 @@ def HighPearsonCorrelation(
     pairs.sort(key=lambda x: abs(x["Coefficient"]), reverse=True)
     pairs = pairs[:top_n_correlations]
 
-    return pairs, all(p["Pass/Fail"] == "Pass" for p in pairs)
+    return (
+        pairs,
+        all(p["Pass/Fail"] == "Pass" for p in pairs),
+        RawData(correlation_matrix=corr),
+    )

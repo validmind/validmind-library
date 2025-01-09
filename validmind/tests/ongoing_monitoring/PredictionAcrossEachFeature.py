@@ -5,7 +5,7 @@
 
 import matplotlib.pyplot as plt
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 
 
 @tags("visualization")
@@ -56,7 +56,7 @@ def PredictionAcrossEachFeature(datasets, model):
     df_reference = datasets[0]._df
     df_monitoring = datasets[1]._df
 
-    figures_to_save = []
+    figures = []
     for column in df_reference:
         prediction_prob_column = f"{model.input_id}_probabilities"
         prediction_column = f"{model.input_id}_prediction"
@@ -76,7 +76,7 @@ def PredictionAcrossEachFeature(datasets, model):
 
             ax2.set_title("Monitoring")
             ax2.set_xlabel(column)
-            figures_to_save.append(fig)
+            figures.append(fig)
             plt.close()
 
-    return tuple(figures_to_save)
+    return (*figures, RawData(df_reference=df_reference, df_monitoring=df_monitoring))

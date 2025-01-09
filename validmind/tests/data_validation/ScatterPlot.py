@@ -5,7 +5,7 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 
 
 @tags("tabular_data", "visualization")
@@ -55,8 +55,8 @@ def ScatterPlot(dataset):
     - Assumes that the dataset can fit into the computer's memory, which might not be valid for extremely large
     datasets.
     """
-
     g = sns.pairplot(data=dataset.df, diag_kind="kde")
+
     for ax in g.axes.flatten():
         # rotate x axis labels
         ax.set_xlabel(ax.get_xlabel(), rotation=45)
@@ -64,12 +64,10 @@ def ScatterPlot(dataset):
         ax.set_ylabel(ax.get_ylabel(), rotation=45)
         # set y labels alignment
         ax.yaxis.get_label().set_horizontalalignment("right")
+
     # Get the current figure
     fig = plt.gcf()
 
-    figures = []
-    figures.append(fig)
-
     plt.close("all")
 
-    return tuple(figures)
+    return fig, RawData(dataset_dataframe=dataset.df)

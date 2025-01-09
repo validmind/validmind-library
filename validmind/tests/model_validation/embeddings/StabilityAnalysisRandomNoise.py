@@ -5,7 +5,7 @@
 import random
 import string
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 
 from .utils import create_stability_analysis_result
@@ -145,8 +145,10 @@ def StabilityAnalysisRandomNoise(
         perturb_data
     )
 
-    return create_stability_analysis_result(
+    result = create_stability_analysis_result(
         dataset.y_pred(model),
         model.predict(perturbed_df),
         mean_similarity_threshold,
     )
+
+    return result, RawData(perturbed_text_data=perturbed_df)

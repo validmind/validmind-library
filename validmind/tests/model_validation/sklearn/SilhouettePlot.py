@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.metrics import silhouette_samples, silhouette_score
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 
 
@@ -105,8 +105,10 @@ def SilhouettePlot(model: VMModel, dataset: VMDataset):
 
     plt.close()
 
-    return [
+    return (
         {
             "Silhouette Score": silhouette_avg,
         },
-    ], fig
+        fig,
+        RawData(sample_silhouette_values=sample_silhouette_values),
+    )

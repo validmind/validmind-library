@@ -6,7 +6,7 @@ import numpy as np
 import plotly.graph_objects as go
 from matplotlib import cm
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 
 
 @tags("visualization", "credit_risk")
@@ -64,7 +64,7 @@ def CumulativePredictionProbabilities(dataset, model, title="Cumulative Probabil
 
     fig = _plot_cumulative_prob(df, dataset.target_column, title)
 
-    return fig
+    return fig, RawData(probabilities_df=df)
 
 
 def _plot_cumulative_prob(df, target_col, title):

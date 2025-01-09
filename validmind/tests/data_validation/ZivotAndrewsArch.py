@@ -6,7 +6,7 @@ import pandas as pd
 from arch.unitroot import ZivotAndrews
 from numpy.linalg import LinAlgError
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.errors import SkipTestError
 from validmind.logging import get_logger
 from validmind.vm_models import VMDataset
@@ -65,6 +65,7 @@ def ZivotAndrewsArch(dataset: VMDataset):
     df = df.apply(pd.to_numeric, errors="coerce")
 
     za_values = []
+    raw_data = {}
 
     for col in df.columns:
         try:
@@ -83,4 +84,14 @@ def ZivotAndrewsArch(dataset: VMDataset):
             }
         )
 
-    return {"Zivot-Andrews Test Results": za_values}
+        # Store intermediate raw data for each column
+        raw_data[col] = {
+            "stat": za.stat,
+            "pvalue": za.pvalue,
+            "usedlag": za.lags,
+            "nobs": za.nobs,
+        }
+
+    return {"Zivot-Andrews Test Results": za_values}, RawData(
+        zivot_andrews_results=raw_data
+    )

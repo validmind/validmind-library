@@ -5,7 +5,7 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.errors import SkipTestError
 from validmind.logging import get_logger
 from validmind.vm_models import VMModel
@@ -90,4 +90,6 @@ def RegressionFeatureSignificance(
 
     plt.close()
 
-    return fig
+    raw_data = RawData(coefficients=coefficients, pvalues=pvalues)
+
+    return fig, raw_data

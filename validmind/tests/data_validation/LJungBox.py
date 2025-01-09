@@ -5,7 +5,7 @@
 import pandas as pd
 from statsmodels.stats.diagnostic import acorr_ljungbox
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 
 
 @tasks("regression")
@@ -52,15 +52,17 @@ def LJungBox(dataset):
     df = dataset.df
 
     ljung_box_values = {}
+    raw_data = {}
     for col in df.columns:
         lb_results = acorr_ljungbox(df[col].values, return_df=True)
         ljung_box_values[col] = {
             "stat": lb_results.iloc[0]["lb_stat"],
             "pvalue": lb_results.iloc[0]["lb_pvalue"],
         }
+        raw_data[col] = lb_results
 
     ljung_box_df = pd.DataFrame.from_dict(ljung_box_values, orient="index")
     ljung_box_df.reset_index(inplace=True)
     ljung_box_df.columns = ["column", "stat", "pvalue"]
 
-    return ljung_box_df
+    return ljung_box_df, RawData(ljung_box_raw=raw_data)

@@ -8,7 +8,7 @@ import sys
 import matplotlib.pyplot as plt
 import pandas as pd
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.errors import MissingDependencyError
 from validmind.logging import get_logger
 
@@ -106,6 +106,7 @@ def ProtectedClassesThresholdOptimizer(
     return (
         {"DPR and EOR Table": fairness_metrics.reset_index()},
         fig,
+        RawData(threshold_optimizer=threshold_optimizer, y_pred_opt=y_pred_opt),
     )
 
 

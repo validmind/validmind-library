@@ -5,7 +5,7 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 
 
 @tags("visualization")
@@ -64,4 +64,6 @@ def TargetPredictionDistributionPlot(datasets, model):
 
     plt.close()
 
-    return fig
+    return fig, RawData(
+        reference_predictions=pred_ref, monitoring_predictions=pred_monitor
+    )

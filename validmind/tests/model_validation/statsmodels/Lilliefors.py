@@ -4,7 +4,7 @@
 
 from statsmodels.stats.diagnostic import lilliefors
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 
 
@@ -70,4 +70,4 @@ def Lilliefors(model: VMModel, dataset: VMDataset):
             }
         )
 
-    return table
+    return table, RawData(test_statistics=table)

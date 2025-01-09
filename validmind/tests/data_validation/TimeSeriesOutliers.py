@@ -5,7 +5,7 @@
 import pandas as pd
 import plotly.graph_objects as go
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.errors import SkipTestError
 from validmind.vm_models import VMDataset
 
@@ -115,4 +115,5 @@ def TimeSeriesOutliers(dataset: VMDataset, zscore_threshold: int = 3):
         outlier_df.sort_values(["Column", "Date"]),
         figures,
         len(outlier_df) == 0,
+        RawData(z_scores=z_scores),
     )

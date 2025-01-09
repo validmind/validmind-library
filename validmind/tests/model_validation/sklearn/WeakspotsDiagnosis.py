@@ -9,6 +9,7 @@ import pandas as pd
 import seaborn as sns
 from sklearn import metrics
 
+from validmind import RawData
 from validmind.tests import tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 
@@ -294,4 +295,8 @@ def WeakspotsDiagnosis(
         ).sort_values(["Feature", "Dataset"]),
         *figures,
         passed,
+        RawData(
+            metrics_results_training=pd.DataFrame(results_1),
+            metrics_results_test=pd.DataFrame(results_2),
+        ),
     )

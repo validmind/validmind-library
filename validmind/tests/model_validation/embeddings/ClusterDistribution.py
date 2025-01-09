@@ -5,7 +5,7 @@
 import plotly.express as px
 from sklearn.cluster import KMeans
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 
 
@@ -52,8 +52,14 @@ def ClusterDistribution(model: VMModel, dataset: VMDataset, num_clusters: int = 
     - Uses the KMeans clustering algorithm, which assumes that clusters are convex and isotropic, and may not work as
     intended if the true clusters in the data are not of this shape.
     """
-    return px.histogram(
-        KMeans(n_clusters=num_clusters).fit(dataset.y_pred(model)).labels_,
+    embeddings = dataset.y_pred(model)
+    kmeans = KMeans(n_clusters=num_clusters).fit(embeddings)
+    labels = kmeans.labels_
+
+    fig = px.histogram(
+        labels,
         nbins=num_clusters,
         title="Embeddings Cluster Distribution",
     )
+
+    return fig, RawData(labels=labels)

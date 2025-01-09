@@ -13,7 +13,7 @@ import pandas as pd
 import plotly.graph_objects as go
 from nltk.corpus import stopwords
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset
 
 
@@ -124,4 +124,5 @@ def StopWords(
         },
         fig,
         passed,
+        RawData(stop_word_frequencies=dic, total_words=total_words),
     )

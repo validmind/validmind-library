@@ -4,7 +4,7 @@
 
 from transformers import MarianMTModel, MarianTokenizer
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.logging import get_logger
 from validmind.vm_models import VMDataset, VMModel
 
@@ -128,8 +128,10 @@ def StabilityAnalysisTranslation(
         perturb_data
     )
 
-    return create_stability_analysis_result(
+    result = create_stability_analysis_result(
         dataset.y_pred(model),
         model.predict(perturbed_df),
         mean_similarity_threshold,
     )
+
+    return result, RawData(original_data=original_df, perturbed_data=perturbed_df)

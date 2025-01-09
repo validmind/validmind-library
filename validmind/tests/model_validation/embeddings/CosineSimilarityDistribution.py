@@ -5,7 +5,7 @@
 import plotly.express as px
 from sklearn.metrics.pairwise import cosine_similarity
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 
 
@@ -52,9 +52,11 @@ def CosineSimilarityDistribution(dataset: VMDataset, model: VMModel):
     - The output is sensitive to the choice of bin number for the histogram. Different bin numbers could give a
     slightly altered perspective on the distribution of cosine similarity.
     """
+    similarity_scores = cosine_similarity(dataset.y_pred(model)).flatten()
+
     return px.histogram(
-        x=cosine_similarity(dataset.y_pred(model)).flatten(),
+        x=similarity_scores,
         nbins=100,
         title="Cosine Similarity Distribution",
         labels={"x": "Cosine Similarity"},
-    )
+    ), RawData(similarity_scores=similarity_scores)

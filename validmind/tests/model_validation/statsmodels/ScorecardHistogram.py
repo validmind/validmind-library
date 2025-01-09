@@ -2,10 +2,11 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+import pandas as pd
 import plotly.graph_objects as go
 from matplotlib import cm
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 
 
 @tags("visualization", "credit_risk", "logistic_regression")
@@ -66,7 +67,7 @@ def ScorecardHistogram(dataset, title="Histogram of Scores", score_column="score
 
     fig = _plot_score_histogram(df, score_column, dataset.target_column, title)
 
-    return fig
+    return fig, RawData(score_data=df[[score_column, dataset.target_column]])
 
 
 def _plot_score_histogram(df, score_col, target_col, title):

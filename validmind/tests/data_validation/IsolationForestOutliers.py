@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.ensemble import IsolationForest
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset
 
 
@@ -93,4 +93,4 @@ def IsolationForestOutliers(
 
         plt.close()
 
-    return tuple(figures)
+    return tuple(figures + [RawData(predictions=y_pred)])

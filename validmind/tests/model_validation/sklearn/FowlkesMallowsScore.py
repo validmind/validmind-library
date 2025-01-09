@@ -52,11 +52,11 @@ def FowlkesMallowsScore(dataset: VMDataset, model: VMModel):
     - It does not handle mismatching numbers of clusters between the true and predicted labels. As such, it may return
     misleading results if the predicted labels suggest a different number of clusters than what is in the true labels.
     """
-    return [
-        {
-            "Fowlkes-Mallows score": metrics.fowlkes_mallows_score(
-                labels_true=dataset.y,
-                labels_pred=dataset.y_pred(model),
-            )
-        }
-    ]
+    score = metrics.fowlkes_mallows_score(
+        labels_true=dataset.y,
+        labels_pred=dataset.y_pred(model),
+    )
+
+    return [{"Fowlkes-Mallows score": score}], RawData(
+        true_labels=dataset.y, predicted_labels=dataset.y_pred(model)
+    )

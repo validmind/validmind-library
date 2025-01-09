@@ -6,7 +6,7 @@ import pandas as pd
 import plotly.graph_objects as go
 from scipy.stats import kstest
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 
 
 @tags("regression")
@@ -102,4 +102,4 @@ def ModelPredictionResiduals(
     # Create a summary DataFrame for the KS normality test results
     summary_df = pd.DataFrame([summary])
 
-    return (summary_df, *figures)
+    return (summary_df, *figures, RawData(residuals=residuals))

@@ -6,7 +6,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 
 
 @tags("visualization")
@@ -98,4 +98,9 @@ def PredictionCorrelation(datasets, model):
     corr_final = corr_final[
         ["Features", "Reference Predictions", "Monitoring Predictions"]
     ]
-    return ({"Correlation Pair Table": corr_final}, fig)
+
+    return (
+        {"Correlation Pair Table": corr_final},
+        fig,
+        RawData(reference_corr=df_corr, monitoring_corr=df_corr2),
+    )

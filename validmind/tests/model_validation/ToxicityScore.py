@@ -6,7 +6,7 @@ import evaluate
 import pandas as pd
 import plotly.graph_objects as go
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 
 
 @tags("nlp", "text_data", "visualization")
@@ -139,4 +139,12 @@ def ToxicityScore(dataset, model):
         ]
     ]
 
-    return (result_df, *tuple(figures))
+    return (
+        result_df,
+        *tuple(figures),
+        RawData(
+            input_toxicity=input_toxicity,
+            true_toxicity=true_toxicity,
+            pred_toxicity=pred_toxicity,
+        ),
+    )

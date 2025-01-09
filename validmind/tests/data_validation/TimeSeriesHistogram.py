@@ -5,7 +5,7 @@
 import pandas as pd
 import plotly.express as px
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.logging import get_logger
 
 logger = get_logger(__name__)
@@ -64,6 +64,7 @@ def TimeSeriesHistogram(dataset, nbins=30):
         raise ValueError("Provided 'columns' must exist in the dataset")
 
     figures = []
+    data_without_na = {}
     for col in columns:
         # Check for missing values and log if any are found
         missing_count = df[col].isna().sum()
@@ -74,6 +75,7 @@ def TimeSeriesHistogram(dataset, nbins=30):
 
         # Drop missing values for the current column
         valid_data = df[~df[col].isna()]
+        data_without_na[col] = valid_data
 
         fig = px.histogram(
             valid_data,
@@ -96,4 +98,4 @@ def TimeSeriesHistogram(dataset, nbins=30):
         )
         figures.append(fig)
 
-    return tuple(figures)
+    return (*figures, RawData(data_without_na=data_without_na))

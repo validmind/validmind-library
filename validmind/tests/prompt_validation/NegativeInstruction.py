@@ -2,7 +2,7 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.errors import MissingRequiredTestInputError
 
 from .ai_powered_test import (
@@ -115,4 +115,4 @@ def NegativeInstruction(model, min_threshold=7):
         }
     ]
 
-    return result, passed
+    return result, passed, RawData(model_response=response)
