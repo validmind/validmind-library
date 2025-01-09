@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import validmind as vm
 from validmind.tests.data_validation.KPSS import KPSS
+from validmind import RawData
 
 
 class TestKPSS(unittest.TestCase):
@@ -33,7 +34,7 @@ class TestKPSS(unittest.TestCase):
         )
 
     def test_kpss_structure(self):
-        result = KPSS(self.vm_dataset)
+        result, raw_data = KPSS(self.vm_dataset)
 
         # Check basic structure
         self.assertIsInstance(result, dict)
@@ -50,8 +51,11 @@ class TestKPSS(unittest.TestCase):
             self.assertIn("usedlag", column_result)
             self.assertIn("critical_values", column_result)
 
+        # Check raw data instance
+        self.assertIsInstance(raw_data, RawData)
+
     def test_kpss_results(self):
-        result = KPSS(self.vm_dataset)
+        result, _ = KPSS(self.vm_dataset)
         kpss_results = result["KPSS Test Results"]
 
         # Get results for each series
@@ -74,7 +78,7 @@ class TestKPSS(unittest.TestCase):
         self.assertLess(stationary_result["stat"], non_stationary_result["stat"])
 
     def test_critical_values(self):
-        result = KPSS(self.vm_dataset)
+        result, _ = KPSS(self.vm_dataset)
         kpss_results = result["KPSS Test Results"]
 
         for column_result in kpss_results:

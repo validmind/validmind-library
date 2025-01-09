@@ -56,15 +56,16 @@ class TestPredictionProbabilitiesHistogram(unittest.TestCase):
         # Assign predictions to the dataset
         self.vm_dataset.assign_predictions(self.vm_model)
 
-    def test_returns_figure(self):
+    def test_returns_figure_and_raw_data(self):
         # Run the function
         result = PredictionProbabilitiesHistogram(self.vm_dataset, self.vm_model)
 
-        # Check if result is a Plotly Figure
-        self.assertIsInstance(result, go.Figure)
+        # Check if result contains a Plotly Figure and RawData
+        self.assertIsInstance(result[0], go.Figure)
+        self.assertIsInstance(result[1], vm.RawData)
 
         # Check if figure has traces
-        self.assertGreater(len(result.data), 0)
+        self.assertGreater(len(result[0].data), 0)
 
     def test_perfect_separation(self):
         # Create a dataset with perfect class separation
@@ -101,12 +102,12 @@ class TestPredictionProbabilitiesHistogram(unittest.TestCase):
         result = PredictionProbabilitiesHistogram(vm_perfect_dataset, vm_perfect_model)
 
         # Check if there are exactly two traces (one for each class)
-        self.assertEqual(len(result.data), 2)
+        self.assertEqual(len(result[0].data), 2)
 
     def test_probability_ranges(self):
         result = PredictionProbabilitiesHistogram(self.vm_dataset, self.vm_model)
 
         # Check if probabilities are within [0, 1] range
-        for trace in result.data:
+        for trace in result[0].data:
             x_values = trace.x
             self.assertTrue(all(0 <= x <= 1 for x in x_values))

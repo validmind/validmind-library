@@ -4,6 +4,7 @@ import numpy as np
 import plotly.graph_objects as go
 import validmind as vm
 from validmind.tests.data_validation.TimeSeriesHistogram import TimeSeriesHistogram
+from validmind import RawData
 
 
 class TestTimeSeriesHistogram(unittest.TestCase):
@@ -43,19 +44,22 @@ class TestTimeSeriesHistogram(unittest.TestCase):
             __log=False,
         )
 
-    def test_returns_tuple_of_figures(self):
+    def test_returns_tuple_of_figures_and_raw_data(self):
         # Run the function
         result = TimeSeriesHistogram(self.vm_dataset)
 
         # Check if result is a tuple
         self.assertIsInstance(result, tuple)
 
-        # Check if all elements in the tuple are Plotly Figures
-        for fig in result:
+        # Check if all elements except the last one in the tuple are Plotly Figures
+        for fig in result[:-1]:
             self.assertIsInstance(fig, go.Figure)
 
-        # Should have one histogram per column
-        self.assertEqual(len(result), len(self.df.columns))
+        # The last element should be RawData
+        self.assertIsInstance(result[-1], RawData)
+
+        # Should have one histogram per column plus one RawData object
+        self.assertEqual(len(result), len(self.df.columns) + 1)
 
     def test_histogram_properties(self):
         result = TimeSeriesHistogram(self.vm_dataset)

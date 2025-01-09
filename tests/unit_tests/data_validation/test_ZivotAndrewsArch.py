@@ -4,6 +4,7 @@ import numpy as np
 import validmind as vm
 from validmind.errors import SkipTestError
 from validmind.tests.data_validation.ZivotAndrewsArch import ZivotAndrewsArch
+from validmind import RawData
 
 
 class TestZivotAndrewsArch(unittest.TestCase):
@@ -39,7 +40,7 @@ class TestZivotAndrewsArch(unittest.TestCase):
         )
 
     def test_zivot_andrews(self):
-        result = ZivotAndrewsArch(self.vm_dataset)
+        result, raw_data = ZivotAndrewsArch(self.vm_dataset)
 
         # Check return type and structure
         self.assertIsInstance(result, dict)
@@ -55,6 +56,9 @@ class TestZivotAndrewsArch(unittest.TestCase):
         for value in za_values:
             for field in required_fields:
                 self.assertIn(field, value)
+
+        # Check raw data
+        self.assertIsInstance(raw_data, RawData)
 
     def test_no_datetime_index(self):
         # Should raise SkipTestError when no datetime index present

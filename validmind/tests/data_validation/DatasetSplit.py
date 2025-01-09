@@ -4,8 +4,8 @@
 
 from typing import List
 
-from validmind import tags, tasks
-from validmind.vm_models import RawData, VMDataset
+from validmind import RawData, tags, tasks
+from validmind.vm_models import VMDataset
 
 DATASET_LABELS = {
     "train_ds": "Training",

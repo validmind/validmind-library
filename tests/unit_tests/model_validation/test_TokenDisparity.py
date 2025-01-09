@@ -66,8 +66,11 @@ class TestTokenDisparity(unittest.TestCase):
         self.assertIsInstance(result, tuple)
         self.assertIsInstance(result[0], pd.DataFrame)
 
+        # Check raw data is an instance of RawData
+        self.assertIsInstance(result[-1], vm.RawData)
+
         # Check all figures are Plotly figures
-        for fig in result[1:]:
+        for fig in result[1:-1]:
             self.assertIsInstance(fig, go.Figure)
 
     def test_results_dataframe(self):

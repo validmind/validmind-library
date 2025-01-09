@@ -2,6 +2,7 @@ import unittest
 import pandas as pd
 import numpy as np
 import validmind as vm
+from validmind import RawData
 from validmind.tests.data_validation.Skewness import Skewness
 
 
@@ -37,11 +38,12 @@ class TestSkewness(unittest.TestCase):
 
     def test_skewness_threshold(self):
         # Test with default threshold (1)
-        results, passed = Skewness(self.vm_dataset)
+        results, passed, raw_data = Skewness(self.vm_dataset)
 
         # Check return types
         self.assertIsInstance(results, dict)
         self.assertIn(passed, [True, False])
+        self.assertIsInstance(raw_data, RawData)
 
         # Check results structure
         results_table = results["Skewness Results for Dataset"]
@@ -60,7 +62,7 @@ class TestSkewness(unittest.TestCase):
 
     def test_custom_threshold(self):
         # Test with very high threshold (all should pass)
-        results, passed = Skewness(self.vm_dataset, max_threshold=10)
+        results, passed, raw_data = Skewness(self.vm_dataset, max_threshold=10)
         results_table = results["Skewness Results for Dataset"]
 
         # All columns should pass with high threshold

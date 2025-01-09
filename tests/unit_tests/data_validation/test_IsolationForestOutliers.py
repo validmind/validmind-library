@@ -6,6 +6,7 @@ from validmind.tests.data_validation.IsolationForestOutliers import (
     IsolationForestOutliers,
 )
 import matplotlib.pyplot as plt
+from validmind import RawData
 
 
 class TestIsolationForestOutliers(unittest.TestCase):
@@ -28,10 +29,13 @@ class TestIsolationForestOutliers(unittest.TestCase):
         )
 
     def test_outliers_detection(self):
-        figures = IsolationForestOutliers(self.vm_dataset, contamination=0.1)
+        result = IsolationForestOutliers(self.vm_dataset, contamination=0.1)
 
         # Check return type
-        self.assertIsInstance(figures, tuple)
+        self.assertIsInstance(result, tuple)
+
+        # Separate figures and raw data
+        *figures, raw_data = result
 
         # Check that at least one figure is returned
         self.assertGreater(len(figures), 0)
@@ -39,6 +43,9 @@ class TestIsolationForestOutliers(unittest.TestCase):
         # Check each figure
         for fig in figures:
             self.assertIsInstance(fig, plt.Figure)
+
+        # Check raw data
+        self.assertIsInstance(raw_data, RawData)
 
     def test_feature_columns_validation(self):
         # Test with valid feature columns

@@ -1,6 +1,7 @@
 import unittest
 import pandas as pd
 import validmind as vm
+from validmind import RawData
 from validmind.errors import SkipTestError
 from validmind.tests.data_validation.ClassImbalance import ClassImbalance
 from plotly.graph_objs import Figure
@@ -35,7 +36,7 @@ class TestClassImbalance(unittest.TestCase):
         )
 
     def test_balanced_classes(self):
-        results, figure, passed = ClassImbalance(
+        results, figure, passed, raw_data = ClassImbalance(
             self.balanced_dataset, min_percent_threshold=20
         )
 
@@ -43,6 +44,7 @@ class TestClassImbalance(unittest.TestCase):
         self.assertIsInstance(results, dict)
         self.assertIsInstance(figure, Figure)
         self.assertIsInstance(passed, bool)
+        self.assertIsInstance(raw_data, RawData)
 
         # Check results for balanced dataset
         imbalance_data = results["target Class Imbalance"]
@@ -53,9 +55,12 @@ class TestClassImbalance(unittest.TestCase):
         self.assertTrue(passed)  # Overall test should pass
 
     def test_imbalanced_classes(self):
-        results, figure, passed = ClassImbalance(
+        results, figure, passed, raw_data = ClassImbalance(
             self.imbalanced_dataset, min_percent_threshold=20
         )
+
+        # Check return type for raw data
+        self.assertIsInstance(raw_data, RawData)
 
         imbalance_data = results["target Class Imbalance"]
 
@@ -66,7 +71,7 @@ class TestClassImbalance(unittest.TestCase):
 
     def test_custom_threshold(self):
         # With threshold of 10%, both classes should pass even in imbalanced dataset
-        results, figure, passed = ClassImbalance(
+        results, figure, passed, raw_data = ClassImbalance(
             self.imbalanced_dataset, min_percent_threshold=10
         )
         self.assertTrue(passed)

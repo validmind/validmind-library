@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import validmind as vm
 from validmind.tests.data_validation.ShapiroWilk import ShapiroWilk
+from validmind import RawData
 
 
 class TestShapiroWilk(unittest.TestCase):
@@ -28,26 +29,33 @@ class TestShapiroWilk(unittest.TestCase):
             __log=False,
         )
 
-    def test_returns_dataframe_with_expected_shape(self):
+    def test_returns_dataframe_and_rawdata(self):
         # Run the function
-        result = ShapiroWilk(self.vm_dataset)
+        result_df, result_rawdata = ShapiroWilk(self.vm_dataset)
 
-        # Check if result is a DataFrame
-        self.assertIsInstance(result, pd.DataFrame)
+        # Check if result_df is a DataFrame
+        self.assertIsInstance(result_df, pd.DataFrame)
 
         # Check if the DataFrame has the expected columns
         expected_columns = ["column", "stat", "pvalue"]
-        self.assertListEqual(list(result.columns), expected_columns)
+        self.assertListEqual(list(result_df.columns), expected_columns)
 
         # Check if the DataFrame has the expected number of rows (one for each numeric feature)
-        self.assertEqual(len(result), len(self.vm_dataset.feature_columns_numeric))
+        self.assertEqual(len(result_df), len(self.vm_dataset.feature_columns_numeric))
+
+        # Check if result_rawdata is an instance of RawData
+        self.assertIsInstance(result_rawdata, RawData)
 
     def test_handles_different_distributions(self):
         # Run the function
-        result = ShapiroWilk(self.vm_dataset)
+        result_df, _ = ShapiroWilk(self.vm_dataset)
 
         # The normal distribution should have a higher p-value than the exponential distribution
-        normal_pvalue = result[result["column"] == "normal_dist"]["pvalue"].iloc[0]
-        exp_pvalue = result[result["column"] == "exponential_dist"]["pvalue"].iloc[0]
+        normal_pvalue = result_df[result_df["column"] == "normal_dist"]["pvalue"].iloc[
+            0
+        ]
+        exp_pvalue = result_df[result_df["column"] == "exponential_dist"][
+            "pvalue"
+        ].iloc[0]
 
         self.assertGreater(normal_pvalue, exp_pvalue)

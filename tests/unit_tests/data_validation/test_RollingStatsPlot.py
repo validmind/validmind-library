@@ -3,6 +3,7 @@ import pandas as pd
 import validmind as vm
 import matplotlib.pyplot as plt
 from validmind.tests.data_validation.RollingStatsPlot import RollingStatsPlot
+from validmind import RawData
 
 
 class TestRollingStatsPlot(unittest.TestCase):
@@ -30,14 +31,17 @@ class TestRollingStatsPlot(unittest.TestCase):
         )
 
     def test_rolling_stats_plot(self):
-        figures = RollingStatsPlot(self.vm_dataset, window_size=10)
+        outputs = RollingStatsPlot(self.vm_dataset, window_size=10)
 
-        # Check that we get the correct number of figures (one per feature)
-        self.assertEqual(len(figures), 2)
+        # Check that we get the correct number of figures (one per feature) plus raw data
+        self.assertEqual(len(outputs), 3)
 
-        # Check that outputs are matplotlib figures
-        for fig in figures:
+        # Check that first outputs are matplotlib figures
+        for fig in outputs[:-1]:
             self.assertIsInstance(fig, plt.Figure)
+
+        # Check that the last output is raw data
+        self.assertIsInstance(outputs[-1], RawData)
 
         # Clean up
         plt.close("all")

@@ -2,6 +2,7 @@ import unittest
 import pandas as pd
 import validmind as vm
 from validmind.tests.data_validation.LJungBox import LJungBox
+from validmind import RawData
 
 
 class TestLJungBox(unittest.TestCase):
@@ -22,7 +23,7 @@ class TestLJungBox(unittest.TestCase):
         )
 
         # Run the function
-        result = LJungBox(vm_dataset)
+        result, raw_data = LJungBox(vm_dataset)
 
         # Check if result is a DataFrame
         self.assertIsInstance(result, pd.DataFrame)
@@ -33,3 +34,6 @@ class TestLJungBox(unittest.TestCase):
 
         # Check if the DataFrame has the expected number of rows (one for each column)
         self.assertEqual(len(result), len(df.columns))
+
+        # Check if raw_data is an instance of RawData
+        self.assertIsInstance(raw_data, RawData)

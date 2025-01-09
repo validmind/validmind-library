@@ -45,11 +45,12 @@ class TestHighPearsonCorrelation(unittest.TestCase):
         )
 
     def test_correlation_structure(self):
-        results, all_passed = HighPearsonCorrelation(self.vm_dataset)
+        results, all_passed, raw_data = HighPearsonCorrelation(self.vm_dataset)
 
         # Check basic structure
         self.assertIsInstance(results, list)
         self.assertIsInstance(all_passed, bool)
+        self.assertIsInstance(raw_data, vm.RawData)
 
         # Check result structure
         for result in results:
@@ -58,7 +59,7 @@ class TestHighPearsonCorrelation(unittest.TestCase):
             self.assertIn("Pass/Fail", result)
 
     def test_correlation_values(self):
-        results, _ = HighPearsonCorrelation(self.vm_dataset, max_threshold=0.5)
+        results, _, _ = HighPearsonCorrelation(self.vm_dataset, max_threshold=0.5)
 
         # First result should be the perfect correlation
         perfect_corr = results[0]
@@ -78,7 +79,7 @@ class TestHighPearsonCorrelation(unittest.TestCase):
         self.assertTrue(moderate_found)
 
     def test_categorical_exclusion(self):
-        results, _ = HighPearsonCorrelation(self.vm_dataset)
+        results, _, _ = HighPearsonCorrelation(self.vm_dataset)
 
         # Verify categorical column is not in results
         for result in results:

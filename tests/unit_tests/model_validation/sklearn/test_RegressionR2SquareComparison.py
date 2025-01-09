@@ -4,6 +4,7 @@ import numpy as np
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
 import validmind as vm
+from validmind import RawData
 from validmind.tests.model_validation.sklearn.RegressionR2SquareComparison import (
     RegressionR2SquareComparison,
 )
@@ -88,19 +89,22 @@ class TestRegressionR2SquareComparison(unittest.TestCase):
 
     def test_returns_dataframe(self):
         # Run the function
-        result = RegressionR2SquareComparison(
+        result_df, raw_data = RegressionR2SquareComparison(
             [self.vm_dataset1, self.vm_dataset2], [self.vm_model1, self.vm_model2]
         )
 
         # Check if result is a DataFrame
-        self.assertIsInstance(result, pd.DataFrame)
+        self.assertIsInstance(result_df, pd.DataFrame)
 
         # Check if DataFrame has expected columns
         expected_columns = ["Model", "Dataset", "R-Squared", "Adjusted R-Squared"]
-        self.assertTrue(all(col in result.columns for col in expected_columns))
+        self.assertTrue(all(col in result_df.columns for col in expected_columns))
 
         # Check if DataFrame has correct number of rows (2 datasets * 2 models)
-        self.assertEqual(len(result), 2)
+        self.assertEqual(len(result_df), 2)
+
+        # Check raw data
+        self.assertIsInstance(raw_data, RawData)
 
     def test_perfect_prediction(self):
         # Create a perfect prediction scenario
@@ -134,21 +138,23 @@ class TestRegressionR2SquareComparison(unittest.TestCase):
         vm_perfect_dataset.assign_predictions(vm_perfect_model)
 
         # Calculate R2 scores
-        result = RegressionR2SquareComparison([vm_perfect_dataset], [vm_perfect_model])
+        result_df, raw_data = RegressionR2SquareComparison(
+            [vm_perfect_dataset], [vm_perfect_model]
+        )
 
         # Both R2 and Adjusted R2 should be very close to 1 for perfect predictions
-        self.assertAlmostEqual(result["R-Squared"].iloc[0], 1.0, places=5)
-        self.assertAlmostEqual(result["Adjusted R-Squared"].iloc[0], 1.0, places=5)
+        self.assertAlmostEqual(result_df["R-Squared"].iloc[0], 1.0, places=5)
+        self.assertAlmostEqual(result_df["Adjusted R-Squared"].iloc[0], 1.0, places=5)
 
     def test_model_comparison(self):
         # Compare linear model vs random forest on non-linear dataset
-        result = RegressionR2SquareComparison(
+        result_df, raw_data = RegressionR2SquareComparison(
             [self.vm_dataset2, self.vm_dataset2], [self.vm_model1, self.vm_model2]
         )
 
         # Get R2 scores for both models
-        linear_r2 = result[result["Model"] == "linear_model"]["R-Squared"].iloc[0]
-        rf_r2 = result[result["Model"] == "rf_model"]["R-Squared"].iloc[0]
+        linear_r2 = result_df[result_df["Model"] == "linear_model"]["R-Squared"].iloc[0]
+        rf_r2 = result_df[result_df["Model"] == "rf_model"]["R-Squared"].iloc[0]
 
         # Random Forest should perform better on non-linear data
         self.assertGreater(rf_r2, linear_r2)
@@ -186,8 +192,10 @@ class TestRegressionR2SquareComparison(unittest.TestCase):
         vm_poor_dataset.assign_predictions(vm_poor_model)
 
         # Calculate R2 scores
-        result = RegressionR2SquareComparison([vm_poor_dataset], [vm_poor_model])
+        result_df, raw_data = RegressionR2SquareComparison(
+            [vm_poor_dataset], [vm_poor_model]
+        )
 
         # R2 scores should be close to 0 for poor predictions
-        self.assertLess(result["R-Squared"].iloc[0], 0.1)
-        self.assertLess(result["Adjusted R-Squared"].iloc[0], 0.1)
+        self.assertLess(result_df["R-Squared"].iloc[0], 0.1)
+        self.assertLess(result_df["Adjusted R-Squared"].iloc[0], 0.1)
