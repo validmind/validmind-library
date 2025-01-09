@@ -3,7 +3,6 @@ import pandas as pd
 import numpy as np
 from sklearn.linear_model import LinearRegression
 import validmind as vm
-from validmind import RawData
 from validmind.tests.model_validation.sklearn.FeatureImportance import FeatureImportance
 
 
@@ -59,7 +58,7 @@ class TestFeatureImportance(unittest.TestCase):
 
     def test_returns_dataframe_and_rawdata(self):
         # Run the function
-        result_df, raw_data = FeatureImportance(self.vm_dataset, self.vm_model)
+        result_df = FeatureImportance(self.vm_dataset, self.vm_model)
 
         # Check if result_df is a DataFrame
         self.assertIsInstance(result_df, pd.DataFrame)
@@ -68,12 +67,9 @@ class TestFeatureImportance(unittest.TestCase):
         expected_columns = ["Feature 1", "Feature 2", "Feature 3"]
         self.assertTrue(all(col in result_df.columns for col in expected_columns))
 
-        # Check if raw_data is an instance of RawData
-        self.assertIsInstance(raw_data, RawData)
-
     def test_feature_importance_ranking(self):
         # Run with all features
-        result_df, _ = FeatureImportance(self.vm_dataset, self.vm_model, num_features=4)
+        result_df = FeatureImportance(self.vm_dataset, self.vm_model, num_features=4)
 
         # Get feature names and scores
         features = []
@@ -91,7 +87,7 @@ class TestFeatureImportance(unittest.TestCase):
     def test_num_features_parameter(self):
         # Test with different num_features values
         for num_features in [2, 3, 4]:
-            result_df, _ = FeatureImportance(
+            result_df = FeatureImportance(
                 self.vm_dataset, self.vm_model, num_features=num_features
             )
 
@@ -102,7 +98,7 @@ class TestFeatureImportance(unittest.TestCase):
             self.assertEqual(len(feature_columns), num_features)
 
     def test_feature_importance_scores(self):
-        result_df, _ = FeatureImportance(self.vm_dataset, self.vm_model)
+        result_df = FeatureImportance(self.vm_dataset, self.vm_model)
 
         # Get first feature score
         first_feature = result_df["Feature 1"].iloc[0]

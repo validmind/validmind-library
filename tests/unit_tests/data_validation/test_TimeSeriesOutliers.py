@@ -5,7 +5,6 @@ import validmind as vm
 import plotly.graph_objs as go
 from validmind.errors import SkipTestError
 from validmind.tests.data_validation.TimeSeriesOutliers import TimeSeriesOutliers
-from validmind import RawData
 
 
 class TestTimeSeriesOutliers(unittest.TestCase):
@@ -37,13 +36,12 @@ class TestTimeSeriesOutliers(unittest.TestCase):
         )
 
     def test_time_series_outliers(self):
-        outlier_df, figures, passed, raw_data = TimeSeriesOutliers(self.vm_dataset)
+        outlier_df, figures, passed = TimeSeriesOutliers(self.vm_dataset)
 
         # Check return types
         self.assertIsInstance(outlier_df, pd.DataFrame)
         self.assertIsInstance(figures, list)
         self.assertIsInstance(passed, bool)
-        self.assertIsInstance(raw_data, RawData)
 
         # Check that we have the expected number of figures (one per feature)
         self.assertEqual(len(figures), 2)

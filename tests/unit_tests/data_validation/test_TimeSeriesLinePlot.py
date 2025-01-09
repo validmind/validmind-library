@@ -2,7 +2,6 @@ import unittest
 import pandas as pd
 import validmind as vm
 import plotly.graph_objs as go
-from validmind import RawData
 from validmind.errors import SkipTestError
 from validmind.tests.data_validation.TimeSeriesLinePlot import TimeSeriesLinePlot
 
@@ -36,16 +35,11 @@ class TestTimeSeriesLinePlot(unittest.TestCase):
 
         # Check that we get the correct number of figures plus raw data (one per feature + RawData)
         self.assertIsInstance(figures, tuple)
-        self.assertEqual(
-            len(figures), 3
-        )  # Should have 2 figures for A and B and 1 RawData
+        self.assertEqual(len(figures), 2)  # Should have 2 figures for A and B
 
-        # Check that the first two outputs are plotly figures
-        for fig in figures[:2]:
+        # Check that the figures are plotly figures
+        for fig in figures:
             self.assertIsInstance(fig, go.Figure)
-
-        # Check that the last output is RawData
-        self.assertIsInstance(figures[-1], RawData)
 
     def test_no_datetime_index(self):
         # Should raise SkipTestError when no datetime index present

@@ -52,9 +52,8 @@ class TestRegressionCoeffs(unittest.TestCase):
         # Check if first element is a Plotly Figure
         self.assertIsInstance(result[0], go.Figure)
 
-        # Check if second element is a table (list of dicts)
-        self.assertIsInstance(result[1], list)
-        self.assertIsInstance(result[1][0], dict)
+        # Check if second element is a table (DataFrame)
+        self.assertIsInstance(result[1], pd.DataFrame)
 
     def test_plot_properties(self):
         # Run the function
