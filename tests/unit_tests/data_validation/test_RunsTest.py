@@ -32,7 +32,7 @@ class TestRunsTest(unittest.TestCase):
         )
 
         # Run the function
-        result, raw_data = RunsTest(vm_dataset)
+        result = RunsTest(vm_dataset)
 
         # Check if result is a DataFrame
         self.assertIsInstance(result, pd.DataFrame)
@@ -43,6 +43,3 @@ class TestRunsTest(unittest.TestCase):
 
         # Check if the DataFrame has the expected number of rows (one for each numeric feature)
         self.assertEqual(len(result), len(vm_dataset.feature_columns_numeric))
-
-        # Check if raw_data is instance of RawData
-        self.assertIsInstance(raw_data, vm.RawData)

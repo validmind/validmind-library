@@ -56,13 +56,10 @@ class TestGINITable(unittest.TestCase):
 
     def test_returns_dataframe_and_rawdata(self):
         # Run the function
-        result, raw_data = GINITable(self.vm_dataset, self.vm_model)
+        result = GINITable(self.vm_dataset, self.vm_model)
 
         # Check if result is a DataFrame
         self.assertIsInstance(result, pd.DataFrame)
-
-        # Check if raw_data is RawData instance
-        self.assertIsInstance(raw_data, RawData)
 
         # Check if DataFrame has expected columns
         expected_columns = ["AUC", "GINI", "KS"]
@@ -103,7 +100,7 @@ class TestGINITable(unittest.TestCase):
         vm_perfect_dataset.assign_predictions(vm_perfect_model)
 
         # Calculate metrics
-        result, _ = GINITable(vm_perfect_dataset, vm_perfect_model)
+        result = GINITable(vm_perfect_dataset, vm_perfect_model)
 
         # For perfect separation:
         # - AUC should be 1.0
@@ -147,7 +144,7 @@ class TestGINITable(unittest.TestCase):
         vm_random_dataset.assign_predictions(vm_random_model)
 
         # Calculate metrics
-        result, _ = GINITable(vm_random_dataset, vm_random_model)
+        result = GINITable(vm_random_dataset, vm_random_model)
 
         # For random predictions:
         # - AUC should be close to 0.5
@@ -161,7 +158,7 @@ class TestGINITable(unittest.TestCase):
 
     def test_metric_ranges(self):
         # Test regular case
-        result, _ = GINITable(self.vm_dataset, self.vm_model)
+        result = GINITable(self.vm_dataset, self.vm_model)
 
         # Check metric ranges
         # AUC should be between 0 and 1

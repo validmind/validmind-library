@@ -3,7 +3,6 @@ import pandas as pd
 import numpy as np
 from sklearn.linear_model import LinearRegression
 import validmind as vm
-from validmind import RawData
 from validmind.tests.model_validation.statsmodels.DurbinWatsonTest import (
     DurbinWatsonTest,
 )
@@ -64,7 +63,7 @@ class TestDurbinWatsonTest(unittest.TestCase):
 
     def test_returns_dataframe_and_rawdata(self):
         # Run the function
-        results, raw_data = DurbinWatsonTest(self.vm_dataset, self.vm_model)
+        results = DurbinWatsonTest(self.vm_dataset, self.vm_model)
 
         # Check if results is a DataFrame
         self.assertIsInstance(results, pd.DataFrame)
@@ -75,9 +74,6 @@ class TestDurbinWatsonTest(unittest.TestCase):
 
         # Check if DataFrame has exactly one row
         self.assertEqual(len(results), 1)
-
-        # Check if raw_data is an instance of RawData
-        self.assertIsInstance(raw_data, RawData)
 
     def test_no_autocorrelation(self):
         # Create a dataset with no autocorrelation
@@ -111,7 +107,7 @@ class TestDurbinWatsonTest(unittest.TestCase):
         vm_no_auto_dataset.assign_predictions(vm_no_auto_model)
 
         # Run the function
-        results, raw_data = DurbinWatsonTest(vm_no_auto_dataset, vm_no_auto_model)
+        results = DurbinWatsonTest(vm_no_auto_dataset, vm_no_auto_model)
 
         # Check if results is a DataFrame
         self.assertIsInstance(results, pd.DataFrame)
@@ -135,6 +131,3 @@ class TestDurbinWatsonTest(unittest.TestCase):
         )
         self.assertEqual(results["autocorrelation"].iloc[0], "No autocorrelation")
         self.assertEqual(results["threshold"].iloc[0], "[1.5, 2.5]")
-
-        # Check if raw_data is an instance of RawData
-        self.assertIsInstance(raw_data, RawData)

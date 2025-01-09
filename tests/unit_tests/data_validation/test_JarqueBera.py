@@ -1,7 +1,7 @@
 import unittest
 import pandas as pd
 import validmind as vm
-from validmind.tests.data_validation.JarqueBera import JarqueBera, RawData
+from validmind.tests.data_validation.JarqueBera import JarqueBera
 
 
 class TestJarqueBera(unittest.TestCase):
@@ -29,7 +29,7 @@ class TestJarqueBera(unittest.TestCase):
         )
 
         # Run the function
-        result, raw_data = JarqueBera(vm_dataset)
+        result = JarqueBera(vm_dataset)
 
         # Check if result is a DataFrame
         self.assertIsInstance(result, pd.DataFrame)
@@ -40,6 +40,3 @@ class TestJarqueBera(unittest.TestCase):
 
         # Check if the DataFrame has the expected number of rows (one for each numeric feature)
         self.assertEqual(len(result), len(vm_dataset.feature_columns_numeric))
-
-        # Check if raw_data is an instance of RawData
-        self.assertIsInstance(raw_data, RawData)

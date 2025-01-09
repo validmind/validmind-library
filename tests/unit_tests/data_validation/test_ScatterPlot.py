@@ -32,19 +32,10 @@ class TestScatterPlot(unittest.TestCase):
 
     def test_returns_tuple_of_figures_and_raw_data(self):
         # Run the function
-        result = ScatterPlot(self.vm_dataset)
-
-        # Check if result is a tuple
-        self.assertIsInstance(result, tuple)
-
-        # Check if the tuple contains exactly two elements
-        self.assertEqual(len(result), 2)
+        figure = ScatterPlot(self.vm_dataset)
 
         # Check if the first element is a matplotlib Figure
-        self.assertIsInstance(result[0], plt.Figure)
-
-        # Check if the second element is an instance of RawData
-        self.assertIsInstance(result[1], vm.RawData)
+        self.assertIsInstance(figure, plt.Figure)
 
         # Check if all figures are properly closed
         self.assertEqual(len(plt.get_fignums()), 0)

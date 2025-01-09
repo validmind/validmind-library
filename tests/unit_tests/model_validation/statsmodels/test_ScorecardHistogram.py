@@ -5,7 +5,6 @@ import validmind as vm
 import plotly.graph_objects as go
 from validmind.tests.model_validation.statsmodels.ScorecardHistogram import (
     ScorecardHistogram,
-    RawData,
 )
 
 
@@ -52,16 +51,13 @@ class TestScorecardHistogram(unittest.TestCase):
 
     def test_returns_figure_and_raw_data(self):
         # Run the function
-        result_figure, result_raw_data = ScorecardHistogram(self.vm_dataset)
+        figure = ScorecardHistogram(self.vm_dataset)
 
         # Check if the first part of the result is a Plotly Figure
-        self.assertIsInstance(result_figure, go.Figure)
+        self.assertIsInstance(figure, go.Figure)
 
         # Check if figure has traces
-        self.assertGreater(len(result_figure.data), 0)
-
-        # Check if the second part of the result is RawData
-        self.assertIsInstance(result_raw_data, RawData)
+        self.assertGreater(len(figure.data), 0)
 
     def test_missing_score_column(self):
         # Create dataset without score column
@@ -78,12 +74,12 @@ class TestScorecardHistogram(unittest.TestCase):
             ScorecardHistogram(vm_dataset_no_score)
 
     def test_histogram_properties(self):
-        result_figure, _ = ScorecardHistogram(self.vm_dataset)
+        figure = ScorecardHistogram(self.vm_dataset)
 
         # Should have two traces (one for each class)
-        self.assertEqual(len(result_figure.data), 2)
+        self.assertEqual(len(figure.data), 2)
 
-        for trace in result_figure.data:
+        for trace in figure.data:
             # Check if trace type is histogram
             self.assertEqual(trace.type, "histogram")
 
@@ -93,13 +89,13 @@ class TestScorecardHistogram(unittest.TestCase):
 
     def test_class_separation(self):
         # Now test the visualization
-        result_figure, _ = ScorecardHistogram(self.vm_dataset)
+        figure = ScorecardHistogram(self.vm_dataset)
 
         # Get scores for each class from the traces
         class_0_scores = None
         class_1_scores = None
 
-        for trace in result_figure.data:
+        for trace in figure.data:
             if "target = 0" in trace.name:
                 class_0_scores = np.array(trace.x)
             elif "target = 1" in trace.name:

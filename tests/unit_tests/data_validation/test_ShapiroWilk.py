@@ -3,7 +3,6 @@ import numpy as np
 import pandas as pd
 import validmind as vm
 from validmind.tests.data_validation.ShapiroWilk import ShapiroWilk
-from validmind import RawData
 
 
 class TestShapiroWilk(unittest.TestCase):
@@ -31,7 +30,7 @@ class TestShapiroWilk(unittest.TestCase):
 
     def test_returns_dataframe_and_rawdata(self):
         # Run the function
-        result_df, result_rawdata = ShapiroWilk(self.vm_dataset)
+        result_df = ShapiroWilk(self.vm_dataset)
 
         # Check if result_df is a DataFrame
         self.assertIsInstance(result_df, pd.DataFrame)
@@ -43,12 +42,9 @@ class TestShapiroWilk(unittest.TestCase):
         # Check if the DataFrame has the expected number of rows (one for each numeric feature)
         self.assertEqual(len(result_df), len(self.vm_dataset.feature_columns_numeric))
 
-        # Check if result_rawdata is an instance of RawData
-        self.assertIsInstance(result_rawdata, RawData)
-
     def test_handles_different_distributions(self):
         # Run the function
-        result_df, _ = ShapiroWilk(self.vm_dataset)
+        result_df = ShapiroWilk(self.vm_dataset)
 
         # The normal distribution should have a higher p-value than the exponential distribution
         normal_pvalue = result_df[result_df["column"] == "normal_dist"]["pvalue"].iloc[

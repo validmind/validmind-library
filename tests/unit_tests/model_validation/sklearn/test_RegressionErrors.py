@@ -3,7 +3,6 @@ import pandas as pd
 import numpy as np
 from sklearn.linear_model import LinearRegression
 import validmind as vm
-from validmind import RawData
 from validmind.tests.model_validation.sklearn.RegressionErrors import RegressionErrors
 
 
@@ -49,7 +48,7 @@ class TestRegressionErrors(unittest.TestCase):
 
     def test_returns_dataframe_and_raw_data(self):
         # Run the function
-        results, raw_data = RegressionErrors(self.vm_model, self.vm_dataset)
+        results = RegressionErrors(self.vm_model, self.vm_dataset)
 
         # Check if results is a DataFrame
         self.assertIsInstance(results, pd.DataFrame)
@@ -67,11 +66,8 @@ class TestRegressionErrors(unittest.TestCase):
         # Check if DataFrame has exactly one row
         self.assertEqual(len(results), 1)
 
-        # Check if raw_data is an instance of RawData
-        self.assertIsInstance(raw_data, RawData)
-
     def test_error_metrics_range(self):
-        results, _ = RegressionErrors(self.vm_model, self.vm_dataset)
+        results = RegressionErrors(self.vm_model, self.vm_dataset)
 
         # All error metrics should be non-negative (except MBD)
         self.assertGreaterEqual(results["Mean Absolute Error (MAE)"].iloc[0], 0)
@@ -113,7 +109,7 @@ class TestRegressionErrors(unittest.TestCase):
         vm_perfect_dataset.assign_predictions(vm_perfect_model)
 
         # Calculate errors
-        results, _ = RegressionErrors(vm_perfect_model, vm_perfect_dataset)
+        results = RegressionErrors(vm_perfect_model, vm_perfect_dataset)
 
         # All error metrics should be very close to 0
         self.assertAlmostEqual(
@@ -128,7 +124,7 @@ class TestRegressionErrors(unittest.TestCase):
         )
 
     def test_error_metrics_consistency(self):
-        results, _ = RegressionErrors(self.vm_model, self.vm_dataset)
+        results = RegressionErrors(self.vm_model, self.vm_dataset)
 
         # MSE should be greater than or equal to MAE squared
         mae = results["Mean Absolute Error (MAE)"].iloc[0]

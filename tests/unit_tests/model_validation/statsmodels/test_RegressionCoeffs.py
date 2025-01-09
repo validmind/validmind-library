@@ -4,7 +4,6 @@ import numpy as np
 import statsmodels.api as sm
 import validmind as vm
 import plotly.graph_objects as go
-from validmind import RawData
 from validmind.tests.model_validation.statsmodels.RegressionCoeffs import (
     RegressionCoeffs,
 )
@@ -53,8 +52,9 @@ class TestRegressionCoeffs(unittest.TestCase):
         # Check if first element is a Plotly Figure
         self.assertIsInstance(result[0], go.Figure)
 
-        # Check if second element is an instance of RawData
-        self.assertIsInstance(result[1], RawData)
+        # Check if second element is a table (list of dicts)
+        self.assertIsInstance(result[1], list)
+        self.assertIsInstance(result[1][0], dict)
 
     def test_plot_properties(self):
         # Run the function
