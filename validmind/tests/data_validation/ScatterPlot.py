@@ -5,7 +5,7 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-from validmind import RawData, tags, tasks
+from validmind import tags, tasks
 
 
 @tags("tabular_data", "visualization")
@@ -70,4 +70,4 @@ def ScatterPlot(dataset):
 
     plt.close("all")
 
-    return fig, RawData(dataset_dataframe=dataset.df)
+    return fig

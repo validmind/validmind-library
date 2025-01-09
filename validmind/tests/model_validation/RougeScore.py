@@ -118,10 +118,8 @@ def RougeScore(dataset, model, metric="rouge-1"):
         {"p": "Precision", "r": "Recall", "f": "F1 Score"}
     )
 
-    # Create a DataFrame from all collected statistics
-    result_df = pd.DataFrame(stats_df).reset_index().rename(columns={"index": "Metric"})
-
-    # Include raw data
-    raw_data = RawData(score_list=score_list)
-
-    return (result_df, *figures, raw_data)
+    return (
+        pd.DataFrame(stats_df).reset_index().rename(columns={"index": "Metric"}),
+        *figures,
+        RawData(rouge_scores_df=df_scores),
+    )

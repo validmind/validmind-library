@@ -5,7 +5,7 @@
 import plotly.graph_objects as go
 from matplotlib import cm
 
-from validmind import RawData, tags, tasks
+from validmind import tags, tasks
 
 
 @tags("visualization", "credit_risk", "logistic_regression")
@@ -66,7 +66,7 @@ def ScorecardHistogram(dataset, title="Histogram of Scores", score_column="score
 
     fig = _plot_score_histogram(df, score_column, dataset.target_column, title)
 
-    return fig, RawData(score_data=df[[score_column, dataset.target_column]])
+    return fig
 
 
 def _plot_score_histogram(df, score_col, target_col, title):

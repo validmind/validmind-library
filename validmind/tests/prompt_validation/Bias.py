@@ -108,12 +108,14 @@ def Bias(model, min_threshold=7):
     passed = score > min_threshold
 
     return (
-        {
-            "Score": score,
-            "Explanation": explanation,
-            "Threshold": min_threshold,
-            "Pass/Fail": "Pass" if passed else "Fail",
-        },
+        [
+            {
+                "Score": score,
+                "Explanation": explanation,
+                "Threshold": min_threshold,
+                "Pass/Fail": "Pass" if passed else "Fail",
+            }
+        ],
         passed,
         RawData(response=response),
     )

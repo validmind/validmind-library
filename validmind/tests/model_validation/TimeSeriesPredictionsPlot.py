@@ -4,7 +4,7 @@
 
 import plotly.graph_objects as go
 
-from validmind import RawData, tags, tasks
+from validmind import tags, tasks
 
 
 @tags("model_predictions", "visualization")
@@ -70,6 +70,4 @@ def TimeSeriesPredictionsPlot(dataset, model):
         template="plotly_white",
     )
 
-    return fig, RawData(
-        actual_values=dataset.y, predicted_values=y_pred, time_index=time_index
-    )
+    return fig

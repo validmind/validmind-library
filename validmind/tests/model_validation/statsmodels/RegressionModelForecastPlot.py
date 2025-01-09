@@ -7,7 +7,7 @@ from typing import Union
 import matplotlib.pyplot as plt
 import pandas as pd
 
-from validmind import RawData, tags, tasks
+from validmind import tags, tasks
 from validmind.logging import get_logger
 from validmind.vm_models import VMDataset, VMModel
 
@@ -87,12 +87,4 @@ def RegressionModelForecastPlot(
 
     plt.close()
 
-    # Prepare raw data
-    raw_data = RawData(
-        observed_values=pd.DataFrame({"index": index, "observed": dataset.y}),
-        forecasted_values=pd.DataFrame(
-            {"index": index, "forecast": dataset.y_pred(model)}
-        ),
-    )
-
-    return fig, raw_data
+    return fig

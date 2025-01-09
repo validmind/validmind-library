@@ -64,7 +64,8 @@ def Punctuations(dataset, count_mode="token"):
     corpus = _create_corpus(dataset.df, dataset.text_column)
     punctuation_counts = _count_punctuations(corpus, count_mode)
     fig = _create_punctuation_plot(punctuation_counts)
-    return fig, RawData(punctuation_counts=dict(punctuation_counts))
+
+    return fig, RawData(punctuation_counts=punctuation_counts)
 
 
 def _create_punctuation_plot(punctuation_counts):

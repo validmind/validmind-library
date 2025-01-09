@@ -229,5 +229,5 @@ def SHAPGlobalImportance(
     return (
         generate_shap_plot("mean", shap_values, shap_sample),
         generate_shap_plot("summary", shap_values, shap_sample),
-        RawData(shap_values=shap_values),
+        RawData(shap_values=shap_values, shap_sample=shap_sample),
     )

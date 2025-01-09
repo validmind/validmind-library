@@ -4,7 +4,7 @@
 
 from sklearn.metrics import adjusted_mutual_info_score
 
-from validmind import RawData, tags, tasks
+from validmind import tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 
 
@@ -52,8 +52,11 @@ def AdjustedMutualInformation(model: VMModel, dataset: VMDataset):
     - The interpretability of the score can be complex as it depends on the understanding of information theory
     concepts.
     """
-    ami_score = adjusted_mutual_info_score(
-        labels_true=dataset.y,
-        labels_pred=dataset.y_pred(model),
-    )
-    return [{"Adjusted Mutual Information": ami_score}], RawData(ami_score=ami_score)
+    return [
+        {
+            "Adjusted Mutual Information": adjusted_mutual_info_score(
+                labels_true=dataset.y,
+                labels_pred=dataset.y_pred(model),
+            )
+        }
+    ]

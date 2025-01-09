@@ -10,7 +10,7 @@ import pandas as pd
 import seaborn as sns
 from sklearn import metrics
 
-from validmind import RawData, tags, tasks
+from validmind import tags, tasks
 from validmind.logging import get_logger
 from validmind.vm_models import VMDataset, VMModel
 
@@ -299,8 +299,4 @@ def OverfitDiagnosis(
                 }
             )
 
-    return (
-        {"Overfit Diagnosis": test_results},
-        *figures,
-        RawData(train_metrics=results_train, test_metrics=results_test),
-    )
+    return ({"Overfit Diagnosis": test_results}, *figures)

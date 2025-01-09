@@ -5,7 +5,7 @@
 import pandas as pd
 from statsmodels.tsa.stattools import kpss
 
-from validmind import RawData, tags, tasks
+from validmind import tags, tasks
 from validmind.errors import SkipTestError
 from validmind.logging import get_logger
 from validmind.vm_models import VMDataset
@@ -80,8 +80,6 @@ def KPSS(dataset: VMDataset):
     if not kpss_table:
         raise SkipTestError(f"No KPSS results found for dataset: {dataset.input_id}")
 
-    kpss_df = pd.DataFrame(kpss_table)
-
     return {
         "KPSS Test Results": kpss_table,
-    }, RawData(kpss_results=kpss_df)
+    }

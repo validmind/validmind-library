@@ -4,7 +4,7 @@
 
 from sklearn.metrics import adjusted_rand_score
 
-from validmind import RawData, tags, tasks
+from validmind import tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 
 
@@ -49,9 +49,11 @@ def AdjustedRandIndex(model: VMModel, dataset: VMDataset):
     - It may be difficult to interpret the implications of an ARI score without context or a benchmark, as it is
     heavily dependent on the characteristics of the dataset used.
     """
-    ari_score = adjusted_rand_score(
-        labels_true=dataset.y,
-        labels_pred=dataset.y_pred(model),
-    )
-
-    return [{"Adjusted Rand Index": ari_score}], RawData(ari_score=ari_score)
+    return [
+        {
+            "Adjusted Rand Index": adjusted_rand_score(
+                labels_true=dataset.y,
+                labels_pred=dataset.y_pred(model),
+            )
+        }
+    ]

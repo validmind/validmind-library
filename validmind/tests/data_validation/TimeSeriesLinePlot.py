@@ -5,7 +5,7 @@
 import pandas as pd
 import plotly.graph_objects as go
 
-from validmind import RawData, tags, tasks
+from validmind import tags, tasks
 from validmind.errors import SkipTestError
 from validmind.vm_models import VMDataset
 
@@ -78,4 +78,4 @@ def TimeSeriesLinePlot(dataset: VMDataset):
 
         figures.append(fig)
 
-    return (*figures, RawData(time_series_data=df[dataset.feature_columns_numeric]))
+    return tuple(figures)

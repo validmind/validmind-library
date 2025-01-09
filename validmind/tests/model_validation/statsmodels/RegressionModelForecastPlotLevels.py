@@ -92,6 +92,6 @@ def RegressionModelForecastPlotLevels(
     plt.close()
 
     return fig, RawData(
-        dataset_y_transformed=dataset_y_transformed,
+        y_transformed=dataset_y_transformed,
         y_pred_transformed=y_pred_transformed,
     )

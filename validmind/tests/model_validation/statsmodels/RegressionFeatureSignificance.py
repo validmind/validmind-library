@@ -90,6 +90,4 @@ def RegressionFeatureSignificance(
 
     plt.close()
 
-    raw_data = RawData(coefficients=coefficients, pvalues=pvalues)
-
-    return fig, raw_data
+    return fig, RawData(coefficients=coefficients, pvalues=pvalues)

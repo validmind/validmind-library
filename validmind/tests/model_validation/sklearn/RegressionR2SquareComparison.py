@@ -5,7 +5,7 @@
 import pandas as pd
 from sklearn import metrics
 
-from validmind import RawData, tags, tasks
+from validmind import tags, tasks
 from validmind.tests.model_validation.statsmodels.statsutils import adj_r2_score
 
 
@@ -77,6 +77,4 @@ def RegressionR2SquareComparison(datasets, models):
             }
         )
 
-    # Convert results list to a DataFrame
-    results_df = pd.DataFrame(results_list)
-    return results_df, RawData(r2_values=results_df)
+    return pd.DataFrame(results_list)

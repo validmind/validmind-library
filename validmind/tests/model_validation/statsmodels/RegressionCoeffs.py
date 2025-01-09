@@ -7,7 +7,7 @@ import pandas as pd
 import plotly.graph_objects as go
 from scipy import stats
 
-from validmind import RawData, tags, tasks
+from validmind import tags, tasks
 from validmind.errors import SkipTestError
 
 
@@ -97,4 +97,4 @@ def RegressionCoeffs(model):
         yaxis_title="Coefficients",
     )
 
-    return fig, RawData(coefficients=coefficients)
+    return fig, coefficients

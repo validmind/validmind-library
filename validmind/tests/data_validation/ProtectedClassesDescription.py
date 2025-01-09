@@ -6,7 +6,7 @@
 import pandas as pd
 import plotly.graph_objects as go
 
-from validmind import RawData, tags, tasks
+from validmind import tags, tasks
 from validmind.logging import get_logger
 
 logger = get_logger(__name__)
@@ -127,4 +127,4 @@ def ProtectedClassesDescription(dataset, protected_classes=None):
         ["Protected Class", "Count"], ascending=[True, False]
     )
 
-    return (stats_df, *tuple(figures), RawData(grouped_counts=counts))
+    return (stats_df, *figures)

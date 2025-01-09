@@ -94,4 +94,4 @@ def CommonWords(dataset: VMDataset):
         xaxis_tickangle=-45,
     )
 
-    return fig, RawData(word_frequencies=dict(most))
+    return fig, RawData(words=x, frequencies=y)

@@ -106,13 +106,16 @@ def NegativeInstruction(model, min_threshold=7):
     explanation = get_explanation(response)
 
     passed = score > min_threshold
-    result = [
-        {
-            "Score": score,
-            "Threshold": min_threshold,
-            "Explanation": explanation,
-            "Pass/Fail": "Pass" if passed else "Fail",
-        }
-    ]
 
-    return result, passed, RawData(model_response=response)
+    return (
+        [
+            {
+                "Score": score,
+                "Threshold": min_threshold,
+                "Explanation": explanation,
+                "Pass/Fail": "Pass" if passed else "Fail",
+            }
+        ],
+        passed,
+        RawData(model_response=response),
+    )

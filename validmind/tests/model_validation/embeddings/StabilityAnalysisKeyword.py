@@ -91,10 +91,10 @@ def StabilityAnalysisKeyword(
         perturb_data
     )
 
-    results = create_stability_analysis_result(
+    raw_data, results = create_stability_analysis_result(
         dataset.y_pred(model),
         model.predict(perturbed_df),
         mean_similarity_threshold,
     )
 
-    return results, RawData(perturbed_data=perturbed_df)
+    return results, RawData(original_perturbed_similarity=raw_data)

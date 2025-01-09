@@ -5,7 +5,7 @@
 import pandas as pd
 from statsmodels.stats.stattools import jarque_bera
 
-from validmind import RawData, tags, tasks
+from validmind import tags, tasks
 
 
 @tasks("classification", "regression")
@@ -67,4 +67,4 @@ def JarqueBera(dataset):
     jb_df.reset_index(inplace=True)
     jb_df.columns = ["column", "stat", "pvalue", "skew", "kurtosis"]
 
-    return jb_df, RawData(df_features=df)
+    return jb_df

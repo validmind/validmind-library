@@ -145,10 +145,10 @@ def StabilityAnalysisRandomNoise(
         perturb_data
     )
 
-    result = create_stability_analysis_result(
+    raw_data, result = create_stability_analysis_result(
         dataset.y_pred(model),
         model.predict(perturbed_df),
         mean_similarity_threshold,
     )
 
-    return result, RawData(perturbed_text_data=perturbed_df)
+    return result, RawData(original_perturbed_similarity=raw_data)

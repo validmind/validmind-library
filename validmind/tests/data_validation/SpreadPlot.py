@@ -95,4 +95,4 @@ def SpreadPlot(dataset: VMDataset):
             name=f"spread_{var1}_{var2}"
         )
 
-    return tuple(figures) + (RawData(spread_data=spread_data),)
+    return (*figures, RawData(spread_data=spread_data))

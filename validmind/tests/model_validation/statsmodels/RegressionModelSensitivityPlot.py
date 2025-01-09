@@ -111,4 +111,7 @@ def RegressionModelSensitivityPlot(
 
     plt.close()
 
-    return fig, RawData(shocked_dfs=shocked_dfs, predictions=predictions)
+    return fig, RawData(
+        transformed_target=transformed_target,
+        transformed_predictions=transformed_predictions,
+    )

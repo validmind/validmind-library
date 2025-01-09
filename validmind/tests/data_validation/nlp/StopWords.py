@@ -84,17 +84,17 @@ def StopWords(
     nltk.download("stopwords", quiet=True)
 
     stop = set(stopwords.words("english"))
-    dic = defaultdict(int)
+    stop_word_frequencies = defaultdict(int)
     for word in corpus:
         if word in stop:
-            dic[word] += 1
+            stop_word_frequencies[word] += 1
 
     # Calculate the total number of words in the corpus
     total_words = len(corpus)
 
     # Calculate the percentage of each word in the corpus
     word_percentages = {}
-    for word, count in dic.items():
+    for word, count in stop_word_frequencies.items():
         percentage = (count / total_words) * 100
         word_percentages[word] = percentage
 
@@ -124,5 +124,5 @@ def StopWords(
         },
         fig,
         passed,
-        RawData(stop_word_frequencies=dic, total_words=total_words),
+        RawData(stop_word_frequencies=stop_word_frequencies, total_words=total_words),
     )

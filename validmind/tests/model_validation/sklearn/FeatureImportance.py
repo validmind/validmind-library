@@ -5,7 +5,7 @@
 import pandas as pd
 from sklearn.inspection import permutation_importance
 
-from validmind import RawData, tags, tasks
+from validmind import tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 
 
@@ -52,8 +52,6 @@ def FeatureImportance(dataset: VMDataset, model: VMModel, num_features: int = 3)
     - The function's output is dependent on the number of features specified by `num_features`, which defaults to 3 but
     can be adjusted.
     """
-    results_list = []
-
     pfi_values = permutation_importance(
         estimator=model.model,
         X=dataset.x_df(),
@@ -61,8 +59,6 @@ def FeatureImportance(dataset: VMDataset, model: VMModel, num_features: int = 3)
         random_state=0,
         n_jobs=-2,
     )
-
-    # Create a dictionary to store PFI scores
     pfi = {
         column: pfi_values["importances_mean"][i]
         for i, column in enumerate(dataset.feature_columns)
@@ -70,14 +66,10 @@ def FeatureImportance(dataset: VMDataset, model: VMModel, num_features: int = 3)
 
     # Sort features by their importance
     sorted_features = sorted(pfi.items(), key=lambda item: item[1], reverse=True)
-
-    # Extract the top `num_features` features
     top_features = sorted_features[:num_features]
 
-    # Prepare the result for the current model and dataset
     result = {}
 
-    # Dynamically add feature columns to the result
     for i in range(num_features):
         if i < len(top_features):
             result[
@@ -86,10 +78,4 @@ def FeatureImportance(dataset: VMDataset, model: VMModel, num_features: int = 3)
         else:
             result[f"Feature {i + 1}"] = None
 
-    # Append the result to the list
-    results_list.append(result)
-
-    # Convert the results list to a DataFrame
-    results_df = pd.DataFrame(results_list)
-
-    return results_df, RawData(permutation_importance_scores=pfi_values)
+    return pd.DataFrame([result])

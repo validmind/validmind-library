@@ -7,7 +7,7 @@ import pandas as pd
 import plotly.express as px
 from sklearn import metrics
 
-from validmind import RawData, tags, tasks
+from validmind import tags, tasks
 
 
 @tags("model_performance", "sklearn")
@@ -105,4 +105,4 @@ def TimeSeriesR2SquareBySegments(dataset, model, segments=None):
         },
     )
 
-    return fig, results_df, RawData(segments=segments)
+    return fig, results_df

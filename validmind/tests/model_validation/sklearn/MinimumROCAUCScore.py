@@ -6,8 +6,7 @@ import numpy as np
 from sklearn.metrics import roc_auc_score
 from sklearn.preprocessing import LabelBinarizer
 
-from validmind import RawData
-from validmind.tests import tags, tasks
+from validmind import tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 
 
@@ -76,13 +75,10 @@ def MinimumROCAUCScore(dataset: VMDataset, model: VMModel, min_threshold: float 
         y_score_prob = dataset.y_prob(model)
         roc_auc = roc_auc_score(y_true=y_true, y_score=y_score_prob)
 
-    table = [
+    return [
         {
             "Score": roc_auc,
             "Threshold": min_threshold,
             "Pass/Fail": "Pass" if roc_auc > min_threshold else "Fail",
         }
-    ]
-    pass_fail = roc_auc > min_threshold
-
-    return table, pass_fail, RawData(y_true=y_true, roc_auc=roc_auc)
+    ], roc_auc > min_threshold

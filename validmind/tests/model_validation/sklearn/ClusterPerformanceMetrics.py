@@ -11,7 +11,7 @@ from sklearn.metrics import (
     v_measure_score,
 )
 
-from validmind import RawData, tags, tasks
+from validmind import tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 
 HOMOGENEITY = """
@@ -115,56 +115,53 @@ def ClusterPerformanceMetrics(model: VMModel, dataset: VMDataset):
     - Does not consider aspects like computational efficiency of the model or its capability to handle high dimensional
     data.
     """
-    labels_true = dataset.y
-    labels_pred = dataset.y_pred(model)
-
     return [
         {
             "Metric": "Homogeneity Score",
             "Description": HOMOGENEITY,
             "Value": homogeneity_score(
-                labels_true=labels_true,
-                labels_pred=labels_pred,
+                labels_true=dataset.y,
+                labels_pred=dataset.y_pred(model),
             ),
         },
         {
             "Metric": "Completeness Score",
             "Description": COMPLETENESS,
             "Value": completeness_score(
-                labels_true=labels_true,
-                labels_pred=labels_pred,
+                labels_true=dataset.y,
+                labels_pred=dataset.y_pred(model),
             ),
         },
         {
             "Metric": "V Measure",
             "Description": V_MEASURE,
             "Value": v_measure_score(
-                labels_true=labels_true,
-                labels_pred=labels_pred,
+                labels_true=dataset.y,
+                labels_pred=dataset.y_pred(model),
             ),
         },
         {
             "Metric": "Adjusted Rand Index",
             "Description": ADJUSTED_RAND_INDEX,
             "Value": adjusted_rand_score(
-                labels_true=labels_true,
-                labels_pred=labels_pred,
+                labels_true=dataset.y,
+                labels_pred=dataset.y_pred(model),
             ),
         },
         {
             "Metric": "Adjusted Mutual Information",
             "Description": ADJUSTED_MUTUAL_INFORMATION,
             "Value": adjusted_mutual_info_score(
-                labels_true=labels_true,
-                labels_pred=labels_pred,
+                labels_true=dataset.y,
+                labels_pred=dataset.y_pred(model),
             ),
         },
         {
             "Metric": "Fowlkes-Mallows score",
             "Description": FOULKES_MALLOWS_SCORE,
             "Value": fowlkes_mallows_score(
-                labels_true=labels_true,
-                labels_pred=labels_pred,
+                labels_true=dataset.y,
+                labels_pred=dataset.y_pred(model),
             ),
         },
-    ], RawData(labels_true=labels_true, labels_pred=labels_pred)
+    ]

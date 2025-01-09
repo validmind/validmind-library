@@ -96,13 +96,15 @@ def Clarity(model, min_threshold=7):
 
     passed = score > min_threshold
 
-    table = [
-        {
-            "Score": score,
-            "Explanation": explanation,
-            "Threshold": min_threshold,
-            "Pass/Fail": "Pass" if passed else "Fail",
-        }
-    ]
-
-    return (table, passed, RawData(response=response))
+    return (
+        [
+            {
+                "Score": score,
+                "Explanation": explanation,
+                "Threshold": min_threshold,
+                "Pass/Fail": "Pass" if passed else "Fail",
+            }
+        ],
+        passed,
+        RawData(response=response),
+    )

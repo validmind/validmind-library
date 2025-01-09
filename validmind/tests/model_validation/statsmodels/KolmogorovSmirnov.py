@@ -4,7 +4,7 @@
 
 from statsmodels.stats.diagnostic import kstest_normal
 
-from validmind import RawData, tags, tasks
+from validmind import tags, tasks
 from validmind.errors import InvalidTestParametersError
 from validmind.vm_models import VMDataset, VMModel
 
@@ -66,4 +66,4 @@ def KolmogorovSmirnov(model: VMModel, dataset: VMDataset, dist: str = "norm"):
             "P-Value": result["pvalue"],
         }
         for k, result in ks_values.items()
-    ], RawData(ks_results=ks_values)
+    ]

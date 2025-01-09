@@ -103,7 +103,7 @@ def TrainingTestDegradation(
         table,
         all(row["Pass/Fail"] == "Pass" for row in table),
         RawData(
-            train_classification_report=ds1_report,
-            test_classification_report=ds2_report,
+            dataset_1_report=ds1_report,
+            dataset_2_report=ds2_report,
         ),
     )

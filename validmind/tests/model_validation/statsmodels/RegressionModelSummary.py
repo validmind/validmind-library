@@ -4,7 +4,7 @@
 
 from sklearn.metrics import mean_squared_error, r2_score
 
-from validmind import RawData, tags, tasks
+from validmind import tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 
 from .statsutils import adj_r2_score
@@ -45,19 +45,17 @@ def RegressionModelSummary(dataset: VMDataset, model: VMModel):
     - A high R-Squared or Adjusted R-Squared may not necessarily indicate a good model, especially in cases of
     overfitting.
     """
-    y_true = dataset.y
-    y_pred = dataset.y_pred(model)
-
-    results = [
+    return [
         {
             "Independent Variables": dataset.feature_columns,
-            "R-Squared": r2_score(y_true, y_pred),
+            "R-Squared": r2_score(dataset.y, dataset.y_pred(model)),
             "Adjusted R-Squared": adj_r2_score(
-                y_true, y_pred, len(y_true), len(dataset.feature_columns)
+                dataset.y,
+                dataset.y_pred(model),
+                len(dataset.y),
+                len(dataset.feature_columns),
             ),
-            "MSE": mean_squared_error(y_true=y_true, y_pred=y_pred, squared=True),
-            "RMSE": mean_squared_error(y_true=y_true, y_pred=y_pred, squared=False),
+            "MSE": mean_squared_error(dataset.y, dataset.y_pred(model), squared=True),
+            "RMSE": mean_squared_error(dataset.y, dataset.y_pred(model), squared=False),
         }
     ]
-
-    return results, RawData(y_true=y_true, y_pred=y_pred)

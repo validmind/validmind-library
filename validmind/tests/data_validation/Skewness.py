@@ -5,7 +5,7 @@
 from ydata_profiling.config import Settings
 from ydata_profiling.model.typeset import ProfilingTypeSet
 
-from validmind import RawData, tags, tasks
+from validmind import tags, tasks
 
 
 @tags("data_quality", "tabular_data")
@@ -78,5 +78,4 @@ def Skewness(dataset, max_threshold=1):
             "Skewness Results for Dataset": results_table,
         },
         passed,
-        RawData(skewness_values=skewness),
     )
