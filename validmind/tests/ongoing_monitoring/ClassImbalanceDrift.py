@@ -4,7 +4,7 @@
 
 import pandas as pd
 import plotly.graph_objs as go
-from typing import List, Tuple
+from typing import List
 from validmind import tags, tasks
 from validmind.vm_models import VMDataset
 from validmind.errors import SkipTestError
