@@ -369,10 +369,6 @@ class VMDataset(VMInput):
         # reset feature columns to exclude the new extra column
         self._set_feature_columns()
 
-        logger.info(
-            f"Extra column {column_name} with {len(column_values)} values added to the dataset"
-        )
-
     @property
     def df(self) -> pd.DataFrame:
         """
