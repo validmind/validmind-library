@@ -5,7 +5,6 @@
 import plotly.graph_objects as go
 import plotly.figure_factory as ff
 import pandas as pd
-import numpy as np
 from scipy.stats import skew, kurtosis
 from validmind import tags, tasks
 

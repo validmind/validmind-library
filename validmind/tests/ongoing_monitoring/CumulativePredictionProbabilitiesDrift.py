@@ -5,7 +5,7 @@
 import numpy as np
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-from typing import List, Tuple
+from typing import List
 from validmind import tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 
@@ -35,12 +35,10 @@ def CumulativePredictionProbabilitiesDrift(
     - Systematic differences across probability ranges
     """
     # Get predictions and true values
-    y_true_ref = datasets[0].y
     y_prob_ref = datasets[0].y_prob(model)
     df_ref = datasets[0].df.copy()
     df_ref["probabilities"] = y_prob_ref
 
-    y_true_mon = datasets[1].y
     y_prob_mon = datasets[1].y_prob(model)
     df_mon = datasets[1].df.copy()
     df_mon["probabilities"] = y_prob_mon
