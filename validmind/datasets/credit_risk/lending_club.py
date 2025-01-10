@@ -860,30 +860,24 @@ def document_model():
     os.environ["VALIDMIND_LLM_DESCRIPTIONS_CONTEXT_ENABLED"] = "1"
 
     context = """
-    FORMAT FOR THE LLM DESCRIPTIONS: 
-        **<Test Name>** is designed to <begin with a concise overview of what the test does and its primary purpose, 
-        extracted from the test description>.
+    FORMAT FOR THE LLM DESCRIPTIONS:
+    **<Test Name>** is designed to <begin with a concise overview of what the test does and its primary purpose, extracted from the test description>.
 
-        The test operates by <write a paragraph about the test mechanism, explaining how it works and what it measures. 
-        Include any relevant formulas or methodologies mentioned in the test description.>
+    The test operates by <write a paragraph about the test mechanism, explaining how it works and what it measures. Include any relevant formulas or methodologies mentioned in the test description.>
 
-        The primary advantages of this test include <write a paragraph about the test's strengths and capabilities, 
-        highlighting what makes it particularly useful for specific scenarios.>
+    The primary advantages of this test include <write a paragraph about the test's strengths and capabilities, highlighting what makes it particularly useful for specific scenarios.>
 
-        Users should be aware that <write a paragraph about the test's limitations and potential risks. 
-        Include both technical limitations and interpretation challenges. 
-        If the test description includes specific signs of high risk, incorporate these here.>
+    Users should be aware that <write a paragraph about the test's limitations and potential risks. Include both technical limitations and interpretation challenges. If the test description includes specific signs of high risk, incorporate these here.>
 
-        **Key Insights:**
+    **Key Insights:**
 
-        The test results reveal:
+    The test results reveal:
 
-        - **<insight title>**: <comprehensive description of one aspect of the results>
-        - **<insight title>**: <comprehensive description of another aspect>
-        ...
+    - **<insight title>**: <comprehensive description of one aspect of the results>
+    - **<insight title>**: <comprehensive description of another aspect>
+    ...
 
-        Based on these results, <conclude with a brief paragraph that ties together the test results with the test's 
-        purpose and provides any final recommendations or considerations.>
+    Based on these results, <conclude with a brief paragraph that ties together the test results with the test's purpose and provides any final recommendations or considerations.>
 
     ADDITIONAL INSTRUCTIONS:
         Present insights in order from general to specific, with each insight as a single bullet point with bold title.
@@ -966,19 +960,19 @@ def document_model():
     train_rf_binary_predictions = (train_rf_prob > cut_off_threshold).astype(int)
     test_rf_binary_predictions = (test_rf_prob > cut_off_threshold).astype(int)
 
-    vm_raw_dataset = vm.init_dataset(
+    vm.init_dataset(
         dataset=df,
         input_id="raw_dataset",
         target_column=target_column,
     )
 
-    vm_preprocess_dataset = vm.init_dataset(
+    vm.init_dataset(
         dataset=preprocess_df,
         input_id="preprocess_dataset",
         target_column=target_column,
     )
 
-    vm_fe_dataset = vm.init_dataset(
+    vm.init_dataset(
         dataset=fe_df,
         input_id="fe_dataset",
         target_column=target_column,
