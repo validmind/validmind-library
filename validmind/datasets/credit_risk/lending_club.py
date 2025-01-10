@@ -852,7 +852,7 @@ def get_demo_test_config(x_test=None, y_test=None):
     return default_config
 
 
-def document_model():
+def load_scorecard():
 
     warnings.filterwarnings("ignore")
     logging.getLogger("scorecardpy").setLevel(logging.ERROR)
@@ -960,6 +960,55 @@ def document_model():
     train_rf_binary_predictions = (train_rf_prob > cut_off_threshold).astype(int)
     test_rf_binary_predictions = (test_rf_prob > cut_off_threshold).astype(int)
 
+    # Compute credit risk scores
+    train_xgb_scores = compute_scores(train_xgb_prob)
+    test_xgb_scores = compute_scores(test_xgb_prob)
+
+    scorecard = {
+        "df": df,
+        "preprocess_df": preprocess_df,
+        "fe_df": fe_df,
+        "train_df": train_df,
+        "test_df": test_df,
+        "x_test": x_test,
+        "y_test": y_test,
+        "xgb_model": xgb_model,
+        "rf_model": rf_model,
+        "train_xgb_binary_predictions": train_xgb_binary_predictions,
+        "test_xgb_binary_predictions": test_xgb_binary_predictions,
+        "train_xgb_prob": train_xgb_prob,
+        "test_xgb_prob": test_xgb_prob,
+        "train_xgb_scores": train_xgb_scores,
+        "test_xgb_scores": test_xgb_scores,
+        "train_rf_binary_predictions": train_rf_binary_predictions,
+        "test_rf_binary_predictions": test_rf_binary_predictions,
+        "train_rf_prob": train_rf_prob,
+        "test_rf_prob": test_rf_prob,
+    }
+
+    return scorecard
+
+
+def init_vm_objects(scorecard):
+
+    df = scorecard["df"]
+    preprocess_df = scorecard["preprocess_df"]
+    fe_df = scorecard["fe_df"]
+    train_df = scorecard["train_df"]
+    test_df = scorecard["test_df"]
+    xgb_model = scorecard["xgb_model"]
+    rf_model = scorecard["rf_model"]
+    train_xgb_binary_predictions = scorecard["train_xgb_binary_predictions"]
+    test_xgb_binary_predictions = scorecard["test_xgb_binary_predictions"]
+    train_xgb_prob = scorecard["train_xgb_prob"]
+    test_xgb_prob = scorecard["test_xgb_prob"]
+    train_rf_binary_predictions = scorecard["train_rf_binary_predictions"]
+    test_rf_binary_predictions = scorecard["test_rf_binary_predictions"]
+    train_rf_prob = scorecard["train_rf_prob"]
+    test_rf_prob = scorecard["test_rf_prob"]
+    train_xgb_scores = scorecard["train_xgb_scores"]
+    test_xgb_scores = scorecard["test_xgb_scores"]
+
     vm.init_dataset(
         dataset=df,
         input_id="raw_dataset",
@@ -1025,15 +1074,17 @@ def document_model():
         prediction_probabilities=test_rf_prob,
     )
 
-    # Compute credit risk scores
-    train_xgb_scores = compute_scores(train_xgb_prob)
-    test_xgb_scores = compute_scores(test_xgb_prob)
-
     # Assign scores to the datasets
     vm_train_ds.add_extra_column("xgb_scores", train_xgb_scores)
     vm_test_ds.add_extra_column("xgb_scores", test_xgb_scores)
 
+
+def load_test_config(scorecard):
+
+    x_test = scorecard["x_test"]
+    y_test = scorecard["y_test"]
+
     # Get the test config
     test_config = get_demo_test_config(x_test, y_test)
 
-    vm.run_documentation_tests(config=test_config)
+    return test_config
