@@ -49,6 +49,8 @@ KNOWN_FAILING_TESTS = [
     # The required column 'score' is not present in the dataset with input_id test_dataset
     "validmind.data_validation.ScoreBandDefaultRates",
     "validmind.model_validation.sklearn.ScoreProbabilityAlignment",
+    "validmind.ongoing_monitoring.ScoreBandsDrift",
+    "validmind.ongoing_monitoring.ScorecardHistogramDrift",
 ]
 SKIPPED_TESTS = []
 SUCCESSFUL_TESTS = []

@@ -2,18 +2,99 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-
+import plotly.graph_objects as go
 from validmind import tags, tasks
+
+
+def calculate_psi_score(actual, expected):
+    """Calculate PSI score for a single bucket."""
+    return (actual - expected) * np.log((actual + 1e-6) / (expected + 1e-6))
+
+
+def calculate_feature_distributions(
+    reference_data, monitoring_data, feature_columns, bins
+):
+    """Calculate population distributions for each feature."""
+    # Calculate quantiles from reference data
+    quantiles = reference_data[feature_columns].quantile(
+        bins, method="single", interpolation="nearest"
+    )
+
+    distributions = {}
+    for dataset_name, data in [
+        ("reference", reference_data),
+        ("monitoring", monitoring_data),
+    ]:
+        for feature in feature_columns:
+            for bin_idx, threshold in enumerate(quantiles[feature]):
+                if bin_idx == 0:
+                    mask = data[feature] < threshold
+                else:
+                    prev_threshold = quantiles[feature][bins[bin_idx - 1]]
+                    mask = (data[feature] >= prev_threshold) & (
+                        data[feature] < threshold
+                    )
+
+                count = mask.sum()
+                proportion = count / len(data)
+                distributions[(dataset_name, feature, bins[bin_idx])] = proportion
+
+    return distributions
+
+
+def create_distribution_plot(feature_name, reference_dist, monitoring_dist, bins):
+    """Create population distribution plot for a feature."""
+    fig = go.Figure()
+
+    # Add reference distribution
+    fig.add_trace(
+        go.Bar(
+            x=list(range(len(bins))),
+            y=reference_dist,
+            name="Reference",
+            marker_color="blue",
+            marker_line_color="black",
+            marker_line_width=1,
+            opacity=0.75,
+        )
+    )
+
+    # Add monitoring distribution
+    fig.add_trace(
+        go.Bar(
+            x=list(range(len(bins))),
+            y=monitoring_dist,
+            name="Monitoring",
+            marker_color="green",
+            marker_line_color="black",
+            marker_line_width=1,
+            opacity=0.75,
+        )
+    )
+
+    fig.update_layout(
+        title=f"Population Distribution: {feature_name}",
+        xaxis_title="Bin",
+        yaxis_title="Population %",
+        barmode="group",
+        template="plotly_white",
+        showlegend=True,
+        width=800,
+        height=400,
+    )
+
+    return fig
 
 
 @tags("visualization")
 @tasks("monitoring")
 def FeatureDrift(
-    datasets, bins=[0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9], feature_columns=None
+    datasets,
+    bins=[0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9],
+    feature_columns=None,
+    psi_threshold=0.2,
 ):
     """
     Evaluates changes in feature distribution over time to identify potential model drift.
@@ -57,130 +138,48 @@ def FeatureDrift(
     - PSI score interpretation can be overly simplistic for complex datasets.
     """
 
-    # Feature columns for both datasets should be the same if not given
-    default_feature_columns = datasets[0].feature_columns
-    feature_columns = feature_columns or default_feature_columns
+    # Get feature columns
+    feature_columns = feature_columns or datasets[0].feature_columns
 
-    x_train_df = datasets[0].x_df()
-    x_test_df = datasets[1].x_df()
+    # Get data
+    reference_data = datasets[0].df
+    monitoring_data = datasets[1].df
 
-    quantiles_train = x_train_df[feature_columns].quantile(
-        bins, method="single", interpolation="nearest"
-    )
-    PSI_QUANTILES = quantiles_train.to_dict()
-
-    PSI_BUCKET_FRAC, col, n = get_psi_buckets(
-        x_test_df, x_train_df, feature_columns, bins, PSI_QUANTILES
+    # Calculate distributions
+    distributions = calculate_feature_distributions(
+        reference_data, monitoring_data, feature_columns, bins
     )
 
-    def nest(d: dict) -> dict:
-        result = {}
-        for key, value in d.items():
-            target = result
-            for k in key[:-1]:  # traverse all keys but the last
-                target = target.setdefault(k, {})
-            target[key[-1]] = value
-        return result
-
-    PSI_BUCKET_FRAC = nest(PSI_BUCKET_FRAC)
-
-    PSI_SCORES = {}
-    for col in feature_columns:
+    # Calculate PSI scores
+    psi_scores = {}
+    for feature in feature_columns:
         psi = 0
-        for n in bins:
-            actual = PSI_BUCKET_FRAC["test"][col][n]
-            expected = PSI_BUCKET_FRAC["train"][col][n]
-            psi_of_bucket = (actual - expected) * np.log(
-                (actual + 1e-6) / (expected + 1e-6)
-            )
-            psi += psi_of_bucket
-        PSI_SCORES[col] = psi
+        for bin_val in bins:
+            reference_prop = distributions[("reference", feature, bin_val)]
+            monitoring_prop = distributions[("monitoring", feature, bin_val)]
+            psi += calculate_psi_score(monitoring_prop, reference_prop)
+        psi_scores[feature] = psi
 
-    psi_df = pd.DataFrame(list(PSI_SCORES.items()), columns=["Features", "PSI Score"])
+    # Create PSI score dataframe
+    psi_df = pd.DataFrame(list(psi_scores.items()), columns=["Feature", "PSI Score"])
 
+    # Add Pass/Fail column
+    psi_df["Pass/Fail"] = psi_df["PSI Score"].apply(
+        lambda x: "Pass" if x < psi_threshold else "Fail"
+    )
+
+    # Sort by PSI Score
     psi_df.sort_values(by=["PSI Score"], inplace=True, ascending=False)
 
-    psi_table = [
-        {"Features": values["Features"], "PSI Score": values["PSI Score"]}
-        for i, values in enumerate(psi_df.to_dict(orient="records"))
-    ]
+    # Create distribution plots
+    figures = []
+    for feature in feature_columns:
+        reference_dist = [distributions[("reference", feature, b)] for b in bins]
+        monitoring_dist = [distributions[("monitoring", feature, b)] for b in bins]
+        fig = create_distribution_plot(feature, reference_dist, monitoring_dist, bins)
+        figures.append(fig)
 
-    save_fig = plot_hist(PSI_BUCKET_FRAC, bins)
+    # Calculate overall pass/fail
+    pass_fail_bool = (psi_df["Pass/Fail"] == "Pass").all()
 
-    final_psi = pd.DataFrame(psi_table)
-
-    return (final_psi, *save_fig)
-
-
-def get_psi_buckets(x_test_df, x_train_df, feature_columns, bins, PSI_QUANTILES):
-    DATA = {"test": x_test_df, "train": x_train_df}
-    PSI_BUCKET_FRAC = {}
-    for table in DATA.keys():
-        total_count = DATA[table].shape[0]
-        for col in feature_columns:
-            count_sum = 0
-            for n in bins:
-                if n == 0:
-                    bucket_count = (DATA[table][col] < PSI_QUANTILES[col][n]).sum()
-                elif n < 9:
-                    bucket_count = (
-                        total_count
-                        - count_sum
-                        - ((DATA[table][col] >= PSI_QUANTILES[col][n]).sum())
-                    )
-                elif n == 9:
-                    bucket_count = total_count - count_sum
-                count_sum += bucket_count
-                PSI_BUCKET_FRAC[table, col, n] = bucket_count / total_count
-    return PSI_BUCKET_FRAC, col, n
-
-
-def plot_hist(PSI_BUCKET_FRAC, bins):
-    bin_table_psi = pd.DataFrame(PSI_BUCKET_FRAC)
-    save_fig = []
-    for i in range(len(bin_table_psi)):
-
-        x = pd.DataFrame(
-            bin_table_psi.iloc[i]["test"].items(),
-            columns=["Bin", "Population % Reference"],
-        )
-        y = pd.DataFrame(
-            bin_table_psi.iloc[i]["train"].items(),
-            columns=["Bin", "Population % Monitoring"],
-        )
-        xy = x.merge(y, on="Bin")
-        xy.index = xy["Bin"]
-        xy = xy.drop(columns="Bin", axis=1)
-        feature_name = bin_table_psi.index[i]
-
-        n = len(bins)
-        r = np.arange(n)
-        width = 0.25
-
-        fig = plt.figure()
-
-        plt.bar(
-            r,
-            xy["Population % Reference"],
-            color="b",
-            width=width,
-            edgecolor="black",
-            label="Reference {0}".format(feature_name),
-        )
-        plt.bar(
-            r + width,
-            xy["Population % Monitoring"],
-            color="g",
-            width=width,
-            edgecolor="black",
-            label="Monitoring {0}".format(feature_name),
-        )
-
-        plt.xlabel("Bin")
-        plt.ylabel("Population %")
-        plt.title("Histogram of Population Differences {0}".format(feature_name))
-        plt.legend()
-        plt.tight_layout()
-        plt.close()
-        save_fig.append(fig)
-    return save_fig
+    return ({"PSI Scores": psi_df}, *figures, pass_fail_bool)
