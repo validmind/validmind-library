@@ -127,4 +127,4 @@ def ProtectedClassesDescription(dataset, protected_classes=None):
         ["Protected Class", "Count"], ascending=[True, False]
     )
 
-    return (stats_df, *tuple(figures))
+    return (stats_df, *figures)

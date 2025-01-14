@@ -6,7 +6,7 @@ import itertools
 
 import plotly.express as px
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 
 
 @tags("tabular_data", "numerical_data", "visualization")
@@ -79,4 +79,6 @@ def BivariateScatterPlots(dataset):
 
         figures.append(fig)
 
-    return tuple(figures)
+    return tuple(figures) + (
+        RawData(selected_numerical_df=df, feature_pairs=features_pairs),
+    )

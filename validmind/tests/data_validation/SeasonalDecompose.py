@@ -9,7 +9,7 @@ from plotly.subplots import make_subplots
 from scipy import stats
 from statsmodels.tsa.seasonal import seasonal_decompose
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.errors import SkipTestError
 from validmind.logging import get_logger
 from validmind.vm_models import VMDataset
@@ -64,6 +64,8 @@ def SeasonalDecompose(dataset: VMDataset, seasonal_model: str = "additive"):
     df = dataset.df
 
     figures = []
+
+    raw_data = {}
 
     for col in df.columns:
         series = df[col].dropna()
@@ -153,7 +155,15 @@ def SeasonalDecompose(dataset: VMDataset, seasonal_model: str = "additive"):
 
         figures.append(fig)
 
+        # Add the decomposed components to raw_data
+        raw_data[col] = {
+            "observed": sd.observed,
+            "trend": sd.trend,
+            "seasonal": sd.seasonal,
+            "residuals": sd.resid,
+        }
+
     if not figures:
         raise SkipTestError("No valid features found for seasonal decomposition")
 
-    return tuple(figures)
+    return (*figures, RawData(decomposed_components=raw_data))

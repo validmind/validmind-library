@@ -4,6 +4,7 @@ import numpy as np
 import validmind as vm
 import plotly.graph_objects as go
 from validmind.tests.model_validation.ContextualRecall import ContextualRecall
+from validmind import RawData
 
 
 class TestContextualRecall(unittest.TestCase):
@@ -72,8 +73,11 @@ class TestContextualRecall(unittest.TestCase):
         # Check if first element is DataFrame
         self.assertIsInstance(result[0], pd.DataFrame)
 
+        # Check if raw data is instance of RawData
+        self.assertIsInstance(result[-1], RawData)
+
         # Check if remaining elements are figures
-        for fig in result[1:]:
+        for fig in result[1:-1]:
             self.assertIsInstance(fig, go.Figure)
 
     def test_metrics_dataframe(self):
@@ -99,7 +103,7 @@ class TestContextualRecall(unittest.TestCase):
 
     def test_figures_properties(self):
         """Test if figures have expected properties."""
-        _, *figures = ContextualRecall(self.vm_dataset, self.vm_model)
+        _, *figures, _ = ContextualRecall(self.vm_dataset, self.vm_model)
 
         # Check if we have the expected number of figures
         self.assertEqual(len(figures), 2)

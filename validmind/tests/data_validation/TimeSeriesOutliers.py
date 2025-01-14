@@ -111,8 +111,4 @@ def TimeSeriesOutliers(dataset: VMDataset, zscore_threshold: int = 3):
 
         figures.append(fig)
 
-    return (
-        outlier_df.sort_values(["Column", "Date"]),
-        figures,
-        len(outlier_df) == 0,
-    )
+    return (outlier_df.sort_values(["Column", "Date"]), figures, len(outlier_df) == 0)

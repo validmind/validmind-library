@@ -2,8 +2,9 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-import pandas as pd
 import numpy as np
+import pandas as pd
+
 from validmind import tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 

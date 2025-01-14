@@ -4,7 +4,7 @@
 
 import pandas as pd
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.errors import MissingRequiredTestInputError, SkipTestError
 
 from .ai_powered_test import call_model, missing_prompt_message
@@ -127,4 +127,8 @@ def Robustness(model, dataset, num_tests=10):
         for generated_input, response in zip(generated_inputs, responses)
     ]
 
-    return results, all(result["Pass/Fail"] == "Pass" for result in results)
+    return (
+        results,
+        all(result["Pass/Fail"] == "Pass" for result in results),
+        RawData(generated_inputs=generated_inputs, responses=responses),
+    )

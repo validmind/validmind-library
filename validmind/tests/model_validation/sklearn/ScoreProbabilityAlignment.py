@@ -4,8 +4,9 @@
 
 import pandas as pd
 import plotly.graph_objects as go
+
 from validmind import tags, tasks
-from validmind.vm_models import VMModel, VMDataset
+from validmind.vm_models import VMDataset, VMModel
 
 
 @tags("visualization", "credit_risk", "calibration")

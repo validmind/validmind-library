@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import validmind as vm
 import plotly.graph_objects as go
+from validmind import RawData
 from validmind.tests.model_validation.BleuScore import BleuScore
 
 
@@ -72,9 +73,11 @@ class TestBleuScore(unittest.TestCase):
         # Check if first element is DataFrame
         self.assertIsInstance(result[0], pd.DataFrame)
 
-        # Check if remaining elements are figures
-        for fig in result[1:]:
+        # Check if remaining elements include expected number of figures and RawData
+        self.assertEqual(len(result), 4)
+        for fig in result[1:3]:
             self.assertIsInstance(fig, go.Figure)
+        self.assertIsInstance(result[3], RawData)
 
     def test_metrics_dataframe(self):
         """Test if metrics DataFrame has expected structure and values."""
@@ -99,7 +102,7 @@ class TestBleuScore(unittest.TestCase):
 
     def test_figures_properties(self):
         """Test if figures have expected properties."""
-        _, *figures = BleuScore(self.vm_dataset, self.vm_model)
+        _, *figures, _ = BleuScore(self.vm_dataset, self.vm_model)
 
         # Check if we have the expected number of figures (2 figures: histogram and bar chart)
         self.assertEqual(len(figures), 2)

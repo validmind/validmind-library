@@ -4,7 +4,7 @@
 
 from typing import List
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset
 
 DATASET_LABELS = {
@@ -98,4 +98,4 @@ def DatasetSplit(datasets: List[VMDataset]):
                 }
             )
 
-    return table
+    return table, RawData(dataset_results=results)

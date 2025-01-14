@@ -8,7 +8,7 @@ import pandas as pd
 import plotly.graph_objects as go
 import plotly.subplots as sp
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.errors import MissingDependencyError
 from validmind.logging import get_logger
 
@@ -202,4 +202,9 @@ def ProtectedClassesCombination(dataset, model, protected_classes=None):
         {"Class Combination Table": metrics_by_group},
         {"DPR and EOR table": dpr_eor_df},
         fig,
+        RawData(
+            metrics_frame=mf,
+            demographic_parity_ratios=m_dpr,
+            equalized_odds_ratios=m_eqo,
+        ),
     )

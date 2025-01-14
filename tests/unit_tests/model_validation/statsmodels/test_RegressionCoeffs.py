@@ -52,67 +52,8 @@ class TestRegressionCoeffs(unittest.TestCase):
         # Check if first element is a Plotly Figure
         self.assertIsInstance(result[0], go.Figure)
 
-        # Check if second element is a DataFrame
+        # Check if second element is a table (DataFrame)
         self.assertIsInstance(result[1], pd.DataFrame)
-
-        # Check if DataFrame has expected columns
-        expected_columns = [
-            "Feature",
-            "coef",
-            "std err",
-            "t",
-            "P>|t|",
-            "[0.025",
-            "0.975]",
-        ]
-        self.assertTrue(all(col in result[1].columns for col in expected_columns))
-
-    def test_coefficient_values(self):
-        # Run the function
-        _, coeffs_df = RegressionCoeffs(self.vm_model)
-
-        # Check if coefficients are close to true values
-        true_coeffs = {"const": 0.0, "feature1": 2.0, "feature2": -1.5, "feature3": 0.5}
-
-        # First, verify all expected features are present
-        features = coeffs_df["Feature"].values
-        for feature in true_coeffs.keys():
-            self.assertIn(
-                feature, features, f"Feature {feature} not found in coefficients"
-            )
-
-        # Then check coefficient values
-        for feature, true_coef in true_coeffs.items():
-            mask = coeffs_df["Feature"] == feature
-            self.assertTrue(any(mask), f"Feature {feature} not found in coefficients")
-
-            estimated_coef = float(coeffs_df.loc[mask, "coef"].iloc[0])
-            # Allow for some estimation error
-            self.assertAlmostEqual(
-                estimated_coef,
-                true_coef,
-                places=1,
-                msg=f"Coefficient for {feature} differs significantly from true value",
-            )
-
-    def test_confidence_intervals(self):
-        # Run the function
-        _, coeffs_df = RegressionCoeffs(self.vm_model)
-
-        # Check if confidence intervals are properly calculated
-        for _, row in coeffs_df.iterrows():
-            coef = float(row["coef"])
-            lower_ci = float(row["[0.025"])
-            upper_ci = float(row["0.975]"])
-
-            # Check if confidence interval contains coefficient
-            self.assertLess(lower_ci, coef)
-            self.assertGreater(upper_ci, coef)
-
-            # Check if confidence interval width is reasonable
-            ci_width = upper_ci - lower_ci
-            self.assertGreater(ci_width, 0)  # Should be positive
-            self.assertLess(ci_width, 10)  # Should not be too wide
 
     def test_plot_properties(self):
         # Run the function

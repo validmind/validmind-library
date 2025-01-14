@@ -2,7 +2,6 @@ import unittest
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
-from datetime import datetime
 import validmind as vm
 from validmind.tests.model_validation.TimeSeriesR2SquareBySegments import (
     TimeSeriesR2SquareBySegments,

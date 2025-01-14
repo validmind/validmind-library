@@ -7,7 +7,7 @@ import re
 import pandas as pd
 import plotly.express as px
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.errors import SkipTestError
 from validmind.vm_models import VMDataset
 
@@ -75,9 +75,12 @@ def Mentions(dataset: VMDataset, top_mentions: int = 25):
         }
     )
 
-    return px.treemap(
-        mention_frequencies_df,
-        path=["Scenario"],
-        values="Percentage",
-        title="Tree of Mentions",
+    return (
+        px.treemap(
+            mention_frequencies_df,
+            path=["Scenario"],
+            values="Percentage",
+            title="Tree of Mentions",
+        ),
+        RawData(mention_counts=mention_counts),
     )

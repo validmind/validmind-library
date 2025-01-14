@@ -5,7 +5,7 @@ from validmind.tests.data_validation.RunsTest import RunsTest
 
 
 class TestRunsTest(unittest.TestCase):
-    def test_returns_dataframe_with_expected_shape(self):
+    def test_returns_dataframe_and_raw_data(self):
         # Create a simple dataset with numeric columns
         df = pd.DataFrame(
             {

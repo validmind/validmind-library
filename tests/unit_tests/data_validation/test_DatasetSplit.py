@@ -1,6 +1,7 @@
 import unittest
 import pandas as pd
 import validmind as vm
+from validmind import RawData
 from validmind.tests.data_validation.DatasetSplit import DatasetSplit
 
 
@@ -32,14 +33,16 @@ class TestDatasetSplit(unittest.TestCase):
 
     def test_dataset_split_proportions(self):
         # Run DatasetSplit
-        result = DatasetSplit([self.train_dataset, self.test_dataset, self.val_dataset])
+        table, raw_data = DatasetSplit(
+            [self.train_dataset, self.test_dataset, self.val_dataset]
+        )
 
         # Verify the structure of the result
-        self.assertIsInstance(result, list)
-        self.assertEqual(len(result), 4)  # 3 datasets + total
+        self.assertIsInstance(table, list)
+        self.assertEqual(len(table), 4)  # 3 datasets + total
 
         # Create a dictionary for easier testing
-        result_dict = {item["Dataset"]: item for item in result}
+        result_dict = {item["Dataset"]: item for item in table}
 
         # Test total size
         self.assertEqual(result_dict["Total"]["Size"], 100)
@@ -55,12 +58,15 @@ class TestDatasetSplit(unittest.TestCase):
         self.assertEqual(result_dict["validation_ds"]["Size"], 20)
         self.assertEqual(result_dict["validation_ds"]["Proportion"], "20.00%")
 
+        # Verify raw data
+        self.assertIsInstance(raw_data, RawData)
+
     def test_dataset_split_with_none(self):
         # Test with some datasets being None
-        result = DatasetSplit([self.train_dataset, None, self.test_dataset])
+        table, raw_data = DatasetSplit([self.train_dataset, None, self.test_dataset])
 
         # Create a dictionary for easier testing
-        result_dict = {item["Dataset"]: item for item in result}
+        result_dict = {item["Dataset"]: item for item in table}
 
         # Test total size
         self.assertEqual(result_dict["Total"]["Size"], 80)
@@ -72,3 +78,6 @@ class TestDatasetSplit(unittest.TestCase):
 
         self.assertEqual(result_dict["test_ds"]["Size"], 20)
         self.assertEqual(result_dict["test_ds"]["Proportion"], "25.00%")
+
+        # Verify raw data
+        self.assertIsInstance(raw_data, RawData)

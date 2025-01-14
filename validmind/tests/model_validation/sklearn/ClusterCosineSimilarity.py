@@ -5,7 +5,7 @@
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.errors import SkipTestError
 from validmind.vm_models import VMDataset, VMModel
 
@@ -61,11 +61,14 @@ def ClusterCosineSimilarity(model: VMModel, dataset: VMDataset):
 
     table = []
 
+    cluster_centroids = {}
+
     for cluster_idx in range(num_clusters):
         cluster_data = dataset.x[y_pred == cluster_idx]
 
         if cluster_data.size != 0:
             cluster_centroid = np.mean(cluster_data, axis=0)
+            cluster_centroids[cluster_idx] = cluster_centroid
             table.append(
                 {
                     "Cluster": cluster_idx,
@@ -81,4 +84,4 @@ def ClusterCosineSimilarity(model: VMModel, dataset: VMDataset):
     if not table:
         raise SkipTestError("No clusters found")
 
-    return table
+    return table, RawData(cluster_centroids=cluster_centroids)

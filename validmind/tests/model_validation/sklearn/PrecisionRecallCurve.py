@@ -6,7 +6,7 @@ import numpy as np
 import plotly.graph_objects as go
 from sklearn.metrics import precision_recall_curve
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.errors import SkipTestError
 from validmind.models import FoundationModel
 from validmind.vm_models import VMDataset, VMModel
@@ -66,7 +66,7 @@ def PrecisionRecallCurve(model: VMModel, dataset: VMDataset):
 
     precision, recall, _ = precision_recall_curve(y_true, dataset.y_prob(model))
 
-    return go.Figure(
+    fig = go.Figure(
         data=[
             go.Scatter(
                 x=recall,
@@ -82,3 +82,5 @@ def PrecisionRecallCurve(model: VMModel, dataset: VMDataset):
             yaxis=dict(title="Precision"),
         ),
     )
+
+    return fig, RawData(precision=precision, recall=recall)

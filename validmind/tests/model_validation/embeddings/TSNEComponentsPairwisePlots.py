@@ -10,7 +10,7 @@ import plotly.express as px
 from sklearn.manifold import TSNE
 from sklearn.preprocessing import StandardScaler
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 
 
 @tags("visualization", "dimensionality_reduction", "embeddings")
@@ -80,7 +80,7 @@ def TSNEComponentsPairwisePlots(
     )
 
     # List to store each plot
-    plots = []
+    figures = []
 
     # Create plots for each pair of t-SNE components (if n_components > 1)
     if n_components > 1:
@@ -95,7 +95,7 @@ def TSNEComponentsPairwisePlots(
                     f"Component {comp2}": f"Component {comp2}",
                 },
             )
-            plots.append(fig)
+            figures.append(fig)
     else:
         fig = px.scatter(
             tsne_df,
@@ -106,7 +106,9 @@ def TSNEComponentsPairwisePlots(
                 "Component 1": "Component 1",
             },
         )
-        plots.append(fig)
+        figures.append(fig)
 
-    # Return the list of plots as a tuple
-    return tuple(plots)
+    return (
+        *figures,
+        RawData(embeddings_scaled=embeddings_scaled, tsne_results=tsne_results),
+    )

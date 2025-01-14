@@ -6,7 +6,7 @@ import numpy as np
 import plotly.express as px
 from sklearn.metrics.pairwise import euclidean_distances
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 
 
 @tags("visualization", "dimensionality_reduction", "embeddings")
@@ -79,4 +79,4 @@ def EuclideanDistanceHeatmap(
         yaxis_title=yaxis_title,
     )
 
-    return fig
+    return fig, RawData(distance_matrix=distance_matrix)

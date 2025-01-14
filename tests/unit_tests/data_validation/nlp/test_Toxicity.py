@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import validmind as vm
 from validmind.tests.data_validation.nlp.Toxicity import Toxicity
+from validmind import RawData
 
 
 class TestToxicity(unittest.TestCase):
@@ -39,20 +40,27 @@ class TestToxicity(unittest.TestCase):
             __log=False,
         )
 
-    def test_returns_matplotlib_figure(self):
+    def test_returns_matplotlib_figure_and_raw_data(self):
         # Run the function
         result = Toxicity(self.vm_dataset)
 
-        # Check if result is a matplotlib Figure
-        self.assertIsInstance(result, plt.Figure)
+        # Check if result is a tuple with two elements
+        self.assertIsInstance(result, tuple)
+        self.assertEqual(len(result), 2)
+
+        # Check if the first element is a matplotlib Figure
+        self.assertIsInstance(result[0], plt.Figure)
 
         # Check if figure has an axes
-        self.assertTrue(len(result.axes) > 0)
+        self.assertTrue(len(result[0].axes) > 0)
 
         # Check if axes has a title and labels
-        ax = result.axes[0]
+        ax = result[0].axes[0]
         self.assertIsNotNone(ax.get_title())
         self.assertIsNotNone(ax.get_xlabel())
+
+        # Check if the second element is an instance of RawData
+        self.assertIsInstance(result[1], RawData)
 
     def test_toxicity_range(self):
         import evaluate

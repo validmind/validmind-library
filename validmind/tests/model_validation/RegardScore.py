@@ -6,7 +6,7 @@ import evaluate
 import pandas as pd
 import plotly.graph_objects as go
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.tests.utils import validate_prediction
 
 
@@ -142,4 +142,8 @@ def RegardScore(dataset, model):
         ]
     ]
 
-    return (result_df, *tuple(figures))
+    return (
+        result_df,
+        *figures,
+        RawData(true_regard=true_df, pred_regard=pred_df),
+    )

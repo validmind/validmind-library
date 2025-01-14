@@ -43,19 +43,18 @@ class TestTimeSeriesHistogram(unittest.TestCase):
             __log=False,
         )
 
-    def test_returns_tuple_of_figures(self):
+    def test_returns_tuple_of_figures_and_raw_data(self):
         # Run the function
         result = TimeSeriesHistogram(self.vm_dataset)
 
         # Check if result is a tuple
         self.assertIsInstance(result, tuple)
 
-        # Check if all elements in the tuple are Plotly Figures
-        for fig in result:
-            self.assertIsInstance(fig, go.Figure)
-
         # Should have one histogram per column
         self.assertEqual(len(result), len(self.df.columns))
+
+        for fig in result:
+            self.assertIsInstance(fig, go.Figure)
 
     def test_histogram_properties(self):
         result = TimeSeriesHistogram(self.vm_dataset)

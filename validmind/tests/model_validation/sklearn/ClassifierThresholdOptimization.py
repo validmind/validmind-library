@@ -6,11 +6,8 @@ import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-from sklearn.metrics import (
-    roc_curve,
-    precision_recall_curve,
-    confusion_matrix,
-)
+from sklearn.metrics import confusion_matrix, precision_recall_curve, roc_curve
+
 from validmind import tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 

@@ -2,14 +2,15 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import List
+
 import numpy as np
 import plotly.graph_objects as go
 from sklearn.metrics import roc_auc_score, roc_curve
+
 from validmind import tags, tasks
 from validmind.errors import SkipTestError
 from validmind.vm_models import VMDataset, VMModel
-
-from typing import List
 
 
 @tags(

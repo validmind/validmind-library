@@ -6,7 +6,7 @@ import evaluate
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 
 
 @tags("nlp", "text_data", "data_validation")
@@ -73,4 +73,4 @@ def Toxicity(dataset):
 
     plt.close()
 
-    return fig
+    return fig, RawData(toxicity_scores=toxicity_scores)

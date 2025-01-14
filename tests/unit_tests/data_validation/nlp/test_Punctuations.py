@@ -2,7 +2,7 @@ import unittest
 import pandas as pd
 import plotly.graph_objects as go
 import validmind as vm
-from validmind.tests.data_validation.nlp.Punctuations import Punctuations
+from validmind.tests.data_validation.nlp.Punctuations import Punctuations, RawData
 
 
 class TestPunctuations(unittest.TestCase):
@@ -39,26 +39,29 @@ class TestPunctuations(unittest.TestCase):
 
     def test_returns_plotly_figure(self):
         # Run the function with default token mode
-        result = Punctuations(self.vm_dataset)
+        fig, raw_data = Punctuations(self.vm_dataset)
 
         # Check if result is a Plotly Figure
-        self.assertIsInstance(result, go.Figure)
+        self.assertIsInstance(fig, go.Figure)
 
         # Should have one trace (bar chart)
-        self.assertEqual(len(result.data), 1)
-        self.assertEqual(result.data[0].type, "bar")
+        self.assertEqual(len(fig.data), 1)
+        self.assertEqual(fig.data[0].type, "bar")
 
         # Should have a title and axis labels
-        self.assertIsNotNone(result.layout.title)
-        self.assertIsNotNone(result.layout.xaxis.title)
-        self.assertIsNotNone(result.layout.yaxis.title)
+        self.assertIsNotNone(fig.layout.title)
+        self.assertIsNotNone(fig.layout.xaxis.title)
+        self.assertIsNotNone(fig.layout.yaxis.title)
+
+        # Check that raw_data is instance of RawData
+        self.assertIsInstance(raw_data, RawData)
 
     def test_token_mode_counting(self):
-        result = Punctuations(self.vm_dataset, count_mode="token")
+        fig, raw_data = Punctuations(self.vm_dataset, count_mode="token")
 
         # Get the punctuation marks and their counts
-        punctuation_marks = result.data[0].x
-        counts = result.data[0].y
+        punctuation_marks = fig.data[0].x
+        counts = fig.data[0].y
 
         # Convert to dict for easier testing
         punct_counts = dict(zip(punctuation_marks, counts))
@@ -69,12 +72,15 @@ class TestPunctuations(unittest.TestCase):
         self.assertEqual(punct_counts["!"], 0)  # Zero exclamation marks
         self.assertEqual(punct_counts["?"], 0)  # Zero question marks
 
+        # Check that raw_data is instance of RawData
+        self.assertIsInstance(raw_data, RawData)
+
     def test_word_mode_counting(self):
-        result = Punctuations(self.vm_dataset, count_mode="word")
+        fig, raw_data = Punctuations(self.vm_dataset, count_mode="word")
 
         # Get the punctuation marks and their counts
-        punctuation_marks = result.data[0].x
-        counts = result.data[0].y
+        punctuation_marks = fig.data[0].x
+        counts = fig.data[0].y
 
         # Convert to dict for easier testing
         punct_counts = dict(zip(punctuation_marks, counts))
@@ -82,6 +88,9 @@ class TestPunctuations(unittest.TestCase):
         # Check specific punctuation counts (should include punctuation within words)
         self.assertTrue(punct_counts["-"] > 0)  # Should count hyphen in "Semi-colons"
         self.assertEqual(punct_counts['"'], 2)  # Two quote marks
+
+        # Check that raw_data is instance of RawData
+        self.assertIsInstance(raw_data, RawData)
 
     def test_invalid_count_mode(self):
         # Check if ValueError is raised for invalid count_mode
