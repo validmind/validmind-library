@@ -111,11 +111,26 @@ hljs.highlightAll();
 </script>
 """
 
-# FIXME: this is a bit too hacky
-katex_snippet = """
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.20/dist/katex.min.css" crossorigin="anonymous">
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.20/dist/katex.min.js" crossorigin="anonymous"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.20/dist/contrib/auto-render.min.js" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+# have to dynamically load mathjax
+math_jax_snippet = """
+<script>
+window.MathJax = {
+    tex2jax: {
+        inlineMath: [['$', '$'], ['\\\\(', '\\\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+        ignoreClass: ".*",
+        processClass: "math"
+    }
+};
+setTimeout(function () {
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS_HTML';
+    document.head.appendChild(script);
+}, 300);
+</script>
 """
 
 failed_content_block_html = """
