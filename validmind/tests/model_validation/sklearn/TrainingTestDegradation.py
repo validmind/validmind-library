@@ -7,6 +7,7 @@ from typing import List
 from numpy import unique
 from sklearn.metrics import classification_report
 
+from validmind import RawData
 from validmind.tests import tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 
@@ -98,4 +99,11 @@ def TrainingTestDegradation(
                 }
             )
 
-    return table, all(row["Pass/Fail"] == "Pass" for row in table)
+    return (
+        table,
+        all(row["Pass/Fail"] == "Pass" for row in table),
+        RawData(
+            dataset_1_report=ds1_report,
+            dataset_2_report=ds2_report,
+        ),
+    )

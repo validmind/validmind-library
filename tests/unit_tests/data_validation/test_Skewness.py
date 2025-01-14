@@ -2,6 +2,7 @@ import unittest
 import pandas as pd
 import numpy as np
 import validmind as vm
+from validmind import RawData
 from validmind.tests.data_validation.Skewness import Skewness
 
 

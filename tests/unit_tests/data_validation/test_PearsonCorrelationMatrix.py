@@ -31,9 +31,9 @@ class TestPearsonCorrelationMatrix(unittest.TestCase):
             __log=False,
         )
 
-    def test_returns_plotly_figure(self):
+    def test_returns_plotly_figure_and_raw_data(self):
         # Run the function
-        result = PearsonCorrelationMatrix(self.vm_dataset)
+        result, raw_data = PearsonCorrelationMatrix(self.vm_dataset)
 
         # Check if result is a Plotly Figure
         self.assertIsInstance(result, go.Figure)
@@ -45,3 +45,6 @@ class TestPearsonCorrelationMatrix(unittest.TestCase):
         # Check if the heatmap has the correct dimensions (3x3 for numeric columns)
         self.assertEqual(len(result.data[0].x), 3)  # Number of numeric columns
         self.assertEqual(len(result.data[0].y), 3)  # Number of numeric columns
+
+        # Check if raw_data is an instance of RawData
+        self.assertIsInstance(raw_data, vm.RawData)

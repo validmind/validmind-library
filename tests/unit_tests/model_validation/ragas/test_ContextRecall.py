@@ -4,6 +4,7 @@ import unittest
 import pandas as pd
 import plotly.graph_objects as go
 import validmind as vm
+from validmind import RawData
 
 # Load environment variables at the start of the test file
 dotenv.load_dotenv()
@@ -66,7 +67,7 @@ class TestContextRecall(unittest.TestCase):
 
         # Check return types
         self.assertIsInstance(result, tuple)
-        self.assertEqual(len(result), 3)  # dict and 2 figures
+        self.assertEqual(len(result), 4)  # dict, 2 figures, and raw data
 
         # Check dictionary structure
         self.assertIsInstance(result[0], dict)
@@ -77,6 +78,9 @@ class TestContextRecall(unittest.TestCase):
         # Check figures
         self.assertIsInstance(result[1], go.Figure)  # Histogram
         self.assertIsInstance(result[2], go.Figure)  # Box plot
+
+        # Check raw data
+        self.assertIsInstance(result[3], RawData)
 
     def test_recall_scores(self):
         """Test if recall scores reflect coverage of reference information."""

@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import validmind as vm
 from validmind.tests.data_validation.nlp.Sentiment import Sentiment
+from validmind import RawData
 
 
 class TestSentiment(unittest.TestCase):
@@ -39,20 +40,26 @@ class TestSentiment(unittest.TestCase):
             __log=False,
         )
 
-    def test_returns_matplotlib_figure(self):
+    def test_returns_matplotlib_figure_and_raw_data(self):
         # Run the function
         result = Sentiment(self.vm_dataset)
 
-        # Check if result is a matplotlib Figure
-        self.assertIsInstance(result, plt.Figure)
+        # Separate results
+        fig, raw_data = result
+
+        # Check if result includes a matplotlib Figure
+        self.assertIsInstance(fig, plt.Figure)
 
         # Check if figure has an axes
-        self.assertTrue(len(result.axes) > 0)
+        self.assertTrue(len(fig.axes) > 0)
 
         # Check if axes has a title and labels
-        ax = result.axes[0]
+        ax = fig.axes[0]
         self.assertIsNotNone(ax.get_title())
         self.assertIsNotNone(ax.get_xlabel())
+
+        # Check if result includes RawData
+        self.assertIsInstance(raw_data, RawData)
 
     def test_sentiment_range(self):
         from nltk.sentiment import SentimentIntensityAnalyzer

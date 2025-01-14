@@ -23,11 +23,12 @@ class TestHighCardinality(unittest.TestCase):
         )
 
     def test_cardinality_structure(self):
-        results, all_passed = HighCardinality(self.vm_dataset)
+        results, all_passed, raw_data = HighCardinality(self.vm_dataset)
 
         # Check basic structure
         self.assertIsInstance(results, list)
         self.assertIsInstance(all_passed, bool)
+        self.assertIsInstance(raw_data, vm.RawData)
 
         # Check that results include both columns
         column_names = [result["Column"] for result in results]
@@ -35,7 +36,7 @@ class TestHighCardinality(unittest.TestCase):
         self.assertIn("high_cardinality", column_names)
 
     def test_cardinality_values(self):
-        results, _ = HighCardinality(self.vm_dataset)
+        results, _, _ = HighCardinality(self.vm_dataset)
 
         # Convert results to dictionary for easier testing
         results_dict = {result["Column"]: result for result in results}
@@ -60,13 +61,13 @@ class TestHighCardinality(unittest.TestCase):
 
     def test_all_passed_flag(self):
         # Default thresholds should result in not all passing
-        _, all_passed_default = HighCardinality(self.vm_dataset)
+        _, all_passed_default, _ = HighCardinality(self.vm_dataset)
 
         # Only test the default case
         self.assertFalse(all_passed_default)
 
     def test_numeric_columns_ignored(self):
-        results, _ = HighCardinality(self.vm_dataset)
+        results, _, _ = HighCardinality(self.vm_dataset)
         column_names = [result["Column"] for result in results]
 
         # Numeric column should not be in results

@@ -37,26 +37,31 @@ class TestLanguageDetection(unittest.TestCase):
             __log=False,
         )
 
-    def test_returns_plotly_figure(self):
+    def test_returns_plotly_figure_and_raw_data(self):
         # Run the function
         result = LanguageDetection(self.vm_dataset)
+        fig, raw_data = result
 
-        # Check if result is a Plotly Figure
-        self.assertIsInstance(result, go.Figure)
+        # Check if the first result is a Plotly Figure
+        self.assertIsInstance(fig, go.Figure)
 
         # Should have one trace (histogram)
-        self.assertEqual(len(result.data), 1)
-        self.assertEqual(result.data[0].type, "histogram")
+        self.assertEqual(len(fig.data), 1)
+        self.assertEqual(fig.data[0].type, "histogram")
 
         # Should have a title and axis labels
-        self.assertIsNotNone(result.layout.title)
-        self.assertIsNotNone(result.layout.xaxis.title)
+        self.assertIsNotNone(fig.layout.title)
+        self.assertIsNotNone(fig.layout.xaxis.title)
+
+        # Check if the second result is an instance of RawData
+        self.assertIsInstance(raw_data, vm.RawData)
 
     def test_language_detection(self):
         result = LanguageDetection(self.vm_dataset)
+        fig, _ = result
 
         # Get the detected languages from the histogram
-        languages = result.data[0].x
+        languages = fig.data[0].x
 
         # Check that expected languages are present
         self.assertTrue("en" in languages[0])  # English

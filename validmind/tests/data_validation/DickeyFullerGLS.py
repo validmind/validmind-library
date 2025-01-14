@@ -6,7 +6,7 @@ import pandas as pd
 from arch.unitroot import DFGLS
 from numpy.linalg import LinAlgError
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.errors import SkipTestError
 from validmind.logging import get_logger
 from validmind.vm_models import VMDataset
@@ -97,4 +97,4 @@ def DickeyFullerGLS(dataset: VMDataset):
 
     return {
         "DFGLS Test Results": dfgls_values,
-    }
+    }, RawData(df=df)

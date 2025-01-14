@@ -7,7 +7,7 @@ import warnings
 import plotly.express as px
 from datasets import Dataset
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.errors import MissingDependencyError
 
 from .utils import get_ragas_config, get_renamed_columns
@@ -187,9 +187,13 @@ def AspectCritic(
         title="Aspect Critique Results",
     )
 
-    return {
-        "Aspect Scores": [
-            {"Aspect": aspect, "Score": result_df[aspect].mean()}
-            for aspect in aspects + [aspect.name for aspect in custom_aspects]
-        ]
-    }, fig
+    return (
+        {
+            "Aspect Scores": [
+                {"Aspect": aspect, "Score": result_df[aspect].mean()}
+                for aspect in aspects + [aspect.name for aspect in custom_aspects]
+            ]
+        },
+        fig,
+        RawData(evaluation_results=result_df),
+    )

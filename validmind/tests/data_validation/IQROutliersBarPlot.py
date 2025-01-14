@@ -4,7 +4,7 @@
 
 import plotly.graph_objects as go
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset
 
 
@@ -118,4 +118,11 @@ def IQROutliersBarPlot(
         )
         figures.append(fig)
 
-    return tuple(figures)
+    return (
+        *figures,
+        RawData(
+            outlier_counts_by_feature=df[dataset.feature_columns_numeric].apply(
+                lambda col: compute_outliers(col, threshold)
+            )
+        ),
+    )

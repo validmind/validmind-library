@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 import plotly.figure_factory as ff
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset
 
 # Define the 'coolwarm' color scale manually
@@ -101,4 +101,4 @@ def LaggedCorrelationHeatmap(dataset: VMDataset, num_lags: int = 10):
         xaxis_title="Lags",
     )
 
-    return fig
+    return fig, RawData(correlation_matrix=correlation_df)

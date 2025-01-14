@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import validmind as vm
 import plotly.graph_objects as go
+from validmind import RawData
 from validmind.tests.data_validation.SeasonalDecompose import SeasonalDecompose
 from validmind.errors import SkipTestError
 
@@ -41,28 +42,36 @@ class TestSeasonalDecompose(unittest.TestCase):
         )
 
     def test_seasonal_decompose(self):
-        figures = SeasonalDecompose(self.vm_dataset)
+        result = SeasonalDecompose(self.vm_dataset)
 
-        # Check that we get the correct number of figures (one per feature)
-        self.assertIsInstance(figures, tuple)
-        self.assertEqual(len(figures), 2)
+        # Check that we get the correct number of figures (one per feature + RawData)
+        self.assertIsInstance(result, tuple)
+        self.assertEqual(len(result), 3)
 
         # Check that outputs are plotly figures with correct subplots
+        figures = result[:-1]  # all but the last item, which is RawData
         for fig in figures:
             self.assertIsInstance(fig, go.Figure)
             # Should have 6 subplots: Observed, Trend, Seasonal, Residuals,
             # Histogram, and Q-Q plot
             self.assertEqual(len(fig.data), 7)  # 6 plots + 1 QQ line
 
+        # Check the last element in the returned result is a RawData instance
+        self.assertIsInstance(result[-1], RawData)
+
     def test_seasonal_decompose_with_nan(self):
         # Should still work with NaN values
-        figures = SeasonalDecompose(self.vm_dataset_with_nan)
-        self.assertEqual(len(figures), 2)
+        result = SeasonalDecompose(self.vm_dataset_with_nan)
+
+        # Expect 2 plots and 1 RawData object
+        self.assertEqual(len(result), 3)
 
     def test_seasonal_decompose_models(self):
         # Test additive model (should work with any data)
-        figures_add = SeasonalDecompose(self.vm_dataset, seasonal_model="additive")
-        self.assertEqual(len(figures_add), 2)
+        result_add = SeasonalDecompose(self.vm_dataset, seasonal_model="additive")
+
+        # Expect 2 plots and 1 RawData object
+        self.assertEqual(len(result_add), 3)
 
         # Test multiplicative model (should raise ValueError for data with zero/negative values)
         with self.assertRaises(ValueError) as context:

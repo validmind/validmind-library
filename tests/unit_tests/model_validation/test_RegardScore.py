@@ -1,8 +1,8 @@
 import unittest
 import pandas as pd
-import numpy as np
 import plotly.graph_objects as go
 import validmind as vm
+from validmind import RawData
 from validmind.tests.model_validation.RegardScore import RegardScore
 
 
@@ -70,8 +70,11 @@ class TestRegardScore(unittest.TestCase):
         self.assertIsInstance(result[0], pd.DataFrame)
 
         # Check if remaining elements are figures
-        for fig in result[1:]:
+        for fig in result[1:-1]:
             self.assertIsInstance(fig, go.Figure)
+
+        # Check if last element is RawData
+        self.assertIsInstance(result[-1], RawData)
 
     def test_metrics_dataframe(self):
         """Test if metrics DataFrame has expected structure and values."""
@@ -97,7 +100,7 @@ class TestRegardScore(unittest.TestCase):
 
     def test_figures_properties(self):
         """Test if figures have expected properties."""
-        _, *figures = RegardScore(self.vm_dataset, self.vm_model)
+        _, *figures, _ = RegardScore(self.vm_dataset, self.vm_model)
 
         # Check if we have the expected number of figures (16 figures: histogram and bar chart for different catergories)
         self.assertEqual(len(figures), 16)

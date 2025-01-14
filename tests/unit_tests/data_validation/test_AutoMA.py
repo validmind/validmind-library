@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import validmind as vm
 from validmind.tests.data_validation.AutoMA import AutoMA
+from validmind import RawData
 
 
 class TestAutoMA(unittest.TestCase):
@@ -41,7 +42,7 @@ class TestAutoMA(unittest.TestCase):
 
     def test_returns_expected_structure(self):
         # Run the function
-        result = AutoMA(self.vm_dataset, max_ma_order=3)
+        result, raw_data = AutoMA(self.vm_dataset, max_ma_order=3)
 
         # Check if result is a dictionary with expected keys
         self.assertIsInstance(result, dict)
@@ -61,8 +62,11 @@ class TestAutoMA(unittest.TestCase):
             list(result["Best MA Order Results"].columns), expected_columns
         )
 
+        # Check raw data is instance of RawData
+        self.assertIsInstance(raw_data, RawData)
+
     def test_ma_order_detection(self):
-        result = AutoMA(self.vm_dataset, max_ma_order=3)
+        result, _ = AutoMA(self.vm_dataset, max_ma_order=3)
         best_orders = result["Best MA Order Results"]
 
         # Get best MA orders for each process
@@ -80,7 +84,7 @@ class TestAutoMA(unittest.TestCase):
 
     def test_max_ma_order_parameter(self):
         max_order = 2
-        result = AutoMA(self.vm_dataset, max_ma_order=max_order)
+        result, _ = AutoMA(self.vm_dataset, max_ma_order=max_order)
         analysis_results = result["Auto MA Analysis Results"]
 
         # Check that no MA order exceeds the maximum
@@ -88,4 +92,4 @@ class TestAutoMA(unittest.TestCase):
 
     def test_handles_nan_values(self):
         # Should run without errors despite NaN values
-        result = AutoMA(self.vm_dataset, max_ma_order=3)
+        result, _ = AutoMA(self.vm_dataset, max_ma_order=3)

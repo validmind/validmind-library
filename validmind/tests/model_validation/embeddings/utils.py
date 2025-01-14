@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 import numpy as np
+import pandas as pd
 import plotly.express as px
 from sklearn.metrics.pairwise import cosine_similarity
 
@@ -17,10 +18,19 @@ def create_stability_analysis_result(
         original_embeddings, perturbed_embeddings
     ).diagonal()
 
+    # create a raw dataframe of the original, perturbed and similarity
+    raw_data = pd.DataFrame(
+        {
+            "original": original_embeddings,
+            "perturbed": perturbed_embeddings,
+            "similarity": similarities,
+        }
+    )
+
     mean = np.mean(similarities)
     passed = mean > mean_similarity_threshold
 
-    return (
+    return raw_data, (
         [
             {
                 "Mean Similarity": mean,

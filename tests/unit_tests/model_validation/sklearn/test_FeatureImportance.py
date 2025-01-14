@@ -56,25 +56,25 @@ class TestFeatureImportance(unittest.TestCase):
             __log=False,
         )
 
-    def test_returns_dataframe(self):
+    def test_returns_dataframe_and_rawdata(self):
         # Run the function
-        result = FeatureImportance(self.vm_dataset, self.vm_model)
+        result_df = FeatureImportance(self.vm_dataset, self.vm_model)
 
-        # Check if result is a DataFrame
-        self.assertIsInstance(result, pd.DataFrame)
+        # Check if result_df is a DataFrame
+        self.assertIsInstance(result_df, pd.DataFrame)
 
         # Check if DataFrame has expected columns
         expected_columns = ["Feature 1", "Feature 2", "Feature 3"]
-        self.assertTrue(all(col in result.columns for col in expected_columns))
+        self.assertTrue(all(col in result_df.columns for col in expected_columns))
 
     def test_feature_importance_ranking(self):
         # Run with all features
-        result = FeatureImportance(self.vm_dataset, self.vm_model, num_features=4)
+        result_df = FeatureImportance(self.vm_dataset, self.vm_model, num_features=4)
 
         # Get feature names and scores
         features = []
         for i in range(1, 5):
-            feature_info = result[f"Feature {i}"].iloc[0]
+            feature_info = result_df[f"Feature {i}"].iloc[0]
             feature_name = feature_info.split(";")[0].strip("[]")
             features.append(feature_name)
 
@@ -87,21 +87,21 @@ class TestFeatureImportance(unittest.TestCase):
     def test_num_features_parameter(self):
         # Test with different num_features values
         for num_features in [2, 3, 4]:
-            result = FeatureImportance(
+            result_df = FeatureImportance(
                 self.vm_dataset, self.vm_model, num_features=num_features
             )
 
             # Check number of columns matches num_features
             feature_columns = [
-                col for col in result.columns if col.startswith("Feature")
+                col for col in result_df.columns if col.startswith("Feature")
             ]
             self.assertEqual(len(feature_columns), num_features)
 
     def test_feature_importance_scores(self):
-        result = FeatureImportance(self.vm_dataset, self.vm_model)
+        result_df = FeatureImportance(self.vm_dataset, self.vm_model)
 
         # Get first feature score
-        first_feature = result["Feature 1"].iloc[0]
+        first_feature = result_df["Feature 1"].iloc[0]
         score = float(first_feature.split(";")[1].strip("[] "))
 
         # Check if score is positive (since we're using absolute importance)

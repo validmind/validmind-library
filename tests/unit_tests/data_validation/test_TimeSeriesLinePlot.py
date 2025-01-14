@@ -33,11 +33,11 @@ class TestTimeSeriesLinePlot(unittest.TestCase):
     def test_time_series_line_plot(self):
         figures = TimeSeriesLinePlot(self.vm_dataset)
 
-        # Check that we get the correct number of figures (one per feature)
+        # Check that we get the correct number of figures plus raw data (one per feature + RawData)
         self.assertIsInstance(figures, tuple)
         self.assertEqual(len(figures), 2)  # Should have 2 figures for A and B
 
-        # Check that outputs are plotly figures
+        # Check that the figures are plotly figures
         for fig in figures:
             self.assertIsInstance(fig, go.Figure)
 

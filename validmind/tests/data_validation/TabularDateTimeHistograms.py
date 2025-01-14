@@ -5,7 +5,7 @@
 import pandas as pd
 import plotly.graph_objects as go
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.errors import SkipTestError
 from validmind.vm_models import VMDataset
 
@@ -72,4 +72,4 @@ def TabularDateTimeHistograms(dataset: VMDataset):
         font=dict(size=18),
     )
 
-    return fig
+    return fig, RawData(date_differences=date_diffs)

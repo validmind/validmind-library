@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.errors import SkipTestError
 from validmind.vm_models import VMDataset
 
@@ -70,6 +70,7 @@ def SpreadPlot(dataset: VMDataset):
     ]
 
     figures = []
+    spread_data = {}
 
     for var1, var2 in feature_pairs:
         fig, ax = plt.subplots()
@@ -80,8 +81,9 @@ def SpreadPlot(dataset: VMDataset):
             y=0.95,
         )
 
+        spread_series = df[var1] - df[var2]
         sns.lineplot(
-            data=df[var1] - df[var2],
+            data=spread_series,
             ax=ax,
         )
 
@@ -89,5 +91,8 @@ def SpreadPlot(dataset: VMDataset):
         ax.tick_params(axis="both", labelsize=18)
 
         figures.append(fig)
+        spread_data[f"{var1}_{var2}_spread"] = spread_series.to_frame(
+            name=f"spread_{var1}_{var2}"
+        )
 
-    return tuple(figures)
+    return (*figures, RawData(spread_data=spread_data))

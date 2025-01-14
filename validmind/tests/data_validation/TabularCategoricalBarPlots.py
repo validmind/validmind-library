@@ -4,7 +4,7 @@
 
 import plotly.graph_objs as go
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.errors import SkipTestError
 from validmind.vm_models import VMDataset
 
@@ -66,9 +66,11 @@ def TabularCategoricalBarPlots(dataset: VMDataset):
     ]
 
     figures = []
+    counts_dict = {}
 
     for col in dataset.feature_columns_categorical:
         counts = dataset.df[col].value_counts()
+        counts_dict[col] = counts
 
         fig = go.Figure()
         fig.add_trace(
@@ -90,4 +92,4 @@ def TabularCategoricalBarPlots(dataset: VMDataset):
         )
         figures.append(fig)
 
-    return tuple(figures)
+    return (*figures, RawData(category_counts=counts_dict))

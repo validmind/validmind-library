@@ -77,13 +77,6 @@ def MutualInformation(
     else:
         mi_scores = mutual_info_regression(X, y)
 
-    # Create DataFrame for raw data
-    raw_data = RawData(
-        feature=dataset.feature_columns,
-        mutual_information_score=mi_scores.tolist(),
-        pass_fail=["Pass" if score >= min_threshold else "Fail" for score in mi_scores],
-    )
-
     # Create Plotly figure
     fig = go.Figure()
 
@@ -127,4 +120,8 @@ def MutualInformation(
         template="plotly_white",
     )
 
-    return raw_data, fig
+    return fig, RawData(
+        mutual_information_scores={
+            feature: score for feature, score in zip(sorted_features, sorted_scores)
+        }
+    )

@@ -11,7 +11,7 @@ from scipy.spatial.distance import cdist
 from sklearn import clone
 from sklearn.metrics import silhouette_score
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.errors import SkipTestError
 from validmind.vm_models import VMDataset, VMModel
 
@@ -124,4 +124,4 @@ def KMeansClustersOptimization(
 
     fig.update_layout(showlegend=False)
 
-    return fig
+    return fig, RawData(distortions=distortions, silhouette_avg=silhouette_avg)

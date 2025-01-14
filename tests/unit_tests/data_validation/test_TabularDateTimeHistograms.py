@@ -29,10 +29,13 @@ class TestTabularDateTimeHistograms(unittest.TestCase):
         )
 
     def test_datetime_histograms(self):
-        figure = TabularDateTimeHistograms(self.vm_dataset)
+        figure, raw_data = TabularDateTimeHistograms(self.vm_dataset)
 
         # Check that output is a plotly figure
         self.assertIsInstance(figure, go.Figure)
+
+        # Check that raw data is an instance of RawData
+        self.assertIsInstance(raw_data, vm.RawData)
 
     def test_no_datetime_index(self):
         # Should raise SkipTestError when no datetime index present

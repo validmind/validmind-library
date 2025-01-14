@@ -7,7 +7,7 @@ from typing import Union
 import plotly.express as px
 from sklearn.manifold import TSNE
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.logging import get_logger
 from validmind.vm_models import VMDataset, VMModel
 
@@ -89,4 +89,4 @@ def EmbeddingsVisualization2D(
     fig = px.scatter(**scatter_kwargs)
     fig.update_layout(width=500, height=500)
 
-    return fig
+    return fig, RawData(tsne_embeddings=reduced_embeddings)

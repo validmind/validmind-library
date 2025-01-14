@@ -10,7 +10,7 @@ import plotly.express as px
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 
 
 @tags("visualization", "dimensionality_reduction", "embeddings")
@@ -74,7 +74,7 @@ def PCAComponentsPairwisePlots(dataset, model, n_components=3):
     )
 
     # List to store each plot
-    plots = []
+    figures = []
 
     # Create plots for each pair of principal components
     for pc1, pc2 in itertools.combinations(range(1, n_components + 1), 2):
@@ -88,7 +88,6 @@ def PCAComponentsPairwisePlots(dataset, model, n_components=3):
                 f"PC{pc2}": f"Principal Component {pc2}",
             },
         )
-        plots.append(fig)
+        figures.append(fig)
 
-    # Return the list of plots as a tuple
-    return tuple(plots)
+    return (*figures, RawData(pca_results=pca_df))
