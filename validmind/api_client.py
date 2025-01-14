@@ -407,6 +407,7 @@ async def alog_metric(
     inputs: Optional[List[str]] = None,
     params: Optional[Dict[str, Any]] = None,
     recorded_at: Optional[str] = None,
+    thresholds: Optional[Dict[str, Any]] = None,
 ):
     """See log_metric for details"""
     if not key or not isinstance(key, str):
@@ -421,6 +422,9 @@ async def alog_metric(
         except (ValueError, TypeError):
             raise ValueError("`value` must be a scalar (int or float)")
 
+    if thresholds is not None and not isinstance(thresholds, dict):
+        raise ValueError("`thresholds` must be a dictionary or None")
+
     try:
         return await _post(
             "log_unit_metric",
@@ -431,6 +435,7 @@ async def alog_metric(
                     "inputs": inputs or [],
                     "params": params or {},
                     "recorded_at": recorded_at,
+                    "thresholds": thresholds or {},
                 },
                 cls=NumpyEncoder,
                 allow_nan=False,
@@ -447,6 +452,7 @@ def log_metric(
     inputs: Optional[List[str]] = None,
     params: Optional[Dict[str, Any]] = None,
     recorded_at: Optional[str] = None,
+    thresholds: Optional[Dict[str, Any]] = None,
 ):
     """Logs a unit metric
 
@@ -463,8 +469,9 @@ def log_metric(
         params (dict, optional): Dictionary of parameters used to compute the metric.
         recorded_at (str, optional): The timestamp of the metric. Server will use
             current time if not provided.
+        thresholds (dict, optional): Dictionary of thresholds for the metric.
     """
-    run_async(alog_metric, key, value, inputs, params, recorded_at)
+    run_async(alog_metric, key, value, inputs, params, recorded_at, thresholds)
 
 
 def get_ai_key() -> Dict[str, Any]:
