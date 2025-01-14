@@ -23,13 +23,12 @@ import seaborn as sns
 from IPython.core import getipython
 from IPython.display import HTML
 from IPython.display import display as ipy_display
-from latex2mathml.converter import convert
 from matplotlib.axes._axes import _log as matplotlib_axes_logger
 from numpy import ndarray
 from sklearn.exceptions import UndefinedMetricWarning
 from tabulate import tabulate
 
-from .html_templates.content_blocks import math_jax_snippet, python_syntax_highlighting
+from .html_templates.content_blocks import katex_snippet, python_syntax_highlighting
 from .logging import get_logger
 
 DEFAULT_BIG_NUMBER_DECIMALS = 2
@@ -491,15 +490,14 @@ def display(widget_or_html, syntax_highlighting=True, mathjax=True):
         ipy_display(HTML(widget_or_html))
         # if html we can auto-detect if we actually need syntax highlighting or MathJax
         syntax_highlighting = 'class="language-' in widget_or_html
-        mathjax = "$$" in widget_or_html
+        # mathjax = "$$" in widget_or_html
     else:
         ipy_display(widget_or_html)
 
     if syntax_highlighting:
         ipy_display(HTML(python_syntax_highlighting))
 
-    if mathjax:
-        ipy_display(HTML(math_jax_snippet))
+    ipy_display(HTML(katex_snippet))
 
 
 def md_to_html(md: str, mathml=False) -> str:
@@ -510,22 +508,22 @@ def md_to_html(md: str, mathml=False) -> str:
     )(md)
 
     if not mathml:
-        # return the html as is (with latex that will be rendered by MathJax)
         return html
 
-    # convert the latex to MathML which CKeditor can render
-    math_block_pattern = re.compile(r'<div class="math">\$\$([\s\S]*?)\$\$</div>')
-    html = math_block_pattern.sub(
-        lambda match: "<p>{}</p>".format(convert(match.group(1), display="block")), html
-    )
+    # # convert the latex to katex which CKeditor can render
+    # math_block_pattern = re.compile(r'<div class="math">\$\$([\s\S]*?)\$\$</div>')
+    # html = math_block_pattern.sub(
+    #     lambda match: '<script type="math/tex; mode=display">{}</script>'.format(
+    #         match.group(1)
+    #     ),
+    #     html,
+    # )
 
-    inline_math_pattern = re.compile(r'<span class="math">\\\((.*?)\\\)</span>')
-    html = inline_math_pattern.sub(
-        lambda match: "<span>{}</span>".format(
-            convert(match.group(1), display="inline")
-        ),
-        html,
-    )
+    # inline_math_pattern = re.compile(r'<span class="math">\\\((.*?)\\\)</span>')
+    # html = inline_math_pattern.sub(
+    #     lambda match: '<script type="math/tex">{}</script>'.format(match.group(1)),
+    #     html,
+    # )
 
     return html
 

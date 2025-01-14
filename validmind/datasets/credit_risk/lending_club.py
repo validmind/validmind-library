@@ -2,20 +2,19 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+import logging
 import os
 import warnings
-import logging
+
 import numpy as np
 import pandas as pd
 import scorecardpy as sc
 import statsmodels.api as sm
-
 import xgboost as xgb
-import validmind as vm
-
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 
+import validmind as vm
 
 current_path = os.path.dirname(os.path.abspath(__file__))
 dataset_path = os.path.join(current_path, "datasets")
