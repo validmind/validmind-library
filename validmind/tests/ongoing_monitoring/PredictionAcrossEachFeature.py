@@ -53,30 +53,25 @@ def PredictionAcrossEachFeature(datasets, model):
     observed during the training of the model.
     """
 
-    df_reference = datasets[0]._df
-    df_monitoring = datasets[1]._df
+    y_prob_reference = datasets[0].y_prob(model)
+    y_prob_monitoring = datasets[1].y_prob(model)
 
-    figures = []
-    for column in df_reference:
-        prediction_prob_column = f"{model.input_id}_probabilities"
-        prediction_column = f"{model.input_id}_prediction"
-        if column == prediction_prob_column or column == prediction_column:
-            pass
-        else:
-            fig, axs = plt.subplots(1, 2, figsize=(20, 10), sharey="row")
+    figures_to_save = []
+    for column in datasets[0].feature_columns:
+        fig, axs = plt.subplots(1, 2, figsize=(20, 10), sharey="row")
 
-            ax1, ax2 = axs
+        ax1, ax2 = axs
 
-            ax1.scatter(df_reference[column], df_reference[prediction_prob_column])
-            ax2.scatter(df_monitoring[column], df_monitoring[prediction_prob_column])
+        ax1.scatter(datasets[0].df[column], y_prob_reference)
+        ax2.scatter(datasets[1].df[column], y_prob_monitoring)
 
-            ax1.set_title("Reference")
-            ax1.set_xlabel(column)
-            ax1.set_ylabel("Prediction Value")
+        ax1.set_title("Reference")
+        ax1.set_xlabel(column)
+        ax1.set_ylabel("Prediction Value")
 
-            ax2.set_title("Monitoring")
-            ax2.set_xlabel(column)
-            figures.append(fig)
-            plt.close()
+        ax2.set_title("Monitoring")
+        ax2.set_xlabel(column)
+        figures_to_save.append(fig)
+        plt.close()
 
-    return tuple(figures)
+    return tuple(figures_to_save)

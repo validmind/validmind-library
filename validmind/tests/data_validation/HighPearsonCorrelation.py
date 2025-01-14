@@ -9,7 +9,10 @@ from validmind.vm_models import VMDataset
 @tags("tabular_data", "data_quality", "correlation")
 @tasks("classification", "regression")
 def HighPearsonCorrelation(
-    dataset: VMDataset, max_threshold: float = 0.3, top_n_correlations: int = 10
+    dataset: VMDataset,
+    max_threshold: float = 0.3,
+    top_n_correlations: int = 10,
+    feature_columns: list = None,
 ):
     """
     Identifies highly correlated feature pairs in a dataset suggesting feature redundancy or multicollinearity.
@@ -51,8 +54,15 @@ def HighPearsonCorrelation(
     - Limited to identifying redundancy only within feature pairs; may fail to spot more complex relationships among
     three or more variables.
     """
+
+    # Select features
+    if feature_columns is None:
+        df = dataset.df
+    else:
+        df = dataset.df[feature_columns]
+
     # Get correlation matrix for numeric columns
-    corr = dataset.df.corr(numeric_only=True)
+    corr = df.corr(numeric_only=True)
 
     # Create table of correlation coefficients and column pairs
     pairs = []

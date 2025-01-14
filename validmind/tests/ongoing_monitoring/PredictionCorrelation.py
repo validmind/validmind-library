@@ -2,16 +2,15 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+import pandas as pd
+import plotly.graph_objects as go
 
-import matplotlib.pyplot as plt
-import numpy as np
-
-from validmind import RawData, tags, tasks
+from validmind import tags, tasks
 
 
 @tags("visualization")
 @tasks("monitoring")
-def PredictionCorrelation(datasets, model):
+def PredictionCorrelation(datasets, model, drift_pct_threshold=20):
     """
     Assesses correlation changes between model predictions from reference and monitoring datasets to detect potential
     target drift.
@@ -47,60 +46,98 @@ def PredictionCorrelation(datasets, model):
     - Focuses solely on linear relationships, potentially missing non-linear interactions.
     """
 
-    prediction_prob_column = f"{model.input_id}_probabilities"
-    prediction_column = f"{model.input_id}_prediction"
+    # Get feature columns and predictions
+    feature_columns = datasets[0].feature_columns
+    y_prob_ref = pd.Series(datasets[0].y_prob(model), index=datasets[0].df.index)
+    y_prob_mon = pd.Series(datasets[1].y_prob(model), index=datasets[1].df.index)
 
-    df_corr = datasets[0]._df.corr()
-    df_corr = df_corr[[prediction_prob_column]]
+    # Create dataframes with features and predictions
+    df_ref = datasets[0].df[feature_columns].copy()
+    df_ref["predictions"] = y_prob_ref
 
-    df_corr2 = datasets[1]._df.corr()
-    df_corr2 = df_corr2[[prediction_prob_column]]
+    df_mon = datasets[1].df[feature_columns].copy()
+    df_mon["predictions"] = y_prob_mon
 
-    corr_final = df_corr.merge(df_corr2, left_index=True, right_index=True)
-    corr_final.columns = ["Reference Predictions", "Monitoring Predictions"]
-    corr_final = corr_final.drop(index=[prediction_column, prediction_prob_column])
+    # Calculate correlations
+    corr_ref = df_ref.corr()["predictions"]
+    corr_mon = df_mon.corr()["predictions"]
 
-    n = len(corr_final)
-    r = np.arange(n)
-    width = 0.25
-
-    fig = plt.figure()
-
-    plt.bar(
-        r,
-        corr_final["Reference Predictions"],
-        color="b",
-        width=width,
-        edgecolor="black",
-        label="Reference Prediction Correlation",
-    )
-    plt.bar(
-        r + width,
-        corr_final["Monitoring Predictions"],
-        color="g",
-        width=width,
-        edgecolor="black",
-        label="Monitoring Prediction Correlation",
+    # Combine correlations (excluding the predictions row)
+    corr_final = pd.DataFrame(
+        {
+            "Reference Predictions": corr_ref[feature_columns],
+            "Monitoring Predictions": corr_mon[feature_columns],
+        }
     )
 
-    plt.xlabel("Features")
-    plt.ylabel("Correlation")
-    plt.title("Correlation between Predictions and Features")
+    # Calculate drift percentage with direction
+    corr_final["Drift (%)"] = (
+        (corr_final["Monitoring Predictions"] - corr_final["Reference Predictions"])
+        / corr_final["Reference Predictions"].abs()
+        * 100
+    ).round(2)
 
-    features = corr_final.index.to_list()
-    plt.xticks(r + width / 2, features, rotation=45)
-    plt.legend()
-    plt.tight_layout()
-
-    plt.close()
-
-    corr_final["Features"] = corr_final.index
-    corr_final = corr_final[
-        ["Features", "Reference Predictions", "Monitoring Predictions"]
-    ]
-
-    return (
-        {"Correlation Pair Table": corr_final},
-        fig,
-        RawData(reference_corr=df_corr, monitoring_corr=df_corr2),
+    # Add Pass/Fail column based on absolute drift
+    corr_final["Pass/Fail"] = (
+        corr_final["Drift (%)"]
+        .abs()
+        .apply(lambda x: "Pass" if x < drift_pct_threshold else "Fail")
     )
+
+    # Create plotly figure
+    fig = go.Figure()
+
+    # Add reference predictions bar
+    fig.add_trace(
+        go.Bar(
+            name="Reference Prediction Correlation",
+            x=corr_final.index,
+            y=corr_final["Reference Predictions"],
+            marker_color="blue",
+            marker_line_color="black",
+            marker_line_width=1,
+            opacity=0.75,
+        )
+    )
+
+    # Add monitoring predictions bar
+    fig.add_trace(
+        go.Bar(
+            name="Monitoring Prediction Correlation",
+            x=corr_final.index,
+            y=corr_final["Monitoring Predictions"],
+            marker_color="green",
+            marker_line_color="black",
+            marker_line_width=1,
+            opacity=0.75,
+        )
+    )
+
+    # Update layout
+    fig.update_layout(
+        title="Correlation between Predictions and Features",
+        xaxis_title="Features",
+        yaxis_title="Correlation",
+        barmode="group",
+        template="plotly_white",
+        showlegend=True,
+        xaxis_tickangle=-45,
+        yaxis=dict(
+            range=[-1, 1],  # Correlation range is always -1 to 1
+            zeroline=True,
+            zerolinewidth=1,
+            zerolinecolor="grey",
+            gridcolor="lightgrey",
+        ),
+        hoverlabel=dict(bgcolor="white", font_size=12, font_family="Arial"),
+    )
+
+    # Ensure Features is the first column
+    corr_final["Feature"] = corr_final.index
+    cols = ["Feature"] + [col for col in corr_final.columns if col != "Feature"]
+    corr_final = corr_final[cols]
+
+    # Calculate overall pass/fail
+    pass_fail_bool = (corr_final["Pass/Fail"] == "Pass").all()
+
+    return ({"Correlation Pair Table": corr_final}, fig, pass_fail_bool)

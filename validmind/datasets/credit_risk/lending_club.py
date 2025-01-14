@@ -2,13 +2,19 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+import logging
 import os
+import warnings
 
 import numpy as np
 import pandas as pd
 import scorecardpy as sc
 import statsmodels.api as sm
+import xgboost as xgb
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
+
+import validmind as vm
 
 current_path = os.path.dirname(os.path.abspath(__file__))
 dataset_path = os.path.join(current_path, "datasets")
@@ -95,7 +101,7 @@ score_params = {
 }
 
 
-def load_data(source="online"):
+def load_data(source="online", verbose=True):
     """
     Load data from either an online source or offline files, automatically dropping specified columns for offline data.
 
@@ -104,28 +110,33 @@ def load_data(source="online"):
     """
 
     if source == "online":
-        print(f"Loading data from an online source: {online_data_file}")
+        if verbose:
+            print(f"Loading data from an online source: {online_data_file}")
         df = pd.read_csv(online_data_file)
-        df = _clean_data(df)
+        df = _clean_data(df, verbose=verbose)
 
     elif source == "offline":
-        print(f"Loading data from an offline .gz file: {offline_data_file}")
+        if verbose:
+            print(f"Loading data from an offline .gz file: {offline_data_file}")
         # Since we know the offline_data_file path ends with '.zip', we replace it with '.csv.gz'
         gzip_file_path = offline_data_file.replace(".zip", ".csv.gz")
-        print(f"Attempting to read from .gz file: {gzip_file_path}")
+        if verbose:
+            print(f"Attempting to read from .gz file: {gzip_file_path}")
         # Read the CSV file directly from the .gz archive
         df = pd.read_csv(gzip_file_path, compression="gzip")
-        print("Data loaded successfully.")
+        if verbose:
+            print("Data loaded successfully.")
     else:
         raise ValueError("Invalid source specified. Choose 'online' or 'offline'.")
 
-    print(
-        f"Rows: {df.shape[0]}, Columns: {df.shape[1]}, Missing values: {df.isnull().sum().sum()}"
-    )
+    if verbose:
+        print(
+            f"Rows: {df.shape[0]}, Columns: {df.shape[1]}, Missing values: {df.isnull().sum().sum()}"
+        )
     return df
 
 
-def _clean_data(df):
+def _clean_data(df, verbose=True):
     df = df.copy()
 
     # Drop columns not relevant for application scorecards
@@ -133,41 +144,45 @@ def _clean_data(df):
 
     # Drop rows with missing target values
     df.dropna(subset=[target_column], inplace=True)
-    print("Dropping rows with missing target values:")
-    print(
-        f"Rows: {df.shape[0]}\nColumns: {df.shape[1]}\nMissing values: {df.isnull().sum().sum()}\n"
-    )
+    if verbose:
+        print("Dropping rows with missing target values:")
+        print(
+            f"Rows: {df.shape[0]}\nColumns: {df.shape[1]}\nMissing values: {df.isnull().sum().sum()}\n"
+        )
 
     # Drop columns with more than N percent missing values
     missing_values = df.isnull().mean()
     df = df.loc[:, missing_values < 0.7]
-    print("Dropping columns with more than 70% missing values:")
-    print(
-        f"Rows: {df.shape[0]}\nColumns: {df.shape[1]}\nMissing values: {df.isnull().sum().sum()}\n"
-    )
+    if verbose:
+        print("Dropping columns with more than 70% missing values:")
+        print(
+            f"Rows: {df.shape[0]}\nColumns: {df.shape[1]}\nMissing values: {df.isnull().sum().sum()}\n"
+        )
 
     # Drop columns with only one unique value
     unique_values = df.nunique()
     df = df.loc[:, unique_values > 1]
-    print("Dropping columns with only one unique value:")
-    print(
-        f"Rows: {df.shape[0]}\nColumns: {df.shape[1]}\nMissing values: {df.isnull().sum().sum()}\n"
-    )
+    if verbose:
+        print("Dropping columns with only one unique value:")
+        print(
+            f"Rows: {df.shape[0]}\nColumns: {df.shape[1]}\nMissing values: {df.isnull().sum().sum()}\n"
+        )
 
     # Define the target variable for the model, representing loan default status.
     df[target_column] = df[target_column].map({"Fully Paid": 0, "Charged Off": 1})
 
     # Drop rows with NaN in target_column after mapping
     df.dropna(subset=[target_column], inplace=True)
-    print("Dropping rows with missing target values:")
-    print(
-        f"Rows: {df.shape[0]}\nColumns: {df.shape[1]}\nMissing values: {df.isnull().sum().sum()}\n"
-    )
+    if verbose:
+        print("Dropping rows with missing target values:")
+        print(
+            f"Rows: {df.shape[0]}\nColumns: {df.shape[1]}\nMissing values: {df.isnull().sum().sum()}\n"
+        )
 
     return df
 
 
-def preprocess(df):
+def preprocess(df, verbose=True):
     df = df.copy()
 
     # Convert the target variable to integer type for modeling.
@@ -175,45 +190,51 @@ def preprocess(df):
 
     # Keep rows where purpose is 'debt_consolidation' or 'credit_card'
     df = df[df["purpose"].isin(["debt_consolidation", "credit_card"])]
-    print("Filtering 'purpose' to 'debt_consolidation' and 'credit_card':")
-    print(
-        f"Rows: {df.shape[0]}\nColumns: {df.shape[1]}\nMissing values: {df.isnull().sum().sum()}\n"
-    )
+    if verbose:
+        print("Filtering 'purpose' to 'debt_consolidation' and 'credit_card':")
+        print(
+            f"Rows: {df.shape[0]}\nColumns: {df.shape[1]}\nMissing values: {df.isnull().sum().sum()}\n"
+        )
 
     # Remove rows where grade is 'F' or 'G'
     df = df[~df["grade"].isin(["F", "G"])]
-    print("Filtering out 'grade' F and G:")
-    print(
-        f"Rows: {df.shape[0]}\nColumns: {df.shape[1]}\nMissing values: {df.isnull().sum().sum()}\n"
-    )
+    if verbose:
+        print("Filtering out 'grade' F and G:")
+        print(
+            f"Rows: {df.shape[0]}\nColumns: {df.shape[1]}\nMissing values: {df.isnull().sum().sum()}\n"
+        )
 
     # Remove rows where sub_grade starts with 'F' or 'G'
     df = df[~df["sub_grade"].str.startswith(("F", "G"))]
-    print("Filtering out 'sub_grade' F and G:")
-    print(
-        f"Rows: {df.shape[0]}\nColumns: {df.shape[1]}\nMissing values: {df.isnull().sum().sum()}\n"
-    )
+    if verbose:
+        print("Filtering out 'sub_grade' F and G:")
+        print(
+            f"Rows: {df.shape[0]}\nColumns: {df.shape[1]}\nMissing values: {df.isnull().sum().sum()}\n"
+        )
 
     # Remove rows where home_ownership is 'OTHER', 'NONE', or 'ANY'
     df = df[~df["home_ownership"].isin(["OTHER", "NONE", "ANY"])]
-    print("Filtering out 'home_ownership' OTHER, NONE, ANY:")
-    print(
-        f"Rows: {df.shape[0]}\nColumns: {df.shape[1]}\nMissing values: {df.isnull().sum().sum()}\n"
-    )
+    if verbose:
+        print("Filtering out 'home_ownership' OTHER, NONE, ANY:")
+        print(
+            f"Rows: {df.shape[0]}\nColumns: {df.shape[1]}\nMissing values: {df.isnull().sum().sum()}\n"
+        )
 
     # Drop features that are not useful for modeling
     df.drop(drop_features, axis=1, inplace=True)
-    print("Dropping specified features:")
-    print(
-        f"Rows: {df.shape[0]}\nColumns: {df.shape[1]}\nMissing values: {df.isnull().sum().sum()}\n"
-    )
+    if verbose:
+        print("Dropping specified features:")
+        print(
+            f"Rows: {df.shape[0]}\nColumns: {df.shape[1]}\nMissing values: {df.isnull().sum().sum()}\n"
+        )
 
     # Drop rows with missing values
     df.dropna(inplace=True)
-    print("Dropping rows with any missing values:")
-    print(
-        f"Rows: {df.shape[0]}\nColumns: {df.shape[1]}\nMissing values: {df.isnull().sum().sum()}\n"
-    )
+    if verbose:
+        print("Dropping rows with any missing values:")
+        print(
+            f"Rows: {df.shape[0]}\nColumns: {df.shape[1]}\nMissing values: {df.isnull().sum().sum()}\n"
+        )
 
     # Preprocess emp_length column
     df = _preprocess_emp_length(df)
@@ -260,34 +281,37 @@ def _preprocess_emp_length(df):
     return df
 
 
-def feature_engineering(df):
+def feature_engineering(df, verbose=True):
     df = df.copy()
 
     # WoE encoding of numerical and categorical features
-    df = woe_encoding(df)
+    df = woe_encoding(df, verbose=verbose)
 
-    print(
-        f"Rows: {df.shape[0]}\nColumns: {df.shape[1]}\nMissing values: {df.isnull().sum().sum()}\n"
-    )
+    if verbose:
+        print(
+            f"Rows: {df.shape[0]}\nColumns: {df.shape[1]}\nMissing values: {df.isnull().sum().sum()}\n"
+        )
 
     return df
 
 
-def woe_encoding(df):
+def woe_encoding(df, verbose=True):
     df = df.copy()
 
-    woe = _woebin(df)
+    woe = _woebin(df, verbose=verbose)
     bins = _woe_to_bins(woe)
 
     # Make sure we don't transform the target column
     if target_column in bins:
         del bins[target_column]
-        print(f"Excluded {target_column} from WoE transformation.")
+        if verbose:
+            print(f"Excluded {target_column} from WoE transformation.")
 
     # Apply the WoE transformation
     df = sc.woebin_ply(df, bins=bins)
 
-    print("Successfully converted features to WoE values.")
+    if verbose:
+        print("Successfully converted features to WoE values.")
 
     return df
 
@@ -326,7 +350,7 @@ def _woe_to_bins(woe):
     return bins
 
 
-def _woebin(df):
+def _woebin(df, verbose=True):
     """
     This function performs automatic binning using WoE.
     df: A pandas dataframe
@@ -337,9 +361,10 @@ def _woebin(df):
     df[non_numeric_cols] = df[non_numeric_cols].astype(str)
 
     try:
-        print(
-            f"Performing binning with breaks_adj: {breaks_adj}"
-        )  # print the breaks_adj being used
+        if verbose:
+            print(
+                f"Performing binning with breaks_adj: {breaks_adj}"
+            )  # print the breaks_adj being used
         bins = sc.woebin(df, target_column, breaks_list=breaks_adj)
     except Exception as e:
         print("Error during binning: ")
@@ -355,7 +380,7 @@ def _woebin(df):
         return bins_df
 
 
-def split(df, validation_size=None, test_size=0.2, add_constant=False):
+def split(df, validation_size=None, test_size=0.2, add_constant=False, verbose=True):
     """
     Split dataset into train, validation (optional), and test sets.
 
@@ -384,15 +409,16 @@ def split(df, validation_size=None, test_size=0.2, add_constant=False):
             train_val_df = sm.add_constant(train_val_df)
 
         # Print details for two-way split
-        print("After splitting the dataset into training and test sets:")
-        print(
-            f"Training Dataset:\nRows: {train_val_df.shape[0]}\nColumns: {train_val_df.shape[1]}\n"
-            f"Missing values: {train_val_df.isnull().sum().sum()}\n"
-        )
-        print(
-            f"Test Dataset:\nRows: {test_df.shape[0]}\nColumns: {test_df.shape[1]}\n"
-            f"Missing values: {test_df.isnull().sum().sum()}\n"
-        )
+        if verbose:
+            print("After splitting the dataset into training and test sets:")
+            print(
+                f"Training Dataset:\nRows: {train_val_df.shape[0]}\nColumns: {train_val_df.shape[1]}\n"
+                f"Missing values: {train_val_df.isnull().sum().sum()}\n"
+            )
+            print(
+                f"Test Dataset:\nRows: {test_df.shape[0]}\nColumns: {test_df.shape[1]}\n"
+                f"Missing values: {test_df.isnull().sum().sum()}\n"
+            )
 
         return train_val_df, test_df
 
@@ -407,19 +433,20 @@ def split(df, validation_size=None, test_size=0.2, add_constant=False):
         validation_df = sm.add_constant(validation_df)
 
     # Print details for three-way split
-    print("After splitting the dataset into training, validation, and test sets:")
-    print(
-        f"Training Dataset:\nRows: {train_df.shape[0]}\nColumns: {train_df.shape[1]}\n"
-        f"Missing values: {train_df.isnull().sum().sum()}\n"
-    )
-    print(
-        f"Validation Dataset:\nRows: {validation_df.shape[0]}\nColumns: {validation_df.shape[1]}\n"
-        f"Missing values: {validation_df.isnull().sum().sum()}\n"
-    )
-    print(
-        f"Test Dataset:\nRows: {test_df.shape[0]}\nColumns: {test_df.shape[1]}\n"
-        f"Missing values: {test_df.isnull().sum().sum()}\n"
-    )
+    if verbose:
+        print("After splitting the dataset into training, validation, and test sets:")
+        print(
+            f"Training Dataset:\nRows: {train_df.shape[0]}\nColumns: {train_df.shape[1]}\n"
+            f"Missing values: {train_df.isnull().sum().sum()}\n"
+        )
+        print(
+            f"Validation Dataset:\nRows: {validation_df.shape[0]}\nColumns: {validation_df.shape[1]}\n"
+            f"Missing values: {validation_df.isnull().sum().sum()}\n"
+        )
+        print(
+            f"Test Dataset:\nRows: {test_df.shape[0]}\nColumns: {test_df.shape[1]}\n"
+            f"Missing values: {test_df.isnull().sum().sum()}\n"
+        )
 
     return train_df, validation_df, test_df
 
@@ -822,3 +849,241 @@ def get_demo_test_config(x_test=None, y_test=None):
     }
 
     return default_config
+
+
+def load_scorecard():
+
+    warnings.filterwarnings("ignore")
+    logging.getLogger("scorecardpy").setLevel(logging.ERROR)
+
+    os.environ["VALIDMIND_LLM_DESCRIPTIONS_CONTEXT_ENABLED"] = "1"
+
+    context = """
+    FORMAT FOR THE LLM DESCRIPTIONS:
+    **<Test Name>** is designed to <begin with a concise overview of what the test does and its primary purpose, extracted from the test description>.
+
+    The test operates by <write a paragraph about the test mechanism, explaining how it works and what it measures. Include any relevant formulas or methodologies mentioned in the test description.>
+
+    The primary advantages of this test include <write a paragraph about the test's strengths and capabilities, highlighting what makes it particularly useful for specific scenarios.>
+
+    Users should be aware that <write a paragraph about the test's limitations and potential risks. Include both technical limitations and interpretation challenges. If the test description includes specific signs of high risk, incorporate these here.>
+
+    **Key Insights:**
+
+    The test results reveal:
+
+    - **<insight title>**: <comprehensive description of one aspect of the results>
+    - **<insight title>**: <comprehensive description of another aspect>
+    ...
+
+    Based on these results, <conclude with a brief paragraph that ties together the test results with the test's purpose and provides any final recommendations or considerations.>
+
+    ADDITIONAL INSTRUCTIONS:
+        Present insights in order from general to specific, with each insight as a single bullet point with bold title.
+
+        For each metric in the test results, include in the test overview:
+        - The metric's purpose and what it measures
+        - Its mathematical formula
+        - The range of possible values
+        - What constitutes good/bad performance
+        - How to interpret different values
+
+        Each insight should progressively cover:
+        1. Overall scope and distribution
+        2. Complete breakdown of all elements with specific values
+        3. Natural groupings and patterns
+        4. Comparative analysis between datasets/categories
+        5. Stability and variations
+        6. Notable relationships or dependencies
+
+        Remember:
+        - Keep all insights at the same level (no sub-bullets or nested structures)
+        - Make each insight complete and self-contained
+        - Include specific numerical values and ranges
+        - Cover all elements in the results comprehensively
+        - Maintain clear, concise language
+        - Use only "- **Title**: Description" format for insights
+        - Progress naturally from general to specific observations
+
+    """.strip()
+
+    os.environ["VALIDMIND_LLM_DESCRIPTIONS_CONTEXT"] = context
+
+    # Load the data
+    df = load_data(source="offline", verbose=False)
+    preprocess_df = preprocess(df, verbose=False)
+    fe_df = feature_engineering(preprocess_df, verbose=False)
+
+    # Split the data
+    train_df, test_df = split(fe_df, test_size=0.2, verbose=False)
+
+    x_train = train_df.drop(target_column, axis=1)
+    y_train = train_df[target_column]
+
+    x_test = test_df.drop(target_column, axis=1)
+    y_test = test_df[target_column]
+
+    # Define the XGBoost model
+    xgb_model = xgb.XGBClassifier(
+        n_estimators=50, random_state=42, early_stopping_rounds=10
+    )
+    xgb_model.set_params(
+        eval_metric=["error", "logloss", "auc"],
+    )
+
+    # Fit the model
+    xgb_model.fit(x_train, y_train, eval_set=[(x_test, y_test)], verbose=False)
+
+    # Define the Random Forest model
+    rf_model = RandomForestClassifier(
+        n_estimators=50,
+        random_state=42,
+    )
+
+    # Fit the model
+    rf_model.fit(x_train, y_train)
+
+    # Compute the probabilities
+    train_xgb_prob = xgb_model.predict_proba(x_train)[:, 1]
+    test_xgb_prob = xgb_model.predict_proba(x_test)[:, 1]
+
+    train_rf_prob = rf_model.predict_proba(x_train)[:, 1]
+    test_rf_prob = rf_model.predict_proba(x_test)[:, 1]
+
+    # Compute binary predictions
+    cut_off_threshold = 0.3
+
+    train_xgb_binary_predictions = (train_xgb_prob > cut_off_threshold).astype(int)
+    test_xgb_binary_predictions = (test_xgb_prob > cut_off_threshold).astype(int)
+
+    train_rf_binary_predictions = (train_rf_prob > cut_off_threshold).astype(int)
+    test_rf_binary_predictions = (test_rf_prob > cut_off_threshold).astype(int)
+
+    # Compute credit risk scores
+    train_xgb_scores = compute_scores(train_xgb_prob)
+    test_xgb_scores = compute_scores(test_xgb_prob)
+
+    scorecard = {
+        "df": df,
+        "preprocess_df": preprocess_df,
+        "fe_df": fe_df,
+        "train_df": train_df,
+        "test_df": test_df,
+        "x_test": x_test,
+        "y_test": y_test,
+        "xgb_model": xgb_model,
+        "rf_model": rf_model,
+        "train_xgb_binary_predictions": train_xgb_binary_predictions,
+        "test_xgb_binary_predictions": test_xgb_binary_predictions,
+        "train_xgb_prob": train_xgb_prob,
+        "test_xgb_prob": test_xgb_prob,
+        "train_xgb_scores": train_xgb_scores,
+        "test_xgb_scores": test_xgb_scores,
+        "train_rf_binary_predictions": train_rf_binary_predictions,
+        "test_rf_binary_predictions": test_rf_binary_predictions,
+        "train_rf_prob": train_rf_prob,
+        "test_rf_prob": test_rf_prob,
+    }
+
+    return scorecard
+
+
+def init_vm_objects(scorecard):
+
+    df = scorecard["df"]
+    preprocess_df = scorecard["preprocess_df"]
+    fe_df = scorecard["fe_df"]
+    train_df = scorecard["train_df"]
+    test_df = scorecard["test_df"]
+    xgb_model = scorecard["xgb_model"]
+    rf_model = scorecard["rf_model"]
+    train_xgb_binary_predictions = scorecard["train_xgb_binary_predictions"]
+    test_xgb_binary_predictions = scorecard["test_xgb_binary_predictions"]
+    train_xgb_prob = scorecard["train_xgb_prob"]
+    test_xgb_prob = scorecard["test_xgb_prob"]
+    train_rf_binary_predictions = scorecard["train_rf_binary_predictions"]
+    test_rf_binary_predictions = scorecard["test_rf_binary_predictions"]
+    train_rf_prob = scorecard["train_rf_prob"]
+    test_rf_prob = scorecard["test_rf_prob"]
+    train_xgb_scores = scorecard["train_xgb_scores"]
+    test_xgb_scores = scorecard["test_xgb_scores"]
+
+    vm.init_dataset(
+        dataset=df,
+        input_id="raw_dataset",
+        target_column=target_column,
+    )
+
+    vm.init_dataset(
+        dataset=preprocess_df,
+        input_id="preprocess_dataset",
+        target_column=target_column,
+    )
+
+    vm.init_dataset(
+        dataset=fe_df,
+        input_id="fe_dataset",
+        target_column=target_column,
+    )
+
+    vm_train_ds = vm.init_dataset(
+        dataset=train_df,
+        input_id="train_dataset",
+        target_column=target_column,
+    )
+
+    vm_test_ds = vm.init_dataset(
+        dataset=test_df,
+        input_id="test_dataset",
+        target_column=target_column,
+    )
+
+    vm_xgb_model = vm.init_model(
+        xgb_model,
+        input_id="xgb_model",
+    )
+
+    vm_rf_model = vm.init_model(
+        rf_model,
+        input_id="rf_model",
+    )
+
+    # Assign predictions
+    vm_train_ds.assign_predictions(
+        model=vm_xgb_model,
+        prediction_values=train_xgb_binary_predictions,
+        prediction_probabilities=train_xgb_prob,
+    )
+
+    vm_test_ds.assign_predictions(
+        model=vm_xgb_model,
+        prediction_values=test_xgb_binary_predictions,
+        prediction_probabilities=test_xgb_prob,
+    )
+
+    vm_train_ds.assign_predictions(
+        model=vm_rf_model,
+        prediction_values=train_rf_binary_predictions,
+        prediction_probabilities=train_rf_prob,
+    )
+
+    vm_test_ds.assign_predictions(
+        model=vm_rf_model,
+        prediction_values=test_rf_binary_predictions,
+        prediction_probabilities=test_rf_prob,
+    )
+
+    # Assign scores to the datasets
+    vm_train_ds.add_extra_column("xgb_scores", train_xgb_scores)
+    vm_test_ds.add_extra_column("xgb_scores", test_xgb_scores)
+
+
+def load_test_config(scorecard):
+
+    x_test = scorecard["x_test"]
+    y_test = scorecard["y_test"]
+
+    # Get the test config
+    test_config = get_demo_test_config(x_test, y_test)
+
+    return test_config

@@ -52,6 +52,15 @@
             <li>
                     <a class="function" href="#get_demo_test_config">get_demo_test_config</a>
             </li>
+            <li>
+                    <a class="function" href="#load_scorecard">load_scorecard</a>
+            </li>
+            <li>
+                    <a class="function" href="#init_vm_objects">init_vm_objects</a>
+            </li>
+            <li>
+                    <a class="function" href="#load_test_config">load_test_config</a>
+            </li>
     </ul>
 
 
@@ -78,7 +87,7 @@
                     <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">load_data</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">source</span><span class="o">=</span><span class="s1">&#39;online&#39;</span></span><span class="return-annotation">):</span></span>
+        <span class="name">load_data</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">source</span><span class="o">=</span><span class="s1">&#39;online&#39;</span>, </span><span class="param"><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span></span><span class="return-annotation">):</span></span>
 
         
     </div>
@@ -105,7 +114,7 @@
                     <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">preprocess</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">df</span></span><span class="return-annotation">):</span></span>
+        <span class="name">preprocess</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">df</span>, </span><span class="param"><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span></span><span class="return-annotation">):</span></span>
 
         
     </div>
@@ -118,7 +127,7 @@
                     <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">feature_engineering</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">df</span></span><span class="return-annotation">):</span></span>
+        <span class="name">feature_engineering</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">df</span>, </span><span class="param"><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span></span><span class="return-annotation">):</span></span>
 
         
     </div>
@@ -131,7 +140,7 @@
                     <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">woe_encoding</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">df</span></span><span class="return-annotation">):</span></span>
+        <span class="name">woe_encoding</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">df</span>, </span><span class="param"><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span></span><span class="return-annotation">):</span></span>
 
         
     </div>
@@ -144,7 +153,7 @@
                     <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">split</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">df</span>, </span><span class="param"><span class="n">validation_size</span><span class="o">=</span><span class="kc">None</span>, </span><span class="param"><span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span>, </span><span class="param"><span class="n">add_constant</span><span class="o">=</span><span class="kc">False</span></span><span class="return-annotation">):</span></span>
+        <span class="name">split</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">df</span>,</span><span class="param">	<span class="n">validation_size</span><span class="o">=</span><span class="kc">None</span>,</span><span class="param">	<span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span>,</span><span class="param">	<span class="n">add_constant</span><span class="o">=</span><span class="kc">False</span>,</span><span class="param">	<span class="n">verbose</span><span class="o">=</span><span class="kc">True</span></span><span class="return-annotation">):</span></span>
 
         
     </div>
@@ -212,6 +221,45 @@
 </blockquote>
 </div>
 
+
+                </section>
+                <section id="load_scorecard">
+                    <div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">load_scorecard</span><span class="signature pdoc-code condensed">(<span class="return-annotation">):</span></span>
+
+        
+    </div>
+    <a class="headerlink" href="#load_scorecard"></a>
+    
+    
+
+                </section>
+                <section id="init_vm_objects">
+                    <div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">init_vm_objects</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">scorecard</span></span><span class="return-annotation">):</span></span>
+
+        
+    </div>
+    <a class="headerlink" href="#init_vm_objects"></a>
+    
+    
+
+                </section>
+                <section id="load_test_config">
+                    <div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">load_test_config</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">scorecard</span></span><span class="return-annotation">):</span></span>
+
+        
+    </div>
+    <a class="headerlink" href="#load_test_config"></a>
+    
+    
 
                 </section>
     </main>
