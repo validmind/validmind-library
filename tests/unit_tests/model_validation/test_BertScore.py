@@ -4,6 +4,7 @@ import numpy as np
 import validmind as vm
 import plotly.graph_objects as go
 from validmind.tests.model_validation.BertScore import BertScore
+from validmind import RawData
 
 
 class TestBertScore(unittest.TestCase):
@@ -70,14 +71,17 @@ class TestBertScore(unittest.TestCase):
         # Check if result is a tuple
         self.assertIsInstance(result, tuple)
 
-        # Should return 7 items: 1 DataFrame and 6 figures (2 for each metric)
-        self.assertEqual(len(result), 7)
+        # Should return 8 items: 1 DataFrame, 6 figures (2 for each metric), and 1 RawData object
+        self.assertEqual(len(result), 8)
 
         # Check if first element is a DataFrame
         self.assertIsInstance(result[0], pd.DataFrame)
 
-        # Check if remaining elements are Plotly Figures
-        for fig in result[1:]:
+        # Check if raw data object is an instance of RawData
+        self.assertIsInstance(result[-1], RawData)
+
+        # Check if remaining elements (figures) are Plotly Figures
+        for fig in result[1:-1]:
             self.assertIsInstance(fig, go.Figure)
 
     def test_metrics_dataframe(self):
@@ -107,7 +111,7 @@ class TestBertScore(unittest.TestCase):
             self.assertTrue(all(0 <= score <= 1 for score in result_df[col]))
 
     def test_figures_properties(self):
-        _, *figures = BertScore(self.vm_dataset, self.vm_model)
+        _, *figures, _ = BertScore(self.vm_dataset, self.vm_model)
 
         # Check if we have the expected number of figures (2 per metric)
         self.assertEqual(len(figures), 6)

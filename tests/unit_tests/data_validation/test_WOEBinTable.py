@@ -2,7 +2,7 @@ import unittest
 import pandas as pd
 import validmind as vm
 from validmind.errors import SkipTestError
-from validmind.tests.data_validation.WOEBinTable import WOEBinTable
+from validmind.tests.data_validation.WOEBinTable import WOEBinTable, RawData
 
 
 class TestWOEBinTable(unittest.TestCase):
@@ -44,7 +44,7 @@ class TestWOEBinTable(unittest.TestCase):
         )
 
     def test_woe_bin_table(self):
-        result = WOEBinTable(self.vm_dataset)
+        result, raw_data = WOEBinTable(self.vm_dataset)
 
         # Check the table structure
         table = result["Weight of Evidence (WoE) and Information Value (IV)"]
@@ -61,6 +61,9 @@ class TestWOEBinTable(unittest.TestCase):
         )  # Should have entries for all 3 features
         expected_features = ["cat1", "cat2", "numeric"]
         self.assertTrue(all(feat in unique_variables for feat in expected_features))
+
+        # Check that raw data is an instance of RawData
+        self.assertIsInstance(raw_data, RawData)
 
     def test_no_target(self):
         # Should raise SkipTestError when no target column present

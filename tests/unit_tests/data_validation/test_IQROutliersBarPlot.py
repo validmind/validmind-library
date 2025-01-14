@@ -4,6 +4,7 @@ import numpy as np
 import validmind as vm
 from validmind.tests.data_validation.IQROutliersBarPlot import IQROutliersBarPlot
 import plotly.graph_objects as go
+from validmind import RawData
 
 
 class TestIQROutliersBarPlot(unittest.TestCase):
@@ -38,13 +39,18 @@ class TestIQROutliersBarPlot(unittest.TestCase):
         )
 
     def test_plot_structure(self):
-        figures = IQROutliersBarPlot(self.vm_dataset)
+        results = IQROutliersBarPlot(self.vm_dataset)
 
         # Check return type
-        self.assertIsInstance(figures, tuple)
+        self.assertIsInstance(results, tuple)
+
+        raw_data = results[-1]
+
+        # Check raw data
+        self.assertIsInstance(raw_data, RawData)
 
         # Check each figure
-        for fig in figures:
+        for fig in results[:-1]:
             self.assertIsInstance(fig, go.Figure)
 
             # Check figure components
@@ -52,14 +58,15 @@ class TestIQROutliersBarPlot(unittest.TestCase):
             self.assertIsInstance(fig.data[0], go.Bar)
 
     def test_plot_data(self):
-        figures = IQROutliersBarPlot(self.vm_dataset)
+        results = IQROutliersBarPlot(self.vm_dataset)
 
         # Should have at least one figure (for the column with outliers)
-        self.assertGreater(len(figures), 0)
+        self.assertGreater(len(results), 1)
 
         # Find the figure for 'with_outliers' column
         outliers_fig = next(
-            (fig for fig in figures if fig.layout.title.text == "with_outliers"), None
+            (fig for fig in results[:-1] if fig.layout.title.text == "with_outliers"),
+            None,
         )
         self.assertIsNotNone(outliers_fig)
 
@@ -69,8 +76,8 @@ class TestIQROutliersBarPlot(unittest.TestCase):
         self.assertGreater(sum(bar_data), 0)  # Should have some outliers
 
     def test_binary_exclusion(self):
-        figures = IQROutliersBarPlot(self.vm_dataset)
+        results = IQROutliersBarPlot(self.vm_dataset)
 
-        # Check that binary column is not included
-        figure_titles = [fig.layout.title.text for fig in figures]
+        # Check that binary column is not included in figures
+        figure_titles = [fig.layout.title.text for fig in results[:-1]]
         self.assertNotIn("binary", figure_titles)

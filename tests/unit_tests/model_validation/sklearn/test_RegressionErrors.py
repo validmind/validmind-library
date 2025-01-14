@@ -43,16 +43,15 @@ class TestRegressionErrors(unittest.TestCase):
             __log=False,
         )
 
-        # Assing predictions to the dataset
+        # Assign predictions to the dataset
         self.vm_dataset.assign_predictions(self.vm_model)
 
-    def test_returns_dataframe(self):
-
+    def test_returns_dataframe_and_raw_data(self):
         # Run the function
-        result = RegressionErrors(self.vm_model, self.vm_dataset)
+        results = RegressionErrors(self.vm_model, self.vm_dataset)
 
-        # Check if result is a DataFrame
-        self.assertIsInstance(result, pd.DataFrame)
+        # Check if results is a DataFrame
+        self.assertIsInstance(results, pd.DataFrame)
 
         # Check if DataFrame has expected columns
         expected_columns = [
@@ -62,25 +61,25 @@ class TestRegressionErrors(unittest.TestCase):
             "Mean Absolute Percentage Error (MAPE)",
             "Mean Bias Deviation (MBD)",
         ]
-        self.assertTrue(all(col in result.columns for col in expected_columns))
+        self.assertTrue(all(col in results.columns for col in expected_columns))
 
         # Check if DataFrame has exactly one row
-        self.assertEqual(len(result), 1)
+        self.assertEqual(len(results), 1)
 
     def test_error_metrics_range(self):
-        result = RegressionErrors(self.vm_model, self.vm_dataset)
+        results = RegressionErrors(self.vm_model, self.vm_dataset)
 
         # All error metrics should be non-negative (except MBD)
-        self.assertGreaterEqual(result["Mean Absolute Error (MAE)"].iloc[0], 0)
-        self.assertGreaterEqual(result["Mean Squared Error (MSE)"].iloc[0], 0)
-        self.assertGreaterEqual(result["Root Mean Squared Error (RMSE)"].iloc[0], 0)
+        self.assertGreaterEqual(results["Mean Absolute Error (MAE)"].iloc[0], 0)
+        self.assertGreaterEqual(results["Mean Squared Error (MSE)"].iloc[0], 0)
+        self.assertGreaterEqual(results["Root Mean Squared Error (RMSE)"].iloc[0], 0)
         self.assertGreaterEqual(
-            result["Mean Absolute Percentage Error (MAPE)"].iloc[0], 0
+            results["Mean Absolute Percentage Error (MAPE)"].iloc[0], 0
         )
 
         # Check if RMSE is square root of MSE
-        mse = result["Mean Squared Error (MSE)"].iloc[0]
-        rmse = result["Root Mean Squared Error (RMSE)"].iloc[0]
+        mse = results["Mean Squared Error (MSE)"].iloc[0]
+        rmse = results["Root Mean Squared Error (RMSE)"].iloc[0]
         self.assertAlmostEqual(rmse, np.sqrt(mse), places=5)
 
     def test_perfect_prediction(self):
@@ -106,28 +105,32 @@ class TestRegressionErrors(unittest.TestCase):
             __log=False,
         )
 
-        # Assing predictions to the perfect dataset
+        # Assign predictions to the perfect dataset
         vm_perfect_dataset.assign_predictions(vm_perfect_model)
 
         # Calculate errors
-        result = RegressionErrors(vm_perfect_model, vm_perfect_dataset)
+        results = RegressionErrors(vm_perfect_model, vm_perfect_dataset)
 
         # All error metrics should be very close to 0
-        self.assertAlmostEqual(result["Mean Absolute Error (MAE)"].iloc[0], 0, places=5)
-        self.assertAlmostEqual(result["Mean Squared Error (MSE)"].iloc[0], 0, places=5)
         self.assertAlmostEqual(
-            result["Root Mean Squared Error (RMSE)"].iloc[0], 0, places=5
+            results["Mean Absolute Error (MAE)"].iloc[0], 0, places=5
         )
-        self.assertAlmostEqual(result["Mean Bias Deviation (MBD)"].iloc[0], 0, places=5)
+        self.assertAlmostEqual(results["Mean Squared Error (MSE)"].iloc[0], 0, places=5)
+        self.assertAlmostEqual(
+            results["Root Mean Squared Error (RMSE)"].iloc[0], 0, places=5
+        )
+        self.assertAlmostEqual(
+            results["Mean Bias Deviation (MBD)"].iloc[0], 0, places=5
+        )
 
     def test_error_metrics_consistency(self):
-        result = RegressionErrors(self.vm_model, self.vm_dataset)
+        results = RegressionErrors(self.vm_model, self.vm_dataset)
 
         # MSE should be greater than or equal to MAE squared
-        mae = result["Mean Absolute Error (MAE)"].iloc[0]
-        mse = result["Mean Squared Error (MSE)"].iloc[0]
+        mae = results["Mean Absolute Error (MAE)"].iloc[0]
+        mse = results["Mean Squared Error (MSE)"].iloc[0]
         self.assertGreaterEqual(mse, mae * mae)
 
         # RMSE should be greater than or equal to MAE
-        rmse = result["Root Mean Squared Error (RMSE)"].iloc[0]
+        rmse = results["Root Mean Squared Error (RMSE)"].iloc[0]
         self.assertGreaterEqual(rmse, mae)

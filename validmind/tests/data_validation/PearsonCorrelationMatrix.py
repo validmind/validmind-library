@@ -5,7 +5,7 @@
 
 import plotly.graph_objects as go
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 
 
 @tags("tabular_data", "numerical_data", "correlation")
@@ -88,4 +88,4 @@ def PearsonCorrelationMatrix(dataset):
 
     fig = go.Figure(data=[heatmap], layout=layout)
 
-    return fig
+    return fig, RawData(correlation_matrix=corr_matrix)

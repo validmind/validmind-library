@@ -6,7 +6,7 @@ import re
 
 import plotly.graph_objects as go
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.errors import SkipTestError
 from validmind.vm_models import VMDataset
 
@@ -76,4 +76,4 @@ def Hashtags(dataset: VMDataset, top_hashtags: int = 25):
         xaxis_tickangle=-45,
     )
 
-    return fig
+    return fig, RawData(top_hashtag_counts=top_hashtag_counts)

@@ -4,6 +4,7 @@ import validmind as vm
 import plotly.graph_objs as go
 from validmind.errors import SkipTestError
 from validmind.tests.data_validation.WOEBinPlots import WOEBinPlots
+from validmind import RawData
 
 
 class TestWOEBinPlots(unittest.TestCase):
@@ -43,20 +44,23 @@ class TestWOEBinPlots(unittest.TestCase):
         )
 
     def test_woe_bin_plots(self):
-        figures = WOEBinPlots(self.vm_dataset)
+        results = WOEBinPlots(self.vm_dataset)
 
         # Check that we get the correct number of figures (one per feature column)
-        self.assertIsInstance(figures, tuple)
+        self.assertIsInstance(results, tuple)
         self.assertEqual(
-            len(figures), 3
-        )  # Should have 3 figures: cat1, cat2, and numeric
+            len(results), 4
+        )  # Should have 3 figures: cat1, cat2, and numeric and a RawData object
 
-        # Check that outputs are plotly figures
-        for fig in figures:
+        # Check that outputs are plotly figures and the last one is RawData
+        for fig in results[:-1]:
             self.assertIsInstance(fig, go.Figure)
 
+        # Check that the last output is an instance of RawData
+        self.assertIsInstance(results[-1], RawData)
+
         # Verify all feature columns have corresponding plots
-        titles = [fig.layout.title.text for fig in figures]
+        titles = [fig.layout.title.text for fig in results[:-1]]
         expected_features = ["cat1", "cat2", "numeric"]
         self.assertTrue(
             all(any(feat in title for feat in expected_features) for title in titles)

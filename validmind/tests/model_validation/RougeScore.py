@@ -6,7 +6,7 @@ import pandas as pd
 import plotly.graph_objects as go
 from rouge import Rouge
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 
 
 @tags("nlp", "text_data", "visualization")
@@ -118,7 +118,8 @@ def RougeScore(dataset, model, metric="rouge-1"):
         {"p": "Precision", "r": "Recall", "f": "F1 Score"}
     )
 
-    # Create a DataFrame from all collected statistics
-    result_df = pd.DataFrame(stats_df).reset_index().rename(columns={"index": "Metric"})
-
-    return (result_df, *tuple(figures))
+    return (
+        pd.DataFrame(stats_df).reset_index().rename(columns={"index": "Metric"}),
+        *figures,
+        RawData(rouge_scores_df=df_scores),
+    )

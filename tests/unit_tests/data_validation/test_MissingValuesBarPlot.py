@@ -4,6 +4,7 @@ import numpy as np
 import validmind as vm
 from validmind.tests.data_validation.MissingValuesBarPlot import MissingValuesBarPlot
 import plotly.graph_objects as go
+from validmind import RawData
 
 
 class TestMissingValuesBarPlot(unittest.TestCase):
@@ -30,13 +31,16 @@ class TestMissingValuesBarPlot(unittest.TestCase):
         )
 
     def test_figure_structure(self):
-        fig = MissingValuesBarPlot(self.vm_dataset, threshold=80)
+        fig, raw_data = MissingValuesBarPlot(self.vm_dataset, threshold=80)
 
-        # Check return type
+        # Check figure return type
         self.assertIsInstance(fig, go.Figure)
 
+        # Check raw data return type
+        self.assertIsInstance(raw_data, RawData)
+
     def test_data_traces(self):
-        fig = MissingValuesBarPlot(self.vm_dataset, threshold=80)
+        fig, _ = MissingValuesBarPlot(self.vm_dataset, threshold=80)
 
         # Should have 3 traces: below threshold, above threshold, and threshold line
         self.assertEqual(len(fig.data), 3)

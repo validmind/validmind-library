@@ -4,6 +4,7 @@ import numpy as np
 import validmind as vm
 from validmind.tests.data_validation.DickeyFullerGLS import DickeyFullerGLS
 from validmind.errors import SkipTestError
+from validmind import RawData
 
 
 class TestDickeyFullerGLS(unittest.TestCase):
@@ -37,11 +38,14 @@ class TestDickeyFullerGLS(unittest.TestCase):
         )
 
     def test_dfgls_structure(self):
-        result = DickeyFullerGLS(self.vm_dataset)
+        result, raw_data = DickeyFullerGLS(self.vm_dataset)
 
         # Check basic structure
         self.assertIn("DFGLS Test Results", result)
         self.assertIsInstance(result["DFGLS Test Results"], list)
+
+        # Check raw data
+        self.assertIsInstance(raw_data, RawData)
 
         # Check results for each variable
         for var_result in result["DFGLS Test Results"]:
@@ -52,7 +56,7 @@ class TestDickeyFullerGLS(unittest.TestCase):
             self.assertIn("nobs", var_result)
 
     def test_dfgls_values(self):
-        result = DickeyFullerGLS(self.vm_dataset)
+        result, _ = DickeyFullerGLS(self.vm_dataset)
         results_dict = {item["Variable"]: item for item in result["DFGLS Test Results"]}
 
         # Stationary series should have lower p-value

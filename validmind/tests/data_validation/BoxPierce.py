@@ -5,7 +5,7 @@
 import pandas as pd
 from statsmodels.stats.diagnostic import acorr_ljungbox
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 
 
 @tasks("regression")
@@ -68,4 +68,4 @@ def BoxPierce(dataset):
     box_pierce_df.reset_index(inplace=True)
     box_pierce_df.columns = ["column", "stat", "pvalue"]
 
-    return box_pierce_df
+    return box_pierce_df, RawData(box_pierce_values=box_pierce_values)

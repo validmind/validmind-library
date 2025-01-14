@@ -49,15 +49,15 @@ class TestScorecardHistogram(unittest.TestCase):
             __log=False,
         )
 
-    def test_returns_figure(self):
+    def test_returns_figure_and_raw_data(self):
         # Run the function
-        result = ScorecardHistogram(self.vm_dataset)
+        figure = ScorecardHistogram(self.vm_dataset)
 
-        # Check if result is a Plotly Figure
-        self.assertIsInstance(result, go.Figure)
+        # Check if the first part of the result is a Plotly Figure
+        self.assertIsInstance(figure, go.Figure)
 
         # Check if figure has traces
-        self.assertGreater(len(result.data), 0)
+        self.assertGreater(len(figure.data), 0)
 
     def test_missing_score_column(self):
         # Create dataset without score column
@@ -74,12 +74,12 @@ class TestScorecardHistogram(unittest.TestCase):
             ScorecardHistogram(vm_dataset_no_score)
 
     def test_histogram_properties(self):
-        result = ScorecardHistogram(self.vm_dataset)
+        figure = ScorecardHistogram(self.vm_dataset)
 
         # Should have two traces (one for each class)
-        self.assertEqual(len(result.data), 2)
+        self.assertEqual(len(figure.data), 2)
 
-        for trace in result.data:
+        for trace in figure.data:
             # Check if trace type is histogram
             self.assertEqual(trace.type, "histogram")
 
@@ -88,15 +88,14 @@ class TestScorecardHistogram(unittest.TestCase):
             self.assertTrue(all(300 <= x <= 900 for x in x_values))
 
     def test_class_separation(self):
-
         # Now test the visualization
-        result = ScorecardHistogram(self.vm_dataset)
+        figure = ScorecardHistogram(self.vm_dataset)
 
         # Get scores for each class from the traces
         class_0_scores = None
         class_1_scores = None
 
-        for trace in result.data:
+        for trace in figure.data:
             if "target = 0" in trace.name:
                 class_0_scores = np.array(trace.x)
             elif "target = 1" in trace.name:

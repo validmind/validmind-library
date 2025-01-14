@@ -28,10 +28,13 @@ class TestIsolationForestOutliers(unittest.TestCase):
         )
 
     def test_outliers_detection(self):
-        figures = IsolationForestOutliers(self.vm_dataset, contamination=0.1)
+        result = IsolationForestOutliers(self.vm_dataset, contamination=0.1)
 
         # Check return type
-        self.assertIsInstance(figures, tuple)
+        self.assertIsInstance(result, tuple)
+
+        # Separate figures and raw data
+        figures = result
 
         # Check that at least one figure is returned
         self.assertGreater(len(figures), 0)

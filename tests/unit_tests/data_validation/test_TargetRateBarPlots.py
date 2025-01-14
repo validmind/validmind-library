@@ -4,6 +4,7 @@ import validmind as vm
 import plotly.graph_objs as go
 from validmind.errors import SkipTestError
 from validmind.tests.data_validation.TargetRateBarPlots import TargetRateBarPlots
+from validmind import RawData
 
 
 class TestTargetRateBarPlots(unittest.TestCase):
@@ -65,13 +66,18 @@ class TestTargetRateBarPlots(unittest.TestCase):
     def test_target_rate_bar_plots(self):
         figures = TargetRateBarPlots(self.vm_dataset)
 
-        # Check that we get the correct number of figures (one per categorical column)
+        # Check that we get the correct number of figures and raw data (one per categorical column and one RawData)
         self.assertIsInstance(figures, tuple)
-        self.assertEqual(len(figures), 2)  # Should have 2 figures for cat1 and cat2
+        self.assertEqual(
+            len(figures), 3
+        )  # Should have 2 figures for cat1 and cat2, and 1 RawData
 
-        # Check that outputs are plotly figures
-        for fig in figures:
+        # Check that outputs are plotly figures for the first two results
+        for fig in figures[:2]:
             self.assertIsInstance(fig, go.Figure)
+
+        # Check that the last output is RawData
+        self.assertIsInstance(figures[2], RawData)
 
     def test_no_categorical_columns(self):
         # Should raise SkipTestError when no categorical columns present

@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.errors import SkipTestError
 from validmind.logging import get_logger
 from validmind.vm_models import VMDataset, VMModel
@@ -192,18 +192,22 @@ def PopulationStabilityIndex(
 
     table_title = f"Population Stability Index for {datasets[0].input_id} and {datasets[1].input_id} Datasets"
 
-    return {
-        table_title: [
-            {
-                "Bin": (
-                    i if i < (len(psi_results) - 1) else "Total"
-                ),  # The last bin is the "Total" bin
-                "Count Initial": values["initial"],
-                "Percent Initial (%)": values["percent_initial"] * 100,
-                "Count New": values["new"],
-                "Percent New (%)": values["percent_new"] * 100,
-                "PSI": values["psi"],
-            }
-            for i, values in enumerate(psi_results)
-        ],
-    }, fig
+    return (
+        {
+            table_title: [
+                {
+                    "Bin": (
+                        i if i < (len(psi_results) - 1) else "Total"
+                    ),  # The last bin is the "Total" bin
+                    "Count Initial": values["initial"],
+                    "Percent Initial (%)": values["percent_initial"] * 100,
+                    "Count New": values["new"],
+                    "Percent New (%)": values["percent_new"] * 100,
+                    "PSI": values["psi"],
+                }
+                for i, values in enumerate(psi_results)
+            ],
+        },
+        fig,
+        RawData(psi_raw=psi_results),
+    )

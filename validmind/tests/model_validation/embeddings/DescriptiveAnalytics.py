@@ -5,7 +5,7 @@
 import numpy as np
 import plotly.express as px
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 
 
@@ -55,17 +55,27 @@ def DescriptiveAnalytics(dataset: VMDataset, model: VMModel):
     - While it displays valuable information about the central tendency and spread of data, it does not provide
     information about correlations between different embedding dimensions.
     """
+    y_pred = dataset.y_pred(model)
+    embedding_means = np.mean(y_pred, axis=0)
+    embedding_medians = np.median(y_pred, axis=0)
+    embedding_stds = np.std(y_pred, axis=0)
+
     return (
         px.histogram(
-            x=np.mean(dataset.y_pred(model), axis=0),
+            x=embedding_means,
             title="Distribution of Embedding Means",
         ),
         px.histogram(
-            x=np.median(dataset.y_pred(model), axis=0),
+            x=embedding_medians,
             title="Distribution of Embedding Medians",
         ),
         px.histogram(
-            x=np.std(dataset.y_pred(model), axis=0),
+            x=embedding_stds,
             title="Distribution of Embedding Standard Deviations",
+        ),
+        RawData(
+            embedding_means=embedding_means,
+            embedding_medians=embedding_medians,
+            embedding_stds=embedding_stds,
         ),
     )

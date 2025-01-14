@@ -5,7 +5,7 @@
 import pandas as pd
 import plotly.graph_objects as go
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 
 
 @tags("nlp", "text_data", "visualization")
@@ -108,4 +108,4 @@ def TokenDisparity(dataset, model):
     # Create a DataFrame from all collected statistics
     result_df = pd.DataFrame(stats_df).reset_index().rename(columns={"index": "Metric"})
 
-    return (result_df, *tuple(figures))
+    return (result_df, *figures, RawData(token_counts_df=df))

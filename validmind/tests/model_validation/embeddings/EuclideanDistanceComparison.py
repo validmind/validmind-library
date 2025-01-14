@@ -9,7 +9,7 @@ import pandas as pd
 import plotly.express as px
 from sklearn.metrics.pairwise import euclidean_distances
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 
 
 @tags("visualization", "dimensionality_reduction", "embeddings")
@@ -57,6 +57,8 @@ def EuclideanDistanceComparison(dataset, models):
     figures = []
     all_stats = []
 
+    distance_matrices = {}
+
     # Generate all pairs of models for comparison
     for model_A, model_B in combinations(models, 2):
         embeddings_A = np.stack(dataset.y_pred(model_A))
@@ -65,6 +67,15 @@ def EuclideanDistanceComparison(dataset, models):
         # Calculate pairwise Euclidean distances
         distance_matrix = euclidean_distances(embeddings_A, embeddings_B)
         distances = distance_matrix.flatten()
+
+        # Store raw distance matrix for each pair-wise comparison
+        distance_matrices.append(
+            {
+                "model_A": model_A.input_id,
+                "model_B": model_B.input_id,
+                "distance_matrix": distance_matrix,
+            }
+        )
 
         # Generate statistics and add model combination as a column
         stats_data = {
@@ -93,4 +104,7 @@ def EuclideanDistanceComparison(dataset, models):
     # Create a DataFrame from all collected statistics
     stats_df = pd.DataFrame(all_stats)
 
-    return (stats_df, *tuple(figures))
+    # Add raw data to return
+    raw_data = RawData(distance_matrices=pd.DataFrame(distance_matrices))
+
+    return (stats_df, *figures, raw_data)

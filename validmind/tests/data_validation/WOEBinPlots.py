@@ -9,7 +9,7 @@ import plotly.graph_objects as go
 import scorecardpy as sc
 from plotly.subplots import make_subplots
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.errors import SkipTestError
 from validmind.logging import get_logger
 from validmind.vm_models import VMDataset
@@ -140,4 +140,4 @@ def WOEBinPlots(
 
         figures.append(fig)
 
-    return tuple(figures)
+    return (*figures, RawData(woe_iv_data=woe_iv_df))

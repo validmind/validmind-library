@@ -6,7 +6,7 @@ import pandas as pd
 import plotly.graph_objects as go
 from statsmodels.tsa.stattools import acf, pacf
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset
 
 
@@ -62,6 +62,8 @@ def ACFandPACFPlot(dataset: VMDataset):
         raise ValueError("Provided 'columns' must exist in the dataset")
 
     figures = []
+    acf_store = {}
+    pacf_store = {}
     for col in df.columns:
         series = df[col]
         max_lags = min(40, len(series) // 2 - 1)
@@ -77,6 +79,7 @@ def ACFandPACFPlot(dataset: VMDataset):
             font=dict(size=18),
         )
         figures.append(acf_fig)
+        acf_store[col] = acf_values
 
         # Create PACF plot using Plotly
         pacf_values = pacf(series, nlags=max_lags)
@@ -89,5 +92,6 @@ def ACFandPACFPlot(dataset: VMDataset):
             font=dict(size=18),
         )
         figures.append(pacf_fig)
+        pacf_store[col] = pacf_values
 
-    return tuple(figures)
+    return (*figures, RawData(acf_values=acf_store, pacf_values=pacf_store))

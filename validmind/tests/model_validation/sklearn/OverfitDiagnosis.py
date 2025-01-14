@@ -242,7 +242,7 @@ def OverfitDiagnosis(
         test_df[prob_column] = datasets[1].y_prob(model)
 
     test_results = []
-    test_figures = []
+    figures = []
     results_headers = ["slice", "shape", "feature", metric]
 
     for feature_column in datasets[0].feature_columns:
@@ -283,7 +283,7 @@ def OverfitDiagnosis(
             )
 
         results = _prepare_results(results_train, results_test, metric)
-        test_figures.append(
+        figures.append(
             _plot_overfit_regions(results, feature_column, cut_off_threshold, metric)
         )
 
@@ -299,4 +299,4 @@ def OverfitDiagnosis(
                 }
             )
 
-    return {"Overfit Diagnosis": test_results}, *test_figures
+    return ({"Overfit Diagnosis": test_results}, *figures)

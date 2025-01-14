@@ -6,7 +6,7 @@
 import numpy as np
 import plotly.graph_objects as go
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 
 
 @tags("tabular_data", "visualization", "correlation")
@@ -58,7 +58,13 @@ def FeatureTargetCorrelationPlot(dataset, fig_height=600):
 
     fig = _visualize_feature_target_correlation(df, dataset.target_column, fig_height)
 
-    return fig
+    correlations = (
+        df.corr(numeric_only=True)[dataset.target_column]
+        .drop(dataset.target_column)
+        .to_frame()
+    )
+
+    return fig, RawData(correlation_data=correlations)
 
 
 def _visualize_feature_target_correlation(df, target_column, fig_height):

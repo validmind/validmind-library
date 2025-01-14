@@ -2,6 +2,7 @@ import unittest
 import pandas as pd
 import validmind as vm
 from validmind.tests.data_validation.BivariateScatterPlots import BivariateScatterPlots
+from validmind import RawData
 
 
 class TestBivariateScatterPlots(unittest.TestCase):
@@ -26,5 +27,8 @@ class TestBivariateScatterPlots(unittest.TestCase):
         # Check if result is a tuple
         self.assertIsInstance(result, tuple)
 
-        # Check if the tuple contains at least one figure (since we have multiple numeric columns)
+        # Check if the tuple contains at least one figure and raw data (since we have multiple numeric columns)
         self.assertTrue(len(result) > 0)
+
+        # Check the raw data is an instance of RawData
+        self.assertTrue(isinstance(result[-1], RawData))

@@ -78,7 +78,6 @@ def ROCCurve(model: VMModel, dataset: VMDataset):
     auc = roc_auc_score(y_true, y_prob)
 
     return (
-        RawData(fpr=fpr, tpr=tpr, auc=auc),
         go.Figure(
             data=[
                 go.Scatter(
@@ -104,4 +103,5 @@ def ROCCurve(model: VMModel, dataset: VMDataset):
                 height=500,
             ),
         ),
+        RawData(fpr=fpr, tpr=tpr, auc=auc),
     )

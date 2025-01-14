@@ -9,7 +9,7 @@ from typing import Any, Dict, Tuple
 
 import plotly.graph_objs as go
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.errors import SkipTestError
 from validmind.vm_models import VMDataset
 
@@ -104,4 +104,5 @@ def ClassImbalance(
         },
         go.Figure(data=[trace], layout=layout),
         all(row["Pass/Fail"] == "Pass" for row in imbalanced_classes),
+        RawData(imbalance_percentages=imbalance_percentages),
     )

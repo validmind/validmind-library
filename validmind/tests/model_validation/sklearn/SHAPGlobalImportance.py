@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import shap
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.errors import UnsupportedModelForSHAPError
 from validmind.logging import get_logger
 from validmind.models import CatBoostModel, SKlearnModel, StatsModelsModel
@@ -229,4 +229,5 @@ def SHAPGlobalImportance(
     return (
         generate_shap_plot("mean", shap_values, shap_sample),
         generate_shap_plot("summary", shap_values, shap_sample),
+        RawData(shap_values=shap_values, shap_sample=shap_sample),
     )

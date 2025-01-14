@@ -4,6 +4,7 @@ import numpy as np
 import plotly.graph_objects as go
 from datetime import datetime
 import validmind as vm
+from validmind import RawData
 from validmind.tests.model_validation.TimeSeriesPredictionWithCI import (
     TimeSeriesPredictionWithCI,
 )
@@ -50,22 +51,25 @@ class TestTimeSeriesPredictionWithCI(unittest.TestCase):
 
     def test_return_types(self):
         """Test if function returns expected types."""
-        fig, breaches_df = TimeSeriesPredictionWithCI(self.vm_dataset, self.vm_model)
+        fig, breaches_df, raw_data = TimeSeriesPredictionWithCI(
+            self.vm_dataset, self.vm_model
+        )
 
         # Check return types
         self.assertIsInstance(fig, go.Figure)
         self.assertIsInstance(breaches_df, pd.DataFrame)
+        self.assertIsInstance(raw_data, RawData)
 
     def test_figure_properties(self):
         """Test if figure has expected properties."""
-        fig, _ = TimeSeriesPredictionWithCI(self.vm_dataset, self.vm_model)
+        fig, _, _ = TimeSeriesPredictionWithCI(self.vm_dataset, self.vm_model)
 
         # Check if figure has exactly four traces (Actual, Predicted, CI Lower, CI Upper)
         self.assertEqual(len(fig.data), 4)
 
     def test_breaches_dataframe(self):
         """Test if breaches DataFrame has expected structure and values."""
-        _, breaches_df = TimeSeriesPredictionWithCI(self.vm_dataset, self.vm_model)
+        _, breaches_df, _ = TimeSeriesPredictionWithCI(self.vm_dataset, self.vm_model)
 
         # Check columns
         expected_columns = [
@@ -97,7 +101,7 @@ class TestTimeSeriesPredictionWithCI(unittest.TestCase):
     def test_custom_confidence(self):
         """Test if custom confidence level works."""
         custom_confidence = 0.90
-        _, breaches_df = TimeSeriesPredictionWithCI(
+        _, breaches_df, _ = TimeSeriesPredictionWithCI(
             self.vm_dataset, self.vm_model, confidence=custom_confidence
         )
 
@@ -106,7 +110,7 @@ class TestTimeSeriesPredictionWithCI(unittest.TestCase):
 
     def test_data_length(self):
         """Test if the plotted data has correct length."""
-        fig, _ = TimeSeriesPredictionWithCI(self.vm_dataset, self.vm_model)
+        fig, _, _ = TimeSeriesPredictionWithCI(self.vm_dataset, self.vm_model)
 
         # All traces should have same length as input data
         for trace in fig.data:
@@ -115,7 +119,7 @@ class TestTimeSeriesPredictionWithCI(unittest.TestCase):
 
     def test_datetime_index(self):
         """Test if x-axis uses datetime values."""
-        fig, _ = TimeSeriesPredictionWithCI(self.vm_dataset, self.vm_model)
+        fig, _, _ = TimeSeriesPredictionWithCI(self.vm_dataset, self.vm_model)
 
         # Check if x values are datetime objects for all traces
         for trace in fig.data:

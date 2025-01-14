@@ -6,7 +6,7 @@ import pandas as pd
 from statsmodels.tsa.arima.model import ARIMA
 from statsmodels.tsa.stattools import adfuller
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.logging import get_logger
 from validmind.vm_models import VMDataset
 
@@ -116,4 +116,4 @@ def AutoMA(dataset: VMDataset, max_ma_order: int = 3):
     return {
         "Auto MA Analysis Results": summary_ma_analysis,
         "Best MA Order Results": best_ma_order,
-    }
+    }, RawData(raw_series_data=df)

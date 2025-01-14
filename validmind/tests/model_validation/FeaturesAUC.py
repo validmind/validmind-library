@@ -7,7 +7,7 @@ import pandas as pd
 import plotly.graph_objects as go
 from sklearn.metrics import roc_auc_score
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.errors import SkipTestError
 from validmind.logging import get_logger
 from validmind.vm_models import VMDataset
@@ -95,4 +95,4 @@ def FeaturesAUC(dataset: VMDataset, fontsize: int = 12, figure_height: int = 500
         height=figure_height,
     )
 
-    return fig
+    return fig, RawData(feature_aucs=aucs)

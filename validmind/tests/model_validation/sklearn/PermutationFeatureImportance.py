@@ -7,7 +7,7 @@ from typing import Union
 import plotly.graph_objects as go
 from sklearn.inspection import permutation_importance
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.errors import SkipTestError
 from validmind.logging import get_logger
 from validmind.vm_models import VMDataset, VMModel
@@ -111,4 +111,4 @@ def PermutationFeatureImportance(
         height=figure_height,
     )
 
-    return fig
+    return fig, RawData(permutation_importance=pfi_values)
