@@ -111,7 +111,7 @@ hljs.highlightAll();
 </script>
 """
 
-# FIXME: this is a bit too hacky
+# have to dynamically load mathjax
 math_jax_snippet = """
 <script>
 window.MathJax = {
