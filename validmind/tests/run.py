@@ -398,6 +398,7 @@ def run_test(  # noqa: C901
 
     return result
 
+
 def print_env():
     e = _get_run_metadata()
     pprint.pp(e)
