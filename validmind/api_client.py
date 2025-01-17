@@ -487,3 +487,16 @@ def get_ai_key() -> Dict[str, Any]:
         raise_api_error(r.text)
 
     return r.json()
+
+
+def generate_test_result_description(test_result_data: Dict[str, Any]) -> str:
+    r = requests.post(
+        url=_get_url("ai/generate/test_result_description"),
+        headers=_get_api_headers(),
+        json=test_result_data,
+    )
+
+    if r.status_code != 200:
+        raise_api_error(r.text)
+
+    return r.json()

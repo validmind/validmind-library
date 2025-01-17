@@ -15,7 +15,7 @@ from ..logging import get_logger
 from ..utils import NumpyEncoder, md_to_html, test_id_to_name
 from ..vm_models.figure import Figure
 from ..vm_models.result import ResultTable
-from .utils import DescriptionFuture, get_client_and_model
+from .utils import DescriptionFuture
 
 __executor = ThreadPoolExecutor()
 __prompt = None
@@ -91,12 +91,12 @@ def generate_description(
     title: Optional[str] = None,
 ):
     """Generate the description for the test results"""
+    from validmind.api_client import generate_test_result_description
+
     if not tables and not figures and not metric:
         raise ValueError(
             "No tables, unit metric or figures provided - cannot generate description"
         )
-
-    client, model = get_client_and_model()
 
     # get last part of test id
     test_name = title or test_id.split(".")[-1]
@@ -131,19 +131,22 @@ def generate_description(
         "figures": [figure._get_b64_url() for figure in ([] if tables else figures)],
         "context": context,
     }
-    system, user = _load_prompt()
+    # system, user = _load_prompt()
 
-    messages = [
-        prompt_to_message("system", system.render(input_data)),
-        prompt_to_message("user", user.render(input_data)),
-    ]
-    response = client.chat.completions.create(
-        model=model,
-        temperature=0.0,
-        messages=messages,
-    )
+    # messages = [
+    #     prompt_to_message("system", system.render(input_data)),
+    #     prompt_to_message("user", user.render(input_data)),
+    # ]
+    # response = client.chat.completions.create(
+    #     model=model,
+    #     temperature=0.0,
+    #     messages=messages,
+    # )
 
-    return response.choices[0].message.content
+    # return response.choices[0].message.content
+    response = generate_test_result_description(input_data)
+
+    return response["content"]
 
 
 def background_generate_description(
