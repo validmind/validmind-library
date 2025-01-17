@@ -50,6 +50,7 @@ from .client import (  # noqa: E402
     run_test_suite,
 )
 from .tests.decorator import tags, tasks, test
+from .tests.run import print_env
 from .vm_models.result import RawData
 
 __all__ = [  # noqa
@@ -63,6 +64,7 @@ __all__ = [  # noqa
     "init_model",
     "init_r_model",
     "preview_template",
+    "print_env",
     "RawData",
     "reload",
     "run_documentation_tests",
