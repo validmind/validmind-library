@@ -2,12 +2,14 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import List
+
 import pandas as pd
 import plotly.graph_objs as go
-from typing import List
+
 from validmind import tags, tasks
-from validmind.vm_models import VMDataset
 from validmind.errors import SkipTestError
+from validmind.vm_models import VMDataset
 
 
 @tags("tabular_data", "binary_classification", "multiclass_classification")

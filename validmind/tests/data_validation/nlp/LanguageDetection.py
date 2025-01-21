@@ -5,7 +5,7 @@
 import plotly.express as px
 from langdetect import LangDetectException, detect
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 
 
 @tags("nlp", "text_data", "visualization")
@@ -64,9 +64,12 @@ def LanguageDetection(dataset):
 
     languages = dataset.df[dataset.text_column].apply(detect_language)
 
-    return px.histogram(
-        languages,
-        x=languages,
-        title="Language Distribution",
-        labels={"x": "Language Codes"},
+    return (
+        px.histogram(
+            languages,
+            x=languages,
+            title="Language Distribution",
+            labels={"x": "Language Codes"},
+        ),
+        RawData(detected_languages=languages),
     )

@@ -1,8 +1,8 @@
 import unittest
 import pandas as pd
-import numpy as np
 import plotly.graph_objects as go
 import validmind as vm
+from validmind import RawData
 from validmind.tests.model_validation.RougeScore import RougeScore
 
 
@@ -61,12 +61,14 @@ class TestRougeScore(unittest.TestCase):
 
     def test_returns_dataframe(self):
         """Test if function returns expected structure."""
-        result = RougeScore(self.vm_dataset, self.vm_model)
+        result_df, *figures, raw_data = RougeScore(self.vm_dataset, self.vm_model)
 
         # Check return type
-        self.assertIsInstance(result, tuple)
-        self.assertIsInstance(result[0], pd.DataFrame)
-
+        self.assertIsInstance(result_df, pd.DataFrame)
+        self.assertIsInstance(figures, list)
+        for fig in figures:
+            self.assertIsInstance(fig, go.Figure)
+        self.assertIsInstance(raw_data, RawData)
         # Check expected columns in DataFrame
         expected_columns = [
             "Metric",
@@ -77,11 +79,11 @@ class TestRougeScore(unittest.TestCase):
             "Standard Deviation",
             "Count",
         ]
-        self.assertListEqual(list(result[0].columns), expected_columns)
+        self.assertListEqual(list(result_df.columns), expected_columns)
 
     def test_score_ranges(self):
         """Test if ROUGE scores are within valid range (0 to 1)."""
-        result_df = RougeScore(self.vm_dataset, self.vm_model)[0]
+        result_df, *_ = RougeScore(self.vm_dataset, self.vm_model)
 
         score_columns = ["Mean Score", "Median Score", "Max Score", "Min Score"]
         for col in score_columns:
@@ -89,7 +91,7 @@ class TestRougeScore(unittest.TestCase):
 
     def test_metrics_present(self):
         """Test if all expected metrics are present."""
-        result_df = RougeScore(self.vm_dataset, self.vm_model)[0]
+        result_df, *_ = RougeScore(self.vm_dataset, self.vm_model)
 
         expected_metrics = ["Precision", "Recall", "F1 Score"]
         actual_metrics = result_df["Metric"].tolist()
@@ -97,7 +99,7 @@ class TestRougeScore(unittest.TestCase):
 
     def test_figures_properties(self):
         """Test if figures have expected properties."""
-        _, *figures = RougeScore(self.vm_dataset, self.vm_model)
+        _, *figures, _ = RougeScore(self.vm_dataset, self.vm_model)
 
         # Should have 6 figures (histogram and bar chart for each metric)
         self.assertEqual(len(figures), 6)
@@ -134,7 +136,7 @@ class TestRougeScore(unittest.TestCase):
             self.vm_model, prediction_column="predictions"
         )
 
-        result_df = RougeScore(vm_dataset_identical, self.vm_model)[0]
+        result_df, *_ = RougeScore(vm_dataset_identical, self.vm_model)
 
         # For identical texts, F1 scores should be 1.0 or very close to 1.0
         f1_score = result_df[result_df["Metric"] == "F1 Score"]["Mean Score"].iloc[0]
@@ -149,8 +151,13 @@ class TestRougeScore(unittest.TestCase):
 
     def test_custom_metric(self):
         """Test if custom ROUGE metric parameter works."""
-        result = RougeScore(self.vm_dataset, self.vm_model, metric="rouge-2")
+        result_df, *figures, raw_data = RougeScore(
+            self.vm_dataset, self.vm_model, metric="rouge-2"
+        )
 
         # Should still return DataFrame and figures
-        self.assertIsInstance(result[0], pd.DataFrame)
-        self.assertTrue(all(isinstance(fig, go.Figure) for fig in result[1:]))
+        self.assertIsInstance(result_df, pd.DataFrame)
+        self.assertTrue(all(isinstance(fig, go.Figure) for fig in figures))
+
+        # Check raw data instance
+        self.assertIsInstance(raw_data, RawData)

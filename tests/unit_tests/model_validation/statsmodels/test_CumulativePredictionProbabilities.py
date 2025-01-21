@@ -7,6 +7,7 @@ from validmind.tests.model_validation.statsmodels.CumulativePredictionProbabilit
     CumulativePredictionProbabilities,
 )
 import plotly.graph_objects as go
+from validmind import RawData
 
 
 class TestCumulativePredictionProbabilities(unittest.TestCase):
@@ -56,20 +57,25 @@ class TestCumulativePredictionProbabilities(unittest.TestCase):
         # Assign predictions to the dataset
         self.vm_dataset.assign_predictions(self.vm_model)
 
-    def test_returns_figure(self):
+    def test_returns_figure_and_raw_data(self):
         # Run the function
-        result = CumulativePredictionProbabilities(self.vm_dataset, self.vm_model)
+        fig, raw_data = CumulativePredictionProbabilities(
+            self.vm_dataset, self.vm_model
+        )
 
         # Check if result is a Plotly Figure
-        self.assertIsInstance(result, go.Figure)
+        self.assertIsInstance(fig, go.Figure)
 
         # Check if figure has traces
-        self.assertGreater(len(result.data), 0)
+        self.assertGreater(len(fig.data), 0)
 
         # Check if figure has expected layout elements
-        self.assertIn("title", result.layout)
-        self.assertIn("xaxis", result.layout)
-        self.assertIn("yaxis", result.layout)
+        self.assertIn("title", fig.layout)
+        self.assertIn("xaxis", fig.layout)
+        self.assertIn("yaxis", fig.layout)
+
+        # Check that raw_data is an instance of RawData
+        self.assertIsInstance(raw_data, RawData)
 
     def test_perfect_separation(self):
         # Create a dataset with perfect class separation
@@ -103,21 +109,25 @@ class TestCumulativePredictionProbabilities(unittest.TestCase):
         vm_perfect_dataset.assign_predictions(vm_perfect_model)
 
         # Generate plot
-        result = CumulativePredictionProbabilities(vm_perfect_dataset, vm_perfect_model)
+        fig, raw_data = CumulativePredictionProbabilities(
+            vm_perfect_dataset, vm_perfect_model
+        )
 
         # Check if there are exactly two traces (one for each class)
-        self.assertEqual(len(result.data), 2)
+        self.assertEqual(len(fig.data), 2)
 
         # Check trace names contain class labels
-        trace_names = [trace.name for trace in result.data]
+        trace_names = [trace.name for trace in fig.data]
         self.assertTrue(any("0" in name for name in trace_names))
         self.assertTrue(any("1" in name for name in trace_names))
 
     def test_probability_range(self):
-        result = CumulativePredictionProbabilities(self.vm_dataset, self.vm_model)
+        fig, raw_data = CumulativePredictionProbabilities(
+            self.vm_dataset, self.vm_model
+        )
 
         # Check if probabilities are within [0, 1] range
-        for trace in result.data:
+        for trace in fig.data:
             x_values = trace.x
             self.assertTrue(all(0 <= x <= 1 for x in x_values))
 

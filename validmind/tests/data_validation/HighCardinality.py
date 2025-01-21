@@ -2,7 +2,7 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset
 
 
@@ -59,6 +59,8 @@ def HighCardinality(
     table = []
     all_passed = True
 
+    raw_data = {}
+
     for col in dataset.feature_columns_categorical:
         n_distinct = df[col].nunique()
         p_distinct = n_distinct / df.shape[0]
@@ -73,7 +75,12 @@ def HighCardinality(
             }
         )
 
+        raw_data[col] = {
+            "n_distinct": n_distinct,
+            "p_distinct": p_distinct,
+        }
+
         if not passed:
             all_passed = False
 
-    return table, all_passed
+    return table, all_passed, RawData(raw_cardinality_details=raw_data)

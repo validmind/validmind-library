@@ -2,6 +2,7 @@ import unittest
 import pandas as pd
 import validmind as vm
 import plotly.graph_objs as go
+from validmind import RawData
 from validmind.errors import SkipTestError
 from validmind.tests.data_validation.TabularCategoricalBarPlots import (
     TabularCategoricalBarPlots,
@@ -38,6 +39,12 @@ class TestTabularCategoricalBarPlots(unittest.TestCase):
 
     def test_categorical_bar_plots(self):
         figures = TabularCategoricalBarPlots(self.vm_dataset)
+
+        # Check that the last element is an instance of RawData
+        self.assertIsInstance(figures[-1], RawData)
+
+        # Remove the raw data before checking figures
+        figures = figures[:-1]
 
         # Check that we get the correct number of figures (one per categorical column)
         self.assertIsInstance(figures, tuple)

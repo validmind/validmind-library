@@ -2,6 +2,7 @@ import unittest
 import pandas as pd
 import plotly.graph_objects as go
 import validmind as vm
+from validmind import RawData
 from validmind.tests.data_validation.nlp.CommonWords import CommonWords
 
 
@@ -37,9 +38,9 @@ class TestCommonWords(unittest.TestCase):
             __log=False,
         )
 
-    def test_returns_plotly_figure(self):
+    def test_returns_plotly_figure_and_raw_data(self):
         # Run the function
-        result = CommonWords(self.vm_dataset)
+        result, raw_data = CommonWords(self.vm_dataset)
 
         # Check if result is a Plotly Figure
         self.assertIsInstance(result, go.Figure)
@@ -53,8 +54,11 @@ class TestCommonWords(unittest.TestCase):
         self.assertIsNotNone(result.layout.xaxis.title)
         self.assertIsNotNone(result.layout.yaxis.title)
 
+        # Check if raw_data is an instance of RawData
+        self.assertIsInstance(raw_data, RawData)
+
     def test_common_words_content(self):
-        result = CommonWords(self.vm_dataset)
+        result, _ = CommonWords(self.vm_dataset)
 
         # Get the words from the bar chart
         words = result.data[0].x
@@ -75,7 +79,7 @@ class TestCommonWords(unittest.TestCase):
         self.assertNotIn("over", words)
 
     def test_word_frequencies(self):
-        result = CommonWords(self.vm_dataset)
+        result, _ = CommonWords(self.vm_dataset)
 
         # Get the words and their frequencies
         words = list(result.data[0].x)

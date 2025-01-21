@@ -7,6 +7,7 @@ import subprocess
 import time
 from datetime import datetime
 from inspect import getdoc
+import pprint
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 from uuid import uuid4
 
@@ -396,3 +397,8 @@ def run_test(  # noqa: C901
         result.show()
 
     return result
+
+
+def print_env():
+    e = _get_run_metadata()
+    pprint.pp(e)

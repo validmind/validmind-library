@@ -6,6 +6,7 @@ from validmind.tests.data_validation.LaggedCorrelationHeatmap import (
     LaggedCorrelationHeatmap,
 )
 import plotly.graph_objects as go
+from validmind import RawData
 
 
 class TestLaggedCorrelationHeatmap(unittest.TestCase):
@@ -32,9 +33,9 @@ class TestLaggedCorrelationHeatmap(unittest.TestCase):
         )
 
     def test_heatmap_structure(self):
-        fig = LaggedCorrelationHeatmap(self.vm_dataset, num_lags=5)
+        fig, raw_data = LaggedCorrelationHeatmap(self.vm_dataset, num_lags=5)
 
-        # Check return type
+        # Check return type for fig
         self.assertIsInstance(fig, go.Figure)
 
         # Check figure has data
@@ -47,7 +48,7 @@ class TestLaggedCorrelationHeatmap(unittest.TestCase):
         self.assertEqual(fig.layout.xaxis.title.text, "Lags")
 
     def test_correlation_values(self):
-        fig = LaggedCorrelationHeatmap(self.vm_dataset, num_lags=5)
+        fig, _ = LaggedCorrelationHeatmap(self.vm_dataset, num_lags=5)
 
         # Get correlation values from heatmap
         heatmap_data = fig.data[0]
@@ -68,15 +69,15 @@ class TestLaggedCorrelationHeatmap(unittest.TestCase):
 
     def test_num_lags_parameter(self):
         # Test with different number of lags
-        fig_small = LaggedCorrelationHeatmap(self.vm_dataset, num_lags=3)
-        fig_large = LaggedCorrelationHeatmap(self.vm_dataset, num_lags=8)
+        fig_small, _ = LaggedCorrelationHeatmap(self.vm_dataset, num_lags=3)
+        fig_large, _ = LaggedCorrelationHeatmap(self.vm_dataset, num_lags=8)
 
         # Check dimensions match num_lags parameter
         self.assertEqual(len(fig_small.data[0].x), 4)  # num_lags + 1
         self.assertEqual(len(fig_large.data[0].x), 9)  # num_lags + 1
 
     def test_correlation_pattern(self):
-        fig = LaggedCorrelationHeatmap(self.vm_dataset, num_lags=5)
+        fig, _ = LaggedCorrelationHeatmap(self.vm_dataset, num_lags=5)
 
         # Get correlation values for feature1
         correlations = fig.data[0].z[0]
@@ -84,3 +85,9 @@ class TestLaggedCorrelationHeatmap(unittest.TestCase):
         # Check that lag 2 has higher correlation than lag 0
         # (since we created target with 2-period lag)
         self.assertGreater(abs(correlations[2]), abs(correlations[0]))
+
+    def test_raw_data_output(self):
+        _, raw_data = LaggedCorrelationHeatmap(self.vm_dataset, num_lags=5)
+
+        # Check that raw_data is instance of RawData
+        self.assertIsInstance(raw_data, RawData)

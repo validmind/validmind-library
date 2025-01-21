@@ -5,7 +5,7 @@
 import pandas as pd
 import plotly.graph_objects as go
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 
 
@@ -72,4 +72,4 @@ def ClusterSizeDistribution(dataset: VMDataset, model: VMModel):
     fig.update_yaxes(title_text="Counts", showgrid=False)
     fig.update_layout(title_text="Cluster distribution", title_x=0.5, barmode="group")
 
-    return fig
+    return fig, RawData(cluster_counts=df_counts)

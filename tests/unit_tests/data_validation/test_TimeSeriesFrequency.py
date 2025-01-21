@@ -4,6 +4,7 @@ import validmind as vm
 import plotly.graph_objs as go
 from validmind.errors import SkipTestError
 from validmind.tests.data_validation.TimeSeriesFrequency import TimeSeriesFrequency
+from validmind import RawData
 
 
 class TestTimeSeriesFrequency(unittest.TestCase):
@@ -31,12 +32,13 @@ class TestTimeSeriesFrequency(unittest.TestCase):
         )
 
     def test_time_series_frequency(self):
-        frequencies, figure, passed = TimeSeriesFrequency(self.vm_dataset)
+        frequencies, figure, passed, raw_data = TimeSeriesFrequency(self.vm_dataset)
 
         # Check return types
         self.assertIsInstance(frequencies, list)
         self.assertIsInstance(figure, go.Figure)
         self.assertIsInstance(passed, bool)
+        self.assertIsInstance(raw_data, RawData)  # Check the new raw_data type
 
         # Check frequencies structure
         self.assertEqual(len(frequencies), 2)  # One entry per feature

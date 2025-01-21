@@ -6,7 +6,7 @@ import numpy as np
 import plotly.figure_factory as ff
 import plotly.graph_objects as go
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 
 
@@ -60,8 +60,9 @@ def RegressionResidualsPlot(model: VMModel, dataset: VMDataset, bin_size: float 
     figures = []
 
     # Residuals plot
+    residuals = y_true.flatten() - y_pred.flatten()
     fig = ff.create_distplot(
-        hist_data=[y_true.flatten() - y_pred.flatten()],
+        hist_data=[residuals],
         group_labels=["Residuals"],
         bin_size=[bin_size],
         show_hist=True,
@@ -104,4 +105,4 @@ def RegressionResidualsPlot(model: VMModel, dataset: VMDataset, bin_size: float 
         )
     )
 
-    return tuple(figures)
+    return (*figures, RawData(residuals=residuals, y_true=y_true, y_pred=y_pred))

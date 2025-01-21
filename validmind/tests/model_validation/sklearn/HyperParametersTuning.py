@@ -2,9 +2,10 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from typing import Union, Dict, List
-from sklearn.model_selection import GridSearchCV
+from typing import Dict, List, Union
+
 from sklearn.metrics import make_scorer, recall_score
+from sklearn.model_selection import GridSearchCV
 
 from validmind import tags, tasks
 from validmind.vm_models import VMDataset, VMModel
@@ -24,7 +25,9 @@ def _get_metrics(scoring):
     return (
         scoring
         if isinstance(scoring, list)
-        else list(scoring.keys()) if isinstance(scoring, dict) else [scoring]
+        else list(scoring.keys())
+        if isinstance(scoring, dict)
+        else [scoring]
     )
 
 

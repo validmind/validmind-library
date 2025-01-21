@@ -48,8 +48,8 @@ class TestTimeSeriesPredictionsPlot(unittest.TestCase):
             self.vm_model, prediction_column="predictions"
         )
 
-    def test_return_type(self):
-        """Test if function returns a Plotly figure."""
+    def test_return_types(self):
+        """Test if function returns a tuple with a Plotly figure and raw data."""
         result = TimeSeriesPredictionsPlot(self.vm_dataset, self.vm_model)
         self.assertIsInstance(result, go.Figure)
 

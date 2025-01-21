@@ -7,7 +7,7 @@ from typing import List, Union
 import matplotlib.pyplot as plt
 import numpy as np
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.logging import get_logger
 from validmind.vm_models import VMDataset, VMModel
 
@@ -111,4 +111,7 @@ def RegressionModelSensitivityPlot(
 
     plt.close()
 
-    return fig
+    return fig, RawData(
+        transformed_target=transformed_target,
+        transformed_predictions=transformed_predictions,
+    )

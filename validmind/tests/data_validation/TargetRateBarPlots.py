@@ -6,7 +6,7 @@ import numpy as np
 import plotly.graph_objs as go
 from plotly.subplots import make_subplots
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.errors import SkipTestError
 from validmind.vm_models import VMDataset
 
@@ -62,12 +62,13 @@ def TargetRateBarPlots(dataset: VMDataset):
 
     df = dataset.df
     figures = []
+    raw_data = []
 
     for col in dataset.feature_columns_categorical:
-
         # Calculate counts and default rate for each category
         counts = df[col].value_counts()
         default_rate = df.groupby(col)[dataset.target_column].mean()
+        raw_data.append({"column": col, "counts": counts, "default_rate": default_rate})
 
         fig = make_subplots(
             rows=1,
@@ -107,4 +108,4 @@ def TargetRateBarPlots(dataset: VMDataset):
 
         figures.append(fig)
 
-    return tuple(figures)
+    return (*figures, RawData(target_rates_by_category=raw_data))

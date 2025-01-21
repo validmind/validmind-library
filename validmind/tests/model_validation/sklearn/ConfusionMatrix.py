@@ -7,7 +7,7 @@ import numpy as np
 import plotly.figure_factory as ff
 from sklearn.metrics import confusion_matrix
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 
 
@@ -119,4 +119,4 @@ def ConfusionMatrix(dataset: VMDataset, model: VMModel):
         font=dict(size=14),
     )
 
-    return fig
+    return fig, RawData(confusion_matrix=cm)

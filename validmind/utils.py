@@ -23,7 +23,6 @@ import seaborn as sns
 from IPython.core import getipython
 from IPython.display import HTML
 from IPython.display import display as ipy_display
-from latex2mathml.converter import convert
 from matplotlib.axes._axes import _log as matplotlib_axes_logger
 from numpy import ndarray
 from sklearn.exceptions import UndefinedMetricWarning
@@ -491,7 +490,7 @@ def display(widget_or_html, syntax_highlighting=True, mathjax=True):
         ipy_display(HTML(widget_or_html))
         # if html we can auto-detect if we actually need syntax highlighting or MathJax
         syntax_highlighting = 'class="language-' in widget_or_html
-        mathjax = "$$" in widget_or_html
+        mathjax = "math/tex" in widget_or_html
     else:
         ipy_display(widget_or_html)
 
@@ -510,20 +509,20 @@ def md_to_html(md: str, mathml=False) -> str:
     )(md)
 
     if not mathml:
-        # return the html as is (with latex that will be rendered by MathJax)
         return html
 
-    # convert the latex to MathML which CKeditor can render
+    # convert the latex to mathjax
     math_block_pattern = re.compile(r'<div class="math">\$\$([\s\S]*?)\$\$</div>')
     html = math_block_pattern.sub(
-        lambda match: "<p>{}</p>".format(convert(match.group(1), display="block")), html
+        lambda match: '<script type="math/tex; mode=display">{}</script>'.format(
+            match.group(1)
+        ),
+        html,
     )
 
     inline_math_pattern = re.compile(r'<span class="math">\\\((.*?)\\\)</span>')
     html = inline_math_pattern.sub(
-        lambda match: "<span>{}</span>".format(
-            convert(match.group(1), display="inline")
-        ),
+        lambda match: '<script type="math/tex">{}</script>'.format(match.group(1)),
         html,
     )
 

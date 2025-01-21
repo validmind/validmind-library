@@ -9,7 +9,7 @@ import pandas as pd
 import plotly.express as px
 from sklearn.metrics.pairwise import cosine_similarity
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 
 
 @tags("visualization", "dimensionality_reduction", "embeddings")
@@ -63,6 +63,7 @@ def CosineSimilarityComparison(dataset, models):
     figures = []
     # Initialize a list to store data for the DataFrame
     all_stats = []
+    similarity_matrices = []
 
     # Generate all pairs of models for comparison
     for model_A, model_B in combinations(models, 2):
@@ -72,6 +73,15 @@ def CosineSimilarityComparison(dataset, models):
         # Calculate pairwise cosine similarity
         similarity_matrix = cosine_similarity(embeddings_A, embeddings_B)
         similarities = similarity_matrix.flatten()
+
+        # store similarity matrix
+        similarity_matrices.append(
+            {
+                "model_A": model_A.input_id,
+                "model_B": model_B.input_id,
+                "similarity_matrix": similarity_matrix,
+            }
+        )
 
         # Generate statistics and add model combination as a column
         stats_data = {
@@ -100,4 +110,8 @@ def CosineSimilarityComparison(dataset, models):
     # Create a DataFrame from all collected statistics
     stats_df = pd.DataFrame(all_stats)
 
-    return (stats_df, *tuple(figures))
+    return (
+        *figures,
+        stats_df,
+        RawData(similarity_matrices=pd.DataFrame(similarity_matrices)),
+    )

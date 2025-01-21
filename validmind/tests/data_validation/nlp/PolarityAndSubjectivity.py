@@ -7,7 +7,7 @@ import pandas as pd
 import plotly.express as px
 from textblob import TextBlob
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 
 
 @tags("nlp", "text_data", "data_validation")
@@ -144,4 +144,4 @@ def PolarityAndSubjectivity(dataset, threshold_subjectivity=0.5, threshold_polar
 
     statistics_tables = {"Quadrant Distribution": quadrant_df, "Statistics": stats_df}
 
-    return fig, statistics_tables
+    return fig, statistics_tables, RawData(sentiment_data=data)

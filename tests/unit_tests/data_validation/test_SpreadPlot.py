@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 import validmind as vm
+from validmind import RawData
 
 from validmind.errors import SkipTestError
 from validmind.tests.data_validation.SpreadPlot import SpreadPlot
@@ -33,7 +34,13 @@ class TestSpreadPlot(unittest.TestCase):
         )
 
     def test_spread_plot(self):
-        figures = SpreadPlot(self.vm_dataset)
+        result = SpreadPlot(self.vm_dataset)
+
+        # The last item should be an instance of RawData
+        self.assertIsInstance(result[-1], RawData)
+
+        # Collect all figures except the last item
+        figures = result[:-1]
 
         # Check that we get the correct number of figures (one per feature pair)
         self.assertEqual(len(figures), 1)  # Only one pair (A-B) for two features

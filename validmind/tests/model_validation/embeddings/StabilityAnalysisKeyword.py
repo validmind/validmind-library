@@ -5,7 +5,7 @@
 import re
 from typing import Dict
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 
 from .utils import create_stability_analysis_result
@@ -91,8 +91,10 @@ def StabilityAnalysisKeyword(
         perturb_data
     )
 
-    return create_stability_analysis_result(
+    raw_data, results = create_stability_analysis_result(
         dataset.y_pred(model),
         model.predict(perturbed_df),
         mean_similarity_threshold,
     )
+
+    return results, RawData(original_perturbed_similarity=raw_data)

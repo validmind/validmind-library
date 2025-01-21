@@ -9,7 +9,7 @@ import pandas as pd
 import seaborn as sns
 from sklearn import metrics
 
-from validmind.tests import tags, tasks
+from validmind import tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 
 DEFAULT_METRICS = {

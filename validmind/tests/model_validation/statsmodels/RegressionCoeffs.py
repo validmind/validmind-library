@@ -97,4 +97,4 @@ def RegressionCoeffs(model):
         yaxis_title="Coefficients",
     )
 
-    return (fig, coefficients)
+    return fig, coefficients

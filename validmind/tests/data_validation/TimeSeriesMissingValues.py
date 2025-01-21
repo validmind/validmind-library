@@ -6,7 +6,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.figure_factory as ff
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.errors import SkipTestError
 from validmind.vm_models import VMDataset
 
@@ -62,15 +62,18 @@ def TimeSeriesMissingValues(dataset: VMDataset, min_threshold: int = 1):
 
     if sum(missing.values) == 0:
         # if theres no missing values, no need to plot anything
-        return [
-            {
-                "Column": col,
-                "Number of Missing Values": missing[col],
-                "Percentage of Missing Values (%)": 0,
-                "Pass/Fail": "Pass",
-            }
-            for col in missing.index
-        ], True
+        return (
+            [
+                {
+                    "Column": col,
+                    "Number of Missing Values": missing[col],
+                    "Percentage of Missing Values (%)": 0,
+                    "Pass/Fail": "Pass",
+                }
+                for col in missing.index
+            ],
+            True,
+        )
 
     barplot = px.bar(
         missing,
@@ -110,4 +113,5 @@ def TimeSeriesMissingValues(dataset: VMDataset, min_threshold: int = 1):
         barplot,
         heatmap,
         all(missing[col] < min_threshold for col in missing.index),
+        RawData(missing_values_count=missing, missing_values_mask=missing_mask),
     )

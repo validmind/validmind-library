@@ -61,19 +61,19 @@ class TestDurbinWatsonTest(unittest.TestCase):
         # Assign predictions to the dataset
         self.vm_dataset.assign_predictions(self.vm_model)
 
-    def test_returns_dataframe(self):
+    def test_returns_dataframe_and_rawdata(self):
         # Run the function
-        result = DurbinWatsonTest(self.vm_dataset, self.vm_model)
+        results = DurbinWatsonTest(self.vm_dataset, self.vm_model)
 
-        # Check if result is a DataFrame
-        self.assertIsInstance(result, pd.DataFrame)
+        # Check if results is a DataFrame
+        self.assertIsInstance(results, pd.DataFrame)
 
         # Check if DataFrame has expected columns
         expected_columns = ["dw_statistic", "threshold", "autocorrelation"]
-        self.assertTrue(all(col in result.columns for col in expected_columns))
+        self.assertTrue(all(col in results.columns for col in expected_columns))
 
         # Check if DataFrame has exactly one row
-        self.assertEqual(len(result), 1)
+        self.assertEqual(len(results), 1)
 
     def test_no_autocorrelation(self):
         # Create a dataset with no autocorrelation
@@ -107,27 +107,27 @@ class TestDurbinWatsonTest(unittest.TestCase):
         vm_no_auto_dataset.assign_predictions(vm_no_auto_model)
 
         # Run the function
-        result = DurbinWatsonTest(vm_no_auto_dataset, vm_no_auto_model)
+        results = DurbinWatsonTest(vm_no_auto_dataset, vm_no_auto_model)
 
-        # Check if result is a DataFrame
-        self.assertIsInstance(result, pd.DataFrame)
+        # Check if results is a DataFrame
+        self.assertIsInstance(results, pd.DataFrame)
 
         # Check if DataFrame has expected columns
         expected_columns = ["dw_statistic", "threshold", "autocorrelation"]
-        self.assertTrue(all(col in result.columns for col in expected_columns))
+        self.assertTrue(all(col in results.columns for col in expected_columns))
 
         # Check if DataFrame has exactly one row
-        self.assertEqual(len(result), 1)
+        self.assertEqual(len(results), 1)
 
         # For no autocorrelation:
         # - DW statistic should be close to 2 (typically between 1.5 and 2.5)
         # - Should be labeled as "No autocorrelation"
-        dw_stat = result["dw_statistic"].iloc[0]
+        dw_stat = results["dw_statistic"].iloc[0]
         self.assertGreater(
             dw_stat, 1.5, f"DW statistic {dw_stat} indicates positive autocorrelation"
         )
         self.assertLess(
             dw_stat, 2.5, f"DW statistic {dw_stat} indicates negative autocorrelation"
         )
-        self.assertEqual(result["autocorrelation"].iloc[0], "No autocorrelation")
-        self.assertEqual(result["threshold"].iloc[0], "[1.5, 2.5]")
+        self.assertEqual(results["autocorrelation"].iloc[0], "No autocorrelation")
+        self.assertEqual(results["threshold"].iloc[0], "[1.5, 2.5]")

@@ -5,7 +5,7 @@
 import pandas as pd
 import plotly.graph_objects as go
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.errors import SkipTestError
 from validmind.vm_models import VMDataset
 
@@ -103,4 +103,9 @@ def TimeSeriesFrequency(dataset: VMDataset):
         ),
     )
 
-    return frequencies, fig, len(set(item["Frequency"] for item in frequencies)) == 1
+    return (
+        frequencies,
+        fig,
+        len(set(item["Frequency"] for item in frequencies)) == 1,
+        RawData(time_diff_days=time_diff_days),
+    )

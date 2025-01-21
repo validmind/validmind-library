@@ -9,7 +9,7 @@ import numpy as np
 from ydata_profiling.config import Settings
 from ydata_profiling.model.typeset import ProfilingTypeSet
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.errors import UnsupportedColumnTypeError
 from validmind.logging import get_logger
 from validmind.vm_models import VMDataset
@@ -220,6 +220,15 @@ def DatasetDescription(dataset: VMDataset):
     for column in infer_datatypes(df):
         results.append(describe_column(df, column))
 
+    raw_data = {
+        column["id"]: {
+            "type": column["type"],
+            "statistics": column["statistics"],
+            "histograms": column["histograms"],
+        }
+        for column in results
+    }
+
     return {
         "Dataset Description": [
             {
@@ -233,4 +242,4 @@ def DatasetDescription(dataset: VMDataset):
             }
             for column in results
         ]
-    }
+    }, RawData(raw_data=raw_data)

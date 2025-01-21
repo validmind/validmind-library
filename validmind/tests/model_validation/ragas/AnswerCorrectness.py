@@ -7,7 +7,7 @@ import warnings
 import plotly.express as px
 from datasets import Dataset
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.errors import MissingDependencyError
 
 from .utils import get_ragas_config, get_renamed_columns
@@ -144,4 +144,5 @@ def AnswerCorrectness(
         },
         fig_histogram,
         fig_box,
+        RawData(evaluation_results=result_df),
     )

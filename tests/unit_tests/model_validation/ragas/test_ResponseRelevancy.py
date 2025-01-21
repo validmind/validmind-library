@@ -61,7 +61,7 @@ class TestResponseRelevancy(unittest.TestCase):
 
         # Check return types
         self.assertIsInstance(result, tuple)
-        self.assertEqual(len(result), 3)  # dict and 2 figures
+        self.assertEqual(len(result), 4)  # dict, 2 figures, and raw data
 
         # Check dictionary structure
         self.assertIsInstance(result[0], dict)
@@ -72,6 +72,9 @@ class TestResponseRelevancy(unittest.TestCase):
         # Check figures
         self.assertIsInstance(result[1], go.Figure)  # Histogram
         self.assertIsInstance(result[2], go.Figure)  # Box plot
+
+        # Check raw data
+        self.assertIsInstance(result[3], vm.RawData)
 
     def test_relevancy_scores(self):
         """Test if relevancy scores reflect response quality."""

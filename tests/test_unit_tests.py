@@ -11,6 +11,17 @@ from tests.unit_tests.utils import (
     print_coverage_statistics,
 )
 
+# Limit OpenMP on Mac so it doesn't segfault:
+#
+# By limiting OpenMP to a single thread (OMP_NUM_THREADS=1), we:
+#  • Prevent nested parallelism from creating too many threads.
+#  • Simplify thread management, avoiding conflicts or resource contention.
+#  • Allow other threading backends (e.g., Apple’s libdispatch or PyTorch's
+#       thread pool) to manage parallelism more predictably.
+if sys.platform == "darwin":
+    os.environ["OMP_NUM_THREADS"] = "1"
+    os.environ["MKL_NUM_THREADS"] = "1"
+
 logger = get_logger(__name__)
 
 KNOWN_FAILING_TESTS = [

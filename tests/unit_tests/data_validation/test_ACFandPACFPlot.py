@@ -3,6 +3,7 @@ import pandas as pd
 import validmind as vm
 from validmind.tests.data_validation.ACFandPACFPlot import ACFandPACFPlot
 from plotly.graph_objects import Figure
+from validmind import RawData
 
 
 class TestACFandPACFPlot(unittest.TestCase):
@@ -27,15 +28,15 @@ class TestACFandPACFPlot(unittest.TestCase):
         # Run the function
         result = ACFandPACFPlot(self.vm_dataset)
 
-        # Check if result is a tuple
-        self.assertIsInstance(result, tuple)
+        # Should return 6 items (ACF and PACF for each column + raw data)
+        self.assertEqual(len(result), 5)
 
-        # Should return 4 figures (ACF and PACF for each column)
-        self.assertEqual(len(result), 4)
-
-        # Check if all elements are Plotly figures
-        for figure in result:
+        # Check if the first 4 elements are Plotly figures
+        for figure in result[:-1]:
             self.assertIsInstance(figure, Figure)
+
+        # Check last element is of type RawData
+        self.assertIsInstance(result[-1], RawData)
 
     def test_raises_error_for_non_datetime_index(self):
         # Create dataset with non-datetime index
@@ -66,5 +67,8 @@ class TestACFandPACFPlot(unittest.TestCase):
         # Should run without errors
         result = ACFandPACFPlot(vm_dataset_with_nans)
 
-        # Should still return 4 figures
-        self.assertEqual(len(result), 4)
+        # Should still return 6 items (ACF and PACF per column + raw data)
+        self.assertEqual(len(result), 5)
+
+        # Check if last element is RawData
+        self.assertIsInstance(result[-1], RawData)
