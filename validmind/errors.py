@@ -228,7 +228,7 @@ class MissingRExtrasError(BaseError):
     def description(self, *args, **kwargs):
         return (
             self.message
-            or "ValidMind r-support needs to be installed: `pip install validmind[r-support]`"
+            or "`rpy2` is required to use R models. Please install it with `pip install rpy2`"
         )
 
 
