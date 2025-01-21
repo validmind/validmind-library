@@ -7,7 +7,7 @@ import pandas as pd
 import plotly.graph_objects as go
 from scipy.stats import norm
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 
 
 @tags("model_predictions", "visualization")
@@ -144,4 +144,13 @@ def TimeSeriesPredictionWithCI(dataset, model, confidence=0.95):
         template="plotly_white",
     )
 
-    return fig, breaches_df
+    return (
+        fig,
+        breaches_df,
+        RawData(
+            errors=errors,
+            z_score=z_score,
+            lower_confidence=lower_conf,
+            upper_confidence=upper_conf,
+        ),
+    )

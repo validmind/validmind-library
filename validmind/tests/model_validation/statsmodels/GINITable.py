@@ -61,27 +61,19 @@ def GINITable(dataset, model):
     - The test does not incorporate a method to efficiently handle missing or inefficiently processed data, which could
     lead to inaccuracies in the metrics if the data is not appropriately preprocessed.
     """
-
-    metrics_dict = {"AUC": [], "GINI": [], "KS": []}
-
-    # Retrieve y_true and y_pred for the current dataset
     y_true = np.ravel(dataset.y)  # Flatten y_true to make it one-dimensional
     y_prob = dataset.y_prob(model)
-
-    # Compute metrics
     y_true = np.array(y_true, dtype=float)
     y_prob = np.array(y_prob, dtype=float)
 
     fpr, tpr, _ = roc_curve(y_true, y_prob)
-    ks = max(tpr - fpr)
     auc = roc_auc_score(y_true, y_prob)
     gini = 2 * auc - 1
 
-    # Add the metrics to the dictionary
-    metrics_dict["AUC"].append(auc)
-    metrics_dict["GINI"].append(gini)
-    metrics_dict["KS"].append(ks)
-
-    # Create a DataFrame to store and return the results
-    metrics_df = pd.DataFrame(metrics_dict)
-    return metrics_df
+    return pd.DataFrame(
+        {
+            "AUC": [auc],
+            "GINI": [gini],
+            "KS": [max(tpr - fpr)],
+        }
+    )

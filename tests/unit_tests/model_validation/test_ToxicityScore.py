@@ -3,6 +3,7 @@ import pandas as pd
 import plotly.graph_objects as go
 import validmind as vm
 from validmind.tests.model_validation.ToxicityScore import ToxicityScore
+from validmind import RawData
 
 
 class TestToxicityScore(unittest.TestCase):
@@ -70,11 +71,14 @@ class TestToxicityScore(unittest.TestCase):
         # Check return types
         self.assertIsInstance(result, tuple)
         self.assertIsInstance(result[0], pd.DataFrame)
-        self.assertEqual(len(result), 7)  # 1 DataFrame + 6 figures
+        self.assertEqual(len(result), 8)  # 1 DataFrame + 6 figures + 1 RawData
 
         # Check all figures are Plotly figures
-        for fig in result[1:]:
+        for fig in result[1:-1]:
             self.assertIsInstance(fig, go.Figure)
+
+        # Check the last element is RawData
+        self.assertIsInstance(result[-1], RawData)
 
     def test_results_dataframe(self):
         """Test if results DataFrame has expected structure."""

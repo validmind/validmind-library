@@ -2,10 +2,11 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-import plotly.graph_objects as go
-import plotly.figure_factory as ff
 import pandas as pd
-from scipy.stats import skew, kurtosis
+import plotly.figure_factory as ff
+import plotly.graph_objects as go
+from scipy.stats import kurtosis, skew
+
 from validmind import tags, tasks
 
 

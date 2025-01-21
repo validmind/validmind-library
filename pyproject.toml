@@ -10,7 +10,7 @@ description = "ValidMind Library"
 license = "Commercial License"
 name = "validmind"
 readme = "README.pypi.md"
-version = "2.7.6"
+version = "2.7.7"
 
 [tool.poetry.dependencies]
 aiohttp = {extras = ["speedups"], version = "*"}
@@ -23,7 +23,6 @@ ipywidgets = "*"
 kaleido = ">=0.2.1,!=0.2.1.post1"
 langchain-openai = {version = ">=0.1.8", optional = true}
 langdetect = "*"
-latex2mathml = ">=3.77.0"
 llvmlite = {version = "*", python = ">=3.8,<=3.11"}
 matplotlib = "*"
 mistune = "^3.0.2"

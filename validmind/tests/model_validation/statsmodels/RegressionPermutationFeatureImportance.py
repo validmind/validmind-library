@@ -8,7 +8,7 @@ import plotly.graph_objects as go
 from sklearn.metrics import r2_score
 from sklearn.utils import check_random_state
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.logging import get_logger
 from validmind.vm_models import VMDataset, VMModel
 
@@ -97,4 +97,4 @@ def RegressionPermutationFeatureImportance(
         height=figure_height,
     )
 
-    return fig
+    return fig, RawData(importances=importances)

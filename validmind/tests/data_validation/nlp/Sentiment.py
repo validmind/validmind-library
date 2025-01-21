@@ -8,7 +8,7 @@ import nltk
 import seaborn as sns
 from nltk.sentiment import SentimentIntensityAnalyzer
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 
 
 @tags("nlp", "text_data", "data_validation")
@@ -77,4 +77,4 @@ def Sentiment(dataset):
 
     plt.close("all")
 
-    return fig
+    return fig, RawData(sentiment_scores=vader_sentiment.tolist())

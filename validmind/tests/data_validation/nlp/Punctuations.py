@@ -11,7 +11,7 @@ from collections import defaultdict
 
 import plotly.graph_objects as go
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 
 
 @tags("nlp", "text_data", "visualization", "frequency_analysis")
@@ -63,7 +63,9 @@ def Punctuations(dataset, count_mode="token"):
 
     corpus = _create_corpus(dataset.df, dataset.text_column)
     punctuation_counts = _count_punctuations(corpus, count_mode)
-    return _create_punctuation_plot(punctuation_counts)
+    fig = _create_punctuation_plot(punctuation_counts)
+
+    return fig, RawData(punctuation_counts=punctuation_counts)
 
 
 def _create_punctuation_plot(punctuation_counts):

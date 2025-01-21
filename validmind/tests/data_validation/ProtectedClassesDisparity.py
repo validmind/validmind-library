@@ -119,7 +119,7 @@ def ProtectedClassesDisparity(
         mask_significance=True,
     )
 
-    plots = []
+    figures = []
     for protected_class in protected_classes:
         plot = ap.disparity(
             bdf, metrics, protected_class, fairness_threshold=disparity_tolerance
@@ -129,13 +129,12 @@ def ProtectedClassesDisparity(
         plot.save(
             buf, format="png"
         )  # as long as the above library is installed, this will work
-        plots.append(buf.getvalue())
+        figures.append(buf.getvalue())
 
     string = "_disparity"
     metrics_adj = [x + string for x in metrics]
 
     table = bdf[["attribute_name", "attribute_value"] + b.list_disparities(bdf)]
-    plots.append(aqp.plot_disparity_all(bdf, metrics=metrics_adj))
-    plots_return = tuple(plots)
+    figures.append(aqp.plot_disparity_all(bdf, metrics=metrics_adj))
 
-    return (table, *plots_return)
+    return (table, *figures)

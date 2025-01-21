@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import validmind as vm
 from validmind.tests.data_validation.DatasetDescription import DatasetDescription
+from validmind import RawData
 
 
 class TestDatasetDescription(unittest.TestCase):
@@ -61,14 +62,20 @@ class TestDatasetDescription(unittest.TestCase):
     def test_returns_expected_structure(self):
         result = DatasetDescription(self.vm_dataset)
 
-        # Check if result is a dictionary with expected key
-        self.assertIsInstance(result, dict)
-        self.assertIn("Dataset Description", result)
+        # Check if result is a tuple with expected structure (Dataset Description, RawData)
+        self.assertIsInstance(result, tuple)
+        self.assertEqual(len(result), 2)
+
+        description, raw_data = result
+
+        # Check if description is a dictionary with expected key
+        self.assertIsInstance(description, dict)
+        self.assertIn("Dataset Description", description)
 
         # Check if description is a list of dictionaries
-        description = result["Dataset Description"]
-        self.assertIsInstance(description, list)
-        self.assertTrue(all(isinstance(item, dict) for item in description))
+        description_list = description["Dataset Description"]
+        self.assertIsInstance(description_list, list)
+        self.assertTrue(all(isinstance(item, dict) for item in description_list))
 
         # Check if each column description has required fields
         # Note: Count is not included as it's not available for Null type columns
@@ -81,21 +88,26 @@ class TestDatasetDescription(unittest.TestCase):
             "Distinct",
             "Distinct %",
         ]
-        for item in description:
+        for item in description_list:
             for field in required_fields:
                 self.assertIn(field, item)
                 self.assertIsNotNone(item[field])
 
         # Check Count field separately as it's not available for Null columns
-        for item in description:
+        for item in description_list:
             if item["Type"] != "Null":
                 self.assertIn("Count", item)
                 self.assertIsNotNone(item["Count"])
 
+        # Check raw_data is instance of RawData
+        self.assertIsInstance(raw_data, RawData)
+
     def test_column_types_and_stats(self):
         result = DatasetDescription(self.vm_dataset)
-        description = result["Dataset Description"]
-        column_info = {item["Name"]: item for item in description}
+        description, _ = result
+        column_info = {
+            item["Name"]: item for item in description["Dataset Description"]
+        }
 
         # Check numeric column
         self.assertEqual(column_info["numeric"]["Type"], "Numeric")

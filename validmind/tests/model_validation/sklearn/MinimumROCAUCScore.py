@@ -6,7 +6,7 @@ import numpy as np
 from sklearn.metrics import roc_auc_score
 from sklearn.preprocessing import LabelBinarizer
 
-from validmind.tests import tags, tasks
+from validmind import tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 
 
@@ -62,14 +62,18 @@ def MinimumROCAUCScore(dataset: VMDataset, model: VMModel, min_threshold: float 
         lb = LabelBinarizer()
         lb.fit(y_true)
 
+        y_true_binarized = lb.transform(y_true)
+        y_score_binarized = lb.transform(dataset.y_pred(model))
+
         roc_auc = roc_auc_score(
-            y_true=lb.transform(y_true),
-            y_score=lb.transform(dataset.y_pred(model)),
+            y_true=y_true_binarized,
+            y_score=y_score_binarized,
             average="macro",
         )
 
     else:
-        roc_auc = roc_auc_score(y_true=y_true, y_score=dataset.y_prob(model))
+        y_score_prob = dataset.y_prob(model)
+        roc_auc = roc_auc_score(y_true=y_true, y_score=y_score_prob)
 
     return [
         {

@@ -59,7 +59,7 @@ class TestContextEntityRecall(unittest.TestCase):
 
         # Check return types
         self.assertIsInstance(result, tuple)
-        self.assertEqual(len(result), 3)  # dict and 2 figures
+        self.assertEqual(len(result), 4)  # dict, 2 figures, and RawData
 
         # Check dictionary structure
         self.assertIsInstance(result[0], dict)
@@ -70,6 +70,9 @@ class TestContextEntityRecall(unittest.TestCase):
         # Check figures
         self.assertIsInstance(result[1], go.Figure)  # Histogram
         self.assertIsInstance(result[2], go.Figure)  # Box plot
+
+        # Check raw data
+        self.assertIsInstance(result[3], vm.RawData)  # Raw data instance
 
     def test_aggregate_scores(self):
         """Test if aggregate scores have expected structure and values."""

@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 from sklearn.linear_model import LogisticRegression
 import validmind as vm
+from validmind import RawData
 from validmind.tests.model_validation.statsmodels.GINITable import GINITable
 
 
@@ -53,7 +54,7 @@ class TestGINITable(unittest.TestCase):
         # Assign predictions to the dataset
         self.vm_dataset.assign_predictions(self.vm_model)
 
-    def test_returns_dataframe(self):
+    def test_returns_dataframe_and_rawdata(self):
         # Run the function
         result = GINITable(self.vm_dataset, self.vm_model)
 

@@ -9,7 +9,7 @@ import pandas as pd
 import plotly.express as px
 from nltk.corpus import stopwords
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset
 
 
@@ -173,4 +173,4 @@ def TextDescription(
             )
         )
 
-    return tuple(figures)
+    return (*figures, RawData(metrics_dataframe=metrics_df))

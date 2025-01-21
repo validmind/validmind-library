@@ -5,7 +5,7 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.errors import SkipTestError
 from validmind.vm_models import VMDataset
 
@@ -95,13 +95,24 @@ def RollingStatsPlot(dataset: VMDataset, window_size: int = 12):
     if not pd.api.types.is_datetime64_any_dtype(dataset.df.index):
         raise SkipTestError("Index must be a datetime type")
 
-    return tuple(
-        [
-            plot_rolling_statistics(
-                df=dataset.df.dropna(),
-                col=col,
-                window_size=window_size,
-            )
-            for col in dataset.feature_columns
-        ]
+    figures = [
+        plot_rolling_statistics(
+            df=dataset.df.dropna(),
+            col=col,
+            window_size=window_size,
+        )
+        for col in dataset.feature_columns
+    ]
+
+    return (
+        *figures,
+        RawData(
+            rolling_means_stds={
+                col: {
+                    "rolling_mean": dataset.df[col].rolling(window=window_size).mean(),
+                    "rolling_std": dataset.df[col].rolling(window=window_size).std(),
+                }
+                for col in dataset.feature_columns
+            }
+        ),
     )

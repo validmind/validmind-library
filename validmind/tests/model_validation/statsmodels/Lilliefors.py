@@ -5,12 +5,12 @@
 from statsmodels.stats.diagnostic import lilliefors
 
 from validmind import tags, tasks
-from validmind.vm_models import VMDataset, VMModel
+from validmind.vm_models import VMDataset
 
 
 @tags("tabular_data", "data_distribution", "statistical_test", "statsmodels")
 @tasks("classification", "regression")
-def Lilliefors(model: VMModel, dataset: VMDataset):
+def Lilliefors(dataset: VMDataset):
     """
     Assesses the normality of feature distributions in an ML model's training dataset using the Lilliefors test.
 

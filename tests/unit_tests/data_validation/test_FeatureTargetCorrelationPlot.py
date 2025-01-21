@@ -27,12 +27,21 @@ class TestFeatureTargetCorrelationPlot(unittest.TestCase):
             __log=False,
         )
 
-    def test_returns_plotly_figure(self):
+    def test_returns_plotly_figure_and_raw_data(self):
         # Run the function
         result = FeatureTargetCorrelationPlot(self.vm_dataset)
 
-        # Check if result is a Plotly Figure
-        self.assertIsInstance(result, go.Figure)
+        # Check if result is a tuple of Plotly Figure and RawData
+        self.assertIsInstance(result, tuple)
+        self.assertEqual(len(result), 2)
+
+        fig, raw_data = result
+
+        # Check if fig is a Plotly Figure
+        self.assertIsInstance(fig, go.Figure)
 
         # Check if the figure has data (at least one trace)
-        self.assertTrue(len(result.data) > 0)
+        self.assertTrue(len(fig.data) > 0)
+
+        # Check if raw_data is an instance of RawData
+        self.assertIsInstance(raw_data, vm.RawData)

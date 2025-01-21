@@ -73,6 +73,9 @@ def Skewness(dataset, max_threshold=1):
             }
         )
 
-    return {
-        "Skewness Results for Dataset": results_table,
-    }, passed
+    return (
+        {
+            "Skewness Results for Dataset": results_table,
+        },
+        passed,
+    )

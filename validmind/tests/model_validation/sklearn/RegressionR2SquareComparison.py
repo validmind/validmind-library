@@ -77,6 +77,4 @@ def RegressionR2SquareComparison(datasets, models):
             }
         )
 
-    # Convert results list to a DataFrame
-    results_df = pd.DataFrame(results_list)
-    return results_df
+    return pd.DataFrame(results_list)

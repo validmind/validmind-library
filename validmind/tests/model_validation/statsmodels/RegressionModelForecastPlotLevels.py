@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 
 
@@ -91,4 +91,7 @@ def RegressionModelForecastPlotLevels(
 
     plt.close()
 
-    return fig
+    return fig, RawData(
+        y_transformed=dataset_y_transformed,
+        y_pred_transformed=y_pred_transformed,
+    )

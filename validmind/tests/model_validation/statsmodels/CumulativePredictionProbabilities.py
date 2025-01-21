@@ -6,7 +6,7 @@ import numpy as np
 import plotly.graph_objects as go
 from matplotlib import cm
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 
 
 @tags("visualization", "credit_risk")
@@ -62,9 +62,9 @@ def CumulativePredictionProbabilities(dataset, model, title="Cumulative Probabil
     df = dataset.df
     df["probabilities"] = dataset.y_prob(model)
 
-    fig = _plot_cumulative_prob(df, dataset.target_column, title)
+    fig, fig_data = _plot_cumulative_prob(df, dataset.target_column, title)
 
-    return fig
+    return fig, RawData(cumulative_probabilities=fig_data)
 
 
 def _plot_cumulative_prob(df, target_col, title):
@@ -82,10 +82,17 @@ def _plot_cumulative_prob(df, target_col, title):
         cls: f"rgb({int(rgb[0]*255)}, {int(rgb[1]*255)}, {int(rgb[2]*255)})"
         for cls, rgb in zip(classes, colors)
     }
+
+    raw_data = {}
+
     for class_value in sorted(df[target_col].unique()):
         # Calculate cumulative distribution for the current class
         sorted_probs = np.sort(df[df[target_col] == class_value]["probabilities"])
         cumulative_probs = np.cumsum(sorted_probs) / np.sum(sorted_probs)
+        raw_data[class_value] = {
+            "sorted_probs": sorted_probs,
+            "cumulative_probs": cumulative_probs,
+        }
 
         fig.add_trace(
             go.Scatter(
@@ -104,4 +111,4 @@ def _plot_cumulative_prob(df, target_col, title):
             yaxis_title="Cumulative Distribution",
         )
 
-    return fig
+    return fig, raw_data

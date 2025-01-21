@@ -103,10 +103,7 @@ def ProtectedClassesThresholdOptimizer(
         test_df, target, y_pred_opt, protected_classes
     )
 
-    return (
-        {"DPR and EOR Table": fairness_metrics.reset_index()},
-        fig,
-    )
+    return {"DPR and EOR Table": fairness_metrics.reset_index()}, fig
 
 
 def initialize_and_fit_optimizer(pipeline, X_train, y_train, protected_classes_df):

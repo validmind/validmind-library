@@ -2,6 +2,7 @@ import unittest
 import pandas as pd
 import validmind as vm
 from validmind.tests.data_validation.BoxPierce import BoxPierce
+from validmind import RawData
 
 
 class TestBoxPierce(unittest.TestCase):
@@ -20,7 +21,7 @@ class TestBoxPierce(unittest.TestCase):
 
     def test_returns_dataframe_with_expected_columns(self):
         # Run the function
-        result = BoxPierce(self.vm_dataset)
+        result, raw_data = BoxPierce(self.vm_dataset)
 
         # Check if result is a DataFrame
         self.assertIsInstance(result, pd.DataFrame)
@@ -31,3 +32,10 @@ class TestBoxPierce(unittest.TestCase):
 
         # Check if the DataFrame has the expected number of rows (one for each input column)
         self.assertEqual(len(result), len(self.df.columns))
+
+    def test_returns_raw_data_as_rawdata_instance(self):
+        # Run the function
+        _, raw_data = BoxPierce(self.vm_dataset)
+
+        # Check if raw_data is an instance of RawData
+        self.assertIsInstance(raw_data, RawData)

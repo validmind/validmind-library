@@ -6,6 +6,7 @@ from validmind.errors import SkipTestError
 from validmind.tests.data_validation.TimeSeriesMissingValues import (
     TimeSeriesMissingValues,
 )
+from validmind import RawData
 
 
 class TestTimeSeriesMissingValues(unittest.TestCase):
@@ -39,13 +40,16 @@ class TestTimeSeriesMissingValues(unittest.TestCase):
         )
 
     def test_time_series_missing_values(self):
-        results, barplot, heatmap, passed = TimeSeriesMissingValues(self.vm_dataset)
+        results, barplot, heatmap, passed, raw_data = TimeSeriesMissingValues(
+            self.vm_dataset
+        )
 
         # Check return types
         self.assertIsInstance(results, list)
         self.assertIsInstance(barplot, go.Figure)
         self.assertIsInstance(heatmap, go.Figure)
         self.assertIsInstance(passed, bool)
+        self.assertIsInstance(raw_data, RawData)
 
         # Check results structure
         self.assertEqual(len(results), 2)  # One entry per feature

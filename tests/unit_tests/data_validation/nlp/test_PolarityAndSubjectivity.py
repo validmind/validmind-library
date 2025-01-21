@@ -39,13 +39,13 @@ class TestPolarityAndSubjectivity(unittest.TestCase):
             __log=False,
         )
 
-    def test_returns_plotly_figure_and_tables(self):
+    def test_returns_plotly_figure_and_tables_and_raw_data(self):
         # Run the function
         result = PolarityAndSubjectivity(self.vm_dataset)
 
-        # Check if result is a tuple of (Figure, dict)
+        # Check if result is a tuple of (Figure, dict, RawData)
         self.assertIsInstance(result, tuple)
-        self.assertEqual(len(result), 2)
+        self.assertEqual(len(result), 3)
 
         # Check the figure
         fig = result[0]
@@ -65,6 +65,10 @@ class TestPolarityAndSubjectivity(unittest.TestCase):
         self.assertIsInstance(tables, dict)
         self.assertIn("Quadrant Distribution", tables)
         self.assertIn("Statistics", tables)
+
+        # Check the raw data
+        raw_data = result[2]
+        self.assertIsInstance(raw_data, vm.RawData)
 
     def test_polarity_and_subjectivity_values(self):
         result = PolarityAndSubjectivity(self.vm_dataset)

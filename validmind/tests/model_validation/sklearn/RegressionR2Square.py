@@ -51,17 +51,15 @@ def RegressionR2Square(dataset, model):
     violated.
     - Does not provide insight on whether the correct regression model was used or if key assumptions have been met.
     """
-
     y_true = dataset.y
     y_pred = dataset.y_pred(model)
     y_true = y_true.astype(y_pred.dtype)
 
-    r2s = metrics.r2_score(y_true, y_pred)
-    adj_r2 = adj_r2_score(y_true, y_pred, len(y_true), len(dataset.feature_columns))
-
-    # Create dataframe with R2 and Adjusted R2 in one row
-    results_df = pd.DataFrame(
-        {"R-squared (R2) Score": [r2s], "Adjusted R-squared (R2) Score": [adj_r2]}
+    return pd.DataFrame(
+        {
+            "R-squared (R2) Score": [metrics.r2_score(y_true, y_pred)],
+            "Adjusted R-squared (R2) Score": [
+                adj_r2_score(y_true, y_pred, len(y_true), len(dataset.feature_columns))
+            ],
+        }
     )
-
-    return results_df
