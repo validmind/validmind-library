@@ -55,26 +55,32 @@ from .vm_models.result import RawData
 
 __all__ = [  # noqa
     "__version__",
-    # Python Library API
-    "datasets",
-    "errors",
-    "get_test_suite",
+    # main library API
     "init",
+    "reload",
     "init_dataset",
     "init_model",
     "init_r_model",
     "preview_template",
-    "print_env",
-    "RawData",
-    "reload",
     "run_documentation_tests",
+    # log metric function (for direct/bulk/retroactive logging of metrics)
+    "log_metric",
+    # test suite functions (less common)
+    "get_test_suite",
     "run_test_suite",
+    # helper functions (for troubleshooting)
+    "print_env",
+    # decorators (for building tests
     "tags",
     "tasks",
     "test",
-    "tests",
-    "test_suites",
+    # raw data (for post-processing test results and building tests)
+    "RawData",
+    # submodules
+    "datasets",
+    "errors",
     "vm_models",
+    "tests",
     "unit_metrics",
-    "log_metric",
+    "test_suites",
 ]
