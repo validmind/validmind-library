@@ -68,5 +68,6 @@ The ValidMind Library has optional dependencies that can be installed separately
 - **R Models**: To use R models with the ValidMind Library, install the `r` extra:
 
     ```bash
-    pip install validmind[r-support]
+    pip install validmind
+    pip install rpy2
     ```
