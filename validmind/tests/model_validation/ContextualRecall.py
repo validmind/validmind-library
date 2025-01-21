@@ -118,4 +118,4 @@ def ContextualRecall(dataset, model):
     # Create a DataFrame from all collected statistics
     result_df = pd.DataFrame(stats_df).reset_index().rename(columns={"index": "Metric"})
 
-    return (result_df, *tuple(figures), RawData(contextual_recall_scores=metrics_df))
+    return (result_df, *figures, RawData(contextual_recall_scores=metrics_df))
