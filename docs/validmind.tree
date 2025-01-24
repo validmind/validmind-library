@@ -71,6 +71,8 @@ validmind (* = docstring)
 │           ├── preprocess (function)*
 │           └── transform (function)
 ├── errors (module)*
+│   ├── raise_api_error (function)*
+│   ├── should_raise_on_fail_fast (function)*
 │   ├── APIRequestError (class)*
 │   ├── BaseError (class)
 │   │   ├── __init__ (function)
@@ -115,10 +117,12 @@ validmind (* = docstring)
 │   ├── UnsupportedFigureError (class)*
 │   ├── UnsupportedModelError (class)*
 │   ├── UnsupportedModelForSHAPError (class)*
-│   ├── UnsupportedRModelError (class)*
-│   ├── raise_api_error (function)*
-│   └── should_raise_on_fail_fast (function)*
+│   └── UnsupportedRModelError (class)*
 ├── test_suites (module)*
+│   ├── describe_suite (function)*
+│   ├── get_by_id (function)*
+│   ├── list_suites (function)*
+│   ├── register_test_suite (function)*
 │   ├── classifier (module)*
 │   │   ├── ClassifierDiagnosis (class)*
 │   │   ├── ClassifierFullSuite (class)*
@@ -155,20 +159,64 @@ validmind (* = docstring)
 │   │   └── TabularDatasetDescription (class)*
 │   ├── text_data (module)*
 │   │   └── TextDataQuality (class)*
-│   ├── time_series (module)*
-│   │   ├── TimeSeriesDataQuality (class)*
-│   │   ├── TimeSeriesDataset (class)*
-│   │   ├── TimeSeriesModelValidation (class)*
-│   │   ├── TimeSeriesMultivariate (class)*
-│   │   └── TimeSeriesUnivariate (class)*
-│   ├── describe_suite (function)*
-│   ├── get_by_id (function)*
-│   ├── list_suites (function)*
-│   └── register_test_suite (function)*
+│   └── time_series (module)*
+│       ├── TimeSeriesDataQuality (class)*
+│       ├── TimeSeriesDataset (class)*
+│       ├── TimeSeriesModelValidation (class)*
+│       ├── TimeSeriesMultivariate (class)*
+│       └── TimeSeriesUnivariate (class)*
 ├── tests (module)*
+│   ├── register_test_provider (function)*
 │   ├── comparison (module)
 │   │   ├── combine_results (function)*
 │   │   └── get_comparison_test_configs (function)*
+│   ├── decorator (module)*
+│   │   ├── tags (function)*
+│   │   ├── tasks (function)*
+│   │   └── test (function)*
+│   ├── load (module)*
+│   │   ├── describe_test (function)*
+│   │   ├── list_tags (function)*
+│   │   ├── list_tasks (function)*
+│   │   ├── list_tasks_and_tags (function)*
+│   │   ├── list_tests (function)*
+│   │   └── load_test (function)*
+│   ├── output (module)
+│   │   ├── process_output (function)*
+│   │   ├── BooleanOutputHandler (class)
+│   │   │   ├── can_handle (function)
+│   │   │   └── process (function)
+│   │   ├── FigureOutputHandler (class)
+│   │   │   ├── can_handle (function)
+│   │   │   └── process (function)
+│   │   ├── MetricOutputHandler (class)
+│   │   │   ├── can_handle (function)
+│   │   │   └── process (function)
+│   │   ├── OutputHandler (class)*
+│   │   │   ├── can_handle (function)*
+│   │   │   └── process (function)*
+│   │   ├── RawDataOutputHandler (class)
+│   │   │   ├── can_handle (function)
+│   │   │   └── process (function)
+│   │   └── TableOutputHandler (class)
+│   │       ├── can_handle (function)
+│   │       └── process (function)
+│   ├── run (module)
+│   │   ├── build_test_result (function)*
+│   │   ├── print_env (function)
+│   │   └── run_test (function)*
+│   ├── test_providers (module)
+│   │   ├── LocalTestProvider (class)*
+│   │   │   ├── __init__ (function)*
+│   │   │   ├── list_tests (function)*
+│   │   │   └── load_test (function)*
+│   │   ├── TestProvider (class)*
+│   │   │   ├── list_tests (function)*
+│   │   │   └── load_test (function)*
+│   │   └── ValidMindTestProvider (class)*
+│   │       ├── __init__ (function)
+│   │       ├── list_tests (function)*
+│   │       └── load_test (function)*
 │   ├── data_validation (module)
 │   │   ├── ACFandPACFPlot (module)
 │   │   │   └── ACFandPACFPlot (function)*
@@ -331,17 +379,6 @@ validmind (* = docstring)
 │   │       │   └── create_metrics_df (function)
 │   │       └── Toxicity (module)
 │   │           └── Toxicity (function)*
-│   ├── decorator (module)*
-│   │   ├── tags (function)*
-│   │   ├── tasks (function)*
-│   │   └── test (function)*
-│   ├── load (module)*
-│   │   ├── describe_test (function)*
-│   │   ├── list_tags (function)*
-│   │   ├── list_tasks (function)*
-│   │   ├── list_tasks_and_tags (function)*
-│   │   ├── list_tests (function)*
-│   │   └── load_test (function)*
 │   ├── model_validation (module)
 │   │   ├── BertScore (module)
 │   │   │   └── BertScore (function)*
@@ -489,62 +526,25 @@ validmind (* = docstring)
 │   │       │   └── ScorecardHistogram (function)*
 │   │       └── statsutils (module)
 │   │           └── adj_r2_score (function)*
-│   ├── output (module)
-│   │   ├── BooleanOutputHandler (class)
-│   │   │   ├── can_handle (function)
-│   │   │   └── process (function)
-│   │   ├── FigureOutputHandler (class)
-│   │   │   ├── can_handle (function)
-│   │   │   └── process (function)
-│   │   ├── MetricOutputHandler (class)
-│   │   │   ├── can_handle (function)
-│   │   │   └── process (function)
-│   │   ├── OutputHandler (class)*
-│   │   │   ├── can_handle (function)*
-│   │   │   └── process (function)*
-│   │   ├── RawDataOutputHandler (class)
-│   │   │   ├── can_handle (function)
-│   │   │   └── process (function)
-│   │   ├── TableOutputHandler (class)
-│   │   │   ├── can_handle (function)
-│   │   │   └── process (function)
-│   │   └── process_output (function)*
-│   ├── prompt_validation (module)
-│   │   ├── Bias (module)
-│   │   │   └── Bias (function)*
-│   │   ├── Clarity (module)
-│   │   │   └── Clarity (function)*
-│   │   ├── Conciseness (module)
-│   │   │   └── Conciseness (function)*
-│   │   ├── Delimitation (module)
-│   │   │   └── Delimitation (function)*
-│   │   ├── NegativeInstruction (module)
-│   │   │   └── NegativeInstruction (function)*
-│   │   ├── Robustness (module)
-│   │   │   └── Robustness (function)*
-│   │   ├── Specificity (module)
-│   │   │   └── Specificity (function)*
-│   │   └── ai_powered_test (module)
-│   │       ├── call_model (function)*
-│   │       ├── get_explanation (function)*
-│   │       └── get_score (function)*
-│   ├── run (module)
-│   │   ├── build_test_result (function)*
-│   │   ├── print_env (function)
-│   │   └── run_test (function)*
-│   ├── test_providers (module)
-│   │   ├── LocalTestProvider (class)*
-│   │   │   ├── __init__ (function)*
-│   │   │   ├── list_tests (function)*
-│   │   │   └── load_test (function)*
-│   │   ├── TestProvider (class)*
-│   │   │   ├── list_tests (function)*
-│   │   │   └── load_test (function)*
-│   │   └── ValidMindTestProvider (class)*
-│   │       ├── __init__ (function)
-│   │       ├── list_tests (function)*
-│   │       └── load_test (function)*
-│   └── register_test_provider (function)*
+│   └── prompt_validation (module)
+│       ├── Bias (module)
+│       │   └── Bias (function)*
+│       ├── Clarity (module)
+│       │   └── Clarity (function)*
+│       ├── Conciseness (module)
+│       │   └── Conciseness (function)*
+│       ├── Delimitation (module)
+│       │   └── Delimitation (function)*
+│       ├── NegativeInstruction (module)
+│       │   └── NegativeInstruction (function)*
+│       ├── Robustness (module)
+│       │   └── Robustness (function)*
+│       ├── Specificity (module)
+│       │   └── Specificity (function)*
+│       └── ai_powered_test (module)
+│           ├── call_model (function)*
+│           ├── get_explanation (function)*
+│           └── get_score (function)*
 ├── unit_metrics (module)
 │   ├── describe_metric (function)*
 │   ├── list_metrics (function)*
@@ -573,37 +573,37 @@ validmind (* = docstring)
     │           ├── y_prob (function)*
     │           └── y_prob_df (function)*
     ├── figure (module)*
-    │   ├── Figure (class)*
-    │   │   ├── __init__ (function)
-    │   │   ├── __post_init__ (function)
-    │   │   ├── serialize (function)*
-    │   │   ├── serialize_files (function)*
-    │   │   └── to_widget (function)*
     │   ├── create_figure (function)*
     │   ├── is_matplotlib_figure (function)
     │   ├── is_plotly_figure (function)
-    │   └── is_png_image (function)
+    │   ├── is_png_image (function)
+    │   └── Figure (class)*
+    │       ├── __init__ (function)
+    │       ├── __post_init__ (function)
+    │       ├── serialize (function)*
+    │       ├── serialize_files (function)*
+    │       └── to_widget (function)*
     ├── input (module)*
     │   └── VMInput (class)*
     │       └── with_options (function)*
     ├── model (module)*
+    │   ├── get_model_class (function)
+    │   ├── has_method_with_arguments (function)
+    │   ├── is_model_metadata (function)*
+    │   ├── is_pytorch_model (function)*
+    │   ├── model_module (function)
     │   ├── ModelAttributes (class)*
     │   │   ├── __init__ (function)
     │   │   └── from_dict (function)*
     │   ├── ModelPipeline (class)*
     │   │   └── __init__ (function)
     │   ├── ModelTask (class)*
-    │   ├── VMModel (class)*
-    │   │   ├── __init__ (function)
-    │   │   ├── __post_init__ (function)*
-    │   │   ├── predict (function)*
-    │   │   ├── predict_proba (function)*
-    │   │   └── serialize (function)*
-    │   ├── get_model_class (function)
-    │   ├── has_method_with_arguments (function)
-    │   ├── is_model_metadata (function)*
-    │   ├── is_pytorch_model (function)*
-    │   └── model_module (function)
+    │   └── VMModel (class)*
+    │       ├── __init__ (function)
+    │       ├── __post_init__ (function)*
+    │       ├── predict (function)*
+    │       ├── predict_proba (function)*
+    │       └── serialize (function)*
     └── result (module)
         └── result (module)*
             ├── ErrorResult (class)*

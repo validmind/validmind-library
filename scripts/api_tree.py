@@ -51,14 +51,20 @@ def get_sort_key(item):
     
     kind = member.get('kind', '')
     
+    # Special case: validation modules in tests should be last
+    if kind == 'module' and name.endswith('_validation'):
+        return (4, name)
+    
     # Then:
-    # 1. Aliases (top-level exports) 
-    # 2. Modules
-    # 3. Everything else alphabetically
+    # 1. Aliases (top-level exports)
+    # 2. Functions
+    # 3. Modules and other items
     if kind == 'alias':
         return (1, name)
-    elif kind == 'module':
+    elif kind == 'function':
         return (2, name)
+    elif kind == 'module':
+        return (3, name)
     else:
         return (3, name)
 
@@ -195,7 +201,7 @@ def main():
     try:
         with open(json_path) as f:
             data = json.load(f)
-        print("\nvalidmind (* = docstring)")
+        print("validmind (* = docstring)")
         # Pass the full data to print_tree for resolving aliases
         if 'validmind' in data:
             print_tree(data['validmind'], is_root=True, full_data=data)
