@@ -26,15 +26,9 @@ def print_tree(data: Dict[str, Any], prefix: str = "", is_last: bool = True, is_
     """Print a tree view of the API structure."""
     members = data.get('members', {})
     
-    # For vm_models, only show items listed in __all__
-    if data.get('name') == 'vm_models' and '__all__' in members:
-        all_elements = members['__all__'].get('value', {}).get('elements', [])
-        items = [(name, member) for name, member in sorted(members.items())
-                if name in {elem.strip("'") for elem in all_elements}]
-    else:
-        # For other modules, use normal filtering
-        items = [(name, member) for name, member in sorted(members.items())
-                if member and (member.get('kind') in SHOW_KINDS or member.get('kind') == 'alias')]
+    # Filter items to only show desired kinds
+    items = [(name, member) for name, member in sorted(members.items())
+            if member and (member.get('kind') in SHOW_KINDS or member.get('kind') == 'alias')]
     
     for i, (name, member) in enumerate(items):
         if name == '__all__':
