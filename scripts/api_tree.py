@@ -101,9 +101,74 @@ def resolve_alias_target(data: Dict[str, Any], target_path: str, visited_paths=N
     
     return current
 
+def find_class_def(members: dict, class_name: str) -> dict:
+    """Recursively search for a class definition in the members dictionary."""
+    if not isinstance(members, dict):
+        return None
+        
+    # Check if this is the class we're looking for
+    if members.get('kind') == 'class' and members.get('name') == class_name:
+        return members
+        
+    # Search in members
+    if 'members' in members:
+        for member in members['members'].values():
+            result = find_class_def(member, class_name)
+            if result:
+                return result
+    return None
+
 def print_tree(data: Dict[str, Any], prefix: str = "", is_last: bool = True, is_root: bool = False, full_data: Dict[str, Any] = None) -> None:
     """Print a tree view of the API structure."""
     members = data.get('members', {})
+    name = data.get('name', '')
+    
+    # Special handling for vm_models
+    if name == 'vm_models':
+        docstring = '*' if data.get('docstring') else ''
+        print(f"{prefix}{'└── ' if is_last else '├── '}{name} (module){docstring}")
+        
+        # Get vm_models members
+        vm_members = full_data['validmind']['members']['vm_models']['members']
+        
+        # Get the __all__ list
+        if '__all__' in vm_members:
+            all_value = vm_members['__all__'].get('value', {})
+            if 'elements' in all_value:
+                all_list = [e.strip("'") for e in all_value['elements']]
+                
+                new_prefix = prefix + ('    ' if is_last else '│   ')
+                # Print items in __all__ order
+                for item in all_list:
+                    if item in vm_members:
+                        member = vm_members[item]
+                        docstring = '*' if member.get('docstring') else ''
+                        if member.get('kind') == 'alias':
+                            target = member.get('target_path', '')
+                            print(f"{new_prefix}├── {item} (alias) -> {target}{docstring}")
+                            
+                            # Get the class name from the target path
+                            class_name = target.split('.')[-1]
+                            
+                            # Navigate through the JSON structure
+                            current = vm_members
+                            for part in target.split('.')[2:]:  # Skip 'validmind' and 'vm_models'
+                                if part in current:
+                                    current = current[part]
+                                elif 'members' in current and part in current['members']:
+                                    current = current['members'][part]
+                                else:
+                                    break
+                            
+                            # If we found a class definition, print its methods
+                            if current.get('kind') == 'class':
+                                class_prefix = new_prefix + "│   "
+                                for method_name, method in sorted(current.get('members', {}).items()):
+                                    if (method.get('kind') == 'function' and 
+                                        not method_name.startswith('_')):
+                                        method_docstring = '*' if method.get('docstring') else ''
+                                        print(f"{class_prefix}├── {method_name} (function){method_docstring}")
+        return
     
     # Get root __all__ if we're at root level
     root_all = set()

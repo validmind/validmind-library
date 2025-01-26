@@ -1,4 +1,3 @@
-
 validmind (* = docstring)
 ├── RawData (alias) -> validmind.vm_models.result.RawData*
 ├── get_test_suite (alias) -> validmind.client.get_test_suite*
@@ -550,87 +549,34 @@ validmind (* = docstring)
 │   ├── list_metrics (function)*
 │   └── run_metric (function)*
 └── vm_models (module)*
-    ├── dataset (module)
-    │   └── dataset (module)*
-    │       ├── DataFrameDataset (class)*
-    │       │   └── __init__ (function)*
-    │       ├── PolarsDataset (class)*
-    │       │   └── __init__ (function)*
-    │       ├── TorchDataset (class)*
-    │       │   └── __init__ (function)*
-    │       └── VMDataset (class)*
-    │           ├── __init__ (function)*
-    │           ├── add_extra_column (function)*
-    │           ├── assign_predictions (function)*
-    │           ├── prediction_column (function)*
-    │           ├── probability_column (function)*
-    │           ├── target_classes (function)*
-    │           ├── with_options (function)*
-    │           ├── x_df (function)*
-    │           ├── y_df (function)*
-    │           ├── y_pred (function)*
-    │           ├── y_pred_df (function)*
-    │           ├── y_prob (function)*
-    │           └── y_prob_df (function)*
-    ├── figure (module)*
-    │   ├── create_figure (function)*
-    │   ├── is_matplotlib_figure (function)
-    │   ├── is_plotly_figure (function)
-    │   ├── is_png_image (function)
-    │   └── Figure (class)*
-    │       ├── __init__ (function)
-    │       ├── __post_init__ (function)
-    │       ├── serialize (function)*
-    │       ├── serialize_files (function)*
-    │       └── to_widget (function)*
-    ├── input (module)*
-    │   └── VMInput (class)*
-    │       └── with_options (function)*
-    ├── model (module)*
-    │   ├── get_model_class (function)
-    │   ├── has_method_with_arguments (function)
-    │   ├── is_model_metadata (function)*
-    │   ├── is_pytorch_model (function)*
-    │   ├── model_module (function)
-    │   ├── ModelAttributes (class)*
-    │   │   ├── __init__ (function)
-    │   │   └── from_dict (function)*
-    │   ├── ModelPipeline (class)*
-    │   │   └── __init__ (function)
-    │   ├── ModelTask (class)*
-    │   └── VMModel (class)*
-    │       ├── __init__ (function)
-    │       ├── __post_init__ (function)*
-    │       ├── predict (function)*
-    │       ├── predict_proba (function)*
-    │       └── serialize (function)*
-    └── result (module)
-        └── result (module)*
-            ├── ErrorResult (class)*
-            │   ├── __init__ (function)
-            │   ├── log_async (function)
-            │   └── to_widget (function)
-            ├── RawData (class)*
-            │   ├── __init__ (function)*
-            │   ├── inspect (function)*
-            │   └── serialize (function)
-            ├── Result (class)*
-            │   ├── __init__ (function)
-            │   ├── log (function)*
-            │   ├── show (function)*
-            │   └── to_widget (function)*
-            ├── ResultTable (class)*
-            │   ├── __init__ (function)
-            │   ├── __post_init__ (function)
-            │   └── serialize (function)
-            └── TestResult (class)*
-                ├── __init__ (function)
-                ├── __post_init__ (function)
-                ├── add_figure (function)*
-                ├── add_table (function)*
-                ├── log (function)*
-                ├── log_async (function)
-                ├── remove_figure (function)*
-                ├── remove_table (function)*
-                ├── serialize (function)*
-                └── to_widget (function)
+    └── vm_models (module)*
+        ├── VMInput (alias) -> validmind.vm_models.input.VMInput
+        │   ├── with_options (function)*
+        ├── VMDataset (alias) -> validmind.vm_models.dataset.dataset.VMDataset
+        │   ├── add_extra_column (function)*
+        │   ├── assign_predictions (function)*
+        │   ├── prediction_column (function)*
+        │   ├── probability_column (function)*
+        │   ├── target_classes (function)*
+        │   ├── with_options (function)*
+        │   ├── x_df (function)*
+        │   ├── y_df (function)*
+        │   ├── y_pred (function)*
+        │   ├── y_pred_df (function)*
+        │   ├── y_prob (function)*
+        │   ├── y_prob_df (function)*
+        ├── VMModel (alias) -> validmind.vm_models.model.VMModel
+        │   ├── predict (function)*
+        │   ├── predict_proba (function)*
+        │   ├── serialize (function)*
+        ├── Figure (alias) -> validmind.vm_models.figure.Figure
+        │   ├── serialize (function)*
+        │   ├── serialize_files (function)*
+        │   ├── to_widget (function)*
+        ├── ModelAttributes (alias) -> validmind.vm_models.model.ModelAttributes
+        │   ├── from_dict (function)*
+        ├── R_MODEL_TYPES (alias) -> validmind.vm_models.model.R_MODEL_TYPES
+        ├── ResultTable (alias) -> validmind.vm_models.result.ResultTable
+        ├── TestResult (alias) -> validmind.vm_models.result.TestResult
+        ├── TestSuite (alias) -> validmind.vm_models.test_suite.test_suite.TestSuite
+        ├── TestSuiteRunner (alias) -> validmind.vm_models.test_suite.runner.TestSuiteRunner

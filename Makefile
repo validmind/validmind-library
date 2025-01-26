@@ -60,7 +60,7 @@ clean-quarto:
 
 docs/validmind.json:
 	rm -f $@
-	poetry run python -m griffe dump validmind > $@
+	poetry run python -m griffe dump validmind -f -o $@ -d google -r -U
 
 docs/validmind/validmind.qmd: docs/templates/module.qmd.jinja2 docs/validmind.json
 	jinja2 docs/templates/module.qmd.jinja2 docs/validmind.json > $@
