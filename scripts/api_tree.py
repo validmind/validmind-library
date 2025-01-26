@@ -139,13 +139,15 @@ def print_tree(data: Dict[str, Any], prefix: str = "", is_last: bool = True, is_
                 
                 new_prefix = prefix + ('    ' if is_last else '│   ')
                 # Print items in __all__ order
-                for item in all_list:
+                for i, item in enumerate(all_list):
+                    is_last_item = i == len(all_list) - 1  # Check if this is the last item
                     if item in vm_members:
                         member = vm_members[item]
                         docstring = '*' if member.get('docstring') else ''
                         if member.get('kind') == 'alias':
                             target = member.get('target_path', '')
-                            print(f"{new_prefix}├── {item} (alias) -> {target}{docstring}")
+                            branch = '└── ' if is_last_item else '├── '  # Use correct branch for last item
+                            print(f"{new_prefix}{branch}{item} (alias) -> {target}{docstring}")
                             
                             # Get the class name from the target path
                             class_name = target.split('.')[-1]
@@ -162,12 +164,19 @@ def print_tree(data: Dict[str, Any], prefix: str = "", is_last: bool = True, is_
                             
                             # If we found a class definition, print its methods
                             if current.get('kind') == 'class':
-                                class_prefix = new_prefix + "│   "
-                                for method_name, method in sorted(current.get('members', {}).items()):
-                                    if (method.get('kind') == 'function' and 
-                                        not method_name.startswith('_')):
-                                        method_docstring = '*' if method.get('docstring') else ''
-                                        print(f"{class_prefix}├── {method_name} (function){method_docstring}")
+                                class_prefix = new_prefix + ('    ' if is_last_item else '│   ')  # Adjust prefix based on last item
+                                methods = [(name, method) for name, method in current.get('members', {}).items()
+                                          if method.get('kind') == 'function' and not name.startswith('_')]
+                                
+                                # Sort methods
+                                methods.sort()
+                                
+                                # Print methods with proper last item handling
+                                for j, (method_name, method) in enumerate(methods):
+                                    is_last_method = j == len(methods) - 1
+                                    method_docstring = '*' if method.get('docstring') else ''
+                                    branch = '└── ' if is_last_method else '├── '
+                                    print(f"{class_prefix}{branch}{method_name} (function){method_docstring}")
         return
     
     # Get root __all__ if we're at root level

@@ -551,7 +551,7 @@ validmind (* = docstring)
 └── vm_models (module)*
     └── vm_models (module)*
         ├── VMInput (alias) -> validmind.vm_models.input.VMInput
-        │   ├── with_options (function)*
+        │   └── with_options (function)*
         ├── VMDataset (alias) -> validmind.vm_models.dataset.dataset.VMDataset
         │   ├── add_extra_column (function)*
         │   ├── assign_predictions (function)*
@@ -564,19 +564,25 @@ validmind (* = docstring)
         │   ├── y_pred (function)*
         │   ├── y_pred_df (function)*
         │   ├── y_prob (function)*
-        │   ├── y_prob_df (function)*
+        │   └── y_prob_df (function)*
         ├── VMModel (alias) -> validmind.vm_models.model.VMModel
         │   ├── predict (function)*
         │   ├── predict_proba (function)*
-        │   ├── serialize (function)*
+        │   └── serialize (function)*
         ├── Figure (alias) -> validmind.vm_models.figure.Figure
         │   ├── serialize (function)*
         │   ├── serialize_files (function)*
-        │   ├── to_widget (function)*
+        │   └── to_widget (function)*
         ├── ModelAttributes (alias) -> validmind.vm_models.model.ModelAttributes
-        │   ├── from_dict (function)*
+        │   └── from_dict (function)*
         ├── R_MODEL_TYPES (alias) -> validmind.vm_models.model.R_MODEL_TYPES
         ├── ResultTable (alias) -> validmind.vm_models.result.ResultTable
         ├── TestResult (alias) -> validmind.vm_models.result.TestResult
         ├── TestSuite (alias) -> validmind.vm_models.test_suite.test_suite.TestSuite
-        ├── TestSuiteRunner (alias) -> validmind.vm_models.test_suite.runner.TestSuiteRunner
+        │   ├── get_default_config (function)*
+        │   ├── get_tests (function)*
+        │   └── num_tests (function)*
+        └── TestSuiteRunner (alias) -> validmind.vm_models.test_suite.runner.TestSuiteRunner
+            ├── log_results (function)*
+            ├── run (function)*
+            └── summarize (function)
