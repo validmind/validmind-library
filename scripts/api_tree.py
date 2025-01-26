@@ -188,45 +188,47 @@ def print_tree(data: Dict[str, Any], prefix: str = "", is_last: bool = True, is_
     # Get module-level __all__ members
     all_members = set(get_all_members(members))
     
-    # Filter and sort items
-    items = []
-    for name, member in sorted(members.items()):
-        if not member or member.get('kind') is None:
-            continue
-            
-        # Skip private members and utils module
-        if name.startswith('_') and name not in {'__init__', '__post_init__'}:
-            continue
-            
-        if name in SKIP_MODULES:
-            continue
-            
-        # At root level, only show items from __all__
-        if is_root:
-            if name not in root_all:
+    # Special handling for vm_models - flatten structure to just show classes
+    if data.get('name') == 'vm_models':
+        items = []
+        # Recursively search for classes in __all__
+        vm_models_all = {'VMInput', 'VMDataset', 'VMModel', 'Figure', 'ModelAttributes', 'ResultTable', 'TestResult'}
+        
+        def collect_classes(module_data):
+            for name, member in module_data.get('members', {}).items():
+                if name in vm_models_all and member.get('kind') == 'class':
+                    items.append((name, member))
+                elif member.get('kind') == 'module':
+                    collect_classes(member)
+        
+        collect_classes(data)
+        items.sort(key=lambda x: x[0])  # Sort classes alphabetically
+    else:
+        # Filter and sort items
+        items = []
+        for name, member in sorted(members.items()):
+            if not member or member.get('kind') is None:
                 continue
-            items.append((name, member))
-            continue
-            
-        # Handle aliases
-        if member.get('kind') == 'alias':
-            # Keep aliases only if they're in __all__
-            if name not in all_members:
+                
+            # Skip private members and utils module
+            if name.startswith('_') and name not in {'__init__', '__post_init__'}:
                 continue
-            # Skip external library imports
-            target_path = member.get('target_path', '')
-            if not target_path.startswith('validmind.'):
+                
+            if name in SKIP_MODULES:
                 continue
-            
-        # Show only modules, classes, functions in __all__ (if present)
-        kind = member.get('kind', 'unknown')
-        if kind == 'module' or kind == 'class' or (
-            kind in SHOW_KINDS and (name in all_members or not all_members)
-        ):
+                
+            # At root level, only show items from __all__
+            if is_root:
+                if name not in root_all:
+                    continue
+                items.append((name, member))
+                continue
+                
             items.append((name, member))
     
     # Sort items using custom sort key
-    items.sort(key=get_sort_key)
+    if data.get('name') != 'vm_models':  # Don't sort vm_models items as they're pre-sorted
+        items.sort(key=get_sort_key)
     
     # Print items
     for i, (name, member) in enumerate(items):
@@ -241,8 +243,8 @@ def print_tree(data: Dict[str, Any], prefix: str = "", is_last: bool = True, is_
         if kind == 'alias' and full_data:
             # Check if either the alias or its target has a docstring
             has_alias_docstring = has_docstring(member)
-            target = member.get('target_path', '')
-            target = resolve_alias_target(full_data['validmind'], target)
+            target_path = member.get('target_path', '')
+            target = resolve_alias_target(full_data['validmind'], target_path)
             has_target_docstring = target is not None and has_docstring(target)
             
             if has_alias_docstring or has_target_docstring:
