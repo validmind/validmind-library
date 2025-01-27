@@ -4,19 +4,6 @@ toc-depth: 3
 toc-expand: 3
 ---
 
-### [class]{.muted} MissingRequiredTestInputError
-
-```python
-class MissingRequiredTestInputError(BaseError):
-```
-
-When a required test context variable is missing.
-
-**Inherited members**
-
-- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
-- **From builtins.BaseException**: with_traceback, add_note
-
 ## Delimitation[()]{.muted}
 
 ```python
@@ -52,3 +39,15 @@ The test employs an LLM to examine prompts for appropriate use of delimiters suc
 - Only checks for the presence and placement of delimiters, not whether the correct delimiter type is used for the specific data or task.
 - May not fully reveal the impacts of poor delimitation on the LLM's final performance.
 - The preset score threshold may not be refined enough for complex tasks and prompts, requiring regular manual adjustment.
+  ### [class]{.muted} MissingRequiredTestInputError
+
+```python
+class MissingRequiredTestInputError(BaseError):
+```
+
+When a required test context variable is missing.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note

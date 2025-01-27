@@ -6,18 +6,6 @@ toc-expand: 3
 
 Test suites for sklearn-compatible clustering models Ideal setup is to have the API client to read a custom test suite from the project's configuration
 
-### [class]{.muted} KmeansParametersOptimization
-
-```python
-class KmeansParametersOptimization(TestSuite):
-```
-
-Test suite for sklearn hyperparameters optimization
-
-**Inherited members**
-
-**Methods**
-
 ### [class]{.muted} ClusterFullSuite
 
 ```python
@@ -49,6 +37,18 @@ class ClusterPerformance(TestSuite):
 ```
 
 Test suite for sklearn cluster performance
+
+**Inherited members**
+
+**Methods**
+
+### [class]{.muted} KmeansParametersOptimization
+
+```python
+class KmeansParametersOptimization(TestSuite):
+```
+
+Test suite for sklearn hyperparameters optimization
 
 **Inherited members**
 

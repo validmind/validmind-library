@@ -19,6 +19,53 @@ Entrypoint for test suites.
 - [text_data](test_suites/text_data.qmd)
 - [time_series](test_suites/time_series.qmd)
 
+## describe_suite[()]{.muted}
+
+```python
+def describe_suite(
+    test_suite_id: str,
+    verbose = False):
+```
+
+Describes a Test Suite by ID
+
+**Parameters**
+
+- **test_suite_id**: Test Suite ID
+- **verbose**: If True, describe all plans and tests in the Test Suite
+
+**Returns**
+
+- A formatted table with the Test Suite description
+
+## get_by_id[()]{.muted}
+
+```python
+def get_by_id(
+    test_suite_id: str):
+```
+
+Returns the test suite by ID
+
+## list_suites[()]{.muted}
+
+```python
+def list_suites(
+    pretty: bool = True):
+```
+
+Returns a list of all available test suites
+
+## register_test_suite[()]{.muted}
+
+```python
+def register_test_suite(
+    suite_id: str,
+    suite: TestSuite):
+```
+
+Registers a custom test suite
+
 ### [class]{.muted} ClassifierDiagnosis
 
 ```python
@@ -380,50 +427,3 @@ The raw time series data provides a visual inspection of the target variable's b
 **Inherited members**
 
 **Methods**
-
-## describe_suite[()]{.muted}
-
-```python
-def describe_suite(
-    test_suite_id: str,
-    verbose = False):
-```
-
-Describes a Test Suite by ID
-
-**Parameters**
-
-- **test_suite_id**: Test Suite ID
-- **verbose**: If True, describe all plans and tests in the Test Suite
-
-**Returns**
-
-- A formatted table with the Test Suite description
-
-## get_by_id[()]{.muted}
-
-```python
-def get_by_id(
-    test_suite_id: str):
-```
-
-Returns the test suite by ID
-
-## list_suites[()]{.muted}
-
-```python
-def list_suites(
-    pretty: bool = True):
-```
-
-Returns a list of all available test suites
-
-## register_test_suite[()]{.muted}
-
-```python
-def register_test_suite(
-    suite_id: str,
-    suite: TestSuite):
-```
-
-Registers a custom test suite

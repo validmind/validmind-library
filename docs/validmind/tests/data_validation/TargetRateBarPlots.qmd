@@ -4,19 +4,6 @@ toc-depth: 3
 toc-expand: 3
 ---
 
-### [class]{.muted} SkipTestError
-
-```python
-class SkipTestError(BaseError):
-```
-
-Useful error to throw when a test cannot be executed.
-
-**Inherited members**
-
-- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
-- **From builtins.BaseException**: with_traceback, add_note
-
 ## TargetRateBarPlots[()]{.muted}
 
 ```python
@@ -47,3 +34,16 @@ The test involves creating a pair of bar plots for each categorical feature in t
 ### Limitations
 
 - The readability of the bar plots drops as the number of distinct categories increases in the dataset, which can make them harder to understand and less useful.
+
+### [class]{.muted} SkipTestError
+
+```python
+class SkipTestError(BaseError):
+```
+
+Useful error to throw when a test cannot be executed.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note

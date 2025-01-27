@@ -4,21 +4,6 @@ toc-depth: 3
 toc-expand: 3
 ---
 
-### [class]{.muted} MissingDependencyError
-
-```python
-class MissingDependencyError(BaseError):
-```
-
-When a required dependency is missing.
-
-**Inherited members**
-
-- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
-- **From builtins.BaseException**: with_traceback, add_note
-
-**Methods**
-
 ## ProtectedClassesCombination[()]{.muted}
 
 ```python
@@ -59,3 +44,17 @@ The test performs the following steps:
 - May become complex and difficult to interpret with a large number of protected classes or combinations.
 - Does not provide statistical significance of observed differences.
 - Visualization alone may not capture all nuances of intersectional fairness.
+  ### [class]{.muted} MissingDependencyError
+
+```python
+class MissingDependencyError(BaseError):
+```
+
+When a required dependency is missing.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note
+
+**Methods**

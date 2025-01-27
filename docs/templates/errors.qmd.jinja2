@@ -1,0 +1,185 @@
+{% import "macros/docstring.jinja2" as doc %}
+{% import "macros/types.jinja2" as types %}
+---
+title: errors
+toc-depth: 3
+toc-expand: 3
+---
+
+{% if module.docstring %}
+{{ doc.format_docstring(module.docstring) }}
+{% endif %}
+
+## Base Errors
+
+{% for member in members | sort_members(is_errors_module=true) %}
+{% if member.kind == 'class' and member.name in ['BaseError', 'APIRequestError'] %}
+### [class]{.muted} {{ member.name }}
+
+```python
+class {{ member.name }}({% for base in member.bases %}{{ base.name }}{% if not loop.last %}, {% endif %}{% endfor %}):
+```
+
+{% if member.docstring %}
+{{ doc.format_docstring(member.docstring) }}
+{% endif %}
+
+{% if member.members %}
+**Methods**
+
+{% for method in member.members.values() | sort(attribute='name') %}
+{% if method.kind == 'method' and not method.name.startswith('_') %}
+#### [{{ method.name }}[()]{.muted}](#{{ method.name }})
+```python
+{{ method.name }}({{ method.parameters | map(attribute='name') | join(', ') }})
+```
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endif %}
+{% endfor %}
+
+## API Errors
+
+{% for member in members | sort_members(is_errors_module=true) %}
+{% if member.kind == 'class' and (member.name.startswith('API') or member.name.endswith('APIError')) and member.name != 'APIRequestError' %}
+### [class]{.muted} {{ member.name }}
+
+```python
+class {{ member.name }}({% for base in member.bases %}{{ base.name }}{% if not loop.last %}, {% endif %}{% endfor %}):
+```
+
+{% if member.docstring %}
+{{ doc.format_docstring(member.docstring) }}
+{% endif %}
+
+{% if member.members %}
+**Methods**
+
+{% for method in member.members.values() | sort(attribute='name') %}
+{% if method.kind == 'method' and not method.name.startswith('_') %}
+#### [{{ method.name }}[()]{.muted}](#{{ method.name }})
+```python
+{{ method.name }}({{ method.parameters | map(attribute='name') | join(', ') }})
+```
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endif %}
+{% endfor %}
+
+## Model Errors
+
+{% for member in members | sort_members(is_errors_module=true) %}
+{% if member.kind == 'class' and 'Model' in member.name %}
+### [class]{.muted} {{ member.name }}
+
+```python
+class {{ member.name }}({% for base in member.bases %}{{ base.name }}{% if not loop.last %}, {% endif %}{% endfor %}):
+```
+
+{% if member.docstring %}
+{{ doc.format_docstring(member.docstring) }}
+{% endif %}
+
+{% if member.members %}
+**Methods**
+
+{% for method in member.members.values() | sort(attribute='name') %}
+{% if method.kind == 'method' and not method.name.startswith('_') %}
+#### [{{ method.name }}[()]{.muted}](#{{ method.name }})
+```python
+{{ method.name }}({{ method.parameters | map(attribute='name') | join(', ') }})
+```
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endif %}
+{% endfor %}
+
+## Test Errors
+
+{% for member in members | sort_members(is_errors_module=true) %}
+{% if member.kind == 'class' and 'Test' in member.name %}
+### [class]{.muted} {{ member.name }}
+
+```python
+class {{ member.name }}({% for base in member.bases %}{{ base.name }}{% if not loop.last %}, {% endif %}{% endfor %}):
+```
+
+{% if member.docstring %}
+{{ doc.format_docstring(member.docstring) }}
+{% endif %}
+
+{% if member.members %}
+**Methods**
+
+{% for method in member.members.values() | sort(attribute='name') %}
+{% if method.kind == 'method' and not method.name.startswith('_') %}
+#### [{{ method.name }}[()]{.muted}](#{{ method.name }})
+```python
+{{ method.name }}({{ method.parameters | map(attribute='name') | join(', ') }})
+```
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endif %}
+{% endfor %}
+
+## Input Validation Errors
+
+{% for member in members | sort_members(is_errors_module=true) %}
+{% if member.kind == 'class' and (member.name.startswith('Invalid') or member.name.startswith('Missing')) %}
+### [class]{.muted} {{ member.name }}
+
+```python
+class {{ member.name }}({% for base in member.bases %}{{ base.name }}{% if not loop.last %}, {% endif %}{% endfor %}):
+```
+
+{% if member.docstring %}
+{{ doc.format_docstring(member.docstring) }}
+{% endif %}
+
+{% if member.members %}
+**Methods**
+
+{% for method in member.members.values() | sort(attribute='name') %}
+{% if method.kind == 'method' and not method.name.startswith('_') %}
+#### [{{ method.name }}[()]{.muted}](#{{ method.name }})
+```python
+{{ method.name }}({{ method.parameters | map(attribute='name') | join(', ') }})
+```
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endif %}
+{% endfor %}
+
+## Unsupported Feature Errors
+
+{% for member in members | sort_members(is_errors_module=true) %}
+{% if member.kind == 'class' and member.name.startswith('Unsupported') %}
+### [class]{.muted} {{ member.name }}
+
+```python
+class {{ member.name }}({% for base in member.bases %}{{ base.name }}{% if not loop.last %}, {% endif %}{% endfor %}):
+```
+
+{% if member.docstring %}
+{{ doc.format_docstring(member.docstring) }}
+{% endif %}
+
+{% if member.members %}
+**Methods**
+
+{% for method in member.members.values() | sort(attribute='name') %}
+{% if method.kind == 'method' and not method.name.startswith('_') %}
+#### [{{ method.name }}[()]{.muted}](#{{ method.name }})
+```python
+{{ method.name }}({{ method.parameters | map(attribute='name') | join(', ') }})
+```
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endif %}
+{% endfor %} 

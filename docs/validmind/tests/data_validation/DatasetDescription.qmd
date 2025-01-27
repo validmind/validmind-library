@@ -4,19 +4,6 @@ toc-depth: 3
 toc-expand: 3
 ---
 
-### [class]{.muted} UnsupportedColumnTypeError
-
-```python
-class UnsupportedColumnTypeError(BaseError):
-```
-
-When an unsupported column type is found on a dataset.
-
-**Inherited members**
-
-- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
-- **From builtins.BaseException**: with_traceback, add_note
-
 ## DatasetDescription[()]{.muted}
 
 ```python
@@ -95,3 +82,16 @@ Returns a collection of histograms for a numerical column, each one with a diffe
 def infer_datatypes(
     df):
 ```
+
+### [class]{.muted} UnsupportedColumnTypeError
+
+```python
+class UnsupportedColumnTypeError(BaseError):
+```
+
+When an unsupported column type is found on a dataset.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note

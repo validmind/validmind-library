@@ -39,18 +39,42 @@ website:
       - text: "errors"
         file: validmind/errors.qmd
         contents:
+        - text: "BaseError"
+          file: validmind/errors.qmd#BaseError
+        - text: "APIRequestError"
+          file: validmind/errors.qmd#APIRequestError
         - text: "raise_api_error()"
           file: validmind/errors.qmd#raise_api_error
         - text: "should_raise_on_fail_fast()"
           file: validmind/errors.qmd#should_raise_on_fail_fast
-        - text: "APIRequestError"
-          file: validmind/errors.qmd#APIRequestError
-        - text: "BaseError"
-          file: validmind/errors.qmd#BaseError
+        - text: "InvalidXGBoostTrainedModelError"
+          file: validmind/errors.qmd#InvalidXGBoostTrainedModelError
+        - text: "MissingModelIdError"
+          file: validmind/errors.qmd#MissingModelIdError
+        - text: "MissingOrInvalidModelPredictFnError"
+          file: validmind/errors.qmd#MissingOrInvalidModelPredictFnError
+        - text: "UnsupportedModelError"
+          file: validmind/errors.qmd#UnsupportedModelError
+        - text: "UnsupportedModelForSHAPError"
+          file: validmind/errors.qmd#UnsupportedModelForSHAPError
+        - text: "UnsupportedRModelError"
+          file: validmind/errors.qmd#UnsupportedRModelError
         - text: "GetTestSuiteError"
           file: validmind/errors.qmd#GetTestSuiteError
         - text: "InitializeTestSuiteError"
           file: validmind/errors.qmd#InitializeTestSuiteError
+        - text: "InvalidTestParametersError"
+          file: validmind/errors.qmd#InvalidTestParametersError
+        - text: "InvalidTestResultsError"
+          file: validmind/errors.qmd#InvalidTestResultsError
+        - text: "LoadTestError"
+          file: validmind/errors.qmd#LoadTestError
+        - text: "MissingRequiredTestInputError"
+          file: validmind/errors.qmd#MissingRequiredTestInputError
+        - text: "SkipTestError"
+          file: validmind/errors.qmd#SkipTestError
+        - text: "TestInputInvalidDatasetError"
+          file: validmind/errors.qmd#TestInputInvalidDatasetError
         - text: "InvalidAPICredentialsError"
           file: validmind/errors.qmd#InvalidAPICredentialsError
         - text: "InvalidContentIdPrefixError"
@@ -63,20 +87,10 @@ website:
           file: validmind/errors.qmd#InvalidProjectError
         - text: "InvalidRequestBodyError"
           file: validmind/errors.qmd#InvalidRequestBodyError
-        - text: "InvalidTestParametersError"
-          file: validmind/errors.qmd#InvalidTestParametersError
-        - text: "InvalidTestResultsError"
-          file: validmind/errors.qmd#InvalidTestResultsError
         - text: "InvalidTextObjectError"
           file: validmind/errors.qmd#InvalidTextObjectError
         - text: "InvalidValueFormatterError"
           file: validmind/errors.qmd#InvalidValueFormatterError
-        - text: "InvalidXGBoostTrainedModelError"
-          file: validmind/errors.qmd#InvalidXGBoostTrainedModelError
-        - text: "LoadTestError"
-          file: validmind/errors.qmd#LoadTestError
-        - text: "MismatchingClassLabelsError"
-          file: validmind/errors.qmd#MismatchingClassLabelsError
         - text: "MissingAPICredentialsError"
           file: validmind/errors.qmd#MissingAPICredentialsError
         - text: "MissingCacheResultsArgumentsError"
@@ -87,37 +101,31 @@ website:
           file: validmind/errors.qmd#MissingDependencyError
         - text: "MissingDocumentationTemplate"
           file: validmind/errors.qmd#MissingDocumentationTemplate
-        - text: "MissingModelIdError"
-          file: validmind/errors.qmd#MissingModelIdError
-        - text: "MissingOrInvalidModelPredictFnError"
-          file: validmind/errors.qmd#MissingOrInvalidModelPredictFnError
-        - text: "MissingRequiredTestInputError"
-          file: validmind/errors.qmd#MissingRequiredTestInputError
         - text: "MissingRExtrasError"
           file: validmind/errors.qmd#MissingRExtrasError
         - text: "MissingTextContentIdError"
           file: validmind/errors.qmd#MissingTextContentIdError
         - text: "MissingTextContentsError"
           file: validmind/errors.qmd#MissingTextContentsError
-        - text: "SkipTestError"
-          file: validmind/errors.qmd#SkipTestError
-        - text: "TestInputInvalidDatasetError"
-          file: validmind/errors.qmd#TestInputInvalidDatasetError
         - text: "UnsupportedColumnTypeError"
           file: validmind/errors.qmd#UnsupportedColumnTypeError
         - text: "UnsupportedDatasetError"
           file: validmind/errors.qmd#UnsupportedDatasetError
         - text: "UnsupportedFigureError"
           file: validmind/errors.qmd#UnsupportedFigureError
-        - text: "UnsupportedModelError"
-          file: validmind/errors.qmd#UnsupportedModelError
-        - text: "UnsupportedModelForSHAPError"
-          file: validmind/errors.qmd#UnsupportedModelForSHAPError
-        - text: "UnsupportedRModelError"
-          file: validmind/errors.qmd#UnsupportedRModelError
+        - text: "MismatchingClassLabelsError"
+          file: validmind/errors.qmd#MismatchingClassLabelsError
       - text: "test_suites"
         file: validmind/test_suites.qmd
         contents:
+        - text: "describe_suite()"
+          file: validmind/test_suites.qmd#describe_suite
+        - text: "get_by_id()"
+          file: validmind/test_suites.qmd#get_by_id
+        - text: "list_suites()"
+          file: validmind/test_suites.qmd#list_suites
+        - text: "register_test_suite()"
+          file: validmind/test_suites.qmd#register_test_suite
         - text: "ClassifierDiagnosis()"
           file: validmind/test_suites.qmd#ClassifierDiagnosis
         - text: "ClassifierFullSuite()"
@@ -184,17 +192,11 @@ website:
           file: validmind/test_suites.qmd#TimeSeriesMultivariate
         - text: "TimeSeriesUnivariate()"
           file: validmind/test_suites.qmd#TimeSeriesUnivariate
-        - text: "describe_suite()"
-          file: validmind/test_suites.qmd#describe_suite
-        - text: "get_by_id()"
-          file: validmind/test_suites.qmd#get_by_id
-        - text: "list_suites()"
-          file: validmind/test_suites.qmd#list_suites
-        - text: "register_test_suite()"
-          file: validmind/test_suites.qmd#register_test_suite
       - text: "tests"
         file: validmind/tests.qmd
         contents:
+        - text: "register_test_provider()"
+          file: validmind/tests.qmd#register_test_provider
         - text: "describe_test()"
           file: validmind/tests.qmd#describe_test
         - text: "list_tags()"
@@ -221,8 +223,6 @@ website:
           file: validmind/tests.qmd#test
         - text: "TestProvider()"
           file: validmind/tests.qmd#TestProvider
-        - text: "register_test_provider()"
-          file: validmind/tests.qmd#register_test_provider
       - text: "unit_metrics"
         file: validmind/unit_metrics.qmd
         contents:

@@ -4,19 +4,6 @@ toc-depth: 3
 toc-expand: 3
 ---
 
-### [class]{.muted} SkipTestError
-
-```python
-class SkipTestError(BaseError):
-```
-
-Useful error to throw when a test cannot be executed.
-
-**Inherited members**
-
-- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
-- **From builtins.BaseException**: with_traceback, add_note
-
 ## DescriptiveStatistics[()]{.muted}
 
 ```python
@@ -67,3 +54,16 @@ def get_summary_statistics_numerical(
     df,
     numerical_fields):
 ```
+
+### [class]{.muted} SkipTestError
+
+```python
+class SkipTestError(BaseError):
+```
+
+Useful error to throw when a test cannot be executed.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note

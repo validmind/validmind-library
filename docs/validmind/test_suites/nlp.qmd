@@ -6,6 +6,18 @@ toc-expand: 3
 
 Test suites for NLP models
 
+### [class]{.muted} NLPClassifierFullSuite
+
+```python
+class NLPClassifierFullSuite(TestSuite):
+```
+
+Full test suite for NLP classification models.
+
+**Inherited members**
+
+**Methods**
+
 ### [class]{.muted} ClassifierDiagnosis
 
 ```python
@@ -49,18 +61,6 @@ class TextDataQuality(TestSuite):
 ```
 
 Test suite for data quality on text data
-
-**Inherited members**
-
-**Methods**
-
-### [class]{.muted} NLPClassifierFullSuite
-
-```python
-class NLPClassifierFullSuite(TestSuite):
-```
-
-Full test suite for NLP classification models.
 
 **Inherited members**
 

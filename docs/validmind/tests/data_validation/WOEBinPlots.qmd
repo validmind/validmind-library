@@ -4,19 +4,6 @@ toc-depth: 3
 toc-expand: 3
 ---
 
-### [class]{.muted} SkipTestError
-
-```python
-class SkipTestError(BaseError):
-```
-
-Useful error to throw when a test cannot be executed.
-
-**Inherited members**
-
-- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
-- **From builtins.BaseException**: with_traceback, add_note
-
 ## WOEBinPlots[()]{.muted}
 
 ```python
@@ -55,3 +42,15 @@ The test implementation follows defined steps. Initially, it selects non-numeric
 - While excellent for categorical data, the encoding of continuous variables into categorical can sometimes lead to information loss.
 - Extreme or outlier values can dramatically affect the computation of WoE and IV, skewing results.
 - The method requires a sufficient number of events per bin to generate a reliable information value and weight of evidence.
+  ### [class]{.muted} SkipTestError
+
+```python
+class SkipTestError(BaseError):
+```
+
+Useful error to throw when a test cannot be executed.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note

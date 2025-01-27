@@ -30,28 +30,42 @@ def get_all_members(members: Dict[str, Any]) -> Set[str]:
         return {elem.strip("'") for elem in all_elements}
     return set()
 
-def sort_members(members):
+def sort_members(members, is_errors_module=False):
     """Sort members by kind and name."""
     if isinstance(members, dict):
         members = members.values()
     
     def get_sort_key(member):
-        name = str(member.get('name', ''))  # Ensure string for sorting
+        name = str(member.get('name', ''))
         kind = member.get('kind', '')
         
-        # Special case: __version__ should be first
-        if name == "__version__":
-            return (0, name)
-        
-        # Order: aliases, functions, modules, others
-        if kind == 'alias':
-            return (1, name.lower())  # Case-insensitive natural sort
-        elif kind == 'function':
-            return (2, name.lower())
-        elif kind == 'module':
-            return (3, name.lower())
+        if is_errors_module and kind == 'class':
+            # Base errors first
+            if name == 'BaseError':
+                return ('0', '0', name)  # Use strings for consistent comparison
+            elif name == 'APIRequestError':
+                return ('0', '1', name)
+            # Then group by category
+            elif name.startswith('API') or name.endswith('APIError'):
+                return ('1', '0', name)
+            elif 'Model' in name:
+                return ('2', '0', name)
+            elif 'Test' in name:
+                return ('3', '0', name)
+            elif name.startswith('Invalid') or name.startswith('Missing'):
+                return ('4', '0', name)
+            elif name.startswith('Unsupported'):
+                return ('5', '0', name)
+            else:
+                return ('6', '0', name)
         else:
-            return (4, name.lower())
+            # Default sorting for non-error modules
+            if kind == 'class':
+                return ('0', name.lower())
+            elif kind == 'function':
+                return ('1', name.lower())
+            else:
+                return ('2', name.lower())
     
     return sorted(members, key=get_sort_key)
 
@@ -93,7 +107,7 @@ def collect_documented_items(module: Dict[str, Any], path: List[str], full_data:
     
     # Collect items from this module
     module_items = []
-    for member in sort_members(module['members']):
+    for member in sort_members(module['members'], module.get('name') == 'errors'):
         if not is_public(member, module, full_data, is_root):
             continue
             
@@ -118,7 +132,7 @@ def collect_documented_items(module: Dict[str, Any], path: List[str], full_data:
             result[module_name] = module_items
     
     # Recursively collect from submodules
-    for member in sort_members(module['members']):
+    for member in sort_members(module['members'], module.get('name') == 'errors'):
         if member['kind'] == 'module' and is_public(member, module, full_data, is_root):
             submodule_path = path + [member['name']]
             submodule_items = collect_documented_items(member, submodule_path, full_data, False)
@@ -126,7 +140,7 @@ def collect_documented_items(module: Dict[str, Any], path: List[str], full_data:
             
             # Also check for nested modules in the submodule
             if member.get('members'):
-                for submember in sort_members(member['members']):
+                for submember in sort_members(member['members'], member.get('name') == 'errors'):
                     if submember['kind'] == 'module' and is_public(submember, member, full_data, False):
                         subsubmodule_path = submodule_path + [submember['name']]
                         subsubmodule_items = collect_documented_items(submember, subsubmodule_path, full_data, False)
@@ -345,8 +359,20 @@ def get_inherited_members(base: Dict[str, Any], full_data: Dict[str, Any]) -> Li
     
     # Return the base class and its description method if it exists
     members = [{'name': base_name, 'kind': 'class', 'base': base_name}]
-    if 'description' in base_class.get('members', {}):
-        members.append({'name': 'description', 'kind': 'method', 'base': base_name})
+    
+    # Add all public methods
+    for name, member in base_class.get('members', {}).items():
+        # Include __init__ and __str__, skip other private methods
+        if name.startswith('_') and name not in {'__init__', '__str__'}:
+            continue
+        
+        if member['kind'] in ('function', 'method', 'property'):
+            members.append({
+                'name': name,
+                'kind': 'method',
+                'base': base_name,
+                'docstring': member.get('docstring', {}).get('value', '')
+            })
     
     # Add built-in methods from Exception
     members.extend([
@@ -355,6 +381,36 @@ def get_inherited_members(base: Dict[str, Any], full_data: Dict[str, Any]) -> Li
     ])
     
     return members
+
+def generate_module_doc(module, full_data, env, output_dir):
+    """Generate documentation for a module."""
+    is_errors = module.get('name') == 'errors'
+    
+    # Choose template based on module name
+    template = env.get_template('errors.qmd.jinja2' if is_errors else 'module.qmd.jinja2')
+    
+    # For errors module, filter to only include classes and skip module-level functions
+    if is_errors:
+        filtered_members = {
+            name: member for name, member in module.get('members', {}).items()
+            if member.get('kind') == 'class'
+        }
+    else:
+        filtered_members = module.get('members', {})
+    
+    # Generate documentation
+    output = template.render(
+        module=module,
+        members=filtered_members,
+        full_data=full_data,
+        doc=doc_utils,
+        is_errors_module=is_errors
+    )
+    
+    # Write output
+    output_path = os.path.join(output_dir, f"{module['name']}.qmd")
+    with open(output_path, 'w') as f:
+        f.write(output)
 
 def generate_docs(json_path: str, template_dir: str, output_dir: str):
     """Generate documentation from JSON data using templates."""

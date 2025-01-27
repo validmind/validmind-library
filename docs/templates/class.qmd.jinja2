@@ -21,7 +21,7 @@ class {{ resolved.name }}({% for base in resolved.bases %}{{ base.name }}{% if n
     {% set _ = grouped[member.base].append(member) %}
 {% endfor %}
 {% for base, members in grouped.items() %}
-- **From {{ base }}**: {% for member in members %}{% if member.kind == 'builtin' %}{{ member.name }}{% else %}[{% if member.kind == 'class' %}class {% endif %}{{ member.name }}](#{{ member.name }})[()]{.muted}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %}
+- **From {{ base }}**: {% for member in members %}{% if member.kind == 'builtin' %}{{ member.name }}{% else %}[{% if member.kind == 'class' %}class {% endif %}{{ member.name }}[()]{.muted}](#{% if member.kind == 'class' %}class-{% endif %}{{ member.name | lower }}){% endif %}{% if not loop.last %}, {% endif %}{% endfor %}
 
 {% endfor %}
 {% endif %}
@@ -29,9 +29,18 @@ class {{ resolved.name }}({% for base in resolved.bases %}{{ base.name }}{% if n
 
 {% if resolved.members %}
 **Methods**
-{% for member in resolved.members | sort_members %}
-{% if member.kind == 'method' and is_public(member, module, full_data) %}
-- [{{ member.name }}](#{{ member.name }}){% if member.docstring %}: {{ member.docstring.value | trim }}{% endif %}
+
+{% for member in resolved.members.values() | sort(attribute='name') %}
+{% if member.kind in ['method', 'function'] and not member.name.startswith('_') %}
+### [{{ member.name }}[()]{.muted}](#{{ member.name }})
+
+```python
+{{ member.name }}({{ member.parameters | map(attribute='name') | join(', ') }})
+```
+
+{% if member.docstring %}
+{{ doc.format_docstring(member.docstring) }}
+{% endif %}
 {% endif %}
 {% endfor %}
 {% endif %}

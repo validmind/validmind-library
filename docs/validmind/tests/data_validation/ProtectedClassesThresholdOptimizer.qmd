@@ -4,21 +4,6 @@ toc-depth: 3
 toc-expand: 3
 ---
 
-### [class]{.muted} MissingDependencyError
-
-```python
-class MissingDependencyError(BaseError):
-```
-
-When a required dependency is missing.
-
-**Inherited members**
-
-- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
-- **From builtins.BaseException**: with_traceback, add_note
-
-**Methods**
-
 ## calculate_fairness_metrics[()]{.muted}
 
 ```python
@@ -115,3 +100,17 @@ The test uses Fairlearn's ThresholdOptimizer to:
 - May lead to a decrease in overall model performance while improving fairness.
 - Requires access to protected attribute information at prediction time.
 - The effectiveness can vary depending on the chosen fairness constraint and objective.
+  ### [class]{.muted} MissingDependencyError
+
+```python
+class MissingDependencyError(BaseError):
+```
+
+When a required dependency is missing.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note
+
+**Methods**

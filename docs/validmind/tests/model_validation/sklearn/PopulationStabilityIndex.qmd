@@ -4,19 +4,6 @@ toc-depth: 3
 toc-expand: 3
 ---
 
-### [class]{.muted} SkipTestError
-
-```python
-class SkipTestError(BaseError):
-```
-
-Useful error to throw when a test cannot be executed.
-
-**Inherited members**
-
-- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
-- **From builtins.BaseException**: with_traceback, add_note
-
 ## calculate_psi[()]{.muted}
 
 ```python
@@ -67,3 +54,15 @@ The implementation of the PSI in this script involves calculating the PSI for ea
 - The PSI test does not inherently provide insights into why there are differences in distributions or why the PSI values may have changed.
 - The test may not handle features with significant outliers adequately.
 - Additionally, the PSI test is performed on model predictions, not on the underlying data distributions which can lead to misinterpretations. Any changes in PSI could be due to shifts in the model (model drift), changes in the relationships between features and the target variable (concept drift), or both. However, distinguishing between these causes is non-trivial.
+  ### [class]{.muted} SkipTestError
+
+```python
+class SkipTestError(BaseError):
+```
+
+Useful error to throw when a test cannot be executed.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note

@@ -4,19 +4,6 @@ toc-depth: 3
 toc-expand: 3
 ---
 
-### [class]{.muted} MissingRequiredTestInputError
-
-```python
-class MissingRequiredTestInputError(BaseError):
-```
-
-When a required test context variable is missing.
-
-**Inherited members**
-
-- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
-- **From builtins.BaseException**: with_traceback, add_note
-
 ## Conciseness[()]{.muted}
 
 ```python
@@ -53,3 +40,15 @@ Using an LLM, this test conducts a conciseness analysis on input prompts. The an
 - The conciseness score is based on an AI's assessment, which might not fully capture human interpretation of conciseness.
 - The predefined threshold for conciseness could be subjective and might need adjustment based on application.
 - The test is dependent on the LLM’s understanding of conciseness, which might vary from model to model.
+  ### [class]{.muted} MissingRequiredTestInputError
+
+```python
+class MissingRequiredTestInputError(BaseError):
+```
+
+When a required test context variable is missing.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note

@@ -4,19 +4,6 @@ toc-depth: 3
 toc-expand: 3
 ---
 
-### [class]{.muted} MissingRequiredTestInputError
-
-```python
-class MissingRequiredTestInputError(BaseError):
-```
-
-When a required test context variable is missing.
-
-**Inherited members**
-
-- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
-- **From builtins.BaseException**: with_traceback, add_note
-
 ## Specificity[()]{.muted}
 
 ```python
@@ -52,3 +39,15 @@ The Specificity Test employs an LLM to grade each prompt based on clarity, detai
 - This test doesn't consider the content comprehension capability of the LLM
 - High specificity score doesn't guarantee a high-quality response from the LLM, as the model's performance is also dependent on various other factors
 - Striking a balance between specificity and verbosity can be challenging, as overly detailed prompts might confuse or mislead the model
+  ### [class]{.muted} MissingRequiredTestInputError
+
+```python
+class MissingRequiredTestInputError(BaseError):
+```
+
+When a required test context variable is missing.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note

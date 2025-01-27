@@ -6,30 +6,6 @@ toc-expand: 3
 
 Time Series Test Suites
 
-### [class]{.muted} RegressionModelDescription
-
-```python
-class RegressionModelDescription(TestSuite):
-```
-
-Test suite for performance metric of regression model of statsmodels library
-
-**Inherited members**
-
-**Methods**
-
-### [class]{.muted} RegressionModelsEvaluation
-
-```python
-class RegressionModelsEvaluation(TestSuite):
-```
-
-Test suite for metrics comparison of regression model of statsmodels library
-
-**Inherited members**
-
-**Methods**
-
 ### [class]{.muted} TimeSeriesDataQuality
 
 ```python
@@ -87,6 +63,30 @@ class TimeSeriesUnivariate(TestSuite):
 This test suite provides a preliminary understanding of the target variable(s) used in the time series dataset. It visualizations that present the raw time series data and a histogram of the target variable(s).
 
 The raw time series data provides a visual inspection of the target variable's behavior over time. This helps to identify any patterns or trends in the data, as well as any potential outliers or anomalies. The histogram of the target variable displays the distribution of values, providing insight into the range and frequency of values observed in the data.
+
+**Inherited members**
+
+**Methods**
+
+### [class]{.muted} RegressionModelDescription
+
+```python
+class RegressionModelDescription(TestSuite):
+```
+
+Test suite for performance metric of regression model of statsmodels library
+
+**Inherited members**
+
+**Methods**
+
+### [class]{.muted} RegressionModelsEvaluation
+
+```python
+class RegressionModelsEvaluation(TestSuite):
+```
+
+Test suite for metrics comparison of regression model of statsmodels library
 
 **Inherited members**
 

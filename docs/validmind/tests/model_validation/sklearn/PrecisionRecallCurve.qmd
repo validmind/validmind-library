@@ -4,19 +4,6 @@ toc-depth: 3
 toc-expand: 3
 ---
 
-### [class]{.muted} SkipTestError
-
-```python
-class SkipTestError(BaseError):
-```
-
-Useful error to throw when a test cannot be executed.
-
-**Inherited members**
-
-- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
-- **From builtins.BaseException**: with_traceback, add_note
-
 ## PrecisionRecallCurve[()]{.muted}
 
 ```python
@@ -50,3 +37,16 @@ The test extracts ground truth labels and prediction probabilities from the mode
 
 - This metric is only applicable to binary classification models - it raises errors for multiclass classification models or Foundation models.
 - It may not fully represent the overall accuracy of the model if the cost of false positives and false negatives are extremely different, or if the dataset is heavily imbalanced.
+
+### [class]{.muted} SkipTestError
+
+```python
+class SkipTestError(BaseError):
+```
+
+Useful error to throw when a test cannot be executed.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note

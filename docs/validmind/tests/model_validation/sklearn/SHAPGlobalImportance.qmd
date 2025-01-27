@@ -4,19 +4,6 @@ toc-depth: 3
 toc-expand: 3
 ---
 
-### [class]{.muted} UnsupportedModelForSHAPError
-
-```python
-class UnsupportedModelForSHAPError(BaseError):
-```
-
-When an unsupported model is used for SHAP importance.
-
-**Inherited members**
-
-- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
-- **From builtins.BaseException**: with_traceback, add_note
-
 ## generate_shap_plot[()]{.muted}
 
 ```python
@@ -101,3 +88,15 @@ The exam begins with the selection of a suitable explainer which aligns with the
 
 - High-dimensional data can convolute interpretations.
 - Associating importance with tangible real-world impact still involves a certain degree of subjectivity.
+  ### [class]{.muted} UnsupportedModelForSHAPError
+
+```python
+class UnsupportedModelForSHAPError(BaseError):
+```
+
+When an unsupported model is used for SHAP importance.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note

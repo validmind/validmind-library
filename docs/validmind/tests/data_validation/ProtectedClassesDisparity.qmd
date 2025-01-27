@@ -4,21 +4,6 @@ toc-depth: 3
 toc-expand: 3
 ---
 
-### [class]{.muted} MissingDependencyError
-
-```python
-class MissingDependencyError(BaseError):
-```
-
-When a required dependency is missing.
-
-**Inherited members**
-
-- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
-- **From builtins.BaseException**: with_traceback, add_note
-
-**Methods**
-
 ## ProtectedClassesDisparity[()]{.muted}
 
 ```python
@@ -63,3 +48,17 @@ The test performs the following steps:
 - Relies on a predefined reference group for each protected class, which may not always be the most appropriate choice.
 - Does not account for intersectionality between different protected attributes.
 - The interpretation of results may require domain expertise to understand the implications of observed disparities.
+  ### [class]{.muted} MissingDependencyError
+
+```python
+class MissingDependencyError(BaseError):
+```
+
+When a required dependency is missing.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note
+
+**Methods**

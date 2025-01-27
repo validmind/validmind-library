@@ -4,19 +4,6 @@ toc-depth: 3
 toc-expand: 3
 ---
 
-### [class]{.muted} SkipTestError
-
-```python
-class SkipTestError(BaseError):
-```
-
-Useful error to throw when a test cannot be executed.
-
-**Inherited members**
-
-- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
-- **From builtins.BaseException**: with_traceback, add_note
-
 ## KPSS[()]{.muted}
 
 ```python
@@ -49,3 +36,15 @@ This test calculates the KPSS score for each feature in the dataset. The KPSS sc
 - Assumes the absence of a unit root in the series and doesn't differentiate between series that are stationary and those border-lining stationarity.
 - The test may have restricted power against certain alternatives.
 - The reliability of the test is contingent on the number of lags selected, which introduces potential bias in the measurement.
+  ### [class]{.muted} SkipTestError
+
+```python
+class SkipTestError(BaseError):
+```
+
+Useful error to throw when a test cannot be executed.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note

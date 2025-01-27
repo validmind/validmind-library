@@ -4,32 +4,6 @@ toc-depth: 3
 toc-expand: 3
 ---
 
-### [class]{.muted} MissingRequiredTestInputError
-
-```python
-class MissingRequiredTestInputError(BaseError):
-```
-
-When a required test context variable is missing.
-
-**Inherited members**
-
-- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
-- **From builtins.BaseException**: with_traceback, add_note
-
-### [class]{.muted} SkipTestError
-
-```python
-class SkipTestError(BaseError):
-```
-
-Useful error to throw when a test cannot be executed.
-
-**Inherited members**
-
-- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
-- **From builtins.BaseException**: with_traceback, add_note
-
 ## Robustness[()]{.muted}
 
 ```python
@@ -65,3 +39,28 @@ The Robustness test appraises prompts under various conditions, alterations, and
 - Currently, the test only supports single-variable prompts, which restricts its application to more complex models.
 - When there are too many target classes (over 10), the test is skipped, which can leave potential vulnerabilities unchecked in complex multi-class models.
 - The test may not account for all potential conditions or alterations that could show up in practical use scenarios.
+  ### [class]{.muted} MissingRequiredTestInputError
+
+```python
+class MissingRequiredTestInputError(BaseError):
+```
+
+When a required test context variable is missing.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note
+
+### [class]{.muted} SkipTestError
+
+```python
+class SkipTestError(BaseError):
+```
+
+Useful error to throw when a test cannot be executed.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note

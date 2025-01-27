@@ -7,14 +7,23 @@ toc-expand: 3
 ValidMind Tests Module
 
 - [data_validation](tests/data_validation.qmd)
-
 - [model_validation](tests/model_validation.qmd)
-
 - [prompt_validation](tests/prompt_validation.qmd)
 
-  ```
-  ### [class]{.muted} LoadTestError
-  ```
+## register_test_provider[()]{.muted}
+
+```python
+def register_test_provider(
+    namespace: str,
+    test_provider: TestProvider) -> None:
+```
+
+Register an external test provider
+
+**Parameters**
+
+- **(str)**: The namespace of the test provider test_provider
+- **(TestProvider)**: The test provider ### [class]{.muted} LoadTestError
 
 ```python
 class LoadTestError(BaseError):
@@ -24,7 +33,7 @@ Exception raised when an error occurs while loading a test
 
 **Inherited members**
 
-- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
 - **From builtins.BaseException**: with_traceback, add_note
 
 **Methods**
@@ -62,7 +71,41 @@ test = test_provider.load_test("my_namespace.my_test_class")
 
 - **root_folder**: The root directory for local tests.
 
-**Methods** ### [class]{.muted} TestProvider
+**Methods**
+
+### [list_tests[()]{.muted}](#list_tests)
+
+```python
+list_tests(self)
+```
+
+List all tests in the given namespace
+
+**Returns**
+
+- A list of test IDs
+
+### [load_test[()]{.muted}](#load_test)
+
+```python
+load_test(self, test_id)
+```
+
+Load the test identified by the given test_id.
+
+**Parameters**
+
+- **(str)**: The identifier of the test. This corresponds to the relative path of the python file from the root folder, with slashes replaced by dots
+
+**Returns**
+
+- The test class that matches the last part of the test_id.
+
+**Raises**
+
+- **LocalTestProviderLoadModuleError**: If the test module cannot be imported
+- **LocalTestProviderLoadTestError**: If the test class cannot be found in the module
+  ### [class]{.muted} TestProvider
 
 ```python
 class TestProvider(Protocol):
@@ -74,17 +117,34 @@ Protocol for user-defined test providers
 
 **Methods**
 
-## register_test_provider[()]{.muted}
+### [list_tests[()]{.muted}](#list_tests)
 
 ```python
-def register_test_provider(
-    namespace: str,
-    test_provider: TestProvider) -> None:
+list_tests(self)
 ```
 
-Register an external test provider
+List all tests in the given namespace
+
+**Returns**
+
+- A list of test IDs
+
+### [load_test[()]{.muted}](#load_test)
+
+```python
+load_test(self, test_id)
+```
+
+Load the test function identified by the given test_id
 
 **Parameters**
 
-- **(str)**: The namespace of the test provider test_provider
-- **(TestProvider)**: The test provider
+- **(str)**: The test ID (does not contain the namespace under which the test is registered)
+
+**Returns**
+
+- The test function
+
+**Raises**
+
+- **FileNotFoundError**: If the test is not found

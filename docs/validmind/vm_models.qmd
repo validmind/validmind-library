@@ -16,6 +16,30 @@ Figure objects track the schema supported by the ValidMind API
 
 **Methods**
 
+### [serialize[()]{.muted}](#serialize)
+
+```python
+serialize(self)
+```
+
+Serializes the Figure to a dictionary so it can be sent to the API
+
+### [serialize_files[()]{.muted}](#serialize_files)
+
+```python
+serialize_files(self)
+```
+
+Creates a `requests`-compatible files object to be sent to the API
+
+### [to_widget[()]{.muted}](#to_widget)
+
+```python
+to_widget(self)
+```
+
+Returns the ipywidget compatible representation of the figure. Ideally we would render images as-is, but Plotly FigureWidgets don't work well on Google Colab when they are combined with ipywidgets.
+
 ### [class]{.muted} ModelAttributes
 
 ```python
@@ -25,6 +49,14 @@ class ModelAttributes():
 Model attributes definition
 
 **Methods**
+
+### [from_dict[()]{.muted}](#from_dict)
+
+```python
+from_dict(cls, data)
+```
+
+Creates a ModelAttributes instance from a dictionary
 
 ### [class]{.muted} TestSuite
 
@@ -38,6 +70,34 @@ Tests can be a flat list of strings or may be nested into sections by using a di
 
 **Methods**
 
+### [get_default_config[()]{.muted}](#get_default_config)
+
+```python
+get_default_config(self)
+```
+
+Returns the default configuration for the test suite Each test in a test suite can accept parameters and those parameters can have default values. Both the parameters and their defaults are set in the test class and a config object can be passed to the test suite's run method to override the defaults. This function returns a dictionary containing the parameters and their default values for every test to allow users to view and set values
+
+**Returns**
+
+- A dictionary of test names and their default parameters
+
+### [get_tests[()]{.muted}](#get_tests)
+
+```python
+get_tests(self)
+```
+
+Get all test suite test objects from all sections
+
+### [num_tests[()]{.muted}](#num_tests)
+
+```python
+num_tests(self)
+```
+
+Returns the total number of tests in the test suite
+
 ### [class]{.muted} TestSuiteRunner
 
 ```python
@@ -47,6 +107,33 @@ class TestSuiteRunner():
 Runs a test suite
 
 **Methods**
+
+### [log_results[()]{.muted}](#log_results)
+
+```python
+log_results(self)
+```
+
+Logs the results of the test suite to ValidMind This method will be called after the test suite has been run and all results have been collected. This method will log the results to ValidMind.
+
+### [run[()]{.muted}](#run)
+
+```python
+run(self, send, fail_fast)
+```
+
+Runs the test suite, renders the summary and sends the results to ValidMind
+
+**Parameters**
+
+- **optional)**: Whether to send the results to ValidMind. Defaults to True. fail_fast (bool,
+- **optional)**: Whether to stop running tests after the first failure. Defaults to False.
+
+### [summarize[()]{.muted}](#summarize)
+
+```python
+summarize(self, show_link)
+```
 
 ### [class]{.muted} VMDataset
 
@@ -77,6 +164,142 @@ This way we can support multiple dataset types but under the hood we only need t
 
 **Methods**
 
+### [add_extra_column[()]{.muted}](#add_extra_column)
+
+```python
+add_extra_column(self, column_name, column_values)
+```
+
+Adds an extra column to the dataset without modifying the dataset `features` and `target` columns.
+
+**Parameters**
+
+- **(str)**: The name of the extra column. column_values (np.ndarray,
+- **optional)**: The values of the extra column.
+
+### [assign_predictions[()]{.muted}](#assign_predictions)
+
+```python
+assign_predictions(self, model, prediction_column, prediction_values, probability_column, probability_values, prediction_probabilities, kwargs)
+```
+
+Assign predictions and probabilities to the dataset.
+
+**Parameters**
+
+- **(VMModel)**: The model used to generate the predictions. prediction_column (str,
+- **optional)**: The name of the column containing the predictions. Defaults to None. prediction_values (list,
+- **optional)**: The values of the predictions. Defaults to None. probability_column (str,
+- **optional)**: The name of the column containing the probabilities. Defaults to None. probability_values (list,
+- **optional)**: The values of the probabilities. Defaults to None. prediction_probabilities (list,
+- **DEPRECATED**: The values of the probabilities. Defaults to None.
+- **kwargs**: Additional keyword arguments that will get passed through to the model's `predict` method.
+
+### [prediction_column[()]{.muted}](#prediction_column)
+
+```python
+prediction_column(self, model, column_name)
+```
+
+Get or set the prediction column for a model.
+
+### [probability_column[()]{.muted}](#probability_column)
+
+```python
+probability_column(self, model, column_name)
+```
+
+Get or set the probability column for a model.
+
+### [target_classes[()]{.muted}](#target_classes)
+
+```python
+target_classes(self)
+```
+
+Returns the target class labels or unique values of the target column.
+
+### [with_options[()]{.muted}](#with_options)
+
+```python
+with_options(self, kwargs)
+```
+
+Support options provided when passing an input to run_test or run_test_suite
+
+**Parameters**
+
+- **Options**: -
+- **columns**: Filter columns in the dataset
+
+**Returns**
+
+- A new instance of the dataset with only the specified columns
+
+### [x_df[()]{.muted}](#x_df)
+
+```python
+x_df(self)
+```
+
+Returns a dataframe containing only the feature columns
+
+### [y_df[()]{.muted}](#y_df)
+
+```python
+y_df(self)
+```
+
+Returns a dataframe containing the target column
+
+### [y_pred[()]{.muted}](#y_pred)
+
+```python
+y_pred(self, model)
+```
+
+Returns the predictions for a given model. Attempts to stack complex prediction types (e.g., embeddings) into a single, multi-dimensional array.
+
+**Parameters**
+
+- **(VMModel)**: The model whose predictions are sought.
+
+**Returns**
+
+- The predictions for the model
+
+### [y_pred_df[()]{.muted}](#y_pred_df)
+
+```python
+y_pred_df(self, model)
+```
+
+Returns a dataframe containing the predictions for a given model
+
+### [y_prob[()]{.muted}](#y_prob)
+
+```python
+y_prob(self, model)
+```
+
+Returns the probabilities for a given model.
+
+**Parameters**
+
+- **(str)**: The ID of the model whose predictions are sought.
+
+**Returns**
+
+- The probability variables.
+
+### [y_prob_df[()]{.muted}](#y_prob_df)
+
+```python
+y_prob_df(self, model)
+```
+
+Returns a dataframe containing the probabilities for a given model
+
 ### [class]{.muted} VMInput
 
 ```python
@@ -88,6 +311,22 @@ Base class for ValidMind Input types
 **Inherited members**
 
 **Methods**
+
+### [with_options[()]{.muted}](#with_options)
+
+```python
+with_options(self, kwargs)
+```
+
+Allows for setting options on the input object that are passed by the user when using the input to run a test or set of tests To allow options, just override this method in the subclass (see VMDataset) and ensure that it returns a new instance of the input with the specified options set.
+
+**Parameters**
+
+- \*\***kwargs**: Arbitrary keyword arguments that will be passed to the input object
+
+**Returns**
+
+- A new instance of the input with the specified options set
 
 ### [class]{.muted} VMModel
 
@@ -107,3 +346,27 @@ An base class that wraps a trained model instance and its associated data.
 **Inherited members**
 
 **Methods**
+
+### [predict[()]{.muted}](#predict)
+
+```python
+predict(self, args, kwargs)
+```
+
+Predict method for the model. This is a wrapper around the model's
+
+### [predict_proba[()]{.muted}](#predict_proba)
+
+```python
+predict_proba(self, args, kwargs)
+```
+
+Predict probabilties - must be implemented by subclass if needed
+
+### [serialize[()]{.muted}](#serialize)
+
+```python
+serialize(self)
+```
+
+Serializes the model to a dictionary so it can be sent to the API

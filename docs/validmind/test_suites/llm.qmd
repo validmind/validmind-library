@@ -6,6 +6,30 @@ toc-expand: 3
 
 Test suites for LLMs
 
+### [class]{.muted} LLMClassifierFullSuite
+
+```python
+class LLMClassifierFullSuite(TestSuite):
+```
+
+Full test suite for LLM classification models.
+
+**Inherited members**
+
+**Methods**
+
+### [class]{.muted} PromptValidation
+
+```python
+class PromptValidation(TestSuite):
+```
+
+Test suite for prompt validation
+
+**Inherited members**
+
+**Methods**
+
 ### [class]{.muted} ClassifierDiagnosis
 
 ```python
@@ -49,30 +73,6 @@ class TextDataQuality(TestSuite):
 ```
 
 Test suite for data quality on text data
-
-**Inherited members**
-
-**Methods**
-
-### [class]{.muted} LLMClassifierFullSuite
-
-```python
-class LLMClassifierFullSuite(TestSuite):
-```
-
-Full test suite for LLM classification models.
-
-**Inherited members**
-
-**Methods**
-
-### [class]{.muted} PromptValidation
-
-```python
-class PromptValidation(TestSuite):
-```
-
-Test suite for prompt validation
 
 **Inherited members**
 
