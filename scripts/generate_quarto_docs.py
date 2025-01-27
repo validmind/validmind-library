@@ -136,8 +136,6 @@ def collect_documented_items(module: Dict[str, Any], path: List[str], full_data:
 
 def process_module(module: Dict[str, Any], path: List[str], env: Environment, full_data: Dict[str, Any]):
     """Process a module and its members."""
-    print("\nDEBUG process_module:", path)
-    
     # Parse docstrings first
     parse_docstrings_recursively(module)
     
@@ -191,8 +189,6 @@ def lint_markdown_files(output_dir: str):
 
 def format_google_docstring(docstring: str) -> str:
     """Format a Google-style docstring from JSON format back to proper structure."""
-    print("\nDEBUG format_google_docstring ENTRY POINT")
-    print("Input:", repr(docstring))
     
     lines = []
     sections = docstring.split('\n\n')
@@ -249,13 +245,10 @@ def format_google_docstring(docstring: str) -> str:
             lines.append(section.strip())
     
     result = '\n'.join(lines)
-    print("Output:", repr(result))
     return result
 
 def format_rst_docstring(docstring: str) -> str:
     """Format an RST-style docstring from JSON format back to proper structure."""
-    print("\nDEBUG format_rst_docstring ENTRY POINT")
-    print("Input:", repr(docstring))
     
     # Split on ":param" and ":return:" to separate sections
     parts = []
@@ -273,14 +266,10 @@ def format_rst_docstring(docstring: str) -> str:
     
     # Join with newlines
     result = '\n'.join(parts)
-    print("Output:", repr(result))
     return result
 
 def try_parse_docstring(docstring: str) -> Any:
     """Try to parse a docstring in multiple styles, defaulting to Google."""
-    print("\nDEBUG try_parse_docstring ENTRY POINT")
-    print("Input:", repr(docstring))
-    
     # Convert escaped newlines to actual newlines
     docstring = docstring.replace('\\n', '\n')
     
@@ -292,27 +281,21 @@ def try_parse_docstring(docstring: str) -> Any:
     rst_markers = [':param', ':return:', ':raises:', ':yields:']
     is_rst = any(marker in docstring for marker in rst_markers)
     
-    print(f"Style detection - Google: {is_google}, RST: {is_rst}")
-    
     if is_google:
         formatted = format_google_docstring(docstring)
         try:
             parsed = parse(formatted)
-            print("Successfully parsed as Google style!")
             return parsed
-        except Exception as e:
-            print(f"Failed to parse Google style: {e}")
-            print("Formatted:", repr(formatted))
+        except Exception:
+            pass
     
     if is_rst:
         formatted = format_rst_docstring(docstring)
         try:
             parsed = parse(formatted, style=Style.REST)
-            print("Successfully parsed as RST style!")
             return parsed
-        except Exception as e:
-            print(f"Failed to parse RST style: {e}")
-            print("Formatted:", repr(formatted))
+        except Exception:
+            pass
     
     # If no style detected or parsing failed, try both as fallback
     try:
@@ -325,10 +308,8 @@ def try_parse_docstring(docstring: str) -> Any:
 
 def parse_docstrings_recursively(data: Dict[str, Any]):
     """Recursively parse all docstrings in the data structure."""
-    print("\nDEBUG parse_docstrings_recursively ENTRY")
     if isinstance(data, dict):
         if 'docstring' in data:
-            print(f"Found docstring: {data.get('name', 'unnamed')}")
             if isinstance(data['docstring'], dict):
                 original = data['docstring'].get('value', '')
             elif isinstance(data['docstring'], str):
@@ -348,7 +329,6 @@ def parse_docstrings_recursively(data: Dict[str, Any]):
 
 def generate_docs(json_path: str, template_dir: str, output_dir: str):
     """Generate documentation from JSON data using templates."""
-    print("\nDEBUG generate_docs START")
     # Load JSON data
     with open(json_path) as f:
         data = json.load(f)
