@@ -1,7 +1,7 @@
 ### [class]{.muted} {{ resolved.name }}
 
 ```python
-class {{ resolved.name }}{% if resolved.bases %}({{ resolved.bases | map(attribute='name') | join(', ') }}){% endif %}:
+class {{ resolved.name }}({% for base in resolved.bases %}{{ base.name }}{% if not loop.last %}, {% endif %}{% endfor %}):
 ```
 
 {% if resolved.docstring %}
@@ -11,12 +11,20 @@ class {{ resolved.name }}{% if resolved.bases %}({{ resolved.bases | map(attribu
 {% if resolved.bases %}
 **Inherited members**
 
-{% for base in resolved.bases %}
-{% set base_members = get_inherited_members(base, full_data) %}
+{% set base_members = get_inherited_members(resolved.bases[0], full_data) %}
 {% if base_members %}
-- **From {{ base.name }}**: {% for member in base_members %}[{{ member.name }}](#{{ member.name }}){% if not loop.last %}, {% endif %}{% endfor %}
-{% endif %}
+{% set grouped = {} %}
+{% for member in base_members %}
+    {% if member.base not in grouped %}
+        {% set _ = grouped.update({member.base: []}) %}
+    {% endif %}
+    {% set _ = grouped[member.base].append(member) %}
 {% endfor %}
+{% for base, members in grouped.items() %}
+- **From {{ base }}**: {% for member in members %}{% if member.kind == 'builtin' %}{{ member.name }}{% else %}[{% if member.kind == 'class' %}class {% endif %}{{ member.name }}](#{{ member.name }})[()]{.muted}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %}
+
+{% endfor %}
+{% endif %}
 {% endif %}
 
 {% if resolved.members %}

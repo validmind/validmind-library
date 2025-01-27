@@ -324,50 +324,35 @@ def parse_docstrings_recursively(data: Dict[str, Any]):
 
 def get_inherited_members(base: Dict[str, Any], full_data: Dict[str, Any]) -> List[Dict[str, Any]]:
     """Get all inherited members from a base class."""
-    # Get the base class name and handle the dictionary structure
-    if isinstance(base, dict):
-        if 'cls' in base and base['cls'] == 'ExprName':
-            base_name = base.get('name', '')
-        else:
-            base_name = base.get('name', '')
-    else:
-        base_name = str(base)
-    
+    # Get the base class name
+    base_name = base.get('name', '')
     if not base_name:
         return []
     
     # Handle built-in exceptions
-    if base_name.startswith('builtins.'):
-        if base_name == 'builtins.BaseException':
-            return [
-                {'name': 'with_traceback', 'kind': 'method'},
-                {'name': 'add_note', 'kind': 'method'}
-            ]
+    if base_name == 'Exception' or base_name.startswith('builtins.'):
+        return [
+            {'name': 'with_traceback', 'kind': 'builtin', 'base': 'builtins.BaseException'},
+            {'name': 'add_note', 'kind': 'builtin', 'base': 'builtins.BaseException'}
+        ]
+    
+    # Look for the base class in the errors module
+    errors_module = full_data.get('validmind', {}).get('members', {}).get('errors', {}).get('members', {})
+    base_class = errors_module.get(base_name)
+    
+    if not base_class:
         return []
     
-    # Look up base class in validmind module
-    current = full_data.get('validmind', {})
-    if not current:
-        return []
+    # Return the base class and its description method if it exists
+    members = [{'name': base_name, 'kind': 'class', 'base': base_name}]
+    if 'description' in base_class.get('members', {}):
+        members.append({'name': 'description', 'kind': 'method', 'base': base_name})
     
-    # Look for the base class in the current module's members
-    if base_name in current.get('members', {}):
-        base_class = current['members'][base_name]
-    else:
-        # Search recursively through submodules
-        for module in current.get('members', {}).values():
-            if module.get('kind') == 'module':
-                if base_name in module.get('members', {}):
-                    base_class = module['members'][base_name]
-                    break
-        else:
-            return []
-    
-    # Collect public methods and properties
-    members = []
-    for member in base_class.get('members', {}).values():
-        if member['kind'] in ('method', 'property') and not member.get('name', '').startswith('_'):
-            members.append(member)
+    # Add built-in methods from Exception
+    members.extend([
+        {'name': 'with_traceback', 'kind': 'builtin', 'base': 'builtins.BaseException'},
+        {'name': 'add_note', 'kind': 'builtin', 'base': 'builtins.BaseException'}
+    ])
     
     return members
 

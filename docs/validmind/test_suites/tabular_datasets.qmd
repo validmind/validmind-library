@@ -9,7 +9,7 @@ Test suites for tabular datasets
 ### [class]{.muted} TabularDataQuality
 
 ```python
-class TabularDataQuality({'cls': 'ExprName', 'name': 'TestSuite'}):
+class TabularDataQuality(TestSuite):
 ```
 
 Test suite for data quality on tabular datasets
@@ -21,7 +21,7 @@ Test suite for data quality on tabular datasets
 ### [class]{.muted} TabularDataset
 
 ```python
-class TabularDataset({'cls': 'ExprName', 'name': 'TestSuite'}):
+class TabularDataset(TestSuite):
 ```
 
 Test suite for tabular datasets.
@@ -33,7 +33,7 @@ Test suite for tabular datasets.
 ### [class]{.muted} TabularDatasetDescription
 
 ```python
-class TabularDatasetDescription({'cls': 'ExprName', 'name': 'TestSuite'}):
+class TabularDatasetDescription(TestSuite):
 ```
 
 Test suite to extract metadata and descriptive statistics from a tabular dataset

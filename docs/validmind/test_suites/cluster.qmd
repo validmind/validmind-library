@@ -9,7 +9,7 @@ Test suites for sklearn-compatible clustering models Ideal setup is to have the 
 ### [class]{.muted} KmeansParametersOptimization
 
 ```python
-class KmeansParametersOptimization({'cls': 'ExprName', 'name': 'TestSuite'}):
+class KmeansParametersOptimization(TestSuite):
 ```
 
 Test suite for sklearn hyperparameters optimization
@@ -21,7 +21,7 @@ Test suite for sklearn hyperparameters optimization
 ### [class]{.muted} ClusterFullSuite
 
 ```python
-class ClusterFullSuite({'cls': 'ExprName', 'name': 'TestSuite'}):
+class ClusterFullSuite(TestSuite):
 ```
 
 Full test suite for clustering models.
@@ -33,7 +33,7 @@ Full test suite for clustering models.
 ### [class]{.muted} ClusterMetrics
 
 ```python
-class ClusterMetrics({'cls': 'ExprName', 'name': 'TestSuite'}):
+class ClusterMetrics(TestSuite):
 ```
 
 Test suite for sklearn clustering metrics
@@ -45,7 +45,7 @@ Test suite for sklearn clustering metrics
 ### [class]{.muted} ClusterPerformance
 
 ```python
-class ClusterPerformance({'cls': 'ExprName', 'name': 'TestSuite'}):
+class ClusterPerformance(TestSuite):
 ```
 
 Test suite for sklearn cluster performance

@@ -9,7 +9,7 @@ Models entrypoint
 ### [class]{.muted} Figure
 
 ```python
-class Figure:
+class Figure():
 ```
 
 Figure objects track the schema supported by the ValidMind API
@@ -19,7 +19,7 @@ Figure objects track the schema supported by the ValidMind API
 ### [class]{.muted} ModelAttributes
 
 ```python
-class ModelAttributes:
+class ModelAttributes():
 ```
 
 Model attributes definition
@@ -29,7 +29,7 @@ Model attributes definition
 ### [class]{.muted} TestSuite
 
 ```python
-class TestSuite:
+class TestSuite():
 ```
 
 Base class for test suites. Test suites are used to define a grouping of tests that can be run as a suite against datasets and models. Test Suites can be defined by inheriting from this base class and defining the list of tests as a class variable.
@@ -41,7 +41,7 @@ Tests can be a flat list of strings or may be nested into sections by using a di
 ### [class]{.muted} TestSuiteRunner
 
 ```python
-class TestSuiteRunner:
+class TestSuiteRunner():
 ```
 
 Runs a test suite
@@ -51,7 +51,7 @@ Runs a test suite
 ### [class]{.muted} VMDataset
 
 ```python
-class VMDataset({'cls': 'ExprName', 'name': 'VMInput'}):
+class VMDataset(VMInput):
 ```
 
 Base class for VM datasets Child classes should be used to support new dataset types (tensor, polars etc) by converting the user's dataset into a numpy array collecting metadata like column names and then call this (parent) class `__init__` method.
@@ -80,7 +80,7 @@ This way we can support multiple dataset types but under the hood we only need t
 ### [class]{.muted} VMInput
 
 ```python
-class VMInput({'cls': 'ExprName', 'name': 'ABC'}):
+class VMInput(ABC):
 ```
 
 Base class for ValidMind Input types
@@ -92,7 +92,7 @@ Base class for ValidMind Input types
 ### [class]{.muted} VMModel
 
 ```python
-class VMModel({'cls': 'ExprName', 'name': 'VMInput'}):
+class VMModel(VMInput):
 ```
 
 An base class that wraps a trained model instance and its associated data.

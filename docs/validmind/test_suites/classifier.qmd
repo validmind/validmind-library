@@ -9,7 +9,7 @@ Test suites for sklearn-compatible classifier models Ideal setup is to have the 
 ### [class]{.muted} TabularDataQuality
 
 ```python
-class TabularDataQuality({'cls': 'ExprName', 'name': 'TestSuite'}):
+class TabularDataQuality(TestSuite):
 ```
 
 Test suite for data quality on tabular datasets
@@ -21,7 +21,7 @@ Test suite for data quality on tabular datasets
 ### [class]{.muted} TabularDatasetDescription
 
 ```python
-class TabularDatasetDescription({'cls': 'ExprName', 'name': 'TestSuite'}):
+class TabularDatasetDescription(TestSuite):
 ```
 
 Test suite to extract metadata and descriptive statistics from a tabular dataset
@@ -33,7 +33,7 @@ Test suite to extract metadata and descriptive statistics from a tabular dataset
 ### [class]{.muted} ClassifierDiagnosis
 
 ```python
-class ClassifierDiagnosis({'cls': 'ExprName', 'name': 'TestSuite'}):
+class ClassifierDiagnosis(TestSuite):
 ```
 
 Test suite for sklearn classifier model diagnosis tests
@@ -45,7 +45,7 @@ Test suite for sklearn classifier model diagnosis tests
 ### [class]{.muted} ClassifierFullSuite
 
 ```python
-class ClassifierFullSuite({'cls': 'ExprName', 'name': 'TestSuite'}):
+class ClassifierFullSuite(TestSuite):
 ```
 
 Full test suite for binary classification models.
@@ -57,7 +57,7 @@ Full test suite for binary classification models.
 ### [class]{.muted} ClassifierMetrics
 
 ```python
-class ClassifierMetrics({'cls': 'ExprName', 'name': 'TestSuite'}):
+class ClassifierMetrics(TestSuite):
 ```
 
 Test suite for sklearn classifier metrics
@@ -69,7 +69,7 @@ Test suite for sklearn classifier metrics
 ### [class]{.muted} ClassifierModelValidation
 
 ```python
-class ClassifierModelValidation({'cls': 'ExprName', 'name': 'TestSuite'}):
+class ClassifierModelValidation(TestSuite):
 ```
 
 Test suite for binary classification models.
@@ -81,7 +81,7 @@ Test suite for binary classification models.
 ### [class]{.muted} ClassifierPerformance
 
 ```python
-class ClassifierPerformance({'cls': 'ExprName', 'name': 'TestSuite'}):
+class ClassifierPerformance(TestSuite):
 ```
 
 Test suite for sklearn classifier models

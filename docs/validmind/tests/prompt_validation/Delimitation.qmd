@@ -7,12 +7,15 @@ toc-expand: 3
 ### [class]{.muted} MissingRequiredTestInputError
 
 ```python
-class MissingRequiredTestInputError({'cls': 'ExprName', 'name': 'BaseError'}):
+class MissingRequiredTestInputError(BaseError):
 ```
 
 When a required test context variable is missing.
 
 **Inherited members**
+
+- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
+- **From builtins.BaseException**: with_traceback, add_note
 
 ## Delimitation[()]{.muted}
 

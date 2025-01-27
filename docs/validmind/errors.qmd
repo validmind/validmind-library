@@ -30,365 +30,472 @@ Determine whether an error should be raised when fail_fast is True.
 ### [class]{.muted} APIRequestError
 
 ```python
-class APIRequestError({'cls': 'ExprName', 'name': 'BaseError'}):
+class APIRequestError(BaseError):
 ```
 
 Generic error for API request errors that are not known.
 
 **Inherited members**
 
+- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
+- **From builtins.BaseException**: with_traceback, add_note
+
 ### [class]{.muted} BaseError
 
 ```python
-class BaseError({'cls': 'ExprName', 'name': 'Exception'}):
+class BaseError(Exception):
 ```
 
 **Inherited members**
+
+- **From builtins.BaseException**: with_traceback, add_note
 
 **Methods**
 
 ### [class]{.muted} GetTestSuiteError
 
 ```python
-class GetTestSuiteError({'cls': 'ExprName', 'name': 'BaseError'}):
+class GetTestSuiteError(BaseError):
 ```
 
 When the test suite could not be found.
 
 **Inherited members**
 
+- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
+- **From builtins.BaseException**: with_traceback, add_note
+
 ### [class]{.muted} InitializeTestSuiteError
 
 ```python
-class InitializeTestSuiteError({'cls': 'ExprName', 'name': 'BaseError'}):
+class InitializeTestSuiteError(BaseError):
 ```
 
 When the test suite was found but could not be initialized.
 
 **Inherited members**
 
+- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
+- **From builtins.BaseException**: with_traceback, add_note
+
 ### [class]{.muted} InvalidAPICredentialsError
 
 ```python
-class InvalidAPICredentialsError({'cls': 'ExprName', 'name': 'APIRequestError'}):
+class InvalidAPICredentialsError(APIRequestError):
 ```
 
 **Inherited members**
+
+- **From APIRequestError**: [class APIRequestError](#APIRequestError)[()]{.muted}
+- **From builtins.BaseException**: with_traceback, add_note
 
 **Methods**
 
 ### [class]{.muted} InvalidContentIdPrefixError
 
 ```python
-class InvalidContentIdPrefixError({'cls': 'ExprName', 'name': 'APIRequestError'}):
+class InvalidContentIdPrefixError(APIRequestError):
 ```
 
 When an invalid text content_id is sent to the API.
 
 **Inherited members**
 
+- **From APIRequestError**: [class APIRequestError](#APIRequestError)[()]{.muted}
+- **From builtins.BaseException**: with_traceback, add_note
+
 ### [class]{.muted} InvalidInputError
 
 ```python
-class InvalidInputError({'cls': 'ExprName', 'name': 'BaseError'}):
+class InvalidInputError(BaseError):
 ```
 
 When an invalid input object.
 
 **Inherited members**
 
+- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
+- **From builtins.BaseException**: with_traceback, add_note
+
 ### [class]{.muted} InvalidMetricResultsError
 
 ```python
-class InvalidMetricResultsError({'cls': 'ExprName', 'name': 'APIRequestError'}):
+class InvalidMetricResultsError(APIRequestError):
 ```
 
 When an invalid metric results object is sent to the API.
 
 **Inherited members**
 
+- **From APIRequestError**: [class APIRequestError](#APIRequestError)[()]{.muted}
+- **From builtins.BaseException**: with_traceback, add_note
+
 ### [class]{.muted} InvalidProjectError
 
 ```python
-class InvalidProjectError({'cls': 'ExprName', 'name': 'APIRequestError'}):
+class InvalidProjectError(APIRequestError):
 ```
 
 **Inherited members**
+
+- **From APIRequestError**: [class APIRequestError](#APIRequestError)[()]{.muted}
+- **From builtins.BaseException**: with_traceback, add_note
 
 **Methods**
 
 ### [class]{.muted} InvalidRequestBodyError
 
 ```python
-class InvalidRequestBodyError({'cls': 'ExprName', 'name': 'APIRequestError'}):
+class InvalidRequestBodyError(APIRequestError):
 ```
 
 When a POST/PUT request is made with an invalid request body.
 
 **Inherited members**
 
+- **From APIRequestError**: [class APIRequestError](#APIRequestError)[()]{.muted}
+- **From builtins.BaseException**: with_traceback, add_note
+
 ### [class]{.muted} InvalidTestParametersError
 
 ```python
-class InvalidTestParametersError({'cls': 'ExprName', 'name': 'BaseError'}):
+class InvalidTestParametersError(BaseError):
 ```
 
 When an invalid parameters for the test.
 
 **Inherited members**
 
+- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
+- **From builtins.BaseException**: with_traceback, add_note
+
 ### [class]{.muted} InvalidTestResultsError
 
 ```python
-class InvalidTestResultsError({'cls': 'ExprName', 'name': 'APIRequestError'}):
+class InvalidTestResultsError(APIRequestError):
 ```
 
 When an invalid test results object is sent to the API.
 
 **Inherited members**
 
+- **From APIRequestError**: [class APIRequestError](#APIRequestError)[()]{.muted}
+- **From builtins.BaseException**: with_traceback, add_note
+
 ### [class]{.muted} InvalidTextObjectError
 
 ```python
-class InvalidTextObjectError({'cls': 'ExprName', 'name': 'APIRequestError'}):
+class InvalidTextObjectError(APIRequestError):
 ```
 
 When an invalid Metadat (Text) object is sent to the API.
 
 **Inherited members**
 
+- **From APIRequestError**: [class APIRequestError](#APIRequestError)[()]{.muted}
+- **From builtins.BaseException**: with_traceback, add_note
+
 ### [class]{.muted} InvalidValueFormatterError
 
 ```python
-class InvalidValueFormatterError({'cls': 'ExprName', 'name': 'BaseError'}):
+class InvalidValueFormatterError(BaseError):
 ```
 
 When an invalid value formatter is provided when serializing results.
 
 **Inherited members**
 
+- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
+- **From builtins.BaseException**: with_traceback, add_note
+
 ### [class]{.muted} InvalidXGBoostTrainedModelError
 
 ```python
-class InvalidXGBoostTrainedModelError({'cls': 'ExprName', 'name': 'BaseError'}):
+class InvalidXGBoostTrainedModelError(BaseError):
 ```
 
 When an invalid XGBoost trained model is used when calling init_r_model.
 
 **Inherited members**
 
+- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
+- **From builtins.BaseException**: with_traceback, add_note
+
 ### [class]{.muted} LoadTestError
 
 ```python
-class LoadTestError({'cls': 'ExprName', 'name': 'BaseError'}):
+class LoadTestError(BaseError):
 ```
 
 Exception raised when an error occurs while loading a test
 
 **Inherited members**
 
+- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
+- **From builtins.BaseException**: with_traceback, add_note
+
 **Methods**
 
 ### [class]{.muted} MismatchingClassLabelsError
 
 ```python
-class MismatchingClassLabelsError({'cls': 'ExprName', 'name': 'BaseError'}):
+class MismatchingClassLabelsError(BaseError):
 ```
 
 When the class labels found in the dataset don't match the provided target labels.
 
 **Inherited members**
 
+- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
+- **From builtins.BaseException**: with_traceback, add_note
+
 ### [class]{.muted} MissingAPICredentialsError
 
 ```python
-class MissingAPICredentialsError({'cls': 'ExprName', 'name': 'BaseError'}):
+class MissingAPICredentialsError(BaseError):
 ```
 
 **Inherited members**
+
+- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
+- **From builtins.BaseException**: with_traceback, add_note
 
 **Methods**
 
 ### [class]{.muted} MissingCacheResultsArgumentsError
 
 ```python
-class MissingCacheResultsArgumentsError({'cls': 'ExprName', 'name': 'BaseError'}):
+class MissingCacheResultsArgumentsError(BaseError):
 ```
 
 When the cache_results function is missing arguments.
 
 **Inherited members**
 
+- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
+- **From builtins.BaseException**: with_traceback, add_note
+
 ### [class]{.muted} MissingClassLabelError
 
 ```python
-class MissingClassLabelError({'cls': 'ExprName', 'name': 'BaseError'}):
+class MissingClassLabelError(BaseError):
 ```
 
 When the one or more class labels are missing from provided dataset targets.
 
 **Inherited members**
 
+- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
+- **From builtins.BaseException**: with_traceback, add_note
+
 ### [class]{.muted} MissingDependencyError
 
 ```python
-class MissingDependencyError({'cls': 'ExprName', 'name': 'BaseError'}):
+class MissingDependencyError(BaseError):
 ```
 
 When a required dependency is missing.
 
 **Inherited members**
 
+- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
+- **From builtins.BaseException**: with_traceback, add_note
+
 **Methods**
 
 ### [class]{.muted} MissingDocumentationTemplate
 
 ```python
-class MissingDocumentationTemplate({'cls': 'ExprName', 'name': 'BaseError'}):
+class MissingDocumentationTemplate(BaseError):
 ```
 
 When the client config is missing the documentation template.
 
 **Inherited members**
 
+- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
+- **From builtins.BaseException**: with_traceback, add_note
+
 ### [class]{.muted} MissingModelIdError
 
 ```python
-class MissingModelIdError({'cls': 'ExprName', 'name': 'BaseError'}):
+class MissingModelIdError(BaseError):
 ```
 
 **Inherited members**
+
+- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
+- **From builtins.BaseException**: with_traceback, add_note
 
 **Methods**
 
 ### [class]{.muted} MissingOrInvalidModelPredictFnError
 
 ```python
-class MissingOrInvalidModelPredictFnError({'cls': 'ExprName', 'name': 'BaseError'}):
+class MissingOrInvalidModelPredictFnError(BaseError):
 ```
 
 When the pytorch model is missing a predict function or its predict method does not have the expected arguments.
 
 **Inherited members**
 
+- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
+- **From builtins.BaseException**: with_traceback, add_note
+
 ### [class]{.muted} MissingRequiredTestInputError
 
 ```python
-class MissingRequiredTestInputError({'cls': 'ExprName', 'name': 'BaseError'}):
+class MissingRequiredTestInputError(BaseError):
 ```
 
 When a required test context variable is missing.
 
 **Inherited members**
 
+- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
+- **From builtins.BaseException**: with_traceback, add_note
+
 ### [class]{.muted} MissingRExtrasError
 
 ```python
-class MissingRExtrasError({'cls': 'ExprName', 'name': 'BaseError'}):
+class MissingRExtrasError(BaseError):
 ```
 
 When the R extras have not been installed.
 
 **Inherited members**
 
+- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
+- **From builtins.BaseException**: with_traceback, add_note
+
 **Methods**
 
 ### [class]{.muted} MissingTextContentIdError
 
 ```python
-class MissingTextContentIdError({'cls': 'ExprName', 'name': 'APIRequestError'}):
+class MissingTextContentIdError(APIRequestError):
 ```
 
 When a Text object is sent to the API without a content_id.
 
 **Inherited members**
 
+- **From APIRequestError**: [class APIRequestError](#APIRequestError)[()]{.muted}
+- **From builtins.BaseException**: with_traceback, add_note
+
 ### [class]{.muted} MissingTextContentsError
 
 ```python
-class MissingTextContentsError({'cls': 'ExprName', 'name': 'APIRequestError'}):
+class MissingTextContentsError(APIRequestError):
 ```
 
 When a Text object is sent to the API without a "text" attribute.
 
 **Inherited members**
 
+- **From APIRequestError**: [class APIRequestError](#APIRequestError)[()]{.muted}
+- **From builtins.BaseException**: with_traceback, add_note
+
 ### [class]{.muted} SkipTestError
 
 ```python
-class SkipTestError({'cls': 'ExprName', 'name': 'BaseError'}):
+class SkipTestError(BaseError):
 ```
 
 Useful error to throw when a test cannot be executed.
 
 **Inherited members**
 
+- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
+- **From builtins.BaseException**: with_traceback, add_note
+
 ### [class]{.muted} TestInputInvalidDatasetError
 
 ```python
-class TestInputInvalidDatasetError({'cls': 'ExprName', 'name': 'BaseError'}):
+class TestInputInvalidDatasetError(BaseError):
 ```
 
 When an invalid dataset is used in a test context.
 
 **Inherited members**
 
+- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
+- **From builtins.BaseException**: with_traceback, add_note
+
 ### [class]{.muted} UnsupportedColumnTypeError
 
 ```python
-class UnsupportedColumnTypeError({'cls': 'ExprName', 'name': 'BaseError'}):
+class UnsupportedColumnTypeError(BaseError):
 ```
 
 When an unsupported column type is found on a dataset.
 
 **Inherited members**
 
+- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
+- **From builtins.BaseException**: with_traceback, add_note
+
 ### [class]{.muted} UnsupportedDatasetError
 
 ```python
-class UnsupportedDatasetError({'cls': 'ExprName', 'name': 'BaseError'}):
+class UnsupportedDatasetError(BaseError):
 ```
 
 When an unsupported dataset is used.
 
 **Inherited members**
 
+- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
+- **From builtins.BaseException**: with_traceback, add_note
+
 ### [class]{.muted} UnsupportedFigureError
 
 ```python
-class UnsupportedFigureError({'cls': 'ExprName', 'name': 'BaseError'}):
+class UnsupportedFigureError(BaseError):
 ```
 
 When an unsupported figure object is constructed.
 
 **Inherited members**
 
+- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
+- **From builtins.BaseException**: with_traceback, add_note
+
 ### [class]{.muted} UnsupportedModelError
 
 ```python
-class UnsupportedModelError({'cls': 'ExprName', 'name': 'BaseError'}):
+class UnsupportedModelError(BaseError):
 ```
 
 When an unsupported model is used.
 
 **Inherited members**
 
+- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
+- **From builtins.BaseException**: with_traceback, add_note
+
 ### [class]{.muted} UnsupportedModelForSHAPError
 
 ```python
-class UnsupportedModelForSHAPError({'cls': 'ExprName', 'name': 'BaseError'}):
+class UnsupportedModelForSHAPError(BaseError):
 ```
 
 When an unsupported model is used for SHAP importance.
 
 **Inherited members**
 
+- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
+- **From builtins.BaseException**: with_traceback, add_note
+
 ### [class]{.muted} UnsupportedRModelError
 
 ```python
-class UnsupportedRModelError({'cls': 'ExprName', 'name': 'BaseError'}):
+class UnsupportedRModelError(BaseError):
 ```
 
 When an unsupported R model is used.
 
 **Inherited members**
+
+- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
+- **From builtins.BaseException**: with_traceback, add_note

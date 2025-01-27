@@ -9,7 +9,7 @@ Time Series Test Suites from statsmodels
 ### [class]{.muted} RegressionModelDescription
 
 ```python
-class RegressionModelDescription({'cls': 'ExprName', 'name': 'TestSuite'}):
+class RegressionModelDescription(TestSuite):
 ```
 
 Test suite for performance metric of regression model of statsmodels library
@@ -21,7 +21,7 @@ Test suite for performance metric of regression model of statsmodels library
 ### [class]{.muted} RegressionModelsEvaluation
 
 ```python
-class RegressionModelsEvaluation({'cls': 'ExprName', 'name': 'TestSuite'}):
+class RegressionModelsEvaluation(TestSuite):
 ```
 
 Test suite for metrics comparison of regression model of statsmodels library

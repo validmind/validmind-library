@@ -9,7 +9,7 @@ Test suites for text datasets
 ### [class]{.muted} TextDataQuality
 
 ```python
-class TextDataQuality({'cls': 'ExprName', 'name': 'TestSuite'}):
+class TextDataQuality(TestSuite):
 ```
 
 Test suite for data quality on text data

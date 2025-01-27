@@ -7,12 +7,15 @@ toc-expand: 3
 ### [class]{.muted} MissingDependencyError
 
 ```python
-class MissingDependencyError({'cls': 'ExprName', 'name': 'BaseError'}):
+class MissingDependencyError(BaseError):
 ```
 
 When a required dependency is missing.
 
 **Inherited members**
+
+- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
+- **From builtins.BaseException**: with_traceback, add_note
 
 **Methods**
 

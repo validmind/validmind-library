@@ -7,7 +7,7 @@ toc-expand: 3
 ### [class]{.muted} TabularDataQuality
 
 ```python
-class TabularDataQuality({'cls': 'ExprName', 'name': 'TestSuite'}):
+class TabularDataQuality(TestSuite):
 ```
 
 Test suite for data quality on tabular datasets
@@ -19,7 +19,7 @@ Test suite for data quality on tabular datasets
 ### [class]{.muted} TabularDatasetDescription
 
 ```python
-class TabularDatasetDescription({'cls': 'ExprName', 'name': 'TestSuite'}):
+class TabularDatasetDescription(TestSuite):
 ```
 
 Test suite to extract metadata and descriptive statistics from a tabular dataset
@@ -31,7 +31,7 @@ Test suite to extract metadata and descriptive statistics from a tabular dataset
 ### [class]{.muted} RegressionFullSuite
 
 ```python
-class RegressionFullSuite({'cls': 'ExprName', 'name': 'TestSuite'}):
+class RegressionFullSuite(TestSuite):
 ```
 
 Full test suite for regression models.
@@ -43,7 +43,7 @@ Full test suite for regression models.
 ### [class]{.muted} RegressionMetrics
 
 ```python
-class RegressionMetrics({'cls': 'ExprName', 'name': 'TestSuite'}):
+class RegressionMetrics(TestSuite):
 ```
 
 Test suite for performance metrics of regression metrics
@@ -55,7 +55,7 @@ Test suite for performance metrics of regression metrics
 ### [class]{.muted} RegressionPerformance
 
 ```python
-class RegressionPerformance({'cls': 'ExprName', 'name': 'TestSuite'}):
+class RegressionPerformance(TestSuite):
 ```
 
 Test suite for regression model performance

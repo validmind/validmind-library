@@ -17,19 +17,22 @@ ValidMind Tests Module
   ```
 
 ```python
-class LoadTestError({'cls': 'ExprName', 'name': 'BaseError'}):
+class LoadTestError(BaseError):
 ```
 
 Exception raised when an error occurs while loading a test
 
 **Inherited members**
 
+- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
+- **From builtins.BaseException**: with_traceback, add_note
+
 **Methods**
 
 ### [class]{.muted} LocalTestProvider
 
 ```python
-class LocalTestProvider:
+class LocalTestProvider():
 ```
 
 Test providers in ValidMind are responsible for loading tests from different sources, such as local files, databases, or remote services. The LocalTestProvider specifically loads tests from the local file system.
@@ -62,7 +65,7 @@ test = test_provider.load_test("my_namespace.my_test_class")
 **Methods** ### [class]{.muted} TestProvider
 
 ```python
-class TestProvider({'cls': 'ExprName', 'name': 'Protocol'}):
+class TestProvider(Protocol):
 ```
 
 Protocol for user-defined test providers

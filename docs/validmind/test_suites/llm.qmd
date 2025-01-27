@@ -9,7 +9,7 @@ Test suites for LLMs
 ### [class]{.muted} ClassifierDiagnosis
 
 ```python
-class ClassifierDiagnosis({'cls': 'ExprName', 'name': 'TestSuite'}):
+class ClassifierDiagnosis(TestSuite):
 ```
 
 Test suite for sklearn classifier model diagnosis tests
@@ -21,7 +21,7 @@ Test suite for sklearn classifier model diagnosis tests
 ### [class]{.muted} ClassifierMetrics
 
 ```python
-class ClassifierMetrics({'cls': 'ExprName', 'name': 'TestSuite'}):
+class ClassifierMetrics(TestSuite):
 ```
 
 Test suite for sklearn classifier metrics
@@ -33,7 +33,7 @@ Test suite for sklearn classifier metrics
 ### [class]{.muted} ClassifierPerformance
 
 ```python
-class ClassifierPerformance({'cls': 'ExprName', 'name': 'TestSuite'}):
+class ClassifierPerformance(TestSuite):
 ```
 
 Test suite for sklearn classifier models
@@ -45,7 +45,7 @@ Test suite for sklearn classifier models
 ### [class]{.muted} TextDataQuality
 
 ```python
-class TextDataQuality({'cls': 'ExprName', 'name': 'TestSuite'}):
+class TextDataQuality(TestSuite):
 ```
 
 Test suite for data quality on text data
@@ -57,7 +57,7 @@ Test suite for data quality on text data
 ### [class]{.muted} LLMClassifierFullSuite
 
 ```python
-class LLMClassifierFullSuite({'cls': 'ExprName', 'name': 'TestSuite'}):
+class LLMClassifierFullSuite(TestSuite):
 ```
 
 Full test suite for LLM classification models.
@@ -69,7 +69,7 @@ Full test suite for LLM classification models.
 ### [class]{.muted} PromptValidation
 
 ```python
-class PromptValidation({'cls': 'ExprName', 'name': 'TestSuite'}):
+class PromptValidation(TestSuite):
 ```
 
 Test suite for prompt validation

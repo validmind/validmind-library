@@ -9,7 +9,7 @@ Test suites for sklearn-compatible hyper parameters tunning Ideal setup is to ha
 ### [class]{.muted} KmeansParametersOptimization
 
 ```python
-class KmeansParametersOptimization({'cls': 'ExprName', 'name': 'TestSuite'}):
+class KmeansParametersOptimization(TestSuite):
 ```
 
 Test suite for sklearn hyperparameters optimization

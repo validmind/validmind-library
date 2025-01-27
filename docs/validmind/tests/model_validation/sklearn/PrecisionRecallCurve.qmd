@@ -7,12 +7,15 @@ toc-expand: 3
 ### [class]{.muted} SkipTestError
 
 ```python
-class SkipTestError({'cls': 'ExprName', 'name': 'BaseError'}):
+class SkipTestError(BaseError):
 ```
 
 Useful error to throw when a test cannot be executed.
 
 **Inherited members**
+
+- **From BaseError**: [class BaseError](#BaseError)[()]{.muted}, [description](#description)[()]{.muted}
+- **From builtins.BaseException**: with_traceback, add_note
 
 ## PrecisionRecallCurve[()]{.muted}
 

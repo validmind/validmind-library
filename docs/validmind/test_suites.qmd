@@ -22,7 +22,7 @@ Entrypoint for test suites.
 ### [class]{.muted} ClassifierDiagnosis
 
 ```python
-class ClassifierDiagnosis({'cls': 'ExprName', 'name': 'TestSuite'}):
+class ClassifierDiagnosis(TestSuite):
 ```
 
 Test suite for sklearn classifier model diagnosis tests
@@ -34,7 +34,7 @@ Test suite for sklearn classifier model diagnosis tests
 ### [class]{.muted} ClassifierFullSuite
 
 ```python
-class ClassifierFullSuite({'cls': 'ExprName', 'name': 'TestSuite'}):
+class ClassifierFullSuite(TestSuite):
 ```
 
 Full test suite for binary classification models.
@@ -46,7 +46,7 @@ Full test suite for binary classification models.
 ### [class]{.muted} ClassifierMetrics
 
 ```python
-class ClassifierMetrics({'cls': 'ExprName', 'name': 'TestSuite'}):
+class ClassifierMetrics(TestSuite):
 ```
 
 Test suite for sklearn classifier metrics
@@ -58,7 +58,7 @@ Test suite for sklearn classifier metrics
 ### [class]{.muted} ClassifierModelValidation
 
 ```python
-class ClassifierModelValidation({'cls': 'ExprName', 'name': 'TestSuite'}):
+class ClassifierModelValidation(TestSuite):
 ```
 
 Test suite for binary classification models.
@@ -70,7 +70,7 @@ Test suite for binary classification models.
 ### [class]{.muted} ClassifierPerformance
 
 ```python
-class ClassifierPerformance({'cls': 'ExprName', 'name': 'TestSuite'}):
+class ClassifierPerformance(TestSuite):
 ```
 
 Test suite for sklearn classifier models
@@ -82,7 +82,7 @@ Test suite for sklearn classifier models
 ### [class]{.muted} ClusterFullSuite
 
 ```python
-class ClusterFullSuite({'cls': 'ExprName', 'name': 'TestSuite'}):
+class ClusterFullSuite(TestSuite):
 ```
 
 Full test suite for clustering models.
@@ -94,7 +94,7 @@ Full test suite for clustering models.
 ### [class]{.muted} ClusterMetrics
 
 ```python
-class ClusterMetrics({'cls': 'ExprName', 'name': 'TestSuite'}):
+class ClusterMetrics(TestSuite):
 ```
 
 Test suite for sklearn clustering metrics
@@ -106,7 +106,7 @@ Test suite for sklearn clustering metrics
 ### [class]{.muted} ClusterPerformance
 
 ```python
-class ClusterPerformance({'cls': 'ExprName', 'name': 'TestSuite'}):
+class ClusterPerformance(TestSuite):
 ```
 
 Test suite for sklearn cluster performance
@@ -118,7 +118,7 @@ Test suite for sklearn cluster performance
 ### [class]{.muted} EmbeddingsFullSuite
 
 ```python
-class EmbeddingsFullSuite({'cls': 'ExprName', 'name': 'TestSuite'}):
+class EmbeddingsFullSuite(TestSuite):
 ```
 
 Full test suite for embeddings models.
@@ -130,7 +130,7 @@ Full test suite for embeddings models.
 ### [class]{.muted} EmbeddingsMetrics
 
 ```python
-class EmbeddingsMetrics({'cls': 'ExprName', 'name': 'TestSuite'}):
+class EmbeddingsMetrics(TestSuite):
 ```
 
 Test suite for embeddings metrics
@@ -142,7 +142,7 @@ Test suite for embeddings metrics
 ### [class]{.muted} EmbeddingsPerformance
 
 ```python
-class EmbeddingsPerformance({'cls': 'ExprName', 'name': 'TestSuite'}):
+class EmbeddingsPerformance(TestSuite):
 ```
 
 Test suite for embeddings model performance
@@ -154,7 +154,7 @@ Test suite for embeddings model performance
 ### [class]{.muted} KmeansParametersOptimization
 
 ```python
-class KmeansParametersOptimization({'cls': 'ExprName', 'name': 'TestSuite'}):
+class KmeansParametersOptimization(TestSuite):
 ```
 
 Test suite for sklearn hyperparameters optimization
@@ -166,7 +166,7 @@ Test suite for sklearn hyperparameters optimization
 ### [class]{.muted} LLMClassifierFullSuite
 
 ```python
-class LLMClassifierFullSuite({'cls': 'ExprName', 'name': 'TestSuite'}):
+class LLMClassifierFullSuite(TestSuite):
 ```
 
 Full test suite for LLM classification models.
@@ -178,7 +178,7 @@ Full test suite for LLM classification models.
 ### [class]{.muted} NLPClassifierFullSuite
 
 ```python
-class NLPClassifierFullSuite({'cls': 'ExprName', 'name': 'TestSuite'}):
+class NLPClassifierFullSuite(TestSuite):
 ```
 
 Full test suite for NLP classification models.
@@ -190,7 +190,7 @@ Full test suite for NLP classification models.
 ### [class]{.muted} PromptValidation
 
 ```python
-class PromptValidation({'cls': 'ExprName', 'name': 'TestSuite'}):
+class PromptValidation(TestSuite):
 ```
 
 Test suite for prompt validation
@@ -202,7 +202,7 @@ Test suite for prompt validation
 ### [class]{.muted} RegressionFullSuite
 
 ```python
-class RegressionFullSuite({'cls': 'ExprName', 'name': 'TestSuite'}):
+class RegressionFullSuite(TestSuite):
 ```
 
 Full test suite for regression models.
@@ -214,7 +214,7 @@ Full test suite for regression models.
 ### [class]{.muted} RegressionMetrics
 
 ```python
-class RegressionMetrics({'cls': 'ExprName', 'name': 'TestSuite'}):
+class RegressionMetrics(TestSuite):
 ```
 
 Test suite for performance metrics of regression metrics
@@ -226,7 +226,7 @@ Test suite for performance metrics of regression metrics
 ### [class]{.muted} RegressionModelDescription
 
 ```python
-class RegressionModelDescription({'cls': 'ExprName', 'name': 'TestSuite'}):
+class RegressionModelDescription(TestSuite):
 ```
 
 Test suite for performance metric of regression model of statsmodels library
@@ -238,7 +238,7 @@ Test suite for performance metric of regression model of statsmodels library
 ### [class]{.muted} RegressionModelsEvaluation
 
 ```python
-class RegressionModelsEvaluation({'cls': 'ExprName', 'name': 'TestSuite'}):
+class RegressionModelsEvaluation(TestSuite):
 ```
 
 Test suite for metrics comparison of regression model of statsmodels library
@@ -250,7 +250,7 @@ Test suite for metrics comparison of regression model of statsmodels library
 ### [class]{.muted} RegressionPerformance
 
 ```python
-class RegressionPerformance({'cls': 'ExprName', 'name': 'TestSuite'}):
+class RegressionPerformance(TestSuite):
 ```
 
 Test suite for regression model performance
@@ -262,7 +262,7 @@ Test suite for regression model performance
 ### [class]{.muted} SummarizationMetrics
 
 ```python
-class SummarizationMetrics({'cls': 'ExprName', 'name': 'TestSuite'}):
+class SummarizationMetrics(TestSuite):
 ```
 
 Test suite for Summarization metrics
@@ -274,7 +274,7 @@ Test suite for Summarization metrics
 ### [class]{.muted} TabularDataQuality
 
 ```python
-class TabularDataQuality({'cls': 'ExprName', 'name': 'TestSuite'}):
+class TabularDataQuality(TestSuite):
 ```
 
 Test suite for data quality on tabular datasets
@@ -286,7 +286,7 @@ Test suite for data quality on tabular datasets
 ### [class]{.muted} TabularDataset
 
 ```python
-class TabularDataset({'cls': 'ExprName', 'name': 'TestSuite'}):
+class TabularDataset(TestSuite):
 ```
 
 Test suite for tabular datasets.
@@ -298,7 +298,7 @@ Test suite for tabular datasets.
 ### [class]{.muted} TabularDatasetDescription
 
 ```python
-class TabularDatasetDescription({'cls': 'ExprName', 'name': 'TestSuite'}):
+class TabularDatasetDescription(TestSuite):
 ```
 
 Test suite to extract metadata and descriptive statistics from a tabular dataset
@@ -310,7 +310,7 @@ Test suite to extract metadata and descriptive statistics from a tabular dataset
 ### [class]{.muted} TextDataQuality
 
 ```python
-class TextDataQuality({'cls': 'ExprName', 'name': 'TestSuite'}):
+class TextDataQuality(TestSuite):
 ```
 
 Test suite for data quality on text data
@@ -322,7 +322,7 @@ Test suite for data quality on text data
 ### [class]{.muted} TimeSeriesDataQuality
 
 ```python
-class TimeSeriesDataQuality({'cls': 'ExprName', 'name': 'TestSuite'}):
+class TimeSeriesDataQuality(TestSuite):
 ```
 
 Test suite for data quality on time series datasets
@@ -334,7 +334,7 @@ Test suite for data quality on time series datasets
 ### [class]{.muted} TimeSeriesDataset
 
 ```python
-class TimeSeriesDataset({'cls': 'ExprName', 'name': 'TestSuite'}):
+class TimeSeriesDataset(TestSuite):
 ```
 
 Test suite for time series datasets.
@@ -346,7 +346,7 @@ Test suite for time series datasets.
 ### [class]{.muted} TimeSeriesModelValidation
 
 ```python
-class TimeSeriesModelValidation({'cls': 'ExprName', 'name': 'TestSuite'}):
+class TimeSeriesModelValidation(TestSuite):
 ```
 
 Test suite for time series model validation.
@@ -358,7 +358,7 @@ Test suite for time series model validation.
 ### [class]{.muted} TimeSeriesMultivariate
 
 ```python
-class TimeSeriesMultivariate({'cls': 'ExprName', 'name': 'TestSuite'}):
+class TimeSeriesMultivariate(TestSuite):
 ```
 
 This test suite provides a preliminary understanding of the features and relationship in multivariate dataset. It presents various multivariate visualizations that can help identify patterns, trends, and relationships between pairs of variables. The visualizations are designed to explore the relationships between multiple features simultaneously. They allow you to quickly identify any patterns or trends in the data, as well as any potential outliers or anomalies. The individual feature distribution can also be explored to provide insight into the range and frequency of values observed in the data. This multivariate analysis test suite aims to provide an overview of the data structure and guide further exploration and modeling.
@@ -370,7 +370,7 @@ This test suite provides a preliminary understanding of the features and relatio
 ### [class]{.muted} TimeSeriesUnivariate
 
 ```python
-class TimeSeriesUnivariate({'cls': 'ExprName', 'name': 'TestSuite'}):
+class TimeSeriesUnivariate(TestSuite):
 ```
 
 This test suite provides a preliminary understanding of the target variable(s) used in the time series dataset. It visualizations that present the raw time series data and a histogram of the target variable(s).

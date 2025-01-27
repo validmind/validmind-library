@@ -9,7 +9,7 @@ Test suites for embeddings models Ideal setup is to have the API client to read 
 ### [class]{.muted} EmbeddingsFullSuite
 
 ```python
-class EmbeddingsFullSuite({'cls': 'ExprName', 'name': 'TestSuite'}):
+class EmbeddingsFullSuite(TestSuite):
 ```
 
 Full test suite for embeddings models.
@@ -21,7 +21,7 @@ Full test suite for embeddings models.
 ### [class]{.muted} EmbeddingsMetrics
 
 ```python
-class EmbeddingsMetrics({'cls': 'ExprName', 'name': 'TestSuite'}):
+class EmbeddingsMetrics(TestSuite):
 ```
 
 Test suite for embeddings metrics
@@ -33,7 +33,7 @@ Test suite for embeddings metrics
 ### [class]{.muted} EmbeddingsPerformance
 
 ```python
-class EmbeddingsPerformance({'cls': 'ExprName', 'name': 'TestSuite'}):
+class EmbeddingsPerformance(TestSuite):
 ```
 
 Test suite for embeddings model performance
