@@ -127,7 +127,22 @@ def generate_docs(json_path: str, template_dir: str, output_dir: str):
     
     # Start processing from root module
     if 'validmind' in data:
+        # Generate module documentation
         process_module(data['validmind'], ['validmind'], env, data)
+        
+        # Generate sidebar
+        sidebar_template = env.get_template('sidebar.qmd.jinja2')
+        sidebar_output = sidebar_template.render(
+            module=data['validmind'],
+            full_data=data,
+            is_root=True,
+            resolve_alias=resolve_alias
+        )
+        
+        # Write sidebar
+        sidebar_path = os.path.join(output_dir, '_sidebar.yml')
+        with open(sidebar_path, 'w') as f:
+            f.write(sidebar_output)
     else:
         print("Error: No 'validmind' module found in JSON")
 

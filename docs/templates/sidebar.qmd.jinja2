@@ -1,0 +1,35 @@
+website:
+  sidebar:
+    - contents:
+      # Root level functions from validmind.qmd
+      - text: "Python API"
+        file: validmind.qmd#python-api
+      {% if module.members.__version__ %}
+      - text: "__version__"
+        file: validmind.qmd#__version__
+      {% endif %}
+      {% for member in module.members | sort_members %}
+      {% if is_public(member, module, full_data, is_root) and member.kind == "alias" %}
+      {% set target = resolve_alias(member, full_data) %}
+      {% if target and target.docstring %}
+      - text: "{{ member.name }}()"
+        file: validmind.qmd#{{ member.name }}
+      {% endif %}
+      {% endif %}
+      {% endfor %}
+
+      # All module documentation pages
+      - text: "Submodules"
+      {% for member in module.members | sort_members %}
+      {% if is_public(member, module, full_data, is_root) and member.kind == "module" %}
+      - text: "{{ member.name }}"
+        file: validmind/{{ member.name }}.qmd
+        contents:
+        {% for submember in member.members | sort_members %}
+        {% if is_public(submember, member, full_data, is_root) and submember.kind == "module" %}
+        - text: "{{ submember.name }}"
+          file: validmind/{{ member.name }}/{{ submember.name }}.qmd
+        {% endif %}
+        {% endfor %}
+      {% endif %}
+      {% endfor %} 

@@ -1,0 +1,56 @@
+website:
+  sidebar:
+    - contents:
+      # Root level functions from validmind.qmd
+      - text: "Python API"
+        file: validmind.qmd#python-api
+      - text: "__version__"
+        file: validmind.qmd#__version__
+      - text: "get_test_suite()"
+        file: validmind.qmd#get_test_suite
+      - text: "init()"
+        file: validmind.qmd#init
+      - text: "init_dataset()"
+        file: validmind.qmd#init_dataset
+      - text: "init_model()"
+        file: validmind.qmd#init_model
+      - text: "init_r_model()"
+        file: validmind.qmd#init_r_model
+      - text: "log_metric()"
+        file: validmind.qmd#log_metric
+      - text: "preview_template()"
+        file: validmind.qmd#preview_template
+      - text: "reload()"
+        file: validmind.qmd#reload
+      - text: "run_documentation_tests()"
+        file: validmind.qmd#run_documentation_tests
+      - text: "run_test_suite()"
+        file: validmind.qmd#run_test_suite
+      - text: "tags()"
+        file: validmind.qmd#tags
+      - text: "tasks()"
+        file: validmind.qmd#tasks
+      - text: "test()"
+        file: validmind.qmd#test
+
+      # All module documentation pages
+      - text: "Submodules"
+      - text: "datasets"
+        file: validmind/datasets.qmd
+        contents:
+      - text: "errors"
+        file: validmind/errors.qmd
+        contents:
+      - text: "test_suites"
+        file: validmind/test_suites.qmd
+        contents:
+      - text: "tests"
+        file: validmind/tests.qmd
+        contents:
+      - text: "unit_metrics"
+        file: validmind/unit_metrics.qmd
+        contents:
+      - text: "vm_models"
+        file: validmind/vm_models.qmd
+        contents:
+ 
