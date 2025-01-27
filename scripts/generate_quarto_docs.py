@@ -4,6 +4,8 @@ import os
 from pathlib import Path
 from typing import Any, Dict, Set, List
 from jinja2 import Environment, FileSystemLoader
+import mdformat
+from docstring_parser import parse
 
 def resolve_alias(member: Dict[str, Any], data: Dict[str, Any]) -> Dict[str, Any]:
     """Resolve an alias to its target member."""
@@ -161,6 +163,108 @@ def process_module(module: Dict[str, Any], path: list, env: Environment, data: D
             if is_public(member, module, data, is_root=len(path) <= 1):
                 process_module(member, path + [name], env, data)
 
+def lint_markdown_files(output_dir: str):
+    """Clean up whitespace and formatting in all generated markdown files."""
+    for path in Path(output_dir).rglob('*.qmd'):
+        with open(path) as f:
+            content = f.read()
+        
+        # Split content into front matter and body
+        parts = content.split('---', 2)
+        if len(parts) >= 3:
+            # Preserve front matter and format the rest
+            front_matter = parts[1]
+            body = parts[2]
+            formatted_body = mdformat.text(body, options={"wrap": "no"})
+            formatted = f"---{front_matter}---\n\n{formatted_body}"
+        else:
+            # No front matter, format everything
+            formatted = mdformat.text(content, options={"wrap": "no"})
+            
+        with open(path, 'w') as f:
+            f.write(formatted)
+
+def format_docstring(docstring: str) -> str:
+    """Format a docstring into markdown using docstring_parser."""
+    try:
+        parsed = parse(docstring)
+        sections = []
+        
+        # Main description
+        if parsed.short_description:
+            sections.append(parsed.short_description)
+        if parsed.long_description:
+            sections.append(parsed.long_description)
+            
+        # Parameters
+        if parsed.params:
+            sections.append("**Parameters**\n")
+            for param in parsed.params:
+                sections.append(f"- **{param.arg_name}**: {param.description}")
+                
+        # Returns
+        if parsed.returns:
+            sections.append("**Returns**\n")
+            sections.append(f"- {parsed.returns.description}")
+            
+        # Raises
+        if parsed.raises:
+            sections.append("**Raises**\n")
+            for raises in parsed.raises:
+                sections.append(f"- **{raises.type_name}**: {raises.description}")
+                
+        return "\n\n".join(sections)
+    except:
+        # Fallback to raw docstring if parsing fails
+        return docstring
+
+def parse_docstrings_recursively(data: Dict[str, Any]):
+    """Recursively parse all docstrings in the data structure."""
+    if isinstance(data, dict):
+        # Parse docstring if present
+        if 'docstring' in data:
+            print("\nBEFORE:", data.get('name', 'unnamed'), data['docstring'])
+            
+            # If it's already a dict with parsed content
+            if isinstance(data['docstring'], dict) and 'parsed' in data['docstring']:
+                # If parsed is a list of sections, convert to docstring-parser format
+                if isinstance(data['docstring']['parsed'], list):
+                    text_content = next((
+                        section['value'] 
+                        for section in data['docstring']['parsed'] 
+                        if section['kind'] == 'text'
+                    ), None)
+                    if text_content:
+                        try:
+                            parsed = parse(text_content)
+                            data['docstring']['parsed'] = parsed
+                        except Exception as e:
+                            print(f"Failed to parse text content: {e}")
+            
+            # If it's a string, try to parse it
+            elif isinstance(data['docstring'], str):
+                original = data['docstring']
+                try:
+                    parsed = parse(original)
+                    data['docstring'] = {
+                        'value': original,
+                        'parsed': parsed
+                    }
+                except Exception as e:
+                    print(f"Failed to parse docstring: {e}")
+                    data['docstring'] = {'value': original}
+            
+            # If it's neither, wrap it in a dict
+            else:
+                data['docstring'] = {'value': str(data['docstring'])}
+                
+            print("AFTER:", data.get('name', 'unnamed'), data['docstring'])
+        
+        # Recursively process members
+        if 'members' in data:
+            for member in data['members'].values():
+                parse_docstrings_recursively(member)
+
 def generate_docs(json_path: str, template_dir: str, output_dir: str):
     """Generate documentation from JSON data using templates."""
     # Load JSON data
@@ -207,6 +311,9 @@ def generate_docs(json_path: str, template_dir: str, output_dir: str):
         sidebar_path = os.path.join(output_dir, '_sidebar.yml')
         with open(sidebar_path, 'w') as f:
             f.write(sidebar_output)
+            
+        # Clean up markdown formatting
+        lint_markdown_files(output_dir)
     else:
         print("Error: No 'validmind' module found in JSON")
 

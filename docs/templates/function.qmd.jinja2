@@ -1,6 +1,6 @@
-{%- if member.kind == "function" %}
+{% if member.kind == "function" %}
 
-#### {{ member.name }}
+## {{ member.name }}[()]{.muted}
 
 ```python
 {% if member.labels and "async" in member.labels %}async {% endif %}def {{ member.name }}(

@@ -4,24 +4,16 @@ toc-depth: 3
 toc-expand: 3
 ---
 
-
-
-
-
-   
-#### load_data
+## load_data[()]{.muted}
 
 ```python
 def load_data(
 ):
 ```
 
- 
-#### preprocess
+## preprocess[()]{.muted}
 
 ```python
 def preprocess(
     df):
 ```
-
- 

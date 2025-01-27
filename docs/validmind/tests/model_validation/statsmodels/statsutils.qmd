@@ -4,12 +4,7 @@ toc-depth: 3
 toc-expand: 3
 ---
 
-
-
-
-
-
-#### adj_r2_score
+## adj_r2_score[()]{.muted}
 
 ```python
 def adj_r2_score(
@@ -20,8 +15,3 @@ def adj_r2_score(
 ```
 
 Adjusted R2 Score
-
-
-
-
- 

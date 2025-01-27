@@ -4,12 +4,7 @@ toc-depth: 3
 toc-expand: 3
 ---
 
-
-
-
-
-
-#### ScoreProbabilityAlignment
+## ScoreProbabilityAlignment[()]{.muted}
 
 ```python
 def ScoreProbabilityAlignment(
@@ -21,21 +16,20 @@ def ScoreProbabilityAlignment(
 
 Analyzes the alignment between credit scores and predicted probabilities.
 
-###### Purpose
+### Purpose
 
-The Score-Probability Alignment test evaluates how well credit scores align with
-predicted default probabilities. This helps validate score scaling, identify potential
-calibration issues, and ensure scores reflect risk appropriately.
+The Score-Probability Alignment test evaluates how well credit scores align with predicted default probabilities. This helps validate score scaling, identify potential calibration issues, and ensure scores reflect risk appropriately.
 
-###### Test Mechanism
+### Test Mechanism
 
 The test:
-1. Groups scores into bins
-2. Calculates average predicted probability per bin
-3. Tests monotonicity of relationship
-4. Analyzes probability distribution within score bands
 
-###### Signs of High Risk
+1. Groups scores into bins
+1. Calculates average predicted probability per bin
+1. Tests monotonicity of relationship
+1. Analyzes probability distribution within score bands
+
+### Signs of High Risk
 
 - Non-monotonic relationship between scores and probabilities
 - Large probability variations within score bands
@@ -46,7 +40,7 @@ The test:
 - Score bands with similar probability profiles
 - Unstable probability estimates in key decision bands
 
-###### Strengths
+### Strengths
 
 - Direct validation of score-to-probability relationship
 - Identifies potential calibration issues
@@ -57,7 +51,7 @@ The test:
 - Easy to interpret
 - Supports regulatory documentation
 
-###### Limitations
+### Limitations
 
 - Sensitive to bin selection
 - Requires sufficient data per bin
@@ -67,8 +61,3 @@ The test:
 - Assumes scores should align with probabilities
 - May oversimplify complex relationships
 - Limited to binary outcomes
-
-
-
-
- 

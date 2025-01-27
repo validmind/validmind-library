@@ -4,20 +4,14 @@ toc-depth: 3
 toc-expand: 3
 ---
 
-
-
-
-
-
-#### compute_scores
+## compute_scores[()]{.muted}
 
 ```python
 def compute_scores(
     probabilities):
 ```
 
- 
-#### load_data
+## load_data[()]{.muted}
 
 ```python
 def load_data(
@@ -26,26 +20,19 @@ def load_data(
 
 Load data from the specified CSV file.
 
-:return**: DataFrame containing the loaded data.
+:return: DataFrame containing the loaded data.
 
-
-
-
- 
-#### preprocess
+## preprocess[()]{.muted}
 
 ```python
 def preprocess(
     df):
 ```
 
- 
-#### split
+## split[()]{.muted}
 
 ```python
 def split(
     df,
     test_size = 0.3):
 ```
-
- 

@@ -4,9 +4,6 @@ toc-depth: 3
 toc-expand: 3
 ---
 
-
-
-
 - [AdjustedMutualInformation](sklearn/AdjustedMutualInformation.qmd)
 - [AdjustedRandIndex](sklearn/AdjustedRandIndex.qmd)
 - [CalibrationCurve](sklearn/CalibrationCurve.qmd)
@@ -43,4 +40,3 @@ toc-expand: 3
 - [TrainingTestDegradation](sklearn/TrainingTestDegradation.qmd)
 - [VMeasure](sklearn/VMeasure.qmd)
 - [WeakspotsDiagnosis](sklearn/WeakspotsDiagnosis.qmd)
-

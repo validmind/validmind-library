@@ -4,9 +4,6 @@ toc-depth: 3
 toc-expand: 3
 ---
 
-
-
-
 - [BertScore](model_validation/BertScore.qmd)
 - [BleuScore](model_validation/BleuScore.qmd)
 - [ClusterSizeDistribution](model_validation/ClusterSizeDistribution.qmd)
@@ -25,4 +22,3 @@ toc-expand: 3
 - [TimeSeriesR2SquareBySegments](model_validation/TimeSeriesR2SquareBySegments.qmd)
 - [TokenDisparity](model_validation/TokenDisparity.qmd)
 - [ToxicityScore](model_validation/ToxicityScore.qmd)
-

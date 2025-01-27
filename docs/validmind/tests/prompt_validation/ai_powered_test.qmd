@@ -4,12 +4,7 @@ toc-depth: 3
 toc-expand: 3
 ---
 
-
-
-
-
-
-#### call_model
+## call_model[()]{.muted}
 
 ```python
 def call_model(
@@ -21,41 +16,32 @@ def call_model(
 
 Call LLM with the given prompts and return the response
 
-
-
-
- 
-#### get_explanation
+## get_explanation[()]{.muted}
 
 ```python
 def get_explanation(
     response: str):
 ```
 
-Get just the explanation from the response string
-- **TODO****: use json response mode instead of this
+Get just the explanation from the response string TODO: use json response mode instead of this
 
-- **e.g. "Score**: 8
+```
+e.g. "Score: 8
+```
+
 Explanation: <some-explanation>" -> "<some-explanation>"
 
-
-
-
- 
-#### get_score
+## get_score[()]{.muted}
 
 ```python
 def get_score(
     response: str):
 ```
 
-Get just the score from the response string
-- **TODO****: use json response mode instead of this
+Get just the score from the response string TODO: use json response mode instead of this
 
-- **e.g. "Score**: 8
+```
+e.g. "Score: 8
+```
+
 Explanation: <some-explanation>" -> 8
-
-
-
-
- 

@@ -4,12 +4,7 @@ toc-depth: 3
 toc-expand: 3
 ---
 
-
-
-
-
-
-#### describe_metric
+## describe_metric[()]{.muted}
 
 ```python
 def describe_metric(
@@ -19,11 +14,7 @@ def describe_metric(
 
 Describe a metric
 
-
-
-
- 
-#### list_metrics
+## list_metrics[()]{.muted}
 
 ```python
 def list_metrics(
@@ -32,11 +23,7 @@ def list_metrics(
 
 List all metrics
 
-
-
-
- 
-#### run_metric
+## run_metric[()]{.muted}
 
 ```python
 def run_metric(
@@ -45,8 +32,3 @@ def run_metric(
 ```
 
 Run a metric
-
-
-
-
- 

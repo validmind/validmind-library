@@ -4,20 +4,14 @@ toc-depth: 3
 toc-expand: 3
 ---
 
-
-
-
-
-
-#### compute_scores
+## compute_scores[()]{.muted}
 
 ```python
 def compute_scores(
     probabilities):
 ```
 
- 
-#### feature_engineering
+## feature_engineering[()]{.muted}
 
 ```python
 def feature_engineering(
@@ -25,8 +19,7 @@ def feature_engineering(
     verbose = True):
 ```
 
- 
-#### get_demo_test_config
+## get_demo_test_config[()]{.muted}
 
 ```python
 def get_demo_test_config(
@@ -36,28 +29,18 @@ def get_demo_test_config(
 
 Get demo test configuration.
 
-**Arguments**
+Args: x_test: Test features DataFrame y_test: Test target Series
 
-- **x_test****: Test features DataFrame
-- **y_test**: Test target Series
+Returns: dict: Test configuration dictionary
 
-**Returns**
-
-- **dict**: Test configuration dictionary
-
-
-
-
- 
-#### init_vm_objects
+## init_vm_objects[()]{.muted}
 
 ```python
 def init_vm_objects(
     scorecard):
 ```
 
- 
-#### load_data
+## load_data[()]{.muted}
 
 ```python
 def load_data(
@@ -67,36 +50,23 @@ def load_data(
 
 Load data from either an online source or offline files, automatically dropping specified columns for offline data.
 
+:param source: 'online' for online data, 'offline' for offline files. Defaults to 'online'. :return: DataFrame containing the loaded data.
 
-**Parameters**
-
-- **source**: 'online' for online data, 'offline' for offline files. Defaults to 'online'.
-
-**Returns**
-
-- DataFrame containing the loaded data.
-
-
-
-
- 
-#### load_scorecard
+## load_scorecard[()]{.muted}
 
 ```python
 def load_scorecard(
 ):
 ```
 
- 
-#### load_test_config
+## load_test_config[()]{.muted}
 
 ```python
 def load_test_config(
     scorecard):
 ```
 
- 
-#### preprocess
+## preprocess[()]{.muted}
 
 ```python
 def preprocess(
@@ -104,8 +74,7 @@ def preprocess(
     verbose = True):
 ```
 
- 
-#### split
+## split[()]{.muted}
 
 ```python
 def split(
@@ -118,28 +87,14 @@ def split(
 
 Split dataset into train, validation (optional), and test sets.
 
-**Arguments**
+Args: df: Input DataFrame validation_split: If None, returns train/test split. If float, returns train/val/test split test_size: Proportion of data for test set (default: 0.2) add_constant: Whether to add constant column for statsmodels (default: False)
 
-- **df****: Input DataFrame
-- **validation_split**: If None, returns train/test split. If float, returns train/val/test split
-- **test_size**: Proportion of data for test set (default: 0.2)
-- **add_constant**: Whether to add constant column for statsmodels (default: False)
+Returns: If validation_size is None: train_df, test_df If validation_size is float: train_df, validation_df, test_df
 
-**Returns**
-
-- **If validation_size is None**: train_df, test_df
-- **If validation_size is float**: train_df, validation_df, test_df
-
-
-
-
- 
-#### woe_encoding
+## woe_encoding[()]{.muted}
 
 ```python
 def woe_encoding(
     df,
     verbose = True):
 ```
-
- 

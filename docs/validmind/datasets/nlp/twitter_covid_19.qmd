@@ -4,16 +4,9 @@ toc-depth: 3
 toc-expand: 3
 ---
 
-
-
-
-
-
-#### load_data
+## load_data[()]{.muted}
 
 ```python
 def load_data(
     full_dataset = False):
 ```
-
- 

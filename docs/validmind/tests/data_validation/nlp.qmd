@@ -4,9 +4,6 @@ toc-depth: 3
 toc-expand: 3
 ---
 
-
-
-
 - [CommonWords](nlp/CommonWords.qmd)
 - [Hashtags](nlp/Hashtags.qmd)
 - [LanguageDetection](nlp/LanguageDetection.qmd)
@@ -17,4 +14,3 @@ toc-expand: 3
 - [StopWords](nlp/StopWords.qmd)
 - [TextDescription](nlp/TextDescription.qmd)
 - [Toxicity](nlp/Toxicity.qmd)
-

@@ -4,9 +4,6 @@ toc-depth: 3
 toc-expand: 3
 ---
 
-
-
-
 - [ACFandPACFPlot](data_validation/ACFandPACFPlot.qmd)
 - [ADF](data_validation/ADF.qmd)
 - [AutoAR](data_validation/AutoAR.qmd)
@@ -67,4 +64,3 @@ toc-expand: 3
 - [WOEBinPlots](data_validation/WOEBinPlots.qmd)
 - [WOEBinTable](data_validation/WOEBinTable.qmd)
 - [ZivotAndrewsArch](data_validation/ZivotAndrewsArch.qmd)
-

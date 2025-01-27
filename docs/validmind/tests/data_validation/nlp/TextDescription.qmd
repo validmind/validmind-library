@@ -4,12 +4,7 @@ toc-depth: 3
 toc-expand: 3
 ---
 
-
-
-
-
-
-#### create_metrics_df
+## create_metrics_df[()]{.muted}
 
 ```python
 def create_metrics_df(
@@ -19,8 +14,7 @@ def create_metrics_df(
     lang):
 ```
 
- 
-#### TextDescription
+## TextDescription[()]{.muted}
 
 ```python
 def TextDescription(
@@ -29,28 +23,22 @@ def TextDescription(
     lang: str = 'english'):
 ```
 
-Conducts comprehensive textual analysis on a dataset using NLTK to evaluate various parameters and generate
-visualizations.
+Conducts comprehensive textual analysis on a dataset using NLTK to evaluate various parameters and generate visualizations.
 
-###### Purpose
+### Purpose
 
-The TextDescription test aims to conduct a thorough textual analysis of a dataset using the NLTK (Natural Language
-Toolkit) library. It evaluates various metrics such as total words, total sentences, average sentence length, total
-paragraphs, total unique words, most common words, total punctuations, and lexical diversity. The goal is to
-understand the nature of the text and anticipate challenges machine learning models might face in text processing,
-language understanding, or summarization tasks.
+The TextDescription test aims to conduct a thorough textual analysis of a dataset using the NLTK (Natural Language Toolkit) library. It evaluates various metrics such as total words, total sentences, average sentence length, total paragraphs, total unique words, most common words, total punctuations, and lexical diversity. The goal is to understand the nature of the text and anticipate challenges machine learning models might face in text processing, language understanding, or summarization tasks.
 
-###### Test Mechanism
+### Test Mechanism
 
 The test works by:
 
 - Parsing the dataset and tokenizing the text into words, sentences, and paragraphs using NLTK.
 - Removing stopwords and unwanted tokens.
-- Calculating parameters like total words, total sentences, average sentence length, total paragraphs, total unique
-words, total punctuations, and lexical diversity.
+- Calculating parameters like total words, total sentences, average sentence length, total paragraphs, total unique words, total punctuations, and lexical diversity.
 - Generating scatter plots to visualize correlations between various metrics (e.g., Total Words vs Total Sentences).
 
-###### Signs of High Risk
+### Signs of High Risk
 
 - Anomalies or increased complexity in lexical diversity.
 - Longer sentences and paragraphs.
@@ -58,20 +46,15 @@ words, total punctuations, and lexical diversity.
 - Large number of unwanted tokens.
 - Missing or erroneous visualizations.
 
-###### Strengths
+### Strengths
 
 - Essential for pre-processing text data in machine learning models.
 - Provides a comprehensive breakdown of text data, aiding in understanding its complexity.
 - Generates visualizations to help comprehend text structure and complexity.
 
-###### Limitations
+### Limitations
 
 - Highly dependent on the NLTK library, limiting the test to supported languages.
 - Limited customization for removing undesirable tokens and stop words.
 - Does not consider semantic or grammatical complexities.
 - Assumes well-structured documents, which may result in inaccuracies with poorly formatted text.
-
-
-
-
- 

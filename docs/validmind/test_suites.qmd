@@ -6,12 +6,6 @@ toc-expand: 3
 
 Entrypoint for test suites.
 
-
-
-
-
-
-
 - [classifier](test_suites/classifier.qmd)
 - [cluster](test_suites/cluster.qmd)
 - [embeddings](test_suites/embeddings.qmd)
@@ -25,8 +19,7 @@ Entrypoint for test suites.
 - [text_data](test_suites/text_data.qmd)
 - [time_series](test_suites/time_series.qmd)
 
-                                 
-#### describe_suite
+## describe_suite[()]{.muted}
 
 ```python
 def describe_suite(
@@ -36,20 +29,11 @@ def describe_suite(
 
 Describes a Test Suite by ID
 
-**Arguments**
+Args: test_suite_id: Test Suite ID verbose: If True, describe all plans and tests in the Test Suite
 
-- **test_suite_id****: Test Suite ID
-- **verbose**: If True, describe all plans and tests in the Test Suite
+Returns: pandas.DataFrame: A formatted table with the Test Suite description
 
-**Returns**
-
-- **pandas.DataFrame**: A formatted table with the Test Suite description
-
-
-
-
- 
-#### get_by_id
+## get_by_id[()]{.muted}
 
 ```python
 def get_by_id(
@@ -58,11 +42,7 @@ def get_by_id(
 
 Returns the test suite by ID
 
-
-
-
- 
-#### list_suites
+## list_suites[()]{.muted}
 
 ```python
 def list_suites(
@@ -71,11 +51,7 @@ def list_suites(
 
 Returns a list of all available test suites
 
-
-
-
- 
-#### register_test_suite
+## register_test_suite[()]{.muted}
 
 ```python
 def register_test_suite(
@@ -84,8 +60,3 @@ def register_test_suite(
 ```
 
 Registers a custom test suite
-
-
-
-
- 

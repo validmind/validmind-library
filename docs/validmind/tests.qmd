@@ -6,18 +6,11 @@ toc-expand: 3
 
 ValidMind Tests Module
 
-
-
-
-
-
-
 - [data_validation](tests/data_validation.qmd)
 - [model_validation](tests/model_validation.qmd)
 - [prompt_validation](tests/prompt_validation.qmd)
 
-             
-#### register_test_provider
+## register_test_provider[()]{.muted}
 
 ```python
 def register_test_provider(
@@ -27,12 +20,4 @@ def register_test_provider(
 
 Register an external test provider
 
-**Arguments**
-
-- **namespace (str)****: The namespace of the test provider
-- **test_provider (TestProvider)**: The test provider
-
-
-
-
- 
+Args: namespace (str): The namespace of the test provider test_provider (TestProvider): The test provider

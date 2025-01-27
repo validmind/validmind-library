@@ -1,66 +1,50 @@
 {% macro format_docstring(docstring) %}
 {% if docstring is mapping %}
-    {%- set content = docstring.value -%}
-    {%- set content = content.replace(':\n-', ':\n\n-') -%}
-    {%- set content = content.replace('\n        ', ' ') -%}
-    {%- set content = content.replace(':param ', '\n**Parameters**\n\n- **') -%}
-    {%- set content = content.replace(': ', '**: ', 1) -%}
-    {%- set content = content.replace(':return: ', '\n**Returns**\n\n- ') -%}
-    {%- set lines = content.split('\n') -%}
-    {%- set formatted_lines = [] -%}
-    {%- for line in lines -%}
-        {%- if line.startswith('### ') -%}
-            {%- set line = line.replace('### ', '###### ') -%}
-        {%- elif line.strip() == 'Args:' -%}
-            {%- set line = '**Arguments**\n' -%}
-        {%- elif line.strip() == 'Attributes:' -%}
-            {%- set line = '**Attributes**\n' -%}
-        {%- elif line.strip() == 'Raises:' -%}
-            {%- set line = '**Raises**\n' -%}
-        {%- elif line.strip() == 'Returns:' -%}
-            {%- set line = '**Returns**\n' -%}
-        {%- elif line.startswith('    ') -%}
-            {%- set trimmed = line.strip() -%}
-            {%- if ':' in trimmed -%}
-                {%- set parts = trimmed.split(':', 1) -%}
-                {%- set param = parts[0].strip() -%}
-                {%- set desc = parts[1].strip() -%}
-                {%- if '[DEPRECATED]' in desc -%}
-                    {%- set desc = desc.replace('[DEPRECATED]', '') ~ '^[**Deprecation notice**<br>`' ~ param ~ '` has been deprecated and will be removed in a future release.]' -%}
-                {%- endif -%}
-                {%- set line = '- **' ~ param ~ '**: ' ~ desc -%}
-            {%- else -%}
-                {%- set line = '- ' ~ trimmed -%}
-            {%- endif -%}
+    {%- if docstring.parsed is defined and docstring.parsed is not none -%}
+        {# Try to use docstring-parser output #}
+        {%- set sections = [] -%}
+        
+        {# Main description #}
+        {%- if docstring.parsed.short_description -%}
+            {%- set _ = sections.append(docstring.parsed.short_description) -%}
         {%- endif -%}
-        {%- if line.strip() or line.startswith('    ') -%}
-            {%- set _ = formatted_lines.append(line) -%}
+        {%- if docstring.parsed.long_description -%}
+            {%- set _ = sections.append(docstring.parsed.long_description) -%}
+        {%- endif -%}
+        
+        {# Parameters #}
+        {%- if docstring.parsed.params -%}
+            {%- set _ = sections.append("**Parameters**\n") -%}
+            {%- for param in docstring.parsed.params -%}
+                {%- set _ = sections.append("- **" ~ param.arg_name ~ "**: " ~ param.description) -%}
+            {%- endfor -%}
+        {%- endif -%}
+        
+        {# Returns #}
+        {%- if docstring.parsed.returns -%}
+            {%- set _ = sections.append("**Returns**\n") -%}
+            {%- set _ = sections.append("- " ~ docstring.parsed.returns.description) -%}
+        {%- endif -%}
+        
+        {# Raises #}
+        {%- if docstring.parsed.raises -%}
+            {%- set _ = sections.append("**Raises**\n") -%}
+            {%- for raises in docstring.parsed.raises -%}
+                {%- set _ = sections.append("- **" ~ raises.type_name ~ "**: " ~ raises.description) -%}
+            {%- endfor -%}
+        {%- endif -%}
+        
+        {# If we got any sections, join them, otherwise fall back to value #}
+        {%- if sections -%}
+            {{ sections | join('\n\n') }}
         {%- else -%}
-            {%- set _ = formatted_lines.append('') -%}
+            {{ docstring.value }}
         {%- endif -%}
-    {%- endfor -%}
-{{ formatted_lines | join('\n') }}
-
-{% if docstring.params %}
-**Parameters:**
-{% for param in docstring.params %}
- `{{ param.name }}`: {{ param.description }}
-{% endfor %}
-{% endif %}
-
-{% if docstring.returns %}
-**Returns:**
-{{ docstring.returns }}
-{% endif %}
-
-{% if docstring.raises %}
-**Raises:**
-{% for error in docstring.raises %}
- `{{ error.type }}`: {{ error.description }}
-{% endfor %}
-{% endif %}
+    {%- else -%}
+        {# Always fall back to value if no parsed content #}
+        {{ docstring.value }}
+    {%- endif -%}
 {% else %}
 {{ docstring }}
-
 {% endif %}
 {% endmacro %} 

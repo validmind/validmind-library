@@ -4,12 +4,7 @@ toc-depth: 3
 toc-expand: 3
 ---
 
-
-
-
-
-
-#### ScoreBandDefaultRates
+## ScoreBandDefaultRates[()]{.muted}
 
 ```python
 def ScoreBandDefaultRates(
@@ -21,21 +16,19 @@ def ScoreBandDefaultRates(
 
 Analyzes default rates and population distribution across credit score bands.
 
-###### Purpose
+### Purpose
 
-The Score Band Default Rates test evaluates the discriminatory power of credit scores by analyzing
-default rates across different score bands. This helps validate score effectiveness, supports
-policy decisions, and provides insights into portfolio risk distribution.
+The Score Band Default Rates test evaluates the discriminatory power of credit scores by analyzing default rates across different score bands. This helps validate score effectiveness, supports policy decisions, and provides insights into portfolio risk distribution.
 
-###### Test Mechanism
+### Test Mechanism
 
 The test segments the score distribution into bands and calculates key metrics for each band:
-1. Population count and percentage in each band
-2. Default rate within each band
-3. Cumulative statistics across bands
-The results show how well the scores separate good and bad accounts.
 
-###### Signs of High Risk
+1. Population count and percentage in each band
+1. Default rate within each band
+1. Cumulative statistics across bands The results show how well the scores separate good and bad accounts.
+
+### Signs of High Risk
 
 - Non-monotonic default rates across score bands
 - Insufficient population in critical score bands
@@ -46,7 +39,7 @@ The results show how well the scores separate good and bad accounts.
 - Extreme population skewness
 - Poor risk separation between bands
 
-###### Strengths
+### Strengths
 
 - Clear view of score effectiveness
 - Supports policy threshold decisions
@@ -57,7 +50,7 @@ The results show how well the scores separate good and bad accounts.
 - Helps validate scoring model
 - Supports portfolio monitoring
 
-###### Limitations
+### Limitations
 
 - Sensitive to band definition choices
 - May mask within-band variations
@@ -67,8 +60,3 @@ The results show how well the scores separate good and bad accounts.
 - No temporal trend information
 - Assumes band boundaries are appropriate
 - May oversimplify risk patterns
-
-
-
-
- 

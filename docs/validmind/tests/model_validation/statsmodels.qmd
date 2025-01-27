@@ -4,9 +4,6 @@ toc-depth: 3
 toc-expand: 3
 ---
 
-
-
-
 - [AutoARIMA](statsmodels/AutoARIMA.qmd)
 - [CumulativePredictionProbabilities](statsmodels/CumulativePredictionProbabilities.qmd)
 - [DurbinWatsonTest](statsmodels/DurbinWatsonTest.qmd)
@@ -23,4 +20,3 @@ toc-expand: 3
 - [RegressionPermutationFeatureImportance](statsmodels/RegressionPermutationFeatureImportance.qmd)
 - [ScorecardHistogram](statsmodels/ScorecardHistogram.qmd)
 - [statsutils](statsmodels/statsutils.qmd)
-

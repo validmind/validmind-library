@@ -4,12 +4,7 @@ toc-depth: 3
 toc-expand: 3
 ---
 
-
-
-
-
-
-#### custom_recall
+## custom_recall[()]{.muted}
 
 ```python
 def custom_recall(
@@ -18,8 +13,7 @@ def custom_recall(
     threshold = 0.5):
 ```
 
- 
-#### HyperParametersTuning
+## HyperParametersTuning[()]{.muted}
 
 ```python
 def HyperParametersTuning(
@@ -31,24 +25,17 @@ def HyperParametersTuning(
     fit_params: dict = None):
 ```
 
-Performs exhaustive grid search over specified parameter ranges to find optimal model configurations
-across different metrics and decision thresholds.
+Performs exhaustive grid search over specified parameter ranges to find optimal model configurations across different metrics and decision thresholds.
 
-###### Purpose
+### Purpose
 
-The Hyperparameter Tuning test systematically explores the model's parameter space to identify optimal
-configurations. It supports multiple optimization metrics and decision thresholds, providing a comprehensive
-view of how different parameter combinations affect various aspects of model performance.
+The Hyperparameter Tuning test systematically explores the model's parameter space to identify optimal configurations. It supports multiple optimization metrics and decision thresholds, providing a comprehensive view of how different parameter combinations affect various aspects of model performance.
 
-###### Test Mechanism
+### Test Mechanism
 
-The test uses scikit-learn's GridSearchCV to perform cross-validation for each parameter combination.
-For each specified threshold and optimization metric, it creates a scoring dictionary with
-threshold-adjusted metrics, performs grid search with cross-validation, records best parameters and
-corresponding scores, and combines results into a comparative table. This process is repeated for each
-optimization metric to provide a comprehensive view of model performance under different configurations.
+The test uses scikit-learn's GridSearchCV to perform cross-validation for each parameter combination. For each specified threshold and optimization metric, it creates a scoring dictionary with threshold-adjusted metrics, performs grid search with cross-validation, records best parameters and corresponding scores, and combines results into a comparative table. This process is repeated for each optimization metric to provide a comprehensive view of model performance under different configurations.
 
-###### Signs of High Risk
+### Signs of High Risk
 
 - Large performance variations across different parameter combinations
 - Significant discrepancies between different optimization metrics
@@ -59,7 +46,7 @@ optimization metric to provide a comprehensive view of model performance under d
 - Cross-validation scores showing high variance
 - Extreme parameter values in best configurations
 
-###### Strengths
+### Strengths
 
 - Comprehensive exploration of parameter space
 - Supports multiple optimization metrics
@@ -70,7 +57,7 @@ optimization metric to provide a comprehensive view of model performance under d
 - Enables systematic parameter selection
 - Supports both classification and clustering tasks
 
-###### Limitations
+### Limitations
 
 - Computationally expensive for large parameter grids
 - May not find global optimum (limited to grid points)
@@ -80,8 +67,3 @@ optimization metric to provide a comprehensive view of model performance under d
 - Cross-validation splits may not preserve time series structure
 - Grid search may miss optimal values between grid points
 - Resource intensive for high-dimensional parameter spaces
-
-
-
-
- 
