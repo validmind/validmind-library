@@ -1,22 +1,29 @@
-{% if member.kind == "class" %}
+### [class]{.muted} {{ resolved.name }}
 
-### Class: {{ member.name }}
+```python
+class {{ resolved.name }}{% if resolved.bases %}({{ resolved.bases | join(', ') }}){% endif %}:
+```
 
-{% if member.docstring %}
-{{ doc.format_docstring(member.docstring) }}
-
+{% if resolved.docstring %}
+{{ doc.format_docstring(resolved.docstring) }}
 {% endif %}
-{% if member.bases %}
-**Bases:** {% for base in member.bases %}{{ types.format_type(base) }}{% if not loop.last %}, {% endif %}{% endfor %}
 
-{% endif %}
-{% if member.members %}
-#### Methods
+{% if resolved.bases %}
+**Inherited members**
 
-{% for method in member.members | sort_members %}
-{% if is_public(method, member, full_data) %}
-{% include "function.qmd.jinja2" %}
+{% for base in resolved.bases %}
+{% set base_members = get_inherited_members(base, full_data) %}
+{% if base_members %}
+- **From {{ base }}**: {% for member in base_members %}[{{ member.name }}](#{{ member.name }}){% if not loop.last %}, {% endif %}{% endfor %}
 {% endif %}
 {% endfor %}
 {% endif %}
-{% endif %} 
+
+{% if resolved.members %}
+**Methods**
+{% for member in resolved.members | sort_members %}
+{% if member.kind == 'method' and is_public(member, module, full_data) %}
+- [{{ member.name }}](#{{ member.name }}){% if member.docstring %}: {{ member.docstring.value | trim }}{% endif %}
+{% endif %}
+{% endfor %}
+{% endif %}

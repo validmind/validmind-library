@@ -4,6 +4,26 @@ toc-depth: 3
 toc-expand: 3
 ---
 
+### [class]{.muted} MissingRequiredTestInputError
+
+```python
+class MissingRequiredTestInputError({'cls': 'ExprName', 'name': 'BaseError'}):
+```
+
+When a required test context variable is missing.
+
+**Inherited members**
+
+### [class]{.muted} SkipTestError
+
+```python
+class SkipTestError({'cls': 'ExprName', 'name': 'BaseError'}):
+```
+
+Useful error to throw when a test cannot be executed.
+
+**Inherited members**
+
 ## Robustness[()]{.muted}
 
 ```python

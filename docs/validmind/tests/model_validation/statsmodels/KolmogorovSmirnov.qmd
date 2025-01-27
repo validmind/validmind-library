@@ -4,6 +4,16 @@ toc-depth: 3
 toc-expand: 3
 ---
 
+### [class]{.muted} InvalidTestParametersError
+
+```python
+class InvalidTestParametersError({'cls': 'ExprName', 'name': 'BaseError'}):
+```
+
+When an invalid parameters for the test.
+
+**Inherited members**
+
 ## KolmogorovSmirnov[()]{.muted}
 
 ```python

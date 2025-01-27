@@ -4,6 +4,16 @@ toc-depth: 3
 toc-expand: 3
 ---
 
+### [class]{.muted} SkipTestError
+
+```python
+class SkipTestError({'cls': 'ExprName', 'name': 'BaseError'}):
+```
+
+Useful error to throw when a test cannot be executed.
+
+**Inherited members**
+
 ## DescriptiveStatistics[()]{.muted}
 
 ```python

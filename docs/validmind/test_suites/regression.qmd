@@ -4,26 +4,62 @@ toc-depth: 3
 toc-expand: 3
 ---
 
-### Class: RegressionFullSuite
+### [class]{.muted} TabularDataQuality
+
+```python
+class TabularDataQuality({'cls': 'ExprName', 'name': 'TestSuite'}):
+```
+
+Test suite for data quality on tabular datasets
+
+**Inherited members**
+
+**Methods**
+
+### [class]{.muted} TabularDatasetDescription
+
+```python
+class TabularDatasetDescription({'cls': 'ExprName', 'name': 'TestSuite'}):
+```
+
+Test suite to extract metadata and descriptive statistics from a tabular dataset
+
+**Inherited members**
+
+**Methods**
+
+### [class]{.muted} RegressionFullSuite
+
+```python
+class RegressionFullSuite({'cls': 'ExprName', 'name': 'TestSuite'}):
+```
 
 Full test suite for regression models.
 
-**Bases:** TestSuite
+**Inherited members**
 
-#### Methods
+**Methods**
 
-### Class: RegressionMetrics
+### [class]{.muted} RegressionMetrics
+
+```python
+class RegressionMetrics({'cls': 'ExprName', 'name': 'TestSuite'}):
+```
 
 Test suite for performance metrics of regression metrics
 
-**Bases:** TestSuite
+**Inherited members**
 
-#### Methods
+**Methods**
 
-### Class: RegressionPerformance
+### [class]{.muted} RegressionPerformance
+
+```python
+class RegressionPerformance({'cls': 'ExprName', 'name': 'TestSuite'}):
+```
 
 Test suite for regression model performance
 
-**Bases:** TestSuite
+**Inherited members**
 
-#### Methods
+**Methods**

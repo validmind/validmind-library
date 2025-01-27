@@ -4,6 +4,18 @@ toc-depth: 3
 toc-expand: 3
 ---
 
+### [class]{.muted} MissingDependencyError
+
+```python
+class MissingDependencyError({'cls': 'ExprName', 'name': 'BaseError'}):
+```
+
+When a required dependency is missing.
+
+**Inherited members**
+
+**Methods**
+
 ## ProtectedClassesDisparity[()]{.muted}
 
 ```python

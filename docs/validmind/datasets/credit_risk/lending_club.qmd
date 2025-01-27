@@ -102,8 +102,8 @@ Split dataset into train, validation (optional), and test sets.
 
 - **df**: Input DataFrame
 - **validation_split**: If None, returns train/test split. If float, returns train/val/test split
-- **test_size**: Proportion of data for test set (default: 0.2)
-- **add_constant**: Whether to add constant column for statsmodels (default: False)
+- **test_size**: Proportion of data for test set (default: ) 0.2)
+- **add_constant**: Whether to add constant column for statsmodels (default: ) False)
 
 **Returns**
 

@@ -4,6 +4,16 @@ toc-depth: 3
 toc-expand: 3
 ---
 
+### [class]{.muted} MissingOrInvalidModelPredictFnError
+
+```python
+class MissingOrInvalidModelPredictFnError({'cls': 'ExprName', 'name': 'BaseError'}):
+```
+
+When the pytorch model is missing a predict function or its predict method does not have the expected arguments.
+
+**Inherited members**
+
 ## RobustnessDiagnosis[()]{.muted}
 
 ```python

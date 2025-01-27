@@ -6,10 +6,62 @@ toc-expand: 3
 
 Test suites for NLP models
 
-### Class: NLPClassifierFullSuite
+### [class]{.muted} ClassifierDiagnosis
+
+```python
+class ClassifierDiagnosis({'cls': 'ExprName', 'name': 'TestSuite'}):
+```
+
+Test suite for sklearn classifier model diagnosis tests
+
+**Inherited members**
+
+**Methods**
+
+### [class]{.muted} ClassifierMetrics
+
+```python
+class ClassifierMetrics({'cls': 'ExprName', 'name': 'TestSuite'}):
+```
+
+Test suite for sklearn classifier metrics
+
+**Inherited members**
+
+**Methods**
+
+### [class]{.muted} ClassifierPerformance
+
+```python
+class ClassifierPerformance({'cls': 'ExprName', 'name': 'TestSuite'}):
+```
+
+Test suite for sklearn classifier models
+
+**Inherited members**
+
+**Methods**
+
+### [class]{.muted} TextDataQuality
+
+```python
+class TextDataQuality({'cls': 'ExprName', 'name': 'TestSuite'}):
+```
+
+Test suite for data quality on text data
+
+**Inherited members**
+
+**Methods**
+
+### [class]{.muted} NLPClassifierFullSuite
+
+```python
+class NLPClassifierFullSuite({'cls': 'ExprName', 'name': 'TestSuite'}):
+```
 
 Full test suite for NLP classification models.
 
-**Bases:** TestSuite
+**Inherited members**
 
-#### Methods
+**Methods**

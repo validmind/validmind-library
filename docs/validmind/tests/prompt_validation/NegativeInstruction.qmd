@@ -4,6 +4,16 @@ toc-depth: 3
 toc-expand: 3
 ---
 
+### [class]{.muted} MissingRequiredTestInputError
+
+```python
+class MissingRequiredTestInputError({'cls': 'ExprName', 'name': 'BaseError'}):
+```
+
+When a required test context variable is missing.
+
+**Inherited members**
+
 ## NegativeInstruction[()]{.muted}
 
 ```python

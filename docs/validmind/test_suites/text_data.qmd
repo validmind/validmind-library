@@ -6,10 +6,14 @@ toc-expand: 3
 
 Test suites for text datasets
 
-### Class: TextDataQuality
+### [class]{.muted} TextDataQuality
+
+```python
+class TextDataQuality({'cls': 'ExprName', 'name': 'TestSuite'}):
+```
 
 Test suite for data quality on text data
 
-**Bases:** TestSuite
+**Inherited members**
 
-#### Methods
+**Methods**

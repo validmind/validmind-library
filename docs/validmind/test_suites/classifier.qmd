@@ -6,42 +6,86 @@ toc-expand: 3
 
 Test suites for sklearn-compatible classifier models Ideal setup is to have the API client to read a custom test suite from the project's configuration
 
-### Class: ClassifierDiagnosis
+### [class]{.muted} TabularDataQuality
+
+```python
+class TabularDataQuality({'cls': 'ExprName', 'name': 'TestSuite'}):
+```
+
+Test suite for data quality on tabular datasets
+
+**Inherited members**
+
+**Methods**
+
+### [class]{.muted} TabularDatasetDescription
+
+```python
+class TabularDatasetDescription({'cls': 'ExprName', 'name': 'TestSuite'}):
+```
+
+Test suite to extract metadata and descriptive statistics from a tabular dataset
+
+**Inherited members**
+
+**Methods**
+
+### [class]{.muted} ClassifierDiagnosis
+
+```python
+class ClassifierDiagnosis({'cls': 'ExprName', 'name': 'TestSuite'}):
+```
 
 Test suite for sklearn classifier model diagnosis tests
 
-**Bases:** TestSuite
+**Inherited members**
 
-#### Methods
+**Methods**
 
-### Class: ClassifierFullSuite
+### [class]{.muted} ClassifierFullSuite
+
+```python
+class ClassifierFullSuite({'cls': 'ExprName', 'name': 'TestSuite'}):
+```
 
 Full test suite for binary classification models.
 
-**Bases:** TestSuite
+**Inherited members**
 
-#### Methods
+**Methods**
 
-### Class: ClassifierMetrics
+### [class]{.muted} ClassifierMetrics
+
+```python
+class ClassifierMetrics({'cls': 'ExprName', 'name': 'TestSuite'}):
+```
 
 Test suite for sklearn classifier metrics
 
-**Bases:** TestSuite
+**Inherited members**
 
-#### Methods
+**Methods**
 
-### Class: ClassifierModelValidation
+### [class]{.muted} ClassifierModelValidation
+
+```python
+class ClassifierModelValidation({'cls': 'ExprName', 'name': 'TestSuite'}):
+```
 
 Test suite for binary classification models.
 
-**Bases:** TestSuite
+**Inherited members**
 
-#### Methods
+**Methods**
 
-### Class: ClassifierPerformance
+### [class]{.muted} ClassifierPerformance
+
+```python
+class ClassifierPerformance({'cls': 'ExprName', 'name': 'TestSuite'}):
+```
 
 Test suite for sklearn classifier models
 
-**Bases:** TestSuite
+**Inherited members**
 
-#### Methods
+**Methods**

@@ -7,8 +7,69 @@ toc-expand: 3
 ValidMind Tests Module
 
 - [data_validation](tests/data_validation.qmd)
+
 - [model_validation](tests/model_validation.qmd)
+
 - [prompt_validation](tests/prompt_validation.qmd)
+
+  ```
+  ### [class]{.muted} LoadTestError
+  ```
+
+```python
+class LoadTestError({'cls': 'ExprName', 'name': 'BaseError'}):
+```
+
+Exception raised when an error occurs while loading a test
+
+**Inherited members**
+
+**Methods**
+
+### [class]{.muted} LocalTestProvider
+
+```python
+class LocalTestProvider:
+```
+
+Test providers in ValidMind are responsible for loading tests from different sources, such as local files, databases, or remote services. The LocalTestProvider specifically loads tests from the local file system.
+
+To use the LocalTestProvider, you need to provide the root_folder, which is the root directory for local tests. The test_id is a combination of the namespace (set when registering the test provider) and the path to the test class module, where slashes are replaced by dots and the .py extension is left out.
+
+Example usage:
+
+```
+# Create an instance of LocalTestProvider with the root folder
+test_provider = LocalTestProvider("/path/to/tests/folder")
+
+# Register the test provider with a namespace
+register_test_provider("my_namespace", test_provider)
+
+# List all tests in the namespace (returns a list of test IDs)
+test_provider.list_tests()
+# this is used by the validmind.tests.list_tests() function to aggregate all tests
+# from all test providers
+
+# Load a test using the test_id (namespace + path to test class module)
+test = test_provider.load_test("my_namespace.my_test_class")
+# full path to the test class module is /path/to/tests/folder/my_test_class.py
+```
+
+**Parameters**
+
+- **root_folder**: The root directory for local tests.
+
+**Methods** ### [class]{.muted} TestProvider
+
+```python
+class TestProvider({'cls': 'ExprName', 'name': 'Protocol'}):
+```
+
+Protocol for user-defined test providers
+
+**Inherited members**
+
+**Methods**
 
 ## register_test_provider[()]{.muted}
 

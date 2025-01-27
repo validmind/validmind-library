@@ -4,6 +4,16 @@ toc-depth: 3
 toc-expand: 3
 ---
 
+### [class]{.muted} UnsupportedModelForSHAPError
+
+```python
+class UnsupportedModelForSHAPError({'cls': 'ExprName', 'name': 'BaseError'}):
+```
+
+When an unsupported model is used for SHAP importance.
+
+**Inherited members**
+
 ## generate_shap_plot[()]{.muted}
 
 ```python
@@ -38,7 +48,7 @@ Selects SHAP values for binary or multiclass classification. For regression mode
 **Parameters**
 
 - **shap_values**: The SHAP values returned by the SHAP explainer. For multiclass classification, this will be a list where each element corresponds to a class. For regression, this will be a single array of SHAP values.
-- **class_of_interest**: The class index for which to retrieve SHAP values. If None (default: (default, the function will assume binary classification and use class 1 by default.)
+- **class_of_interest**: The class index for which to retrieve SHAP values. If None (default), the function will assume binary classification and use class 1 by default.
 
 **Returns**
 

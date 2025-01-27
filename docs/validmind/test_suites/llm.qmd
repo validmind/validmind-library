@@ -6,18 +6,74 @@ toc-expand: 3
 
 Test suites for LLMs
 
-### Class: LLMClassifierFullSuite
+### [class]{.muted} ClassifierDiagnosis
+
+```python
+class ClassifierDiagnosis({'cls': 'ExprName', 'name': 'TestSuite'}):
+```
+
+Test suite for sklearn classifier model diagnosis tests
+
+**Inherited members**
+
+**Methods**
+
+### [class]{.muted} ClassifierMetrics
+
+```python
+class ClassifierMetrics({'cls': 'ExprName', 'name': 'TestSuite'}):
+```
+
+Test suite for sklearn classifier metrics
+
+**Inherited members**
+
+**Methods**
+
+### [class]{.muted} ClassifierPerformance
+
+```python
+class ClassifierPerformance({'cls': 'ExprName', 'name': 'TestSuite'}):
+```
+
+Test suite for sklearn classifier models
+
+**Inherited members**
+
+**Methods**
+
+### [class]{.muted} TextDataQuality
+
+```python
+class TextDataQuality({'cls': 'ExprName', 'name': 'TestSuite'}):
+```
+
+Test suite for data quality on text data
+
+**Inherited members**
+
+**Methods**
+
+### [class]{.muted} LLMClassifierFullSuite
+
+```python
+class LLMClassifierFullSuite({'cls': 'ExprName', 'name': 'TestSuite'}):
+```
 
 Full test suite for LLM classification models.
 
-**Bases:** TestSuite
+**Inherited members**
 
-#### Methods
+**Methods**
 
-### Class: PromptValidation
+### [class]{.muted} PromptValidation
+
+```python
+class PromptValidation({'cls': 'ExprName', 'name': 'TestSuite'}):
+```
 
 Test suite for prompt validation
 
-**Bases:** TestSuite
+**Inherited members**
 
-#### Methods
+**Methods**

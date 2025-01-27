@@ -189,7 +189,6 @@ def lint_markdown_files(output_dir: str):
 
 def format_google_docstring(docstring: str) -> str:
     """Format a Google-style docstring from JSON format back to proper structure."""
-    
     lines = []
     sections = docstring.split('\n\n')
     
@@ -215,17 +214,14 @@ def format_google_docstring(docstring: str) -> str:
                 
                 elif part.startswith('(default'):
                     # Look ahead for the default value
-                    default_value = []
-                    while i < len(parts) and not parts[i].endswith(')'):
-                        default_value.append(parts[i])
-                        i += 1
-                    if i < len(parts):  # Add the last part with )
-                        default_value.append(parts[i])
-                    
-                    # Clean up the default value
-                    default_str = ' '.join(default_value)
-                    default_str = default_str.replace('(default:', '').replace(')', '')
-                    param_desc.append(f"(default: {default_str.strip()})")
+                    try:
+                        if ':' in part:
+                            default_value = part.split(':', 1)[1].rstrip(')')
+                            param_desc.append(f"(default: {default_value})")
+                        else:
+                            param_desc.append(part)
+                    except IndexError:
+                        param_desc.append(part)
                 
                 else:
                     param_desc.append(part)
@@ -244,8 +240,7 @@ def format_google_docstring(docstring: str) -> str:
         else:
             lines.append(section.strip())
     
-    result = '\n'.join(lines)
-    return result
+    return '\n'.join(lines)
 
 def format_rst_docstring(docstring: str) -> str:
     """Format an RST-style docstring from JSON format back to proper structure."""
@@ -327,6 +322,43 @@ def parse_docstrings_recursively(data: Dict[str, Any]):
             for member in data['members'].values():
                 parse_docstrings_recursively(member)
 
+def get_inherited_members(base: Dict[str, Any], full_data: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """Get all inherited members from a base class."""
+    # Get the base class name
+    base_name = base.get('name', '')
+    if not base_name:
+        return []
+    
+    # Handle built-in exceptions
+    if base_name.startswith('builtins.'):
+        if base_name == 'builtins.BaseException':
+            return [
+                {'name': 'with_traceback', 'kind': 'method'},
+                {'name': 'add_note', 'kind': 'method'}
+            ]
+        return []
+    
+    # Look up base class in our codebase
+    path_parts = base_name.split('.')
+    current = full_data.get(path_parts[0])
+    if not current:
+        return []
+    
+    # Navigate to base class
+    for part in path_parts[1:]:
+        if part in current.get('members', {}):
+            current = current['members'][part]
+        else:
+            return []
+    
+    # Collect public methods and properties
+    members = []
+    for member in current.get('members', {}).values():
+        if member['kind'] in ('method', 'property') and not member.get('name', '').startswith('_'):
+            members.append(member)
+    
+    return members
+
 def generate_docs(json_path: str, template_dir: str, output_dir: str):
     """Generate documentation from JSON data using templates."""
     # Load JSON data
@@ -345,6 +377,7 @@ def generate_docs(json_path: str, template_dir: str, output_dir: str):
     env.globals['is_public'] = is_public
     env.globals['resolve_alias'] = resolve_alias
     env.globals['get_all_members'] = get_all_members
+    env.globals['get_inherited_members'] = get_inherited_members
     
     # Start processing from root module
     if 'validmind' in data:

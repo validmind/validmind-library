@@ -5,3 +5,105 @@ toc-expand: 3
 ---
 
 Models entrypoint
+
+### [class]{.muted} Figure
+
+```python
+class Figure:
+```
+
+Figure objects track the schema supported by the ValidMind API
+
+**Methods**
+
+### [class]{.muted} ModelAttributes
+
+```python
+class ModelAttributes:
+```
+
+Model attributes definition
+
+**Methods**
+
+### [class]{.muted} TestSuite
+
+```python
+class TestSuite:
+```
+
+Base class for test suites. Test suites are used to define a grouping of tests that can be run as a suite against datasets and models. Test Suites can be defined by inheriting from this base class and defining the list of tests as a class variable.
+
+Tests can be a flat list of strings or may be nested into sections by using a dict
+
+**Methods**
+
+### [class]{.muted} TestSuiteRunner
+
+```python
+class TestSuiteRunner:
+```
+
+Runs a test suite
+
+**Methods**
+
+### [class]{.muted} VMDataset
+
+```python
+class VMDataset({'cls': 'ExprName', 'name': 'VMInput'}):
+```
+
+Base class for VM datasets Child classes should be used to support new dataset types (tensor, polars etc) by converting the user's dataset into a numpy array collecting metadata like column names and then call this (parent) class `__init__` method.
+
+This way we can support multiple dataset types but under the hood we only need to work with numpy arrays and pandas dataframes in this class.
+
+**Parameters**
+
+- **raw_dataset**: The raw dataset as a NumPy array.
+- **input_id**: Identifier for the dataset.
+- **index**: The raw dataset index as a NumPy array.
+- **columns**: The column names of the dataset.
+- **target_column**: The target column name of the dataset.
+- **feature_columns**: The feature column names of the dataset.
+- **feature_columns_numeric**: The numeric feature column names of the dataset.
+- **feature_columns_categorical**: The categorical feature column names of the dataset.
+- **text_column**: The text column name of the dataset for NLP tasks.
+- **target_class_labels**: The class labels for the target columns.
+- **df**: The dataset as a pandas DataFrame.
+- **extra_columns**: Extra columns to include in the dataset.
+
+**Inherited members**
+
+**Methods**
+
+### [class]{.muted} VMInput
+
+```python
+class VMInput({'cls': 'ExprName', 'name': 'ABC'}):
+```
+
+Base class for ValidMind Input types
+
+**Inherited members**
+
+**Methods**
+
+### [class]{.muted} VMModel
+
+```python
+class VMModel({'cls': 'ExprName', 'name': 'VMInput'}):
+```
+
+An base class that wraps a trained model instance and its associated data.
+
+**Parameters**
+
+- **model**: The trained model instance. Defaults to None.
+- **input_id**: The input ID for the model. Defaults to None.
+- **attributes**: The attributes of the model. Defaults to None.
+- **name**: The name of the model. Defaults to the class name.
+
+**Inherited members**
+
+**Methods**

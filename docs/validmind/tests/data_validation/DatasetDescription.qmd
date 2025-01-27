@@ -4,6 +4,16 @@ toc-depth: 3
 toc-expand: 3
 ---
 
+### [class]{.muted} UnsupportedColumnTypeError
+
+```python
+class UnsupportedColumnTypeError({'cls': 'ExprName', 'name': 'BaseError'}):
+```
+
+When an unsupported column type is found on a dataset.
+
+**Inherited members**
+
 ## DatasetDescription[()]{.muted}
 
 ```python

@@ -6,6 +6,16 @@ toc-expand: 3
 
 Threshold based tests
 
+### [class]{.muted} SkipTestError
+
+```python
+class SkipTestError({'cls': 'ExprName', 'name': 'BaseError'}):
+```
+
+Useful error to throw when a test cannot be executed.
+
+**Inherited members**
+
 ## ClassImbalance[()]{.muted}
 
 ```python

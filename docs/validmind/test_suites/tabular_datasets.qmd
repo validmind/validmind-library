@@ -6,26 +6,38 @@ toc-expand: 3
 
 Test suites for tabular datasets
 
-### Class: TabularDataQuality
+### [class]{.muted} TabularDataQuality
+
+```python
+class TabularDataQuality({'cls': 'ExprName', 'name': 'TestSuite'}):
+```
 
 Test suite for data quality on tabular datasets
 
-**Bases:** TestSuite
+**Inherited members**
 
-#### Methods
+**Methods**
 
-### Class: TabularDataset
+### [class]{.muted} TabularDataset
+
+```python
+class TabularDataset({'cls': 'ExprName', 'name': 'TestSuite'}):
+```
 
 Test suite for tabular datasets.
 
-**Bases:** TestSuite
+**Inherited members**
 
-#### Methods
+**Methods**
 
-### Class: TabularDatasetDescription
+### [class]{.muted} TabularDatasetDescription
+
+```python
+class TabularDatasetDescription({'cls': 'ExprName', 'name': 'TestSuite'}):
+```
 
 Test suite to extract metadata and descriptive statistics from a tabular dataset
 
-**Bases:** TestSuite
+**Inherited members**
 
-#### Methods
+**Methods**
