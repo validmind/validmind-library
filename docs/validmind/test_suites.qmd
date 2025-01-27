@@ -19,6 +19,41 @@ Entrypoint for test suites.
 - [text_data](test_suites/text_data.qmd)
 - [time_series](test_suites/time_series.qmd)
 
+## format_dataframe[()]{.muted}
+
+```python
+def format_dataframe(
+    df: {'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'pd'}, {'cls': 'ExprName', 'name': 'DataFrame'}]}) -> {'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'pd'}, {'cls': 'ExprName', 'name': 'DataFrame'}]}:
+```
+
+Format a pandas DataFrame for display purposes
+
+## get_logger[()]{.muted}
+
+```python
+def get_logger(
+    name = 'validmind',    log_level = None):
+```
+
+Get a logger for the given module name
+
+## test_id_to_name[()]{.muted}
+
+```python
+def test_id_to_name(
+    test_id: {'cls': 'ExprName', 'name': 'str'}) -> {'cls': 'ExprName', 'name': 'str'}:
+```
+
+Convert a test ID to a human-readable name.
+
+**Parameters**
+
+- **(str)**: The test identifier, typically in CamelCase or snake_case.
+
+**Returns**
+
+- A human-readable name derived from the test ID.
+
 ## describe_suite[()]{.muted}
 
 ```python
@@ -66,7 +101,7 @@ def register_test_suite(
 
 Registers a custom test suite
 
-### [class]{.muted} ClassifierDiagnosis
+## [class]{.muted} ClassifierDiagnosis
 
 ```python
 class ClassifierDiagnosis(TestSuite):
@@ -76,9 +111,7 @@ Test suite for sklearn classifier model diagnosis tests
 
 **Inherited members**
 
-**Methods**
-
-### [class]{.muted} ClassifierFullSuite
+## [class]{.muted} ClassifierFullSuite
 
 ```python
 class ClassifierFullSuite(TestSuite):
@@ -88,9 +121,7 @@ Full test suite for binary classification models.
 
 **Inherited members**
 
-**Methods**
-
-### [class]{.muted} ClassifierMetrics
+## [class]{.muted} ClassifierMetrics
 
 ```python
 class ClassifierMetrics(TestSuite):
@@ -100,9 +131,7 @@ Test suite for sklearn classifier metrics
 
 **Inherited members**
 
-**Methods**
-
-### [class]{.muted} ClassifierModelValidation
+## [class]{.muted} ClassifierModelValidation
 
 ```python
 class ClassifierModelValidation(TestSuite):
@@ -112,9 +141,7 @@ Test suite for binary classification models.
 
 **Inherited members**
 
-**Methods**
-
-### [class]{.muted} ClassifierPerformance
+## [class]{.muted} ClassifierPerformance
 
 ```python
 class ClassifierPerformance(TestSuite):
@@ -124,9 +151,7 @@ Test suite for sklearn classifier models
 
 **Inherited members**
 
-**Methods**
-
-### [class]{.muted} ClusterFullSuite
+## [class]{.muted} ClusterFullSuite
 
 ```python
 class ClusterFullSuite(TestSuite):
@@ -136,9 +161,7 @@ Full test suite for clustering models.
 
 **Inherited members**
 
-**Methods**
-
-### [class]{.muted} ClusterMetrics
+## [class]{.muted} ClusterMetrics
 
 ```python
 class ClusterMetrics(TestSuite):
@@ -148,9 +171,7 @@ Test suite for sklearn clustering metrics
 
 **Inherited members**
 
-**Methods**
-
-### [class]{.muted} ClusterPerformance
+## [class]{.muted} ClusterPerformance
 
 ```python
 class ClusterPerformance(TestSuite):
@@ -160,9 +181,7 @@ Test suite for sklearn cluster performance
 
 **Inherited members**
 
-**Methods**
-
-### [class]{.muted} EmbeddingsFullSuite
+## [class]{.muted} EmbeddingsFullSuite
 
 ```python
 class EmbeddingsFullSuite(TestSuite):
@@ -172,9 +191,7 @@ Full test suite for embeddings models.
 
 **Inherited members**
 
-**Methods**
-
-### [class]{.muted} EmbeddingsMetrics
+## [class]{.muted} EmbeddingsMetrics
 
 ```python
 class EmbeddingsMetrics(TestSuite):
@@ -184,9 +201,7 @@ Test suite for embeddings metrics
 
 **Inherited members**
 
-**Methods**
-
-### [class]{.muted} EmbeddingsPerformance
+## [class]{.muted} EmbeddingsPerformance
 
 ```python
 class EmbeddingsPerformance(TestSuite):
@@ -196,9 +211,7 @@ Test suite for embeddings model performance
 
 **Inherited members**
 
-**Methods**
-
-### [class]{.muted} KmeansParametersOptimization
+## [class]{.muted} KmeansParametersOptimization
 
 ```python
 class KmeansParametersOptimization(TestSuite):
@@ -208,9 +221,7 @@ Test suite for sklearn hyperparameters optimization
 
 **Inherited members**
 
-**Methods**
-
-### [class]{.muted} LLMClassifierFullSuite
+## [class]{.muted} LLMClassifierFullSuite
 
 ```python
 class LLMClassifierFullSuite(TestSuite):
@@ -220,9 +231,7 @@ Full test suite for LLM classification models.
 
 **Inherited members**
 
-**Methods**
-
-### [class]{.muted} NLPClassifierFullSuite
+## [class]{.muted} NLPClassifierFullSuite
 
 ```python
 class NLPClassifierFullSuite(TestSuite):
@@ -232,9 +241,7 @@ Full test suite for NLP classification models.
 
 **Inherited members**
 
-**Methods**
-
-### [class]{.muted} PromptValidation
+## [class]{.muted} PromptValidation
 
 ```python
 class PromptValidation(TestSuite):
@@ -244,9 +251,7 @@ Test suite for prompt validation
 
 **Inherited members**
 
-**Methods**
-
-### [class]{.muted} RegressionFullSuite
+## [class]{.muted} RegressionFullSuite
 
 ```python
 class RegressionFullSuite(TestSuite):
@@ -256,9 +261,7 @@ Full test suite for regression models.
 
 **Inherited members**
 
-**Methods**
-
-### [class]{.muted} RegressionMetrics
+## [class]{.muted} RegressionMetrics
 
 ```python
 class RegressionMetrics(TestSuite):
@@ -268,9 +271,7 @@ Test suite for performance metrics of regression metrics
 
 **Inherited members**
 
-**Methods**
-
-### [class]{.muted} RegressionModelDescription
+## [class]{.muted} RegressionModelDescription
 
 ```python
 class RegressionModelDescription(TestSuite):
@@ -280,9 +281,7 @@ Test suite for performance metric of regression model of statsmodels library
 
 **Inherited members**
 
-**Methods**
-
-### [class]{.muted} RegressionModelsEvaluation
+## [class]{.muted} RegressionModelsEvaluation
 
 ```python
 class RegressionModelsEvaluation(TestSuite):
@@ -292,9 +291,7 @@ Test suite for metrics comparison of regression model of statsmodels library
 
 **Inherited members**
 
-**Methods**
-
-### [class]{.muted} RegressionPerformance
+## [class]{.muted} RegressionPerformance
 
 ```python
 class RegressionPerformance(TestSuite):
@@ -304,9 +301,7 @@ Test suite for regression model performance
 
 **Inherited members**
 
-**Methods**
-
-### [class]{.muted} SummarizationMetrics
+## [class]{.muted} SummarizationMetrics
 
 ```python
 class SummarizationMetrics(TestSuite):
@@ -316,9 +311,7 @@ Test suite for Summarization metrics
 
 **Inherited members**
 
-**Methods**
-
-### [class]{.muted} TabularDataQuality
+## [class]{.muted} TabularDataQuality
 
 ```python
 class TabularDataQuality(TestSuite):
@@ -328,9 +321,7 @@ Test suite for data quality on tabular datasets
 
 **Inherited members**
 
-**Methods**
-
-### [class]{.muted} TabularDataset
+## [class]{.muted} TabularDataset
 
 ```python
 class TabularDataset(TestSuite):
@@ -340,9 +331,7 @@ Test suite for tabular datasets.
 
 **Inherited members**
 
-**Methods**
-
-### [class]{.muted} TabularDatasetDescription
+## [class]{.muted} TabularDatasetDescription
 
 ```python
 class TabularDatasetDescription(TestSuite):
@@ -352,9 +341,7 @@ Test suite to extract metadata and descriptive statistics from a tabular dataset
 
 **Inherited members**
 
-**Methods**
-
-### [class]{.muted} TextDataQuality
+## [class]{.muted} TextDataQuality
 
 ```python
 class TextDataQuality(TestSuite):
@@ -364,9 +351,7 @@ Test suite for data quality on text data
 
 **Inherited members**
 
-**Methods**
-
-### [class]{.muted} TimeSeriesDataQuality
+## [class]{.muted} TimeSeriesDataQuality
 
 ```python
 class TimeSeriesDataQuality(TestSuite):
@@ -376,9 +361,7 @@ Test suite for data quality on time series datasets
 
 **Inherited members**
 
-**Methods**
-
-### [class]{.muted} TimeSeriesDataset
+## [class]{.muted} TimeSeriesDataset
 
 ```python
 class TimeSeriesDataset(TestSuite):
@@ -388,9 +371,7 @@ Test suite for time series datasets.
 
 **Inherited members**
 
-**Methods**
-
-### [class]{.muted} TimeSeriesModelValidation
+## [class]{.muted} TimeSeriesModelValidation
 
 ```python
 class TimeSeriesModelValidation(TestSuite):
@@ -400,9 +381,7 @@ Test suite for time series model validation.
 
 **Inherited members**
 
-**Methods**
-
-### [class]{.muted} TimeSeriesMultivariate
+## [class]{.muted} TimeSeriesMultivariate
 
 ```python
 class TimeSeriesMultivariate(TestSuite):
@@ -412,9 +391,7 @@ This test suite provides a preliminary understanding of the features and relatio
 
 **Inherited members**
 
-**Methods**
-
-### [class]{.muted} TimeSeriesUnivariate
+## [class]{.muted} TimeSeriesUnivariate
 
 ```python
 class TimeSeriesUnivariate(TestSuite):
@@ -425,5 +402,3 @@ This test suite provides a preliminary understanding of the target variable(s) u
 The raw time series data provides a visual inspection of the target variable's behavior over time. This helps to identify any patterns or trends in the data, as well as any potential outliers or anomalies. The histogram of the target variable displays the distribution of values, providing insight into the range and frequency of values observed in the data.
 
 **Inherited members**
-
-**Methods**

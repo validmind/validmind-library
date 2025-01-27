@@ -73,20 +73,29 @@ def is_public(member: Dict[str, Any], module: Dict[str, Any], full_data: Dict[st
     """Check if a member should be included in public documentation."""
     name = member.get('name', '')
     
+    # Add debug logging
+    print(f"\nChecking visibility for: {name}")
+    print(f"Is root: {is_root}")
+    
     # Skip private members except __init__ and __post_init__
     if name.startswith('_') and name not in {'__init__', '__post_init__'}:
+        print(f"- Skipping private member: {name}")
         return False
     
     # At root level, only show items from __all__
     if is_root:
         root_all = get_all_members(full_data['validmind'].get('members', {}))
+        print(f"- Root __all__: {root_all}")
         return name in root_all
     
     # If module has __all__, only include members listed there
     if module and '__all__' in module.get('members', {}):
         module_all = get_all_members(module.get('members', {}))
+        print(f"- Module __all__: {module_all}")
+        print(f"- Is {name} in module __all__? {name in module_all}")
         return name in module_all
     
+    print(f"- No __all__ found, including {name}")
     return True
 
 def ensure_dir(path):
@@ -149,7 +158,19 @@ def collect_documented_items(module: Dict[str, Any], path: List[str], full_data:
     return result
 
 def process_module(module: Dict[str, Any], path: List[str], env: Environment, full_data: Dict[str, Any]):
-    """Process a module and its members."""
+    """Process a module and its submodules."""
+    if module.get('name') == 'tests':
+        print("\nProcessing tests module members:")
+        for name, member in module.get('members', {}).items():
+            if is_public(member, module, full_data):
+                print(f"\n{name}:")
+                print(f"  Original: kind={member.get('kind')}")
+                if member.get('kind') == 'alias':
+                    resolved = resolve_alias(member, full_data)
+                    print(f"  Resolved: kind={resolved.get('kind')}")
+                    print(f"  Target path: {member.get('target_path')}")
+                    print(f"  In __all__: {name in get_all_members(module.get('members', {}))}")
+    
     # Parse docstrings first
     parse_docstrings_recursively(module)
     

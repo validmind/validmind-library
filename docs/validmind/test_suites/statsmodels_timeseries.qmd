@@ -6,7 +6,7 @@ toc-expand: 3
 
 Time Series Test Suites from statsmodels
 
-### [class]{.muted} RegressionModelDescription
+## [class]{.muted} RegressionModelDescription
 
 ```python
 class RegressionModelDescription(TestSuite):
@@ -16,9 +16,7 @@ Test suite for performance metric of regression model of statsmodels library
 
 **Inherited members**
 
-**Methods**
-
-### [class]{.muted} RegressionModelsEvaluation
+## [class]{.muted} RegressionModelsEvaluation
 
 ```python
 class RegressionModelsEvaluation(TestSuite):
@@ -27,5 +25,3 @@ class RegressionModelsEvaluation(TestSuite):
 Test suite for metrics comparison of regression model of statsmodels library
 
 **Inherited members**
-
-**Methods**

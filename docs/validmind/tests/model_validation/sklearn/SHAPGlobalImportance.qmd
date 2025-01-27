@@ -4,6 +4,15 @@ toc-depth: 3
 toc-expand: 3
 ---
 
+## get_logger[()]{.muted}
+
+```python
+def get_logger(
+    name = 'validmind',    log_level = None):
+```
+
+Get a logger for the given module name
+
 ## generate_shap_plot[()]{.muted}
 
 ```python
@@ -88,7 +97,8 @@ The exam begins with the selection of a suitable explainer which aligns with the
 
 - High-dimensional data can convolute interpretations.
 - Associating importance with tangible real-world impact still involves a certain degree of subjectivity.
-  ### [class]{.muted} UnsupportedModelForSHAPError
+
+## [class]{.muted} UnsupportedModelForSHAPError
 
 ```python
 class UnsupportedModelForSHAPError(BaseError):

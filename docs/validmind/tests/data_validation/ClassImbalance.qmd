@@ -46,7 +46,7 @@ This Class Imbalance test operates by calculating the frequency (expressed as a 
 - While it can identify imbalances in class distribution, it doesn't provide direct methods to address or correct these imbalances.
 - The test is only applicable for classification operations and unsuitable for regression or clustering tasks.
 
-### [class]{.muted} SkipTestError
+## [class]{.muted} SkipTestError
 
 ```python
 class SkipTestError(BaseError):

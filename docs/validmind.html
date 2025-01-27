@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.40">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>validmind</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="validmind_files/libs/clipboard/clipboard.min.js"></script>
+<script src="validmind_files/libs/quarto-html/quarto.js"></script>
+<script src="validmind_files/libs/quarto-html/popper.min.js"></script>
+<script src="validmind_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="validmind_files/libs/quarto-html/anchor.min.js"></script>
+<link href="validmind_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="validmind_files/libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="validmind_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="validmind_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="validmind_files/libs/bootstrap/bootstrap-973236bd072d72a04ee9cd82dcc9cb29.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">validmind</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>The ValidMind Library is a suite of developer tools and methods designed to automate the documentation and validation of your models. Designed to be model agnostic, the ValidMind Library provides all the standard functionality without requiring you to rewrite any functions as long as your model is built in Python.</p>
+<p>With a rich array of documentation tools and test suites, from documenting descriptions of your datasets to testing your models for weak spots and overfit areas, the ValidMind Library helps you automate model documentation by feeding the ValidMind Platform with documentation artifacts and test results.</p>
+<p>To install the ValidMind Library:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install validmind</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>To initialize the ValidMind Library, paste the code snippet with the model identifier credentials directly into your development source code, replacing this example with your own:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> validmind <span class="im">as</span> vm</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>vm.init(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  api_host <span class="op">=</span> <span class="st">"https://api.dev.vm.validmind.ai/api/v1/tracking/tracking"</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  api_key <span class="op">=</span> <span class="st">"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  api_secret <span class="op">=</span> <span class="st">"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  project <span class="op">=</span> <span class="st">"&lt;project-identifier&gt;"</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>After you have pasted the code snippet into your development source code and executed the code, the Python Library API will register with ValidMind. You can now use the ValidMind Library to document and test your models, and to upload to the ValidMind Platform.</p>
+<section id="python-api" class="level2">
+<h2 class="anchored" data-anchor-id="python-api">Python API</h2>
+<section id="version" class="level3">
+<h3 class="anchored" data-anchor-id="version"><strong>version</strong></h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fl">2.8.0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="get_test_suite" class="level3">
+<h3 class="anchored" data-anchor-id="get_test_suite">get_test_suite<span class="muted">()</span></h3>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_test_suite(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    test_suite_id: <span class="bu">str</span> <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    section: <span class="bu">str</span> <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span>args <span class="op">=</span> (),</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">**</span>kwargs <span class="op">=</span> {}) <span class="op">-&gt;</span> TestSuite:</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Gets a TestSuite object for the current project or a specific test suite This function provides an interface to retrieve the TestSuite instance for the current project or a specific TestSuite instance identified by test_suite_id. The project Test Suite will contain sections for every section in the project’s documentation template and these Test Suite Sections will contain all the tests associated with that template section.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><strong>optional)</strong>: The test suite name. If not passed, then the project’s test suite will be returned. Defaults to None. section (str,</li>
+<li><strong>optional)</strong>: The section of the documentation template from which to retrieve the test suite. This only applies if test_suite_id is None. Defaults to None.</li>
+<li><strong>args</strong>: Additional arguments to pass to the TestSuite</li>
+<li><strong>kwargs</strong>: Additional keyword arguments to pass to the TestSuite</li>
+</ul>
+</section>
+<section id="init" class="level3">
+<h3 class="anchored" data-anchor-id="init">init<span class="muted">()</span></h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> init(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    project: Optional <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    api_key: Optional <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    api_secret: Optional <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    api_host: Optional <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    model: Optional <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    monitoring: <span class="bu">bool</span> <span class="op">=</span> <span class="va">False</span>):</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Initializes the API client instances and calls the /ping endpoint to ensure the provided credentials are valid and we can connect to the ValidMind API. If the API key and secret are not provided, the client will attempt to retrieve them from the environment variables <code>VM_API_KEY</code> and <code>VM_API_SECRET</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><strong>optional)</strong>: The project CUID. Alias for model. Defaults to None. [DEPRECATED] model (str,</li>
+<li><strong>optional)</strong>: The model CUID. Defaults to None. api_key (str,</li>
+<li><strong>optional)</strong>: The API key. Defaults to None. api_secret (str,</li>
+<li><strong>optional)</strong>: The API secret. Defaults to None. api_host (str,</li>
+<li><strong>optional)</strong>: The API host. Defaults to None. monitoring</li>
+<li><strong>(bool)</strong>: The ongoing monitoring flag. Defaults to False.</li>
+</ul>
+<p><strong>Raises</strong></p>
+<ul>
+<li><strong>ValueError</strong>: If the API key and secret are not provided</li>
+</ul>
+</section>
+<section id="init_dataset" class="level3">
+<h3 class="anchored" data-anchor-id="init_dataset">init_dataset<span class="muted">()</span></h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> init_dataset(</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    dataset,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    model <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    index <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    index_name: <span class="bu">str</span> <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    date_time_index: <span class="bu">bool</span> <span class="op">=</span> <span class="va">False</span>,</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    columns: <span class="bu">list</span> <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    text_column: <span class="bu">str</span> <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    target_column: <span class="bu">str</span> <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    feature_columns: <span class="bu">list</span> <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    extra_columns: <span class="bu">dict</span> <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    class_labels: <span class="bu">dict</span> <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="bu">type</span>: <span class="bu">str</span> <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    input_id: <span class="bu">str</span> <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    __log <span class="op">=</span> <span class="va">True</span>) <span class="op">-&gt;</span> VMDataset:</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Initializes a VM Dataset, which can then be passed to other functions that can perform additional analysis and tests on the data. This function also ensures we are reading a valid dataset type. The following dataset types are supported:</p>
+<ul>
+<li>Pandas DataFrame</li>
+<li>Polars DataFrame</li>
+<li>Numpy ndarray</li>
+<li>Torch TensorDataset</li>
+</ul>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><strong>(VMModel)</strong>: ValidMind model object targets</li>
+<li><strong>(vm.vm.DatasetTargets)</strong>: A list of target variables target_column</li>
+<li><strong>(str)</strong>: The name of the target column in the dataset feature_columns</li>
+<li><strong>(list)</strong>: A list of names of feature columns in the dataset extra_columns</li>
+<li><strong>(dictionary)</strong>: A dictionary containing the names of the prediction_column and group_by_columns in the dataset class_labels</li>
+<li><strong>(dict)</strong>: A list of class labels for classification problems type</li>
+<li><strong>(str)</strong>: The type of dataset (one of DATASET_TYPES) input_id</li>
+<li><strong>(str)</strong>: The input ID for the dataset (e.g.&nbsp;“my_dataset”). By default, this will be set to <code>dataset</code> but if you are passing this dataset as a test input using some other key than <code>dataset</code>, then you should set this to the same key.</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>A VM Dataset instance</li>
+</ul>
+<p><strong>Raises</strong></p>
+<ul>
+<li><strong>ValueError</strong>: If the dataset type is not supported</li>
+</ul>
+</section>
+<section id="init_model" class="level3">
+<h3 class="anchored" data-anchor-id="init_model">init_model<span class="muted">()</span></h3>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> init_model(</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    model: <span class="bu">object</span> <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    input_id: <span class="bu">str</span> <span class="op">=</span> <span class="st">'model'</span>,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    attributes: <span class="bu">dict</span> <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    predict_fn: <span class="bu">callable</span> <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    __log <span class="op">=</span> <span class="va">True</span>,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">**</span>kwargs <span class="op">=</span> {}) <span class="op">-&gt;</span> VMModel:</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Initializes a VM Model, which can then be passed to other functions that can perform additional analysis and tests on the data. This function also ensures we are creating a model supported libraries.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><strong>model</strong>: A trained model or VMModel instance input_id</li>
+<li><strong>(str)</strong>: The input ID for the model (e.g.&nbsp;“my_model”). By default, this will be set to <code>model</code> but if you are passing this model as a test input using some other key than <code>model</code>, then you should set this to the same key. attributes</li>
+<li><strong>(dict)</strong>: A dictionary of model attributes predict_fn</li>
+<li><strong>(callable)</strong>: A function that takes an input and returns a prediction</li>
+<li>**<strong>kwargs</strong>: Additional arguments to pass to the model</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>A VM Model instance</li>
+</ul>
+<p><strong>Raises</strong></p>
+<ul>
+<li><strong>ValueError</strong>: If the model type is not supported</li>
+</ul>
+</section>
+<section id="init_r_model" class="level3">
+<h3 class="anchored" data-anchor-id="init_r_model">init_r_model<span class="muted">()</span></h3>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> init_r_model(</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    model_path: <span class="bu">str</span>,</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    input_id: <span class="bu">str</span> <span class="op">=</span> <span class="st">'model'</span>) <span class="op">-&gt;</span> VMModel:</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Initializes a VM Model for an R model R models must be saved to disk and the filetype depends on the model type… Currently we support the following model types:</p>
+<ul>
+<li>LogisticRegression <code>glm</code> model in R: saved as an RDS file with <code>saveRDS</code></li>
+<li>LinearRegression <code>lm</code> model in R: saved as an RDS file with <code>saveRDS</code></li>
+<li>XGBClassifier: saved as a .json or .bin file with <code>xgb.save</code></li>
+<li>XGBRegressor: saved as a .json or .bin file with <code>xgb.save</code> LogisticRegression and LinearRegression models are converted to sklearn models by extracting the coefficients and intercept from the R model. XGB models are loaded using the xgboost since xgb models saved in .json or .bin format can be loaded directly with either Python or R</li>
+</ul>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><strong>(str)</strong>: The path to the R model saved as an RDS or XGB file model_type</li>
+<li><strong>(str)</strong>: The type of the model (one of R_MODEL_TYPES)</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>A VM Model instance</li>
+</ul>
+</section>
+<section id="log_metric" class="level3">
+<h3 class="anchored" data-anchor-id="log_metric">log_metric<span class="muted">()</span></h3>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> log_metric(</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    key: <span class="bu">str</span>,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    value: <span class="bu">float</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    inputs: Optional <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    params: Optional <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    recorded_at: Optional <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    thresholds: Optional <span class="op">=</span> <span class="va">None</span>):</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Logs a unit metric Unit metrics are key-value pairs where the key is the metric name and the value is a scalar (int or float). These key-value pairs are associated with the currently selected model (inventory model in the ValidMind Platform) and keys can be logged to over time to create a history of the metric. On the ValidMind Platform, these metrics will be used to create plots/visualizations for documentation and dashboards etc.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><strong>(str)</strong>: The metric key value</li>
+<li><strong>(float)</strong>: The metric value inputs (list,</li>
+<li><strong>optional)</strong>: A list of input IDs that were used to compute the metric. params (dict,</li>
+<li><strong>optional)</strong>: Dictionary of parameters used to compute the metric. recorded_at (str,</li>
+<li><strong>optional)</strong>: The timestamp of the metric. Server will use current time if not provided. thresholds (dict,</li>
+<li><strong>optional)</strong>: Dictionary of thresholds for the metric.</li>
+</ul>
+</section>
+<section id="preview_template" class="level3">
+<h3 class="anchored" data-anchor-id="preview_template">preview_template<span class="muted">()</span></h3>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> preview_template(</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>):</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Preview the documentation template for the current project This function will display the documentation template for the current project. If the project has not been initialized, then an error will be raised.</p>
+<p><strong>Raises</strong></p>
+<ul>
+<li><strong>ValueError</strong>: If the project has not been initialized</li>
+</ul>
+</section>
+<section id="reload" class="level3">
+<h3 class="anchored" data-anchor-id="reload">reload<span class="muted">()</span></h3>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="bu">reload</span>(</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>):</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Reconnect to the ValidMind API and reload the project configuration</p>
+</section>
+<section id="run_documentation_tests" class="level3">
+<h3 class="anchored" data-anchor-id="run_documentation_tests">run_documentation_tests<span class="muted">()</span></h3>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> run_documentation_tests(</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    section <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    send <span class="op">=</span> <span class="va">True</span>,</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    fail_fast <span class="op">=</span> <span class="va">False</span>,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    inputs <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    config <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">**</span>kwargs <span class="op">=</span> {}):</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Collect and run all the tests associated with a template This function will analyze the current project’s documentation template and collect all the tests associated with it into a test suite. It will then run the test suite, log the results to the ValidMind API, and display them to the user.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><strong>optional)</strong>: The section(s) to preview. Defaults to None. send (bool,</li>
+<li><strong>optional)</strong>: Whether to send the results to the ValidMind API. Defaults to True. fail_fast (bool,</li>
+<li><strong>optional)</strong>: Whether to stop running tests after the first failure. Defaults to False. inputs (dict,</li>
+<li><strong>optional)</strong>: A dictionary of test inputs to pass to the TestSuite</li>
+<li><strong>config</strong>: A dictionary of test parameters to override the defaults</li>
+<li>**<strong>kwargs</strong>: backwards compatibility for passing in test inputs using keyword arguments</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>TestSuite or dict: The completed TestSuite instance or a dictionary of TestSuites if section is a list.</li>
+</ul>
+<p><strong>Raises</strong></p>
+<ul>
+<li><strong>ValueError</strong>: If the project has not been initialized</li>
+</ul>
+</section>
+<section id="run_test_suite" class="level3">
+<h3 class="anchored" data-anchor-id="run_test_suite">run_test_suite<span class="muted">()</span></h3>
+<div class="sourceCode" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> run_test_suite(</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    test_suite_id,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    send <span class="op">=</span> <span class="va">True</span>,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    fail_fast <span class="op">=</span> <span class="va">False</span>,</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    config <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    inputs <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">**</span>kwargs <span class="op">=</span> {}):</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>High Level function for running a test suite This function provides a high level interface for running a test suite. A test suite is a collection of tests. This function will automatically find the correct test suite class based on the test_suite_id, initialize each of the tests, and run them.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><strong>(str)</strong>: The test suite name (e.g.&nbsp;‘classifier_full_suite’) config (dict,</li>
+<li><strong>optional)</strong>: A dictionary of parameters to pass to the tests in the test suite. Defaults to None. send (bool,</li>
+<li><strong>optional)</strong>: Whether to post the test results to the API. send=False is useful for testing. Defaults to True. fail_fast (bool,</li>
+<li><strong>optional)</strong>: Whether to stop running tests after the first failure. Defaults to False. inputs (dict,</li>
+<li><strong>optional)</strong>: A dictionary of test inputs to pass to the TestSuite e.g.&nbsp;<code>model</code>, <code>dataset</code> <code>models</code> etc. These inputs will be accessible by any test in the test suite. See the test documentation or <code>vm.describe_test()</code> for more details on the inputs required for each.</li>
+<li>**<strong>kwargs</strong>: backwards compatibility for passing in test inputs using keyword arguments</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the TestSuite instance</li>
+</ul>
+<p><strong>Raises</strong></p>
+<ul>
+<li><strong>ValueError</strong>: If the test suite name is not found or if there is an error initializing the test suite</li>
+</ul>
+</section>
+<section id="tags" class="level3">
+<h3 class="anchored" data-anchor-id="tags">tags<span class="muted">()</span></h3>
+<div class="sourceCode" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> tags(</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span>tags <span class="op">=</span> ()):</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Decorator for specifying tags for a test.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li>*<strong>tags</strong>: The tags to apply to the test.</li>
+</ul>
+</section>
+<section id="tasks" class="level3">
+<h3 class="anchored" data-anchor-id="tasks">tasks<span class="muted">()</span></h3>
+<div class="sourceCode" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> tasks(</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span>tasks <span class="op">=</span> ()):</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Decorator for specifying the task types that a test is designed for.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li>*<strong>tasks</strong>: The task types that the test is designed for.</li>
+</ul>
+</section>
+<section id="test" class="level3">
+<h3 class="anchored" data-anchor-id="test">test<span class="muted">()</span></h3>
+<div class="sourceCode" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test(</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    func_or_id):</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Decorator for creating and registering custom tests This decorator registers the function it wraps as a test function within ValidMind under the provided ID. Once decorated, the function can be run using the <code>validmind.tests.run_test</code> function. The function can take two different types of arguments:</p>
+<ul>
+<li>Inputs: ValidMind model or dataset (or list of models/datasets). These arguments must use the following names: <code>model</code>, <code>models</code>, <code>dataset</code>, <code>datasets</code>.</li>
+<li>Parameters: Any additional keyword arguments of any type (must have a default value) that can have any name. The function should return one of the following types:</li>
+<li>Table: Either a list of dictionaries or a pandas DataFrame</li>
+<li>Plot: Either a matplotlib figure or a plotly figure</li>
+<li>Scalar: A single number (int or float)</li>
+<li>Boolean: A single boolean value indicating whether the test passed or failed The function may also include a docstring. This docstring will be used and logged as the metric’s description.</li>
+</ul>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><strong>func</strong>: The function to decorate</li>
+<li><strong>test_id</strong>: The identifier for the metric. If not provided, the function name is used.</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>The decorated function.</li>
+</ul>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

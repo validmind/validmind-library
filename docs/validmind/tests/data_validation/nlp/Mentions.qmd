@@ -39,7 +39,7 @@ The test first verifies the existence of a text column in the provided dataset. 
 - This test isn't suited for datasets devoid of textual data.
 - It does not provide insights on less frequently occurring data or outliers, which means potentially significant patterns could be overlooked.
 
-### [class]{.muted} SkipTestError
+## [class]{.muted} SkipTestError
 
 ```python
 class SkipTestError(BaseError):

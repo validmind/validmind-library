@@ -38,7 +38,7 @@ Initially, the test checks if the dataframe index is in datetime format. Subsequ
 - The `infer_freq` method might not always correctly infer frequency when faced with missing or irregular data points.
 - Depending on context or the model under development, mixed frequencies might sometimes be acceptable, but this test considers them a failing condition.
 
-### [class]{.muted} SkipTestError
+## [class]{.muted} SkipTestError
 
 ```python
 class SkipTestError(BaseError):

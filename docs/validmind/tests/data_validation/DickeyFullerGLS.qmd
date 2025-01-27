@@ -4,6 +4,15 @@ toc-depth: 3
 toc-expand: 3
 ---
 
+## get_logger[()]{.muted}
+
+```python
+def get_logger(
+    name = 'validmind',    log_level = None):
+```
+
+Get a logger for the given module name
+
 ## DickeyFullerGLS[()]{.muted}
 
 ```python
@@ -36,7 +45,8 @@ This code implements the Dickey-Fuller GLS unit root test on each attribute of t
 - Despite its benefits, the DFGLS test does present some drawbacks. It can potentially lead to inaccurate conclusions if the time series data incorporates a structural break.
 - If the time series tends to follow a trend while still being stationary, the test might misinterpret it, necessitating further detrending.
 - The test also presents challenges when dealing with shorter time series data or volatile data, not producing reliable results in these cases.
-  ### [class]{.muted} SkipTestError
+
+## [class]{.muted} SkipTestError
 
 ```python
 class SkipTestError(BaseError):

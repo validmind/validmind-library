@@ -50,7 +50,7 @@ This mechanism is comprised of two steps. Initially, the rolling mean and standa
 - Requires the dataset to be indexed by date and time, hence it may not be usable for datasets without a timestamp index.
 - Primarily serves for data visualization as it does not facilitate any quantitative measures for stationarity, such as through statistical tests. Therefore, the interpretation is subjective and depends heavily on modeler discretion.
 
-### [class]{.muted} SkipTestError
+## [class]{.muted} SkipTestError
 
 ```python
 class SkipTestError(BaseError):

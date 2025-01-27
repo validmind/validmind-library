@@ -4,7 +4,7 @@ toc-depth: 3
 toc-expand: 3
 ---
 
-### [class]{.muted} RegressionFullSuite
+## [class]{.muted} RegressionFullSuite
 
 ```python
 class RegressionFullSuite(TestSuite):
@@ -14,9 +14,7 @@ Full test suite for regression models.
 
 **Inherited members**
 
-**Methods**
-
-### [class]{.muted} RegressionMetrics
+## [class]{.muted} RegressionMetrics
 
 ```python
 class RegressionMetrics(TestSuite):
@@ -26,9 +24,7 @@ Test suite for performance metrics of regression metrics
 
 **Inherited members**
 
-**Methods**
-
-### [class]{.muted} RegressionPerformance
+## [class]{.muted} RegressionPerformance
 
 ```python
 class RegressionPerformance(TestSuite):
@@ -38,9 +34,7 @@ Test suite for regression model performance
 
 **Inherited members**
 
-**Methods**
-
-### [class]{.muted} TabularDataQuality
+## [class]{.muted} TabularDataQuality
 
 ```python
 class TabularDataQuality(TestSuite):
@@ -50,9 +44,7 @@ Test suite for data quality on tabular datasets
 
 **Inherited members**
 
-**Methods**
-
-### [class]{.muted} TabularDatasetDescription
+## [class]{.muted} TabularDatasetDescription
 
 ```python
 class TabularDatasetDescription(TestSuite):
@@ -61,5 +53,3 @@ class TabularDatasetDescription(TestSuite):
 Test suite to extract metadata and descriptive statistics from a tabular dataset
 
 **Inherited members**
-
-**Methods**

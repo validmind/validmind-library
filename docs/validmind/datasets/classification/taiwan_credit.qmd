@@ -4,6 +4,60 @@ toc-depth: 3
 toc-expand: 3
 ---
 
+## simple_preprocess_booleans[()]{.muted}
+
+```python
+def simple_preprocess_booleans(
+    df,    columns):
+```
+
+Preprocess boolean columns.
+
+**Parameters**
+
+- **(pandas.DataFrame)**: Dataframe to preprocess. columns
+- **(list)**: List of columns to preprocess.
+
+**Returns**
+
+- Preprocessed dataframe.
+
+## simple_preprocess_categoricals[()]{.muted}
+
+```python
+def simple_preprocess_categoricals(
+    df,    columns):
+```
+
+Preprocess categorical columns.
+
+**Parameters**
+
+- **(pandas.DataFrame)**: Dataframe to preprocess. columns
+- **(list)**: List of columns to preprocess.
+
+**Returns**
+
+- Preprocessed dataframe.
+
+## simple_preprocess_numericals[()]{.muted}
+
+```python
+def simple_preprocess_numericals(
+    df,    columns):
+```
+
+Preprocess numerical columns.
+
+**Parameters**
+
+- **(pandas.DataFrame)**: Dataframe to preprocess. columns
+- **(list)**: List of columns to preprocess.
+
+**Returns**
+
+- Preprocessed dataframe.
+
 ## load_data[()]{.muted}
 
 ```python

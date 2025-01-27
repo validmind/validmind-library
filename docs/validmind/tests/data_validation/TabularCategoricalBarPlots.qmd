@@ -38,7 +38,7 @@ The provided dataset is first checked to determine if it contains any categorica
 - It does not provide informative value when there are too many categories, as the bar chart could become cluttered and hard to interpret.
 - Offers no insights into the model's performance or precision, but rather provides a descriptive analysis of the input.
 
-### [class]{.muted} SkipTestError
+## [class]{.muted} SkipTestError
 
 ```python
 class SkipTestError(BaseError):

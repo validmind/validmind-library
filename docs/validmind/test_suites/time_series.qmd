@@ -6,7 +6,7 @@ toc-expand: 3
 
 Time Series Test Suites
 
-### [class]{.muted} TimeSeriesDataQuality
+## [class]{.muted} TimeSeriesDataQuality
 
 ```python
 class TimeSeriesDataQuality(TestSuite):
@@ -16,9 +16,7 @@ Test suite for data quality on time series datasets
 
 **Inherited members**
 
-**Methods**
-
-### [class]{.muted} TimeSeriesDataset
+## [class]{.muted} TimeSeriesDataset
 
 ```python
 class TimeSeriesDataset(TestSuite):
@@ -28,9 +26,7 @@ Test suite for time series datasets.
 
 **Inherited members**
 
-**Methods**
-
-### [class]{.muted} TimeSeriesModelValidation
+## [class]{.muted} TimeSeriesModelValidation
 
 ```python
 class TimeSeriesModelValidation(TestSuite):
@@ -40,9 +36,7 @@ Test suite for time series model validation.
 
 **Inherited members**
 
-**Methods**
-
-### [class]{.muted} TimeSeriesMultivariate
+## [class]{.muted} TimeSeriesMultivariate
 
 ```python
 class TimeSeriesMultivariate(TestSuite):
@@ -52,9 +46,7 @@ This test suite provides a preliminary understanding of the features and relatio
 
 **Inherited members**
 
-**Methods**
-
-### [class]{.muted} TimeSeriesUnivariate
+## [class]{.muted} TimeSeriesUnivariate
 
 ```python
 class TimeSeriesUnivariate(TestSuite):
@@ -66,9 +58,7 @@ The raw time series data provides a visual inspection of the target variable's b
 
 **Inherited members**
 
-**Methods**
-
-### [class]{.muted} RegressionModelDescription
+## [class]{.muted} RegressionModelDescription
 
 ```python
 class RegressionModelDescription(TestSuite):
@@ -78,9 +68,7 @@ Test suite for performance metric of regression model of statsmodels library
 
 **Inherited members**
 
-**Methods**
-
-### [class]{.muted} RegressionModelsEvaluation
+## [class]{.muted} RegressionModelsEvaluation
 
 ```python
 class RegressionModelsEvaluation(TestSuite):
@@ -89,5 +77,3 @@ class RegressionModelsEvaluation(TestSuite):
 Test suite for metrics comparison of regression model of statsmodels library
 
 **Inherited members**
-
-**Methods**

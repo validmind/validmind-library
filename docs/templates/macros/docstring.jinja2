@@ -21,7 +21,11 @@
                     {%- if desc.endswith(')') and '(default:' in desc -%}
                         {%- set desc = desc[:-1] ~ ')' -%}
                     {%- endif -%}
-                    {%- set _ = sections.append("- **" ~ param.arg_name ~ "**: " ~ desc) -%}
+                    {%- if param.type_name -%}
+                        {%- set _ = sections.append("- **" ~ param.arg_name ~ "** (" ~ param.type_name ~ "): " ~ desc) -%}
+                    {%- else -%}
+                        {%- set _ = sections.append("- **" ~ param.arg_name ~ "**: " ~ desc) -%}
+                    {%- endif -%}
                 {%- endif -%}
             {%- endfor -%}
         {%- endif -%}

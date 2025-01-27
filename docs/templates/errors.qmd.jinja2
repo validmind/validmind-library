@@ -25,8 +25,6 @@ class {{ member.name }}({% for base in member.bases %}{{ base.name }}{% if not l
 {% endif %}
 
 {% if member.members %}
-**Methods**
-
 {% for method in member.members.values() | sort(attribute='name') %}
 {% if method.kind == 'method' and not method.name.startswith('_') %}
 #### [{{ method.name }}[()]{.muted}](#{{ method.name }})
@@ -54,8 +52,6 @@ class {{ member.name }}({% for base in member.bases %}{{ base.name }}{% if not l
 {% endif %}
 
 {% if member.members %}
-**Methods**
-
 {% for method in member.members.values() | sort(attribute='name') %}
 {% if method.kind == 'method' and not method.name.startswith('_') %}
 #### [{{ method.name }}[()]{.muted}](#{{ method.name }})
@@ -83,8 +79,6 @@ class {{ member.name }}({% for base in member.bases %}{{ base.name }}{% if not l
 {% endif %}
 
 {% if member.members %}
-**Methods**
-
 {% for method in member.members.values() | sort(attribute='name') %}
 {% if method.kind == 'method' and not method.name.startswith('_') %}
 #### [{{ method.name }}[()]{.muted}](#{{ method.name }})
@@ -112,8 +106,6 @@ class {{ member.name }}({% for base in member.bases %}{{ base.name }}{% if not l
 {% endif %}
 
 {% if member.members %}
-**Methods**
-
 {% for method in member.members.values() | sort(attribute='name') %}
 {% if method.kind == 'method' and not method.name.startswith('_') %}
 #### [{{ method.name }}[()]{.muted}](#{{ method.name }})
@@ -141,8 +133,6 @@ class {{ member.name }}({% for base in member.bases %}{{ base.name }}{% if not l
 {% endif %}
 
 {% if member.members %}
-**Methods**
-
 {% for method in member.members.values() | sort(attribute='name') %}
 {% if method.kind == 'method' and not method.name.startswith('_') %}
 #### [{{ method.name }}[()]{.muted}](#{{ method.name }})
@@ -170,8 +160,6 @@ class {{ member.name }}({% for base in member.bases %}{{ base.name }}{% if not l
 {% endif %}
 
 {% if member.members %}
-**Methods**
-
 {% for method in member.members.values() | sort(attribute='name') %}
 {% if method.kind == 'method' and not method.name.startswith('_') %}
 #### [{{ method.name }}[()]{.muted}](#{{ method.name }})

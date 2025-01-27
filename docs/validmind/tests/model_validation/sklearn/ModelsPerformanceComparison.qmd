@@ -4,6 +4,13 @@ toc-depth: 3
 toc-expand: 3
 ---
 
+## multiclass_roc_auc_score[()]{.muted}
+
+```python
+def multiclass_roc_auc_score(
+    y_test,    y_pred,    average = 'macro'):
+```
+
 ## ModelsPerformanceComparison[()]{.muted}
 
 ```python

@@ -4,6 +4,15 @@ toc-depth: 3
 toc-expand: 3
 ---
 
+## adj_r2_score[()]{.muted}
+
+```python
+def adj_r2_score(
+    actual: {'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'np'}, {'cls': 'ExprName', 'name': 'ndarray'}]},    predicted: {'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'np'}, {'cls': 'ExprName', 'name': 'ndarray'}]},    rowcount: {'cls': 'ExprName', 'name': 'int'},    featurecount: {'cls': 'ExprName', 'name': 'int'}):
+```
+
+Adjusted R2 Score
+
 ## RegressionModelSummary[()]{.muted}
 
 ```python

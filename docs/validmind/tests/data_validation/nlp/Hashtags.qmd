@@ -41,7 +41,7 @@ The test implements a regular expression (regex) to extract all hashtags from th
 - Does not account for typographical errors, variations, or synonyms in hashtags.
 - Does not provide context or sentiment associated with the hashtags, so the information provided may have limited utility on its own.
 
-### [class]{.muted} SkipTestError
+## [class]{.muted} SkipTestError
 
 ```python
 class SkipTestError(BaseError):

@@ -42,7 +42,7 @@ The test mechanism involves iterating over a predefined range of cluster numbers
 - Might not be straightforward to determine the 'elbow' point or maximize the silhouette average score, especially in larger and complicated datasets.
 - Assumes spherical clusters (due to using the Euclidean distance in the Elbow method), which might not align with the actual structure of the data.
 
-### [class]{.muted} SkipTestError
+## [class]{.muted} SkipTestError
 
 ```python
 class SkipTestError(BaseError):

@@ -26,6 +26,7 @@ aliases:
 ```
 {% endif %}
 
+{# Process root-level aliases #}
 {% for member in module.members | sort_members %}
 {% if is_public(member, module, full_data, is_root) and member.kind == "alias" %}
 {% set target = resolve_alias(member, full_data) %}
@@ -67,13 +68,38 @@ def {{ member.name }}(
 {% endfor %}
 {% endif %}
 
+{# Process module-level aliases #}
+{% if not is_root %}
+{% for member in module.members | sort_members %}
+{% if is_public(member, module, full_data, is_root) and member.kind == "alias" %}
+{% set resolved = resolve_alias(member, full_data) %}
+{% if resolved.kind == "function" %}
+## {{ member.name }}[()]{.muted}
+
+```python
+{% if resolved.labels and "async" in resolved.labels %}async {% endif %}def {{ member.name }}(
+{% for param in resolved.parameters %}
+    {{ param.name }}{% if param.annotation %}: {{ param.annotation }}{% endif %}{% if param.default %} = {{ param.default }}{% endif %}{% if not loop.last %},{% endif %}
+{% endfor %}
+){% if resolved.returns %} -> {{ resolved.returns }}{% endif %}:
+```
+
+{% if resolved.docstring %}
+{{ doc.format_docstring(resolved.docstring) }}
+{% endif %}
+{% endif %}
+{% endif %}
+{% endfor %}
+{% endif %}
+
 {# List classes and functions #}
 {% for member in module.members | sort_members %}
 {% if is_public(member, module, full_data, is_root) %}
 {% set resolved = resolve_alias(member, full_data) %}
 {% if resolved.kind == "class" %}
+
 {% include "class.qmd.jinja2" %}
-{% elif resolved.kind == "function" %}
+{% elif resolved.kind == "function" and member.kind != "alias" %}
 {% include "function.qmd.jinja2" %}
 {% endif %}
 {% endif %}

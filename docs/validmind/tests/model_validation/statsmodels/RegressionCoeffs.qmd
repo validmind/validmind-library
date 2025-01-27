@@ -38,7 +38,7 @@ The function operates by extracting the estimated coefficients and their standar
 - It does not address issues related to multi-collinearity among predictor variables, which can affect the interpretation of coefficients.
 - This metric is limited to regression tasks using tabular data and is not applicable to other types of machine learning tasks or data structures.
 
-### [class]{.muted} SkipTestError
+## [class]{.muted} SkipTestError
 
 ```python
 class SkipTestError(BaseError):

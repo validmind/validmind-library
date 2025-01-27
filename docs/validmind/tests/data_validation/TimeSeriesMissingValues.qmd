@@ -39,7 +39,7 @@ The test method commences by validating if the dataset has a datetime index; if 
 - The test's sensitivity to the 'min_threshold' parameter may raise false alarms if set too strictly or may overlook problematic data if set too loosely.
 - Solely focuses on the 'missingness' of the data and might fall short in addressing other aspects of data quality.
 
-### [class]{.muted} SkipTestError
+## [class]{.muted} SkipTestError
 
 ```python
 class SkipTestError(BaseError):

@@ -40,7 +40,7 @@ The mechanism for this Python class involves extracting the column names from th
 - The metric necessitates that the time-specific data has been transformed into a datetime index, with the data formatted correctly.
 - The metric has an inherent limitation in that it cannot extract deeper statistical insights from the time series data, which can limit its efficacy with complex data structures and phenomena.
 
-### [class]{.muted} SkipTestError
+## [class]{.muted} SkipTestError
 
 ```python
 class SkipTestError(BaseError):

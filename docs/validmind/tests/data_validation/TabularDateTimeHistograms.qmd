@@ -39,7 +39,7 @@ This test operates by first identifying all datetime columns and extracting them
 - The test is only applicable to datasets containing datetime columns and will fail if such columns are unavailable.
 - The interpretation of the histograms relies heavily on the domain expertise and experience of the reviewer.
 
-### [class]{.muted} SkipTestError
+## [class]{.muted} SkipTestError
 
 ```python
 class SkipTestError(BaseError):

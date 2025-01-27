@@ -38,7 +38,7 @@ The test extracts ground truth labels and prediction probabilities from the mode
 - This metric is only applicable to binary classification models - it raises errors for multiclass classification models or Foundation models.
 - It may not fully represent the overall accuracy of the model if the cost of false positives and false negatives are extremely different, or if the dataset is heavily imbalanced.
 
-### [class]{.muted} SkipTestError
+## [class]{.muted} SkipTestError
 
 ```python
 class SkipTestError(BaseError):

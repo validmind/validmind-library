@@ -4,6 +4,15 @@ toc-depth: 3
 toc-expand: 3
 ---
 
+## get_logger[()]{.muted}
+
+```python
+def get_logger(
+    name = 'validmind',    log_level = None):
+```
+
+Get a logger for the given module name
+
 ## PermutationFeatureImportance[()]{.muted}
 
 ```python
@@ -40,7 +49,8 @@ PFI is calculated via the `permutation_importance` method from the `sklearn.insp
 - Does not imply causality; it only presents the amount of information that a feature provides for the prediction task.
 - Does not account for interactions between features. If features are correlated, the permutation importance may allocate importance to one and not the other.
 - Cannot interact with certain libraries like statsmodels, pytorch, catboost, etc., thus limiting its applicability.
-  ### [class]{.muted} SkipTestError
+
+## [class]{.muted} SkipTestError
 
 ```python
 class SkipTestError(BaseError):

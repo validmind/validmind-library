@@ -9,7 +9,7 @@ This module contains all the custom errors that are used in the ValidMind Librar
 - BaseError
 - APIRequestError
 
-### [class]{.muted} APIRequestError
+## [class]{.muted} APIRequestError
 
 ```python
 class APIRequestError(BaseError):
@@ -22,7 +22,7 @@ Generic error for API request errors that are not known.
 - **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
 - **From builtins.BaseException**: with_traceback, add_note
 
-### [class]{.muted} BaseError
+## [class]{.muted} BaseError
 
 ```python
 class BaseError(Exception):
@@ -32,15 +32,13 @@ class BaseError(Exception):
 
 - **From builtins.BaseException**: with_traceback, add_note
 
-**Methods**
-
 ### [description[()]{.muted}](#description)
 
 ```python
 description(self, args, kwargs)
 ```
 
-### [class]{.muted} GetTestSuiteError
+## [class]{.muted} GetTestSuiteError
 
 ```python
 class GetTestSuiteError(BaseError):
@@ -53,7 +51,7 @@ When the test suite could not be found.
 - **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
 - **From builtins.BaseException**: with_traceback, add_note
 
-### [class]{.muted} InitializeTestSuiteError
+## [class]{.muted} InitializeTestSuiteError
 
 ```python
 class InitializeTestSuiteError(BaseError):
@@ -66,7 +64,7 @@ When the test suite was found but could not be initialized.
 - **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
 - **From builtins.BaseException**: with_traceback, add_note
 
-### [class]{.muted} InvalidAPICredentialsError
+## [class]{.muted} InvalidAPICredentialsError
 
 ```python
 class InvalidAPICredentialsError(APIRequestError):
@@ -77,15 +75,13 @@ class InvalidAPICredentialsError(APIRequestError):
 - **From APIRequestError**: [class APIRequestError[()]{.muted}](#class-apirequesterror)
 - **From builtins.BaseException**: with_traceback, add_note
 
-**Methods**
-
 ### [description[()]{.muted}](#description)
 
 ```python
 description(self, args, kwargs)
 ```
 
-### [class]{.muted} InvalidContentIdPrefixError
+## [class]{.muted} InvalidContentIdPrefixError
 
 ```python
 class InvalidContentIdPrefixError(APIRequestError):
@@ -98,7 +94,7 @@ When an invalid text content_id is sent to the API.
 - **From APIRequestError**: [class APIRequestError[()]{.muted}](#class-apirequesterror)
 - **From builtins.BaseException**: with_traceback, add_note
 
-### [class]{.muted} InvalidInputError
+## [class]{.muted} InvalidInputError
 
 ```python
 class InvalidInputError(BaseError):
@@ -111,7 +107,7 @@ When an invalid input object.
 - **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
 - **From builtins.BaseException**: with_traceback, add_note
 
-### [class]{.muted} InvalidMetricResultsError
+## [class]{.muted} InvalidMetricResultsError
 
 ```python
 class InvalidMetricResultsError(APIRequestError):
@@ -124,7 +120,7 @@ When an invalid metric results object is sent to the API.
 - **From APIRequestError**: [class APIRequestError[()]{.muted}](#class-apirequesterror)
 - **From builtins.BaseException**: with_traceback, add_note
 
-### [class]{.muted} InvalidProjectError
+## [class]{.muted} InvalidProjectError
 
 ```python
 class InvalidProjectError(APIRequestError):
@@ -135,15 +131,13 @@ class InvalidProjectError(APIRequestError):
 - **From APIRequestError**: [class APIRequestError[()]{.muted}](#class-apirequesterror)
 - **From builtins.BaseException**: with_traceback, add_note
 
-**Methods**
-
 ### [description[()]{.muted}](#description)
 
 ```python
 description(self, args, kwargs)
 ```
 
-### [class]{.muted} InvalidRequestBodyError
+## [class]{.muted} InvalidRequestBodyError
 
 ```python
 class InvalidRequestBodyError(APIRequestError):
@@ -156,7 +150,7 @@ When a POST/PUT request is made with an invalid request body.
 - **From APIRequestError**: [class APIRequestError[()]{.muted}](#class-apirequesterror)
 - **From builtins.BaseException**: with_traceback, add_note
 
-### [class]{.muted} InvalidTestParametersError
+## [class]{.muted} InvalidTestParametersError
 
 ```python
 class InvalidTestParametersError(BaseError):
@@ -169,7 +163,7 @@ When an invalid parameters for the test.
 - **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
 - **From builtins.BaseException**: with_traceback, add_note
 
-### [class]{.muted} InvalidTestResultsError
+## [class]{.muted} InvalidTestResultsError
 
 ```python
 class InvalidTestResultsError(APIRequestError):
@@ -182,7 +176,7 @@ When an invalid test results object is sent to the API.
 - **From APIRequestError**: [class APIRequestError[()]{.muted}](#class-apirequesterror)
 - **From builtins.BaseException**: with_traceback, add_note
 
-### [class]{.muted} InvalidTextObjectError
+## [class]{.muted} InvalidTextObjectError
 
 ```python
 class InvalidTextObjectError(APIRequestError):
@@ -195,7 +189,7 @@ When an invalid Metadat (Text) object is sent to the API.
 - **From APIRequestError**: [class APIRequestError[()]{.muted}](#class-apirequesterror)
 - **From builtins.BaseException**: with_traceback, add_note
 
-### [class]{.muted} InvalidValueFormatterError
+## [class]{.muted} InvalidValueFormatterError
 
 ```python
 class InvalidValueFormatterError(BaseError):
@@ -208,7 +202,7 @@ When an invalid value formatter is provided when serializing results.
 - **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
 - **From builtins.BaseException**: with_traceback, add_note
 
-### [class]{.muted} InvalidXGBoostTrainedModelError
+## [class]{.muted} InvalidXGBoostTrainedModelError
 
 ```python
 class InvalidXGBoostTrainedModelError(BaseError):
@@ -221,7 +215,7 @@ When an invalid XGBoost trained model is used when calling init_r_model.
 - **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
 - **From builtins.BaseException**: with_traceback, add_note
 
-### [class]{.muted} LoadTestError
+## [class]{.muted} LoadTestError
 
 ```python
 class LoadTestError(BaseError):
@@ -234,9 +228,7 @@ Exception raised when an error occurs while loading a test
 - **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
 - **From builtins.BaseException**: with_traceback, add_note
 
-**Methods**
-
-### [class]{.muted} MismatchingClassLabelsError
+## [class]{.muted} MismatchingClassLabelsError
 
 ```python
 class MismatchingClassLabelsError(BaseError):
@@ -249,7 +241,7 @@ When the class labels found in the dataset don't match the provided target label
 - **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
 - **From builtins.BaseException**: with_traceback, add_note
 
-### [class]{.muted} MissingAPICredentialsError
+## [class]{.muted} MissingAPICredentialsError
 
 ```python
 class MissingAPICredentialsError(BaseError):
@@ -260,15 +252,13 @@ class MissingAPICredentialsError(BaseError):
 - **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
 - **From builtins.BaseException**: with_traceback, add_note
 
-**Methods**
-
 ### [description[()]{.muted}](#description)
 
 ```python
 description(self, args, kwargs)
 ```
 
-### [class]{.muted} MissingCacheResultsArgumentsError
+## [class]{.muted} MissingCacheResultsArgumentsError
 
 ```python
 class MissingCacheResultsArgumentsError(BaseError):
@@ -281,7 +271,7 @@ When the cache_results function is missing arguments.
 - **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
 - **From builtins.BaseException**: with_traceback, add_note
 
-### [class]{.muted} MissingClassLabelError
+## [class]{.muted} MissingClassLabelError
 
 ```python
 class MissingClassLabelError(BaseError):
@@ -294,7 +284,7 @@ When the one or more class labels are missing from provided dataset targets.
 - **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
 - **From builtins.BaseException**: with_traceback, add_note
 
-### [class]{.muted} MissingDependencyError
+## [class]{.muted} MissingDependencyError
 
 ```python
 class MissingDependencyError(BaseError):
@@ -307,9 +297,7 @@ When a required dependency is missing.
 - **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
 - **From builtins.BaseException**: with_traceback, add_note
 
-**Methods**
-
-### [class]{.muted} MissingDocumentationTemplate
+## [class]{.muted} MissingDocumentationTemplate
 
 ```python
 class MissingDocumentationTemplate(BaseError):
@@ -322,7 +310,7 @@ When the client config is missing the documentation template.
 - **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
 - **From builtins.BaseException**: with_traceback, add_note
 
-### [class]{.muted} MissingModelIdError
+## [class]{.muted} MissingModelIdError
 
 ```python
 class MissingModelIdError(BaseError):
@@ -333,15 +321,13 @@ class MissingModelIdError(BaseError):
 - **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
 - **From builtins.BaseException**: with_traceback, add_note
 
-**Methods**
-
 ### [description[()]{.muted}](#description)
 
 ```python
 description(self, args, kwargs)
 ```
 
-### [class]{.muted} MissingOrInvalidModelPredictFnError
+## [class]{.muted} MissingOrInvalidModelPredictFnError
 
 ```python
 class MissingOrInvalidModelPredictFnError(BaseError):
@@ -354,7 +340,7 @@ When the pytorch model is missing a predict function or its predict method does 
 - **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
 - **From builtins.BaseException**: with_traceback, add_note
 
-### [class]{.muted} MissingRequiredTestInputError
+## [class]{.muted} MissingRequiredTestInputError
 
 ```python
 class MissingRequiredTestInputError(BaseError):
@@ -367,7 +353,7 @@ When a required test context variable is missing.
 - **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
 - **From builtins.BaseException**: with_traceback, add_note
 
-### [class]{.muted} MissingRExtrasError
+## [class]{.muted} MissingRExtrasError
 
 ```python
 class MissingRExtrasError(BaseError):
@@ -380,15 +366,13 @@ When the R extras have not been installed.
 - **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
 - **From builtins.BaseException**: with_traceback, add_note
 
-**Methods**
-
 ### [description[()]{.muted}](#description)
 
 ```python
 description(self, args, kwargs)
 ```
 
-### [class]{.muted} MissingTextContentIdError
+## [class]{.muted} MissingTextContentIdError
 
 ```python
 class MissingTextContentIdError(APIRequestError):
@@ -401,7 +385,7 @@ When a Text object is sent to the API without a content_id.
 - **From APIRequestError**: [class APIRequestError[()]{.muted}](#class-apirequesterror)
 - **From builtins.BaseException**: with_traceback, add_note
 
-### [class]{.muted} MissingTextContentsError
+## [class]{.muted} MissingTextContentsError
 
 ```python
 class MissingTextContentsError(APIRequestError):
@@ -414,7 +398,7 @@ When a Text object is sent to the API without a "text" attribute.
 - **From APIRequestError**: [class APIRequestError[()]{.muted}](#class-apirequesterror)
 - **From builtins.BaseException**: with_traceback, add_note
 
-### [class]{.muted} SkipTestError
+## [class]{.muted} SkipTestError
 
 ```python
 class SkipTestError(BaseError):
@@ -427,7 +411,7 @@ Useful error to throw when a test cannot be executed.
 - **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
 - **From builtins.BaseException**: with_traceback, add_note
 
-### [class]{.muted} TestInputInvalidDatasetError
+## [class]{.muted} TestInputInvalidDatasetError
 
 ```python
 class TestInputInvalidDatasetError(BaseError):
@@ -440,7 +424,7 @@ When an invalid dataset is used in a test context.
 - **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
 - **From builtins.BaseException**: with_traceback, add_note
 
-### [class]{.muted} UnsupportedColumnTypeError
+## [class]{.muted} UnsupportedColumnTypeError
 
 ```python
 class UnsupportedColumnTypeError(BaseError):
@@ -453,7 +437,7 @@ When an unsupported column type is found on a dataset.
 - **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
 - **From builtins.BaseException**: with_traceback, add_note
 
-### [class]{.muted} UnsupportedDatasetError
+## [class]{.muted} UnsupportedDatasetError
 
 ```python
 class UnsupportedDatasetError(BaseError):
@@ -466,7 +450,7 @@ When an unsupported dataset is used.
 - **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
 - **From builtins.BaseException**: with_traceback, add_note
 
-### [class]{.muted} UnsupportedFigureError
+## [class]{.muted} UnsupportedFigureError
 
 ```python
 class UnsupportedFigureError(BaseError):
@@ -479,7 +463,7 @@ When an unsupported figure object is constructed.
 - **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
 - **From builtins.BaseException**: with_traceback, add_note
 
-### [class]{.muted} UnsupportedModelError
+## [class]{.muted} UnsupportedModelError
 
 ```python
 class UnsupportedModelError(BaseError):
@@ -492,7 +476,7 @@ When an unsupported model is used.
 - **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
 - **From builtins.BaseException**: with_traceback, add_note
 
-### [class]{.muted} UnsupportedModelForSHAPError
+## [class]{.muted} UnsupportedModelForSHAPError
 
 ```python
 class UnsupportedModelForSHAPError(BaseError):
@@ -505,7 +489,7 @@ When an unsupported model is used for SHAP importance.
 - **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
 - **From builtins.BaseException**: with_traceback, add_note
 
-### [class]{.muted} UnsupportedRModelError
+## [class]{.muted} UnsupportedRModelError
 
 ```python
 class UnsupportedRModelError(BaseError):

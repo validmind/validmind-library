@@ -1,9 +1,9 @@
 {% if member.kind == "function" %}
 
-## {{ member.name }}[()]{.muted}
+## {{ member_name | default(member.name) }}[()]{.muted}
 
 ```python
-{% if member.labels and "async" in member.labels %}async {% endif %}def {{ member.name }}(
+{% if member.labels and "async" in member.labels %}async {% endif %}def {{ member_name | default(member.name) }}(
 {% for param in member.parameters %}
     {{ '**' if param.kind == 'variadic keyword' else '*' if param.kind == 'variadic positional' else '' }}{{ param.name }}{% if param.annotation %}: {{ param.annotation.name if param.annotation.cls == "ExprName" else param.annotation.left.name if param.annotation.cls == "ExprSubscript" else "" }}{% endif %}{% if param.default is not none %} = {{ param.default }}{% endif %}{% if not loop.last %},
 {% endif %}

@@ -40,7 +40,7 @@ The function creates a contingency table for each categorical feature and the ta
 - As with all hypothesis tests, the Chi-Squared test can only detect associations, not causal relationships.
 - The choice of p-value threshold can affect the interpretation of feature relevance, and different thresholds may lead to different conclusions.
 
-### [class]{.muted} SkipTestError
+## [class]{.muted} SkipTestError
 
 ```python
 class SkipTestError(BaseError):

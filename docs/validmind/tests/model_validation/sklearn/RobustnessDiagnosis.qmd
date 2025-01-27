@@ -4,6 +4,15 @@ toc-depth: 3
 toc-expand: 3
 ---
 
+## get_logger[()]{.muted}
+
+```python
+def get_logger(
+    name = 'validmind',    log_level = None):
+```
+
+Get a logger for the given module name
+
 ## RobustnessDiagnosis[()]{.muted}
 
 ```python
@@ -46,7 +55,8 @@ This test introduces Gaussian noise to the numeric input features of the dataset
 - Gaussian noise might not adequately represent all types of real-world data perturbations.
 - Performance thresholds are somewhat arbitrary and might need tuning.
 - The test may not account for more complex or unstructured noise patterns that could affect model robustness.
-  ### [class]{.muted} MissingOrInvalidModelPredictFnError
+
+## [class]{.muted} MissingOrInvalidModelPredictFnError
 
 ```python
 class MissingOrInvalidModelPredictFnError(BaseError):

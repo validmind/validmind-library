@@ -4,6 +4,15 @@ toc-depth: 3
 toc-expand: 3
 ---
 
+## get_logger[()]{.muted}
+
+```python
+def get_logger(
+    name = 'validmind',    log_level = None):
+```
+
+Get a logger for the given module name
+
 ## SeasonalDecompose[()]{.muted}
 
 ```python
@@ -39,7 +48,8 @@ The testing process leverages the `seasonal_decompose` function from the `statsm
 - **Dependence on Assumptions**: Assumes that dataset features are periodically distributed. Features with no inferable frequency are excluded from the test.
 - **Handling Non-Finite Values**: Disregards non-finite values during analysis, potentially resulting in an incomplete understanding of the dataset.
 - **Unreliability with Noisy Datasets**: Produces unreliable results when used with datasets that contain heavy noise.
-  ### [class]{.muted} SkipTestError
+
+## [class]{.muted} SkipTestError
 
 ```python
 class SkipTestError(BaseError):

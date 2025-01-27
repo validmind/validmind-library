@@ -6,7 +6,7 @@ toc-expand: 3
 
 Test suites for llm summarization models
 
-### [class]{.muted} SummarizationMetrics
+## [class]{.muted} SummarizationMetrics
 
 ```python
 class SummarizationMetrics(TestSuite):
@@ -15,5 +15,3 @@ class SummarizationMetrics(TestSuite):
 Test suite for Summarization metrics
 
 **Inherited members**
-
-**Methods**

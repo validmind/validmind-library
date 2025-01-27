@@ -4,6 +4,15 @@ toc-depth: 3
 toc-expand: 3
 ---
 
+## get_logger[()]{.muted}
+
+```python
+def get_logger(
+    name = 'validmind',    log_level = None):
+```
+
+Get a logger for the given module name
+
 ## KPSS[()]{.muted}
 
 ```python
@@ -36,7 +45,8 @@ This test calculates the KPSS score for each feature in the dataset. The KPSS sc
 - Assumes the absence of a unit root in the series and doesn't differentiate between series that are stationary and those border-lining stationarity.
 - The test may have restricted power against certain alternatives.
 - The reliability of the test is contingent on the number of lags selected, which introduces potential bias in the measurement.
-  ### [class]{.muted} SkipTestError
+
+## [class]{.muted} SkipTestError
 
 ```python
 class SkipTestError(BaseError):

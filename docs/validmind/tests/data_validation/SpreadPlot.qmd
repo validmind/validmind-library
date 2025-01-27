@@ -41,7 +41,7 @@ The SpreadPlot test computes and represents the spread between each pair of time
 - Can become inefficient or difficult to interpret with a high number of variables due to the profuse number of plots.
 - Might not completely capture intricate non-linear relationships between the variables.
 
-### [class]{.muted} SkipTestError
+## [class]{.muted} SkipTestError
 
 ```python
 class SkipTestError(BaseError):

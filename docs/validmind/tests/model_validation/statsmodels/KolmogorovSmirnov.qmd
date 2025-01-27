@@ -40,7 +40,7 @@ This test calculates the KS statistic and corresponding p-value for each feature
 - Less effective for multivariate distributions, as it is designed for univariate distributions.
 - Does not identify specific types of non-normality, such as skewness or kurtosis, which could impact model fitting.
 
-### [class]{.muted} InvalidTestParametersError
+## [class]{.muted} InvalidTestParametersError
 
 ```python
 class InvalidTestParametersError(BaseError):

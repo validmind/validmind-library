@@ -4,6 +4,45 @@ toc-depth: 3
 toc-expand: 3
 ---
 
+## call_model[()]{.muted}
+
+```python
+def call_model(
+    system_prompt: {'cls': 'ExprName', 'name': 'str'},    user_prompt: {'cls': 'ExprName', 'name': 'str'},    temperature: {'cls': 'ExprName', 'name': 'float'} = 0.0,    seed: {'cls': 'ExprName', 'name': 'int'} = 42):
+```
+
+Call LLM with the given prompts and return the response
+
+## get_explanation[()]{.muted}
+
+```python
+def get_explanation(
+    response: {'cls': 'ExprName', 'name': 'str'}):
+```
+
+Get just the explanation from the response string TODO: use json response mode instead of this
+
+```
+e.g. "Score: 8
+```
+
+Explanation: <some-explanation>" -> "<some-explanation>"
+
+## get_score[()]{.muted}
+
+```python
+def get_score(
+    response: {'cls': 'ExprName', 'name': 'str'}):
+```
+
+Get just the score from the response string TODO: use json response mode instead of this
+
+```
+e.g. "Score: 8
+```
+
+Explanation: <some-explanation>" -> 8
+
 ## Delimitation[()]{.muted}
 
 ```python
@@ -39,7 +78,8 @@ The test employs an LLM to examine prompts for appropriate use of delimiters suc
 - Only checks for the presence and placement of delimiters, not whether the correct delimiter type is used for the specific data or task.
 - May not fully reveal the impacts of poor delimitation on the LLM's final performance.
 - The preset score threshold may not be refined enough for complex tasks and prompts, requiring regular manual adjustment.
-  ### [class]{.muted} MissingRequiredTestInputError
+
+## [class]{.muted} MissingRequiredTestInputError
 
 ```python
 class MissingRequiredTestInputError(BaseError):

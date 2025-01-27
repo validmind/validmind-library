@@ -4,6 +4,45 @@ toc-depth: 3
 toc-expand: 3
 ---
 
+## call_model[()]{.muted}
+
+```python
+def call_model(
+    system_prompt: {'cls': 'ExprName', 'name': 'str'},    user_prompt: {'cls': 'ExprName', 'name': 'str'},    temperature: {'cls': 'ExprName', 'name': 'float'} = 0.0,    seed: {'cls': 'ExprName', 'name': 'int'} = 42):
+```
+
+Call LLM with the given prompts and return the response
+
+## get_explanation[()]{.muted}
+
+```python
+def get_explanation(
+    response: {'cls': 'ExprName', 'name': 'str'}):
+```
+
+Get just the explanation from the response string TODO: use json response mode instead of this
+
+```
+e.g. "Score: 8
+```
+
+Explanation: <some-explanation>" -> "<some-explanation>"
+
+## get_score[()]{.muted}
+
+```python
+def get_score(
+    response: {'cls': 'ExprName', 'name': 'str'}):
+```
+
+Get just the score from the response string TODO: use json response mode instead of this
+
+```
+e.g. "Score: 8
+```
+
+Explanation: <some-explanation>" -> 8
+
 ## Clarity[()]{.muted}
 
 ```python
@@ -38,7 +77,8 @@ The evaluation uses an LLM to scrutinize the clarity of prompts, factoring in co
 - Scoring system is subjective and relies on the AI’s interpretation of 'clarity'
 - The test assumes that all required factors (detail inclusion, persona adoption, step-by-step instructions, use of examples, and specification of output length) contribute equally to clarity, which might not always be the case
 - The evaluation may not be as effective if used on non-textual models
-  ### [class]{.muted} MissingRequiredTestInputError
+
+## [class]{.muted} MissingRequiredTestInputError
 
 ```python
 class MissingRequiredTestInputError(BaseError):

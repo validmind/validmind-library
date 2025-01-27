@@ -4,6 +4,15 @@ toc-depth: 3
 toc-expand: 3
 ---
 
+## get_logger[()]{.muted}
+
+```python
+def get_logger(
+    name = 'validmind',    log_level = None):
+```
+
+Get a logger for the given module name
+
 ## RegressionFeatureSignificance[()]{.muted}
 
 ```python
@@ -39,7 +48,8 @@ The test mechanism involves extracting the model's coefficients and p-values for
 - The p-value strategy for feature selection doesn't take into account the magnitude of the effect, focusing solely on whether the feature is likely non-zero.
 - This test is specific to regression models and wouldn't be suitable for other types of ML models.
 - P-value thresholds are somewhat arbitrary and do not always indicate practical significance, only statistical significance.
-  ### [class]{.muted} SkipTestError
+
+## [class]{.muted} SkipTestError
 
 ```python
 class SkipTestError(BaseError):

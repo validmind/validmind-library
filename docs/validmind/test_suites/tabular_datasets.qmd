@@ -6,7 +6,7 @@ toc-expand: 3
 
 Test suites for tabular datasets
 
-### [class]{.muted} TabularDataQuality
+## [class]{.muted} TabularDataQuality
 
 ```python
 class TabularDataQuality(TestSuite):
@@ -16,9 +16,7 @@ Test suite for data quality on tabular datasets
 
 **Inherited members**
 
-**Methods**
-
-### [class]{.muted} TabularDataset
+## [class]{.muted} TabularDataset
 
 ```python
 class TabularDataset(TestSuite):
@@ -28,9 +26,7 @@ Test suite for tabular datasets.
 
 **Inherited members**
 
-**Methods**
-
-### [class]{.muted} TabularDatasetDescription
+## [class]{.muted} TabularDatasetDescription
 
 ```python
 class TabularDatasetDescription(TestSuite):
@@ -39,5 +35,3 @@ class TabularDatasetDescription(TestSuite):
 Test suite to extract metadata and descriptive statistics from a tabular dataset
 
 **Inherited members**
-
-**Methods**

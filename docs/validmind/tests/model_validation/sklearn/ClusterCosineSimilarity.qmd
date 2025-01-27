@@ -40,7 +40,7 @@ This test works by first extracting the true and predicted clusters of the model
 - It primarily works with continuous variables and is not suitable for binary or categorical variables.
 - Lastly, although rare, perfect perpendicular vectors (cosine similarity = 0) could be within the same cluster, which may give an inaccurate representation of a 'bad' cluster due to low cosine similarity score.
 
-### [class]{.muted} SkipTestError
+## [class]{.muted} SkipTestError
 
 ```python
 class SkipTestError(BaseError):

@@ -4,6 +4,45 @@ toc-depth: 3
 toc-expand: 3
 ---
 
+## call_model[()]{.muted}
+
+```python
+def call_model(
+    system_prompt: {'cls': 'ExprName', 'name': 'str'},    user_prompt: {'cls': 'ExprName', 'name': 'str'},    temperature: {'cls': 'ExprName', 'name': 'float'} = 0.0,    seed: {'cls': 'ExprName', 'name': 'int'} = 42):
+```
+
+Call LLM with the given prompts and return the response
+
+## get_explanation[()]{.muted}
+
+```python
+def get_explanation(
+    response: {'cls': 'ExprName', 'name': 'str'}):
+```
+
+Get just the explanation from the response string TODO: use json response mode instead of this
+
+```
+e.g. "Score: 8
+```
+
+Explanation: <some-explanation>" -> "<some-explanation>"
+
+## get_score[()]{.muted}
+
+```python
+def get_score(
+    response: {'cls': 'ExprName', 'name': 'str'}):
+```
+
+Get just the score from the response string TODO: use json response mode instead of this
+
+```
+e.g. "Score: 8
+```
+
+Explanation: <some-explanation>" -> 8
+
 ## NegativeInstruction[()]{.muted}
 
 ```python
@@ -39,7 +78,8 @@ An LLM is employed to evaluate each prompt. The prompt is graded based on its us
 - The test necessitates an LLM for evaluation, which might not be available or feasible in certain scenarios.
 - A numeric scoring system, while straightforward, may oversimplify complex issues related to prompt designing and instruction clarity.
 - The effectiveness of the test hinges significantly on the predetermined threshold level, which can be subjective and may need to be adjusted according to specific use-cases.
-  ### [class]{.muted} MissingRequiredTestInputError
+
+## [class]{.muted} MissingRequiredTestInputError
 
 ```python
 class MissingRequiredTestInputError(BaseError):

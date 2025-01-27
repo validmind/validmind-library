@@ -4,6 +4,21 @@ toc-depth: 3
 toc-expand: 3
 ---
 
+## format_records[()]{.muted}
+
+```python
+def format_records(
+    df: {'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'pd'}, {'cls': 'ExprName', 'name': 'DataFrame'}]}) -> {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Dict'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'str'}, {'cls': 'ExprName', 'name': 'Any'}], 'implicit': True}}}:
+```
+
+Round the values on each dataframe's column to a given number of decimal places. The returned value is converted to a dict in "records" with Pandas's to_dict() function.
+
+We do this for display purposes before sending data to ValidMind. Rules:
+
+- Check if we are rendering "big" numbers greater than 10 or just numbers between 0 and 1
+- If the column's smallest number has more decimals 6, use that number's precision so we can avoid rendering a 0 instead
+- If the column's smallest number has less decimals than 6, use 6 decimal places
+
 ## DescriptiveStatistics[()]{.muted}
 
 ```python
@@ -55,7 +70,7 @@ def get_summary_statistics_numerical(
     numerical_fields):
 ```
 
-### [class]{.muted} SkipTestError
+## [class]{.muted} SkipTestError
 
 ```python
 class SkipTestError(BaseError):

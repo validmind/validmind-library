@@ -6,15 +6,13 @@ toc-expand: 3
 
 Models entrypoint
 
-### [class]{.muted} Figure
+## [class]{.muted} Figure
 
 ```python
 class Figure():
 ```
 
 Figure objects track the schema supported by the ValidMind API
-
-**Methods**
 
 ### [serialize[()]{.muted}](#serialize)
 
@@ -40,15 +38,13 @@ to_widget(self)
 
 Returns the ipywidget compatible representation of the figure. Ideally we would render images as-is, but Plotly FigureWidgets don't work well on Google Colab when they are combined with ipywidgets.
 
-### [class]{.muted} ModelAttributes
+## [class]{.muted} ModelAttributes
 
 ```python
 class ModelAttributes():
 ```
 
 Model attributes definition
-
-**Methods**
 
 ### [from_dict[()]{.muted}](#from_dict)
 
@@ -58,7 +54,7 @@ from_dict(cls, data)
 
 Creates a ModelAttributes instance from a dictionary
 
-### [class]{.muted} TestSuite
+## [class]{.muted} TestSuite
 
 ```python
 class TestSuite():
@@ -67,8 +63,6 @@ class TestSuite():
 Base class for test suites. Test suites are used to define a grouping of tests that can be run as a suite against datasets and models. Test Suites can be defined by inheriting from this base class and defining the list of tests as a class variable.
 
 Tests can be a flat list of strings or may be nested into sections by using a dict
-
-**Methods**
 
 ### [get_default_config[()]{.muted}](#get_default_config)
 
@@ -98,15 +92,13 @@ num_tests(self)
 
 Returns the total number of tests in the test suite
 
-### [class]{.muted} TestSuiteRunner
+## [class]{.muted} TestSuiteRunner
 
 ```python
 class TestSuiteRunner():
 ```
 
 Runs a test suite
-
-**Methods**
 
 ### [log_results[()]{.muted}](#log_results)
 
@@ -135,7 +127,7 @@ Runs the test suite, renders the summary and sends the results to ValidMind
 summarize(self, show_link)
 ```
 
-### [class]{.muted} VMDataset
+## [class]{.muted} VMDataset
 
 ```python
 class VMDataset(VMInput):
@@ -147,22 +139,20 @@ This way we can support multiple dataset types but under the hood we only need t
 
 **Parameters**
 
-- **raw_dataset**: The raw dataset as a NumPy array.
-- **input_id**: Identifier for the dataset.
-- **index**: The raw dataset index as a NumPy array.
-- **columns**: The column names of the dataset.
-- **target_column**: The target column name of the dataset.
-- **feature_columns**: The feature column names of the dataset.
-- **feature_columns_numeric**: The numeric feature column names of the dataset.
-- **feature_columns_categorical**: The categorical feature column names of the dataset.
-- **text_column**: The text column name of the dataset for NLP tasks.
-- **target_class_labels**: The class labels for the target columns.
-- **df**: The dataset as a pandas DataFrame.
-- **extra_columns**: Extra columns to include in the dataset.
+- **raw_dataset** (np.ndarray): The raw dataset as a NumPy array.
+- **input_id** (str): Identifier for the dataset.
+- **index** (np.ndarray): The raw dataset index as a NumPy array.
+- **columns** (Set[str]): The column names of the dataset.
+- **target_column** (str): The target column name of the dataset.
+- **feature_columns** (List[str]): The feature column names of the dataset.
+- **feature_columns_numeric** (List[str]): The numeric feature column names of the dataset.
+- **feature_columns_categorical** (List[str]): The categorical feature column names of the dataset.
+- **text_column** (str): The text column name of the dataset for NLP tasks.
+- **target_class_labels** (Dict): The class labels for the target columns.
+- **df** (pd.DataFrame): The dataset as a pandas DataFrame.
+- **extra_columns** (Dict): Extra columns to include in the dataset.
 
 **Inherited members**
-
-**Methods**
 
 ### [add_extra_column[()]{.muted}](#add_extra_column)
 
@@ -300,7 +290,7 @@ y_prob_df(self, model)
 
 Returns a dataframe containing the probabilities for a given model
 
-### [class]{.muted} VMInput
+## [class]{.muted} VMInput
 
 ```python
 class VMInput(ABC):
@@ -309,8 +299,6 @@ class VMInput(ABC):
 Base class for ValidMind Input types
 
 **Inherited members**
-
-**Methods**
 
 ### [with_options[()]{.muted}](#with_options)
 
@@ -328,7 +316,7 @@ Allows for setting options on the input object that are passed by the user when 
 
 - A new instance of the input with the specified options set
 
-### [class]{.muted} VMModel
+## [class]{.muted} VMModel
 
 ```python
 class VMModel(VMInput):
@@ -338,14 +326,12 @@ An base class that wraps a trained model instance and its associated data.
 
 **Parameters**
 
-- **model**: The trained model instance. Defaults to None.
-- **input_id**: The input ID for the model. Defaults to None.
-- **attributes**: The attributes of the model. Defaults to None.
-- **name**: The name of the model. Defaults to the class name.
+- **model** (object): The trained model instance. Defaults to None.
+- **input_id** (str): The input ID for the model. Defaults to None.
+- **attributes** (ModelAttributes): The attributes of the model. Defaults to None.
+- **name** (str): The name of the model. Defaults to the class name.
 
 **Inherited members**
-
-**Methods**
 
 ### [predict[()]{.muted}](#predict)
 

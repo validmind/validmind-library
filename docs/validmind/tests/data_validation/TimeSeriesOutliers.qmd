@@ -44,7 +44,7 @@ The test processes a given dataset which must have datetime indexing, checks if 
 - It does not address possible ways to handle identified outliers in the data.
 - The requirement for a datetime index could limit its application.
 
-### [class]{.muted} SkipTestError
+## [class]{.muted} SkipTestError
 
 ```python
 class SkipTestError(BaseError):

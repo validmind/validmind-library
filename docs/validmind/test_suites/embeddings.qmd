@@ -6,7 +6,7 @@ toc-expand: 3
 
 Test suites for embeddings models Ideal setup is to have the API client to read a custom test suite from the project's configuration
 
-### [class]{.muted} EmbeddingsFullSuite
+## [class]{.muted} EmbeddingsFullSuite
 
 ```python
 class EmbeddingsFullSuite(TestSuite):
@@ -16,9 +16,7 @@ Full test suite for embeddings models.
 
 **Inherited members**
 
-**Methods**
-
-### [class]{.muted} EmbeddingsMetrics
+## [class]{.muted} EmbeddingsMetrics
 
 ```python
 class EmbeddingsMetrics(TestSuite):
@@ -28,9 +26,7 @@ Test suite for embeddings metrics
 
 **Inherited members**
 
-**Methods**
-
-### [class]{.muted} EmbeddingsPerformance
+## [class]{.muted} EmbeddingsPerformance
 
 ```python
 class EmbeddingsPerformance(TestSuite):
@@ -39,5 +35,3 @@ class EmbeddingsPerformance(TestSuite):
 Test suite for embeddings model performance
 
 **Inherited members**
-
-**Methods**

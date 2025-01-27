@@ -4,6 +4,25 @@ toc-depth: 3
 toc-expand: 3
 ---
 
+## validate_prediction[()]{.muted}
+
+```python
+def validate_prediction(
+    y_true,    y_pred,    dataset_id = None):
+```
+
+Comprehensive validation of true and predicted value pairs. Handles NaN/None values and length mismatches.
+
+**Parameters**
+
+- **y_true**: List or array of true values
+- **y_pred**: List or array of predicted values
+- **dataset_id**: Optional identifier for the dataset (for logging)
+
+**Returns**
+
+- (cleaned_y_true, cleaned_y_pred) with matching lengths and no NaN values
+
 ## ContextualRecall[()]{.muted}
 
 ```python

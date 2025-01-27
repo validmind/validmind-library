@@ -4,6 +4,15 @@ toc-depth: 3
 toc-expand: 3
 ---
 
+## call_model[()]{.muted}
+
+```python
+def call_model(
+    system_prompt: {'cls': 'ExprName', 'name': 'str'},    user_prompt: {'cls': 'ExprName', 'name': 'str'},    temperature: {'cls': 'ExprName', 'name': 'float'} = 0.0,    seed: {'cls': 'ExprName', 'name': 'int'} = 42):
+```
+
+Call LLM with the given prompts and return the response
+
 ## Robustness[()]{.muted}
 
 ```python
@@ -39,7 +48,8 @@ The Robustness test appraises prompts under various conditions, alterations, and
 - Currently, the test only supports single-variable prompts, which restricts its application to more complex models.
 - When there are too many target classes (over 10), the test is skipped, which can leave potential vulnerabilities unchecked in complex multi-class models.
 - The test may not account for all potential conditions or alterations that could show up in practical use scenarios.
-  ### [class]{.muted} MissingRequiredTestInputError
+
+## [class]{.muted} MissingRequiredTestInputError
 
 ```python
 class MissingRequiredTestInputError(BaseError):
@@ -52,7 +62,7 @@ When a required test context variable is missing.
 - **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
 - **From builtins.BaseException**: with_traceback, add_note
 
-### [class]{.muted} SkipTestError
+## [class]{.muted} SkipTestError
 
 ```python
 class SkipTestError(BaseError):

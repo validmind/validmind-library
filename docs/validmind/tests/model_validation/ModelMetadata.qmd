@@ -4,6 +4,15 @@ toc-depth: 3
 toc-expand: 3
 ---
 
+## get_model_info[()]{.muted}
+
+```python
+def get_model_info(
+    model):
+```
+
+Attempts to extract all model info from a model object instance
+
 ## ModelMetadata[()]{.muted}
 
 ```python
