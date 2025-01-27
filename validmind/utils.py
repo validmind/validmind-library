@@ -7,6 +7,7 @@ import difflib
 import inspect
 import json
 import math
+import os
 import re
 import sys
 import warnings
@@ -58,6 +59,19 @@ pylab.rcParams.update(params)
 #################################
 
 logger = get_logger(__name__)
+
+
+def parse_version(version: str) -> tuple[int, ...]:
+    """
+    Parse a semver version string into a tuple of major, minor, patch integers
+
+    Args:
+        version (str): The semantic version string to parse
+
+    Returns:
+        tuple[int, ...]: A tuple of major, minor, patch integers
+    """
+    return tuple(int(x) for x in version.split(".")[:3])
 
 
 def is_notebook() -> bool:
