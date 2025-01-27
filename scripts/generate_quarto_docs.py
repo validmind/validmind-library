@@ -324,8 +324,15 @@ def parse_docstrings_recursively(data: Dict[str, Any]):
 
 def get_inherited_members(base: Dict[str, Any], full_data: Dict[str, Any]) -> List[Dict[str, Any]]:
     """Get all inherited members from a base class."""
-    # Get the base class name
-    base_name = base.get('name', '')
+    # Get the base class name and handle the dictionary structure
+    if isinstance(base, dict):
+        if 'cls' in base and base['cls'] == 'ExprName':
+            base_name = base.get('name', '')
+        else:
+            base_name = base.get('name', '')
+    else:
+        base_name = str(base)
+    
     if not base_name:
         return []
     
@@ -338,22 +345,27 @@ def get_inherited_members(base: Dict[str, Any], full_data: Dict[str, Any]) -> Li
             ]
         return []
     
-    # Look up base class in our codebase
-    path_parts = base_name.split('.')
-    current = full_data.get(path_parts[0])
+    # Look up base class in validmind module
+    current = full_data.get('validmind', {})
     if not current:
         return []
     
-    # Navigate to base class
-    for part in path_parts[1:]:
-        if part in current.get('members', {}):
-            current = current['members'][part]
+    # Look for the base class in the current module's members
+    if base_name in current.get('members', {}):
+        base_class = current['members'][base_name]
+    else:
+        # Search recursively through submodules
+        for module in current.get('members', {}).values():
+            if module.get('kind') == 'module':
+                if base_name in module.get('members', {}):
+                    base_class = module['members'][base_name]
+                    break
         else:
             return []
     
     # Collect public methods and properties
     members = []
-    for member in current.get('members', {}).values():
+    for member in base_class.get('members', {}).values():
         if member['kind'] in ('method', 'property') and not member.get('name', '').startswith('_'):
             members.append(member)
     
