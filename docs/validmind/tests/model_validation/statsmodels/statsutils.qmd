@@ -11,6 +11,14 @@ toc-expand: 3
 
 #### adj_r2_score
 
+```python
+def adj_r2_score(
+    actual: ,
+    predicted: ,
+    rowcount: int,
+    featurecount: int):
+```
+
 Adjusted R2 Score
 
 

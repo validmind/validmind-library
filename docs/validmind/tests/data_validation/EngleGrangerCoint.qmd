@@ -11,6 +11,12 @@ toc-expand: 3
  
 #### EngleGrangerCoint
 
+```python
+def EngleGrangerCoint(
+    dataset: VMDataset,
+    threshold: float = 0.05):
+```
+
 Assesses the degree of co-movement between pairs of time series data using the Engle-Granger cointegration test.
 
 ###### Purpose

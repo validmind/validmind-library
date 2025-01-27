@@ -11,6 +11,11 @@ toc-expand: 3
  
 #### TabularCategoricalBarPlots
 
+```python
+def TabularCategoricalBarPlots(
+    dataset: VMDataset):
+```
+
 Generates and visualizes bar plots for each category in categorical features to evaluate the dataset's composition.
 
 ###### Purpose

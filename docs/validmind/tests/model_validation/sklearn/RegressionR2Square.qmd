@@ -11,6 +11,12 @@ toc-expand: 3
  
 #### RegressionR2Square
 
+```python
+def RegressionR2Square(
+    dataset,
+    model):
+```
+
 Assesses the overall goodness-of-fit of a regression model by evaluating R-squared (R2) and Adjusted R-squared (Adj
 R2) scores to determine the model's explanatory power over the dependent variable.
 

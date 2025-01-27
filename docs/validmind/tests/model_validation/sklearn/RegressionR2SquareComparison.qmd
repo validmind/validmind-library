@@ -11,6 +11,12 @@ toc-expand: 3
  
 #### RegressionR2SquareComparison
 
+```python
+def RegressionR2SquareComparison(
+    datasets,
+    models):
+```
+
 Compares R-Squared and Adjusted R-Squared values for different regression models across multiple datasets to assess
 model performance and relevance of features.
 

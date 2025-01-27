@@ -11,6 +11,12 @@ toc-expand: 3
 
 #### LaggedCorrelationHeatmap
 
+```python
+def LaggedCorrelationHeatmap(
+    dataset: VMDataset,
+    num_lags: int = 10):
+```
+
 Assesses and visualizes correlation between target variable and lagged independent variables in a time-series
 dataset.
 

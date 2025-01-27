@@ -11,6 +11,12 @@ toc-expand: 3
 
 #### FowlkesMallowsScore
 
+```python
+def FowlkesMallowsScore(
+    dataset: VMDataset,
+    model: VMModel):
+```
+
 Evaluates the similarity between predicted and actual cluster assignments in a model using the Fowlkes-Mallows
 score.
 

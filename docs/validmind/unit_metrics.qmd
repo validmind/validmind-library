@@ -11,6 +11,12 @@ toc-expand: 3
 
 #### describe_metric
 
+```python
+def describe_metric(
+    metric_id: str,
+    **kwargs = {}):
+```
+
 Describe a metric
 
 
@@ -19,6 +25,11 @@ Describe a metric
  
 #### list_metrics
 
+```python
+def list_metrics(
+    **kwargs = {}):
+```
+
 List all metrics
 
 
@@ -26,6 +37,12 @@ List all metrics
 
  
 #### run_metric
+
+```python
+def run_metric(
+    metric_id: str,
+    **kwargs = {}):
+```
 
 Run a metric
 

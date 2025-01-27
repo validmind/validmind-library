@@ -11,6 +11,13 @@ toc-expand: 3
 
 #### CalibrationCurve
 
+```python
+def CalibrationCurve(
+    model: VMModel,
+    dataset: VMDataset,
+    n_bins: int = 10):
+```
+
 Evaluates the calibration of probability estimates by comparing predicted probabilities against observed
 frequencies.
 

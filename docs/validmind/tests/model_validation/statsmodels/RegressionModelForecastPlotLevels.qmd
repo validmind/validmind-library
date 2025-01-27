@@ -11,8 +11,20 @@ toc-expand: 3
 
 #### integrate_diff
 
+```python
+def integrate_diff(
+    series_diff,
+    start_value):
+```
+
  
 #### RegressionModelForecastPlotLevels
+
+```python
+def RegressionModelForecastPlotLevels(
+    model: VMModel,
+    dataset: VMDataset):
+```
 
 Assesses the alignment between forecasted and observed values in regression models through visual plots
 

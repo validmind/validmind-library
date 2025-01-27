@@ -11,6 +11,12 @@ toc-expand: 3
     
 #### NegativeInstruction
 
+```python
+def NegativeInstruction(
+    model,
+    min_threshold = 7):
+```
+
 Evaluates and grades the use of affirmative, proactive language over negative instructions in LLM prompts.
 
 ###### Purpose

@@ -11,6 +11,11 @@ toc-expand: 3
  
 #### ModelMetadata
 
+```python
+def ModelMetadata(
+    model):
+```
+
 Compare metadata of different models and generate a summary table with the results.
 
 **Purpose****: The purpose of this function is to compare the metadata of different models, including information about their architecture, framework, framework version, and programming language.

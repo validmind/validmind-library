@@ -11,6 +11,13 @@ toc-expand: 3
   
 #### generate_shap_plot
 
+```python
+def generate_shap_plot(
+    type_,
+    shap_values,
+    x_test):
+```
+
 Plots two types of SHAP global importance (SHAP).
 
 **Arguments**
@@ -28,6 +35,12 @@ Plots two types of SHAP global importance (SHAP).
 
  
 #### select_shap_values
+
+```python
+def select_shap_values(
+    shap_values,
+    class_of_interest):
+```
 
 Selects SHAP values for binary or multiclass classification.
 
@@ -52,6 +65,15 @@ For regression models, returns the SHAP values directly as there are no classes.
 
  
 #### SHAPGlobalImportance
+
+```python
+def SHAPGlobalImportance(
+    model: VMModel,
+    dataset: VMDataset,
+    kernel_explainer_samples: int = 10,
+    tree_or_linear_explainer_samples: int = 200,
+    class_of_interest: int = None):
+```
 
 Evaluates and visualizes global feature importance using SHAP values for model explanation and risk identification.
 

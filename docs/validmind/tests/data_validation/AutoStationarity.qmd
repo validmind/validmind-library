@@ -11,6 +11,13 @@ toc-expand: 3
 
 #### AutoStationarity
 
+```python
+def AutoStationarity(
+    dataset: VMDataset,
+    max_order: int = 5,
+    threshold: float = 0.05):
+```
+
 Automates Augmented Dickey-Fuller test to assess stationarity across multiple time series in a DataFrame.
 
 ###### Purpose

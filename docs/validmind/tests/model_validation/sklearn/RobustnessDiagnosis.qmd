@@ -11,6 +11,15 @@ toc-expand: 3
   
 #### RobustnessDiagnosis
 
+```python
+def RobustnessDiagnosis(
+    datasets: List,
+    model: VMModel,
+    metric: str = None,
+    scaling_factor_std_dev_list: List = {'cls': 'ExprName', 'name': 'DEFAULT_STD_DEV_LIST'},
+    performance_decay_threshold: float = {'cls': 'ExprName', 'name': 'DEFAULT_DECAY_THRESHOLD'}):
+```
+
 Assesses the robustness of a machine learning model by evaluating performance decay under noisy conditions.
 
 ###### Purpose

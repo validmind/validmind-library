@@ -11,6 +11,12 @@ toc-expand: 3
     
 #### Clarity
 
+```python
+def Clarity(
+    model,
+    min_threshold = 7):
+```
+
 Evaluates and scores the clarity of prompts in a Large Language Model based on specified guidelines.
 
 ###### Purpose

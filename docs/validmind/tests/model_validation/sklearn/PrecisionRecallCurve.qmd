@@ -11,6 +11,12 @@ toc-expand: 3
  
 #### PrecisionRecallCurve
 
+```python
+def PrecisionRecallCurve(
+    model: VMModel,
+    dataset: VMDataset):
+```
+
 Evaluates the precision-recall trade-off for binary classification models and visualizes the Precision-Recall curve.
 
 ###### Purpose

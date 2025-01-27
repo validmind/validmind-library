@@ -11,6 +11,11 @@ toc-expand: 3
 
 #### Toxicity
 
+```python
+def Toxicity(
+    dataset):
+```
+
 Assesses the toxicity of text data within a dataset to visualize the distribution of toxicity scores.
 
 ###### Purpose

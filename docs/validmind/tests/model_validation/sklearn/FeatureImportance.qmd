@@ -11,6 +11,13 @@ toc-expand: 3
 
 #### FeatureImportance
 
+```python
+def FeatureImportance(
+    dataset: VMDataset,
+    model: VMModel,
+    num_features: int = 3):
+```
+
 Compute feature importance scores for a given model and generate a summary table
 with the top important features.
 

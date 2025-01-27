@@ -21,6 +21,11 @@ The following base errors are defined for others:
 
 #### raise_api_error
 
+```python
+def raise_api_error(
+    error_string):
+```
+
 Safely try to parse JSON from the response message in case the API
 returns a non-JSON string or if the API returns a non-standard error
 
@@ -30,12 +35,15 @@ returns a non-JSON string or if the API returns a non-standard error
  
 #### should_raise_on_fail_fast
 
+```python
+def should_raise_on_fail_fast(
+    error) -> bool:
+```
+
 Determine whether an error should be raised when fail_fast is True.
 
 
 
-
-**Returns:** bool
 
  
 ### Class: APIRequestError

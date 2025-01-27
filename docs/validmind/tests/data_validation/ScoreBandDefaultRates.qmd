@@ -11,6 +11,14 @@ toc-expand: 3
 
 #### ScoreBandDefaultRates
 
+```python
+def ScoreBandDefaultRates(
+    dataset: VMDataset,
+    model: VMModel,
+    score_column: str = 'score',
+    score_bands: list = None):
+```
+
 Analyzes default rates and population distribution across credit score bands.
 
 ###### Purpose

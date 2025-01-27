@@ -11,6 +11,13 @@ toc-expand: 3
 
 #### RougeScore
 
+```python
+def RougeScore(
+    dataset,
+    model,
+    metric = 'rouge-1'):
+```
+
 Assesses the quality of machine-generated text using ROUGE metrics and visualizes the results to provide
 comprehensive performance insights.
 

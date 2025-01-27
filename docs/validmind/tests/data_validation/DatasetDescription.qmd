@@ -11,6 +11,11 @@ toc-expand: 3
   
 #### DatasetDescription
 
+```python
+def DatasetDescription(
+    dataset: VMDataset):
+```
+
 Provides comprehensive analysis and statistical summaries of each column in a machine learning model's dataset.
 
 ###### Purpose
@@ -66,6 +71,12 @@ distribution.
  
 #### describe_column
 
+```python
+def describe_column(
+    df,
+    column):
+```
+
 Gets descriptive statistics for a single column in a Pandas DataFrame.
 
 
@@ -73,6 +84,13 @@ Gets descriptive statistics for a single column in a Pandas DataFrame.
 
  
 #### get_column_histograms
+
+```python
+def get_column_histograms(
+    df,
+    column,
+    type_):
+```
 
 Returns a collection of histograms for a numerical or categorical column.
 We store different combinations of bin sizes to allow analyzing the data better
@@ -85,6 +103,12 @@ Will be used in favor of _get_histogram in the future
  
 #### get_numerical_histograms
 
+```python
+def get_numerical_histograms(
+    df,
+    column):
+```
+
 Returns a collection of histograms for a numerical column, each one
 with a different bin size
 
@@ -93,5 +117,10 @@ with a different bin size
 
  
 #### infer_datatypes
+
+```python
+def infer_datatypes(
+    df):
+```
 
  

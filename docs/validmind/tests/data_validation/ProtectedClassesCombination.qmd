@@ -11,6 +11,13 @@ toc-expand: 3
   
 #### ProtectedClassesCombination
 
+```python
+def ProtectedClassesCombination(
+    dataset,
+    model,
+    protected_classes = None):
+```
+
 Visualizes combinations of protected classes and their corresponding error metric differences.
 
 ###### Purpose

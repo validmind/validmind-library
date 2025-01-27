@@ -11,6 +11,15 @@ toc-expand: 3
 
 #### WeakspotsDiagnosis
 
+```python
+def WeakspotsDiagnosis(
+    datasets: List,
+    model: VMModel,
+    features_columns: Union = None,
+    metrics: Union = None,
+    thresholds: Union = None):
+```
+
 Identifies and visualizes weak spots in a machine learning model's performance across various sections of the
 feature space.
 

@@ -11,6 +11,12 @@ toc-expand: 3
  
 #### AutoARIMA
 
+```python
+def AutoARIMA(
+    model: VMModel,
+    dataset: VMDataset):
+```
+
 Evaluates ARIMA models for time-series forecasting, ranking them using Bayesian and Akaike Information Criteria.
 
 ###### Purpose

@@ -11,6 +11,13 @@ toc-expand: 3
 
 #### ClassifierPerformance
 
+```python
+def ClassifierPerformance(
+    dataset: VMDataset,
+    model: VMModel,
+    average: str = 'macro'):
+```
+
 Evaluates performance of binary or multiclass classification models using precision, recall, F1-Score, accuracy,
 and ROC AUC scores.
 
@@ -52,5 +59,12 @@ is binary or multiclass.
 
  
 #### multiclass_roc_auc_score
+
+```python
+def multiclass_roc_auc_score(
+    y_test,
+    y_pred,
+    average = 'macro'):
+```
 
  

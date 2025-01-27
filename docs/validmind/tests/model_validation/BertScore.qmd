@@ -11,6 +11,13 @@ toc-expand: 3
  
 #### BertScore
 
+```python
+def BertScore(
+    dataset,
+    model,
+    evaluation_model = 'distilbert-base-uncased'):
+```
+
 Assesses the quality of machine-generated text using BERTScore metrics and visualizes results through histograms
 and bar charts, alongside compiling a comprehensive table of descriptive statistics.
 

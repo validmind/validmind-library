@@ -11,6 +11,12 @@ toc-expand: 3
  
 #### BleuScore
 
+```python
+def BleuScore(
+    dataset,
+    model):
+```
+
 Evaluates the quality of machine-generated text using BLEU metrics and visualizes the results through histograms
 and bar charts, alongside compiling a comprehensive table of descriptive statistics for BLEU scores.
 

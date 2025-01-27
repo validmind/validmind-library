@@ -11,6 +11,13 @@ toc-expand: 3
 
 #### PolarityAndSubjectivity
 
+```python
+def PolarityAndSubjectivity(
+    dataset,
+    threshold_subjectivity = 0.5,
+    threshold_polarity = 0):
+```
+
 Analyzes the polarity and subjectivity of text data within a given dataset to visualize the sentiment distribution.
 
 ###### Purpose

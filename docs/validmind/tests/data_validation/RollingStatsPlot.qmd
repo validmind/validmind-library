@@ -11,8 +11,21 @@ toc-expand: 3
  
 #### plot_rolling_statistics
 
+```python
+def plot_rolling_statistics(
+    df,
+    col,
+    window_size):
+```
+
  
 #### RollingStatsPlot
+
+```python
+def RollingStatsPlot(
+    dataset: VMDataset,
+    window_size: int = 12):
+```
 
 Evaluates the stationarity of time series data by plotting its rolling mean and standard deviation over a specified
 window.

@@ -16,6 +16,12 @@ Threshold based tests
  
 #### ClassImbalance
 
+```python
+def ClassImbalance(
+    dataset: VMDataset,
+    min_percent_threshold: int = 10) -> Tuple[, , bool]:
+```
+
 Evaluates and quantifies class distribution imbalance in a dataset used by a machine learning model.
 
 ###### Purpose
@@ -63,7 +69,5 @@ these imbalances.
 
 
 
-
-**Returns:** 
 
  

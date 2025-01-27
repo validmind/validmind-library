@@ -11,6 +11,12 @@ toc-expand: 3
     
 #### Specificity
 
+```python
+def Specificity(
+    model,
+    min_threshold = 7):
+```
+
 Evaluates and scores the specificity of prompts provided to a Large Language Model (LLM), based on clarity, detail,
 and relevance.
 

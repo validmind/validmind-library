@@ -11,6 +11,14 @@ toc-expand: 3
 
 #### ScoreProbabilityAlignment
 
+```python
+def ScoreProbabilityAlignment(
+    model: VMModel,
+    dataset: VMDataset,
+    score_column: str = 'score',
+    n_bins: int = 10):
+```
+
 Analyzes the alignment between credit scores and predicted probabilities.
 
 ###### Purpose

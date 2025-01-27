@@ -16,6 +16,13 @@ Threshold based tests
 
 #### StopWords
 
+```python
+def StopWords(
+    dataset: VMDataset,
+    min_percent_threshold: float = 0.5,
+    num_words: int = 25):
+```
+
 Evaluates and visualizes the frequency of English stop words in a text dataset against a defined threshold.
 
 ###### Purpose

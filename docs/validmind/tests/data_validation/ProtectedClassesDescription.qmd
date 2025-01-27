@@ -11,6 +11,12 @@ toc-expand: 3
  
 #### ProtectedClassesDescription
 
+```python
+def ProtectedClassesDescription(
+    dataset,
+    protected_classes = None):
+```
+
 Visualizes the distribution of protected classes in the dataset relative to the target variable
 and provides descriptive statistics.
 

@@ -11,8 +11,21 @@ toc-expand: 3
 
 #### compute_outliers
 
+```python
+def compute_outliers(
+    series,
+    threshold):
+```
+
  
 #### IQROutliersBarPlot
+
+```python
+def IQROutliersBarPlot(
+    dataset: VMDataset,
+    threshold: float = 1.5,
+    fig_width: int = 800):
+```
 
 Visualizes outlier distribution across percentiles in numerical data using the Interquartile Range (IQR) method.
 

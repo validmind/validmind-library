@@ -11,6 +11,11 @@ toc-expand: 3
   
 #### DickeyFullerGLS
 
+```python
+def DickeyFullerGLS(
+    dataset: VMDataset):
+```
+
 Assesses stationarity in time series data using the Dickey-Fuller GLS test to determine the order of integration.
 
 ###### Purpose

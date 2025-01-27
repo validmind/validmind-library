@@ -11,6 +11,12 @@ toc-expand: 3
 
 #### AdjustedRandIndex
 
+```python
+def AdjustedRandIndex(
+    model: VMModel,
+    dataset: VMDataset):
+```
+
 Measures the similarity between two data clusters using the Adjusted Rand Index (ARI) metric in clustering machine
 learning models.
 

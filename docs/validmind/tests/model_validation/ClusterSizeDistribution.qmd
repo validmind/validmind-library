@@ -11,6 +11,12 @@ toc-expand: 3
 
 #### ClusterSizeDistribution
 
+```python
+def ClusterSizeDistribution(
+    dataset: VMDataset,
+    model: VMModel):
+```
+
 Assesses the performance of clustering models by comparing the distribution of cluster sizes in model predictions
 with the actual data.
 

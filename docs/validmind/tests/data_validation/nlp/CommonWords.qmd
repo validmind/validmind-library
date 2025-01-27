@@ -11,6 +11,11 @@ toc-expand: 3
 
 #### CommonWords
 
+```python
+def CommonWords(
+    dataset: VMDataset):
+```
+
 Assesses the most frequent non-stopwords in a text column for identifying prevalent language patterns.
 
 ###### Purpose

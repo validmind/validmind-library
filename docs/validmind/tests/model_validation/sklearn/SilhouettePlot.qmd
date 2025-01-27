@@ -11,6 +11,12 @@ toc-expand: 3
 
 #### SilhouettePlot
 
+```python
+def SilhouettePlot(
+    model: VMModel,
+    dataset: VMDataset):
+```
+
 Calculates and visualizes Silhouette Score, assessing the degree of data point suitability to its cluster in ML
 models.
 

@@ -11,23 +11,73 @@ toc-expand: 3
   
 #### calculate_fairness_metrics
 
+```python
+def calculate_fairness_metrics(
+    test_df,
+    target,
+    y_pred_opt,
+    protected_classes):
+```
+
  
 #### calculate_group_metrics
+
+```python
+def calculate_group_metrics(
+    test_df,
+    target,
+    y_pred_opt,
+    protected_classes):
+```
 
  
 #### get_thresholds_by_group
 
+```python
+def get_thresholds_by_group(
+    threshold_optimizer):
+```
+
  
 #### initialize_and_fit_optimizer
+
+```python
+def initialize_and_fit_optimizer(
+    pipeline,
+    X_train,
+    y_train,
+    protected_classes_df):
+```
 
  
 #### make_predictions
 
+```python
+def make_predictions(
+    threshold_optimizer,
+    test_df,
+    protected_classes):
+```
+
  
 #### plot_thresholds
 
+```python
+def plot_thresholds(
+    threshold_optimizer):
+```
+
  
 #### ProtectedClassesThresholdOptimizer
+
+```python
+def ProtectedClassesThresholdOptimizer(
+    dataset,
+    pipeline = None,
+    protected_classes = None,
+    X_train = None,
+    y_train = None):
+```
 
 Obtains a classifier by applying group-specific thresholds to the provided estimator.
 

@@ -11,6 +11,12 @@ toc-expand: 3
 
 #### AdjustedMutualInformation
 
+```python
+def AdjustedMutualInformation(
+    model: VMModel,
+    dataset: VMDataset):
+```
+
 Evaluates clustering model performance by measuring mutual information between true and predicted labels, adjusting
 for chance.
 

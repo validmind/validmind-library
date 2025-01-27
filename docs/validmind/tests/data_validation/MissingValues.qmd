@@ -11,6 +11,12 @@ toc-expand: 3
 
 #### MissingValues
 
+```python
+def MissingValues(
+    dataset: VMDataset,
+    min_threshold: int = 1):
+```
+
 Evaluates dataset quality by ensuring missing value ratio across all features does not exceed a set threshold.
 
 ###### Purpose

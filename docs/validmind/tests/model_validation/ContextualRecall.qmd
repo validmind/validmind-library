@@ -11,6 +11,12 @@ toc-expand: 3
  
 #### ContextualRecall
 
+```python
+def ContextualRecall(
+    dataset,
+    model):
+```
+
 Evaluates a Natural Language Generation model's ability to generate contextually relevant and factually correct
 text, visualizing the results through histograms and bar charts, alongside compiling a comprehensive table of
 descriptive statistics for contextual recall scores.

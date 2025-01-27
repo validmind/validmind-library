@@ -11,6 +11,12 @@ toc-expand: 3
     
 #### Delimitation
 
+```python
+def Delimitation(
+    model,
+    min_threshold = 7):
+```
+
 Evaluates the proper use of delimiters in prompts provided to Large Language Models.
 
 ###### Purpose

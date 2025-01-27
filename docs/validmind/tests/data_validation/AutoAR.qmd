@@ -11,6 +11,12 @@ toc-expand: 3
  
 #### AutoAR
 
+```python
+def AutoAR(
+    dataset: VMDataset,
+    max_ar_order: int = 3):
+```
+
 Automatically identifies the optimal Autoregressive (AR) order for a time series using BIC and AIC criteria.
 
 ###### Purpose

@@ -11,6 +11,12 @@ toc-expand: 3
  
 #### ModelsPerformanceComparison
 
+```python
+def ModelsPerformanceComparison(
+    dataset: VMDataset,
+    models: list):
+```
+
 Evaluates and compares the performance of multiple Machine Learning models using various metrics like accuracy,
 precision, recall, and F1 score.
 

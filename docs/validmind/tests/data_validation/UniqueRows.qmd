@@ -11,6 +11,12 @@ toc-expand: 3
 
 #### UniqueRows
 
+```python
+def UniqueRows(
+    dataset: VMDataset,
+    min_percent_threshold: float = 1):
+```
+
 Verifies the diversity of the dataset by ensuring that the count of unique rows exceeds a prescribed threshold.
 
 ###### Purpose

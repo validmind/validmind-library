@@ -11,6 +11,13 @@ toc-expand: 3
  
 #### KolmogorovSmirnov
 
+```python
+def KolmogorovSmirnov(
+    model: VMModel,
+    dataset: VMDataset,
+    dist: str = 'norm'):
+```
+
 Assesses whether each feature in the dataset aligns with a normal distribution using the Kolmogorov-Smirnov test.
 
 ###### Purpose

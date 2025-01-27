@@ -11,8 +11,25 @@ toc-expand: 3
 
 #### custom_recall
 
+```python
+def custom_recall(
+    y_true,
+    y_pred_proba,
+    threshold = 0.5):
+```
+
  
 #### HyperParametersTuning
+
+```python
+def HyperParametersTuning(
+    model: VMModel,
+    dataset: VMDataset,
+    param_grid: dict,
+    scoring: Union = None,
+    thresholds: Union = None,
+    fit_params: dict = None):
+```
 
 Performs exhaustive grid search over specified parameter ranges to find optimal model configurations
 across different metrics and decision thresholds.

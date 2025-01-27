@@ -11,23 +11,61 @@ toc-expand: 3
 
 #### get_categorical_columns
 
+```python
+def get_categorical_columns(
+    dataset):
+```
+
  
 #### get_datetime_columns
+
+```python
+def get_datetime_columns(
+    dataset):
+```
 
  
 #### get_numerical_columns
 
+```python
+def get_numerical_columns(
+    dataset):
+```
+
  
 #### get_summary_statistics_categorical
+
+```python
+def get_summary_statistics_categorical(
+    dataset,
+    categorical_fields):
+```
 
  
 #### get_summary_statistics_datetime
 
+```python
+def get_summary_statistics_datetime(
+    dataset,
+    datetime_fields):
+```
+
  
 #### get_summary_statistics_numerical
 
+```python
+def get_summary_statistics_numerical(
+    dataset,
+    numerical_fields):
+```
+
  
 #### TabularDescriptionTables
+
+```python
+def TabularDescriptionTables(
+    dataset):
+```
 
 Summarizes key descriptive statistics for numerical, categorical, and datetime variables in a dataset.
 

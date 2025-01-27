@@ -11,6 +11,13 @@ toc-expand: 3
  
 #### KMeansClustersOptimization
 
+```python
+def KMeansClustersOptimization(
+    model: VMModel,
+    dataset: VMDataset,
+    n_clusters: Union = None):
+```
+
 Optimizes the number of clusters in K-means models using Elbow and Silhouette methods.
 
 ###### Purpose

@@ -11,6 +11,12 @@ toc-expand: 3
     
 #### Conciseness
 
+```python
+def Conciseness(
+    model,
+    min_threshold = 7):
+```
+
 Analyzes and grades the conciseness of prompts provided to a Large Language Model.
 
 ###### Purpose

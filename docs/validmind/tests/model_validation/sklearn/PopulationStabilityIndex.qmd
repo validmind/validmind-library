@@ -11,6 +11,14 @@ toc-expand: 3
   
 #### calculate_psi
 
+```python
+def calculate_psi(
+    score_initial,
+    score_new,
+    num_bins = 10,
+    mode = 'fixed'):
+```
+
 Taken from:
 https://towardsdatascience.com/checking-model-stability-and-population-shift-with-psi-and-csi-6d12af008783
 
@@ -19,6 +27,14 @@ https://towardsdatascience.com/checking-model-stability-and-population-shift-wit
 
  
 #### PopulationStabilityIndex
+
+```python
+def PopulationStabilityIndex(
+    datasets: List,
+    model: VMModel,
+    num_bins: int = 10,
+    mode: str = 'fixed'):
+```
 
 Assesses the Population Stability Index (PSI) to quantify the stability of an ML model's predictions across
 different datasets.

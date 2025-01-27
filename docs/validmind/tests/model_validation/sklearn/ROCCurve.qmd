@@ -11,6 +11,12 @@ toc-expand: 3
  
 #### ROCCurve
 
+```python
+def ROCCurve(
+    model: VMModel,
+    dataset: VMDataset):
+```
+
 Evaluates binary classification model performance by generating and plotting the Receiver Operating Characteristic
 (ROC) curve and calculating the Area Under Curve (AUC) score.
 

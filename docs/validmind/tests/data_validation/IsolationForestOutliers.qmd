@@ -11,6 +11,14 @@ toc-expand: 3
 
 #### IsolationForestOutliers
 
+```python
+def IsolationForestOutliers(
+    dataset: VMDataset,
+    random_state: int = 0,
+    contamination: float = 0.1,
+    feature_columns: list = None):
+```
+
 Detects outliers in a dataset using the Isolation Forest algorithm and visualizes results through scatter plots.
 
 ###### Purpose

@@ -11,7 +11,17 @@ toc-expand: 3
    
 #### load_data
 
+```python
+def load_data(
+):
+```
+
  
 #### preprocess
+
+```python
+def preprocess(
+    df):
+```
 
  

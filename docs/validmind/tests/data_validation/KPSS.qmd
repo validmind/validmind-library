@@ -11,6 +11,11 @@ toc-expand: 3
   
 #### KPSS
 
+```python
+def KPSS(
+    dataset: VMDataset):
+```
+
 Assesses the stationarity of time-series data in a machine learning model using the KPSS unit root test.
 
 ###### Purpose

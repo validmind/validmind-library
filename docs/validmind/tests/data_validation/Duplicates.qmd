@@ -11,6 +11,12 @@ toc-expand: 3
 
 #### Duplicates
 
+```python
+def Duplicates(
+    dataset,
+    min_threshold = 1):
+```
+
 Tests dataset for duplicate entries, ensuring model reliability via data quality verification.
 
 ###### Purpose

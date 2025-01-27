@@ -11,6 +11,11 @@ toc-expand: 3
  
 #### RegressionCoeffs
 
+```python
+def RegressionCoeffs(
+    model):
+```
+
 Assesses the significance and uncertainty of predictor variables in a regression model through visualization of
 coefficients and their 95% confidence intervals.
 

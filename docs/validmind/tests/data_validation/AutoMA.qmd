@@ -11,6 +11,12 @@ toc-expand: 3
  
 #### AutoMA
 
+```python
+def AutoMA(
+    dataset: VMDataset,
+    max_ma_order: int = 3):
+```
+
 Automatically selects the optimal Moving Average (MA) order for each variable in a time series dataset based on
 minimal BIC and AIC values.
 

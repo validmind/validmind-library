@@ -11,23 +11,61 @@ toc-expand: 3
 
 #### load_all_data
 
+```python
+def load_all_data(
+):
+```
+
  
 #### load_data
+
+```python
+def load_data(
+):
+```
 
  
 #### load_model
 
+```python
+def load_model(
+    model_name):
+```
+
  
 #### load_processed_data
+
+```python
+def load_processed_data(
+):
+```
 
  
 #### load_test_dataset
 
+```python
+def load_test_dataset(
+    model_name):
+```
+
  
 #### load_train_dataset
 
+```python
+def load_train_dataset(
+    model_path):
+```
+
  
 #### preprocess
+
+```python
+def preprocess(
+    df,
+    split_option = 'train_test_val',
+    train_size = 0.6,
+    test_size = 0.2):
+```
 
 Split a time series DataFrame into train, validation, and test sets.
 
@@ -48,5 +86,11 @@ Parameters:
 
  
 #### transform
+
+```python
+def transform(
+    df,
+    transform_func = 'diff'):
+```
 
  

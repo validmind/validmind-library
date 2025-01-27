@@ -11,6 +11,12 @@ toc-expand: 3
  
 #### Hashtags
 
+```python
+def Hashtags(
+    dataset: VMDataset,
+    top_hashtags: int = 25):
+```
+
 Assesses hashtag frequency in a text column, highlighting usage trends and potential dataset bias or spam.
 
 ###### Purpose

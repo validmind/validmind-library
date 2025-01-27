@@ -11,6 +11,14 @@ toc-expand: 3
  
 #### RegressionPermutationFeatureImportance
 
+```python
+def RegressionPermutationFeatureImportance(
+    dataset: VMDataset,
+    model: VMModel,
+    fontsize: int = 12,
+    figure_height: int = 500):
+```
+
 Assesses the significance of each feature in a model by evaluating the impact on model performance when feature
 values are randomly rearranged.
 

@@ -11,6 +11,11 @@ toc-expand: 3
   
 #### PhillipsPerronArch
 
+```python
+def PhillipsPerronArch(
+    dataset: VMDataset):
+```
+
 Assesses the stationarity of time series data in each feature of the ML model using the Phillips-Perron test.
 
 ###### Purpose

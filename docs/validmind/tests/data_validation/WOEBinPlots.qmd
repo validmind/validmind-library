@@ -11,6 +11,14 @@ toc-expand: 3
   
 #### WOEBinPlots
 
+```python
+def WOEBinPlots(
+    dataset: VMDataset,
+    breaks_adj: list = None,
+    fig_height: int = 600,
+    fig_width: int = 500):
+```
+
 Generates visualizations of Weight of Evidence (WoE) and Information Value (IV) for understanding predictive power
 of categorical variables in a data set.
 

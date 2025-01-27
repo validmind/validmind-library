@@ -11,6 +11,12 @@ toc-expand: 3
 
 #### TooManyZeroValues
 
+```python
+def TooManyZeroValues(
+    dataset: VMDataset,
+    max_percent_threshold: float = 0.03):
+```
+
 Identifies numerical columns in a dataset that contain an excessive number of zero values, defined by a threshold
 percentage.
 

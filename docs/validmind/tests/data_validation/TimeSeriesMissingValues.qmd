@@ -11,6 +11,12 @@ toc-expand: 3
  
 #### TimeSeriesMissingValues
 
+```python
+def TimeSeriesMissingValues(
+    dataset: VMDataset,
+    min_threshold: int = 1):
+```
+
 Validates time-series data quality by confirming the count of missing values is below a certain threshold.
 
 ###### Purpose

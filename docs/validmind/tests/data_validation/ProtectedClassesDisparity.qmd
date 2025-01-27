@@ -11,6 +11,15 @@ toc-expand: 3
   
 #### ProtectedClassesDisparity
 
+```python
+def ProtectedClassesDisparity(
+    dataset,
+    model,
+    protected_classes = None,
+    disparity_tolerance = 1.25,
+    metrics = {'cls': 'ExprList', 'elements': ["'fnr'", "'fpr'", "'tpr'"]}):
+```
+
 Investigates disparities in model performance across different protected class segments.
 
 ###### Purpose

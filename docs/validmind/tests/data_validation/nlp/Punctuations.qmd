@@ -16,6 +16,12 @@ Metrics functions for any Pandas-compatible datasets
 
 #### Punctuations
 
+```python
+def Punctuations(
+    dataset,
+    count_mode = 'token'):
+```
+
 Analyzes and visualizes the frequency distribution of punctuation usage in a given text dataset.
 
 ###### Purpose

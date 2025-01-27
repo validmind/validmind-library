@@ -11,6 +11,13 @@ toc-expand: 3
 
 #### MutualInformation
 
+```python
+def MutualInformation(
+    dataset: VMDataset,
+    min_threshold: float = 0.01,
+    task: str = 'classification'):
+```
+
 Calculates mutual information scores between features and target variable to evaluate feature relevance.
 
 ###### Purpose

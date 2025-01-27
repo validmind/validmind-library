@@ -11,6 +11,13 @@ toc-expand: 3
 
 #### TimeSeriesR2SquareBySegments
 
+```python
+def TimeSeriesR2SquareBySegments(
+    dataset,
+    model,
+    segments = None):
+```
+
 Evaluates the R-Squared values of regression models over specified time segments in time series data to assess
 segment-wise model performance.
 

@@ -11,6 +11,13 @@ toc-expand: 3
   
 #### FeaturesAUC
 
+```python
+def FeaturesAUC(
+    dataset: VMDataset,
+    fontsize: int = 12,
+    figure_height: int = 500):
+```
+
 Evaluates the discriminatory power of each individual feature within a binary classification model by calculating
 the Area Under the Curve (AUC) for each feature separately.
 

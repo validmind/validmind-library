@@ -11,6 +11,13 @@ toc-expand: 3
 
 #### TrainingTestDegradation
 
+```python
+def TrainingTestDegradation(
+    datasets: List,
+    model: VMModel,
+    max_threshold: float = 0.1):
+```
+
 Tests if model performance degradation between training and test datasets exceeds a predefined threshold.
 
 ###### Purpose

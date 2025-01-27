@@ -11,6 +11,11 @@ toc-expand: 3
  
 #### TargetRateBarPlots
 
+```python
+def TargetRateBarPlots(
+    dataset: VMDataset):
+```
+
 Generates bar plots visualizing the default rates of categorical features for a classification machine learning
 model.
 

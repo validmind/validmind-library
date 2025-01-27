@@ -11,6 +11,12 @@ toc-expand: 3
 
 #### RegressionErrors
 
+```python
+def RegressionErrors(
+    model,
+    dataset):
+```
+
 Assesses the performance and error distribution of a regression model using various error metrics.
 
 ###### Purpose

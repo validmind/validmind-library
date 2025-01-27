@@ -11,6 +11,13 @@ toc-expand: 3
 
 #### TimeSeriesPredictionWithCI
 
+```python
+def TimeSeriesPredictionWithCI(
+    dataset,
+    model,
+    confidence = 0.95):
+```
+
 Assesses predictive accuracy and uncertainty in time series models, highlighting breaches beyond confidence
 intervals.
 

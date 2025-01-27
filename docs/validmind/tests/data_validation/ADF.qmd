@@ -11,6 +11,11 @@ toc-expand: 3
  
 #### ADF
 
+```python
+def ADF(
+    dataset: VMDataset):
+```
+
 Assesses the stationarity of a time series dataset using the Augmented Dickey-Fuller (ADF) test.
 
 ###### Purpose

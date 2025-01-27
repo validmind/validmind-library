@@ -11,8 +11,18 @@ toc-expand: 3
 
 #### compute_scores
 
+```python
+def compute_scores(
+    probabilities):
+```
+
  
 #### load_data
+
+```python
+def load_data(
+):
+```
 
 Load data from the specified CSV file.
 
@@ -24,7 +34,18 @@ Load data from the specified CSV file.
  
 #### preprocess
 
+```python
+def preprocess(
+    df):
+```
+
  
 #### split
+
+```python
+def split(
+    df,
+    test_size = 0.3):
+```
 
  

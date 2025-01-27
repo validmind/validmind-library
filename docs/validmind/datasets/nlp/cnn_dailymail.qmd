@@ -11,6 +11,12 @@ toc-expand: 3
 
 #### display_nice
 
+```python
+def display_nice(
+    df,
+    num_rows = None):
+```
+
 Primary function to format and display a DataFrame.
 
 
@@ -18,6 +24,12 @@ Primary function to format and display a DataFrame.
 
  
 #### load_data
+
+```python
+def load_data(
+    source = 'online',
+    dataset_size = None):
+```
 
 Load data from either online source or offline files.
 

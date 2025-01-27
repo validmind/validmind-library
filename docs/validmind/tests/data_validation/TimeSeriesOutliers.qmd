@@ -11,6 +11,12 @@ toc-expand: 3
  
 #### TimeSeriesOutliers
 
+```python
+def TimeSeriesOutliers(
+    dataset: VMDataset,
+    zscore_threshold: int = 3):
+```
+
 Identifies and visualizes outliers in time-series data using the z-score method.
 
 ###### Purpose

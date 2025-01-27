@@ -11,6 +11,13 @@ toc-expand: 3
 
 #### MinimumF1Score
 
+```python
+def MinimumF1Score(
+    dataset: VMDataset,
+    model: VMModel,
+    min_threshold: float = 0.5):
+```
+
 Assesses if the model's F1 score on the validation set meets a predefined minimum threshold, ensuring balanced
 performance between precision and recall.
 

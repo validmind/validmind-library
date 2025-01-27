@@ -11,6 +11,12 @@ toc-expand: 3
 
 #### TimeSeriesPredictionsPlot
 
+```python
+def TimeSeriesPredictionsPlot(
+    dataset,
+    model):
+```
+
 Plot actual vs predicted values for time series data and generate a visual comparison for the model.
 
 ###### Purpose

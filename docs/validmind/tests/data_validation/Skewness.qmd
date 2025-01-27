@@ -11,6 +11,12 @@ toc-expand: 3
 
 #### Skewness
 
+```python
+def Skewness(
+    dataset,
+    max_threshold = 1):
+```
+
 Evaluates the skewness of numerical data in a dataset to check against a defined threshold, aiming to ensure data
 quality and optimize model performance.
 

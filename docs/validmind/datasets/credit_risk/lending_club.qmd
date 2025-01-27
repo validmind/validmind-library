@@ -11,11 +11,28 @@ toc-expand: 3
 
 #### compute_scores
 
+```python
+def compute_scores(
+    probabilities):
+```
+
  
 #### feature_engineering
 
+```python
+def feature_engineering(
+    df,
+    verbose = True):
+```
+
  
 #### get_demo_test_config
+
+```python
+def get_demo_test_config(
+    x_test = None,
+    y_test = None):
+```
 
 Get demo test configuration.
 
@@ -34,8 +51,19 @@ Get demo test configuration.
  
 #### init_vm_objects
 
+```python
+def init_vm_objects(
+    scorecard):
+```
+
  
 #### load_data
+
+```python
+def load_data(
+    source = 'online',
+    verbose = True):
+```
 
 Load data from either an online source or offline files, automatically dropping specified columns for offline data.
 
@@ -54,14 +82,39 @@ Load data from either an online source or offline files, automatically dropping 
  
 #### load_scorecard
 
+```python
+def load_scorecard(
+):
+```
+
  
 #### load_test_config
+
+```python
+def load_test_config(
+    scorecard):
+```
 
  
 #### preprocess
 
+```python
+def preprocess(
+    df,
+    verbose = True):
+```
+
  
 #### split
+
+```python
+def split(
+    df,
+    validation_size = None,
+    test_size = 0.2,
+    add_constant = False,
+    verbose = True):
+```
 
 Split dataset into train, validation (optional), and test sets.
 
@@ -82,5 +135,11 @@ Split dataset into train, validation (optional), and test sets.
 
  
 #### woe_encoding
+
+```python
+def woe_encoding(
+    df,
+    verbose = True):
+```
 
  

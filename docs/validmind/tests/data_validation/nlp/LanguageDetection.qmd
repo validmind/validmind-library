@@ -11,6 +11,11 @@ toc-expand: 3
 
 #### LanguageDetection
 
+```python
+def LanguageDetection(
+    dataset):
+```
+
 Assesses the diversity of languages in a textual dataset by detecting and visualizing the distribution of languages.
 
 ###### Purpose

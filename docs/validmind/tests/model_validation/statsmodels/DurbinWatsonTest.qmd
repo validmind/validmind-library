@@ -11,6 +11,13 @@ toc-expand: 3
 
 #### DurbinWatsonTest
 
+```python
+def DurbinWatsonTest(
+    dataset,
+    model,
+    threshold = {'cls': 'ExprList', 'elements': ['1.5', '2.5']}):
+```
+
 Assesses autocorrelation in time series data features using the Durbin-Watson statistic.
 
 ###### Purpose

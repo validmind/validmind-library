@@ -11,6 +11,12 @@ toc-expand: 3
  
 #### RegressionModelSummary
 
+```python
+def RegressionModelSummary(
+    dataset: VMDataset,
+    model: VMModel):
+```
+
 Evaluates regression model performance using metrics including R-Squared, Adjusted R-Squared, MSE, and RMSE.
 
 ###### Purpose

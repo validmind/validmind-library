@@ -11,6 +11,11 @@ toc-expand: 3
   
 #### DescriptiveStatistics
 
+```python
+def DescriptiveStatistics(
+    dataset: VMDataset):
+```
+
 Performs a detailed descriptive statistical analysis of both numerical and categorical data within a model's
 dataset.
 
@@ -61,7 +66,19 @@ model's data.
  
 #### get_summary_statistics_categorical
 
+```python
+def get_summary_statistics_categorical(
+    df,
+    categorical_fields):
+```
+
  
 #### get_summary_statistics_numerical
+
+```python
+def get_summary_statistics_numerical(
+    df,
+    numerical_fields):
+```
 
  

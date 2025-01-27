@@ -2,7 +2,7 @@
 import json
 import os
 from pathlib import Path
-from typing import Any, Dict, Set
+from typing import Any, Dict, Set, List
 from jinja2 import Environment, FileSystemLoader
 
 def resolve_alias(member: Dict[str, Any], data: Dict[str, Any]) -> Dict[str, Any]:
@@ -77,6 +77,61 @@ def ensure_dir(path):
     """Create directory if it doesn't exist."""
     Path(path).mkdir(parents=True, exist_ok=True)
 
+def collect_documented_items(module: Dict[str, Any], path: List[str], full_data: Dict[str, Any], is_root: bool = False) -> Dict[str, List[Dict[str, str]]]:
+    """Collect all documented items from a module and its submodules."""
+    result = {}
+    
+    # Skip if no members
+    if not module.get('members'):
+        return result
+    
+    # Build the current file path
+    file_path = '/'.join(path)
+    module_name = module.get('name', 'root')
+    
+    # Collect items from this module
+    module_items = []
+    for member in sort_members(module['members']):
+        if not is_public(member, module, full_data, is_root):
+            continue
+            
+        if member['kind'] in ('function', 'class'):
+            module_items.append({
+                'text': f"{member['name']}()" if member['kind'] == 'function' else member['name'],
+                'file': f"{file_path}.qmd#{member['name']}"
+            })
+        elif member['kind'] == 'alias':
+            target = resolve_alias(member, full_data)
+            if target and target.get('docstring'):
+                module_items.append({
+                    'text': f"{member['name']}()",
+                    'file': f"{file_path}.qmd#{member['name']}"
+                })
+    
+    if module_items:
+        # For root module, store under 'root' key
+        if is_root:
+            result['root'] = module_items
+        else:
+            result[module_name] = module_items
+    
+    # Recursively collect from submodules
+    for member in sort_members(module['members']):
+        if member['kind'] == 'module' and is_public(member, module, full_data, is_root):
+            submodule_path = path + [member['name']]
+            submodule_items = collect_documented_items(member, submodule_path, full_data, False)
+            result.update(submodule_items)
+            
+            # Also check for nested modules in the submodule
+            if member.get('members'):
+                for submember in sort_members(member['members']):
+                    if submember['kind'] == 'module' and is_public(submember, member, full_data, False):
+                        subsubmodule_path = submodule_path + [submember['name']]
+                        subsubmodule_items = collect_documented_items(submember, subsubmodule_path, full_data, False)
+                        result.update(subsubmodule_items)
+    
+    return result
+
 def process_module(module: Dict[str, Any], path: list, env: Environment, data: Dict[str, Any]):
     """Process a module and its members."""
     module_dir = os.path.join('docs', *path[:-1])
@@ -127,16 +182,25 @@ def generate_docs(json_path: str, template_dir: str, output_dir: str):
     
     # Start processing from root module
     if 'validmind' in data:
-        # Generate module documentation
+        # First pass: Generate module documentation
         process_module(data['validmind'], ['validmind'], env, data)
         
-        # Generate sidebar
+        # Second pass: Collect all documented items
+        documented_items = collect_documented_items(
+            module=data['validmind'],
+            path=['validmind'],
+            full_data=data,
+            is_root=True
+        )
+        
+        # Generate sidebar with collected items
         sidebar_template = env.get_template('sidebar.qmd.jinja2')
         sidebar_output = sidebar_template.render(
             module=data['validmind'],
             full_data=data,
             is_root=True,
-            resolve_alias=resolve_alias
+            resolve_alias=resolve_alias,
+            documented_items=documented_items
         )
         
         # Write sidebar

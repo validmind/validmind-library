@@ -11,6 +11,12 @@ toc-expand: 3
  
 #### RegressionPerformance
 
+```python
+def RegressionPerformance(
+    model: VMModel,
+    dataset: VMDataset):
+```
+
 Evaluates the performance of a regression model using five different metrics**: MAE, MSE, RMSE, MAPE, and MBD.
 
 ###### Purpose

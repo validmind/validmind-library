@@ -11,6 +11,11 @@ toc-expand: 3
  
 #### TimeSeriesLinePlot
 
+```python
+def TimeSeriesLinePlot(
+    dataset: VMDataset):
+```
+
 Generates and analyses time-series data through line plots revealing trends, patterns, anomalies over time.
 
 ###### Purpose

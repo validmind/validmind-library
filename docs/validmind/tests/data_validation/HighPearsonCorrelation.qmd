@@ -11,6 +11,14 @@ toc-expand: 3
 
 #### HighPearsonCorrelation
 
+```python
+def HighPearsonCorrelation(
+    dataset: VMDataset,
+    max_threshold: float = 0.3,
+    top_n_correlations: int = 10,
+    feature_columns: list = None):
+```
+
 Identifies highly correlated feature pairs in a dataset suggesting feature redundancy or multicollinearity.
 
 ###### Purpose

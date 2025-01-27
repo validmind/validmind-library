@@ -11,6 +11,12 @@ toc-expand: 3
     
 #### Bias
 
+```python
+def Bias(
+    model,
+    min_threshold = 7):
+```
+
 Assesses potential bias in a Large Language Model by analyzing the distribution and order of exemplars in the
 prompt.
 

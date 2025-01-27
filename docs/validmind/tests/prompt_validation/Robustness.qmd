@@ -11,6 +11,13 @@ toc-expand: 3
    
 #### Robustness
 
+```python
+def Robustness(
+    model,
+    dataset,
+    num_tests = 10):
+```
+
 Assesses the robustness of prompts provided to a Large Language Model under varying conditions and contexts. This test
 specifically measures the model's ability to generate correct classifications with the given prompt even when the
 inputs are edge cases or otherwise difficult to classify.

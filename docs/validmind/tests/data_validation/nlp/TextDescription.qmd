@@ -11,8 +11,23 @@ toc-expand: 3
 
 #### create_metrics_df
 
+```python
+def create_metrics_df(
+    df,
+    text_column,
+    unwanted_tokens,
+    lang):
+```
+
  
 #### TextDescription
+
+```python
+def TextDescription(
+    dataset: VMDataset,
+    unwanted_tokens: set = {'cls': 'ExprSet', 'elements': ["'s'", '"s\'"', "'mr'", "'ms'", "'mrs'", "'dr'", '"\'s"', "' '", '"\'\'"', "'dollar'", "'us'", "'``'"]},
+    lang: str = 'english'):
+```
 
 Conducts comprehensive textual analysis on a dataset using NLTK to evaluate various parameters and generate
 visualizations.

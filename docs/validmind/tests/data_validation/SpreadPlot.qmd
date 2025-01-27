@@ -11,6 +11,11 @@ toc-expand: 3
  
 #### SpreadPlot
 
+```python
+def SpreadPlot(
+    dataset: VMDataset):
+```
+
 Assesses potential correlations between pairs of time series variables through visualization to enhance
 understanding of their relationships.
 

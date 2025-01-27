@@ -11,6 +11,13 @@ toc-expand: 3
 
 #### MinimumAccuracy
 
+```python
+def MinimumAccuracy(
+    dataset: VMDataset,
+    model: VMModel,
+    min_threshold: float = 0.7):
+```
+
 Checks if the model's prediction accuracy meets or surpasses a specified threshold.
 
 ###### Purpose

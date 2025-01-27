@@ -11,6 +11,12 @@ toc-expand: 3
 
 #### VMeasure
 
+```python
+def VMeasure(
+    dataset: VMDataset,
+    model: VMModel):
+```
+
 Evaluates homogeneity and completeness of a clustering model using the V Measure Score.
 
 ###### Purpose

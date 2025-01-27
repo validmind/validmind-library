@@ -11,6 +11,12 @@ toc-expand: 3
 
 #### ConfusionMatrix
 
+```python
+def ConfusionMatrix(
+    dataset: VMDataset,
+    model: VMModel):
+```
+
 Evaluates and visually represents the classification ML model's predictive performance using a Confusion Matrix
 heatmap.
 

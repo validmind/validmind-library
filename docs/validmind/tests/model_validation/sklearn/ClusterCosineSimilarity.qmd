@@ -11,6 +11,12 @@ toc-expand: 3
  
 #### ClusterCosineSimilarity
 
+```python
+def ClusterCosineSimilarity(
+    model: VMModel,
+    dataset: VMDataset):
+```
+
 Measures the intra-cluster similarity of a clustering model using cosine similarity.
 
 ###### Purpose

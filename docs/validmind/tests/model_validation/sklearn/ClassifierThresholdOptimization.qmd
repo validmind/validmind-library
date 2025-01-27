@@ -11,6 +11,14 @@ toc-expand: 3
 
 #### ClassifierThresholdOptimization
 
+```python
+def ClassifierThresholdOptimization(
+    dataset: VMDataset,
+    model: VMModel,
+    methods = None,
+    target_recall = None):
+```
+
 Analyzes and visualizes different threshold optimization methods for binary classification models.
 
 ###### Purpose
@@ -80,6 +88,14 @@ comprehensive performance metrics at each threshold.
 
  
 #### find_optimal_threshold
+
+```python
+def find_optimal_threshold(
+    y_true,
+    y_prob,
+    method = 'youden',
+    target_recall = None):
+```
 
 Find the optimal classification threshold using various methods.
 

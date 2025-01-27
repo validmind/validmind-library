@@ -11,6 +11,13 @@ toc-expand: 3
   
 #### RegressionFeatureSignificance
 
+```python
+def RegressionFeatureSignificance(
+    model: VMModel,
+    fontsize: int = 10,
+    p_threshold: float = 0.05):
+```
+
 Assesses and visualizes the statistical significance of features in a regression model.
 
 ###### Purpose

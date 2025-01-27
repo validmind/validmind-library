@@ -11,6 +11,12 @@ toc-expand: 3
  
 #### Mentions
 
+```python
+def Mentions(
+    dataset: VMDataset,
+    top_mentions: int = 25):
+```
+
 Calculates and visualizes frequencies of '@' prefixed mentions in a text-based dataset for NLP model analysis.
 
 ###### Purpose

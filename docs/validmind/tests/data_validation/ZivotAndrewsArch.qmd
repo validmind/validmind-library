@@ -11,6 +11,11 @@ toc-expand: 3
   
 #### ZivotAndrewsArch
 
+```python
+def ZivotAndrewsArch(
+    dataset: VMDataset):
+```
+
 Evaluates the order of integration and stationarity of time series data using the Zivot-Andrews unit root test.
 
 ###### Purpose

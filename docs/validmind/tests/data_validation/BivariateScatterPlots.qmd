@@ -11,6 +11,11 @@ toc-expand: 3
 
 #### BivariateScatterPlots
 
+```python
+def BivariateScatterPlots(
+    dataset):
+```
+
 Generates bivariate scatterplots to visually inspect relationships between pairs of numerical predictor variables
 in machine learning classification tasks.
 

@@ -11,6 +11,11 @@ toc-expand: 3
  
 #### TimeSeriesFrequency
 
+```python
+def TimeSeriesFrequency(
+    dataset: VMDataset):
+```
+
 Evaluates consistency of time series data frequency and generates a frequency plot.
 
 ###### Purpose

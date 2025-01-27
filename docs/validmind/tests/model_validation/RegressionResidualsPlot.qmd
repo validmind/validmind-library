@@ -11,6 +11,13 @@ toc-expand: 3
 
 #### RegressionResidualsPlot
 
+```python
+def RegressionResidualsPlot(
+    model: VMModel,
+    dataset: VMDataset,
+    bin_size: float = 0.1):
+```
+
 Evaluates regression model performance using residual distribution and actual vs. predicted plots.
 
 ###### Purpose

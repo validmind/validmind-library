@@ -11,6 +11,11 @@ toc-expand: 3
  
 #### TabularDateTimeHistograms
 
+```python
+def TabularDateTimeHistograms(
+    dataset: VMDataset):
+```
+
 Generates histograms to provide graphical insight into the distribution of time intervals in a model's datetime
 data.
 

@@ -11,6 +11,14 @@ toc-expand: 3
  
 #### RegressionModelForecastPlot
 
+```python
+def RegressionModelForecastPlot(
+    model: VMModel,
+    dataset: VMDataset,
+    start_date: Union = None,
+    end_date: Union = None):
+```
+
 Generates plots to visually compare the forecasted outcomes of a regression model against actual observed values over
 a specified date range.
 

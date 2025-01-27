@@ -11,6 +11,11 @@ toc-expand: 3
 
 #### JarqueBera
 
+```python
+def JarqueBera(
+    dataset):
+```
+
 Assesses normality of dataset features in an ML model using the Jarque-Bera test.
 
 ###### Purpose

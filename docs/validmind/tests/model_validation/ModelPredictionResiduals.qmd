@@ -11,6 +11,16 @@ toc-expand: 3
 
 #### ModelPredictionResiduals
 
+```python
+def ModelPredictionResiduals(
+    dataset,
+    model,
+    nbins = 100,
+    p_value_threshold = 0.05,
+    start_date = None,
+    end_date = None):
+```
+
 Assesses normality and behavior of residuals in regression models through visualization and statistical tests.
 
 ###### Purpose

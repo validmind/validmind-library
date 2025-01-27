@@ -11,6 +11,12 @@ toc-expand: 3
 
 #### HomogeneityScore
 
+```python
+def HomogeneityScore(
+    dataset: VMDataset,
+    model: VMModel):
+```
+
 Assesses clustering homogeneity by comparing true and predicted labels, scoring from 0 (heterogeneous) to 1
 (homogeneous).
 

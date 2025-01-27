@@ -11,6 +11,12 @@ toc-expand: 3
 
 #### GINITable
 
+```python
+def GINITable(
+    dataset,
+    model):
+```
+
 Evaluates classification model performance using AUC, GINI, and KS metrics for training and test datasets.
 
 ###### Purpose

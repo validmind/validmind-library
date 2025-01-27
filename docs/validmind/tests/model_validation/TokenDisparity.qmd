@@ -11,6 +11,12 @@ toc-expand: 3
 
 #### TokenDisparity
 
+```python
+def TokenDisparity(
+    dataset,
+    model):
+```
+
 Evaluates the token disparity between reference and generated texts, visualizing the results through histograms and
 bar charts, alongside compiling a comprehensive table of descriptive statistics for token counts.
 

@@ -11,6 +11,11 @@ toc-expand: 3
 
 #### Sentiment
 
+```python
+def Sentiment(
+    dataset):
+```
+
 Analyzes the sentiment of text data within a dataset using the VADER sentiment analysis tool.
 
 ###### Purpose

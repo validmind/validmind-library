@@ -11,6 +11,11 @@ toc-expand: 3
 
 #### ACFandPACFPlot
 
+```python
+def ACFandPACFPlot(
+    dataset: VMDataset):
+```
+
 Analyzes time series data using Autocorrelation Function (ACF) and Partial Autocorrelation Function (PACF) plots to
 reveal trends and correlations.
 

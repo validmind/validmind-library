@@ -11,8 +11,20 @@ toc-expand: 3
 
 #### compute_outliers
 
+```python
+def compute_outliers(
+    series,
+    threshold = 1.5):
+```
+
  
 #### IQROutliersTable
+
+```python
+def IQROutliersTable(
+    dataset: VMDataset,
+    threshold: float = 1.5):
+```
 
 Determines and summarizes outliers in numerical features using the Interquartile Range method.
 

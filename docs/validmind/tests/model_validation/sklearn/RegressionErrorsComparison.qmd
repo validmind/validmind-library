@@ -11,6 +11,12 @@ toc-expand: 3
  
 #### RegressionErrorsComparison
 
+```python
+def RegressionErrorsComparison(
+    datasets,
+    models):
+```
+
 Assesses multiple regression error metrics to compare model performance across different datasets, emphasizing
 systematic overestimation or underestimation and large percentage errors.
 

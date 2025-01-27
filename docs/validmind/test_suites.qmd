@@ -28,6 +28,12 @@ Entrypoint for test suites.
                                  
 #### describe_suite
 
+```python
+def describe_suite(
+    test_suite_id: str,
+    verbose = False):
+```
+
 Describes a Test Suite by ID
 
 **Arguments**
@@ -45,6 +51,11 @@ Describes a Test Suite by ID
  
 #### get_by_id
 
+```python
+def get_by_id(
+    test_suite_id: str):
+```
+
 Returns the test suite by ID
 
 
@@ -53,6 +64,11 @@ Returns the test suite by ID
  
 #### list_suites
 
+```python
+def list_suites(
+    pretty: bool = True):
+```
+
 Returns a list of all available test suites
 
 
@@ -60,6 +76,12 @@ Returns a list of all available test suites
 
  
 #### register_test_suite
+
+```python
+def register_test_suite(
+    suite_id: str,
+    suite: TestSuite):
+```
 
 Registers a custom test suite
 

@@ -11,6 +11,13 @@ toc-expand: 3
 
 #### CumulativePredictionProbabilities
 
+```python
+def CumulativePredictionProbabilities(
+    dataset,
+    model,
+    title = 'Cumulative Probabilities'):
+```
+
 Visualizes cumulative probabilities of positive and negative classes for both training and testing in classification models.
 
 ###### Purpose

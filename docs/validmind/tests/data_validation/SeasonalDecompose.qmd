@@ -11,6 +11,12 @@ toc-expand: 3
   
 #### SeasonalDecompose
 
+```python
+def SeasonalDecompose(
+    dataset: VMDataset,
+    seasonal_model: str = 'additive'):
+```
+
 Assesses patterns and seasonality in a time series dataset by decomposing its features into foundational components.
 
 ###### Purpose

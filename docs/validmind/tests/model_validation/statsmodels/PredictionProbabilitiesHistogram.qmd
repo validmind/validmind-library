@@ -11,6 +11,13 @@ toc-expand: 3
 
 #### PredictionProbabilitiesHistogram
 
+```python
+def PredictionProbabilitiesHistogram(
+    dataset,
+    model,
+    title = 'Histogram of Predictive Probabilities'):
+```
+
 Assesses the predictive probability distribution for binary classification to evaluate model performance and
 potential overfitting or bias.
 

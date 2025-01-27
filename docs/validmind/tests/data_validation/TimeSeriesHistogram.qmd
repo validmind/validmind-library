@@ -11,6 +11,12 @@ toc-expand: 3
  
 #### TimeSeriesHistogram
 
+```python
+def TimeSeriesHistogram(
+    dataset,
+    nbins = 30):
+```
+
 Visualizes distribution of time-series data using histograms and Kernel Density Estimation (KDE) lines.
 
 ###### Purpose

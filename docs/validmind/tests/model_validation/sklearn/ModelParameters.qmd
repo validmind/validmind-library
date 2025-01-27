@@ -11,6 +11,12 @@ toc-expand: 3
 
 #### ModelParameters
 
+```python
+def ModelParameters(
+    model,
+    model_params = None):
+```
+
 Extracts and displays model parameters in a structured format for transparency and reproducibility.
 
 ###### Purpose

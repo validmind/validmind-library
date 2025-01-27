@@ -19,6 +19,12 @@ ValidMind Tests Module
              
 #### register_test_provider
 
+```python
+def register_test_provider(
+    namespace: str,
+    test_provider: TestProvider) -> None:
+```
+
 Register an external test provider
 
 **Arguments**
@@ -28,7 +34,5 @@ Register an external test provider
 
 
 
-
-**Returns:** None
 
  

@@ -11,6 +11,12 @@ toc-expand: 3
 
 #### ClusterPerformanceMetrics
 
+```python
+def ClusterPerformanceMetrics(
+    model: VMModel,
+    dataset: VMDataset):
+```
+
 Evaluates the performance of clustering machine learning models using multiple established metrics.
 
 ###### Purpose

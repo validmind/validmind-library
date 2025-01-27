@@ -11,6 +11,11 @@ toc-expand: 3
 
 #### ShapiroWilk
 
+```python
+def ShapiroWilk(
+    dataset):
+```
+
 Evaluates feature-wise normality of training data using the Shapiro-Wilk test.
 
 ###### Purpose

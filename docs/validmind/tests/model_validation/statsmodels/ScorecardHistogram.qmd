@@ -11,6 +11,13 @@ toc-expand: 3
 
 #### ScorecardHistogram
 
+```python
+def ScorecardHistogram(
+    dataset,
+    title = 'Histogram of Scores',
+    score_column = 'score'):
+```
+
 The Scorecard Histogram test evaluates the distribution of credit scores between default and non-default instances,
 providing critical insights into the performance and generalizability of credit-risk models.
 

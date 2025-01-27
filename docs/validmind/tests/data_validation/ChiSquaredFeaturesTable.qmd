@@ -11,6 +11,12 @@ toc-expand: 3
  
 #### ChiSquaredFeaturesTable
 
+```python
+def ChiSquaredFeaturesTable(
+    dataset,
+    p_threshold = 0.05):
+```
+
 Assesses the statistical association between categorical features and a target variable using the Chi-Squared test.
 
 ###### Purpose

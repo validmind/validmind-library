@@ -11,6 +11,14 @@ toc-expand: 3
  
 #### OverfitDiagnosis
 
+```python
+def OverfitDiagnosis(
+    model: VMModel,
+    datasets: List,
+    metric: str = None,
+    cut_off_threshold: float = {'cls': 'ExprName', 'name': 'DEFAULT_THRESHOLD'}):
+```
+
 Assesses potential overfitting in a model's predictions, identifying regions where performance between training and
 testing sets deviates significantly.
 
