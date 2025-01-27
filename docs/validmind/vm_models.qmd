@@ -312,7 +312,7 @@ Base class for ValidMind Input types
 
 **Methods**
 
-#### [with_options[()]{.muted}](#with_options)
+### [with_options[()]{.muted}](#with_options)
 
 ```python
 with_options(self, kwargs)
