@@ -1,7 +1,7 @@
 ### [class]{.muted} {{ resolved.name }}
 
 ```python
-class {{ resolved.name }}{% if resolved.bases %}({{ resolved.bases | join(', ') }}){% endif %}:
+class {{ resolved.name }}{% if resolved.bases %}({{ resolved.bases | map(attribute='name') | join(', ') }}){% endif %}:
 ```
 
 {% if resolved.docstring %}
@@ -14,7 +14,7 @@ class {{ resolved.name }}{% if resolved.bases %}({{ resolved.bases | join(', ') 
 {% for base in resolved.bases %}
 {% set base_members = get_inherited_members(base, full_data) %}
 {% if base_members %}
-- **From {{ base }}**: {% for member in base_members %}[{{ member.name }}](#{{ member.name }}){% if not loop.last %}, {% endif %}{% endfor %}
+- **From {{ base.name }}**: {% for member in base_members %}[{{ member.name }}](#{{ member.name }}){% if not loop.last %}, {% endif %}{% endfor %}
 {% endif %}
 {% endfor %}
 {% endif %}
