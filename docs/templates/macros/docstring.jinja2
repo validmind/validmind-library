@@ -14,37 +14,47 @@
         
         {# Parameters #}
         {%- if docstring.parsed.params -%}
-            {%- set _ = sections.append("**Parameters**\n") -%}
+            {%- set _ = sections.append("\n**Parameters**") -%}
             {%- for param in docstring.parsed.params -%}
-                {%- set _ = sections.append("- **" ~ param.arg_name ~ "**: " ~ param.description) -%}
+                {%- if param.arg_name and param.description -%}
+                    {%- set desc = param.description | trim -%}
+                    {%- if desc.endswith(')') and '(default:' in desc -%}
+                        {%- set desc = desc[:-1] ~ ')' -%}
+                    {%- endif -%}
+                    {%- set _ = sections.append("- **" ~ param.arg_name ~ "**: " ~ desc) -%}
+                {%- endif -%}
             {%- endfor -%}
         {%- endif -%}
         
         {# Returns #}
         {%- if docstring.parsed.returns -%}
-            {%- set _ = sections.append("**Returns**\n") -%}
-            {%- set _ = sections.append("- " ~ docstring.parsed.returns.description) -%}
+            {%- set _ = sections.append("\n**Returns**") -%}
+            {%- if docstring.parsed.returns.description -%}
+                {%- set _ = sections.append("- " ~ docstring.parsed.returns.description | trim) -%}
+            {%- endif -%}
         {%- endif -%}
         
         {# Raises #}
         {%- if docstring.parsed.raises -%}
-            {%- set _ = sections.append("**Raises**\n") -%}
+            {%- set _ = sections.append("\n**Raises**") -%}
             {%- for raises in docstring.parsed.raises -%}
-                {%- set _ = sections.append("- **" ~ raises.type_name ~ "**: " ~ raises.description) -%}
+                {%- if raises.type_name and raises.description -%}
+                    {%- set _ = sections.append("- **" ~ raises.type_name ~ "**: " ~ raises.description | trim) -%}
+                {%- endif -%}
             {%- endfor -%}
         {%- endif -%}
         
-        {# If we got any sections, join them, otherwise fall back to value #}
+        {# Join sections with proper spacing #}
         {%- if sections -%}
-            {{ sections | join('\n\n') }}
+            {{ sections | join('\n') | trim }}
         {%- else -%}
-            {{ docstring.value }}
+            {{ docstring.value | trim }}
         {%- endif -%}
     {%- else -%}
         {# Always fall back to value if no parsed content #}
-        {{ docstring.value }}
+        {{ docstring.value | trim }}
     {%- endif -%}
 {% else %}
-{{ docstring }}
+{{ docstring | trim }}
 {% endif %}
 {% endmacro %} 

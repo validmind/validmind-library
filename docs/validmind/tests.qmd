@@ -20,4 +20,7 @@ def register_test_provider(
 
 Register an external test provider
 
-Args: namespace (str): The namespace of the test provider test_provider (TestProvider): The test provider
+**Parameters**
+
+- **(str)**: The namespace of the test provider test_provider
+- **(TestProvider)**: The test provider

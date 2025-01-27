@@ -29,9 +29,14 @@ def describe_suite(
 
 Describes a Test Suite by ID
 
-Args: test_suite_id: Test Suite ID verbose: If True, describe all plans and tests in the Test Suite
+**Parameters**
 
-Returns: pandas.DataFrame: A formatted table with the Test Suite description
+- **test_suite_id**: Test Suite ID
+- **verbose**: If True, describe all plans and tests in the Test Suite
+
+**Returns**
+
+- A formatted table with the Test Suite description
 
 ## get_by_id[()]{.muted}
 

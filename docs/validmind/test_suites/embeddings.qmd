@@ -4,9 +4,7 @@ toc-depth: 3
 toc-expand: 3
 ---
 
-Test suites for embeddings models
-
-Ideal setup is to have the API client to read a custom test suite from the project's configuration
+Test suites for embeddings models Ideal setup is to have the API client to read a custom test suite from the project's configuration
 
 ### Class: EmbeddingsFullSuite
 

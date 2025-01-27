@@ -20,7 +20,9 @@ def load_data(
 
 Load data from the specified CSV file.
 
-:return: DataFrame containing the loaded data.
+**Returns**
+
+- DataFrame containing the loaded data.
 
 ## preprocess[()]{.muted}
 

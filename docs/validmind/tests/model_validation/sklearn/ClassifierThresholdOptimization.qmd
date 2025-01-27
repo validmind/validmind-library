@@ -63,9 +63,18 @@ The test implements multiple threshold optimization methods:
 - May not capture temporal changes in optimal threshold
 - Single threshold may not be optimal for all subgroups
 
-Args: dataset: VMDataset containing features and target model: VMModel containing predictions methods: List of methods to compare (default: ['youden', 'f1', 'precision_recall']) target_recall: Target recall value if using 'target_recall' method
+**Parameters**
 
-Returns: Dictionary containing: - table: DataFrame comparing different threshold optimization methods (using weighted averages for precision, recall, and f1) - figure: Plotly figure showing ROC and PR curves with optimal thresholds
+- **dataset**: VMDataset containing features and target
+- **model**: VMModel containing predictions
+- **methods**: List of methods to compare (default: ['youden', 'f1', 'precision_recall'])
+- **target_recall**: Target recall value if using 'target_recall' method
+
+**Returns**
+
+- Dictionary containing:
+- table: DataFrame comparing different threshold optimization methods (using weighted averages for precision, recall, and f1)
+- figure: Plotly figure showing ROC and PR curves with optimal thresholds
 
 ## find_optimal_threshold[()]{.muted}
 
@@ -79,6 +88,13 @@ def find_optimal_threshold(
 
 Find the optimal classification threshold using various methods.
 
-Args: y_true: True binary labels y_prob: Predicted probabilities method: Method to use for finding optimal threshold target_recall: Required if method='target_recall'
+**Parameters**
 
-Returns: dict: Dictionary containing threshold and metrics
+- **y_true**: True binary labels
+- **y_prob**: Predicted probabilities
+- **method**: Method to use for finding optimal threshold
+- **target_recall**: Required if method='target_recall'
+
+**Returns**
+
+- Dictionary containing threshold and metrics
