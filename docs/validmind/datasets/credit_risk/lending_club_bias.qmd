@@ -1,0 +1,31 @@
+---
+title: lending_club_bias
+toc-depth: 3
+toc-expand: 3
+---
+
+
+
+
+
+
+
+#### compute_scores
+
+ 
+#### load_data
+
+Load data from the specified CSV file.
+
+:return**: DataFrame containing the loaded data.
+
+
+
+
+ 
+#### preprocess
+
+ 
+#### split
+
+ 

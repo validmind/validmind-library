@@ -1,0 +1,70 @@
+---
+title: test_suites
+toc-depth: 3
+toc-expand: 3
+---
+
+Entrypoint for test suites.
+
+
+
+
+
+
+
+
+- [classifier](test_suites/classifier.qmd)
+- [cluster](test_suites/cluster.qmd)
+- [embeddings](test_suites/embeddings.qmd)
+- [llm](test_suites/llm.qmd)
+- [nlp](test_suites/nlp.qmd)
+- [parameters_optimization](test_suites/parameters_optimization.qmd)
+- [regression](test_suites/regression.qmd)
+- [statsmodels_timeseries](test_suites/statsmodels_timeseries.qmd)
+- [summarization](test_suites/summarization.qmd)
+- [tabular_datasets](test_suites/tabular_datasets.qmd)
+- [text_data](test_suites/text_data.qmd)
+- [time_series](test_suites/time_series.qmd)
+
+                                 
+#### describe_suite
+
+Describes a Test Suite by ID
+
+**Arguments**
+
+- **test_suite_id****: Test Suite ID
+- **verbose**: If True, describe all plans and tests in the Test Suite
+
+**Returns**
+
+- **pandas.DataFrame**: A formatted table with the Test Suite description
+
+
+
+
+ 
+#### get_by_id
+
+Returns the test suite by ID
+
+
+
+
+ 
+#### list_suites
+
+Returns a list of all available test suites
+
+
+
+
+ 
+#### register_test_suite
+
+Registers a custom test suite
+
+
+
+
+ 

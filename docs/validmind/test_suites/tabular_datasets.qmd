@@ -1,0 +1,57 @@
+---
+title: tabular_datasets
+toc-depth: 3
+toc-expand: 3
+---
+
+Test suites for tabular datasets
+
+
+
+
+
+
+
+
+
+
+### Class: TabularDataQuality
+
+Test suite for data quality on tabular datasets
+
+
+
+
+
+**Bases:** TestSuite
+
+#### Methods
+
+   
+### Class: TabularDataset
+
+Test suite for tabular datasets.
+
+
+
+
+
+**Bases:** TestSuite
+
+#### Methods
+
+   
+### Class: TabularDatasetDescription
+
+Test suite to extract metadata and descriptive
+statistics from a tabular dataset
+
+
+
+
+
+**Bases:** TestSuite
+
+#### Methods
+
+   

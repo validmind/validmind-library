@@ -1,0 +1,53 @@
+{% macro format_type(type) %}
+{% if type is mapping %}
+{% if type.kind == 'union' %}
+{{ type.types | map('format_type') | join(' | ') }}
+{% elif type.kind == 'generic' %}
+{{ type.base }}[{{ type.args | map('format_type') | join(', ') }}]
+{% else %}
+{{ type.name }}
+{% endif %}
+{% else %}
+{{ type }}
+{% endif %}
+{% endmacro %}
+
+{%- macro format_return_type(returns) -%}
+{%- if returns.cls == "ExprName" -%}
+    {%- if returns.name in validmind.members.client.members and validmind.members.client.members[returns.name].kind == "alias" -%}
+        {{ validmind.members.client.members[returns.name].target_path }}
+    {%- else -%}
+        {{ returns.name }}
+    {%- endif -%}
+{%- elif returns.cls == "ExprSubscript" and returns.left is defined -%}
+    {{ returns.left.name }}[
+    {%- if returns.slice.cls == "ExprTuple" -%}
+        {{ returns.slice.elements|map(attribute="name")|join(", ") }}
+    {%- else -%}
+        {{ returns.slice.name }}
+    {%- endif -%}
+    ]
+{%- else -%}
+    {{ returns|string }}
+{%- endif -%}
+{%- endmacro %}
+
+{%- macro format_module_return_type(returns, module, full_data) -%}
+{%- if returns.cls == "ExprName" -%}
+    {%- if returns.name in module.members and module.members[returns.name].kind == "alias" -%}
+        {{ module.members[returns.name].target_path }}
+    {%- else -%}
+        {{ returns.name }}
+    {%- endif -%}
+{%- elif returns.cls == "ExprSubscript" and returns.left is defined -%}
+    {{ returns.left.name }}[
+    {%- if returns.slice.cls == "ExprTuple" -%}
+        {{ returns.slice.elements|map(attribute="name")|join(", ") }}
+    {%- else -%}
+        {{ returns.slice.name }}
+    {%- endif -%}
+    ]
+{%- else -%}
+    {{ returns|string }}
+{%- endif -%}
+{%- endmacro %} 

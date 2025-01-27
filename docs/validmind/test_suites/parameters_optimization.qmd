@@ -1,0 +1,33 @@
+---
+title: parameters_optimization
+toc-depth: 3
+toc-expand: 3
+---
+
+Test suites for sklearn-compatible hyper parameters tunning
+
+Ideal setup is to have the API client to read a
+custom test suite from the project's configuration
+
+
+
+
+
+
+
+
+
+
+### Class: KmeansParametersOptimization
+
+Test suite for sklearn hyperparameters optimization
+
+
+
+
+
+**Bases:** TestSuite
+
+#### Methods
+
+   

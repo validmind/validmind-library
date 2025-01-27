@@ -1,0 +1,20 @@
+---
+title: datasets
+toc-depth: 3
+toc-expand: 3
+---
+
+Example datasets that can be used with the ValidMind Library.
+
+
+
+
+
+
+
+
+- [classification](datasets/classification.qmd)
+- [credit_risk](datasets/credit_risk.qmd)
+- [nlp](datasets/nlp.qmd)
+- [regression](datasets/regression.qmd)
+

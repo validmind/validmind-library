@@ -1,0 +1,18 @@
+---
+title: regression
+toc-depth: 3
+toc-expand: 3
+---
+
+Entrypoint for regression datasets
+
+
+
+
+
+
+
+
+- [fred](regression/fred.qmd)
+- [lending_club](regression/lending_club.qmd)
+

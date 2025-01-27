@@ -1,0 +1,30 @@
+---
+title: text_data
+toc-depth: 3
+toc-expand: 3
+---
+
+Test suites for text datasets
+
+
+
+
+
+
+
+
+
+
+### Class: TextDataQuality
+
+Test suite for data quality on text data
+
+
+
+
+
+**Bases:** TestSuite
+
+#### Methods
+
+   

@@ -1,0 +1,43 @@
+---
+title: statsmodels_timeseries
+toc-depth: 3
+toc-expand: 3
+---
+
+Time Series Test Suites from statsmodels
+
+
+
+
+
+
+
+
+
+
+### Class: RegressionModelDescription
+
+Test suite for performance metric of regression model of statsmodels library
+
+
+
+
+
+**Bases:** TestSuite
+
+#### Methods
+
+   
+### Class: RegressionModelsEvaluation
+
+Test suite for metrics comparison of regression model of statsmodels library
+
+
+
+
+
+**Bases:** TestSuite
+
+#### Methods
+
+   

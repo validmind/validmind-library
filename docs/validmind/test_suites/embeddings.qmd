@@ -1,0 +1,59 @@
+---
+title: embeddings
+toc-depth: 3
+toc-expand: 3
+---
+
+Test suites for embeddings models
+
+Ideal setup is to have the API client to read a
+custom test suite from the project's configuration
+
+
+
+
+
+
+
+
+
+
+### Class: EmbeddingsFullSuite
+
+Full test suite for embeddings models.
+
+
+
+
+
+**Bases:** TestSuite
+
+#### Methods
+
+   
+### Class: EmbeddingsMetrics
+
+Test suite for embeddings metrics
+
+
+
+
+
+**Bases:** TestSuite
+
+#### Methods
+
+   
+### Class: EmbeddingsPerformance
+
+Test suite for embeddings model performance
+
+
+
+
+
+**Bases:** TestSuite
+
+#### Methods
+
+   

@@ -1,0 +1,41 @@
+---
+title: cnn_dailymail
+toc-depth: 3
+toc-expand: 3
+---
+
+
+
+
+
+
+
+#### display_nice
+
+Primary function to format and display a DataFrame.
+
+
+
+
+ 
+#### load_data
+
+Load data from either online source or offline files.
+
+
+**Parameters**
+
+- **source**: 'online' for online data, 'offline' for offline data. Defaults to 'online'.
+
+**Parameters**
+
+- **dataset_size: Applicable if source is 'offline'. '300k' or '500k' for dataset size. Defaults to None.
+
+**Returns**
+
+- DataFrame containing the loaded data.
+
+
+
+
+ 

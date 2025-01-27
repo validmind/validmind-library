@@ -1,0 +1,59 @@
+---
+title: cluster
+toc-depth: 3
+toc-expand: 3
+---
+
+Test suites for sklearn-compatible clustering models
+
+Ideal setup is to have the API client to read a
+custom test suite from the project's configuration
+
+
+
+
+
+
+
+
+
+ 
+### Class: ClusterFullSuite
+
+Full test suite for clustering models.
+
+
+
+
+
+**Bases:** TestSuite
+
+#### Methods
+
+   
+### Class: ClusterMetrics
+
+Test suite for sklearn clustering metrics
+
+
+
+
+
+**Bases:** TestSuite
+
+#### Methods
+
+   
+### Class: ClusterPerformance
+
+Test suite for sklearn cluster performance
+
+
+
+
+
+**Bases:** TestSuite
+
+#### Methods
+
+   

@@ -1,0 +1,18 @@
+---
+title: credit_risk
+toc-depth: 3
+toc-expand: 3
+---
+
+Entrypoint for credit risk datasets.
+
+
+
+
+
+
+
+
+- [lending_club](credit_risk/lending_club.qmd)
+- [lending_club_bias](credit_risk/lending_club_bias.qmd)
+

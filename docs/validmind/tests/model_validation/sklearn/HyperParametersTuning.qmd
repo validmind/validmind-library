@@ -1,0 +1,71 @@
+---
+title: HyperParametersTuning
+toc-depth: 3
+toc-expand: 3
+---
+
+
+
+
+
+
+
+#### custom_recall
+
+ 
+#### HyperParametersTuning
+
+Performs exhaustive grid search over specified parameter ranges to find optimal model configurations
+across different metrics and decision thresholds.
+
+###### Purpose
+
+The Hyperparameter Tuning test systematically explores the model's parameter space to identify optimal
+configurations. It supports multiple optimization metrics and decision thresholds, providing a comprehensive
+view of how different parameter combinations affect various aspects of model performance.
+
+###### Test Mechanism
+
+The test uses scikit-learn's GridSearchCV to perform cross-validation for each parameter combination.
+For each specified threshold and optimization metric, it creates a scoring dictionary with
+threshold-adjusted metrics, performs grid search with cross-validation, records best parameters and
+corresponding scores, and combines results into a comparative table. This process is repeated for each
+optimization metric to provide a comprehensive view of model performance under different configurations.
+
+###### Signs of High Risk
+
+- Large performance variations across different parameter combinations
+- Significant discrepancies between different optimization metrics
+- Best parameters at the edges of the parameter grid
+- Unstable performance across different thresholds
+- Overly complex model configurations (risk of overfitting)
+- Very different optimal parameters for different metrics
+- Cross-validation scores showing high variance
+- Extreme parameter values in best configurations
+
+###### Strengths
+
+- Comprehensive exploration of parameter space
+- Supports multiple optimization metrics
+- Allows threshold optimization
+- Provides comparative view across different configurations
+- Uses cross-validation for robust evaluation
+- Helps understand trade-offs between different metrics
+- Enables systematic parameter selection
+- Supports both classification and clustering tasks
+
+###### Limitations
+
+- Computationally expensive for large parameter grids
+- May not find global optimum (limited to grid points)
+- Cannot handle dependencies between parameters
+- Memory intensive for large datasets
+- Limited to scikit-learn compatible models
+- Cross-validation splits may not preserve time series structure
+- Grid search may miss optimal values between grid points
+- Resource intensive for high-dimensional parameter spaces
+
+
+
+
+ 

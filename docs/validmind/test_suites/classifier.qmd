@@ -1,0 +1,85 @@
+---
+title: classifier
+toc-depth: 3
+toc-expand: 3
+---
+
+Test suites for sklearn-compatible classifier models
+
+Ideal setup is to have the API client to read a
+custom test suite from the project's configuration
+
+
+
+
+
+
+
+
+
+  
+### Class: ClassifierDiagnosis
+
+Test suite for sklearn classifier model diagnosis tests
+
+
+
+
+
+**Bases:** TestSuite
+
+#### Methods
+
+   
+### Class: ClassifierFullSuite
+
+Full test suite for binary classification models.
+
+
+
+
+
+**Bases:** TestSuite
+
+#### Methods
+
+   
+### Class: ClassifierMetrics
+
+Test suite for sklearn classifier metrics
+
+
+
+
+
+**Bases:** TestSuite
+
+#### Methods
+
+   
+### Class: ClassifierModelValidation
+
+Test suite for binary classification models.
+
+
+
+
+
+**Bases:** TestSuite
+
+#### Methods
+
+   
+### Class: ClassifierPerformance
+
+Test suite for sklearn classifier models
+
+
+
+
+
+**Bases:** TestSuite
+
+#### Methods
+
+   

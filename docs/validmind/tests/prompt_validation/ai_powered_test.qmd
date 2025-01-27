@@ -1,0 +1,44 @@
+---
+title: ai_powered_test
+toc-depth: 3
+toc-expand: 3
+---
+
+
+
+
+
+
+
+#### call_model
+
+Call LLM with the given prompts and return the response
+
+
+
+
+ 
+#### get_explanation
+
+Get just the explanation from the response string
+- **TODO****: use json response mode instead of this
+
+- **e.g. "Score**: 8
+Explanation: <some-explanation>" -> "<some-explanation>"
+
+
+
+
+ 
+#### get_score
+
+Get just the score from the response string
+- **TODO****: use json response mode instead of this
+
+- **e.g. "Score**: 8
+Explanation: <some-explanation>" -> 8
+
+
+
+
+ 

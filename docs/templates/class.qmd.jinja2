@@ -1,0 +1,22 @@
+{% if member.kind == "class" %}
+
+### Class: {{ member.name }}
+
+{% if member.docstring %}
+{{ doc.format_docstring(member.docstring) }}
+
+{% endif %}
+{% if member.bases %}
+**Bases:** {% for base in member.bases %}{{ types.format_type(base) }}{% if not loop.last %}, {% endif %}{% endfor %}
+
+{% endif %}
+{% if member.members %}
+#### Methods
+
+{% for method in member.members | sort_members %}
+{% if is_public(method, member, full_data) %}
+{% include "function.qmd.jinja2" %}
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endif %} 

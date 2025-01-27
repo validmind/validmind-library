@@ -1,0 +1,424 @@
+---
+title: errors
+toc-depth: 3
+toc-expand: 3
+---
+
+This module contains all the custom errors that are used in the ValidMind Library.
+
+The following base errors are defined for others:
+
+- BaseError
+- APIRequestError
+
+
+
+
+
+
+
+
+
+
+#### raise_api_error
+
+Safely try to parse JSON from the response message in case the API
+returns a non-JSON string or if the API returns a non-standard error
+
+
+
+
+ 
+#### should_raise_on_fail_fast
+
+Determine whether an error should be raised when fail_fast is True.
+
+
+
+
+**Returns:** bool
+
+ 
+### Class: APIRequestError
+
+Generic error for API request errors that are not known.
+
+
+
+
+
+**Bases:** BaseError
+
+ 
+### Class: BaseError
+
+**Bases:** Exception
+
+#### Methods
+
+    
+### Class: GetTestSuiteError
+
+When the test suite could not be found.
+
+
+
+
+
+**Bases:** BaseError
+
+ 
+### Class: InitializeTestSuiteError
+
+When the test suite was found but could not be initialized.
+
+
+
+
+
+**Bases:** BaseError
+
+ 
+### Class: InvalidAPICredentialsError
+
+**Bases:** APIRequestError
+
+#### Methods
+
+  
+### Class: InvalidContentIdPrefixError
+
+When an invalid text content_id is sent to the API.
+
+
+
+
+
+**Bases:** APIRequestError
+
+ 
+### Class: InvalidInputError
+
+When an invalid input object.
+
+
+
+
+
+**Bases:** BaseError
+
+ 
+### Class: InvalidMetricResultsError
+
+When an invalid metric results object is sent to the API.
+
+
+
+
+
+**Bases:** APIRequestError
+
+ 
+### Class: InvalidProjectError
+
+**Bases:** APIRequestError
+
+#### Methods
+
+  
+### Class: InvalidRequestBodyError
+
+When a POST/PUT request is made with an invalid request body.
+
+
+
+
+
+**Bases:** APIRequestError
+
+ 
+### Class: InvalidTestParametersError
+
+When an invalid parameters for the test.
+
+
+
+
+
+**Bases:** BaseError
+
+ 
+### Class: InvalidTestResultsError
+
+When an invalid test results object is sent to the API.
+
+
+
+
+
+**Bases:** APIRequestError
+
+ 
+### Class: InvalidTextObjectError
+
+When an invalid Metadat (Text) object is sent to the API.
+
+
+
+
+
+**Bases:** APIRequestError
+
+ 
+### Class: InvalidValueFormatterError
+
+When an invalid value formatter is provided when serializing results.
+
+
+
+
+
+**Bases:** BaseError
+
+ 
+### Class: InvalidXGBoostTrainedModelError
+
+When an invalid XGBoost trained model is used when calling init_r_model.
+
+
+
+
+
+**Bases:** BaseError
+
+ 
+### Class: LoadTestError
+
+Exception raised when an error occurs while loading a test
+
+
+
+
+
+**Bases:** BaseError
+
+#### Methods
+
+   
+### Class: MismatchingClassLabelsError
+
+When the class labels found in the dataset don't match the provided target labels.
+
+
+
+
+
+**Bases:** BaseError
+
+ 
+### Class: MissingAPICredentialsError
+
+**Bases:** BaseError
+
+#### Methods
+
+  
+### Class: MissingCacheResultsArgumentsError
+
+When the cache_results function is missing arguments.
+
+
+
+
+
+**Bases:** BaseError
+
+ 
+### Class: MissingClassLabelError
+
+When the one or more class labels are missing from provided dataset targets.
+
+
+
+
+
+**Bases:** BaseError
+
+ 
+### Class: MissingDependencyError
+
+When a required dependency is missing.
+
+
+
+
+
+**Bases:** BaseError
+
+#### Methods
+
+    
+### Class: MissingDocumentationTemplate
+
+When the client config is missing the documentation template.
+
+
+
+
+
+**Bases:** BaseError
+
+ 
+### Class: MissingModelIdError
+
+**Bases:** BaseError
+
+#### Methods
+
+  
+### Class: MissingOrInvalidModelPredictFnError
+
+When the pytorch model is missing a predict function or its predict
+method does not have the expected arguments.
+
+
+
+
+
+**Bases:** BaseError
+
+ 
+### Class: MissingRequiredTestInputError
+
+When a required test context variable is missing.
+
+
+
+
+
+**Bases:** BaseError
+
+ 
+### Class: MissingRExtrasError
+
+When the R extras have not been installed.
+
+
+
+
+
+**Bases:** BaseError
+
+#### Methods
+
+  
+### Class: MissingTextContentIdError
+
+When a Text object is sent to the API without a content_id.
+
+
+
+
+
+**Bases:** APIRequestError
+
+ 
+### Class: MissingTextContentsError
+
+When a Text object is sent to the API without a "text" attribute.
+
+
+
+
+
+**Bases:** APIRequestError
+
+ 
+### Class: SkipTestError
+
+Useful error to throw when a test cannot be executed.
+
+
+
+
+
+**Bases:** BaseError
+
+ 
+### Class: TestInputInvalidDatasetError
+
+When an invalid dataset is used in a test context.
+
+
+
+
+
+**Bases:** BaseError
+
+ 
+### Class: UnsupportedColumnTypeError
+
+When an unsupported column type is found on a dataset.
+
+
+
+
+
+**Bases:** BaseError
+
+ 
+### Class: UnsupportedDatasetError
+
+When an unsupported dataset is used.
+
+
+
+
+
+**Bases:** BaseError
+
+ 
+### Class: UnsupportedFigureError
+
+When an unsupported figure object is constructed.
+
+
+
+
+
+**Bases:** BaseError
+
+ 
+### Class: UnsupportedModelError
+
+When an unsupported model is used.
+
+
+
+
+
+**Bases:** BaseError
+
+ 
+### Class: UnsupportedModelForSHAPError
+
+When an unsupported model is used for SHAP importance.
+
+
+
+
+
+**Bases:** BaseError
+
+ 
+### Class: UnsupportedRModelError
+
+When an unsupported R model is used.
+
+
+
+
+
+**Bases:** BaseError
+
+ 

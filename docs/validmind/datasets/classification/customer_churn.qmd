@@ -1,0 +1,44 @@
+---
+title: customer_churn
+toc-depth: 3
+toc-expand: 3
+---
+
+
+
+
+
+
+   
+#### get_demo_test_config
+
+Returns input configuration for the default documentation
+template assigned to this demo model
+
+The default documentation template uses the following inputs:
+
+- raw_dataset
+- train_dataset
+- test_dataset
+- model
+
+We assign the following inputs depending on the input config expected
+by each test:
+
+- When a test expects a "dataset" we use the raw_dataset
+- When a tets expects "datasets" we use the train_dataset and test_dataset
+- When a test expects a "model" we use the model
+- When a test expects "model" and "dataset" we use the model and test_dataset
+- The only exception is ClassifierPerformance since that runs twice**: once
+- with the train_dataset (in sample) and once with the test_dataset (out of sample)
+
+
+
+
+ 
+#### load_data
+
+ 
+#### preprocess
+
+ 

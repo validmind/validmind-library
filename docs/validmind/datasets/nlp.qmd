@@ -1,0 +1,18 @@
+---
+title: nlp
+toc-depth: 3
+toc-expand: 3
+---
+
+Example datasets that can be used with the ValidMind Library.
+
+
+
+
+
+
+
+
+- [cnn_dailymail](nlp/cnn_dailymail.qmd)
+- [twitter_covid_19](nlp/twitter_covid_19.qmd)
+

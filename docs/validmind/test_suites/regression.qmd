@@ -1,0 +1,51 @@
+---
+title: regression
+toc-depth: 3
+toc-expand: 3
+---
+
+
+
+
+
+
+  
+### Class: RegressionFullSuite
+
+Full test suite for regression models.
+
+
+
+
+
+**Bases:** TestSuite
+
+#### Methods
+
+   
+### Class: RegressionMetrics
+
+Test suite for performance metrics of regression metrics
+
+
+
+
+
+**Bases:** TestSuite
+
+#### Methods
+
+   
+### Class: RegressionPerformance
+
+Test suite for regression model performance
+
+
+
+
+
+**Bases:** TestSuite
+
+#### Methods
+
+   

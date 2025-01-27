@@ -1,0 +1,14 @@
+{%- if member.kind == "function" %}
+
+#### {{ member.name }}
+
+{% if member.docstring %}
+{{ doc.format_docstring(member.docstring) }}
+{% endif %}
+{% if member.signature %}
+**Signature:** `{{ member.signature }}`
+{% endif %}
+{% if member.returns %}
+**Returns:** {{ types.format_type(member.returns) }}
+{% endif %}
+{% endif %} 
