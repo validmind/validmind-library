@@ -9,7 +9,6 @@ toc-expand: 3
 
 
 
-
 #### display_nice
 
 Primary function to format and display a DataFrame.

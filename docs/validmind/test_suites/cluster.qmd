@@ -16,7 +16,6 @@ custom test suite from the project's configuration
 
 
 
-
  
 ### Class: ClusterFullSuite
 

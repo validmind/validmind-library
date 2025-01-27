@@ -14,7 +14,6 @@ Time Series Test Suites from statsmodels
 
 
 
-
 ### Class: RegressionModelDescription
 
 Test suite for performance metric of regression model of statsmodels library

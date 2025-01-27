@@ -9,7 +9,6 @@ toc-expand: 3
 
 
 
-
 #### LanguageDetection
 
 Assesses the diversity of languages in a textual dataset by detecting and visualizing the distribution of languages.

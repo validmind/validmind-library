@@ -9,7 +9,6 @@ toc-expand: 3
 
 
 
-
 #### ModelPredictionResiduals
 
 Assesses normality and behavior of residuals in regression models through visualization and statistical tests.

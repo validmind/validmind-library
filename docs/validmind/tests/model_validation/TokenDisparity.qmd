@@ -9,7 +9,6 @@ toc-expand: 3
 
 
 
-
 #### TokenDisparity
 
 Evaluates the token disparity between reference and generated texts, visualizing the results through histograms and

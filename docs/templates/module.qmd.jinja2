@@ -59,16 +59,13 @@ def {{ member.name }}(
 {% endif %}
 {% endfor %}
 
-{% if has_modules.value and module.name == "validmind" %}
-## Submodules
-
-{% endif %}
-
+{% if not is_root %}
 {% for member in module.members | sort_members %}
 {% if is_public(member, module, full_data, is_root) and member.kind == "module" %}
 - [{{ member.name }}]({{ module.name }}/{{ member.name }}.qmd)
 {% endif %}
 {% endfor %}
+{% endif %}
 
 {# List classes and functions #}
 {% for member in module.members | sort_members %}

@@ -12,7 +12,6 @@ Entrypoint for regression datasets
 
 
 
-
 - [fred](regression/fred.qmd)
 - [lending_club](regression/lending_club.qmd)
 

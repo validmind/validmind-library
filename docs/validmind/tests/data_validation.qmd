@@ -7,7 +7,6 @@ toc-expand: 3
 
 
 
-
 - [ACFandPACFPlot](data_validation/ACFandPACFPlot.qmd)
 - [ADF](data_validation/ADF.qmd)
 - [AutoAR](data_validation/AutoAR.qmd)

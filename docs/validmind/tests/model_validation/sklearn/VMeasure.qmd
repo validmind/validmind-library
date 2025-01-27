@@ -9,7 +9,6 @@ toc-expand: 3
 
 
 
-
 #### VMeasure
 
 Evaluates homogeneity and completeness of a clustering model using the V Measure Score.

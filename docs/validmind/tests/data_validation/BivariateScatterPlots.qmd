@@ -9,7 +9,6 @@ toc-expand: 3
 
 
 
-
 #### BivariateScatterPlots
 
 Generates bivariate scatterplots to visually inspect relationships between pairs of numerical predictor variables

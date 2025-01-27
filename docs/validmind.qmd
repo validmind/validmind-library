@@ -446,14 +446,5 @@ as the metric's description.
 
 
 
-## Submodules
-
-
-- [datasets](validmind/datasets.qmd)
-- [errors](validmind/errors.qmd)
-- [test_suites](validmind/test_suites.qmd)
-- [tests](validmind/tests.qmd)
-- [unit_metrics](validmind/unit_metrics.qmd)
-- [vm_models](validmind/vm_models.qmd)
 
               

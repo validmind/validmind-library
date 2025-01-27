@@ -9,7 +9,6 @@ toc-expand: 3
 
 
 
-
 #### MinimumROCAUCScore
 
 Validates model by checking if the ROC AUC score meets or surpasses a specified threshold.

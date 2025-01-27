@@ -9,7 +9,6 @@ toc-expand: 3
 
 
 
-
 #### TimeSeriesR2SquareBySegments
 
 Evaluates the R-Squared values of regression models over specified time segments in time series data to assess

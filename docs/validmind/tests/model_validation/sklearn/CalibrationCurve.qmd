@@ -9,7 +9,6 @@ toc-expand: 3
 
 
 
-
 #### CalibrationCurve
 
 Evaluates the calibration of probability estimates by comparing predicted probabilities against observed

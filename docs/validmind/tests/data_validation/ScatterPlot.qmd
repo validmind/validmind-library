@@ -9,7 +9,6 @@ toc-expand: 3
 
 
 
-
 #### ScatterPlot
 
 Assesses visual relationships, patterns, and outliers among features in a dataset through scatter plot matrices.

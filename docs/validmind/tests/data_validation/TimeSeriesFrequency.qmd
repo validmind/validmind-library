@@ -8,7 +8,6 @@ toc-expand: 3
 
 
 
-
  
 #### TimeSeriesFrequency
 

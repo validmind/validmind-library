@@ -9,7 +9,6 @@ toc-expand: 3
 
 
 
-
 #### ScoreProbabilityAlignment
 
 Analyzes the alignment between credit scores and predicted probabilities.

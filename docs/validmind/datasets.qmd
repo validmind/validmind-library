@@ -12,7 +12,6 @@ Example datasets that can be used with the ValidMind Library.
 
 
 
-
 - [classification](datasets/classification.qmd)
 - [credit_risk](datasets/credit_risk.qmd)
 - [nlp](datasets/nlp.qmd)

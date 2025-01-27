@@ -9,7 +9,6 @@ toc-expand: 3
 
 
 
-
 #### describe_metric
 
 Describe a metric

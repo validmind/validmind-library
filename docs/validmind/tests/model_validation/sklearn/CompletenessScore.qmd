@@ -9,7 +9,6 @@ toc-expand: 3
 
 
 
-
 #### CompletenessScore
 
 Evaluates a clustering model's capacity to categorize instances from a single class into the same cluster.

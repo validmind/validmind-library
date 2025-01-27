@@ -12,7 +12,6 @@ ValidMind Tests Module
 
 
 
-
 - [data_validation](tests/data_validation.qmd)
 - [model_validation](tests/model_validation.qmd)
 - [prompt_validation](tests/prompt_validation.qmd)

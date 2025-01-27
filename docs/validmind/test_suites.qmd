@@ -12,7 +12,6 @@ Entrypoint for test suites.
 
 
 
-
 - [classifier](test_suites/classifier.qmd)
 - [cluster](test_suites/cluster.qmd)
 - [embeddings](test_suites/embeddings.qmd)

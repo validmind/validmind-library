@@ -9,7 +9,6 @@ toc-expand: 3
 
 
 
-
 #### ModelParameters
 
 Extracts and displays model parameters in a structured format for transparency and reproducibility.

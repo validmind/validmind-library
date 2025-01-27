@@ -9,7 +9,6 @@ toc-expand: 3
 
 
 
-
 #### ScoreBandDefaultRates
 
 Analyzes default rates and population distribution across credit score bands.

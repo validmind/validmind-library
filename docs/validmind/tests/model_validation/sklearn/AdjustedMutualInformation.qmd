@@ -9,7 +9,6 @@ toc-expand: 3
 
 
 
-
 #### AdjustedMutualInformation
 
 Evaluates clustering model performance by measuring mutual information between true and predicted labels, adjusting

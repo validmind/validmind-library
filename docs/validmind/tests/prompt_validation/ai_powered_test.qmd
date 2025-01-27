@@ -9,7 +9,6 @@ toc-expand: 3
 
 
 
-
 #### call_model
 
 Call LLM with the given prompts and return the response

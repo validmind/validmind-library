@@ -9,7 +9,6 @@ toc-expand: 3
 
 
 
-
 #### MutualInformation
 
 Calculates mutual information scores between features and target variable to evaluate feature relevance.

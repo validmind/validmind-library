@@ -9,7 +9,6 @@ toc-expand: 3
 
 
 
-
 #### LaggedCorrelationHeatmap
 
 Assesses and visualizes correlation between target variable and lagged independent variables in a time-series

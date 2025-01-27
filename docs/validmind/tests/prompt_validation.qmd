@@ -7,7 +7,6 @@ toc-expand: 3
 
 
 
-
 - [ai_powered_test](prompt_validation/ai_powered_test.qmd)
 - [Bias](prompt_validation/Bias.qmd)
 - [Clarity](prompt_validation/Clarity.qmd)

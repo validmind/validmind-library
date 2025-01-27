@@ -9,7 +9,6 @@ toc-expand: 3
 
 
 
-
 #### ScorecardHistogram
 
 The Scorecard Histogram test evaluates the distribution of credit scores between default and non-default instances,

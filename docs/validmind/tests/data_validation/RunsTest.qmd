@@ -9,7 +9,6 @@ toc-expand: 3
 
 
 
-
 #### RunsTest
 
 Executes Runs Test on ML model to detect non-random patterns in output data sequence.

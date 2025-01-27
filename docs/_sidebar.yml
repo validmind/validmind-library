@@ -2,8 +2,6 @@ website:
   sidebar:
     - contents:
       # Root level functions from validmind.qmd
-      - text: "Python API"
-        file: validmind.qmd#python-api
       - text: "__version__"
         file: validmind.qmd#__version__
       - text: "get_test_suite()"

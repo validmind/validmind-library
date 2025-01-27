@@ -9,7 +9,6 @@ toc-expand: 3
 
 
 
-
 #### RougeScore
 
 Assesses the quality of machine-generated text using ROUGE metrics and visualizes the results to provide

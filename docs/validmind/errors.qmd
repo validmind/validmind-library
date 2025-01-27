@@ -19,7 +19,6 @@ The following base errors are defined for others:
 
 
 
-
 #### raise_api_error
 
 Safely try to parse JSON from the response message in case the API

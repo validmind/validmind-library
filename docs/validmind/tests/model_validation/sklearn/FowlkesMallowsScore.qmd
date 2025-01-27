@@ -9,7 +9,6 @@ toc-expand: 3
 
 
 
-
 #### FowlkesMallowsScore
 
 Evaluates the similarity between predicted and actual cluster assignments in a model using the Fowlkes-Mallows

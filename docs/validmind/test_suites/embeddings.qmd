@@ -17,7 +17,6 @@ custom test suite from the project's configuration
 
 
 
-
 ### Class: EmbeddingsFullSuite
 
 Full test suite for embeddings models.

@@ -9,7 +9,6 @@ toc-expand: 3
 
 
 
-
 #### TabularNumericalHistograms
 
 Generates histograms for each numerical feature in a dataset to provide visual insights into data distribution and

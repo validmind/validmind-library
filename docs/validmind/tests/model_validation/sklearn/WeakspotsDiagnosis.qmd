@@ -9,7 +9,6 @@ toc-expand: 3
 
 
 
-
 #### WeakspotsDiagnosis
 
 Identifies and visualizes weak spots in a machine learning model's performance across various sections of the

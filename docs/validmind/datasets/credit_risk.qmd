@@ -12,7 +12,6 @@ Entrypoint for credit risk datasets.
 
 
 
-
 - [lending_club](credit_risk/lending_club.qmd)
 - [lending_club_bias](credit_risk/lending_club_bias.qmd)
 

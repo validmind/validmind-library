@@ -9,7 +9,6 @@ toc-expand: 3
 
 
 
-
 #### AdjustedRandIndex
 
 Measures the similarity between two data clusters using the Adjusted Rand Index (ARI) metric in clustering machine

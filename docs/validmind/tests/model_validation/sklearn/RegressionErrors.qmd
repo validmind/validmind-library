@@ -9,7 +9,6 @@ toc-expand: 3
 
 
 
-
 #### RegressionErrors
 
 Assesses the performance and error distribution of a regression model using various error metrics.

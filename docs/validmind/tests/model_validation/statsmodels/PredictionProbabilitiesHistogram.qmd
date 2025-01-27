@@ -9,7 +9,6 @@ toc-expand: 3
 
 
 
-
 #### PredictionProbabilitiesHistogram
 
 Assesses the predictive probability distribution for binary classification to evaluate model performance and

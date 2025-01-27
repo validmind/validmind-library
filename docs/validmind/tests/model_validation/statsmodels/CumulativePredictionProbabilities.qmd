@@ -9,7 +9,6 @@ toc-expand: 3
 
 
 
-
 #### CumulativePredictionProbabilities
 
 Visualizes cumulative probabilities of positive and negative classes for both training and testing in classification models.

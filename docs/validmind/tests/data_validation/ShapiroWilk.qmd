@@ -9,7 +9,6 @@ toc-expand: 3
 
 
 
-
 #### ShapiroWilk
 
 Evaluates feature-wise normality of training data using the Shapiro-Wilk test.
