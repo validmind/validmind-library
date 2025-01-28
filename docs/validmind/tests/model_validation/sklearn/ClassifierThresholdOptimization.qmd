@@ -65,32 +65,6 @@ The test implements multiple threshold optimization methods:
 
 **Parameters**
 
-DEBUG:
-
-- arg_name: dataset
-- type_name: None
-- description: VMDataset containing features and target
-
-______________________________________________________________________
-
-- arg_name: model
-- type_name: None
-- description: VMModel containing predictions
-
-______________________________________________________________________
-
-- arg_name: methods
-- type_name: None
-- description: List of methods to compare (default: ['youden', 'f1', 'precision_recall'])
-
-______________________________________________________________________
-
-- arg_name: target_recall
-- type_name: None
-- description: Target recall value if using 'target_recall' method
-
-______________________________________________________________________
-
 - **dataset**: VMDataset containing features and target
 - **model**: VMModel containing predictions
 - **methods**: List of methods to compare (default: ['youden', 'f1', 'precision_recall'])
@@ -115,32 +89,6 @@ def find_optimal_threshold(
 Find the optimal classification threshold using various methods.
 
 **Parameters**
-
-DEBUG:
-
-- arg_name: y_true
-- type_name: None
-- description: True binary labels
-
-______________________________________________________________________
-
-- arg_name: y_prob
-- type_name: None
-- description: Predicted probabilities
-
-______________________________________________________________________
-
-- arg_name: method
-- type_name: None
-- description: Method to use for finding optimal threshold
-
-______________________________________________________________________
-
-- arg_name: target_recall
-- type_name: None
-- description: Required if method='target_recall'
-
-______________________________________________________________________
 
 - **y_true**: True binary labels
 - **y_prob**: Predicted probabilities

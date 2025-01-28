@@ -15,26 +15,6 @@ Comprehensive validation of true and predicted value pairs. Handles NaN/None val
 
 **Parameters**
 
-DEBUG:
-
-- arg_name: y_true
-- type_name: None
-- description: List or array of true values
-
-______________________________________________________________________
-
-- arg_name: y_pred
-- type_name: None
-- description: List or array of predicted values
-
-______________________________________________________________________
-
-- arg_name: dataset_id
-- type_name: None
-- description: Optional identifier for the dataset (for logging)
-
-______________________________________________________________________
-
 - **y_true**: List or array of true values
 - **y_pred**: List or array of predicted values
 - **dataset_id**: Optional identifier for the dataset (for logging)

@@ -1,252 +1,50 @@
 website:
   sidebar:
-    - contents:
+    - text: "ValidMind Library"
+      file: reference/validmind.qmd
+      contents:
       # Root level functions from validmind.qmd
       - text: "__version__"
-        file: validmind.qmd#__version__
+        file: reference/validmind.qmd#__version__
       - text: "get_test_suite()"
-        file: validmind.qmd#get_test_suite
+        file: reference/validmind.html#get_test_suite
       - text: "init()"
-        file: validmind.qmd#init
+        file: reference/validmind.html#init
       - text: "init_dataset()"
-        file: validmind.qmd#init_dataset
+        file: reference/validmind.html#init_dataset
       - text: "init_model()"
-        file: validmind.qmd#init_model
+        file: reference/validmind.html#init_model
       - text: "init_r_model()"
-        file: validmind.qmd#init_r_model
+        file: reference/validmind.html#init_r_model
       - text: "log_metric()"
-        file: validmind.qmd#log_metric
+        file: reference/validmind.html#log_metric
       - text: "preview_template()"
-        file: validmind.qmd#preview_template
+        file: reference/validmind.html#preview_template
       - text: "reload()"
-        file: validmind.qmd#reload
+        file: reference/validmind.html#reload
       - text: "run_documentation_tests()"
-        file: validmind.qmd#run_documentation_tests
+        file: reference/validmind.html#run_documentation_tests
       - text: "run_test_suite()"
-        file: validmind.qmd#run_test_suite
+        file: reference/validmind.html#run_test_suite
       - text: "tags()"
-        file: validmind.qmd#tags
+        file: reference/validmind.html#tags
       - text: "tasks()"
-        file: validmind.qmd#tasks
+        file: reference/validmind.html#tasks
       - text: "test()"
-        file: validmind.qmd#test
+        file: reference/validmind.html#test
 
       # All module documentation pages
       - text: "Submodules"
       - text: "datasets"
         file: validmind/datasets.qmd
-        contents:
       - text: "errors"
         file: validmind/errors.qmd
-        contents:
-        - text: "BaseError"
-          file: validmind/errors.qmd#BaseError
-        - text: "APIRequestError"
-          file: validmind/errors.qmd#APIRequestError
-        - text: "raise_api_error()"
-          file: validmind/errors.qmd#raise_api_error
-        - text: "should_raise_on_fail_fast()"
-          file: validmind/errors.qmd#should_raise_on_fail_fast
-        - text: "InvalidXGBoostTrainedModelError"
-          file: validmind/errors.qmd#InvalidXGBoostTrainedModelError
-        - text: "MissingModelIdError"
-          file: validmind/errors.qmd#MissingModelIdError
-        - text: "MissingOrInvalidModelPredictFnError"
-          file: validmind/errors.qmd#MissingOrInvalidModelPredictFnError
-        - text: "UnsupportedModelError"
-          file: validmind/errors.qmd#UnsupportedModelError
-        - text: "UnsupportedModelForSHAPError"
-          file: validmind/errors.qmd#UnsupportedModelForSHAPError
-        - text: "UnsupportedRModelError"
-          file: validmind/errors.qmd#UnsupportedRModelError
-        - text: "GetTestSuiteError"
-          file: validmind/errors.qmd#GetTestSuiteError
-        - text: "InitializeTestSuiteError"
-          file: validmind/errors.qmd#InitializeTestSuiteError
-        - text: "InvalidTestParametersError"
-          file: validmind/errors.qmd#InvalidTestParametersError
-        - text: "InvalidTestResultsError"
-          file: validmind/errors.qmd#InvalidTestResultsError
-        - text: "LoadTestError"
-          file: validmind/errors.qmd#LoadTestError
-        - text: "MissingRequiredTestInputError"
-          file: validmind/errors.qmd#MissingRequiredTestInputError
-        - text: "SkipTestError"
-          file: validmind/errors.qmd#SkipTestError
-        - text: "TestInputInvalidDatasetError"
-          file: validmind/errors.qmd#TestInputInvalidDatasetError
-        - text: "InvalidAPICredentialsError"
-          file: validmind/errors.qmd#InvalidAPICredentialsError
-        - text: "InvalidContentIdPrefixError"
-          file: validmind/errors.qmd#InvalidContentIdPrefixError
-        - text: "InvalidInputError"
-          file: validmind/errors.qmd#InvalidInputError
-        - text: "InvalidMetricResultsError"
-          file: validmind/errors.qmd#InvalidMetricResultsError
-        - text: "InvalidProjectError"
-          file: validmind/errors.qmd#InvalidProjectError
-        - text: "InvalidRequestBodyError"
-          file: validmind/errors.qmd#InvalidRequestBodyError
-        - text: "InvalidTextObjectError"
-          file: validmind/errors.qmd#InvalidTextObjectError
-        - text: "InvalidValueFormatterError"
-          file: validmind/errors.qmd#InvalidValueFormatterError
-        - text: "MissingAPICredentialsError"
-          file: validmind/errors.qmd#MissingAPICredentialsError
-        - text: "MissingCacheResultsArgumentsError"
-          file: validmind/errors.qmd#MissingCacheResultsArgumentsError
-        - text: "MissingClassLabelError"
-          file: validmind/errors.qmd#MissingClassLabelError
-        - text: "MissingDependencyError"
-          file: validmind/errors.qmd#MissingDependencyError
-        - text: "MissingDocumentationTemplate"
-          file: validmind/errors.qmd#MissingDocumentationTemplate
-        - text: "MissingRExtrasError"
-          file: validmind/errors.qmd#MissingRExtrasError
-        - text: "MissingTextContentIdError"
-          file: validmind/errors.qmd#MissingTextContentIdError
-        - text: "MissingTextContentsError"
-          file: validmind/errors.qmd#MissingTextContentsError
-        - text: "UnsupportedColumnTypeError"
-          file: validmind/errors.qmd#UnsupportedColumnTypeError
-        - text: "UnsupportedDatasetError"
-          file: validmind/errors.qmd#UnsupportedDatasetError
-        - text: "UnsupportedFigureError"
-          file: validmind/errors.qmd#UnsupportedFigureError
-        - text: "MismatchingClassLabelsError"
-          file: validmind/errors.qmd#MismatchingClassLabelsError
       - text: "test_suites"
         file: validmind/test_suites.qmd
-        contents:
-        - text: "describe_suite()"
-          file: validmind/test_suites.qmd#describe_suite
-        - text: "get_by_id()"
-          file: validmind/test_suites.qmd#get_by_id
-        - text: "list_suites()"
-          file: validmind/test_suites.qmd#list_suites
-        - text: "register_test_suite()"
-          file: validmind/test_suites.qmd#register_test_suite
-        - text: "ClassifierDiagnosis()"
-          file: validmind/test_suites.qmd#ClassifierDiagnosis
-        - text: "ClassifierFullSuite()"
-          file: validmind/test_suites.qmd#ClassifierFullSuite
-        - text: "ClassifierMetrics()"
-          file: validmind/test_suites.qmd#ClassifierMetrics
-        - text: "ClassifierModelValidation()"
-          file: validmind/test_suites.qmd#ClassifierModelValidation
-        - text: "ClassifierPerformance()"
-          file: validmind/test_suites.qmd#ClassifierPerformance
-        - text: "ClusterFullSuite()"
-          file: validmind/test_suites.qmd#ClusterFullSuite
-        - text: "ClusterMetrics()"
-          file: validmind/test_suites.qmd#ClusterMetrics
-        - text: "ClusterPerformance()"
-          file: validmind/test_suites.qmd#ClusterPerformance
-        - text: "EmbeddingsFullSuite()"
-          file: validmind/test_suites.qmd#EmbeddingsFullSuite
-        - text: "EmbeddingsMetrics()"
-          file: validmind/test_suites.qmd#EmbeddingsMetrics
-        - text: "EmbeddingsPerformance()"
-          file: validmind/test_suites.qmd#EmbeddingsPerformance
-        - text: "format_dataframe()"
-          file: validmind/test_suites.qmd#format_dataframe
-        - text: "get_logger()"
-          file: validmind/test_suites.qmd#get_logger
-        - text: "KmeansParametersOptimization()"
-          file: validmind/test_suites.qmd#KmeansParametersOptimization
-        - text: "LLMClassifierFullSuite()"
-          file: validmind/test_suites.qmd#LLMClassifierFullSuite
-        - text: "NLPClassifierFullSuite()"
-          file: validmind/test_suites.qmd#NLPClassifierFullSuite
-        - text: "PromptValidation()"
-          file: validmind/test_suites.qmd#PromptValidation
-        - text: "RegressionFullSuite()"
-          file: validmind/test_suites.qmd#RegressionFullSuite
-        - text: "RegressionMetrics()"
-          file: validmind/test_suites.qmd#RegressionMetrics
-        - text: "RegressionModelDescription()"
-          file: validmind/test_suites.qmd#RegressionModelDescription
-        - text: "RegressionModelsEvaluation()"
-          file: validmind/test_suites.qmd#RegressionModelsEvaluation
-        - text: "RegressionPerformance()"
-          file: validmind/test_suites.qmd#RegressionPerformance
-        - text: "SummarizationMetrics()"
-          file: validmind/test_suites.qmd#SummarizationMetrics
-        - text: "TabularDataQuality()"
-          file: validmind/test_suites.qmd#TabularDataQuality
-        - text: "TabularDataset()"
-          file: validmind/test_suites.qmd#TabularDataset
-        - text: "TabularDatasetDescription()"
-          file: validmind/test_suites.qmd#TabularDatasetDescription
-        - text: "test_id_to_name()"
-          file: validmind/test_suites.qmd#test_id_to_name
-        - text: "TextDataQuality()"
-          file: validmind/test_suites.qmd#TextDataQuality
-        - text: "TimeSeriesDataQuality()"
-          file: validmind/test_suites.qmd#TimeSeriesDataQuality
-        - text: "TimeSeriesDataset()"
-          file: validmind/test_suites.qmd#TimeSeriesDataset
-        - text: "TimeSeriesModelValidation()"
-          file: validmind/test_suites.qmd#TimeSeriesModelValidation
-        - text: "TimeSeriesMultivariate()"
-          file: validmind/test_suites.qmd#TimeSeriesMultivariate
-        - text: "TimeSeriesUnivariate()"
-          file: validmind/test_suites.qmd#TimeSeriesUnivariate
       - text: "tests"
         file: validmind/tests.qmd
-        contents:
-        - text: "register_test_provider()"
-          file: validmind/tests.qmd#register_test_provider
-        - text: "describe_test()"
-          file: validmind/tests.qmd#describe_test
-        - text: "list_tags()"
-          file: validmind/tests.qmd#list_tags
-        - text: "list_tasks()"
-          file: validmind/tests.qmd#list_tasks
-        - text: "list_tasks_and_tags()"
-          file: validmind/tests.qmd#list_tasks_and_tags
-        - text: "list_tests()"
-          file: validmind/tests.qmd#list_tests
-        - text: "load_test()"
-          file: validmind/tests.qmd#load_test
-        - text: "LoadTestError()"
-          file: validmind/tests.qmd#LoadTestError
-        - text: "LocalTestProvider()"
-          file: validmind/tests.qmd#LocalTestProvider
-        - text: "run_test()"
-          file: validmind/tests.qmd#run_test
-        - text: "tags()"
-          file: validmind/tests.qmd#tags
-        - text: "tasks()"
-          file: validmind/tests.qmd#tasks
-        - text: "test()"
-          file: validmind/tests.qmd#test
-        - text: "TestProvider()"
-          file: validmind/tests.qmd#TestProvider
       - text: "unit_metrics"
         file: validmind/unit_metrics.qmd
-        contents:
-        - text: "describe_metric()"
-          file: validmind/unit_metrics.qmd#describe_metric
-        - text: "list_metrics()"
-          file: validmind/unit_metrics.qmd#list_metrics
-        - text: "run_metric()"
-          file: validmind/unit_metrics.qmd#run_metric
       - text: "vm_models"
         file: validmind/vm_models.qmd
-        contents:
-        - text: "Figure()"
-          file: validmind/vm_models.qmd#Figure
-        - text: "ModelAttributes()"
-          file: validmind/vm_models.qmd#ModelAttributes
-        - text: "TestSuite()"
-          file: validmind/vm_models.qmd#TestSuite
-        - text: "TestSuiteRunner()"
-          file: validmind/vm_models.qmd#TestSuiteRunner
-        - text: "VMDataset()"
-          file: validmind/vm_models.qmd#VMDataset
-        - text: "VMInput()"
-          file: validmind/vm_models.qmd#VMInput
-        - text: "VMModel()"
-          file: validmind/vm_models.qmd#VMModel
  

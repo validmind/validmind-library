@@ -21,20 +21,6 @@ Get or show details about the test This function can be used to see test details
 
 **Parameters**
 
-DEBUG:
-
-- arg_name: test_id
-- type_name: str
-- description: The test ID. Defaults to None.
-
-______________________________________________________________________
-
-- arg_name: raw
-- type_name: bool
-- description: If True, returns a dictionary with the test details. Defaults to False.
-
-______________________________________________________________________
-
 - **test_id** str: The test ID. Defaults to None.
 - **raw** bool: If True, returns a dictionary with the test details. Defaults to False.
 
@@ -80,38 +66,6 @@ List all tests in the tests directory.
 
 **Parameters**
 
-DEBUG:
-
-- arg_name: filter
-- type_name: str
-- description: Find tests where the ID, tasks or tags match the filter string. Defaults to None.
-
-______________________________________________________________________
-
-- arg_name: task
-- type_name: str
-- description: Find tests that match the task. Can be used to narrow down matches from the filter string. Defaults to None.
-
-______________________________________________________________________
-
-- arg_name: tags
-- type_name: list
-- description: Find tests that match list of tags. Can be used to narrow down matches from the filter string. Defaults to None.
-
-______________________________________________________________________
-
-- arg_name: pretty
-- type_name: bool
-- description: If True, returns a pandas DataFrame with a formatted table. Defaults to True.
-
-______________________________________________________________________
-
-- arg_name: truncate
-- type_name: bool
-- description: If True, truncates the test description to the first line. Defaults to True. (only used if pretty=True)
-
-______________________________________________________________________
-
 - **filter** str: Find tests where the ID, tasks or tags match the filter string. Defaults to None.
 - **task** str: Find tests that match the task. Can be used to narrow down matches from the filter string. Defaults to None.
 - **tags** list: Find tests that match list of tags. Can be used to narrow down matches from the filter string. Defaults to None.
@@ -133,20 +87,6 @@ Load a test by test ID Test IDs are in the format `namespace.path_to_module.Test
 
 **Parameters**
 
-DEBUG:
-
-- arg_name: test_id
-- type_name: str
-- description: The test ID in the format `namespace.path_to_module.TestName[:tag]`
-
-______________________________________________________________________
-
-- arg_name: test_func
-- type_name: callable
-- description: The test function to load. If not provided, the test will be loaded from the test provider. Defaults to None.
-
-______________________________________________________________________
-
 - **test_id** str: The test ID in the format `namespace.path_to_module.TestName[:tag]`
 - **test_func** callable: The test function to load. If not provided, the test will be loaded from the test provider. Defaults to None.
 
@@ -160,78 +100,6 @@ def run_test(
 Run a ValidMind or custom test This function is the main entry point for running tests. It can run simple unit metrics, ValidMind and custom tests, composite tests made up of multiple unit metrics and comparison tests made up of multiple tests.
 
 **Parameters**
-
-DEBUG:
-
-- arg_name: test_id
-- type_name: TestID
-- description: Test ID to run. Not required if `name` and `unit_metrics` provided.
-
-______________________________________________________________________
-
-- arg_name: params
-- type_name: dict
-- description: Parameters to customize test behavior. See test details for available parameters.
-
-______________________________________________________________________
-
-- arg_name: param_grid
-- type_name: Union\[Dict\[str, List[Any]\], List\[Dict[str, Any]\]\]
-- description: For comparison tests, either:
-- Dict mapping parameter names to lists of values (creates Cartesian product)
-- List of parameter dictionaries to test
-
-______________________________________________________________________
-
-- arg_name: inputs
-- type_name: Dict[str, Any]
-- description: Test inputs (models/datasets initialized with vm.init_model/dataset)
-
-______________________________________________________________________
-
-- arg_name: input_grid
-- type_name: Union\[Dict\[str, List[Any]\], List\[Dict[str, Any]\]\]
-- description: For comparison tests, either:
-- Dict mapping input names to lists of values (creates Cartesian product)
-- List of input dictionaries to test
-
-______________________________________________________________________
-
-- arg_name: name
-- type_name: str
-- description: Test name (required for composite metrics)
-
-______________________________________________________________________
-
-- arg_name: unit_metrics
-- type_name: list
-- description: Unit metric IDs to run as composite metric
-
-______________________________________________________________________
-
-- arg_name: show
-- type_name: bool
-- description: Whether to display results. Defaults to True.
-
-______________________________________________________________________
-
-- arg_name: generate_description
-- type_name: bool
-- description: Whether to generate a description. Defaults to True.
-
-______________________________________________________________________
-
-- arg_name: title
-- type_name: str
-- description: Custom title for the test result
-
-______________________________________________________________________
-
-- arg_name: post_process_fn
-- type_name: Callable\[[TestResult], None\]
-- description: Function to post-process the test result
-
-______________________________________________________________________
 
 - **test_id** TestID: Test ID to run. Not required if `name` and `unit_metrics` provided.
 - **params** dict: Parameters to customize test behavior. See test details for available parameters.
@@ -269,14 +137,6 @@ Decorator for specifying tags for a test.
 
 **Parameters**
 
-DEBUG:
-
-- arg_name: \*tags
-- type_name: None
-- description: The tags to apply to the test.
-
-______________________________________________________________________
-
 - \***tags**: The tags to apply to the test.
 
 ## tasks[()]{.muted}
@@ -289,14 +149,6 @@ def tasks(
 Decorator for specifying the task types that a test is designed for.
 
 **Parameters**
-
-DEBUG:
-
-- arg_name: \*tasks
-- type_name: None
-- description: The task types that the test is designed for.
-
-______________________________________________________________________
 
 - \***tasks**: The task types that the test is designed for.
 
@@ -325,20 +177,6 @@ The function may also include a docstring. This docstring will be used and logge
 
 **Parameters**
 
-DEBUG:
-
-- arg_name: func
-- type_name: None
-- description: The function to decorate
-
-______________________________________________________________________
-
-- arg_name: test_id
-- type_name: None
-- description: The identifier for the metric. If not provided, the function name is used.
-
-______________________________________________________________________
-
 - **func**: The function to decorate
 - **test_id**: The identifier for the metric. If not provided, the function name is used.
 
@@ -357,20 +195,6 @@ def register_test_provider(
 Register an external test provider
 
 **Parameters**
-
-DEBUG:
-
-- arg_name: namespace
-- type_name: str
-- description: The namespace of the test provider
-
-______________________________________________________________________
-
-- arg_name: test_provider
-- type_name: TestProvider
-- description: The test provider
-
-______________________________________________________________________
 
 - **namespace** str: The namespace of the test provider
 - **test_provider** TestProvider: The test provider
@@ -418,14 +242,6 @@ test = test_provider.load_test("my_namespace.my_test_class")
 ```
 
 **Parameters**
-
-DEBUG:
-
-- arg_name: root_folder
-- type_name: str
-- description: The root directory for local tests.
-
-______________________________________________________________________
 
 - **root_folder** str: The root directory for local tests.
 
@@ -484,14 +300,6 @@ load_test(self, test_id)
 Load the test function identified by the given test_id
 
 **Parameters**
-
-DEBUG:
-
-- arg_name: test_id
-- type_name: str
-- description: The test ID (does not contain the namespace under which the test is registered)
-
-______________________________________________________________________
 
 - **test_id** str: The test ID (does not contain the namespace under which the test is registered)
 

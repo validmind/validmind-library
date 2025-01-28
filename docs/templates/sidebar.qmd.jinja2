@@ -1,10 +1,12 @@
 website:
   sidebar:
-    - contents:
+    - text: "ValidMind Library"
+      file: reference/validmind.qmd
+      contents:
       # Root level functions from validmind.qmd
       {% if module.members.__version__ %}
       - text: "__version__"
-        file: validmind.qmd#__version__
+        file: reference/validmind.qmd#__version__
       {% endif %}
       {% if documented_items.get('root') %}
       {% for item in documented_items['root'] %}
@@ -19,38 +21,13 @@ website:
       {% if is_public(member, module, full_data, is_root) and member.kind == "module" %}
       - text: "{{ member.name }}"
         file: validmind/{{ member.name }}.qmd
+        {% set module_files = qmd_files.get(member.name, []) %}
+        {% if module_files %}
         contents:
-        {% if member.name in documented_items %}
-        {% for item in documented_items[member.name] %}
-        - text: "{{ item.text }}"
-          file: {{ item.file }}
+        {% for file in module_files %}
+        - text: "{{ file.split('/')[-1].replace('.qmd', '') }}"
+          file: {{ file }}
         {% endfor %}
         {% endif %}
-        {% for submember in member.members | sort_members %}
-        {% if is_public(submember, member, full_data, is_root) and submember.kind == "module" %}
-        - text: "{{ submember.name }}"
-          file: validmind/{{ member.name }}/{{ submember.name }}.qmd
-          contents:
-          {% if submember.name in documented_items %}
-          {% for item in documented_items[submember.name] %}
-          - text: "{{ item.text }}"
-            file: {{ item.file }}
-          {% endfor %}
-          {% endif %}
-          {% for subsubmember in submember.members | sort_members %}
-          {% if is_public(subsubmember, submember, full_data, is_root) and subsubmember.kind == "module" %}
-          - text: "{{ subsubmember.name }}"
-            file: validmind/{{ member.name }}/{{ submember.name }}/{{ subsubmember.name }}.qmd
-            {% if subsubmember.name in documented_items %}
-            contents:
-            {% for item in documented_items[subsubmember.name] %}
-            - text: "{{ item.text }}"
-              file: {{ item.file }}
-            {% endfor %}
-            {% endif %}
-          {% endif %}
-          {% endfor %}
-        {% endif %}
-        {% endfor %}
       {% endif %}
       {% endfor %} 

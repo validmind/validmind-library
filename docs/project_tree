@@ -1,0 +1,1219 @@
+.
+├── LICENSE
+├── Makefile
+├── README.md
+├── README.pypi.md
+├── docs
+│   ├── _build
+│   │   ├── index.html
+│   │   ├── search.js
+│   │   ├── validmind
+│   │   │   ├── __version__.html
+│   │   │   ├── datasets
+│   │   │   │   ├── classification
+│   │   │   │   │   ├── customer_churn.html
+│   │   │   │   │   └── taiwan_credit.html
+│   │   │   │   ├── classification.html
+│   │   │   │   ├── credit_risk
+│   │   │   │   │   ├── lending_club.html
+│   │   │   │   │   └── lending_club_bias.html
+│   │   │   │   ├── credit_risk.html
+│   │   │   │   ├── nlp
+│   │   │   │   │   ├── cnn_dailymail.html
+│   │   │   │   │   └── twitter_covid_19.html
+│   │   │   │   ├── nlp.html
+│   │   │   │   ├── regression
+│   │   │   │   │   ├── fred.html
+│   │   │   │   │   └── lending_club.html
+│   │   │   │   └── regression.html
+│   │   │   ├── datasets.html
+│   │   │   ├── errors.html
+│   │   │   ├── test_suites
+│   │   │   │   ├── classifier.html
+│   │   │   │   ├── cluster.html
+│   │   │   │   ├── embeddings.html
+│   │   │   │   ├── llm.html
+│   │   │   │   ├── nlp.html
+│   │   │   │   ├── parameters_optimization.html
+│   │   │   │   ├── regression.html
+│   │   │   │   ├── statsmodels_timeseries.html
+│   │   │   │   ├── summarization.html
+│   │   │   │   ├── tabular_datasets.html
+│   │   │   │   ├── text_data.html
+│   │   │   │   └── time_series.html
+│   │   │   ├── test_suites.html
+│   │   │   ├── tests
+│   │   │   │   ├── data_validation
+│   │   │   │   │   ├── ACFandPACFPlot.html
+│   │   │   │   │   ├── ADF.html
+│   │   │   │   │   ├── AutoAR.html
+│   │   │   │   │   ├── AutoMA.html
+│   │   │   │   │   ├── AutoStationarity.html
+│   │   │   │   │   ├── BivariateScatterPlots.html
+│   │   │   │   │   ├── BoxPierce.html
+│   │   │   │   │   ├── ChiSquaredFeaturesTable.html
+│   │   │   │   │   ├── ClassImbalance.html
+│   │   │   │   │   ├── DatasetDescription.html
+│   │   │   │   │   ├── DatasetSplit.html
+│   │   │   │   │   ├── DescriptiveStatistics.html
+│   │   │   │   │   ├── DickeyFullerGLS.html
+│   │   │   │   │   ├── Duplicates.html
+│   │   │   │   │   ├── EngleGrangerCoint.html
+│   │   │   │   │   ├── FeatureTargetCorrelationPlot.html
+│   │   │   │   │   ├── HighCardinality.html
+│   │   │   │   │   ├── HighPearsonCorrelation.html
+│   │   │   │   │   ├── IQROutliersBarPlot.html
+│   │   │   │   │   ├── IQROutliersTable.html
+│   │   │   │   │   ├── IsolationForestOutliers.html
+│   │   │   │   │   ├── JarqueBera.html
+│   │   │   │   │   ├── KPSS.html
+│   │   │   │   │   ├── LJungBox.html
+│   │   │   │   │   ├── LaggedCorrelationHeatmap.html
+│   │   │   │   │   ├── MissingValues.html
+│   │   │   │   │   ├── MissingValuesBarPlot.html
+│   │   │   │   │   ├── MutualInformation.html
+│   │   │   │   │   ├── PearsonCorrelationMatrix.html
+│   │   │   │   │   ├── PhillipsPerronArch.html
+│   │   │   │   │   ├── ProtectedClassesCombination.html
+│   │   │   │   │   ├── ProtectedClassesDescription.html
+│   │   │   │   │   ├── ProtectedClassesDisparity.html
+│   │   │   │   │   ├── ProtectedClassesThresholdOptimizer.html
+│   │   │   │   │   ├── RollingStatsPlot.html
+│   │   │   │   │   ├── RunsTest.html
+│   │   │   │   │   ├── ScatterPlot.html
+│   │   │   │   │   ├── ScoreBandDefaultRates.html
+│   │   │   │   │   ├── SeasonalDecompose.html
+│   │   │   │   │   ├── ShapiroWilk.html
+│   │   │   │   │   ├── Skewness.html
+│   │   │   │   │   ├── SpreadPlot.html
+│   │   │   │   │   ├── TabularCategoricalBarPlots.html
+│   │   │   │   │   ├── TabularDateTimeHistograms.html
+│   │   │   │   │   ├── TabularDescriptionTables.html
+│   │   │   │   │   ├── TabularNumericalHistograms.html
+│   │   │   │   │   ├── TargetRateBarPlots.html
+│   │   │   │   │   ├── TimeSeriesDescription.html
+│   │   │   │   │   ├── TimeSeriesDescriptiveStatistics.html
+│   │   │   │   │   ├── TimeSeriesFrequency.html
+│   │   │   │   │   ├── TimeSeriesHistogram.html
+│   │   │   │   │   ├── TimeSeriesLinePlot.html
+│   │   │   │   │   ├── TimeSeriesMissingValues.html
+│   │   │   │   │   ├── TimeSeriesOutliers.html
+│   │   │   │   │   ├── TooManyZeroValues.html
+│   │   │   │   │   ├── UniqueRows.html
+│   │   │   │   │   ├── WOEBinPlots.html
+│   │   │   │   │   ├── WOEBinTable.html
+│   │   │   │   │   ├── ZivotAndrewsArch.html
+│   │   │   │   │   ├── nlp
+│   │   │   │   │   │   ├── CommonWords.html
+│   │   │   │   │   │   ├── Hashtags.html
+│   │   │   │   │   │   ├── LanguageDetection.html
+│   │   │   │   │   │   ├── Mentions.html
+│   │   │   │   │   │   ├── PolarityAndSubjectivity.html
+│   │   │   │   │   │   ├── Punctuations.html
+│   │   │   │   │   │   ├── Sentiment.html
+│   │   │   │   │   │   ├── StopWords.html
+│   │   │   │   │   │   ├── TextDescription.html
+│   │   │   │   │   │   └── Toxicity.html
+│   │   │   │   │   └── nlp.html
+│   │   │   │   ├── data_validation.html
+│   │   │   │   ├── model_validation
+│   │   │   │   │   ├── BertScore.html
+│   │   │   │   │   ├── BleuScore.html
+│   │   │   │   │   ├── ClusterSizeDistribution.html
+│   │   │   │   │   ├── ContextualRecall.html
+│   │   │   │   │   ├── FeaturesAUC.html
+│   │   │   │   │   ├── MeteorScore.html
+│   │   │   │   │   ├── ModelMetadata.html
+│   │   │   │   │   ├── ModelPredictionResiduals.html
+│   │   │   │   │   ├── RegardScore.html
+│   │   │   │   │   ├── RegressionResidualsPlot.html
+│   │   │   │   │   ├── RougeScore.html
+│   │   │   │   │   ├── TimeSeriesPredictionWithCI.html
+│   │   │   │   │   ├── TimeSeriesPredictionsPlot.html
+│   │   │   │   │   ├── TimeSeriesR2SquareBySegments.html
+│   │   │   │   │   ├── TokenDisparity.html
+│   │   │   │   │   ├── ToxicityScore.html
+│   │   │   │   │   ├── sklearn
+│   │   │   │   │   │   ├── AdjustedMutualInformation.html
+│   │   │   │   │   │   ├── AdjustedRandIndex.html
+│   │   │   │   │   │   ├── CalibrationCurve.html
+│   │   │   │   │   │   ├── ClassifierPerformance.html
+│   │   │   │   │   │   ├── ClassifierThresholdOptimization.html
+│   │   │   │   │   │   ├── ClusterCosineSimilarity.html
+│   │   │   │   │   │   ├── ClusterPerformanceMetrics.html
+│   │   │   │   │   │   ├── CompletenessScore.html
+│   │   │   │   │   │   ├── ConfusionMatrix.html
+│   │   │   │   │   │   ├── FeatureImportance.html
+│   │   │   │   │   │   ├── FowlkesMallowsScore.html
+│   │   │   │   │   │   ├── HomogeneityScore.html
+│   │   │   │   │   │   ├── HyperParametersTuning.html
+│   │   │   │   │   │   ├── KMeansClustersOptimization.html
+│   │   │   │   │   │   ├── MinimumAccuracy.html
+│   │   │   │   │   │   ├── MinimumF1Score.html
+│   │   │   │   │   │   ├── MinimumROCAUCScore.html
+│   │   │   │   │   │   ├── ModelParameters.html
+│   │   │   │   │   │   ├── ModelsPerformanceComparison.html
+│   │   │   │   │   │   ├── OverfitDiagnosis.html
+│   │   │   │   │   │   ├── PermutationFeatureImportance.html
+│   │   │   │   │   │   ├── PopulationStabilityIndex.html
+│   │   │   │   │   │   ├── PrecisionRecallCurve.html
+│   │   │   │   │   │   ├── ROCCurve.html
+│   │   │   │   │   │   ├── RegressionErrors.html
+│   │   │   │   │   │   ├── RegressionErrorsComparison.html
+│   │   │   │   │   │   ├── RegressionPerformance.html
+│   │   │   │   │   │   ├── RegressionR2Square.html
+│   │   │   │   │   │   ├── RegressionR2SquareComparison.html
+│   │   │   │   │   │   ├── RobustnessDiagnosis.html
+│   │   │   │   │   │   ├── SHAPGlobalImportance.html
+│   │   │   │   │   │   ├── ScoreProbabilityAlignment.html
+│   │   │   │   │   │   ├── SilhouettePlot.html
+│   │   │   │   │   │   ├── TrainingTestDegradation.html
+│   │   │   │   │   │   ├── VMeasure.html
+│   │   │   │   │   │   └── WeakspotsDiagnosis.html
+│   │   │   │   │   ├── sklearn.html
+│   │   │   │   │   ├── statsmodels
+│   │   │   │   │   │   ├── AutoARIMA.html
+│   │   │   │   │   │   ├── CumulativePredictionProbabilities.html
+│   │   │   │   │   │   ├── DurbinWatsonTest.html
+│   │   │   │   │   │   ├── GINITable.html
+│   │   │   │   │   │   ├── KolmogorovSmirnov.html
+│   │   │   │   │   │   ├── Lilliefors.html
+│   │   │   │   │   │   ├── PredictionProbabilitiesHistogram.html
+│   │   │   │   │   │   ├── RegressionCoeffs.html
+│   │   │   │   │   │   ├── RegressionFeatureSignificance.html
+│   │   │   │   │   │   ├── RegressionModelForecastPlot.html
+│   │   │   │   │   │   ├── RegressionModelForecastPlotLevels.html
+│   │   │   │   │   │   ├── RegressionModelSensitivityPlot.html
+│   │   │   │   │   │   ├── RegressionModelSummary.html
+│   │   │   │   │   │   ├── RegressionPermutationFeatureImportance.html
+│   │   │   │   │   │   ├── ScorecardHistogram.html
+│   │   │   │   │   │   └── statsutils.html
+│   │   │   │   │   └── statsmodels.html
+│   │   │   │   ├── model_validation.html
+│   │   │   │   ├── prompt_validation
+│   │   │   │   │   ├── Bias.html
+│   │   │   │   │   ├── Clarity.html
+│   │   │   │   │   ├── Conciseness.html
+│   │   │   │   │   ├── Delimitation.html
+│   │   │   │   │   ├── NegativeInstruction.html
+│   │   │   │   │   ├── Robustness.html
+│   │   │   │   │   ├── Specificity.html
+│   │   │   │   │   └── ai_powered_test.html
+│   │   │   │   └── prompt_validation.html
+│   │   │   ├── tests.html
+│   │   │   ├── unit_metrics.html
+│   │   │   └── vm_models.html
+│   │   └── validmind.html
+│   ├── _sidebar.yml
+│   ├── griffe_all.log
+│   ├── project_tree
+│   ├── templates
+│   │   ├── class.qmd.jinja2
+│   │   ├── custom.css
+│   │   ├── errors.qmd.jinja2
+│   │   ├── function.qmd.jinja2
+│   │   ├── macros
+│   │   │   ├── docstring.jinja2
+│   │   │   ├── navigation.jinja2
+│   │   │   └── types.jinja2
+│   │   ├── module.html.jinja2
+│   │   ├── module.qmd.jinja2
+│   │   ├── sidebar.qmd.jinja2
+│   │   └── template.qmd.jinja2_OLD
+│   ├── validmind
+│   ├── validmind.json
+│   ├── validmind.qmd
+│   └── validmind.tree
+├── images
+│   └── ValidMind-logo-color.svg
+├── notebooks
+│   ├── README.md
+│   ├── code_samples
+│   │   ├── capital_markets
+│   │   │   ├── quickstart_option_pricing_models.ipynb
+│   │   │   └── quickstart_option_pricing_models_quantlib.ipynb
+│   │   ├── credit_risk
+│   │   │   ├── application_scorecard_demo.ipynb
+│   │   │   ├── application_scorecard_executive.ipynb
+│   │   │   ├── application_scorecard_full_suite.ipynb
+│   │   │   ├── application_scorecard_with_bias.ipynb
+│   │   │   ├── application_scorecard_with_ml.ipynb
+│   │   │   └── custom_tests
+│   │   │       └── ScoreBandDiscriminationMetrics.py
+│   │   ├── custom_tests
+│   │   │   ├── implement_custom_tests.ipynb
+│   │   │   └── integrate_external_test_providers.ipynb
+│   │   ├── nlp_and_llm
+│   │   │   ├── datasets
+│   │   │   │   ├── bbc_text_cls.csv
+│   │   │   │   ├── bbc_text_cls_reference.csv
+│   │   │   │   ├── cnn_dailymail_100_with_predictions.csv
+│   │   │   │   ├── cnn_dailymail_500_with_predictions.csv
+│   │   │   │   ├── sentiments.csv
+│   │   │   │   └── sentiments_with_predictions.csv
+│   │   │   ├── foundation_models_integration_demo.ipynb
+│   │   │   ├── foundation_models_summarization_demo.ipynb
+│   │   │   ├── hugging_face_integration_demo.ipynb
+│   │   │   ├── hugging_face_summarization_demo.ipynb
+│   │   │   ├── llm_summarization_demo.ipynb
+│   │   │   ├── prompt_validation_demo.ipynb
+│   │   │   └── rag_documentation_demo.ipynb
+│   │   ├── ongoing_monitoring
+│   │   │   ├── application_scorecard_ongoing_monitoring.ipynb
+│   │   │   ├── quickstart_customer_churn_ongoing_monitoring.ipynb
+│   │   │   └── xgboost_model.model
+│   │   ├── quickstart_customer_churn_full_suite.ipynb
+│   │   ├── regression
+│   │   │   └── quickstart_regression_full_suite.ipynb
+│   │   └── time_series
+│   │       ├── quickstart_time_series_full_suite.ipynb
+│   │       └── quickstart_time_series_high_code.ipynb
+│   ├── code_sharing
+│   │   ├── clustering
+│   │   │   └── quickstart_cluster_demo.ipynb
+│   │   ├── credit_risk
+│   │   │   └── assign_prediction_probabilities.ipynb
+│   │   ├── datasets
+│   │   │   ├── bank_customer_churn.csv
+│   │   │   ├── lending_club_loan_rates.csv
+│   │   │   ├── marketing_lead_conversion.csv
+│   │   │   ├── probability_of_default
+│   │   │   │   └── Data Dictionary.xlsx
+│   │   │   ├── taiwan_credit.csv
+│   │   │   └── time_series
+│   │   │       ├── fred_loan_rates.csv
+│   │   │       ├── fred_loan_rates_test_1.csv
+│   │   │       ├── fred_loan_rates_test_2.csv
+│   │   │       ├── fred_loan_rates_test_3.csv
+│   │   │       ├── fred_loan_rates_test_4.csv
+│   │   │       ├── fred_loan_rates_test_5.csv
+│   │   │       ├── lending_club_loan_rates.csv
+│   │   │       └── raw
+│   │   │           └── fred
+│   │   │               ├── CPIAUCSL.csv
+│   │   │               ├── CSUSHPISA.csv
+│   │   │               ├── DRSFRMACBS.csv
+│   │   │               ├── FEDFUNDS.csv
+│   │   │               ├── GDP.csv
+│   │   │               ├── GDPC1.csv
+│   │   │               ├── GS10.csv
+│   │   │               ├── GS3.csv
+│   │   │               ├── GS5.csv
+│   │   │               ├── MORTGAGE30US.csv
+│   │   │               └── UNRATE.csv
+│   │   ├── embeddings
+│   │   │   └── quickstart_embeddings_demo.ipynb
+│   │   ├── external_tests
+│   │   │   └── tests
+│   │   │       └── MyIsolationForest.py
+│   │   ├── insurance_mortality
+│   │   │   ├── insurance_dataset.csv
+│   │   │   ├── insurance_validation_demo.ipynb
+│   │   │   ├── test_df.csv
+│   │   │   ├── train_df.csv
+│   │   │   └── validmind_insurance_POC.ipynb
+│   │   ├── llm
+│   │   │   ├── datasets
+│   │   │   │   ├── bbc_text_cls.csv
+│   │   │   │   ├── bbc_text_cls_reference.csv
+│   │   │   │   ├── rag
+│   │   │   │   │   ├── rag_evaluation_dataset_01.csv
+│   │   │   │   │   ├── rag_evaluation_dataset_02.csv
+│   │   │   │   │   ├── rag_evaluation_dataset_03.csv
+│   │   │   │   │   ├── rag_evaluation_results.csv
+│   │   │   │   │   ├── rfp_existing_questions_client_1.csv
+│   │   │   │   │   ├── rfp_existing_questions_client_2.csv
+│   │   │   │   │   ├── rfp_existing_questions_client_3.csv
+│   │   │   │   │   ├── rfp_existing_questions_client_4.csv
+│   │   │   │   │   ├── rfp_existing_questions_client_5.csv
+│   │   │   │   │   ├── rfp_new_questions_client_100.csv
+│   │   │   │   │   ├── vendor_contracts_001_020.csv
+│   │   │   │   │   ├── vendor_contracts_021_040.csv
+│   │   │   │   │   ├── vendor_contracts_041_060.csv
+│   │   │   │   │   └── vendor_contracts_questions.csv
+│   │   │   │   └── sentiments.csv
+│   │   │   ├── llm_descriptions_context.ipynb
+│   │   │   ├── rag_llamaindex.ipynb
+│   │   │   ├── rag_rfp_answer_generation.ipynb
+│   │   │   ├── rag_rfp_answer_generation_langchain.ipynb
+│   │   │   ├── rag_rfp_question_similarity.ipynb
+│   │   │   ├── rag_vendor_contracts_llamaindex.ipynb
+│   │   │   └── vendor_contract_agent
+│   │   │       ├── data
+│   │   │       │   ├── contracts.json
+│   │   │       │   └── vendors.json
+│   │   │       ├── genai_vendor_contract_agent_usecase_poc.ipynb
+│   │   │       ├── tool_definitions
+│   │   │       │   ├── query_database.json
+│   │   │       │   └── search_online.json
+│   │   │       └── utils.py
+│   │   ├── market_basket_analysis
+│   │   │   ├── datasets
+│   │   │   │   └── mba
+│   │   │   │       └── Online Retail.csv
+│   │   │   └── mba_poc.ipynb
+│   │   ├── operational_deposit
+│   │   │   ├── dataset_image.png
+│   │   │   ├── datasets
+│   │   │   │   └── odm_data_example
+│   │   │   │       └── synthetic_data.csv
+│   │   │   ├── model_image.png
+│   │   │   ├── operational_deposit_poc.ipynb
+│   │   │   ├── synthetic_data_generation.ipynb
+│   │   │   └── tests
+│   │   │       └── TimeseriesGroupbyPlot.py
+│   │   ├── output_templates
+│   │   │   ├── Screenshot 2024-02-15 at 2.48.03 PM.png
+│   │   │   ├── Screenshot 2024-02-15 at 4.51.56 PM.png
+│   │   │   └── customizing_tests_with_output_templates.ipynb
+│   │   ├── post_processing_functions.ipynb
+│   │   ├── r
+│   │   │   ├── r_custom_tests.Rmd
+│   │   │   ├── r_customer_churn_demo.Rmd
+│   │   │   ├── r_customer_churn_demo_xgboost.Rmd
+│   │   │   ├── r_mortality_demo.Rmd
+│   │   │   ├── r_time_series_data_validation.Rmd
+│   │   │   └── r_time_series_model_validation.Rmd
+│   │   ├── r_demo
+│   │   │   ├── prune_dt.pmml
+│   │   │   ├── r-customer-churn-model.ipynb
+│   │   │   ├── r-ecm-demo.ipynb
+│   │   │   ├── r-ecm-model.ipynb
+│   │   │   ├── r-ecm-model.rds
+│   │   │   ├── r_churn_test.csv
+│   │   │   ├── r_churn_train.csv
+│   │   │   ├── r_log_reg_churn_model.rds
+│   │   │   └── r_xgb_churn_model.json
+│   │   ├── regression
+│   │   │   └── regression_unit_metrics.ipynb
+│   │   └── test_configuration_updates_demo.ipynb
+│   ├── how_to
+│   │   ├── configure_dataset_features.ipynb
+│   │   ├── dataset_image.png
+│   │   ├── document_multiple_results_for_the_same_test.ipynb
+│   │   ├── explore_test_suites.ipynb
+│   │   ├── explore_tests.ipynb
+│   │   ├── filter_input_columns.ipynb
+│   │   ├── load_datasets_predictions.ipynb
+│   │   ├── log_metrics_over_time.ipynb
+│   │   ├── model_image.png
+│   │   ├── run_documentation_sections.ipynb
+│   │   ├── run_documentation_tests_with_config.ipynb
+│   │   ├── run_tests
+│   │   │   ├── 1_run_dataset_based_tests.ipynb
+│   │   │   └── 2_run_comparison_tests.ipynb
+│   │   ├── run_tests_that_require_multiple_datasets.ipynb
+│   │   ├── run_unit_metrics.ipynb
+│   │   └── use_dataset_model_objects.ipynb
+│   ├── images
+│   │   ├── add_metric_over_time_block.png
+│   │   ├── btc-price-custom-metric.png
+│   │   ├── composite-metric-in-template-preview.png
+│   │   ├── high-pearson-correlation-block.png
+│   │   ├── hyperparameters-custom-metric.png
+│   │   ├── image-in-custom-metric.png
+│   │   ├── insert-test-driven-block-correlations.png
+│   │   ├── insert-test-driven-block-custom-class-imbalance.jpg
+│   │   ├── insert-test-driven-block-custom-confusion-matrix.png
+│   │   ├── insert-test-driven-block-custom.png
+│   │   ├── insert-test-driven-block-test-provider.png
+│   │   ├── insert-test-driven-block.png
+│   │   ├── log_metric_accuracy.png
+│   │   ├── log_metric_auc_1.png
+│   │   ├── log_metric_auc_2.png
+│   │   ├── log_metric_auc_3.png
+│   │   ├── log_metric_auc_4.png
+│   │   ├── log_metric_f1.png
+│   │   ├── log_metric_precision.png
+│   │   ├── log_metric_recall.png
+│   │   ├── multiple-tables-plots-custom-metric.png
+│   │   ├── my_tests_directory.png
+│   │   ├── parameterized-custom-metric.png
+│   │   ├── pearson-correlation-matrix-test-output.png
+│   │   ├── pearson-correlation-matrix.png
+│   │   ├── selecting-composite-metric.png
+│   │   └── selecting-high-pearson-correlation-test.png
+│   ├── templates
+│   │   ├── README.md
+│   │   ├── __pycache__
+│   │   │   └── e2e_template.cpython-39.pyc
+│   │   ├── about-validmind.ipynb
+│   │   ├── e2e-notebook.ipynb
+│   │   ├── e2e_template.py
+│   │   ├── install-initialize-validmind.ipynb
+│   │   ├── next-steps.ipynb
+│   │   └── upgrade-validmind.ipynb
+│   └── tutorials
+│       └── intro_for_model_developers.ipynb
+├── poetry.lock
+├── pyproject.toml
+├── r
+│   ├── custom_tests.py
+│   └── validmind
+│       ├── DESCRIPTION
+│       ├── NAMESPACE
+│       ├── R
+│       │   ├── custom_tests.R
+│       │   └── platform.R
+│       ├── README.md
+│       ├── inst
+│       │   └── extdata
+│       │       └── child.Rmd
+│       ├── man
+│       │   ├── build_r_plotly.Rd
+│       │   ├── display_report.Rd
+│       │   ├── print_summary_tables.Rd
+│       │   ├── process_result.Rd
+│       │   ├── register_custom_test.Rd
+│       │   ├── run_custom_test.Rd
+│       │   ├── save_model.Rd
+│       │   ├── summarize_metric_result.Rd
+│       │   ├── summarize_result.Rd
+│       │   ├── summarize_test_result.Rd
+│       │   └── vm.Rd
+│       └── validmind.Rproj
+├── scripts
+│   ├── README.md
+│   ├── __init__.py
+│   ├── api_tree.py
+│   ├── bulk_ai_test_updates.py
+│   ├── bulk_unit_tests_updates.py
+│   ├── check_tests.py
+│   ├── copyright.txt
+│   ├── copyright_files.py
+│   ├── credentials_check.py
+│   ├── ensure_clean_notebooks.py
+│   ├── extract_descriptions.py
+│   ├── format_and_add.sh
+│   ├── generate_quarto_docs.py
+│   ├── generate_test_id_type.py
+│   ├── run_e2e_notebooks.py
+│   └── verify_copyright.py
+├── tests
+│   ├── __init__.py
+│   ├── run_test_utils.py
+│   ├── test_api_client.py
+│   ├── test_client.py
+│   ├── test_dataset.py
+│   ├── test_framework_init.py
+│   ├── test_full_suite.py
+│   ├── test_full_suite_nb.py
+│   ├── test_unit_tests.py
+│   ├── test_validmind_tests_module.py
+│   └── unit_tests
+│       ├── __init__.py
+│       ├── data_validation
+│       │   ├── __init__.py
+│       │   ├── nlp
+│       │   │   ├── test_CommonWords.py
+│       │   │   ├── test_LanguageDetection.py
+│       │   │   ├── test_PolarityAndSubjectivity.py
+│       │   │   ├── test_Punctuations.py
+│       │   │   ├── test_Sentiment.py
+│       │   │   └── test_Toxicity.py
+│       │   ├── test_ACFandPACFPlot.py
+│       │   ├── test_ADF.py
+│       │   ├── test_AutoAR.py
+│       │   ├── test_AutoMA.py
+│       │   ├── test_AutoStationarity.py
+│       │   ├── test_BivariateScatterPlots.py
+│       │   ├── test_BoxPierce.py
+│       │   ├── test_ChiSquaredFeaturesTable.py
+│       │   ├── test_ClassImbalance.py
+│       │   ├── test_DatasetDescription.py
+│       │   ├── test_DatasetSplit.py
+│       │   ├── test_DescriptiveStatistics.py
+│       │   ├── test_DickeyFullerGLS.py
+│       │   ├── test_Duplicates.py
+│       │   ├── test_EngleGrangerCoint.py
+│       │   ├── test_FeatureTargetCorrelationPlot.py
+│       │   ├── test_HighCardinality.py
+│       │   ├── test_HighPearsonCorrelation.py
+│       │   ├── test_IQROutliersBarPlot.py
+│       │   ├── test_IQROutliersTable.py
+│       │   ├── test_IsolationForestOutliers.py
+│       │   ├── test_JarqueBera.py
+│       │   ├── test_KPSS.py
+│       │   ├── test_LJungBox.py
+│       │   ├── test_LaggedCorrelationHeatmap.py
+│       │   ├── test_MissingValues.py
+│       │   ├── test_MissingValuesBarPlot.py
+│       │   ├── test_PearsonCorrelationMatrix.py
+│       │   ├── test_PhillipsPerronArch.py
+│       │   ├── test_RollingStatsPlot.py
+│       │   ├── test_RunsTest.py
+│       │   ├── test_ScatterPlot.py
+│       │   ├── test_SeasonalDecompose.py
+│       │   ├── test_ShapiroWilk.py
+│       │   ├── test_Skewness.py
+│       │   ├── test_SpreadPlot.py
+│       │   ├── test_TabularCategoricalBarPlots.py
+│       │   ├── test_TabularDateTimeHistograms.py
+│       │   ├── test_TabularDescriptionTables.py
+│       │   ├── test_TabularNumericalHistograms.py
+│       │   ├── test_TargetRateBarPlots.py
+│       │   ├── test_TimeSeriesDescription.py
+│       │   ├── test_TimeSeriesDescriptiveStatistics.py
+│       │   ├── test_TimeSeriesFrequency.py
+│       │   ├── test_TimeSeriesHistogram.py
+│       │   ├── test_TimeSeriesLinePlot.py
+│       │   ├── test_TimeSeriesMissingValues.py
+│       │   ├── test_TimeSeriesOutliers.py
+│       │   ├── test_TooManyZeroValues.py
+│       │   ├── test_UniqueRows.py
+│       │   ├── test_WOEBinPlots.py
+│       │   ├── test_WOEBinTable.py
+│       │   └── test_ZivotAndrewsArch.py
+│       ├── model_validation
+│       │   ├── ragas
+│       │   │   ├── test_AnswerCorrectness.py
+│       │   │   ├── test_AspectCritic.py
+│       │   │   ├── test_ContextEntityRecall.py
+│       │   │   ├── test_ContextPrecision.py
+│       │   │   ├── test_ContextPrecisionWithoutReference.py
+│       │   │   ├── test_ContextRecall.py
+│       │   │   ├── test_Faithfulness.py
+│       │   │   ├── test_NoiseSensitivity.py
+│       │   │   ├── test_ResponseRelevancy.py
+│       │   │   └── test_SemanticSimilarity.py
+│       │   ├── sklearn
+│       │   │   ├── test_FeatureImportance.py
+│       │   │   ├── test_ROCCurve.py
+│       │   │   ├── test_RegressionErrors.py
+│       │   │   ├── test_RegressionErrorsComparison.py
+│       │   │   ├── test_RegressionR2Square.py
+│       │   │   └── test_RegressionR2SquareComparison.py
+│       │   ├── statsmodels
+│       │   │   ├── test_CumulativePredictionProbabilities.py
+│       │   │   ├── test_DurbinWatsonTest.py
+│       │   │   ├── test_GINITable.py
+│       │   │   ├── test_PredictionProbabilitiesHistogram.py
+│       │   │   ├── test_RegressionCoeffs.py
+│       │   │   └── test_ScorecardHistogram.py
+│       │   ├── test_BertScore.py
+│       │   ├── test_BleuScore.py
+│       │   ├── test_ContextualRecall.py
+│       │   ├── test_MeteorScore.py
+│       │   ├── test_ModelMetadata.py
+│       │   ├── test_ModelPredictionResiduals.py
+│       │   ├── test_RegardScore.py
+│       │   ├── test_RougeScore.py
+│       │   ├── test_TimeSeriesPredictionWithCI.py
+│       │   ├── test_TimeSeriesPredictionsPlot.py
+│       │   ├── test_TimeSeriesR2SquareBySegments.py
+│       │   ├── test_TokenDisparity.py
+│       │   └── test_ToxicityScore.py
+│       └── utils.py
+└── validmind
+    ├── __init__.py
+    ├── __pycache__
+    │   ├── __init__.cpython-39.pyc
+    │   ├── __version__.cpython-39.pyc
+    │   ├── api_client.cpython-39.pyc
+    │   ├── client.cpython-39.pyc
+    │   ├── client_config.cpython-39.pyc
+    │   ├── errors.cpython-39.pyc
+    │   ├── input_registry.cpython-39.pyc
+    │   ├── logging.cpython-39.pyc
+    │   ├── template.cpython-39.pyc
+    │   └── utils.cpython-39.pyc
+    ├── __version__.py
+    ├── ai
+    │   ├── __pycache__
+    │   │   ├── test_descriptions.cpython-39.pyc
+    │   │   └── utils.cpython-39.pyc
+    │   ├── test_descriptions.py
+    │   └── utils.py
+    ├── api_client.py
+    ├── client.py
+    ├── client_config.py
+    ├── datasets
+    │   ├── __init__.py
+    │   ├── __pycache__
+    │   │   └── __init__.cpython-39.pyc
+    │   ├── classification
+    │   │   ├── __init__.py
+    │   │   ├── __pycache__
+    │   │   │   ├── __init__.cpython-39.pyc
+    │   │   │   ├── customer_churn.cpython-39.pyc
+    │   │   │   └── taiwan_credit.cpython-39.pyc
+    │   │   ├── customer_churn.py
+    │   │   ├── datasets
+    │   │   │   ├── bank_customer_churn.csv
+    │   │   │   └── taiwan_credit.csv
+    │   │   └── taiwan_credit.py
+    │   ├── cluster
+    │   │   └── digits.py
+    │   ├── credit_risk
+    │   │   ├── __init__.py
+    │   │   ├── __pycache__
+    │   │   │   ├── __init__.cpython-39.pyc
+    │   │   │   ├── lending_club.cpython-39.pyc
+    │   │   │   └── lending_club_bias.cpython-39.pyc
+    │   │   ├── datasets
+    │   │   │   ├── lending_club_biased.csv.gz
+    │   │   │   └── lending_club_loan_data_2007_2014_clean.csv.gz
+    │   │   ├── lending_club.py
+    │   │   └── lending_club_bias.py
+    │   ├── llm
+    │   │   └── rag
+    │   │       ├── __init__.py
+    │   │       ├── datasets
+    │   │       │   ├── rfp_existing_questions_client_1.csv
+    │   │       │   ├── rfp_existing_questions_client_2.csv
+    │   │       │   ├── rfp_existing_questions_client_3.csv
+    │   │       │   ├── rfp_existing_questions_client_4.csv
+    │   │       │   └── rfp_existing_questions_client_5.csv
+    │   │       └── rfp.py
+    │   ├── nlp
+    │   │   ├── __init__.py
+    │   │   ├── __pycache__
+    │   │   │   ├── __init__.cpython-39.pyc
+    │   │   │   ├── cnn_dailymail.cpython-39.pyc
+    │   │   │   └── twitter_covid_19.cpython-39.pyc
+    │   │   ├── cnn_dailymail.py
+    │   │   ├── datasets
+    │   │   │   ├── Covid_19.csv
+    │   │   │   ├── cnn_dailymail_100_with_predictions.csv
+    │   │   │   ├── cnn_dailymail_500_with_predictions.csv
+    │   │   │   └── sentiments_with_predictions.csv
+    │   │   └── twitter_covid_19.py
+    │   └── regression
+    │       ├── __init__.py
+    │       ├── __pycache__
+    │       │   ├── __init__.cpython-39.pyc
+    │       │   ├── california_housing.cpython-39.pyc
+    │       │   ├── fred.cpython-39.pyc
+    │       │   ├── fred_timeseries.cpython-39.pyc
+    │       │   └── lending_club.cpython-39.pyc
+    │       ├── california_housing.py
+    │       ├── datasets
+    │       │   ├── fred
+    │       │   │   ├── CPIAUCSL.csv
+    │       │   │   ├── CSUSHPISA.csv
+    │       │   │   ├── DRSFRMACBS.csv
+    │       │   │   ├── FEDFUNDS.csv
+    │       │   │   ├── GDP.csv
+    │       │   │   ├── GDPC1.csv
+    │       │   │   ├── GS10.csv
+    │       │   │   ├── GS3.csv
+    │       │   │   ├── GS5.csv
+    │       │   │   ├── MORTGAGE30US.csv
+    │       │   │   └── UNRATE.csv
+    │       │   ├── fred_loan_rates.csv
+    │       │   ├── fred_loan_rates_test_1.csv
+    │       │   ├── fred_loan_rates_test_2.csv
+    │       │   ├── fred_loan_rates_test_3.csv
+    │       │   ├── fred_loan_rates_test_4.csv
+    │       │   ├── fred_loan_rates_test_5.csv
+    │       │   └── leanding_club_loan_rates.csv
+    │       ├── fred.py
+    │       ├── fred_timeseries.py
+    │       ├── lending_club.py
+    │       └── models
+    │           ├── fred_loan_rates_model_1.pkl
+    │           ├── fred_loan_rates_model_2.pkl
+    │           ├── fred_loan_rates_model_3.pkl
+    │           ├── fred_loan_rates_model_4.pkl
+    │           └── fred_loan_rates_model_5.pkl
+    ├── errors.py
+    ├── html_templates
+    │   ├── __init__.py
+    │   ├── __pycache__
+    │   │   ├── __init__.cpython-39.pyc
+    │   │   └── content_blocks.cpython-39.pyc
+    │   └── content_blocks.py
+    ├── input_registry.py
+    ├── logging.py
+    ├── models
+    │   ├── __init__.py
+    │   ├── __pycache__
+    │   │   ├── __init__.cpython-39.pyc
+    │   │   ├── foundation.cpython-39.pyc
+    │   │   ├── function.cpython-39.pyc
+    │   │   ├── huggingface.cpython-39.pyc
+    │   │   ├── metadata.cpython-39.pyc
+    │   │   ├── pipeline.cpython-39.pyc
+    │   │   ├── pytorch.cpython-39.pyc
+    │   │   ├── r_model.cpython-39.pyc
+    │   │   └── sklearn.cpython-39.pyc
+    │   ├── foundation.py
+    │   ├── function.py
+    │   ├── huggingface.py
+    │   ├── metadata.py
+    │   ├── pipeline.py
+    │   ├── pytorch.py
+    │   ├── r_model.py
+    │   └── sklearn.py
+    ├── template.py
+    ├── test_suites
+    │   ├── __init__.py
+    │   ├── __pycache__
+    │   │   ├── __init__.cpython-39.pyc
+    │   │   ├── classifier.cpython-39.pyc
+    │   │   ├── cluster.cpython-39.pyc
+    │   │   ├── embeddings.cpython-39.pyc
+    │   │   ├── llm.cpython-39.pyc
+    │   │   ├── nlp.cpython-39.pyc
+    │   │   ├── parameters_optimization.cpython-39.pyc
+    │   │   ├── regression.cpython-39.pyc
+    │   │   ├── statsmodels_timeseries.cpython-39.pyc
+    │   │   ├── summarization.cpython-39.pyc
+    │   │   ├── tabular_datasets.cpython-39.pyc
+    │   │   ├── text_data.cpython-39.pyc
+    │   │   └── time_series.cpython-39.pyc
+    │   ├── classifier.py
+    │   ├── cluster.py
+    │   ├── embeddings.py
+    │   ├── llm.py
+    │   ├── nlp.py
+    │   ├── parameters_optimization.py
+    │   ├── regression.py
+    │   ├── statsmodels_timeseries.py
+    │   ├── summarization.py
+    │   ├── tabular_datasets.py
+    │   ├── text_data.py
+    │   └── time_series.py
+    ├── tests
+    │   ├── __init__.py
+    │   ├── __pycache__
+    │   │   ├── __init__.cpython-39.pyc
+    │   │   ├── __types__.cpython-39.pyc
+    │   │   ├── _store.cpython-39.pyc
+    │   │   ├── comparison.cpython-39.pyc
+    │   │   ├── decorator.cpython-39.pyc
+    │   │   ├── load.cpython-39.pyc
+    │   │   ├── output.cpython-39.pyc
+    │   │   ├── run.cpython-39.pyc
+    │   │   ├── test_providers.cpython-39.pyc
+    │   │   └── utils.cpython-39.pyc
+    │   ├── __types__.py
+    │   ├── _store.py
+    │   ├── comparison.py
+    │   ├── data_validation
+    │   │   ├── ACFandPACFPlot.py
+    │   │   ├── ADF.py
+    │   │   ├── AutoAR.py
+    │   │   ├── AutoMA.py
+    │   │   ├── AutoStationarity.py
+    │   │   ├── BivariateScatterPlots.py
+    │   │   ├── BoxPierce.py
+    │   │   ├── ChiSquaredFeaturesTable.py
+    │   │   ├── ClassImbalance.py
+    │   │   ├── DatasetDescription.py
+    │   │   ├── DatasetSplit.py
+    │   │   ├── DescriptiveStatistics.py
+    │   │   ├── DickeyFullerGLS.py
+    │   │   ├── Duplicates.py
+    │   │   ├── EngleGrangerCoint.py
+    │   │   ├── FeatureTargetCorrelationPlot.py
+    │   │   ├── HighCardinality.py
+    │   │   ├── HighPearsonCorrelation.py
+    │   │   ├── IQROutliersBarPlot.py
+    │   │   ├── IQROutliersTable.py
+    │   │   ├── IsolationForestOutliers.py
+    │   │   ├── JarqueBera.py
+    │   │   ├── KPSS.py
+    │   │   ├── LJungBox.py
+    │   │   ├── LaggedCorrelationHeatmap.py
+    │   │   ├── MissingValues.py
+    │   │   ├── MissingValuesBarPlot.py
+    │   │   ├── MutualInformation.py
+    │   │   ├── PearsonCorrelationMatrix.py
+    │   │   ├── PhillipsPerronArch.py
+    │   │   ├── ProtectedClassesCombination.py
+    │   │   ├── ProtectedClassesDescription.py
+    │   │   ├── ProtectedClassesDisparity.py
+    │   │   ├── ProtectedClassesThresholdOptimizer.py
+    │   │   ├── RollingStatsPlot.py
+    │   │   ├── RunsTest.py
+    │   │   ├── ScatterPlot.py
+    │   │   ├── ScoreBandDefaultRates.py
+    │   │   ├── SeasonalDecompose.py
+    │   │   ├── ShapiroWilk.py
+    │   │   ├── Skewness.py
+    │   │   ├── SpreadPlot.py
+    │   │   ├── TabularCategoricalBarPlots.py
+    │   │   ├── TabularDateTimeHistograms.py
+    │   │   ├── TabularDescriptionTables.py
+    │   │   ├── TabularNumericalHistograms.py
+    │   │   ├── TargetRateBarPlots.py
+    │   │   ├── TimeSeriesDescription.py
+    │   │   ├── TimeSeriesDescriptiveStatistics.py
+    │   │   ├── TimeSeriesFrequency.py
+    │   │   ├── TimeSeriesHistogram.py
+    │   │   ├── TimeSeriesLinePlot.py
+    │   │   ├── TimeSeriesMissingValues.py
+    │   │   ├── TimeSeriesOutliers.py
+    │   │   ├── TooManyZeroValues.py
+    │   │   ├── UniqueRows.py
+    │   │   ├── WOEBinPlots.py
+    │   │   ├── WOEBinTable.py
+    │   │   ├── ZivotAndrewsArch.py
+    │   │   ├── __init__.py
+    │   │   ├── __pycache__
+    │   │   │   ├── ACFandPACFPlot.cpython-39.pyc
+    │   │   │   ├── ADF.cpython-39.pyc
+    │   │   │   ├── AutoAR.cpython-39.pyc
+    │   │   │   ├── AutoMA.cpython-39.pyc
+    │   │   │   ├── AutoStationarity.cpython-39.pyc
+    │   │   │   ├── BivariateScatterPlots.cpython-39.pyc
+    │   │   │   ├── BoxPierce.cpython-39.pyc
+    │   │   │   ├── ChiSquaredFeaturesTable.cpython-39.pyc
+    │   │   │   ├── ClassImbalance.cpython-39.pyc
+    │   │   │   ├── DatasetDescription.cpython-39.pyc
+    │   │   │   ├── DatasetSplit.cpython-39.pyc
+    │   │   │   ├── DescriptiveStatistics.cpython-39.pyc
+    │   │   │   ├── DickeyFullerGLS.cpython-39.pyc
+    │   │   │   ├── Duplicates.cpython-39.pyc
+    │   │   │   ├── EngleGrangerCoint.cpython-39.pyc
+    │   │   │   ├── FeatureTargetCorrelationPlot.cpython-39.pyc
+    │   │   │   ├── HighCardinality.cpython-39.pyc
+    │   │   │   ├── HighPearsonCorrelation.cpython-39.pyc
+    │   │   │   ├── IQROutliersBarPlot.cpython-39.pyc
+    │   │   │   ├── IQROutliersTable.cpython-39.pyc
+    │   │   │   ├── IsolationForestOutliers.cpython-39.pyc
+    │   │   │   ├── JarqueBera.cpython-39.pyc
+    │   │   │   ├── KPSS.cpython-39.pyc
+    │   │   │   ├── LJungBox.cpython-39.pyc
+    │   │   │   ├── LaggedCorrelationHeatmap.cpython-39.pyc
+    │   │   │   ├── MissingValues.cpython-39.pyc
+    │   │   │   ├── MissingValuesBarPlot.cpython-39.pyc
+    │   │   │   ├── MutualInformation.cpython-39.pyc
+    │   │   │   ├── PearsonCorrelationMatrix.cpython-39.pyc
+    │   │   │   ├── PhillipsPerronArch.cpython-39.pyc
+    │   │   │   ├── ProtectedClassesCombination.cpython-39.pyc
+    │   │   │   ├── ProtectedClassesDescription.cpython-39.pyc
+    │   │   │   ├── ProtectedClassesDisparity.cpython-39.pyc
+    │   │   │   ├── ProtectedClassesThresholdOptimizer.cpython-39.pyc
+    │   │   │   ├── RollingStatsPlot.cpython-39.pyc
+    │   │   │   ├── RunsTest.cpython-39.pyc
+    │   │   │   ├── ScatterPlot.cpython-39.pyc
+    │   │   │   ├── ScoreBandDefaultRates.cpython-39.pyc
+    │   │   │   ├── SeasonalDecompose.cpython-39.pyc
+    │   │   │   ├── ShapiroWilk.cpython-39.pyc
+    │   │   │   ├── Skewness.cpython-39.pyc
+    │   │   │   ├── SpreadPlot.cpython-39.pyc
+    │   │   │   ├── TabularCategoricalBarPlots.cpython-39.pyc
+    │   │   │   ├── TabularDateTimeHistograms.cpython-39.pyc
+    │   │   │   ├── TabularDescriptionTables.cpython-39.pyc
+    │   │   │   ├── TabularNumericalHistograms.cpython-39.pyc
+    │   │   │   ├── TargetRateBarPlots.cpython-39.pyc
+    │   │   │   ├── TimeSeriesDescription.cpython-39.pyc
+    │   │   │   ├── TimeSeriesDescriptiveStatistics.cpython-39.pyc
+    │   │   │   ├── TimeSeriesFrequency.cpython-39.pyc
+    │   │   │   ├── TimeSeriesHistogram.cpython-39.pyc
+    │   │   │   ├── TimeSeriesLinePlot.cpython-39.pyc
+    │   │   │   ├── TimeSeriesMissingValues.cpython-39.pyc
+    │   │   │   ├── TimeSeriesOutliers.cpython-39.pyc
+    │   │   │   ├── TooManyZeroValues.cpython-39.pyc
+    │   │   │   ├── UniqueRows.cpython-39.pyc
+    │   │   │   ├── WOEBinPlots.cpython-39.pyc
+    │   │   │   ├── WOEBinTable.cpython-39.pyc
+    │   │   │   ├── ZivotAndrewsArch.cpython-39.pyc
+    │   │   │   └── __init__.cpython-39.pyc
+    │   │   └── nlp
+    │   │       ├── CommonWords.py
+    │   │       ├── Hashtags.py
+    │   │       ├── LanguageDetection.py
+    │   │       ├── Mentions.py
+    │   │       ├── PolarityAndSubjectivity.py
+    │   │       ├── Punctuations.py
+    │   │       ├── Sentiment.py
+    │   │       ├── StopWords.py
+    │   │       ├── TextDescription.py
+    │   │       ├── Toxicity.py
+    │   │       ├── __init__.py
+    │   │       └── __pycache__
+    │   │           ├── CommonWords.cpython-39.pyc
+    │   │           ├── Hashtags.cpython-39.pyc
+    │   │           ├── LanguageDetection.cpython-39.pyc
+    │   │           ├── Mentions.cpython-39.pyc
+    │   │           ├── PolarityAndSubjectivity.cpython-39.pyc
+    │   │           ├── Punctuations.cpython-39.pyc
+    │   │           ├── Sentiment.cpython-39.pyc
+    │   │           ├── StopWords.cpython-39.pyc
+    │   │           ├── TextDescription.cpython-39.pyc
+    │   │           ├── Toxicity.cpython-39.pyc
+    │   │           └── __init__.cpython-39.pyc
+    │   ├── decorator.py
+    │   ├── load.py
+    │   ├── model_validation
+    │   │   ├── BertScore.py
+    │   │   ├── BleuScore.py
+    │   │   ├── ClusterSizeDistribution.py
+    │   │   ├── ContextualRecall.py
+    │   │   ├── FeaturesAUC.py
+    │   │   ├── MeteorScore.py
+    │   │   ├── ModelMetadata.py
+    │   │   ├── ModelPredictionResiduals.py
+    │   │   ├── RegardScore.py
+    │   │   ├── RegressionResidualsPlot.py
+    │   │   ├── RougeScore.py
+    │   │   ├── TimeSeriesPredictionWithCI.py
+    │   │   ├── TimeSeriesPredictionsPlot.py
+    │   │   ├── TimeSeriesR2SquareBySegments.py
+    │   │   ├── TokenDisparity.py
+    │   │   ├── ToxicityScore.py
+    │   │   ├── __init__.py
+    │   │   ├── __pycache__
+    │   │   │   ├── BertScore.cpython-39.pyc
+    │   │   │   ├── BleuScore.cpython-39.pyc
+    │   │   │   ├── ClusterSizeDistribution.cpython-39.pyc
+    │   │   │   ├── ContextualRecall.cpython-39.pyc
+    │   │   │   ├── FeaturesAUC.cpython-39.pyc
+    │   │   │   ├── MeteorScore.cpython-39.pyc
+    │   │   │   ├── ModelMetadata.cpython-39.pyc
+    │   │   │   ├── ModelPredictionResiduals.cpython-39.pyc
+    │   │   │   ├── RegardScore.cpython-39.pyc
+    │   │   │   ├── RegressionResidualsPlot.cpython-39.pyc
+    │   │   │   ├── RougeScore.cpython-39.pyc
+    │   │   │   ├── TimeSeriesPredictionWithCI.cpython-39.pyc
+    │   │   │   ├── TimeSeriesPredictionsPlot.cpython-39.pyc
+    │   │   │   ├── TimeSeriesR2SquareBySegments.cpython-39.pyc
+    │   │   │   ├── TokenDisparity.cpython-39.pyc
+    │   │   │   ├── ToxicityScore.cpython-39.pyc
+    │   │   │   └── __init__.cpython-39.pyc
+    │   │   ├── embeddings
+    │   │   │   ├── ClusterDistribution.py
+    │   │   │   ├── CosineSimilarityComparison.py
+    │   │   │   ├── CosineSimilarityDistribution.py
+    │   │   │   ├── CosineSimilarityHeatmap.py
+    │   │   │   ├── DescriptiveAnalytics.py
+    │   │   │   ├── EmbeddingsVisualization2D.py
+    │   │   │   ├── EuclideanDistanceComparison.py
+    │   │   │   ├── EuclideanDistanceHeatmap.py
+    │   │   │   ├── PCAComponentsPairwisePlots.py
+    │   │   │   ├── StabilityAnalysisKeyword.py
+    │   │   │   ├── StabilityAnalysisRandomNoise.py
+    │   │   │   ├── StabilityAnalysisSynonyms.py
+    │   │   │   ├── StabilityAnalysisTranslation.py
+    │   │   │   ├── TSNEComponentsPairwisePlots.py
+    │   │   │   └── utils.py
+    │   │   ├── ragas
+    │   │   │   ├── AnswerCorrectness.py
+    │   │   │   ├── AspectCritic.py
+    │   │   │   ├── ContextEntityRecall.py
+    │   │   │   ├── ContextPrecision.py
+    │   │   │   ├── ContextPrecisionWithoutReference.py
+    │   │   │   ├── ContextRecall.py
+    │   │   │   ├── Faithfulness.py
+    │   │   │   ├── NoiseSensitivity.py
+    │   │   │   ├── ResponseRelevancy.py
+    │   │   │   ├── SemanticSimilarity.py
+    │   │   │   └── utils.py
+    │   │   ├── sklearn
+    │   │   │   ├── AdjustedMutualInformation.py
+    │   │   │   ├── AdjustedRandIndex.py
+    │   │   │   ├── CalibrationCurve.py
+    │   │   │   ├── ClassifierPerformance.py
+    │   │   │   ├── ClassifierThresholdOptimization.py
+    │   │   │   ├── ClusterCosineSimilarity.py
+    │   │   │   ├── ClusterPerformanceMetrics.py
+    │   │   │   ├── CompletenessScore.py
+    │   │   │   ├── ConfusionMatrix.py
+    │   │   │   ├── FeatureImportance.py
+    │   │   │   ├── FowlkesMallowsScore.py
+    │   │   │   ├── HomogeneityScore.py
+    │   │   │   ├── HyperParametersTuning.py
+    │   │   │   ├── KMeansClustersOptimization.py
+    │   │   │   ├── MinimumAccuracy.py
+    │   │   │   ├── MinimumF1Score.py
+    │   │   │   ├── MinimumROCAUCScore.py
+    │   │   │   ├── ModelParameters.py
+    │   │   │   ├── ModelsPerformanceComparison.py
+    │   │   │   ├── OverfitDiagnosis.py
+    │   │   │   ├── PermutationFeatureImportance.py
+    │   │   │   ├── PopulationStabilityIndex.py
+    │   │   │   ├── PrecisionRecallCurve.py
+    │   │   │   ├── ROCCurve.py
+    │   │   │   ├── RegressionErrors.py
+    │   │   │   ├── RegressionErrorsComparison.py
+    │   │   │   ├── RegressionPerformance.py
+    │   │   │   ├── RegressionR2Square.py
+    │   │   │   ├── RegressionR2SquareComparison.py
+    │   │   │   ├── RobustnessDiagnosis.py
+    │   │   │   ├── SHAPGlobalImportance.py
+    │   │   │   ├── ScoreProbabilityAlignment.py
+    │   │   │   ├── SilhouettePlot.py
+    │   │   │   ├── TrainingTestDegradation.py
+    │   │   │   ├── VMeasure.py
+    │   │   │   ├── WeakspotsDiagnosis.py
+    │   │   │   ├── __init__.py
+    │   │   │   └── __pycache__
+    │   │   │       ├── AdjustedMutualInformation.cpython-39.pyc
+    │   │   │       ├── AdjustedRandIndex.cpython-39.pyc
+    │   │   │       ├── CalibrationCurve.cpython-39.pyc
+    │   │   │       ├── ClassifierPerformance.cpython-39.pyc
+    │   │   │       ├── ClassifierThresholdOptimization.cpython-39.pyc
+    │   │   │       ├── ClusterCosineSimilarity.cpython-39.pyc
+    │   │   │       ├── ClusterPerformanceMetrics.cpython-39.pyc
+    │   │   │       ├── CompletenessScore.cpython-39.pyc
+    │   │   │       ├── ConfusionMatrix.cpython-39.pyc
+    │   │   │       ├── FeatureImportance.cpython-39.pyc
+    │   │   │       ├── FowlkesMallowsScore.cpython-39.pyc
+    │   │   │       ├── HomogeneityScore.cpython-39.pyc
+    │   │   │       ├── HyperParametersTuning.cpython-39.pyc
+    │   │   │       ├── KMeansClustersOptimization.cpython-39.pyc
+    │   │   │       ├── MinimumAccuracy.cpython-39.pyc
+    │   │   │       ├── MinimumF1Score.cpython-39.pyc
+    │   │   │       ├── MinimumROCAUCScore.cpython-39.pyc
+    │   │   │       ├── ModelParameters.cpython-39.pyc
+    │   │   │       ├── ModelsPerformanceComparison.cpython-39.pyc
+    │   │   │       ├── OverfitDiagnosis.cpython-39.pyc
+    │   │   │       ├── PermutationFeatureImportance.cpython-39.pyc
+    │   │   │       ├── PopulationStabilityIndex.cpython-39.pyc
+    │   │   │       ├── PrecisionRecallCurve.cpython-39.pyc
+    │   │   │       ├── ROCCurve.cpython-39.pyc
+    │   │   │       ├── RegressionErrors.cpython-39.pyc
+    │   │   │       ├── RegressionErrorsComparison.cpython-39.pyc
+    │   │   │       ├── RegressionPerformance.cpython-39.pyc
+    │   │   │       ├── RegressionR2Square.cpython-39.pyc
+    │   │   │       ├── RegressionR2SquareComparison.cpython-39.pyc
+    │   │   │       ├── RobustnessDiagnosis.cpython-39.pyc
+    │   │   │       ├── SHAPGlobalImportance.cpython-39.pyc
+    │   │   │       ├── ScoreProbabilityAlignment.cpython-39.pyc
+    │   │   │       ├── SilhouettePlot.cpython-39.pyc
+    │   │   │       ├── TrainingTestDegradation.cpython-39.pyc
+    │   │   │       ├── VMeasure.cpython-39.pyc
+    │   │   │       ├── WeakspotsDiagnosis.cpython-39.pyc
+    │   │   │       └── __init__.cpython-39.pyc
+    │   │   └── statsmodels
+    │   │       ├── AutoARIMA.py
+    │   │       ├── CumulativePredictionProbabilities.py
+    │   │       ├── DurbinWatsonTest.py
+    │   │       ├── GINITable.py
+    │   │       ├── KolmogorovSmirnov.py
+    │   │       ├── Lilliefors.py
+    │   │       ├── PredictionProbabilitiesHistogram.py
+    │   │       ├── RegressionCoeffs.py
+    │   │       ├── RegressionFeatureSignificance.py
+    │   │       ├── RegressionModelForecastPlot.py
+    │   │       ├── RegressionModelForecastPlotLevels.py
+    │   │       ├── RegressionModelSensitivityPlot.py
+    │   │       ├── RegressionModelSummary.py
+    │   │       ├── RegressionPermutationFeatureImportance.py
+    │   │       ├── ScorecardHistogram.py
+    │   │       ├── __init__.py
+    │   │       ├── __pycache__
+    │   │       │   ├── AutoARIMA.cpython-39.pyc
+    │   │       │   ├── CumulativePredictionProbabilities.cpython-39.pyc
+    │   │       │   ├── DurbinWatsonTest.cpython-39.pyc
+    │   │       │   ├── GINITable.cpython-39.pyc
+    │   │       │   ├── KolmogorovSmirnov.cpython-39.pyc
+    │   │       │   ├── Lilliefors.cpython-39.pyc
+    │   │       │   ├── PredictionProbabilitiesHistogram.cpython-39.pyc
+    │   │       │   ├── RegressionCoeffs.cpython-39.pyc
+    │   │       │   ├── RegressionFeatureSignificance.cpython-39.pyc
+    │   │       │   ├── RegressionModelForecastPlot.cpython-39.pyc
+    │   │       │   ├── RegressionModelForecastPlotLevels.cpython-39.pyc
+    │   │       │   ├── RegressionModelSensitivityPlot.cpython-39.pyc
+    │   │       │   ├── RegressionModelSummary.cpython-39.pyc
+    │   │       │   ├── RegressionPermutationFeatureImportance.cpython-39.pyc
+    │   │       │   ├── ScorecardHistogram.cpython-39.pyc
+    │   │       │   ├── __init__.cpython-39.pyc
+    │   │       │   └── statsutils.cpython-39.pyc
+    │   │       └── statsutils.py
+    │   ├── ongoing_monitoring
+    │   │   ├── CalibrationCurveDrift.py
+    │   │   ├── ClassDiscriminationDrift.py
+    │   │   ├── ClassImbalanceDrift.py
+    │   │   ├── ClassificationAccuracyDrift.py
+    │   │   ├── ConfusionMatrixDrift.py
+    │   │   ├── CumulativePredictionProbabilitiesDrift.py
+    │   │   ├── FeatureDrift.py
+    │   │   ├── PredictionAcrossEachFeature.py
+    │   │   ├── PredictionCorrelation.py
+    │   │   ├── PredictionProbabilitiesHistogramDrift.py
+    │   │   ├── PredictionQuantilesAcrossFeatures.py
+    │   │   ├── ROCCurveDrift.py
+    │   │   ├── ScoreBandsDrift.py
+    │   │   ├── ScorecardHistogramDrift.py
+    │   │   └── TargetPredictionDistributionPlot.py
+    │   ├── output.py
+    │   ├── prompt_validation
+    │   │   ├── Bias.py
+    │   │   ├── Clarity.py
+    │   │   ├── Conciseness.py
+    │   │   ├── Delimitation.py
+    │   │   ├── NegativeInstruction.py
+    │   │   ├── Robustness.py
+    │   │   ├── Specificity.py
+    │   │   ├── __init__.py
+    │   │   ├── __pycache__
+    │   │   │   ├── Bias.cpython-39.pyc
+    │   │   │   ├── Clarity.cpython-39.pyc
+    │   │   │   ├── Conciseness.cpython-39.pyc
+    │   │   │   ├── Delimitation.cpython-39.pyc
+    │   │   │   ├── NegativeInstruction.cpython-39.pyc
+    │   │   │   ├── Robustness.cpython-39.pyc
+    │   │   │   ├── Specificity.cpython-39.pyc
+    │   │   │   ├── __init__.cpython-39.pyc
+    │   │   │   └── ai_powered_test.cpython-39.pyc
+    │   │   └── ai_powered_test.py
+    │   ├── run.py
+    │   ├── test_providers.py
+    │   └── utils.py
+    ├── unit_metrics
+    │   ├── __init__.py
+    │   ├── __pycache__
+    │   │   └── __init__.cpython-39.pyc
+    │   ├── classification
+    │   │   ├── Accuracy.py
+    │   │   ├── F1.py
+    │   │   ├── Precision.py
+    │   │   ├── ROC_AUC.py
+    │   │   └── Recall.py
+    │   └── regression
+    │       ├── AdjustedRSquaredScore.py
+    │       ├── GiniCoefficient.py
+    │       ├── HuberLoss.py
+    │       ├── KolmogorovSmirnovStatistic.py
+    │       ├── MeanAbsoluteError.py
+    │       ├── MeanAbsolutePercentageError.py
+    │       ├── MeanBiasDeviation.py
+    │       ├── MeanSquaredError.py
+    │       ├── QuantileLoss.py
+    │       ├── RSquaredScore.py
+    │       └── RootMeanSquaredError.py
+    ├── utils.py
+    └── vm_models
+        ├── __init__.py
+        ├── __pycache__
+        │   ├── __init__.cpython-39.pyc
+        │   ├── figure.cpython-39.pyc
+        │   ├── input.cpython-39.pyc
+        │   └── model.cpython-39.pyc
+        ├── dataset
+        │   ├── __init__.py
+        │   ├── __pycache__
+        │   │   ├── __init__.cpython-39.pyc
+        │   │   ├── dataset.cpython-39.pyc
+        │   │   └── utils.cpython-39.pyc
+        │   ├── dataset.py
+        │   └── utils.py
+        ├── figure.py
+        ├── input.py
+        ├── model.py
+        ├── result
+        │   ├── __init__.py
+        │   ├── __pycache__
+        │   │   ├── __init__.cpython-39.pyc
+        │   │   ├── result.cpython-39.pyc
+        │   │   └── utils.cpython-39.pyc
+        │   ├── result.jinja
+        │   ├── result.py
+        │   └── utils.py
+        └── test_suite
+            ├── __init__.py
+            ├── __pycache__
+            │   ├── runner.cpython-39.pyc
+            │   ├── summary.cpython-39.pyc
+            │   ├── test.cpython-39.pyc
+            │   └── test_suite.cpython-39.pyc
+            ├── runner.py
+            ├── summary.py
+            ├── test.py
+            └── test_suite.py
+
+141 directories, 1076 files

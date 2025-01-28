@@ -15,20 +15,6 @@ Preprocess boolean columns.
 
 **Parameters**
 
-DEBUG:
-
-- arg_name: df
-- type_name: pandas.DataFrame
-- description: Dataframe to preprocess.
-
-______________________________________________________________________
-
-- arg_name: columns
-- type_name: list
-- description: List of columns to preprocess.
-
-______________________________________________________________________
-
 - **df** pandas.DataFrame: Dataframe to preprocess.
 - **columns** list: List of columns to preprocess.
 
@@ -47,20 +33,6 @@ Preprocess categorical columns.
 
 **Parameters**
 
-DEBUG:
-
-- arg_name: df
-- type_name: pandas.DataFrame
-- description: Dataframe to preprocess.
-
-______________________________________________________________________
-
-- arg_name: columns
-- type_name: list
-- description: List of columns to preprocess.
-
-______________________________________________________________________
-
 - **df** pandas.DataFrame: Dataframe to preprocess.
 - **columns** list: List of columns to preprocess.
 
@@ -78,20 +50,6 @@ def simple_preprocess_numericals(
 Preprocess numerical columns.
 
 **Parameters**
-
-DEBUG:
-
-- arg_name: df
-- type_name: pandas.DataFrame
-- description: Dataframe to preprocess.
-
-______________________________________________________________________
-
-- arg_name: columns
-- type_name: list
-- description: List of columns to preprocess.
-
-______________________________________________________________________
 
 - **df** pandas.DataFrame: Dataframe to preprocess.
 - **columns** list: List of columns to preprocess.
