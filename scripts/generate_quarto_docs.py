@@ -7,6 +7,7 @@ from jinja2 import Environment, FileSystemLoader
 import mdformat
 from docstring_parser import parse, Style
 from glob import glob
+import subprocess
 
 def resolve_alias(member: Dict[str, Any], data: Dict[str, Any]) -> Dict[str, Any]:
     """Resolve an alias to its target member."""
@@ -80,23 +81,23 @@ def is_public(member: Dict[str, Any], module: Dict[str, Any], full_data: Dict[st
     
     # Skip private members except __init__ and __post_init__
     if name.startswith('_') and name not in {'__init__', '__post_init__'}:
-        print(f"- Skipping private member: {name}")
+        # print(f"- Skipping private member: {name}")
         return False
     
     # At root level, only show items from __all__
     if is_root:
         root_all = get_all_members(full_data['validmind'].get('members', {}))
-        print(f"- Root __all__: {root_all}")
+        # print(f"- Root __all__: {root_all}")
         return name in root_all
     
     # If module has __all__, only include members listed there
     if module and '__all__' in module.get('members', {}):
         module_all = get_all_members(module.get('members', {}))
-        print(f"- Module __all__: {module_all}")
-        print(f"- Is {name} in module __all__? {name in module_all}")
+        # print(f"- Module __all__: {module_all}")
+        # print(f"- Is {name} in module __all__? {name in module_all}")
         return name in module_all
     
-    print(f"- No __all__ found, including {name}")
+    # print(f"- No __all__ found, including {name}")
     return True
 
 def ensure_dir(path):
@@ -157,19 +158,22 @@ def collect_documented_items(module: Dict[str, Any], path: List[str], full_data:
     
     return result
 
+# Add at module level
+written_qmd_files = {}
+
 def process_module(module: Dict[str, Any], path: List[str], env: Environment, full_data: Dict[str, Any]):
     """Process a module and its submodules."""
-    if module.get('name') == 'tests':
-        print("\nProcessing tests module members:")
-        for name, member in module.get('members', {}).items():
-            if is_public(member, module, full_data):
-                print(f"\n{name}:")
-                print(f"  Original: kind={member.get('kind')}")
-                if member.get('kind') == 'alias':
-                    resolved = resolve_alias(member, full_data)
-                    print(f"  Resolved: kind={resolved.get('kind')}")
-                    print(f"  Target path: {member.get('target_path')}")
-                    print(f"  In __all__: {name in get_all_members(module.get('members', {}))}")
+    # if module.get('name') == 'tests':
+    #     print("\nProcessing tests module members:")
+    #     for name, member in module.get('members', {}).items():
+    #         if is_public(member, module, full_data):
+    #             print(f"\n{name}:")
+    #             print(f"  Original: kind={member.get('kind')}")
+    #             if member.get('kind') == 'alias':
+    #                 resolved = resolve_alias(member, full_data)
+    #                 print(f"  Resolved: kind={resolved.get('kind')}")
+    #                 print(f"  Target path: {member.get('target_path')}")
+    #                 print(f"  In __all__: {name in get_all_members(module.get('members', {}))}")
     
     # Parse docstrings first
     parse_docstrings_recursively(module)
@@ -193,6 +197,11 @@ def process_module(module: Dict[str, Any], path: List[str], env: Environment, fu
     output_path = os.path.join(module_dir, filename)
     with open(output_path, 'w') as f:
         f.write(output)
+    
+    # Track with full path and print full path
+    full_path = os.path.join("docs", os.path.relpath(output_path, "docs"))
+    print(f"Wrote file: {full_path}")
+    written_qmd_files[filename] = full_path
     
     # Process submodules
     members = module.get('members', {})
@@ -414,45 +423,11 @@ def generate_module_doc(module, full_data, env, output_dir):
 def find_qmd_files(base_path: str) -> Dict[str, List[str]]:
     """Find all .qmd files and their associated folders in docs/validmind."""
     print("\nEntering find_qmd_files()")
+    print(f"\nFiles written during documentation generation (count: {len(written_qmd_files)}):")
+    for filename, path in written_qmd_files.items():
+        print(f"  {filename}: {path}")
     
-    base_path = os.path.abspath(base_path)
-    validmind_path = os.path.join(base_path, 'validmind')
-    print(f"Looking in: {validmind_path}")
-    print(f"Path exists: {os.path.exists(validmind_path)}")
-    print(f"Is directory: {os.path.isdir(validmind_path)}")
-    print(f"Directory contents: {os.listdir(validmind_path)}")
-    
-    qmd_files = {}
-    
-    # Debug: Print full directory tree
-    print("\nWalking directory tree:")
-    for root, dirs, files in os.walk(validmind_path, followlinks=True):
-        print(f"\nDirectory: {root}")
-        print(f"  Is directory: {os.path.isdir(root)}")
-        print(f"  Directory exists: {os.path.exists(root)}")
-        print(f"  Direct contents: {os.listdir(root)}")
-        print(f"  Subdirs from walk: {dirs}")
-        print(f"  Files from walk: {files}")
-        print(f"  QMD files: {[f for f in files if f.endswith('.qmd')]}")
-        
-        rel_path = os.path.relpath(root, base_path)
-        print(f"  Relative path: {rel_path}")
-        
-        # Get module name from the filename instead of path
-        for file in files:
-            if file.endswith('.qmd'):
-                # Extract module name from the filename (remove .qmd extension)
-                module = file[:-4]
-                if module not in qmd_files:
-                    qmd_files[module] = []
-                
-                full_path = os.path.join(root, file)
-                ref_path = f"reference/{os.path.relpath(full_path, base_path)}".replace('\\', '/')
-                qmd_files[module].append(ref_path)
-                print(f"Found: {ref_path}")
-    
-    print(f"\nCollected qmd_files: {json.dumps(qmd_files, indent=2)}")
-    return qmd_files
+    return written_qmd_files
 
 def generate_docs(json_path: str, template_dir: str, output_dir: str):
     """Generate documentation from JSON data using templates."""
@@ -477,17 +452,17 @@ def generate_docs(json_path: str, template_dir: str, output_dir: str):
     env.globals['get_all_members'] = get_all_members
     env.globals['get_inherited_members'] = get_inherited_members
     
-    print("\nAbout to call find_qmd_files()")
-    qmd_files = find_qmd_files(output_dir)
-    print(f"Found QMD files: {qmd_files}")
-    
-    # Add to template context
-    env.globals['qmd_files'] = qmd_files
-    
     # Start processing from root module
     if 'validmind' in data:
         # First pass: Generate module documentation
         process_module(data['validmind'], ['validmind'], env, data)
+        
+        print("\nAbout to call find_qmd_files()")
+        qmd_files = find_qmd_files(output_dir)
+        print(f"Found QMD files: {qmd_files}")
+        
+        # Add to template context
+        env.globals['qmd_files'] = qmd_files
         
         # Second pass: Collect all documented items
         documented_items = collect_documented_items(

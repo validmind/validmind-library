@@ -36,15 +36,21 @@ website:
       # All module documentation pages
       - text: "Submodules"
       - text: "datasets"
-        file: validmind/datasets.qmd
+        file: reference/validmind/datasets.qmd
+        contents:
+          - reference/validmind/datasets/**
       - text: "errors"
-        file: validmind/errors.qmd
+        file: reference/validmind/errors.qmd
       - text: "test_suites"
-        file: validmind/test_suites.qmd
+        file: reference/validmind/test_suites.qmd
+        contents:
+          - reference/validmind/test_suites/**
       - text: "tests"
-        file: validmind/tests.qmd
+        file: reference/validmind/tests.qmd
+        contents:
+          - reference/validmind/tests/**
       - text: "unit_metrics"
-        file: validmind/unit_metrics.qmd
+        file: reference/validmind/unit_metrics.qmd
       - text: "vm_models"
-        file: validmind/vm_models.qmd
+        file: reference/validmind/vm_models.qmd
  

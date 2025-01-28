@@ -19,15 +19,12 @@ website:
       - text: "Submodules"
       {% for member in module.members | sort_members %}
       {% if is_public(member, module, full_data, is_root) and member.kind == "module" %}
-      - text: "{{ member.name }}"
-        file: validmind/{{ member.name }}.qmd
-        {% set module_files = qmd_files.get(member.name, []) %}
-        {% if module_files %}
+      {% set module_name = member.name %}
+      - text: "{{ module_name }}"
+        file: reference/validmind/{{ module_name }}.qmd
+        {% if module_name in ['datasets', 'test_suites', 'tests'] %}
         contents:
-        {% for file in module_files %}
-        - text: "{{ file.split('/')[-1].replace('.qmd', '') }}"
-          file: {{ file }}
-        {% endfor %}
+          - reference/validmind/{{ module_name }}/**
         {% endif %}
       {% endif %}
       {% endfor %} 
