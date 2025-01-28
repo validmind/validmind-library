@@ -15,6 +15,15 @@
         {# Parameters #}
         {%- if docstring.parsed.params -%}
             {%- set _ = sections.append("\n**Parameters**") -%}
+            {# Debug info #}
+            {%- set _ = sections.append("\nDEBUG:") -%}
+            {%- for param in docstring.parsed.params -%}
+                {%- set _ = sections.append("- arg_name: " ~ param.arg_name|string) -%}
+                {%- set _ = sections.append("- type_name: " ~ param.type_name|string) -%}
+                {%- set _ = sections.append("- description: " ~ param.description|string) -%}
+                {%- set _ = sections.append("---") -%}
+            {%- endfor -%}
+            {# Original parameter processing #}
             {%- for param in docstring.parsed.params -%}
                 {%- if param.arg_name and param.description -%}
                     {%- set desc = param.description | trim -%}
@@ -22,7 +31,11 @@
                         {%- set desc = desc[:-1] ~ ')' -%}
                     {%- endif -%}
                     {%- if param.type_name -%}
-                        {%- set _ = sections.append("- **" ~ param.arg_name ~ "** (" ~ param.type_name ~ "): " ~ desc) -%}
+                        {%- set type_info = param.type_name -%}
+                        {%- if type_info.endswith(')') and not type_info.startswith('(') -%}
+                            {%- set type_info = '(' ~ type_info -%}
+                        {%- endif -%}
+                        {%- set _ = sections.append("- **" ~ param.arg_name ~ "** " ~ type_info ~ ": " ~ desc) -%}
                     {%- else -%}
                         {%- set _ = sections.append("- **" ~ param.arg_name ~ "**: " ~ desc) -%}
                     {%- endif -%}

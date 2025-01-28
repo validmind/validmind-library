@@ -15,8 +15,22 @@ Preprocess boolean columns.
 
 **Parameters**
 
-- **(pandas.DataFrame)**: Dataframe to preprocess. columns
-- **(list)**: List of columns to preprocess.
+DEBUG:
+
+- arg_name: df
+- type_name: pandas.DataFrame
+- description: Dataframe to preprocess.
+
+______________________________________________________________________
+
+- arg_name: columns
+- type_name: list
+- description: List of columns to preprocess.
+
+______________________________________________________________________
+
+- **df** pandas.DataFrame: Dataframe to preprocess.
+- **columns** list: List of columns to preprocess.
 
 **Returns**
 
@@ -33,8 +47,22 @@ Preprocess categorical columns.
 
 **Parameters**
 
-- **(pandas.DataFrame)**: Dataframe to preprocess. columns
-- **(list)**: List of columns to preprocess.
+DEBUG:
+
+- arg_name: df
+- type_name: pandas.DataFrame
+- description: Dataframe to preprocess.
+
+______________________________________________________________________
+
+- arg_name: columns
+- type_name: list
+- description: List of columns to preprocess.
+
+______________________________________________________________________
+
+- **df** pandas.DataFrame: Dataframe to preprocess.
+- **columns** list: List of columns to preprocess.
 
 **Returns**
 
@@ -51,8 +79,22 @@ Preprocess numerical columns.
 
 **Parameters**
 
-- **(pandas.DataFrame)**: Dataframe to preprocess. columns
-- **(list)**: List of columns to preprocess.
+DEBUG:
+
+- arg_name: df
+- type_name: pandas.DataFrame
+- description: Dataframe to preprocess.
+
+______________________________________________________________________
+
+- arg_name: columns
+- type_name: list
+- description: List of columns to preprocess.
+
+______________________________________________________________________
+
+- **df** pandas.DataFrame: Dataframe to preprocess.
+- **columns** list: List of columns to preprocess.
 
 **Returns**
 

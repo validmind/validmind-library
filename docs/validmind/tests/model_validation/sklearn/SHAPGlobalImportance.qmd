@@ -26,6 +26,26 @@ Plots two types of SHAP global importance (SHAP).
 
 **Parameters**
 
+DEBUG:
+
+- arg_name: type\_
+- type_name: None
+- description: The type of SHAP plot to generate. Must be "mean" or "summary".
+
+______________________________________________________________________
+
+- arg_name: shap_values
+- type_name: None
+- description: The SHAP values to plot.
+
+______________________________________________________________________
+
+- arg_name: x_test
+- type_name: None
+- description: The test data used to generate the SHAP values.
+
+______________________________________________________________________
+
 - **type\_**: The type of SHAP plot to generate. Must be "mean" or "summary".
 - **shap_values**: The SHAP values to plot.
 - **x_test**: The test data used to generate the SHAP values.
@@ -45,6 +65,20 @@ def select_shap_values(
 Selects SHAP values for binary or multiclass classification. For regression models, returns the SHAP values directly as there are no classes.
 
 **Parameters**
+
+DEBUG:
+
+- arg_name: shap_values
+- type_name: None
+- description: The SHAP values returned by the SHAP explainer. For multiclass classification, this will be a list where each element corresponds to a class. For regression, this will be a single array of SHAP values.
+
+______________________________________________________________________
+
+- arg_name: class_of_interest
+- type_name: None
+- description: The class index for which to retrieve SHAP values. If None (default), the function will assume binary classification and use class 1 by default.
+
+______________________________________________________________________
 
 - **shap_values**: The SHAP values returned by the SHAP explainer. For multiclass classification, this will be a list where each element corresponds to a class. For regression, this will be a single array of SHAP values.
 - **class_of_interest**: The class index for which to retrieve SHAP values. If None (default), the function will assume binary classification and use class 1 by default.

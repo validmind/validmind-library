@@ -303,37 +303,14 @@ def try_parse_docstring(docstring: str) -> Any:
     # Convert escaped newlines to actual newlines
     docstring = docstring.replace('\\n', '\n')
     
-    # Check for Google style markers
-    google_markers = ['Args:', 'Returns:', 'Raises:', 'Yields:', 'Example:']
-    is_google = any(marker in docstring for marker in google_markers)
-    
-    # Check for RST style markers
-    rst_markers = [':param', ':return:', ':raises:', ':yields:']
-    is_rst = any(marker in docstring for marker in rst_markers)
-    
-    if is_google:
-        formatted = format_google_docstring(docstring)
-        try:
-            parsed = parse(formatted)
-            return parsed
-        except Exception:
-            pass
-    
-    if is_rst:
-        formatted = format_rst_docstring(docstring)
-        try:
-            parsed = parse(formatted, style=Style.REST)
-            return parsed
-        except Exception:
-            pass
-    
-    # If no style detected or parsing failed, try both as fallback
+    # Try Google style first
     try:
-        return parse(docstring)
-    except:
+        return parse(docstring, style=Style.GOOGLE)
+    except Exception:
+        # Fallback to RST style
         try:
             return parse(docstring, style=Style.REST)
-        except:
+        except Exception:
             return None
 
 def parse_docstrings_recursively(data: Dict[str, Any]):
@@ -347,6 +324,7 @@ def parse_docstrings_recursively(data: Dict[str, Any]):
             else:
                 original = str(data['docstring'])
             
+            # Parse docstring once and store both original and parsed versions
             parsed = try_parse_docstring(original)
             data['docstring'] = {
                 'value': original,
@@ -485,6 +463,59 @@ def generate_docs(json_path: str, template_dir: str, output_dir: str):
         lint_markdown_files(output_dir)
     else:
         print("Error: No 'validmind' module found in JSON")
+
+def parse_docstring(docstring):
+    """Parse a docstring into its components."""
+    if not docstring:
+        return None
+    try:
+        # Pre-process docstring to reconstruct original format
+        lines = docstring.split('\n')
+        processed_lines = []
+        in_args = False
+        current_param = []
+        
+        for line in lines:
+            line = line.strip()
+            # Check if we're in the Args section
+            if line.startswith('Args:'):
+                in_args = True
+                processed_lines.append(line)
+                continue
+                
+            if in_args and line:
+                # Fix mangled parameter lines like "optional): The test suite name..."
+                if line.startswith('optional)'):
+                    # Extract the actual parameter name from the description
+                    desc_parts = line.split(':', 1)[1].strip().split('(')
+                    if len(desc_parts) > 1:
+                        param_name = desc_parts[1].split(',')[0].strip()
+                        desc = desc_parts[0].strip()
+                        line = f"    {param_name} (str, optional): {desc}"
+                processed_lines.append(line)
+            else:
+                processed_lines.append(line)
+                
+        processed_docstring = '\n'.join(processed_lines)
+        return parse(processed_docstring, style=Style.GOOGLE)
+    except Exception as e:
+        # Fallback to just returning the raw docstring
+        return {'value': docstring}
+
+def debug_docstring_state(stage: str, docstring: Any):
+    """Debug helper to track docstring transformations."""
+    print(f"\n=== {stage} ===")
+    if isinstance(docstring, dict):
+        if 'value' in docstring:
+            print("Value:", docstring['value'][:200] + "..." if len(docstring['value']) > 200 else docstring['value'])
+        if 'parsed' in docstring and docstring['parsed']:
+            print("\nParsed params:")
+            for param in docstring['parsed'].params:
+                print(f"- arg_name: {param.arg_name}")
+                print(f"  type_name: {param.type_name}")
+                print(f"  description: {param.description}")
+    else:
+        print(docstring[:200] + "..." if len(str(docstring)) > 200 else docstring)
 
 if __name__ == '__main__':
     generate_docs(

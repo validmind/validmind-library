@@ -53,8 +53,34 @@ Gets a TestSuite object for the current project or a specific test suite This fu
 
 **Parameters**
 
-- **optional)**: The test suite name. If not passed, then the project's test suite will be returned. Defaults to None. section (str,
-- **optional)**: The section of the documentation template from which to retrieve the test suite. This only applies if test_suite_id is None. Defaults to None.
+DEBUG:
+
+- arg_name: test_suite_id
+- type_name: str
+- description: The test suite name. If not passed, then the project's test suite will be returned. Defaults to None.
+
+______________________________________________________________________
+
+- arg_name: section
+- type_name: str
+- description: The section of the documentation template from which to retrieve the test suite. This only applies if test_suite_id is None. Defaults to None.
+
+______________________________________________________________________
+
+- arg_name: args
+- type_name: None
+- description: Additional arguments to pass to the TestSuite
+
+______________________________________________________________________
+
+- arg_name: kwargs
+- type_name: None
+- description: Additional keyword arguments to pass to the TestSuite
+
+______________________________________________________________________
+
+- **test_suite_id** str: The test suite name. If not passed, then the project's test suite will be returned. Defaults to None.
+- **section** str: The section of the documentation template from which to retrieve the test suite. This only applies if test_suite_id is None. Defaults to None.
 - **args**: Additional arguments to pass to the TestSuite
 - **kwargs**: Additional keyword arguments to pass to the TestSuite
 
@@ -70,16 +96,56 @@ def init(
     monitoring: bool = False):
 ```
 
-Initializes the API client instances and calls the /ping endpoint to ensure the provided credentials are valid and we can connect to the ValidMind API. If the API key and secret are not provided, the client will attempt to retrieve them from the environment variables `VM_API_KEY` and `VM_API_SECRET`.
+Initializes the API client instances and calls the /ping endpoint to ensure the provided credentials are valid and we can connect to the ValidMind API.
+
+If the API key and secret are not provided, the client will attempt to retrieve them from the environment variables `VM_API_KEY` and `VM_API_SECRET`.
 
 **Parameters**
 
-- **optional)**: The project CUID. Alias for model. Defaults to None. [DEPRECATED] model (str,
-- **optional)**: The model CUID. Defaults to None. api_key (str,
-- **optional)**: The API key. Defaults to None. api_secret (str,
-- **optional)**: The API secret. Defaults to None. api_host (str,
-- **optional)**: The API host. Defaults to None. monitoring
-- **(bool)**: The ongoing monitoring flag. Defaults to False.
+DEBUG:
+
+- arg_name: project
+- type_name: str
+- description: The project CUID. Alias for model. Defaults to None. [DEPRECATED]
+
+______________________________________________________________________
+
+- arg_name: model
+- type_name: str
+- description: The model CUID. Defaults to None.
+
+______________________________________________________________________
+
+- arg_name: api_key
+- type_name: str
+- description: The API key. Defaults to None.
+
+______________________________________________________________________
+
+- arg_name: api_secret
+- type_name: str
+- description: The API secret. Defaults to None.
+
+______________________________________________________________________
+
+- arg_name: api_host
+- type_name: str
+- description: The API host. Defaults to None.
+
+______________________________________________________________________
+
+- arg_name: monitoring
+- type_name: bool
+- description: The ongoing monitoring flag. Defaults to False.
+
+______________________________________________________________________
+
+- **project** str: The project CUID. Alias for model. Defaults to None. [DEPRECATED]
+- **model** str: The model CUID. Defaults to None.
+- **api_key** str: The API key. Defaults to None.
+- **api_secret** str: The API secret. Defaults to None.
+- **api_host** str: The API host. Defaults to None.
+- **monitoring** bool: The ongoing monitoring flag. Defaults to False.
 
 **Raises**
 
@@ -105,31 +171,20 @@ def init_dataset(
     __log = True) -> VMDataset:
 ```
 
-Initializes a VM Dataset, which can then be passed to other functions that can perform additional analysis and tests on the data. This function also ensures we are reading a valid dataset type. The following dataset types are supported:
+Initializes a VM Dataset, which can then be passed to other functions that can perform additional analysis and tests on the data. This function also ensures we are reading a valid dataset type.
+
+The following dataset types are supported:
 
 - Pandas DataFrame
 - Polars DataFrame
 - Numpy ndarray
 - Torch TensorDataset
 
-**Parameters**
+Args: dataset : dataset from various python libraries model (VMModel): ValidMind model object targets (vm.vm.DatasetTargets): A list of target variables target_column (str): The name of the target column in the dataset feature_columns (list): A list of names of feature columns in the dataset extra_columns (dictionary): A dictionary containing the names of the prediction_column and group_by_columns in the dataset class_labels (dict): A list of class labels for classification problems type (str): The type of dataset (one of DATASET_TYPES) input_id (str): The input ID for the dataset (e.g. "my_dataset"). By default, this will be set to `dataset` but if you are passing this dataset as a test input using some other key than `dataset`, then you should set this to the same key.
 
-- **(VMModel)**: ValidMind model object targets
-- **(vm.vm.DatasetTargets)**: A list of target variables target_column
-- **(str)**: The name of the target column in the dataset feature_columns
-- **(list)**: A list of names of feature columns in the dataset extra_columns
-- **(dictionary)**: A dictionary containing the names of the prediction_column and group_by_columns in the dataset class_labels
-- **(dict)**: A list of class labels for classification problems type
-- **(str)**: The type of dataset (one of DATASET_TYPES) input_id
-- **(str)**: The input ID for the dataset (e.g. "my_dataset"). By default, this will be set to `dataset` but if you are passing this dataset as a test input using some other key than `dataset`, then you should set this to the same key.
+Raises: ValueError: If the dataset type is not supported
 
-**Returns**
-
-- A VM Dataset instance
-
-**Raises**
-
-- **ValueError**: If the dataset type is not supported
+Returns: vm.vm.Dataset: A VM Dataset instance
 
 ### init_model[()]{.muted}
 
@@ -147,10 +202,42 @@ Initializes a VM Model, which can then be passed to other functions that can per
 
 **Parameters**
 
-- **model**: A trained model or VMModel instance input_id
-- **(str)**: The input ID for the model (e.g. "my_model"). By default, this will be set to `model` but if you are passing this model as a test input using some other key than `model`, then you should set this to the same key. attributes
-- **(dict)**: A dictionary of model attributes predict_fn
-- **(callable)**: A function that takes an input and returns a prediction
+DEBUG:
+
+- arg_name: model
+- type_name: None
+- description: A trained model or VMModel instance
+
+______________________________________________________________________
+
+- arg_name: input_id
+- type_name: str
+- description: The input ID for the model (e.g. "my_model"). By default, this will be set to `model` but if you are passing this model as a test input using some other key than `model`, then you should set this to the same key.
+
+______________________________________________________________________
+
+- arg_name: attributes
+- type_name: dict
+- description: A dictionary of model attributes
+
+______________________________________________________________________
+
+- arg_name: predict_fn
+- type_name: callable
+- description: A function that takes an input and returns a prediction
+
+______________________________________________________________________
+
+- arg_name: \*\*kwargs
+- type_name: None
+- description: Additional arguments to pass to the model
+
+______________________________________________________________________
+
+- **model**: A trained model or VMModel instance
+- **input_id** str: The input ID for the model (e.g. "my_model"). By default, this will be set to `model` but if you are passing this model as a test input using some other key than `model`, then you should set this to the same key.
+- **attributes** dict: A dictionary of model attributes
+- **predict_fn** callable: A function that takes an input and returns a prediction
 - \*\***kwargs**: Additional arguments to pass to the model
 
 **Returns**
@@ -174,12 +261,28 @@ Initializes a VM Model for an R model R models must be saved to disk and the fil
 - LogisticRegression `glm` model in R: saved as an RDS file with `saveRDS`
 - LinearRegression `lm` model in R: saved as an RDS file with `saveRDS`
 - XGBClassifier: saved as a .json or .bin file with `xgb.save`
-- XGBRegressor: saved as a .json or .bin file with `xgb.save` LogisticRegression and LinearRegression models are converted to sklearn models by extracting the coefficients and intercept from the R model. XGB models are loaded using the xgboost since xgb models saved in .json or .bin format can be loaded directly with either Python or R
+- XGBRegressor: saved as a .json or .bin file with `xgb.save`
+
+LogisticRegression and LinearRegression models are converted to sklearn models by extracting the coefficients and intercept from the R model. XGB models are loaded using the xgboost since xgb models saved in .json or .bin format can be loaded directly with either Python or R
 
 **Parameters**
 
-- **(str)**: The path to the R model saved as an RDS or XGB file model_type
-- **(str)**: The type of the model (one of R_MODEL_TYPES)
+DEBUG:
+
+- arg_name: model_path
+- type_name: str
+- description: The path to the R model saved as an RDS or XGB file
+
+______________________________________________________________________
+
+- arg_name: model_type
+- type_name: str
+- description: The type of the model (one of R_MODEL_TYPES)
+
+______________________________________________________________________
+
+- **model_path** str: The path to the R model saved as an RDS or XGB file
+- **model_type** str: The type of the model (one of R_MODEL_TYPES)
 
 **Returns**
 
@@ -201,12 +304,50 @@ Logs a unit metric Unit metrics are key-value pairs where the key is the metric 
 
 **Parameters**
 
-- **(str)**: The metric key value
-- **(float)**: The metric value inputs (list,
-- **optional)**: A list of input IDs that were used to compute the metric. params (dict,
-- **optional)**: Dictionary of parameters used to compute the metric. recorded_at (str,
-- **optional)**: The timestamp of the metric. Server will use current time if not provided. thresholds (dict,
-- **optional)**: Dictionary of thresholds for the metric.
+DEBUG:
+
+- arg_name: key
+- type_name: str
+- description: The metric key
+
+______________________________________________________________________
+
+- arg_name: value
+- type_name: float
+- description: The metric value
+
+______________________________________________________________________
+
+- arg_name: inputs
+- type_name: list
+- description: A list of input IDs that were used to compute the metric.
+
+______________________________________________________________________
+
+- arg_name: params
+- type_name: dict
+- description: Dictionary of parameters used to compute the metric.
+
+______________________________________________________________________
+
+- arg_name: recorded_at
+- type_name: str
+- description: The timestamp of the metric. Server will use current time if not provided.
+
+______________________________________________________________________
+
+- arg_name: thresholds
+- type_name: dict
+- description: Dictionary of thresholds for the metric.
+
+______________________________________________________________________
+
+- **key** str: The metric key
+- **value** float: The metric value
+- **inputs** list: A list of input IDs that were used to compute the metric.
+- **params** dict: Dictionary of parameters used to compute the metric.
+- **recorded_at** str: The timestamp of the metric. Server will use current time if not provided.
+- **thresholds** dict: Dictionary of thresholds for the metric.
 
 ### preview_template[()]{.muted}
 
@@ -246,10 +387,48 @@ Collect and run all the tests associated with a template This function will anal
 
 **Parameters**
 
-- **optional)**: The section(s) to preview. Defaults to None. send (bool,
-- **optional)**: Whether to send the results to the ValidMind API. Defaults to True. fail_fast (bool,
-- **optional)**: Whether to stop running tests after the first failure. Defaults to False. inputs (dict,
-- **optional)**: A dictionary of test inputs to pass to the TestSuite
+DEBUG:
+
+- arg_name: section
+- type_name: str or list
+- description: The section(s) to preview. Defaults to None.
+
+______________________________________________________________________
+
+- arg_name: send
+- type_name: bool
+- description: Whether to send the results to the ValidMind API. Defaults to True.
+
+______________________________________________________________________
+
+- arg_name: fail_fast
+- type_name: bool
+- description: Whether to stop running tests after the first failure. Defaults to False.
+
+______________________________________________________________________
+
+- arg_name: inputs
+- type_name: dict
+- description: A dictionary of test inputs to pass to the TestSuite
+
+______________________________________________________________________
+
+- arg_name: config
+- type_name: None
+- description: A dictionary of test parameters to override the defaults
+
+______________________________________________________________________
+
+- arg_name: \*\*kwargs
+- type_name: None
+- description: backwards compatibility for passing in test inputs using keyword arguments
+
+______________________________________________________________________
+
+- **section** str or list: The section(s) to preview. Defaults to None.
+- **send** bool: Whether to send the results to the ValidMind API. Defaults to True.
+- **fail_fast** bool: Whether to stop running tests after the first failure. Defaults to False.
+- **inputs** dict: A dictionary of test inputs to pass to the TestSuite
 - **config**: A dictionary of test parameters to override the defaults
 - \*\***kwargs**: backwards compatibility for passing in test inputs using keyword arguments
 
@@ -277,11 +456,49 @@ High Level function for running a test suite This function provides a high level
 
 **Parameters**
 
-- **(str)**: The test suite name (e.g. 'classifier_full_suite') config (dict,
-- **optional)**: A dictionary of parameters to pass to the tests in the test suite. Defaults to None. send (bool,
-- **optional)**: Whether to post the test results to the API. send=False is useful for testing. Defaults to True. fail_fast (bool,
-- **optional)**: Whether to stop running tests after the first failure. Defaults to False. inputs (dict,
-- **optional)**: A dictionary of test inputs to pass to the TestSuite e.g. `model`, `dataset` `models` etc. These inputs will be accessible by any test in the test suite. See the test documentation or `vm.describe_test()` for more details on the inputs required for each.
+DEBUG:
+
+- arg_name: test_suite_id
+- type_name: str
+- description: The test suite name (e.g. 'classifier_full_suite')
+
+______________________________________________________________________
+
+- arg_name: config
+- type_name: dict
+- description: A dictionary of parameters to pass to the tests in the test suite. Defaults to None.
+
+______________________________________________________________________
+
+- arg_name: send
+- type_name: bool
+- description: Whether to post the test results to the API. send=False is useful for testing. Defaults to True.
+
+______________________________________________________________________
+
+- arg_name: fail_fast
+- type_name: bool
+- description: Whether to stop running tests after the first failure. Defaults to False.
+
+______________________________________________________________________
+
+- arg_name: inputs
+- type_name: dict
+- description: A dictionary of test inputs to pass to the TestSuite e.g. `model`, `dataset` `models` etc. These inputs will be accessible by any test in the test suite. See the test documentation or `vm.describe_test()` for more details on the inputs required for each.
+
+______________________________________________________________________
+
+- arg_name: \*\*kwargs
+- type_name: None
+- description: backwards compatibility for passing in test inputs using keyword arguments
+
+______________________________________________________________________
+
+- **test_suite_id** str: The test suite name (e.g. 'classifier_full_suite')
+- **config** dict: A dictionary of parameters to pass to the tests in the test suite. Defaults to None.
+- **send** bool: Whether to post the test results to the API. send=False is useful for testing. Defaults to True.
+- **fail_fast** bool: Whether to stop running tests after the first failure. Defaults to False.
+- **inputs** dict: A dictionary of test inputs to pass to the TestSuite e.g. `model`, `dataset` `models` etc. These inputs will be accessible by any test in the test suite. See the test documentation or `vm.describe_test()` for more details on the inputs required for each.
 - \*\***kwargs**: backwards compatibility for passing in test inputs using keyword arguments
 
 **Returns**
@@ -303,6 +520,14 @@ Decorator for specifying tags for a test.
 
 **Parameters**
 
+DEBUG:
+
+- arg_name: \*tags
+- type_name: None
+- description: The tags to apply to the test.
+
+______________________________________________________________________
+
 - \***tags**: The tags to apply to the test.
 
 ### tasks[()]{.muted}
@@ -316,6 +541,14 @@ Decorator for specifying the task types that a test is designed for.
 
 **Parameters**
 
+DEBUG:
+
+- arg_name: \*tasks
+- type_name: None
+- description: The task types that the test is designed for.
+
+______________________________________________________________________
+
 - \***tasks**: The task types that the test is designed for.
 
 ### test[()]{.muted}
@@ -325,16 +558,37 @@ def test(
     func_or_id):
 ```
 
-Decorator for creating and registering custom tests This decorator registers the function it wraps as a test function within ValidMind under the provided ID. Once decorated, the function can be run using the `validmind.tests.run_test` function. The function can take two different types of arguments:
+Decorator for creating and registering custom tests This decorator registers the function it wraps as a test function within ValidMind under the provided ID. Once decorated, the function can be run using the `validmind.tests.run_test` function.
+
+The function can take two different types of arguments:
 
 - Inputs: ValidMind model or dataset (or list of models/datasets). These arguments must use the following names: `model`, `models`, `dataset`, `datasets`.
-- Parameters: Any additional keyword arguments of any type (must have a default value) that can have any name. The function should return one of the following types:
+- Parameters: Any additional keyword arguments of any type (must have a default value) that can have any name.
+
+The function should return one of the following types:
+
 - Table: Either a list of dictionaries or a pandas DataFrame
 - Plot: Either a matplotlib figure or a plotly figure
 - Scalar: A single number (int or float)
-- Boolean: A single boolean value indicating whether the test passed or failed The function may also include a docstring. This docstring will be used and logged as the metric's description.
+- Boolean: A single boolean value indicating whether the test passed or failed
+
+The function may also include a docstring. This docstring will be used and logged as the metric's description.
 
 **Parameters**
+
+DEBUG:
+
+- arg_name: func
+- type_name: None
+- description: The function to decorate
+
+______________________________________________________________________
+
+- arg_name: test_id
+- type_name: None
+- description: The identifier for the metric. If not provided, the function name is used.
+
+______________________________________________________________________
 
 - **func**: The function to decorate
 - **test_id**: The identifier for the metric. If not provided, the function name is used.

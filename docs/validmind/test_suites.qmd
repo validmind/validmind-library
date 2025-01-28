@@ -48,7 +48,15 @@ Convert a test ID to a human-readable name.
 
 **Parameters**
 
-- **(str)**: The test identifier, typically in CamelCase or snake_case.
+DEBUG:
+
+- arg_name: test_id
+- type_name: str
+- description: The test identifier, typically in CamelCase or snake_case.
+
+______________________________________________________________________
+
+- **test_id** str: The test identifier, typically in CamelCase or snake_case.
 
 **Returns**
 
@@ -65,6 +73,20 @@ def describe_suite(
 Describes a Test Suite by ID
 
 **Parameters**
+
+DEBUG:
+
+- arg_name: test_suite_id
+- type_name: None
+- description: Test Suite ID
+
+______________________________________________________________________
+
+- arg_name: verbose
+- type_name: None
+- description: If True, describe all plans and tests in the Test Suite
+
+______________________________________________________________________
 
 - **test_suite_id**: Test Suite ID
 - **verbose**: If True, describe all plans and tests in the Test Suite
