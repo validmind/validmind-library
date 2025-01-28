@@ -418,15 +418,25 @@ def find_qmd_files(base_path: str) -> Dict[str, List[str]]:
     base_path = os.path.abspath(base_path)
     validmind_path = os.path.join(base_path, 'validmind')
     print(f"Looking in: {validmind_path}")
+    print(f"Path exists: {os.path.exists(validmind_path)}")
+    print(f"Is directory: {os.path.isdir(validmind_path)}")
+    print(f"Directory contents: {os.listdir(validmind_path)}")
     
     qmd_files = {}
     
     # Debug: Print full directory tree
+    print("\nWalking directory tree:")
     for root, dirs, files in os.walk(validmind_path, followlinks=True):
+        print(f"\nDirectory: {root}")
+        print(f"  Is directory: {os.path.isdir(root)}")
+        print(f"  Directory exists: {os.path.exists(root)}")
+        print(f"  Direct contents: {os.listdir(root)}")
+        print(f"  Subdirs from walk: {dirs}")
+        print(f"  Files from walk: {files}")
+        print(f"  QMD files: {[f for f in files if f.endswith('.qmd')]}")
+        
         rel_path = os.path.relpath(root, base_path)
-        print(f"\nDirectory: {rel_path}")
-        print(f"  Subdirs: {dirs}")
-        print(f"  Files: {[f for f in files if f.endswith('.qmd')]}")
+        print(f"  Relative path: {rel_path}")
         
         # Get module name from the filename instead of path
         for file in files:
