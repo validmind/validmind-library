@@ -134,4 +134,4 @@ def StabilityAnalysisTranslation(
         mean_similarity_threshold,
     )
 
-    return result, RawData(original_perturbed_similarity=raw_data)
+    return *result, RawData(original_perturbed_similarity=raw_data)
