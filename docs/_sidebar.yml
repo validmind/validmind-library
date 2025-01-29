@@ -1,56 +1,59 @@
 website:
   sidebar:
-    - text: "ValidMind Library"
-      file: reference/validmind.qmd
+    - id: validmind-reference
+      title: "ValidMind Library"
       contents:
-      # Root level functions from validmind.qmd
-      - text: "__version__"
-        file: reference/validmind.qmd#__version__
-      - text: "get_test_suite()"
-        file: reference/validmind.html#get_test_suite
-      - text: "init()"
-        file: reference/validmind.html#init
-      - text: "init_dataset()"
-        file: reference/validmind.html#init_dataset
-      - text: "init_model()"
-        file: reference/validmind.html#init_model
-      - text: "init_r_model()"
-        file: reference/validmind.html#init_r_model
-      - text: "log_metric()"
-        file: reference/validmind.html#log_metric
-      - text: "preview_template()"
-        file: reference/validmind.html#preview_template
-      - text: "reload()"
-        file: reference/validmind.html#reload
-      - text: "run_documentation_tests()"
-        file: reference/validmind.html#run_documentation_tests
-      - text: "run_test_suite()"
-        file: reference/validmind.html#run_test_suite
-      - text: "tags()"
-        file: reference/validmind.html#tags
-      - text: "tasks()"
-        file: reference/validmind.html#tasks
-      - text: "test()"
-        file: reference/validmind.html#test
-
-      # All module documentation pages
-      - text: "Submodules"
-      - text: "datasets"
-        file: reference/validmind/datasets.qmd
-        contents:
-          - reference/validmind/datasets/**
-      - text: "errors"
-        file: reference/validmind/errors.qmd
-      - text: "test_suites"
-        file: reference/validmind/test_suites.qmd
-        contents:
-          - reference/validmind/test_suites/**
-      - text: "tests"
-        file: reference/validmind/tests.qmd
-        contents:
-          - reference/validmind/tests/**
-      - text: "unit_metrics"
-        file: reference/validmind/unit_metrics.qmd
-      - text: "vm_models"
-        file: reference/validmind/vm_models.qmd
+        - reference/validmind.qmd
+        - text: "---"
+        - text: "Python API"
+        # Root level functions from validmind.qmd
+        - text: "__version__"
+          file: reference/validmind.qmd#__version__
+        - text: "get_test_suite()"
+          file: reference/validmind.qmd#get_test_suite
+        - text: "init()"
+          file: reference/validmind.qmd#init
+        - text: "init_dataset()"
+          file: reference/validmind.qmd#init_dataset
+        - text: "init_model()"
+          file: reference/validmind.qmd#init_model
+        - text: "init_r_model()"
+          file: reference/validmind.qmd#init_r_model
+        - text: "log_metric()"
+          file: reference/validmind.qmd#log_metric
+        - text: "preview_template()"
+          file: reference/validmind.qmd#preview_template
+        - text: "reload()"
+          file: reference/validmind.qmd#reload
+        - text: "run_documentation_tests()"
+          file: reference/validmind.qmd#run_documentation_tests
+        - text: "run_test_suite()"
+          file: reference/validmind.qmd#run_test_suite
+        - text: "tags()"
+          file: reference/validmind.qmd#tags
+        - text: "tasks()"
+          file: reference/validmind.qmd#tasks
+        - text: "test()"
+          file: reference/validmind.qmd#test
+        # All module documentation pages
+        - text: "---"
+        - text: "Submodules"
+        - text: "datasets"
+          file: reference/validmind/datasets.qmd
+          contents:
+            - reference/validmind/datasets/**
+        - text: "errors"
+          file: reference/validmind/errors.qmd
+        - text: "test_suites"
+          file: reference/validmind/test_suites.qmd
+          contents:
+            - reference/validmind/test_suites/**
+        - text: "tests"
+          file: reference/validmind/tests.qmd
+          contents:
+            - reference/validmind/tests/**
+        - text: "unit_metrics"
+          file: reference/validmind/unit_metrics.qmd
+        - text: "vm_models"
+          file: reference/validmind/vm_models.qmd
  

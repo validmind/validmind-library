@@ -2,6 +2,7 @@
 title: MinimumF1Score
 toc-depth: 3
 toc-expand: 3
+sidebar: validmind-reference
 ---
 
 ## MinimumF1Score[()]{.muted}

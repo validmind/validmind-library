@@ -4,6 +4,7 @@ toc-depth: 3
 toc-expand: 3
 aliases:
   - index.html
+sidebar: validmind-reference
 ---
 
 The ValidMind Library is a suite of developer tools and methods designed to automate the documentation and validation of your models. Designed to be model agnostic, the ValidMind Library provides all the standard functionality without requiring you to rewrite any functions as long as your model is built in Python.

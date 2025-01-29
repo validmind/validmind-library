@@ -2,6 +2,7 @@
 title: statsmodels
 toc-depth: 3
 toc-expand: 3
+sidebar: validmind-reference
 ---
 
 - [AutoARIMA](statsmodels/AutoARIMA.qmd)

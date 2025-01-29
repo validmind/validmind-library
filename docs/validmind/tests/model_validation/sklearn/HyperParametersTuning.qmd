@@ -2,6 +2,7 @@
 title: HyperParametersTuning
 toc-depth: 3
 toc-expand: 3
+sidebar: validmind-reference
 ---
 
 ## custom_recall[()]{.muted}

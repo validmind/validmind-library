@@ -2,6 +2,7 @@
 title: customer_churn
 toc-depth: 3
 toc-expand: 3
+sidebar: validmind-reference
 ---
 
 ## simple_preprocess_booleans[()]{.muted}

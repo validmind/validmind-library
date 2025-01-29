@@ -2,6 +2,7 @@
 title: Punctuations
 toc-depth: 3
 toc-expand: 3
+sidebar: validmind-reference
 ---
 
 Metrics functions for any Pandas-compatible datasets

@@ -2,6 +2,7 @@
 title: credit_risk
 toc-depth: 3
 toc-expand: 3
+sidebar: validmind-reference
 ---
 
 Entrypoint for credit risk datasets.

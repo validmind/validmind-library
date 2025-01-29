@@ -2,6 +2,7 @@
 title: TimeSeriesR2SquareBySegments
 toc-depth: 3
 toc-expand: 3
+sidebar: validmind-reference
 ---
 
 ## TimeSeriesR2SquareBySegments[()]{.muted}

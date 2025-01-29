@@ -2,6 +2,7 @@
 title: statsutils
 toc-depth: 3
 toc-expand: 3
+sidebar: validmind-reference
 ---
 
 ## adj_r2_score[()]{.muted}

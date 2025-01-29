@@ -2,6 +2,7 @@
 title: TabularDescriptionTables
 toc-depth: 3
 toc-expand: 3
+sidebar: validmind-reference
 ---
 
 ## get_categorical_columns[()]{.muted}

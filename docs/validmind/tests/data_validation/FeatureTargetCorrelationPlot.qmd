@@ -2,6 +2,7 @@
 title: FeatureTargetCorrelationPlot
 toc-depth: 3
 toc-expand: 3
+sidebar: validmind-reference
 ---
 
 ## FeatureTargetCorrelationPlot[()]{.muted}

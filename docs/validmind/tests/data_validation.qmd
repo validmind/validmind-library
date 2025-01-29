@@ -2,6 +2,7 @@
 title: data_validation
 toc-depth: 3
 toc-expand: 3
+sidebar: validmind-reference
 ---
 
 - [ACFandPACFPlot](data_validation/ACFandPACFPlot.qmd)

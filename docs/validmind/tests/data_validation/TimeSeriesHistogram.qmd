@@ -2,6 +2,7 @@
 title: TimeSeriesHistogram
 toc-depth: 3
 toc-expand: 3
+sidebar: validmind-reference
 ---
 
 ## get_logger[()]{.muted}

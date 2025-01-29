@@ -2,6 +2,7 @@
 title: IQROutliersBarPlot
 toc-depth: 3
 toc-expand: 3
+sidebar: validmind-reference
 ---
 
 ## compute_outliers[()]{.muted}

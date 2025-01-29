@@ -2,6 +2,7 @@
 title: nlp
 toc-depth: 3
 toc-expand: 3
+sidebar: validmind-reference
 ---
 
 Example datasets that can be used with the ValidMind Library.

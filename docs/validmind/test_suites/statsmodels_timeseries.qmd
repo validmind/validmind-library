@@ -2,6 +2,7 @@
 title: statsmodels_timeseries
 toc-depth: 3
 toc-expand: 3
+sidebar: validmind-reference
 ---
 
 Time Series Test Suites from statsmodels

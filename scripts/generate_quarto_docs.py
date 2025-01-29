@@ -123,11 +123,11 @@ def collect_documented_items(module: Dict[str, Any], path: List[str], full_data:
             continue
             
         if member['kind'] in ('function', 'class'):
-            # For root module items, always use reference/validmind.html path
+            # For root module items, always use reference/validmind.qmd path
             file_prefix = 'reference/validmind' if is_root else file_path
             module_items.append({
                 'text': f"{member['name']}()" if member['kind'] == 'function' else member['name'],
-                'file': f"{file_prefix}.html#{member['name']}"
+                'file': f"{file_prefix}.qmd#{member['name']}"
             })
         elif member['kind'] == 'alias':
             target = resolve_alias(member, full_data)
@@ -135,7 +135,7 @@ def collect_documented_items(module: Dict[str, Any], path: List[str], full_data:
                 file_prefix = 'reference/validmind' if is_root else file_path
                 module_items.append({
                     'text': f"{member['name']}()",
-                    'file': f"{file_prefix}.html#{member['name']}"
+                    'file': f"{file_prefix}.qmd#{member['name']}"
                 })
     
     if module_items:

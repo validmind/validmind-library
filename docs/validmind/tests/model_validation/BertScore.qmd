@@ -2,6 +2,7 @@
 title: BertScore
 toc-depth: 3
 toc-expand: 3
+sidebar: validmind-reference
 ---
 
 ## validate_prediction[()]{.muted}

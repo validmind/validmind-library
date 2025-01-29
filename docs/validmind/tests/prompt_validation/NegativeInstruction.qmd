@@ -2,6 +2,7 @@
 title: NegativeInstruction
 toc-depth: 3
 toc-expand: 3
+sidebar: validmind-reference
 ---
 
 ## call_model[()]{.muted}

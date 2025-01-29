@@ -2,6 +2,7 @@
 title: lending_club_bias
 toc-depth: 3
 toc-expand: 3
+sidebar: validmind-reference
 ---
 
 ## compute_scores[()]{.muted}

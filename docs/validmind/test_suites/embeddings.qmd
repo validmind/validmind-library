@@ -2,6 +2,7 @@
 title: embeddings
 toc-depth: 3
 toc-expand: 3
+sidebar: validmind-reference
 ---
 
 Test suites for embeddings models Ideal setup is to have the API client to read a custom test suite from the project's configuration

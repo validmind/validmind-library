@@ -2,6 +2,7 @@
 title: TextDescription
 toc-depth: 3
 toc-expand: 3
+sidebar: validmind-reference
 ---
 
 ## create_metrics_df[()]{.muted}

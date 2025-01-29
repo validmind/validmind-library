@@ -2,6 +2,7 @@
 title: prompt_validation
 toc-depth: 3
 toc-expand: 3
+sidebar: validmind-reference
 ---
 
 - [ai_powered_test](prompt_validation/ai_powered_test.qmd)
