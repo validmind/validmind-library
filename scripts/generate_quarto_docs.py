@@ -200,7 +200,7 @@ def process_module(module: Dict[str, Any], path: List[str], env: Environment, fu
     
     # Track with full path and print full path
     full_path = os.path.join("docs", os.path.relpath(output_path, "docs"))
-    print(f"Wrote file: {full_path}")
+    # print(f"Wrote file: {full_path}")
     written_qmd_files[filename] = full_path
     
     # Process submodules
