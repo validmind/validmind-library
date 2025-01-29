@@ -18,14 +18,12 @@ def create_stability_analysis_result(
         original_embeddings, perturbed_embeddings
     ).diagonal()
 
-    # create a raw dataframe of the original, perturbed and similarity
-    raw_data = pd.DataFrame(
-        {
-            "original": original_embeddings,
-            "perturbed": perturbed_embeddings,
-            "similarity": similarities,
-        }
-    )
+    # Store raw data in a dictionary
+    raw_data = {
+        "original_embeddings": original_embeddings,
+        "perturbed_embeddings": perturbed_embeddings,
+        "similarities": similarities,
+    }
 
     mean = np.mean(similarities)
     passed = mean > mean_similarity_threshold
