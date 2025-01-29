@@ -378,4 +378,10 @@ def combine_results(
     combined_inputs = _combine_dict_values(combined_inputs)
     combined_params = _combine_dict_values(combined_params)
 
-    return combined_outputs, combined_inputs, combined_params
+    combined_raw_data = _combine_raw_data(results)
+
+    return (
+        (*combined_outputs, combined_raw_data),  # raw data is part of the output
+        combined_inputs,
+        combined_params,
+    )
