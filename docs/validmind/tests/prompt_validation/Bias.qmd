@@ -1,7 +1,5 @@
 ---
 title: Bias
-toc-depth: 3
-toc-expand: 3
 sidebar: validmind-reference
 ---
 

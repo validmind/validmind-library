@@ -2,9 +2,7 @@
 {% import "macros/types.jinja2" as types %}
 {% import "macros/navigation.jinja2" as nav %}
 ---
-title: {{ module.name }}
-toc-depth: 3
-toc-expand: 3
+title: {% if module.name == "validmind" %}ValidMind Library{% else %}{{ module.name }}{% endif +%}
 {% if module.name == "validmind" %}
 aliases:
   - index.html

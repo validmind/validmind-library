@@ -422,17 +422,17 @@ def generate_module_doc(module, full_data, env, output_dir):
 
 def find_qmd_files(base_path: str) -> Dict[str, List[str]]:
     """Find all .qmd files and their associated folders in docs/validmind."""
-    print("\nEntering find_qmd_files()")
-    print(f"\nFiles written during documentation generation (count: {len(written_qmd_files)}):")
-    for filename, path in written_qmd_files.items():
-        print(f"  {filename}: {path}")
+    # print("\nEntering find_qmd_files()")
+    # print(f"\nFiles written during documentation generation (count: {len(written_qmd_files)}):")
+    # for filename, path in written_qmd_files.items():
+    #     print(f"  {filename}: {path}")
     
     return written_qmd_files
 
 def generate_docs(json_path: str, template_dir: str, output_dir: str):
     """Generate documentation from JSON data using templates."""
-    print("\nEntering generate_docs()")
-    print(f"output_dir: {output_dir}")
+    # print("\nEntering generate_docs()")
+    # print(f"output_dir: {output_dir}")
     
     # Load JSON data
     with open(json_path) as f:

@@ -1,7 +1,5 @@
 ---
 title: twitter_covid_19
-toc-depth: 3
-toc-expand: 3
 sidebar: validmind-reference
 ---
 
