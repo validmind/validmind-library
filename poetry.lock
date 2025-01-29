@@ -213,6 +213,26 @@ test = ["anyio[trio]", "coverage[toml] (>=7)", "exceptiongroup (>=1.2.0)", "hypo
 trio = ["trio (>=0.26.1)"]
 
 [[package]]
+name = "anywidget"
+version = "0.9.13"
+description = "custom jupyter widgets made easy"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "anywidget-0.9.13-py3-none-any.whl", hash = "sha256:43d1658f1043b8c95cd350b2f5deccb123fd37810a36f656d6163aefe8163705"},
+    {file = "anywidget-0.9.13.tar.gz", hash = "sha256:c655455bf51f82182eb23c5947d37cc41f0b1ffacaf7e2b763147a2332cb3f07"},
+]
+
+[package.dependencies]
+ipywidgets = ">=7.6.0"
+psygnal = ">=0.8.1"
+typing-extensions = ">=4.2.0"
+
+[package.extras]
+dev = ["comm (>=0.1.0)", "watchfiles (>=0.18.0)"]
+test = ["ipython (<8.13)", "msgspec", "mypy (==1.10.0)", "pydantic", "pytest", "pytest-cov", "ruff"]
+
+[[package]]
 name = "appdirs"
 version = "1.4.4"
 description = "A small Python module for determining appropriate platform-specific dirs, e.g. a \"user data dir\"."
@@ -1351,8 +1371,11 @@ name = "docutils"
 version = "0.18.1"
 description = "Docutils -- Python Documentation Utilities"
 optional = false
-python-versions = "*"
-files = []
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+files = [
+    {file = "docutils-0.18.1-py2.py3-none-any.whl", hash = "sha256:23010f129180089fbcd3bc08cfefccb3b890b0050e1ca00c867036e9d161b98c"},
+    {file = "docutils-0.18.1.tar.gz", hash = "sha256:679987caf361a7539d76e584cbeddc311e3aee937877c87346f31debc63e9d06"},
+]
 
 [[package]]
 name = "entrypoints"
@@ -4281,8 +4304,8 @@ files = [
 [package.dependencies]
 numpy = [
     {version = ">=1.20.3", markers = "python_version < \"3.10\""},
-    {version = ">=1.23.2", markers = "python_version >= \"3.11\""},
     {version = ">=1.21.0", markers = "python_version >= \"3.10\" and python_version < \"3.11\""},
+    {version = ">=1.23.2", markers = "python_version >= \"3.11\""},
 ]
 python-dateutil = ">=2.8.2"
 pytz = ">=2020.1"
@@ -4900,6 +4923,45 @@ files = [
 [package.extras]
 dev = ["abi3audit", "black", "check-manifest", "coverage", "packaging", "pylint", "pyperf", "pypinfo", "pytest-cov", "requests", "rstcheck", "ruff", "sphinx", "sphinx_rtd_theme", "toml-sort", "twine", "virtualenv", "vulture", "wheel"]
 test = ["pytest", "pytest-xdist", "setuptools"]
+
+[[package]]
+name = "psygnal"
+version = "0.11.1"
+description = "Fast python callback/event system modeled after Qt Signals"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "psygnal-0.11.1-cp310-cp310-macosx_10_16_arm64.whl", hash = "sha256:8d9187700fc608abefeb287bf2e0980a26c62471921ffd1a3cd223ccc554181b"},
+    {file = "psygnal-0.11.1-cp310-cp310-macosx_10_16_x86_64.whl", hash = "sha256:cec87aee468a1fe564094a64bc3c30edc86ce34d7bb37ab69332c7825b873396"},
+    {file = "psygnal-0.11.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:7676e89225abc2f37ca7022c300ffd26fefaf21bdc894bc7c41dffbad5e969df"},
+    {file = "psygnal-0.11.1-cp310-cp310-musllinux_1_1_x86_64.whl", hash = "sha256:c392f638aac2cdc4f13fffb904455224ae9b4dbb2f26d7f3264e4208fee5334d"},
+    {file = "psygnal-0.11.1-cp311-cp311-macosx_10_16_arm64.whl", hash = "sha256:3c04baec10f882cdf784a7312e23892416188417ad85607e6d1de2e8a9e70709"},
+    {file = "psygnal-0.11.1-cp311-cp311-macosx_10_16_x86_64.whl", hash = "sha256:8f77317cbd11fbed5bfdd40ea41b4e551ee0cf37881cdbc325b67322af577485"},
+    {file = "psygnal-0.11.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:24e69ea57ee39e3677298f38a18828af87cdc0bf0aa64685d44259e608bae3ec"},
+    {file = "psygnal-0.11.1-cp311-cp311-musllinux_1_1_x86_64.whl", hash = "sha256:d77f1a71fe9859c0335c87d92afe1b17c520a4137326810e94351839342d8fc7"},
+    {file = "psygnal-0.11.1-cp312-cp312-macosx_10_16_arm64.whl", hash = "sha256:0b55cb42e468f3a7de75392520778604fef2bc518b7df36c639b35ce4ed92016"},
+    {file = "psygnal-0.11.1-cp312-cp312-macosx_10_16_x86_64.whl", hash = "sha256:c7dd3cf809c9c1127d90c6b11fbbd1eb2d66d512ccd4d5cab048786f13d11220"},
+    {file = "psygnal-0.11.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:885922a6e65ece9ff8ccf2b6810f435ca8067f410889f7a8fffb6b0d61421a0d"},
+    {file = "psygnal-0.11.1-cp312-cp312-musllinux_1_1_x86_64.whl", hash = "sha256:1c2388360a9ffcd1381e9b36d0f794287a270d58e69bf17658a194bbf86685c1"},
+    {file = "psygnal-0.11.1-cp38-cp38-macosx_10_16_arm64.whl", hash = "sha256:2deec4bf7adbb9e3ef0513ae8b9e98bb815eb62b76a7bf1986f1d6ed626c8784"},
+    {file = "psygnal-0.11.1-cp38-cp38-macosx_10_16_x86_64.whl", hash = "sha256:36cd667dd1d3e70e3fd970463a8571436e5ae58f02cc05a4a1669e6d8550d263"},
+    {file = "psygnal-0.11.1-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:dc260f19349485bd58e276e731cf8be40d8891cc6ff1c165762bd2c1b84f1ff7"},
+    {file = "psygnal-0.11.1-cp38-cp38-musllinux_1_1_x86_64.whl", hash = "sha256:fe70023fe4cf8bb6a0f27e89fd8f1cf715893dfb004b790937a0bc59d9071aab"},
+    {file = "psygnal-0.11.1-cp39-cp39-macosx_10_16_arm64.whl", hash = "sha256:c9dde42a2cdf34f9c5fe0cd7515e2ab1524e3207afb37d096733c7a3dcdf388a"},
+    {file = "psygnal-0.11.1-cp39-cp39-macosx_10_16_x86_64.whl", hash = "sha256:c05f474b297e2577506b354132c3fed054f0444ccce6d431f299d3750c2ede4b"},
+    {file = "psygnal-0.11.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:713dfb96a1315378ce9120376d975671ede3133de4985884a43d4b6b332faeee"},
+    {file = "psygnal-0.11.1-cp39-cp39-musllinux_1_1_x86_64.whl", hash = "sha256:09c75d21eb090e2ffafb32893bc5d104b98ed237ed64bebccb45cca759c7dcf4"},
+    {file = "psygnal-0.11.1-py3-none-any.whl", hash = "sha256:04255fe28828060a80320f8fda937c47bc0c21ca14f55a13eb7c494b165ea395"},
+    {file = "psygnal-0.11.1.tar.gz", hash = "sha256:f9b02ca246ab0adb108c4010b4a486e464f940543201074591e50370cd7b0cc0"},
+]
+
+[package.extras]
+dev = ["ipython", "mypy", "mypy-extensions", "pre-commit", "pyqt5", "pytest-mypy-plugins", "rich", "ruff", "typing-extensions"]
+docs = ["griffe (==0.25.5)", "mkdocs (==1.4.2)", "mkdocs-material (==8.5.10)", "mkdocs-minify-plugin", "mkdocs-spellcheck[all]", "mkdocstrings (==0.20.0)", "mkdocstrings-python (==0.8.3)"]
+proxy = ["wrapt"]
+pydantic = ["pydantic"]
+test = ["attrs", "dask", "msgspec", "numpy", "pydantic", "pyinstaller (>=4.0)", "pytest (>=6.0)", "pytest-cov", "toolz", "wrapt"]
+testqt = ["pytest-qt", "qtpy"]
 
 [[package]]
 name = "ptyprocess"
@@ -8069,4 +8131,4 @@ pytorch = ["torch"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8.1,<3.12"
-content-hash = "6c3c40ab7dbfe990a6c1b02c4c23a558e49230daaba554fd5571b337c8e0c033"
+content-hash = "c998f65816b0b08d89c839c0f2bb7c1474b12e753bcd4a9b1d6ec322fa5c18a4"
