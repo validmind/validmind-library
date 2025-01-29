@@ -3,7 +3,6 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 import numpy as np
-import pandas as pd
 import plotly.express as px
 from sklearn.metrics.pairwise import cosine_similarity
 
