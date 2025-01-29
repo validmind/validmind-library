@@ -194,6 +194,7 @@ def init(
     api_host: Optional[str] = None,
     model: Optional[str] = None,
     monitoring: bool = False,
+    generate_descriptions: Optional[bool] = None,
 ):
     """
     Initializes the API client instances and calls the /ping endpoint to ensure
@@ -209,7 +210,7 @@ def init(
         api_secret (str, optional): The API secret. Defaults to None.
         api_host (str, optional): The API host. Defaults to None.
         monitoring (bool): The ongoing monitoring flag. Defaults to False.
-
+        generate_descriptions (bool): Whether to use GenAI to generate test result descriptions. Defaults to True.
     Raises:
         ValueError: If the API key and secret are not provided
     """
@@ -234,6 +235,9 @@ def init(
     )
 
     _monitoring = monitoring
+
+    if generate_descriptions is not None:
+        os.environ["VALIDMIND_LLM_DESCRIPTIONS_ENABLED"] = str(generate_descriptions)
 
     reload()
 
