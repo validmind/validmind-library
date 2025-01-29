@@ -4,23 +4,24 @@
 
 import os
 
-from validmind.ai.utils import get_client_and_model
-from validmind.client_config import client_config
+from validmind.ai.utils import get_client_and_model, is_configured
 
 EMBEDDINGS_MODEL = "text-embedding-3-small"
 
 
 def get_ragas_config():
-    if not client_config.can_generate_llm_test_descriptions():
-        raise ValueError(
-            "LLM based descriptions are not enabled in the current configuration."
-        )
-
     # import here since its an optional dependency
     try:
         from langchain_openai import ChatOpenAI, OpenAIEmbeddings
     except ImportError:
         raise ImportError("Please run `pip install validmind[llm]` to use LLM tests")
+
+    if not is_configured():
+        raise ValueError(
+            "LLM is not configured. Please set an `OPENAI_API_KEY` environment variable "
+            "or ensure that you are connected to the ValidMind API and ValidMind AI is "
+            "enabled for your account."
+        )
 
     client, model = get_client_and_model()
     os.environ["OPENAI_API_BASE"] = str(client.base_url)
