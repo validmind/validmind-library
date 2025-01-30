@@ -32,7 +32,7 @@ After you have pasted the code snippet into your development source code and exe
 
 ## Python API
 
-### \_\_version\_\_
+### \\_\\_version\\_\\_
 
 ```python
 2.8.4
@@ -353,7 +353,7 @@ The function may also include a docstring. This docstring will be used and logge
 
 - The decorated function.
 
-## [class]{.muted} RawData
+### [class]{.muted} RawData
 
 ```python
 class RawData():
@@ -361,7 +361,7 @@ class RawData():
 
 Holds raw data for a test result
 
-### RawData[()]{.muted}
+#### RawData[()]{.muted}
 
 ```python
 def __init__(    self,
@@ -376,7 +376,7 @@ Create a new RawData object
 - **log** bool: If True, log the raw data to ValidMind
 - \*\***kwargs**: Keyword arguments to set as attributes e.g. `RawData(log=True, dataset_duplicates=df_duplicates)`
 
-### inspect[()]{.muted}
+#### inspect[()]{.muted}
 
 ```python
 def inspect(    self,
@@ -385,7 +385,7 @@ def inspect(    self,
 
 Inspect the raw data
 
-### serialize[()]{.muted}
+#### serialize[()]{.muted}
 
 ```python
 def serialize(    self):
