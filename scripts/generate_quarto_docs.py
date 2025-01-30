@@ -425,12 +425,6 @@ def get_child_files(files_dict: Dict[str, str], module_name: str) -> List[Dict[s
     prefix = f'docs/validmind/{module_name}/'
     directory_structure = {}
     
-    def ensure_reference_path(path: str) -> str:
-        """Ensure path starts with reference/"""
-        if path.startswith('validmind/'):
-            return f'reference/{path}'
-        return path
-    
     # First pass: organize files by directory
     for filename, path in files_dict.items():
         if path.startswith(prefix) and path != f'docs/validmind/{module_name}.qmd':
@@ -444,14 +438,14 @@ def get_child_files(files_dict: Dict[str, str], module_name: str) -> List[Dict[s
                 if dir_name not in directory_structure:
                     directory_structure[dir_name] = {
                         'text': dir_name,
-                        'file': ensure_reference_path(rel_path)
+                        'file': f'reference/{rel_path}'  # Add reference/ prefix
                     }
             else:  # Nested file
                 dir_name = parts[0]
                 if dir_name not in directory_structure:
                     directory_structure[dir_name] = {
                         'text': dir_name,
-                        'file': ensure_reference_path(f'validmind/{module_name}/{dir_name}.qmd')
+                        'file': f'reference/validmind/{module_name}/{dir_name}.qmd'  # Add reference/ prefix
                     }
                 
                 # Add to contents if it's a child file
@@ -460,7 +454,7 @@ def get_child_files(files_dict: Dict[str, str], module_name: str) -> List[Dict[s
                 
                 directory_structure[dir_name]['contents'].append({
                     'text': Path(parts[-1]).stem,
-                    'file': ensure_reference_path(rel_path)
+                    'file': f'reference/{rel_path}'  # Add reference/ prefix
                 })
     
     # Sort children within each directory
