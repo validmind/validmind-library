@@ -41,17 +41,367 @@ website:
         - text: "datasets"
           file: reference/validmind/datasets.qmd
           contents:
-            - reference/validmind/datasets/**
+            - text: "classification"
+              file: validmind/datasets/classification.qmd
+              contents:
+                - text: "customer_churn"
+                  file: validmind/datasets/classification/customer_churn.qmd
+                - text: "taiwan_credit"
+                  file: validmind/datasets/classification/taiwan_credit.qmd
+            - text: "credit_risk"
+              file: validmind/datasets/credit_risk.qmd
+              contents:
+                - text: "lending_club_bias"
+                  file: validmind/datasets/credit_risk/lending_club_bias.qmd
+            - text: "nlp"
+              file: validmind/datasets/nlp.qmd
+              contents:
+                - text: "cnn_dailymail"
+                  file: validmind/datasets/nlp/cnn_dailymail.qmd
+                - text: "twitter_covid_19"
+                  file: validmind/datasets/nlp/twitter_covid_19.qmd
+            - text: "regression"
+              file: validmind/datasets/regression.qmd
+              contents:
+                - text: "fred"
+                  file: validmind/datasets/regression/fred.qmd
+                - text: "lending_club"
+                  file: validmind/datasets/regression/lending_club.qmd
         - text: "errors"
           file: reference/validmind/errors.qmd
         - text: "test_suites"
           file: reference/validmind/test_suites.qmd
           contents:
-            - reference/validmind/test_suites/**
+            - text: "classifier"
+              file: validmind/test_suites/classifier.qmd
+            - text: "cluster"
+              file: validmind/test_suites/cluster.qmd
+            - text: "embeddings"
+              file: validmind/test_suites/embeddings.qmd
+            - text: "llm"
+              file: validmind/test_suites/llm.qmd
+            - text: "parameters_optimization"
+              file: validmind/test_suites/parameters_optimization.qmd
+            - text: "regression"
+              file: validmind/test_suites/regression.qmd
+            - text: "statsmodels_timeseries"
+              file: validmind/test_suites/statsmodels_timeseries.qmd
+            - text: "summarization"
+              file: validmind/test_suites/summarization.qmd
+            - text: "tabular_datasets"
+              file: validmind/test_suites/tabular_datasets.qmd
+            - text: "text_data"
+              file: validmind/test_suites/text_data.qmd
+            - text: "time_series"
+              file: validmind/test_suites/time_series.qmd
         - text: "tests"
           file: reference/validmind/tests.qmd
           contents:
-            - reference/validmind/tests/**
+            - text: "data_validation"
+              file: validmind/tests/data_validation.qmd
+              contents:
+                - text: "ACFandPACFPlot"
+                  file: validmind/tests/data_validation/ACFandPACFPlot.qmd
+                - text: "ADF"
+                  file: validmind/tests/data_validation/ADF.qmd
+                - text: "AutoAR"
+                  file: validmind/tests/data_validation/AutoAR.qmd
+                - text: "AutoMA"
+                  file: validmind/tests/data_validation/AutoMA.qmd
+                - text: "AutoStationarity"
+                  file: validmind/tests/data_validation/AutoStationarity.qmd
+                - text: "BivariateScatterPlots"
+                  file: validmind/tests/data_validation/BivariateScatterPlots.qmd
+                - text: "BoxPierce"
+                  file: validmind/tests/data_validation/BoxPierce.qmd
+                - text: "ChiSquaredFeaturesTable"
+                  file: validmind/tests/data_validation/ChiSquaredFeaturesTable.qmd
+                - text: "ClassImbalance"
+                  file: validmind/tests/data_validation/ClassImbalance.qmd
+                - text: "CommonWords"
+                  file: validmind/tests/data_validation/nlp/CommonWords.qmd
+                - text: "DatasetDescription"
+                  file: validmind/tests/data_validation/DatasetDescription.qmd
+                - text: "DatasetSplit"
+                  file: validmind/tests/data_validation/DatasetSplit.qmd
+                - text: "DescriptiveStatistics"
+                  file: validmind/tests/data_validation/DescriptiveStatistics.qmd
+                - text: "DickeyFullerGLS"
+                  file: validmind/tests/data_validation/DickeyFullerGLS.qmd
+                - text: "Duplicates"
+                  file: validmind/tests/data_validation/Duplicates.qmd
+                - text: "EngleGrangerCoint"
+                  file: validmind/tests/data_validation/EngleGrangerCoint.qmd
+                - text: "FeatureTargetCorrelationPlot"
+                  file: validmind/tests/data_validation/FeatureTargetCorrelationPlot.qmd
+                - text: "Hashtags"
+                  file: validmind/tests/data_validation/nlp/Hashtags.qmd
+                - text: "HighCardinality"
+                  file: validmind/tests/data_validation/HighCardinality.qmd
+                - text: "HighPearsonCorrelation"
+                  file: validmind/tests/data_validation/HighPearsonCorrelation.qmd
+                - text: "IQROutliersBarPlot"
+                  file: validmind/tests/data_validation/IQROutliersBarPlot.qmd
+                - text: "IQROutliersTable"
+                  file: validmind/tests/data_validation/IQROutliersTable.qmd
+                - text: "IsolationForestOutliers"
+                  file: validmind/tests/data_validation/IsolationForestOutliers.qmd
+                - text: "JarqueBera"
+                  file: validmind/tests/data_validation/JarqueBera.qmd
+                - text: "KPSS"
+                  file: validmind/tests/data_validation/KPSS.qmd
+                - text: "LJungBox"
+                  file: validmind/tests/data_validation/LJungBox.qmd
+                - text: "LaggedCorrelationHeatmap"
+                  file: validmind/tests/data_validation/LaggedCorrelationHeatmap.qmd
+                - text: "LanguageDetection"
+                  file: validmind/tests/data_validation/nlp/LanguageDetection.qmd
+                - text: "Mentions"
+                  file: validmind/tests/data_validation/nlp/Mentions.qmd
+                - text: "MissingValues"
+                  file: validmind/tests/data_validation/MissingValues.qmd
+                - text: "MissingValuesBarPlot"
+                  file: validmind/tests/data_validation/MissingValuesBarPlot.qmd
+                - text: "MutualInformation"
+                  file: validmind/tests/data_validation/MutualInformation.qmd
+                - text: "PearsonCorrelationMatrix"
+                  file: validmind/tests/data_validation/PearsonCorrelationMatrix.qmd
+                - text: "PhillipsPerronArch"
+                  file: validmind/tests/data_validation/PhillipsPerronArch.qmd
+                - text: "PolarityAndSubjectivity"
+                  file: validmind/tests/data_validation/nlp/PolarityAndSubjectivity.qmd
+                - text: "ProtectedClassesCombination"
+                  file: validmind/tests/data_validation/ProtectedClassesCombination.qmd
+                - text: "ProtectedClassesDescription"
+                  file: validmind/tests/data_validation/ProtectedClassesDescription.qmd
+                - text: "ProtectedClassesDisparity"
+                  file: validmind/tests/data_validation/ProtectedClassesDisparity.qmd
+                - text: "ProtectedClassesThresholdOptimizer"
+                  file: validmind/tests/data_validation/ProtectedClassesThresholdOptimizer.qmd
+                - text: "Punctuations"
+                  file: validmind/tests/data_validation/nlp/Punctuations.qmd
+                - text: "RollingStatsPlot"
+                  file: validmind/tests/data_validation/RollingStatsPlot.qmd
+                - text: "RunsTest"
+                  file: validmind/tests/data_validation/RunsTest.qmd
+                - text: "ScatterPlot"
+                  file: validmind/tests/data_validation/ScatterPlot.qmd
+                - text: "ScoreBandDefaultRates"
+                  file: validmind/tests/data_validation/ScoreBandDefaultRates.qmd
+                - text: "SeasonalDecompose"
+                  file: validmind/tests/data_validation/SeasonalDecompose.qmd
+                - text: "Sentiment"
+                  file: validmind/tests/data_validation/nlp/Sentiment.qmd
+                - text: "ShapiroWilk"
+                  file: validmind/tests/data_validation/ShapiroWilk.qmd
+                - text: "Skewness"
+                  file: validmind/tests/data_validation/Skewness.qmd
+                - text: "SpreadPlot"
+                  file: validmind/tests/data_validation/SpreadPlot.qmd
+                - text: "StopWords"
+                  file: validmind/tests/data_validation/nlp/StopWords.qmd
+                - text: "TabularCategoricalBarPlots"
+                  file: validmind/tests/data_validation/TabularCategoricalBarPlots.qmd
+                - text: "TabularDateTimeHistograms"
+                  file: validmind/tests/data_validation/TabularDateTimeHistograms.qmd
+                - text: "TabularDescriptionTables"
+                  file: validmind/tests/data_validation/TabularDescriptionTables.qmd
+                - text: "TabularNumericalHistograms"
+                  file: validmind/tests/data_validation/TabularNumericalHistograms.qmd
+                - text: "TargetRateBarPlots"
+                  file: validmind/tests/data_validation/TargetRateBarPlots.qmd
+                - text: "TextDescription"
+                  file: validmind/tests/data_validation/nlp/TextDescription.qmd
+                - text: "TimeSeriesDescription"
+                  file: validmind/tests/data_validation/TimeSeriesDescription.qmd
+                - text: "TimeSeriesDescriptiveStatistics"
+                  file: validmind/tests/data_validation/TimeSeriesDescriptiveStatistics.qmd
+                - text: "TimeSeriesFrequency"
+                  file: validmind/tests/data_validation/TimeSeriesFrequency.qmd
+                - text: "TimeSeriesHistogram"
+                  file: validmind/tests/data_validation/TimeSeriesHistogram.qmd
+                - text: "TimeSeriesLinePlot"
+                  file: validmind/tests/data_validation/TimeSeriesLinePlot.qmd
+                - text: "TimeSeriesMissingValues"
+                  file: validmind/tests/data_validation/TimeSeriesMissingValues.qmd
+                - text: "TimeSeriesOutliers"
+                  file: validmind/tests/data_validation/TimeSeriesOutliers.qmd
+                - text: "TooManyZeroValues"
+                  file: validmind/tests/data_validation/TooManyZeroValues.qmd
+                - text: "Toxicity"
+                  file: validmind/tests/data_validation/nlp/Toxicity.qmd
+                - text: "UniqueRows"
+                  file: validmind/tests/data_validation/UniqueRows.qmd
+                - text: "WOEBinPlots"
+                  file: validmind/tests/data_validation/WOEBinPlots.qmd
+                - text: "WOEBinTable"
+                  file: validmind/tests/data_validation/WOEBinTable.qmd
+                - text: "ZivotAndrewsArch"
+                  file: validmind/tests/data_validation/ZivotAndrewsArch.qmd
+                - text: "nlp"
+                  file: validmind/tests/data_validation/nlp.qmd
+            - text: "model_validation"
+              file: validmind/tests/model_validation.qmd
+              contents:
+                - text: "AdjustedMutualInformation"
+                  file: validmind/tests/model_validation/sklearn/AdjustedMutualInformation.qmd
+                - text: "AdjustedRandIndex"
+                  file: validmind/tests/model_validation/sklearn/AdjustedRandIndex.qmd
+                - text: "AutoARIMA"
+                  file: validmind/tests/model_validation/statsmodels/AutoARIMA.qmd
+                - text: "BertScore"
+                  file: validmind/tests/model_validation/BertScore.qmd
+                - text: "BleuScore"
+                  file: validmind/tests/model_validation/BleuScore.qmd
+                - text: "CalibrationCurve"
+                  file: validmind/tests/model_validation/sklearn/CalibrationCurve.qmd
+                - text: "ClassifierPerformance"
+                  file: validmind/tests/model_validation/sklearn/ClassifierPerformance.qmd
+                - text: "ClassifierThresholdOptimization"
+                  file: validmind/tests/model_validation/sklearn/ClassifierThresholdOptimization.qmd
+                - text: "ClusterCosineSimilarity"
+                  file: validmind/tests/model_validation/sklearn/ClusterCosineSimilarity.qmd
+                - text: "ClusterPerformanceMetrics"
+                  file: validmind/tests/model_validation/sklearn/ClusterPerformanceMetrics.qmd
+                - text: "ClusterSizeDistribution"
+                  file: validmind/tests/model_validation/ClusterSizeDistribution.qmd
+                - text: "CompletenessScore"
+                  file: validmind/tests/model_validation/sklearn/CompletenessScore.qmd
+                - text: "ConfusionMatrix"
+                  file: validmind/tests/model_validation/sklearn/ConfusionMatrix.qmd
+                - text: "ContextualRecall"
+                  file: validmind/tests/model_validation/ContextualRecall.qmd
+                - text: "CumulativePredictionProbabilities"
+                  file: validmind/tests/model_validation/statsmodels/CumulativePredictionProbabilities.qmd
+                - text: "DurbinWatsonTest"
+                  file: validmind/tests/model_validation/statsmodels/DurbinWatsonTest.qmd
+                - text: "FeatureImportance"
+                  file: validmind/tests/model_validation/sklearn/FeatureImportance.qmd
+                - text: "FeaturesAUC"
+                  file: validmind/tests/model_validation/FeaturesAUC.qmd
+                - text: "FowlkesMallowsScore"
+                  file: validmind/tests/model_validation/sklearn/FowlkesMallowsScore.qmd
+                - text: "GINITable"
+                  file: validmind/tests/model_validation/statsmodels/GINITable.qmd
+                - text: "HomogeneityScore"
+                  file: validmind/tests/model_validation/sklearn/HomogeneityScore.qmd
+                - text: "HyperParametersTuning"
+                  file: validmind/tests/model_validation/sklearn/HyperParametersTuning.qmd
+                - text: "KMeansClustersOptimization"
+                  file: validmind/tests/model_validation/sklearn/KMeansClustersOptimization.qmd
+                - text: "KolmogorovSmirnov"
+                  file: validmind/tests/model_validation/statsmodels/KolmogorovSmirnov.qmd
+                - text: "Lilliefors"
+                  file: validmind/tests/model_validation/statsmodels/Lilliefors.qmd
+                - text: "MeteorScore"
+                  file: validmind/tests/model_validation/MeteorScore.qmd
+                - text: "MinimumAccuracy"
+                  file: validmind/tests/model_validation/sklearn/MinimumAccuracy.qmd
+                - text: "MinimumF1Score"
+                  file: validmind/tests/model_validation/sklearn/MinimumF1Score.qmd
+                - text: "MinimumROCAUCScore"
+                  file: validmind/tests/model_validation/sklearn/MinimumROCAUCScore.qmd
+                - text: "ModelMetadata"
+                  file: validmind/tests/model_validation/ModelMetadata.qmd
+                - text: "ModelParameters"
+                  file: validmind/tests/model_validation/sklearn/ModelParameters.qmd
+                - text: "ModelPredictionResiduals"
+                  file: validmind/tests/model_validation/ModelPredictionResiduals.qmd
+                - text: "ModelsPerformanceComparison"
+                  file: validmind/tests/model_validation/sklearn/ModelsPerformanceComparison.qmd
+                - text: "OverfitDiagnosis"
+                  file: validmind/tests/model_validation/sklearn/OverfitDiagnosis.qmd
+                - text: "PermutationFeatureImportance"
+                  file: validmind/tests/model_validation/sklearn/PermutationFeatureImportance.qmd
+                - text: "PopulationStabilityIndex"
+                  file: validmind/tests/model_validation/sklearn/PopulationStabilityIndex.qmd
+                - text: "PrecisionRecallCurve"
+                  file: validmind/tests/model_validation/sklearn/PrecisionRecallCurve.qmd
+                - text: "PredictionProbabilitiesHistogram"
+                  file: validmind/tests/model_validation/statsmodels/PredictionProbabilitiesHistogram.qmd
+                - text: "ROCCurve"
+                  file: validmind/tests/model_validation/sklearn/ROCCurve.qmd
+                - text: "RegardScore"
+                  file: validmind/tests/model_validation/RegardScore.qmd
+                - text: "RegressionCoeffs"
+                  file: validmind/tests/model_validation/statsmodels/RegressionCoeffs.qmd
+                - text: "RegressionErrors"
+                  file: validmind/tests/model_validation/sklearn/RegressionErrors.qmd
+                - text: "RegressionErrorsComparison"
+                  file: validmind/tests/model_validation/sklearn/RegressionErrorsComparison.qmd
+                - text: "RegressionFeatureSignificance"
+                  file: validmind/tests/model_validation/statsmodels/RegressionFeatureSignificance.qmd
+                - text: "RegressionModelForecastPlot"
+                  file: validmind/tests/model_validation/statsmodels/RegressionModelForecastPlot.qmd
+                - text: "RegressionModelForecastPlotLevels"
+                  file: validmind/tests/model_validation/statsmodels/RegressionModelForecastPlotLevels.qmd
+                - text: "RegressionModelSensitivityPlot"
+                  file: validmind/tests/model_validation/statsmodels/RegressionModelSensitivityPlot.qmd
+                - text: "RegressionModelSummary"
+                  file: validmind/tests/model_validation/statsmodels/RegressionModelSummary.qmd
+                - text: "RegressionPerformance"
+                  file: validmind/tests/model_validation/sklearn/RegressionPerformance.qmd
+                - text: "RegressionPermutationFeatureImportance"
+                  file: validmind/tests/model_validation/statsmodels/RegressionPermutationFeatureImportance.qmd
+                - text: "RegressionR2Square"
+                  file: validmind/tests/model_validation/sklearn/RegressionR2Square.qmd
+                - text: "RegressionR2SquareComparison"
+                  file: validmind/tests/model_validation/sklearn/RegressionR2SquareComparison.qmd
+                - text: "RegressionResidualsPlot"
+                  file: validmind/tests/model_validation/RegressionResidualsPlot.qmd
+                - text: "RobustnessDiagnosis"
+                  file: validmind/tests/model_validation/sklearn/RobustnessDiagnosis.qmd
+                - text: "RougeScore"
+                  file: validmind/tests/model_validation/RougeScore.qmd
+                - text: "SHAPGlobalImportance"
+                  file: validmind/tests/model_validation/sklearn/SHAPGlobalImportance.qmd
+                - text: "ScoreProbabilityAlignment"
+                  file: validmind/tests/model_validation/sklearn/ScoreProbabilityAlignment.qmd
+                - text: "ScorecardHistogram"
+                  file: validmind/tests/model_validation/statsmodels/ScorecardHistogram.qmd
+                - text: "SilhouettePlot"
+                  file: validmind/tests/model_validation/sklearn/SilhouettePlot.qmd
+                - text: "TimeSeriesPredictionWithCI"
+                  file: validmind/tests/model_validation/TimeSeriesPredictionWithCI.qmd
+                - text: "TimeSeriesPredictionsPlot"
+                  file: validmind/tests/model_validation/TimeSeriesPredictionsPlot.qmd
+                - text: "TimeSeriesR2SquareBySegments"
+                  file: validmind/tests/model_validation/TimeSeriesR2SquareBySegments.qmd
+                - text: "TokenDisparity"
+                  file: validmind/tests/model_validation/TokenDisparity.qmd
+                - text: "ToxicityScore"
+                  file: validmind/tests/model_validation/ToxicityScore.qmd
+                - text: "TrainingTestDegradation"
+                  file: validmind/tests/model_validation/sklearn/TrainingTestDegradation.qmd
+                - text: "VMeasure"
+                  file: validmind/tests/model_validation/sklearn/VMeasure.qmd
+                - text: "WeakspotsDiagnosis"
+                  file: validmind/tests/model_validation/sklearn/WeakspotsDiagnosis.qmd
+                - text: "sklearn"
+                  file: validmind/tests/model_validation/sklearn.qmd
+                - text: "statsmodels"
+                  file: validmind/tests/model_validation/statsmodels.qmd
+                - text: "statsutils"
+                  file: validmind/tests/model_validation/statsmodels/statsutils.qmd
+            - text: "prompt_validation"
+              file: validmind/tests/prompt_validation.qmd
+              contents:
+                - text: "Bias"
+                  file: validmind/tests/prompt_validation/Bias.qmd
+                - text: "Clarity"
+                  file: validmind/tests/prompt_validation/Clarity.qmd
+                - text: "Conciseness"
+                  file: validmind/tests/prompt_validation/Conciseness.qmd
+                - text: "Delimitation"
+                  file: validmind/tests/prompt_validation/Delimitation.qmd
+                - text: "NegativeInstruction"
+                  file: validmind/tests/prompt_validation/NegativeInstruction.qmd
+                - text: "Robustness"
+                  file: validmind/tests/prompt_validation/Robustness.qmd
+                - text: "Specificity"
+                  file: validmind/tests/prompt_validation/Specificity.qmd
+                - text: "ai_powered_test"
+                  file: validmind/tests/prompt_validation/ai_powered_test.qmd
         - text: "unit_metrics"
           file: reference/validmind/unit_metrics.qmd
         - text: "vm_models"

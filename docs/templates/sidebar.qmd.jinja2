@@ -23,11 +23,28 @@ website:
         {% for member in module.members | sort_members %}
         {% if is_public(member, module, full_data, is_root) and member.kind == "module" %}
         {% set module_name = member.name %}
+        {% set has_children = qmd_files | has_subfiles(module_name) %}
+        {% if has_children %}
         - text: "{{ module_name }}"
           file: reference/validmind/{{ module_name }}.qmd
-          {% if module_name in ['datasets', 'test_suites', 'tests'] %}
           contents:
-            - reference/validmind/{{ module_name }}/**
-          {% endif %}
+            {% for item in qmd_files | get_child_files(module_name) %}
+            {% if item.contents is defined %}
+            - text: "{{ item.text }}"
+              file: {{ item.file }}
+              contents:
+                {% for child in item.contents %}
+                - text: "{{ child.text }}"
+                  file: {{ child.file }}
+                {% endfor %}
+            {% else %}
+            - text: "{{ item.text }}"
+              file: {{ item.file }}
+            {% endif %}
+            {% endfor %}
+        {% else %}
+        - text: "{{ module_name }}"
+          file: reference/validmind/{{ module_name }}.qmd
+        {% endif %}
         {% endif %}
         {% endfor %} 

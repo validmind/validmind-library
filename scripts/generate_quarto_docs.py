@@ -420,14 +420,66 @@ def generate_module_doc(module, full_data, env, output_dir):
     with open(output_path, 'w') as f:
         f.write(output)
 
-def find_qmd_files(base_path: str) -> Dict[str, List[str]]:
-    """Find all .qmd files and their associated folders in docs/validmind."""
-    # print("\nEntering find_qmd_files()")
-    # print(f"\nFiles written during documentation generation (count: {len(written_qmd_files)}):")
-    # for filename, path in written_qmd_files.items():
-    #     print(f"  {filename}: {path}")
+def get_child_files(files_dict: Dict[str, str], module_name: str) -> List[Dict[str, Any]]:
+    """Get all child QMD files for a given module."""
+    prefix = f'docs/validmind/{module_name}/'
+    directory_structure = {}
     
-    return written_qmd_files
+    # First pass: organize files by directory
+    for filename, path in files_dict.items():
+        if path.startswith(prefix) and path != f'docs/validmind/{module_name}.qmd':
+            # Remove the prefix to get the relative path
+            rel_path = path.replace('docs/', '')
+            parts = Path(rel_path).parts[2:]  # Skip 'validmind' and module_name
+            
+            # Handle directory-level QMD and its children
+            if len(parts) == 1:  # Direct child
+                dir_name = Path(parts[0]).stem
+                if dir_name not in directory_structure:
+                    directory_structure[dir_name] = {
+                        'text': dir_name,
+                        'file': rel_path
+                    }
+            else:  # Nested file
+                dir_name = parts[0]
+                if dir_name not in directory_structure:
+                    directory_structure[dir_name] = {
+                        'text': dir_name,
+                        'file': f'validmind/{module_name}/{dir_name}.qmd'
+                    }
+                
+                # Add to contents if it's a child file
+                if 'contents' not in directory_structure[dir_name]:
+                    directory_structure[dir_name]['contents'] = []
+                
+                directory_structure[dir_name]['contents'].append({
+                    'text': Path(parts[-1]).stem,
+                    'file': rel_path
+                })
+    
+    # Sort children within each directory
+    for dir_info in directory_structure.values():
+        if 'contents' in dir_info:
+            dir_info['contents'].sort(key=lambda x: x['text'])
+    
+    # Return sorted list of directories
+    return sorted(directory_structure.values(), key=lambda x: x['text'])
+
+def has_subfiles(files_dict, module_name):
+    """Check if a module has child QMD files."""
+    prefix = f'docs/validmind/{module_name}/'
+    return any(path.startswith(prefix) for path in files_dict.values())
+
+def find_qmd_files(base_path: str) -> Dict[str, str]:
+    """Find all .qmd files and their associated paths."""
+    # Convert the written_qmd_files paths to be relative to docs/
+    relative_paths = {}
+    for filename, path in written_qmd_files.items():
+        if path.startswith('docs/'):
+            relative_paths[filename] = path
+        else:
+            relative_paths[filename] = f'docs/{path}'
+    return relative_paths
 
 def generate_docs(json_path: str, template_dir: str, output_dir: str):
     """Generate documentation from JSON data using templates."""
@@ -447,6 +499,8 @@ def generate_docs(json_path: str, template_dir: str, output_dir: str):
     
     # Add custom filters and globals
     env.filters['sort_members'] = sort_members
+    env.filters['has_subfiles'] = has_subfiles
+    env.filters['get_child_files'] = get_child_files
     env.globals['is_public'] = is_public
     env.globals['resolve_alias'] = resolve_alias
     env.globals['get_all_members'] = get_all_members
