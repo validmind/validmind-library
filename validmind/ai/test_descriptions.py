@@ -150,7 +150,8 @@ def get_result_description(
     # Check the feature flag first, then the environment variable
     llm_descriptions_enabled = (
         client_config.can_generate_llm_test_descriptions()
-        and os.getenv("VALIDMIND_LLM_DESCRIPTIONS_ENABLED", "1") not in ["0", "false"]
+        and os.getenv("VALIDMIND_LLM_DESCRIPTIONS_ENABLED", "1").lower()
+        not in ["0", "false"]
     )
 
     # TODO: fix circular import
