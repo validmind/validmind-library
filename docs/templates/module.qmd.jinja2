@@ -104,3 +104,22 @@ def {{ member.name }}(
 {% endif %}
 {% endfor %}
 {% endif %}
+
+{# Add this section at the end, after all existing code #}
+{% if module.name == "validmind" %}
+## Other Members
+
+<!-- Debug: Starting Other Members section -->
+{% for member in module.members | sort_members %}
+<!-- Debug: Processing {{ member.name }} -->
+{% if is_public(member, module, full_data, is_root) %}
+<!-- Debug: {{ member.name }} is public -->
+{% set resolved = resolve_alias(member, full_data) %}
+<!-- Debug: {{ member.name }} - member kind: {{ member.kind }}, resolved kind: {{ resolved.kind if resolved else 'none' }}, target path: {{ member.target_path if member.kind == "alias" else "none" }} -->
+{% if member.kind == "class" or (member.kind == "alias" and member.target_path and member.target_path.split(".")[-1][0].isupper()) %}
+<!-- Debug: Including class template for {{ member.name }} -->
+{% include "class.qmd.jinja2" with context %}
+{% endif %}
+{% endif %}
+{% endfor %}
+{% endif %}

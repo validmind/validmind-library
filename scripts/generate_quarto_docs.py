@@ -9,19 +9,49 @@ from docstring_parser import parse, Style
 from glob import glob
 import subprocess
 
+# Add at module level
+_alias_cache = {}  # Cache for resolved aliases
+
 def resolve_alias(member: Dict[str, Any], data: Dict[str, Any]) -> Dict[str, Any]:
     """Resolve an alias to its target member."""
     if member.get('kind') == 'alias' and member.get('target_path'):
-        path_parts = member['target_path'].split('.')
+        target_path = member['target_path']
+        
+        # Check cache first
+        if target_path in _alias_cache:
+            return _alias_cache[target_path]
+            
+        path_parts = target_path.split('.')
         # Skip resolution if it's not in our codebase
         if path_parts[0] != 'validmind':
             return member
+            
+        # Debug only for specific problematic paths
+        debug = any(x in target_path for x in ['vm_models.result.RawData', 'vm_models.result.Result'])
+        
+        if debug:
+            print(f"\nResolving alias: {target_path}")
+            
         current = data[path_parts[0]]  # Start at validmind
         for part in path_parts[1:]:
+            if debug:
+                print(f"  Resolving part: {part}")
+                print(f"  Available members: {sorted(list(current.get('members', {}).keys()))}")
+            
             if part in current.get('members', {}):
                 current = current['members'][part]
             else:
+                if debug:
+                    print(f"  Failed to find {part}")
                 return member
+                
+        if debug:
+            print(f"  Resolution successful")
+            print(f"  Final kind: {current.get('kind')}")
+            print(f"  Has docstring: {bool(current.get('docstring'))}")
+            
+        # Cache the result
+        _alias_cache[target_path] = current
         return current
     return member
 
@@ -511,9 +541,9 @@ def generate_docs(json_path: str, template_dir: str, output_dir: str):
         # First pass: Generate module documentation
         process_module(data['validmind'], ['validmind'], env, data)
         
-        print("\nAbout to call find_qmd_files()")
+        # print("\nAbout to call find_qmd_files()")
         qmd_files = find_qmd_files(output_dir)
-        print(f"Found QMD files: {qmd_files}")
+        # print(f"Found QMD files: {qmd_files}")
         
         # Add to template context
         env.globals['qmd_files'] = qmd_files

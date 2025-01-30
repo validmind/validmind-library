@@ -23,6 +23,8 @@ website:
           file: reference/validmind.qmd#log_metric
         - text: "preview_template()"
           file: reference/validmind.qmd#preview_template
+        - text: "print_env()"
+          file: reference/validmind.qmd#print_env
         - text: "reload()"
           file: reference/validmind.qmd#reload
         - text: "run_documentation_tests()"
