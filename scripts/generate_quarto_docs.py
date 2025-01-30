@@ -252,11 +252,19 @@ def lint_markdown_files(output_dir: str):
             # Preserve front matter and format the rest
             front_matter = parts[1]
             body = parts[2]
-            formatted_body = mdformat.text(body, options={"wrap": "no"})
+            formatted_body = mdformat.text(body, options={
+                "wrap": "no",
+                "number": False,
+                "normalize_whitespace": True
+            })
             formatted = f"---{front_matter}---\n\n{formatted_body}"
         else:
             # No front matter, format everything
-            formatted = mdformat.text(content, options={"wrap": "no"})
+            formatted = mdformat.text(content, options={
+                "wrap": "no",
+                "number": False,
+                "normalize_whitespace": True
+            })
             
         with open(path, 'w') as f:
             f.write(formatted)

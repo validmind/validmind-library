@@ -18,7 +18,7 @@ sidebar: validmind-reference
 ## Python API
 
 {% if module.members.__version__ %}
-### __version__
+### \_\_version\_\_
 
 ```python
 {{ module.members.__version__.value | replace("'", "") if module.members.__version__.value else module.members.__version__.members.__version__.value | replace("'", "") }}
@@ -105,20 +105,47 @@ def {{ member.name }}(
 {% endfor %}
 {% endif %}
 
-{# Add this section at the end, after all existing code #}
 {% if module.name == "validmind" %}
-## Other Members
 
-<!-- Debug: Starting Other Members section -->
 {% for member in module.members | sort_members %}
-<!-- Debug: Processing {{ member.name }} -->
 {% if is_public(member, module, full_data, is_root) %}
-<!-- Debug: {{ member.name }} is public -->
 {% set resolved = resolve_alias(member, full_data) %}
-<!-- Debug: {{ member.name }} - member kind: {{ member.kind }}, resolved kind: {{ resolved.kind if resolved else 'none' }}, target path: {{ member.target_path if member.kind == "alias" else "none" }} -->
 {% if member.kind == "class" or (member.kind == "alias" and member.target_path and member.target_path.split(".")[-1][0].isupper()) %}
-<!-- Debug: Including class template for {{ member.name }} -->
-{% include "class.qmd.jinja2" with context %}
+{% set target = resolve_alias(resolved, full_data) %}
+
+## [class]{.muted} {{ member.name }}
+
+```python
+class {{ member.name }}():
+```
+
+{% if target.docstring %}
+{{ doc.format_docstring(target.docstring) }}
+{% endif %}
+
+{% if target.members %}
+{% for method_name, method in target.members.items() %}
+{% if method.kind == "function" and (not method_name.startswith('_') or method_name in ['__init__']) %}
+
+### {{ member.name if method_name == '__init__' else method_name }}[()]{.muted}
+
+```python
+def {{ method_name }}(
+{%- for param in method.parameters %}
+    {{ param.name }}{% if param.annotation %}: {{ param.annotation.name if param.annotation.cls == "ExprName" else param.annotation }}{% endif %}{% if param.default is not none %} = {{ param.default }}{% endif %}{% if not loop.last %},
+{% endif %}
+{%- endfor %}
+):{% if method.returns %} -> {{ method.returns }}{% endif +%}
+```
+
+{% if method.docstring %}
+{{ doc.format_docstring(method.docstring) }}
+{% endif %}
+
+{% endif %}
+{% endfor %}
+{% endif %}
+
 {% endif %}
 {% endif %}
 {% endfor %}

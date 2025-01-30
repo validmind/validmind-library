@@ -32,7 +32,7 @@ After you have pasted the code snippet into your development source code and exe
 
 ## Python API
 
-### __version__
+### \_\_version\_\_
 
 ```python
 2.8.4
@@ -353,186 +353,40 @@ The function may also include a docstring. This docstring will be used and logge
 
 - The decorated function.
 
-## Other Members
-
-<!-- Debug: Starting Other Members section -->
-
-<!-- Debug: Processing check_version -->
-
-<!-- Debug: Processing show_warning -->
-
-<!-- Debug: Processing __all__ -->
-
-<!-- Debug: Processing __shown -->
-
-<!-- Debug: Processing __version__ -->
-
-<!-- Debug: Processing api_client -->
-
-<!-- Debug: Processing client -->
-
-<!-- Debug: Processing client_config -->
-
-<!-- Debug: Processing datasets -->
-
-<!-- Debug: datasets is public -->
-
-<!-- Debug: datasets - member kind: module, resolved kind: module, target path: none -->
-
-<!-- Debug: Processing display -->
-
-<!-- Debug: Processing errors -->
-
-<!-- Debug: errors is public -->
-
-<!-- Debug: errors - member kind: module, resolved kind: module, target path: none -->
-
-<!-- Debug: Processing get_test_suite -->
-
-<!-- Debug: get_test_suite is public -->
-
-<!-- Debug: get_test_suite - member kind: alias, resolved kind: function, target path: validmind.client.get_test_suite -->
-
-<!-- Debug: Processing HTML -->
-
-<!-- Debug: Processing html_templates -->
-
-<!-- Debug: Processing init -->
-
-<!-- Debug: init is public -->
-
-<!-- Debug: init - member kind: alias, resolved kind: function, target path: validmind.api_client.init -->
-
-<!-- Debug: Processing init_dataset -->
-
-<!-- Debug: init_dataset is public -->
-
-<!-- Debug: init_dataset - member kind: alias, resolved kind: function, target path: validmind.client.init_dataset -->
-
-<!-- Debug: Processing init_model -->
-
-<!-- Debug: init_model is public -->
-
-<!-- Debug: init_model - member kind: alias, resolved kind: function, target path: validmind.client.init_model -->
-
-<!-- Debug: Processing init_r_model -->
-
-<!-- Debug: init_r_model is public -->
-
-<!-- Debug: init_r_model - member kind: alias, resolved kind: function, target path: validmind.client.init_r_model -->
-
-<!-- Debug: Processing input_registry -->
-
-<!-- Debug: Processing is_notebook -->
-
-<!-- Debug: Processing log_metric -->
-
-<!-- Debug: log_metric is public -->
-
-<!-- Debug: log_metric - member kind: alias, resolved kind: function, target path: validmind.api_client.log_metric -->
-
-<!-- Debug: Processing logging -->
-
-<!-- Debug: Processing models -->
-
-<!-- Debug: Processing NumbaDeprecationWarning -->
-
-<!-- Debug: Processing NumbaPendingDeprecationWarning -->
-
-<!-- Debug: Processing parse_version -->
-
-<!-- Debug: Processing pkg_resources -->
-
-<!-- Debug: Processing preview_template -->
-
-<!-- Debug: preview_template is public -->
-
-<!-- Debug: preview_template - member kind: alias, resolved kind: function, target path: validmind.client.preview_template -->
-
-<!-- Debug: Processing print_env -->
-
-<!-- Debug: print_env is public -->
-
-<!-- Debug: print_env - member kind: alias, resolved kind: function, target path: validmind.tests.run.print_env -->
-
-<!-- Debug: Processing RawData -->
-
-<!-- Debug: RawData is public -->
-
-<!-- Debug: RawData - member kind: alias, resolved kind: alias, target path: validmind.vm_models.result.RawData -->
-
-<!-- Debug: Including class template for RawData -->
-
 ## [class]{.muted} RawData
 
 ```python
 class RawData():
 ```
 
-<!-- Debug: Processing reload -->
+Holds raw data for a test result
 
-<!-- Debug: reload is public -->
+### RawData[()]{.muted}
 
-<!-- Debug: reload - member kind: alias, resolved kind: function, target path: validmind.api_client.reload -->
+```python
+def __init__(    self,
+    log: bool = False,
+    kwargs = {}):
+```
 
-<!-- Debug: Processing run_documentation_tests -->
+Create a new RawData object
 
-<!-- Debug: run_documentation_tests is public -->
+**Parameters**
 
-<!-- Debug: run_documentation_tests - member kind: alias, resolved kind: function, target path: validmind.client.run_documentation_tests -->
+- **log** bool: If True, log the raw data to ValidMind
+- \*\***kwargs**: Keyword arguments to set as attributes e.g. `RawData(log=True, dataset_duplicates=df_duplicates)`
 
-<!-- Debug: Processing run_test_suite -->
+### inspect[()]{.muted}
 
-<!-- Debug: run_test_suite is public -->
+```python
+def inspect(    self,
+    show: bool = True):
+```
 
-<!-- Debug: run_test_suite - member kind: alias, resolved kind: function, target path: validmind.client.run_test_suite -->
+Inspect the raw data
 
-<!-- Debug: Processing tags -->
+### serialize[()]{.muted}
 
-<!-- Debug: tags is public -->
-
-<!-- Debug: tags - member kind: alias, resolved kind: function, target path: validmind.tests.decorator.tags -->
-
-<!-- Debug: Processing tasks -->
-
-<!-- Debug: tasks is public -->
-
-<!-- Debug: tasks - member kind: alias, resolved kind: function, target path: validmind.tests.decorator.tasks -->
-
-<!-- Debug: Processing template -->
-
-<!-- Debug: Processing test -->
-
-<!-- Debug: test is public -->
-
-<!-- Debug: test - member kind: alias, resolved kind: function, target path: validmind.tests.decorator.test -->
-
-<!-- Debug: Processing test_suites -->
-
-<!-- Debug: test_suites is public -->
-
-<!-- Debug: test_suites - member kind: module, resolved kind: module, target path: none -->
-
-<!-- Debug: Processing tests -->
-
-<!-- Debug: tests is public -->
-
-<!-- Debug: tests - member kind: module, resolved kind: module, target path: none -->
-
-<!-- Debug: Processing threading -->
-
-<!-- Debug: Processing unit_metrics -->
-
-<!-- Debug: unit_metrics is public -->
-
-<!-- Debug: unit_metrics - member kind: module, resolved kind: module, target path: none -->
-
-<!-- Debug: Processing utils -->
-
-<!-- Debug: Processing vm_models -->
-
-<!-- Debug: vm_models is public -->
-
-<!-- Debug: vm_models - member kind: module, resolved kind: module, target path: none -->
-
-<!-- Debug: Processing warnings -->
+```python
+def serialize(    self):
+```

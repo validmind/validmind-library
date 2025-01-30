@@ -2,19 +2,24 @@ website:
   sidebar:
     - id: validmind-reference
       title: "ValidMind Library"
+      collapsed: false
+      collapse-level: 2
       contents:
         - reference/validmind.qmd
         - text: "---"
         - text: "Python API"
-        # Root level functions from validmind.qmd
-        {% if module.members.__version__ %}
-        - text: "__version__"
-          file: reference/validmind.qmd#__version__
-        {% endif %}
+        # Root level items from validmind.qmd
         {% if documented_items.get('root') %}
         {% for item in documented_items['root'] %}
         - text: "{{ item.text }}"
           file: {{ item.file }}
+          {% if item.contents %}
+          contents:
+            {% for method in item.contents %}
+            - text: "{{ method.text }}"
+              file: {{ method.file }}
+            {% endfor %}
+          {% endif %}
         {% endfor %}
         {% endif %}
         # All module documentation pages

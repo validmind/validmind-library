@@ -2,13 +2,13 @@ website:
   sidebar:
     - id: validmind-reference
       title: "ValidMind Library"
+      collapsed: false
+      collapse-level: 2
       contents:
         - reference/validmind.qmd
         - text: "---"
         - text: "Python API"
-        # Root level functions from validmind.qmd
-        - text: "__version__"
-          file: reference/validmind.qmd#__version__
+        # Root level items from validmind.qmd
         - text: "get_test_suite()"
           file: reference/validmind.qmd#get_test_suite
         - text: "init()"
