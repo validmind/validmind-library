@@ -5,6 +5,8 @@ sidebar: validmind-reference
 
 ## DatasetSplit[()]{.muted}
 
+<!-- function.qmd.jinja2 - function signature -->
+
 ```python
 def DatasetSplit(
     datasets: List):

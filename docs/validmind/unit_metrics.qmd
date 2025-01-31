@@ -5,6 +5,8 @@ sidebar: validmind-reference
 
 ## describe_metric[()]{.muted}
 
+<!-- function.qmd.jinja2 - function signature -->
+
 ```python
 def describe_metric(
     metric_id: str,
@@ -15,6 +17,8 @@ Describe a metric
 
 ## list_metrics[()]{.muted}
 
+<!-- function.qmd.jinja2 - function signature -->
+
 ```python
 def list_metrics(
     **kwargs = {}):
@@ -23,6 +27,8 @@ def list_metrics(
 List all metrics
 
 ## run_metric[()]{.muted}
+
+<!-- function.qmd.jinja2 - function signature -->
 
 ```python
 def run_metric(

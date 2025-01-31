@@ -10,6 +10,8 @@ This module contains all the custom errors that are used in the ValidMind Librar
 
 ## [class]{.muted} APIRequestError
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class APIRequestError(BaseError):
 ```
@@ -23,6 +25,8 @@ Generic error for API request errors that are not known.
 
 ## [class]{.muted} BaseError
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class BaseError(Exception):
 ```
@@ -33,11 +37,15 @@ class BaseError(Exception):
 
 ### [description[()]{.muted}](#description)
 
+<!-- class.qmd.jinja2 - member method signature -->
+
 ```python
 description(self, args, kwargs)
 ```
 
 ## [class]{.muted} GetTestSuiteError
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class GetTestSuiteError(BaseError):
@@ -52,6 +60,8 @@ When the test suite could not be found.
 
 ## [class]{.muted} InitializeTestSuiteError
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class InitializeTestSuiteError(BaseError):
 ```
@@ -65,6 +75,8 @@ When the test suite was found but could not be initialized.
 
 ## [class]{.muted} InvalidAPICredentialsError
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class InvalidAPICredentialsError(APIRequestError):
 ```
@@ -76,11 +88,15 @@ class InvalidAPICredentialsError(APIRequestError):
 
 ### [description[()]{.muted}](#description)
 
+<!-- class.qmd.jinja2 - member method signature -->
+
 ```python
 description(self, args, kwargs)
 ```
 
 ## [class]{.muted} InvalidContentIdPrefixError
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class InvalidContentIdPrefixError(APIRequestError):
@@ -95,6 +111,8 @@ When an invalid text content_id is sent to the API.
 
 ## [class]{.muted} InvalidInputError
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class InvalidInputError(BaseError):
 ```
@@ -107,6 +125,8 @@ When an invalid input object.
 - **From builtins.BaseException**: with_traceback, add_note
 
 ## [class]{.muted} InvalidMetricResultsError
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class InvalidMetricResultsError(APIRequestError):
@@ -121,6 +141,8 @@ When an invalid metric results object is sent to the API.
 
 ## [class]{.muted} InvalidProjectError
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class InvalidProjectError(APIRequestError):
 ```
@@ -132,11 +154,15 @@ class InvalidProjectError(APIRequestError):
 
 ### [description[()]{.muted}](#description)
 
+<!-- class.qmd.jinja2 - member method signature -->
+
 ```python
 description(self, args, kwargs)
 ```
 
 ## [class]{.muted} InvalidRequestBodyError
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class InvalidRequestBodyError(APIRequestError):
@@ -151,6 +177,8 @@ When a POST/PUT request is made with an invalid request body.
 
 ## [class]{.muted} InvalidTestParametersError
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class InvalidTestParametersError(BaseError):
 ```
@@ -163,6 +191,8 @@ When an invalid parameters for the test.
 - **From builtins.BaseException**: with_traceback, add_note
 
 ## [class]{.muted} InvalidTestResultsError
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class InvalidTestResultsError(APIRequestError):
@@ -177,6 +207,8 @@ When an invalid test results object is sent to the API.
 
 ## [class]{.muted} InvalidTextObjectError
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class InvalidTextObjectError(APIRequestError):
 ```
@@ -189,6 +221,8 @@ When an invalid Metadat (Text) object is sent to the API.
 - **From builtins.BaseException**: with_traceback, add_note
 
 ## [class]{.muted} InvalidValueFormatterError
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class InvalidValueFormatterError(BaseError):
@@ -203,6 +237,8 @@ When an invalid value formatter is provided when serializing results.
 
 ## [class]{.muted} InvalidXGBoostTrainedModelError
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class InvalidXGBoostTrainedModelError(BaseError):
 ```
@@ -215,6 +251,8 @@ When an invalid XGBoost trained model is used when calling init_r_model.
 - **From builtins.BaseException**: with_traceback, add_note
 
 ## [class]{.muted} LoadTestError
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class LoadTestError(BaseError):
@@ -229,6 +267,8 @@ Exception raised when an error occurs while loading a test
 
 ## [class]{.muted} MismatchingClassLabelsError
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class MismatchingClassLabelsError(BaseError):
 ```
@@ -242,6 +282,8 @@ When the class labels found in the dataset don't match the provided target label
 
 ## [class]{.muted} MissingAPICredentialsError
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class MissingAPICredentialsError(BaseError):
 ```
@@ -253,11 +295,15 @@ class MissingAPICredentialsError(BaseError):
 
 ### [description[()]{.muted}](#description)
 
+<!-- class.qmd.jinja2 - member method signature -->
+
 ```python
 description(self, args, kwargs)
 ```
 
 ## [class]{.muted} MissingCacheResultsArgumentsError
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class MissingCacheResultsArgumentsError(BaseError):
@@ -272,6 +318,8 @@ When the cache_results function is missing arguments.
 
 ## [class]{.muted} MissingClassLabelError
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class MissingClassLabelError(BaseError):
 ```
@@ -284,6 +332,8 @@ When the one or more class labels are missing from provided dataset targets.
 - **From builtins.BaseException**: with_traceback, add_note
 
 ## [class]{.muted} MissingDependencyError
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class MissingDependencyError(BaseError):
@@ -298,6 +348,8 @@ When a required dependency is missing.
 
 ## [class]{.muted} MissingDocumentationTemplate
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class MissingDocumentationTemplate(BaseError):
 ```
@@ -311,6 +363,8 @@ When the client config is missing the documentation template.
 
 ## [class]{.muted} MissingModelIdError
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class MissingModelIdError(BaseError):
 ```
@@ -322,11 +376,15 @@ class MissingModelIdError(BaseError):
 
 ### [description[()]{.muted}](#description)
 
+<!-- class.qmd.jinja2 - member method signature -->
+
 ```python
 description(self, args, kwargs)
 ```
 
 ## [class]{.muted} MissingOrInvalidModelPredictFnError
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class MissingOrInvalidModelPredictFnError(BaseError):
@@ -341,6 +399,8 @@ When the pytorch model is missing a predict function or its predict method does 
 
 ## [class]{.muted} MissingRequiredTestInputError
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class MissingRequiredTestInputError(BaseError):
 ```
@@ -353,6 +413,8 @@ When a required test context variable is missing.
 - **From builtins.BaseException**: with_traceback, add_note
 
 ## [class]{.muted} MissingRExtrasError
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class MissingRExtrasError(BaseError):
@@ -367,11 +429,15 @@ When the R extras have not been installed.
 
 ### [description[()]{.muted}](#description)
 
+<!-- class.qmd.jinja2 - member method signature -->
+
 ```python
 description(self, args, kwargs)
 ```
 
 ## [class]{.muted} MissingTextContentIdError
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class MissingTextContentIdError(APIRequestError):
@@ -386,6 +452,8 @@ When a Text object is sent to the API without a content_id.
 
 ## [class]{.muted} MissingTextContentsError
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class MissingTextContentsError(APIRequestError):
 ```
@@ -398,6 +466,8 @@ When a Text object is sent to the API without a "text" attribute.
 - **From builtins.BaseException**: with_traceback, add_note
 
 ## [class]{.muted} SkipTestError
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class SkipTestError(BaseError):
@@ -412,6 +482,8 @@ Useful error to throw when a test cannot be executed.
 
 ## [class]{.muted} TestInputInvalidDatasetError
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class TestInputInvalidDatasetError(BaseError):
 ```
@@ -424,6 +496,8 @@ When an invalid dataset is used in a test context.
 - **From builtins.BaseException**: with_traceback, add_note
 
 ## [class]{.muted} UnsupportedColumnTypeError
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class UnsupportedColumnTypeError(BaseError):
@@ -438,6 +512,8 @@ When an unsupported column type is found on a dataset.
 
 ## [class]{.muted} UnsupportedDatasetError
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class UnsupportedDatasetError(BaseError):
 ```
@@ -450,6 +526,8 @@ When an unsupported dataset is used.
 - **From builtins.BaseException**: with_traceback, add_note
 
 ## [class]{.muted} UnsupportedFigureError
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class UnsupportedFigureError(BaseError):
@@ -464,6 +542,8 @@ When an unsupported figure object is constructed.
 
 ## [class]{.muted} UnsupportedModelError
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class UnsupportedModelError(BaseError):
 ```
@@ -476,6 +556,8 @@ When an unsupported model is used.
 - **From builtins.BaseException**: with_traceback, add_note
 
 ## [class]{.muted} UnsupportedModelForSHAPError
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class UnsupportedModelForSHAPError(BaseError):
@@ -490,6 +572,8 @@ When an unsupported model is used for SHAP importance.
 
 ## [class]{.muted} UnsupportedRModelError
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class UnsupportedRModelError(BaseError):
 ```
@@ -503,6 +587,8 @@ When an unsupported R model is used.
 
 ## raise_api_error[()]{.muted}
 
+<!-- function.qmd.jinja2 - function signature -->
+
 ```python
 def raise_api_error(
     error_string):
@@ -511,6 +597,8 @@ def raise_api_error(
 Safely try to parse JSON from the response message in case the API returns a non-JSON string or if the API returns a non-standard error
 
 ## should_raise_on_fail_fast[()]{.muted}
+
+<!-- function.qmd.jinja2 - function signature -->
 
 ```python
 def should_raise_on_fail_fast(

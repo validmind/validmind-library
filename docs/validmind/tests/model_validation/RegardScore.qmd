@@ -5,6 +5,8 @@ sidebar: validmind-reference
 
 ## validate_prediction[()]{.muted}
 
+<!-- module.qmd.jinja2 - module level function alias -->
+
 ```python
 def validate_prediction(
     y_true,    y_pred,    dataset_id = None):
@@ -23,6 +25,8 @@ Comprehensive validation of true and predicted value pairs. Handles NaN/None val
 - (cleaned_y_true, cleaned_y_pred) with matching lengths and no NaN values
 
 ## RegardScore[()]{.muted}
+
+<!-- function.qmd.jinja2 - function signature -->
 
 ```python
 def RegardScore(

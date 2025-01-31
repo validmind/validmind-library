@@ -5,12 +5,16 @@ sidebar: validmind-reference
 
 ## get_categorical_columns[()]{.muted}
 
+<!-- function.qmd.jinja2 - function signature -->
+
 ```python
 def get_categorical_columns(
     dataset):
 ```
 
 ## get_datetime_columns[()]{.muted}
+
+<!-- function.qmd.jinja2 - function signature -->
 
 ```python
 def get_datetime_columns(
@@ -19,12 +23,16 @@ def get_datetime_columns(
 
 ## get_numerical_columns[()]{.muted}
 
+<!-- function.qmd.jinja2 - function signature -->
+
 ```python
 def get_numerical_columns(
     dataset):
 ```
 
 ## get_summary_statistics_categorical[()]{.muted}
+
+<!-- function.qmd.jinja2 - function signature -->
 
 ```python
 def get_summary_statistics_categorical(
@@ -34,6 +42,8 @@ def get_summary_statistics_categorical(
 
 ## get_summary_statistics_datetime[()]{.muted}
 
+<!-- function.qmd.jinja2 - function signature -->
+
 ```python
 def get_summary_statistics_datetime(
     dataset,
@@ -42,6 +52,8 @@ def get_summary_statistics_datetime(
 
 ## get_summary_statistics_numerical[()]{.muted}
 
+<!-- function.qmd.jinja2 - function signature -->
+
 ```python
 def get_summary_statistics_numerical(
     dataset,
@@ -49,6 +61,8 @@ def get_summary_statistics_numerical(
 ```
 
 ## TabularDescriptionTables[()]{.muted}
+
+<!-- function.qmd.jinja2 - function signature -->
 
 ```python
 def TabularDescriptionTables(

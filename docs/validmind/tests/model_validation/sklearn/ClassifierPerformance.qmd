@@ -5,6 +5,8 @@ sidebar: validmind-reference
 
 ## ClassifierPerformance[()]{.muted}
 
+<!-- function.qmd.jinja2 - function signature -->
+
 ```python
 def ClassifierPerformance(
     dataset: VMDataset,
@@ -41,6 +43,8 @@ The test produces a report that includes precision, recall, F1-Score, and accura
 - May provide limited insights if the test dataset does not represent real-world scenarios adequately.
 
 ## multiclass_roc_auc_score[()]{.muted}
+
+<!-- function.qmd.jinja2 - function signature -->
 
 ```python
 def multiclass_roc_auc_score(

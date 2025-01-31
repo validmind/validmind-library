@@ -7,6 +7,8 @@ Time Series Test Suites from statsmodels
 
 ## [class]{.muted} RegressionModelDescription
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class RegressionModelDescription(TestSuite):
 ```
@@ -16,6 +18,8 @@ Test suite for performance metric of regression model of statsmodels library
 **Inherited members**
 
 ## [class]{.muted} RegressionModelsEvaluation
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class RegressionModelsEvaluation(TestSuite):

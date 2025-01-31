@@ -5,12 +5,16 @@ sidebar: validmind-reference
 
 ## compute_scores[()]{.muted}
 
+<!-- function.qmd.jinja2 - function signature -->
+
 ```python
 def compute_scores(
     probabilities):
 ```
 
 ## load_data[()]{.muted}
+
+<!-- function.qmd.jinja2 - function signature -->
 
 ```python
 def load_data(
@@ -21,12 +25,16 @@ Load data from the specified CSV file. :return: DataFrame containing the loaded 
 
 ## preprocess[()]{.muted}
 
+<!-- function.qmd.jinja2 - function signature -->
+
 ```python
 def preprocess(
     df):
 ```
 
 ## split[()]{.muted}
+
+<!-- function.qmd.jinja2 - function signature -->
 
 ```python
 def split(

@@ -20,6 +20,7 @@ sidebar: validmind-reference
 {% if module.members.__version__ %}
 ### \\_\\_version\\_\\_
 
+<!-- module.qmd.jinja2 - version number -->
 ```python
 {{ module.members.__version__.value | replace("'", "") if module.members.__version__.value else module.members.__version__.members.__version__.value | replace("'", "") }}
 ```
@@ -33,6 +34,7 @@ sidebar: validmind-reference
 ### {{ member.name }}[()]{.muted}
 
 {% if target.kind == "function" %}
+<!-- module.qmd.jinja2 - root level function alias -->
 ```python
 {% if target.labels and "async" in target.labels %}async {% endif %}
 def {{ member.name }}(
@@ -75,6 +77,7 @@ def {{ member.name }}(
 {% if resolved.kind == "function" %}
 ## {{ member.name }}[()]{.muted}
 
+<!-- module.qmd.jinja2 - module level function alias -->
 ```python
 {% if resolved.labels and "async" in resolved.labels %}async {% endif %}def {{ member.name }}(
 {% for param in resolved.parameters %}
@@ -115,6 +118,7 @@ def {{ member.name }}(
 
 ### [class]{.muted} {{ member.name }}
 
+<!-- module.qmd.jinja2 - class definition -->
 ```python
 class {{ member.name }}():
 ```
@@ -129,6 +133,7 @@ class {{ member.name }}():
 
 #### {{ member.name if method_name == '__init__' else method_name }}[()]{.muted}
 
+<!-- module.qmd.jinja2 - class method definition -->
 ```python
 def {{ method_name }}(
 {%- for param in method.parameters %}

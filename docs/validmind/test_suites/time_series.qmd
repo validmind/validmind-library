@@ -7,6 +7,8 @@ Time Series Test Suites
 
 ## [class]{.muted} TimeSeriesDataQuality
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class TimeSeriesDataQuality(TestSuite):
 ```
@@ -16,6 +18,8 @@ Test suite for data quality on time series datasets
 **Inherited members**
 
 ## [class]{.muted} TimeSeriesDataset
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class TimeSeriesDataset(TestSuite):
@@ -27,6 +31,8 @@ Test suite for time series datasets.
 
 ## [class]{.muted} TimeSeriesModelValidation
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class TimeSeriesModelValidation(TestSuite):
 ```
@@ -37,6 +43,8 @@ Test suite for time series model validation.
 
 ## [class]{.muted} TimeSeriesMultivariate
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class TimeSeriesMultivariate(TestSuite):
 ```
@@ -46,6 +54,8 @@ This test suite provides a preliminary understanding of the features and relatio
 **Inherited members**
 
 ## [class]{.muted} TimeSeriesUnivariate
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class TimeSeriesUnivariate(TestSuite):
@@ -59,6 +69,8 @@ The raw time series data provides a visual inspection of the target variable's b
 
 ## [class]{.muted} RegressionModelDescription
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class RegressionModelDescription(TestSuite):
 ```
@@ -68,6 +80,8 @@ Test suite for performance metric of regression model of statsmodels library
 **Inherited members**
 
 ## [class]{.muted} RegressionModelsEvaluation
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class RegressionModelsEvaluation(TestSuite):

@@ -5,6 +5,8 @@ sidebar: validmind-reference
 
 ## EngleGrangerCoint[()]{.muted}
 
+<!-- function.qmd.jinja2 - function signature -->
+
 ```python
 def EngleGrangerCoint(
     dataset: VMDataset,
@@ -38,6 +40,8 @@ The test first drops any non-applicable values from the input dataset and then i
 - May not perform well for small sample sizes due to lack of statistical power and should be supplemented with other predictive indicators for a more robust model evaluation.
 
 ## [class]{.muted} SkipTestError
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class SkipTestError(BaseError):

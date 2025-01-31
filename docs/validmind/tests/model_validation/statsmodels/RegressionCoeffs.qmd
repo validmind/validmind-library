@@ -5,6 +5,8 @@ sidebar: validmind-reference
 
 ## RegressionCoeffs[()]{.muted}
 
+<!-- function.qmd.jinja2 - function signature -->
+
 ```python
 def RegressionCoeffs(
     model):
@@ -38,6 +40,8 @@ The function operates by extracting the estimated coefficients and their standar
 - This metric is limited to regression tasks using tabular data and is not applicable to other types of machine learning tasks or data structures.
 
 ## [class]{.muted} SkipTestError
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class SkipTestError(BaseError):

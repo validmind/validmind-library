@@ -7,6 +7,8 @@ Test suites for NLP models
 
 ## [class]{.muted} NLPClassifierFullSuite
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class NLPClassifierFullSuite(TestSuite):
 ```
@@ -16,6 +18,8 @@ Full test suite for NLP classification models.
 **Inherited members**
 
 ## [class]{.muted} ClassifierDiagnosis
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class ClassifierDiagnosis(TestSuite):
@@ -27,6 +31,8 @@ Test suite for sklearn classifier model diagnosis tests
 
 ## [class]{.muted} ClassifierMetrics
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class ClassifierMetrics(TestSuite):
 ```
@@ -37,6 +43,8 @@ Test suite for sklearn classifier metrics
 
 ## [class]{.muted} ClassifierPerformance
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class ClassifierPerformance(TestSuite):
 ```
@@ -46,6 +54,8 @@ Test suite for sklearn classifier models
 **Inherited members**
 
 ## [class]{.muted} TextDataQuality
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class TextDataQuality(TestSuite):

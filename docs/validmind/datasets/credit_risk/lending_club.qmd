@@ -5,12 +5,16 @@ sidebar: validmind-reference
 
 ## compute_scores[()]{.muted}
 
+<!-- function.qmd.jinja2 - function signature -->
+
 ```python
 def compute_scores(
     probabilities):
 ```
 
 ## feature_engineering[()]{.muted}
+
+<!-- function.qmd.jinja2 - function signature -->
 
 ```python
 def feature_engineering(
@@ -19,6 +23,8 @@ def feature_engineering(
 ```
 
 ## get_demo_test_config[()]{.muted}
+
+<!-- function.qmd.jinja2 - function signature -->
 
 ```python
 def get_demo_test_config(
@@ -39,12 +45,16 @@ Get demo test configuration.
 
 ## init_vm_objects[()]{.muted}
 
+<!-- function.qmd.jinja2 - function signature -->
+
 ```python
 def init_vm_objects(
     scorecard):
 ```
 
 ## load_data[()]{.muted}
+
+<!-- function.qmd.jinja2 - function signature -->
 
 ```python
 def load_data(
@@ -56,12 +66,16 @@ Load data from either an online source or offline files, automatically dropping 
 
 ## load_scorecard[()]{.muted}
 
+<!-- function.qmd.jinja2 - function signature -->
+
 ```python
 def load_scorecard(
 ):
 ```
 
 ## load_test_config[()]{.muted}
+
+<!-- function.qmd.jinja2 - function signature -->
 
 ```python
 def load_test_config(
@@ -70,6 +84,8 @@ def load_test_config(
 
 ## preprocess[()]{.muted}
 
+<!-- function.qmd.jinja2 - function signature -->
+
 ```python
 def preprocess(
     df,
@@ -77,6 +93,8 @@ def preprocess(
 ```
 
 ## split[()]{.muted}
+
+<!-- function.qmd.jinja2 - function signature -->
 
 ```python
 def split(
@@ -101,6 +119,8 @@ Split dataset into train, validation (optional), and test sets.
 - If validation_size is None: train_df, test_df If validation_size is float: train_df, validation_df, test_df
 
 ## woe_encoding[()]{.muted}
+
+<!-- function.qmd.jinja2 - function signature -->
 
 ```python
 def woe_encoding(

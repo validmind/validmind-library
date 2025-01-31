@@ -7,6 +7,8 @@ Test suites for text datasets
 
 ## [class]{.muted} TextDataQuality
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class TextDataQuality(TestSuite):
 ```

@@ -7,6 +7,8 @@ Models entrypoint
 
 ## [class]{.muted} Figure
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class Figure():
 ```
@@ -14,6 +16,8 @@ class Figure():
 Figure objects track the schema supported by the ValidMind API
 
 ### [serialize[()]{.muted}](#serialize)
+
+<!-- class.qmd.jinja2 - member method signature -->
 
 ```python
 serialize(self)
@@ -23,6 +27,8 @@ Serializes the Figure to a dictionary so it can be sent to the API
 
 ### [serialize_files[()]{.muted}](#serialize_files)
 
+<!-- class.qmd.jinja2 - member method signature -->
+
 ```python
 serialize_files(self)
 ```
@@ -30,6 +36,8 @@ serialize_files(self)
 Creates a `requests`-compatible files object to be sent to the API
 
 ### [to_widget[()]{.muted}](#to_widget)
+
+<!-- class.qmd.jinja2 - member method signature -->
 
 ```python
 to_widget(self)
@@ -39,6 +47,8 @@ Returns the ipywidget compatible representation of the figure. Ideally we would 
 
 ## [class]{.muted} ModelAttributes
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class ModelAttributes():
 ```
@@ -47,6 +57,8 @@ Model attributes definition
 
 ### [from_dict[()]{.muted}](#from_dict)
 
+<!-- class.qmd.jinja2 - member method signature -->
+
 ```python
 from_dict(cls, data)
 ```
@@ -54,6 +66,8 @@ from_dict(cls, data)
 Creates a ModelAttributes instance from a dictionary
 
 ## [class]{.muted} TestSuite
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class TestSuite():
@@ -64,6 +78,8 @@ Base class for test suites. Test suites are used to define a grouping of tests t
 Tests can be a flat list of strings or may be nested into sections by using a dict
 
 ### [get_default_config[()]{.muted}](#get_default_config)
+
+<!-- class.qmd.jinja2 - member method signature -->
 
 ```python
 get_default_config(self)
@@ -77,6 +93,8 @@ Returns the default configuration for the test suite Each test in a test suite c
 
 ### [get_tests[()]{.muted}](#get_tests)
 
+<!-- class.qmd.jinja2 - member method signature -->
+
 ```python
 get_tests(self)
 ```
@@ -84,6 +102,8 @@ get_tests(self)
 Get all test suite test objects from all sections
 
 ### [num_tests[()]{.muted}](#num_tests)
+
+<!-- class.qmd.jinja2 - member method signature -->
 
 ```python
 num_tests(self)
@@ -93,6 +113,8 @@ Returns the total number of tests in the test suite
 
 ## [class]{.muted} TestSuiteRunner
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class TestSuiteRunner():
 ```
@@ -101,6 +123,8 @@ Runs a test suite
 
 ### [log_results[()]{.muted}](#log_results)
 
+<!-- class.qmd.jinja2 - member method signature -->
+
 ```python
 log_results(self)
 ```
@@ -108,6 +132,8 @@ log_results(self)
 Logs the results of the test suite to ValidMind This method will be called after the test suite has been run and all results have been collected. This method will log the results to ValidMind.
 
 ### [run[()]{.muted}](#run)
+
+<!-- class.qmd.jinja2 - member method signature -->
 
 ```python
 run(self, send, fail_fast)
@@ -122,11 +148,15 @@ Runs the test suite, renders the summary and sends the results to ValidMind
 
 ### [summarize[()]{.muted}](#summarize)
 
+<!-- class.qmd.jinja2 - member method signature -->
+
 ```python
 summarize(self, show_link)
 ```
 
 ## [class]{.muted} VMDataset
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class VMDataset(VMInput):
@@ -155,6 +185,8 @@ This way we can support multiple dataset types but under the hood we only need t
 
 ### [add_extra_column[()]{.muted}](#add_extra_column)
 
+<!-- class.qmd.jinja2 - member method signature -->
+
 ```python
 add_extra_column(self, column_name, column_values)
 ```
@@ -167,6 +199,8 @@ Adds an extra column to the dataset without modifying the dataset `features` and
 - **column_values** np.ndarray: The values of the extra column.
 
 ### [assign_predictions[()]{.muted}](#assign_predictions)
+
+<!-- class.qmd.jinja2 - member method signature -->
 
 ```python
 assign_predictions(self, model, prediction_column, prediction_values, probability_column, probability_values, prediction_probabilities, kwargs)
@@ -186,6 +220,8 @@ Assign predictions and probabilities to the dataset.
 
 ### [prediction_column[()]{.muted}](#prediction_column)
 
+<!-- class.qmd.jinja2 - member method signature -->
+
 ```python
 prediction_column(self, model, column_name)
 ```
@@ -193,6 +229,8 @@ prediction_column(self, model, column_name)
 Get or set the prediction column for a model.
 
 ### [probability_column[()]{.muted}](#probability_column)
+
+<!-- class.qmd.jinja2 - member method signature -->
 
 ```python
 probability_column(self, model, column_name)
@@ -202,6 +240,8 @@ Get or set the probability column for a model.
 
 ### [target_classes[()]{.muted}](#target_classes)
 
+<!-- class.qmd.jinja2 - member method signature -->
+
 ```python
 target_classes(self)
 ```
@@ -209,6 +249,8 @@ target_classes(self)
 Returns the target class labels or unique values of the target column.
 
 ### [with_options[()]{.muted}](#with_options)
+
+<!-- class.qmd.jinja2 - member method signature -->
 
 ```python
 with_options(self, kwargs)
@@ -227,6 +269,8 @@ Support options provided when passing an input to run_test or run_test_suite
 
 ### [x_df[()]{.muted}](#x_df)
 
+<!-- class.qmd.jinja2 - member method signature -->
+
 ```python
 x_df(self)
 ```
@@ -235,6 +279,8 @@ Returns a dataframe containing only the feature columns
 
 ### [y_df[()]{.muted}](#y_df)
 
+<!-- class.qmd.jinja2 - member method signature -->
+
 ```python
 y_df(self)
 ```
@@ -242,6 +288,8 @@ y_df(self)
 Returns a dataframe containing the target column
 
 ### [y_pred[()]{.muted}](#y_pred)
+
+<!-- class.qmd.jinja2 - member method signature -->
 
 ```python
 y_pred(self, model)
@@ -259,6 +307,8 @@ Returns the predictions for a given model. Attempts to stack complex prediction 
 
 ### [y_pred_df[()]{.muted}](#y_pred_df)
 
+<!-- class.qmd.jinja2 - member method signature -->
+
 ```python
 y_pred_df(self, model)
 ```
@@ -266,6 +316,8 @@ y_pred_df(self, model)
 Returns a dataframe containing the predictions for a given model
 
 ### [y_prob[()]{.muted}](#y_prob)
+
+<!-- class.qmd.jinja2 - member method signature -->
 
 ```python
 y_prob(self, model)
@@ -283,6 +335,8 @@ Returns the probabilities for a given model.
 
 ### [y_prob_df[()]{.muted}](#y_prob_df)
 
+<!-- class.qmd.jinja2 - member method signature -->
+
 ```python
 y_prob_df(self, model)
 ```
@@ -290,6 +344,8 @@ y_prob_df(self, model)
 Returns a dataframe containing the probabilities for a given model
 
 ## [class]{.muted} VMInput
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class VMInput(ABC):
@@ -300,6 +356,8 @@ Base class for ValidMind Input types
 **Inherited members**
 
 ### [with_options[()]{.muted}](#with_options)
+
+<!-- class.qmd.jinja2 - member method signature -->
 
 ```python
 with_options(self, kwargs)
@@ -319,6 +377,8 @@ To allow options, just override this method in the subclass (see VMDataset) and 
 
 ## [class]{.muted} VMModel
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class VMModel(VMInput):
 ```
@@ -336,6 +396,8 @@ An base class that wraps a trained model instance and its associated data.
 
 ### [predict[()]{.muted}](#predict)
 
+<!-- class.qmd.jinja2 - member method signature -->
+
 ```python
 predict(self, args, kwargs)
 ```
@@ -344,6 +406,8 @@ Predict method for the model. This is a wrapper around the model's
 
 ### [predict_proba[()]{.muted}](#predict_proba)
 
+<!-- class.qmd.jinja2 - member method signature -->
+
 ```python
 predict_proba(self, args, kwargs)
 ```
@@ -351,6 +415,8 @@ predict_proba(self, args, kwargs)
 Predict probabilties - must be implemented by subclass if needed
 
 ### [serialize[()]{.muted}](#serialize)
+
+<!-- class.qmd.jinja2 - member method signature -->
 
 ```python
 serialize(self)

@@ -5,6 +5,8 @@ sidebar: validmind-reference
 
 ## TargetRateBarPlots[()]{.muted}
 
+<!-- function.qmd.jinja2 - function signature -->
+
 ```python
 def TargetRateBarPlots(
     dataset: VMDataset):
@@ -35,6 +37,8 @@ The test involves creating a pair of bar plots for each categorical feature in t
 - The readability of the bar plots drops as the number of distinct categories increases in the dataset, which can make them harder to understand and less useful.
 
 ## [class]{.muted} SkipTestError
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class SkipTestError(BaseError):

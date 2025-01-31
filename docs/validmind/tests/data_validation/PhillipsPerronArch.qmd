@@ -5,6 +5,8 @@ sidebar: validmind-reference
 
 ## get_logger[()]{.muted}
 
+<!-- module.qmd.jinja2 - module level function alias -->
+
 ```python
 def get_logger(
     name = 'validmind',    log_level = None):
@@ -13,6 +15,8 @@ def get_logger(
 Get a logger for the given module name
 
 ## PhillipsPerronArch[()]{.muted}
+
+<!-- function.qmd.jinja2 - function signature -->
 
 ```python
 def PhillipsPerronArch(
@@ -52,6 +56,8 @@ The PP test is conducted for each feature in the dataset as follows:
 - Non-stationary time series must be converted to stationary series through differencing, potentially leading to loss of important data points.
 
 ## [class]{.muted} SkipTestError
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class SkipTestError(BaseError):

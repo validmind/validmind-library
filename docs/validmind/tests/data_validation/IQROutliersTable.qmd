@@ -5,6 +5,8 @@ sidebar: validmind-reference
 
 ## compute_outliers[()]{.muted}
 
+<!-- function.qmd.jinja2 - function signature -->
+
 ```python
 def compute_outliers(
     series,
@@ -12,6 +14,8 @@ def compute_outliers(
 ```
 
 ## IQROutliersTable[()]{.muted}
+
+<!-- function.qmd.jinja2 - function signature -->
 
 ```python
 def IQROutliersTable(

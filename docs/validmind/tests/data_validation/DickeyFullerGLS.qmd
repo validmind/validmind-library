@@ -5,6 +5,8 @@ sidebar: validmind-reference
 
 ## get_logger[()]{.muted}
 
+<!-- module.qmd.jinja2 - module level function alias -->
+
 ```python
 def get_logger(
     name = 'validmind',    log_level = None):
@@ -13,6 +15,8 @@ def get_logger(
 Get a logger for the given module name
 
 ## DickeyFullerGLS[()]{.muted}
+
+<!-- function.qmd.jinja2 - function signature -->
 
 ```python
 def DickeyFullerGLS(
@@ -46,6 +50,8 @@ This code implements the Dickey-Fuller GLS unit root test on each attribute of t
 - The test also presents challenges when dealing with shorter time series data or volatile data, not producing reliable results in these cases.
 
 ## [class]{.muted} SkipTestError
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class SkipTestError(BaseError):

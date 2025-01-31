@@ -5,6 +5,8 @@ sidebar: validmind-reference
 
 ## KMeansClustersOptimization[()]{.muted}
 
+<!-- function.qmd.jinja2 - function signature -->
+
 ```python
 def KMeansClustersOptimization(
     model: VMModel,
@@ -42,6 +44,8 @@ The test mechanism involves iterating over a predefined range of cluster numbers
 - Assumes spherical clusters (due to using the Euclidean distance in the Elbow method), which might not align with the actual structure of the data.
 
 ## [class]{.muted} SkipTestError
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class SkipTestError(BaseError):

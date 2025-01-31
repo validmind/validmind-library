@@ -5,6 +5,8 @@ sidebar: validmind-reference
 
 ## TimeSeriesOutliers[()]{.muted}
 
+<!-- function.qmd.jinja2 - function signature -->
+
 ```python
 def TimeSeriesOutliers(
     dataset: VMDataset,
@@ -44,6 +46,8 @@ The test processes a given dataset which must have datetime indexing, checks if 
 - The requirement for a datetime index could limit its application.
 
 ## [class]{.muted} SkipTestError
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class SkipTestError(BaseError):

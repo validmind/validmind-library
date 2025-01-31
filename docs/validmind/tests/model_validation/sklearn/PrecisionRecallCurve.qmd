@@ -5,6 +5,8 @@ sidebar: validmind-reference
 
 ## PrecisionRecallCurve[()]{.muted}
 
+<!-- function.qmd.jinja2 - function signature -->
+
 ```python
 def PrecisionRecallCurve(
     model: VMModel,
@@ -38,6 +40,8 @@ The test extracts ground truth labels and prediction probabilities from the mode
 - It may not fully represent the overall accuracy of the model if the cost of false positives and false negatives are extremely different, or if the dataset is heavily imbalanced.
 
 ## [class]{.muted} SkipTestError
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class SkipTestError(BaseError):

@@ -5,6 +5,8 @@ sidebar: validmind-reference
 
 ## get_logger[()]{.muted}
 
+<!-- module.qmd.jinja2 - module level function alias -->
+
 ```python
 def get_logger(
     name = 'validmind',    log_level = None):
@@ -13,6 +15,8 @@ def get_logger(
 Get a logger for the given module name
 
 ## PermutationFeatureImportance[()]{.muted}
+
+<!-- function.qmd.jinja2 - function signature -->
 
 ```python
 def PermutationFeatureImportance(
@@ -50,6 +54,8 @@ PFI is calculated via the `permutation_importance` method from the `sklearn.insp
 - Cannot interact with certain libraries like statsmodels, pytorch, catboost, etc., thus limiting its applicability.
 
 ## [class]{.muted} SkipTestError
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class SkipTestError(BaseError):

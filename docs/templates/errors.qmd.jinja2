@@ -16,6 +16,7 @@ toc-expand: 3
 {% if member.kind == 'class' and member.name in ['BaseError', 'APIRequestError'] %}
 ### [class]{.muted} {{ member.name }}
 
+<!-- errors.qmd.jinja2 - error class definition -->
 ```python
 class {{ member.name }}({% for base in member.bases %}{{ base.name }}{% if not loop.last %}, {% endif %}{% endfor %}):
 ```
@@ -28,6 +29,8 @@ class {{ member.name }}({% for base in member.bases %}{{ base.name }}{% if not l
 {% for method in member.members.values() | sort(attribute='name') %}
 {% if method.kind == 'method' and not method.name.startswith('_') %}
 #### [{{ method.name }}[()]{.muted}](#{{ method.name }})
+
+<!-- errors.qmd.jinja2 - error method signature -->
 ```python
 {{ method.name }}({{ method.parameters | map(attribute='name') | join(', ') }})
 ```
@@ -43,6 +46,7 @@ class {{ member.name }}({% for base in member.bases %}{{ base.name }}{% if not l
 {% if member.kind == 'class' and (member.name.startswith('API') or member.name.endswith('APIError')) and member.name != 'APIRequestError' %}
 ### [class]{.muted} {{ member.name }}
 
+<!-- errors.qmd.jinja2 - api error class definition -->
 ```python
 class {{ member.name }}({% for base in member.bases %}{{ base.name }}{% if not loop.last %}, {% endif %}{% endfor %}):
 ```
@@ -55,6 +59,8 @@ class {{ member.name }}({% for base in member.bases %}{{ base.name }}{% if not l
 {% for method in member.members.values() | sort(attribute='name') %}
 {% if method.kind == 'method' and not method.name.startswith('_') %}
 #### [{{ method.name }}[()]{.muted}](#{{ method.name }})
+
+<!-- errors.qmd.jinja2 - api error method signature -->
 ```python
 {{ method.name }}({{ method.parameters | map(attribute='name') | join(', ') }})
 ```
@@ -70,6 +76,7 @@ class {{ member.name }}({% for base in member.bases %}{{ base.name }}{% if not l
 {% if member.kind == 'class' and 'Model' in member.name %}
 ### [class]{.muted} {{ member.name }}
 
+<!-- errors.qmd.jinja2 - model error class definition -->
 ```python
 class {{ member.name }}({% for base in member.bases %}{{ base.name }}{% if not loop.last %}, {% endif %}{% endfor %}):
 ```
@@ -82,6 +89,8 @@ class {{ member.name }}({% for base in member.bases %}{{ base.name }}{% if not l
 {% for method in member.members.values() | sort(attribute='name') %}
 {% if method.kind == 'method' and not method.name.startswith('_') %}
 #### [{{ method.name }}[()]{.muted}](#{{ method.name }})
+
+<!-- errors.qmd.jinja2 - model error method signature -->
 ```python
 {{ method.name }}({{ method.parameters | map(attribute='name') | join(', ') }})
 ```
@@ -97,6 +106,7 @@ class {{ member.name }}({% for base in member.bases %}{{ base.name }}{% if not l
 {% if member.kind == 'class' and 'Test' in member.name %}
 ### [class]{.muted} {{ member.name }}
 
+<!-- errors.qmd.jinja2 - test error class definition -->
 ```python
 class {{ member.name }}({% for base in member.bases %}{{ base.name }}{% if not loop.last %}, {% endif %}{% endfor %}):
 ```
@@ -109,6 +119,8 @@ class {{ member.name }}({% for base in member.bases %}{{ base.name }}{% if not l
 {% for method in member.members.values() | sort(attribute='name') %}
 {% if method.kind == 'method' and not method.name.startswith('_') %}
 #### [{{ method.name }}[()]{.muted}](#{{ method.name }})
+
+<!-- errors.qmd.jinja2 - test error method signature -->
 ```python
 {{ method.name }}({{ method.parameters | map(attribute='name') | join(', ') }})
 ```
@@ -124,6 +136,7 @@ class {{ member.name }}({% for base in member.bases %}{{ base.name }}{% if not l
 {% if member.kind == 'class' and (member.name.startswith('Invalid') or member.name.startswith('Missing')) %}
 ### [class]{.muted} {{ member.name }}
 
+<!-- errors.qmd.jinja2 - validation error class definition -->
 ```python
 class {{ member.name }}({% for base in member.bases %}{{ base.name }}{% if not loop.last %}, {% endif %}{% endfor %}):
 ```
@@ -136,6 +149,8 @@ class {{ member.name }}({% for base in member.bases %}{{ base.name }}{% if not l
 {% for method in member.members.values() | sort(attribute='name') %}
 {% if method.kind == 'method' and not method.name.startswith('_') %}
 #### [{{ method.name }}[()]{.muted}](#{{ method.name }})
+
+<!-- errors.qmd.jinja2 - validation error method signature -->
 ```python
 {{ method.name }}({{ method.parameters | map(attribute='name') | join(', ') }})
 ```
@@ -151,6 +166,7 @@ class {{ member.name }}({% for base in member.bases %}{{ base.name }}{% if not l
 {% if member.kind == 'class' and member.name.startswith('Unsupported') %}
 ### [class]{.muted} {{ member.name }}
 
+<!-- errors.qmd.jinja2 - unsupported feature error class definition -->
 ```python
 class {{ member.name }}({% for base in member.bases %}{{ base.name }}{% if not loop.last %}, {% endif %}{% endfor %}):
 ```
@@ -163,6 +179,8 @@ class {{ member.name }}({% for base in member.bases %}{{ base.name }}{% if not l
 {% for method in member.members.values() | sort(attribute='name') %}
 {% if method.kind == 'method' and not method.name.startswith('_') %}
 #### [{{ method.name }}[()]{.muted}](#{{ method.name }})
+
+<!-- errors.qmd.jinja2 - unsupported feature error method signature -->
 ```python
 {{ method.name }}({{ method.parameters | map(attribute='name') | join(', ') }})
 ```

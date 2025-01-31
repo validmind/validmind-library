@@ -5,6 +5,8 @@ sidebar: validmind-reference
 
 ## [class]{.muted} RegressionFullSuite
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class RegressionFullSuite(TestSuite):
 ```
@@ -14,6 +16,8 @@ Full test suite for regression models.
 **Inherited members**
 
 ## [class]{.muted} RegressionMetrics
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class RegressionMetrics(TestSuite):
@@ -25,6 +29,8 @@ Test suite for performance metrics of regression metrics
 
 ## [class]{.muted} RegressionPerformance
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class RegressionPerformance(TestSuite):
 ```
@@ -35,6 +41,8 @@ Test suite for regression model performance
 
 ## [class]{.muted} TabularDataQuality
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class TabularDataQuality(TestSuite):
 ```
@@ -44,6 +52,8 @@ Test suite for data quality on tabular datasets
 **Inherited members**
 
 ## [class]{.muted} TabularDatasetDescription
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class TabularDatasetDescription(TestSuite):

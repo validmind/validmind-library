@@ -34,11 +34,15 @@ After you have pasted the code snippet into your development source code and exe
 
 ### \\_\\_version\\_\\_
 
+<!-- module.qmd.jinja2 - version number -->
+
 ```python
 2.8.4
 ```
 
 ### get_test_suite[()]{.muted}
+
+<!-- module.qmd.jinja2 - root level function alias -->
 
 ```python
 def get_test_suite(
@@ -58,6 +62,8 @@ Gets a TestSuite object for the current project or a specific test suite This fu
 - **kwargs**: Additional keyword arguments to pass to the TestSuite
 
 ### init[()]{.muted}
+
+<!-- module.qmd.jinja2 - root level function alias -->
 
 ```python
 def init(
@@ -89,6 +95,8 @@ If the API key and secret are not provided, the client will attempt to retrieve 
 - **ValueError**: If the API key and secret are not provided
 
 ### init_dataset[()]{.muted}
+
+<!-- module.qmd.jinja2 - root level function alias -->
 
 ```python
 def init_dataset(
@@ -125,6 +133,8 @@ Returns: vm.vm.Dataset: A VM Dataset instance
 
 ### init_model[()]{.muted}
 
+<!-- module.qmd.jinja2 - root level function alias -->
+
 ```python
 def init_model(
     model: object = None,
@@ -155,6 +165,8 @@ Initializes a VM Model, which can then be passed to other functions that can per
 
 ### init_r_model[()]{.muted}
 
+<!-- module.qmd.jinja2 - root level function alias -->
+
 ```python
 def init_r_model(
     model_path: str,
@@ -181,6 +193,8 @@ LogisticRegression and LinearRegression models are converted to sklearn models b
 
 ### log_metric[()]{.muted}
 
+<!-- module.qmd.jinja2 - root level function alias -->
+
 ```python
 def log_metric(
     key: str,
@@ -204,6 +218,8 @@ Logs a unit metric Unit metrics are key-value pairs where the key is the metric 
 
 ### preview_template[()]{.muted}
 
+<!-- module.qmd.jinja2 - root level function alias -->
+
 ```python
 def preview_template(
 ):
@@ -217,6 +233,8 @@ Preview the documentation template for the current project This function will di
 
 ### print_env[()]{.muted}
 
+<!-- module.qmd.jinja2 - root level function alias -->
+
 ```python
 def print_env(
 ):
@@ -226,6 +244,8 @@ Prints a log of the running environment for debugging. Output includes: ValidMin
 
 ### reload[()]{.muted}
 
+<!-- module.qmd.jinja2 - root level function alias -->
+
 ```python
 def reload(
 ):
@@ -234,6 +254,8 @@ def reload(
 Reconnect to the ValidMind API and reload the project configuration
 
 ### run_documentation_tests[()]{.muted}
+
+<!-- module.qmd.jinja2 - root level function alias -->
 
 ```python
 def run_documentation_tests(
@@ -266,6 +288,8 @@ Collect and run all the tests associated with a template This function will anal
 
 ### run_test_suite[()]{.muted}
 
+<!-- module.qmd.jinja2 - root level function alias -->
+
 ```python
 def run_test_suite(
     test_suite_id,
@@ -297,6 +321,8 @@ High Level function for running a test suite This function provides a high level
 
 ### tags[()]{.muted}
 
+<!-- module.qmd.jinja2 - root level function alias -->
+
 ```python
 def tags(
     *tags = ()):
@@ -310,6 +336,8 @@ Decorator for specifying tags for a test.
 
 ### tasks[()]{.muted}
 
+<!-- module.qmd.jinja2 - root level function alias -->
+
 ```python
 def tasks(
     *tasks = ()):
@@ -322,6 +350,8 @@ Decorator for specifying the task types that a test is designed for.
 - \***tasks**: The task types that the test is designed for.
 
 ### test[()]{.muted}
+
+<!-- module.qmd.jinja2 - root level function alias -->
 
 ```python
 def test(
@@ -355,6 +385,8 @@ The function may also include a docstring. This docstring will be used and logge
 
 ### [class]{.muted} RawData
 
+<!-- module.qmd.jinja2 - class definition -->
+
 ```python
 class RawData():
 ```
@@ -362,6 +394,8 @@ class RawData():
 Holds raw data for a test result
 
 #### RawData[()]{.muted}
+
+<!-- module.qmd.jinja2 - class method definition -->
 
 ```python
 def __init__(    self,
@@ -378,6 +412,8 @@ Create a new RawData object
 
 #### inspect[()]{.muted}
 
+<!-- module.qmd.jinja2 - class method definition -->
+
 ```python
 def inspect(    self,
     show: bool = True):
@@ -386,6 +422,8 @@ def inspect(    self,
 Inspect the raw data
 
 #### serialize[()]{.muted}
+
+<!-- module.qmd.jinja2 - class method definition -->
 
 ```python
 def serialize(    self):

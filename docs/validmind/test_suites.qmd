@@ -20,6 +20,8 @@ Entrypoint for test suites.
 
 ## format_dataframe[()]{.muted}
 
+<!-- module.qmd.jinja2 - module level function alias -->
+
 ```python
 def format_dataframe(
     df: {'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'pd'}, {'cls': 'ExprName', 'name': 'DataFrame'}]}) -> {'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'pd'}, {'cls': 'ExprName', 'name': 'DataFrame'}]}:
@@ -29,6 +31,8 @@ Format a pandas DataFrame for display purposes
 
 ## get_logger[()]{.muted}
 
+<!-- module.qmd.jinja2 - module level function alias -->
+
 ```python
 def get_logger(
     name = 'validmind',    log_level = None):
@@ -37,6 +41,8 @@ def get_logger(
 Get a logger for the given module name
 
 ## test_id_to_name[()]{.muted}
+
+<!-- module.qmd.jinja2 - module level function alias -->
 
 ```python
 def test_id_to_name(
@@ -54,6 +60,8 @@ Convert a test ID to a human-readable name.
 - A human-readable name derived from the test ID.
 
 ## describe_suite[()]{.muted}
+
+<!-- function.qmd.jinja2 - function signature -->
 
 ```python
 def describe_suite(
@@ -74,6 +82,8 @@ Describes a Test Suite by ID
 
 ## get_by_id[()]{.muted}
 
+<!-- function.qmd.jinja2 - function signature -->
+
 ```python
 def get_by_id(
     test_suite_id: str):
@@ -83,6 +93,8 @@ Returns the test suite by ID
 
 ## list_suites[()]{.muted}
 
+<!-- function.qmd.jinja2 - function signature -->
+
 ```python
 def list_suites(
     pretty: bool = True):
@@ -91,6 +103,8 @@ def list_suites(
 Returns a list of all available test suites
 
 ## register_test_suite[()]{.muted}
+
+<!-- function.qmd.jinja2 - function signature -->
 
 ```python
 def register_test_suite(
@@ -102,6 +116,8 @@ Registers a custom test suite
 
 ## [class]{.muted} ClassifierDiagnosis
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class ClassifierDiagnosis(TestSuite):
 ```
@@ -111,6 +127,8 @@ Test suite for sklearn classifier model diagnosis tests
 **Inherited members**
 
 ## [class]{.muted} ClassifierFullSuite
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class ClassifierFullSuite(TestSuite):
@@ -122,6 +140,8 @@ Full test suite for binary classification models.
 
 ## [class]{.muted} ClassifierMetrics
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class ClassifierMetrics(TestSuite):
 ```
@@ -131,6 +151,8 @@ Test suite for sklearn classifier metrics
 **Inherited members**
 
 ## [class]{.muted} ClassifierModelValidation
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class ClassifierModelValidation(TestSuite):
@@ -142,6 +164,8 @@ Test suite for binary classification models.
 
 ## [class]{.muted} ClassifierPerformance
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class ClassifierPerformance(TestSuite):
 ```
@@ -151,6 +175,8 @@ Test suite for sklearn classifier models
 **Inherited members**
 
 ## [class]{.muted} ClusterFullSuite
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class ClusterFullSuite(TestSuite):
@@ -162,6 +188,8 @@ Full test suite for clustering models.
 
 ## [class]{.muted} ClusterMetrics
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class ClusterMetrics(TestSuite):
 ```
@@ -171,6 +199,8 @@ Test suite for sklearn clustering metrics
 **Inherited members**
 
 ## [class]{.muted} ClusterPerformance
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class ClusterPerformance(TestSuite):
@@ -182,6 +212,8 @@ Test suite for sklearn cluster performance
 
 ## [class]{.muted} EmbeddingsFullSuite
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class EmbeddingsFullSuite(TestSuite):
 ```
@@ -191,6 +223,8 @@ Full test suite for embeddings models.
 **Inherited members**
 
 ## [class]{.muted} EmbeddingsMetrics
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class EmbeddingsMetrics(TestSuite):
@@ -202,6 +236,8 @@ Test suite for embeddings metrics
 
 ## [class]{.muted} EmbeddingsPerformance
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class EmbeddingsPerformance(TestSuite):
 ```
@@ -211,6 +247,8 @@ Test suite for embeddings model performance
 **Inherited members**
 
 ## [class]{.muted} KmeansParametersOptimization
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class KmeansParametersOptimization(TestSuite):
@@ -222,6 +260,8 @@ Test suite for sklearn hyperparameters optimization
 
 ## [class]{.muted} LLMClassifierFullSuite
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class LLMClassifierFullSuite(TestSuite):
 ```
@@ -231,6 +271,8 @@ Full test suite for LLM classification models.
 **Inherited members**
 
 ## [class]{.muted} NLPClassifierFullSuite
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class NLPClassifierFullSuite(TestSuite):
@@ -242,6 +284,8 @@ Full test suite for NLP classification models.
 
 ## [class]{.muted} PromptValidation
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class PromptValidation(TestSuite):
 ```
@@ -251,6 +295,8 @@ Test suite for prompt validation
 **Inherited members**
 
 ## [class]{.muted} RegressionFullSuite
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class RegressionFullSuite(TestSuite):
@@ -262,6 +308,8 @@ Full test suite for regression models.
 
 ## [class]{.muted} RegressionMetrics
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class RegressionMetrics(TestSuite):
 ```
@@ -271,6 +319,8 @@ Test suite for performance metrics of regression metrics
 **Inherited members**
 
 ## [class]{.muted} RegressionModelDescription
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class RegressionModelDescription(TestSuite):
@@ -282,6 +332,8 @@ Test suite for performance metric of regression model of statsmodels library
 
 ## [class]{.muted} RegressionModelsEvaluation
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class RegressionModelsEvaluation(TestSuite):
 ```
@@ -291,6 +343,8 @@ Test suite for metrics comparison of regression model of statsmodels library
 **Inherited members**
 
 ## [class]{.muted} RegressionPerformance
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class RegressionPerformance(TestSuite):
@@ -302,6 +356,8 @@ Test suite for regression model performance
 
 ## [class]{.muted} SummarizationMetrics
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class SummarizationMetrics(TestSuite):
 ```
@@ -311,6 +367,8 @@ Test suite for Summarization metrics
 **Inherited members**
 
 ## [class]{.muted} TabularDataQuality
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class TabularDataQuality(TestSuite):
@@ -322,6 +380,8 @@ Test suite for data quality on tabular datasets
 
 ## [class]{.muted} TabularDataset
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class TabularDataset(TestSuite):
 ```
@@ -331,6 +391,8 @@ Test suite for tabular datasets.
 **Inherited members**
 
 ## [class]{.muted} TabularDatasetDescription
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class TabularDatasetDescription(TestSuite):
@@ -342,6 +404,8 @@ Test suite to extract metadata and descriptive statistics from a tabular dataset
 
 ## [class]{.muted} TextDataQuality
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class TextDataQuality(TestSuite):
 ```
@@ -351,6 +415,8 @@ Test suite for data quality on text data
 **Inherited members**
 
 ## [class]{.muted} TimeSeriesDataQuality
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class TimeSeriesDataQuality(TestSuite):
@@ -362,6 +428,8 @@ Test suite for data quality on time series datasets
 
 ## [class]{.muted} TimeSeriesDataset
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class TimeSeriesDataset(TestSuite):
 ```
@@ -371,6 +439,8 @@ Test suite for time series datasets.
 **Inherited members**
 
 ## [class]{.muted} TimeSeriesModelValidation
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class TimeSeriesModelValidation(TestSuite):
@@ -382,6 +452,8 @@ Test suite for time series model validation.
 
 ## [class]{.muted} TimeSeriesMultivariate
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class TimeSeriesMultivariate(TestSuite):
 ```
@@ -391,6 +463,8 @@ This test suite provides a preliminary understanding of the features and relatio
 **Inherited members**
 
 ## [class]{.muted} TimeSeriesUnivariate
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class TimeSeriesUnivariate(TestSuite):

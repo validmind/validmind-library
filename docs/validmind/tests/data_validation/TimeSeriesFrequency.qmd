@@ -5,6 +5,8 @@ sidebar: validmind-reference
 
 ## TimeSeriesFrequency[()]{.muted}
 
+<!-- function.qmd.jinja2 - function signature -->
+
 ```python
 def TimeSeriesFrequency(
     dataset: VMDataset):
@@ -38,6 +40,8 @@ Initially, the test checks if the dataframe index is in datetime format. Subsequ
 - Depending on context or the model under development, mixed frequencies might sometimes be acceptable, but this test considers them a failing condition.
 
 ## [class]{.muted} SkipTestError
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class SkipTestError(BaseError):

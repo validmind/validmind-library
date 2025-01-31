@@ -5,6 +5,8 @@ sidebar: validmind-reference
 
 ## TabularCategoricalBarPlots[()]{.muted}
 
+<!-- function.qmd.jinja2 - function signature -->
+
 ```python
 def TabularCategoricalBarPlots(
     dataset: VMDataset):
@@ -38,6 +40,8 @@ The provided dataset is first checked to determine if it contains any categorica
 - Offers no insights into the model's performance or precision, but rather provides a descriptive analysis of the input.
 
 ## [class]{.muted} SkipTestError
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class SkipTestError(BaseError):

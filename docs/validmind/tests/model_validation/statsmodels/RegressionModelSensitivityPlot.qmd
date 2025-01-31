@@ -5,6 +5,8 @@ sidebar: validmind-reference
 
 ## get_logger[()]{.muted}
 
+<!-- module.qmd.jinja2 - module level function alias -->
+
 ```python
 def get_logger(
     name = 'validmind',    log_level = None):
@@ -14,6 +16,8 @@ Get a logger for the given module name
 
 ## integrate_diff[()]{.muted}
 
+<!-- function.qmd.jinja2 - function signature -->
+
 ```python
 def integrate_diff(
     series_diff,
@@ -21,6 +25,8 @@ def integrate_diff(
 ```
 
 ## RegressionModelSensitivityPlot[()]{.muted}
+
+<!-- function.qmd.jinja2 - function signature -->
 
 ```python
 def RegressionModelSensitivityPlot(

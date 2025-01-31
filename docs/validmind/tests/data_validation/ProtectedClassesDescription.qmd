@@ -5,6 +5,8 @@ sidebar: validmind-reference
 
 ## get_logger[()]{.muted}
 
+<!-- module.qmd.jinja2 - module level function alias -->
+
 ```python
 def get_logger(
     name = 'validmind',    log_level = None):
@@ -13,6 +15,8 @@ def get_logger(
 Get a logger for the given module name
 
 ## ProtectedClassesDescription[()]{.muted}
+
+<!-- function.qmd.jinja2 - function signature -->
 
 ```python
 def ProtectedClassesDescription(

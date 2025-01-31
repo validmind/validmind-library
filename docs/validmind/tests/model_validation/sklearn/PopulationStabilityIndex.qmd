@@ -5,6 +5,8 @@ sidebar: validmind-reference
 
 ## get_logger[()]{.muted}
 
+<!-- module.qmd.jinja2 - module level function alias -->
+
 ```python
 def get_logger(
     name = 'validmind',    log_level = None):
@@ -13,6 +15,8 @@ def get_logger(
 Get a logger for the given module name
 
 ## calculate_psi[()]{.muted}
+
+<!-- function.qmd.jinja2 - function signature -->
 
 ```python
 def calculate_psi(
@@ -25,6 +29,8 @@ def calculate_psi(
 Taken from: https://towardsdatascience.com/checking-model-stability-and-population-shift-with-psi-and-csi-6d12af008783
 
 ## PopulationStabilityIndex[()]{.muted}
+
+<!-- function.qmd.jinja2 - function signature -->
 
 ```python
 def PopulationStabilityIndex(
@@ -64,6 +70,8 @@ The implementation of the PSI in this script involves calculating the PSI for ea
 - Additionally, the PSI test is performed on model predictions, not on the underlying data distributions which can lead to misinterpretations. Any changes in PSI could be due to shifts in the model (model drift), changes in the relationships between features and the target variable (concept drift), or both. However, distinguishing between these causes is non-trivial.
 
 ## [class]{.muted} SkipTestError
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class SkipTestError(BaseError):

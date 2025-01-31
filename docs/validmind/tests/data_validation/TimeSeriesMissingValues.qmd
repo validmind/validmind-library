@@ -5,6 +5,8 @@ sidebar: validmind-reference
 
 ## TimeSeriesMissingValues[()]{.muted}
 
+<!-- function.qmd.jinja2 - function signature -->
+
 ```python
 def TimeSeriesMissingValues(
     dataset: VMDataset,
@@ -39,6 +41,8 @@ The test method commences by validating if the dataset has a datetime index; if 
 - Solely focuses on the 'missingness' of the data and might fall short in addressing other aspects of data quality.
 
 ## [class]{.muted} SkipTestError
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class SkipTestError(BaseError):

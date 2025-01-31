@@ -5,6 +5,8 @@ sidebar: validmind-reference
 
 ## call_model[()]{.muted}
 
+<!-- module.qmd.jinja2 - module level function alias -->
+
 ```python
 def call_model(
     system_prompt: {'cls': 'ExprName', 'name': 'str'},    user_prompt: {'cls': 'ExprName', 'name': 'str'},    temperature: {'cls': 'ExprName', 'name': 'float'} = 0.0,    seed: {'cls': 'ExprName', 'name': 'int'} = 42):
@@ -13,6 +15,8 @@ def call_model(
 Call LLM with the given prompts and return the response
 
 ## Robustness[()]{.muted}
+
+<!-- function.qmd.jinja2 - function signature -->
 
 ```python
 def Robustness(
@@ -50,6 +54,8 @@ The Robustness test appraises prompts under various conditions, alterations, and
 
 ## [class]{.muted} MissingRequiredTestInputError
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class MissingRequiredTestInputError(BaseError):
 ```
@@ -62,6 +68,8 @@ When a required test context variable is missing.
 - **From builtins.BaseException**: with_traceback, add_note
 
 ## [class]{.muted} SkipTestError
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class SkipTestError(BaseError):

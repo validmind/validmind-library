@@ -5,6 +5,8 @@ sidebar: validmind-reference
 
 ## TimeSeriesLinePlot[()]{.muted}
 
+<!-- function.qmd.jinja2 - function signature -->
+
 ```python
 def TimeSeriesLinePlot(
     dataset: VMDataset):
@@ -40,6 +42,8 @@ The mechanism for this Python class involves extracting the column names from th
 - The metric has an inherent limitation in that it cannot extract deeper statistical insights from the time series data, which can limit its efficacy with complex data structures and phenomena.
 
 ## [class]{.muted} SkipTestError
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class SkipTestError(BaseError):

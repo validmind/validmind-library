@@ -2,6 +2,7 @@
 
 ## {{ member_name | default(member.name) }}[()]{.muted}
 
+<!-- function.qmd.jinja2 - function signature -->
 ```python
 {% if member.labels and "async" in member.labels %}async {% endif %}def {{ member_name | default(member.name) }}(
 {% for param in member.parameters %}

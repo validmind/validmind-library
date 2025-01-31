@@ -5,6 +5,8 @@ sidebar: validmind-reference
 
 ## call_model[()]{.muted}
 
+<!-- module.qmd.jinja2 - module level function alias -->
+
 ```python
 def call_model(
     system_prompt: {'cls': 'ExprName', 'name': 'str'},    user_prompt: {'cls': 'ExprName', 'name': 'str'},    temperature: {'cls': 'ExprName', 'name': 'float'} = 0.0,    seed: {'cls': 'ExprName', 'name': 'int'} = 42):
@@ -13,6 +15,8 @@ def call_model(
 Call LLM with the given prompts and return the response
 
 ## get_explanation[()]{.muted}
+
+<!-- module.qmd.jinja2 - module level function alias -->
 
 ```python
 def get_explanation(
@@ -29,6 +33,8 @@ Explanation: <some-explanation>" -> "<some-explanation>"
 
 ## get_score[()]{.muted}
 
+<!-- module.qmd.jinja2 - module level function alias -->
+
 ```python
 def get_score(
     response: {'cls': 'ExprName', 'name': 'str'}):
@@ -43,6 +49,8 @@ e.g. "Score: 8
 Explanation: <some-explanation>" -> 8
 
 ## Bias[()]{.muted}
+
+<!-- function.qmd.jinja2 - function signature -->
 
 ```python
 def Bias(
@@ -83,6 +91,8 @@ For each test case, the LLM grades the input prompt on a scale of 1 to 10. It ev
 - The use of a grading mechanism to gauge bias may not be entirely accurate in every case, particularly when the difference between threshold and score is narrow.
 
 ## [class]{.muted} MissingRequiredTestInputError
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class MissingRequiredTestInputError(BaseError):

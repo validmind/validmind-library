@@ -5,12 +5,16 @@ sidebar: validmind-reference
 
 ## multiclass_roc_auc_score[()]{.muted}
 
+<!-- module.qmd.jinja2 - module level function alias -->
+
 ```python
 def multiclass_roc_auc_score(
     y_test,    y_pred,    average = 'macro'):
 ```
 
 ## ModelsPerformanceComparison[()]{.muted}
+
+<!-- function.qmd.jinja2 - function signature -->
 
 ```python
 def ModelsPerformanceComparison(

@@ -11,6 +11,8 @@ ValidMind Tests Module
 
 ## describe_test[()]{.muted}
 
+<!-- module.qmd.jinja2 - module level function alias -->
+
 ```python
 def describe_test(
     test_id: {'cls': 'ExprName', 'name': 'TestID'} = None,    raw: {'cls': 'ExprName', 'name': 'bool'} = False,    show: {'cls': 'ExprName', 'name': 'bool'} = True):
@@ -25,6 +27,8 @@ Get or show details about the test This function can be used to see test details
 
 ## list_tags[()]{.muted}
 
+<!-- module.qmd.jinja2 - module level function alias -->
+
 ```python
 def list_tags(
 ):
@@ -34,6 +38,8 @@ List unique tags from all test classes.
 
 ## list_tasks[()]{.muted}
 
+<!-- module.qmd.jinja2 - module level function alias -->
+
 ```python
 def list_tasks(
 ):
@@ -42,6 +48,8 @@ def list_tasks(
 List unique tasks from all test classes.
 
 ## list_tasks_and_tags[()]{.muted}
+
+<!-- module.qmd.jinja2 - module level function alias -->
 
 ```python
 def list_tasks_and_tags(
@@ -55,6 +63,8 @@ List all task types and their associated tags, with one row per task type and al
 - A DataFrame with 'Task Type' and concatenated 'Tags'.
 
 ## list_tests[()]{.muted}
+
+<!-- module.qmd.jinja2 - module level function alias -->
 
 ```python
 def list_tests(
@@ -77,6 +87,8 @@ List all tests in the tests directory.
 
 ## load_test[()]{.muted}
 
+<!-- module.qmd.jinja2 - module level function alias -->
+
 ```python
 def load_test(
     test_id: {'cls': 'ExprName', 'name': 'str'},    test_func: {'cls': 'ExprName', 'name': 'callable'} = None,    reload: {'cls': 'ExprName', 'name': 'bool'} = False):
@@ -90,6 +102,8 @@ Load a test by test ID Test IDs are in the format `namespace.path_to_module.Test
 - **test_func** callable: The test function to load. If not provided, the test will be loaded from the test provider. Defaults to None.
 
 ## run_test[()]{.muted}
+
+<!-- module.qmd.jinja2 - module level function alias -->
 
 ```python
 def run_test(
@@ -127,6 +141,8 @@ Run a ValidMind or custom test This function is the main entry point for running
 
 ## tags[()]{.muted}
 
+<!-- module.qmd.jinja2 - module level function alias -->
+
 ```python
 def tags(
     tags = ()):
@@ -140,6 +156,8 @@ Decorator for specifying tags for a test.
 
 ## tasks[()]{.muted}
 
+<!-- module.qmd.jinja2 - module level function alias -->
+
 ```python
 def tasks(
     tasks = ()):
@@ -152,6 +170,8 @@ Decorator for specifying the task types that a test is designed for.
 - \***tasks**: The task types that the test is designed for.
 
 ## test[()]{.muted}
+
+<!-- module.qmd.jinja2 - module level function alias -->
 
 ```python
 def test(
@@ -185,6 +205,8 @@ The function may also include a docstring. This docstring will be used and logge
 
 ## register_test_provider[()]{.muted}
 
+<!-- function.qmd.jinja2 - function signature -->
+
 ```python
 def register_test_provider(
     namespace: str,
@@ -200,6 +222,8 @@ Register an external test provider
 
 ## [class]{.muted} LoadTestError
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class LoadTestError(BaseError):
 ```
@@ -212,6 +236,8 @@ Exception raised when an error occurs while loading a test
 - **From builtins.BaseException**: with_traceback, add_note
 
 ## [class]{.muted} LocalTestProvider
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class LocalTestProvider():
@@ -246,6 +272,8 @@ test = test_provider.load_test("my_namespace.my_test_class")
 
 ### [list_tests[()]{.muted}](#list_tests)
 
+<!-- class.qmd.jinja2 - member method signature -->
+
 ```python
 list_tests(self)
 ```
@@ -257,6 +285,8 @@ List all tests in the given namespace
 - A list of test IDs
 
 ### [load_test[()]{.muted}](#load_test)
+
+<!-- class.qmd.jinja2 - member method signature -->
 
 ```python
 load_test(self, test_id)
@@ -270,6 +300,8 @@ Raises: LocalTestProviderLoadModuleError: If the test module cannot be imported 
 
 ## [class]{.muted} TestProvider
 
+<!-- class.qmd.jinja2 - class definition -->
+
 ```python
 class TestProvider(Protocol):
 ```
@@ -279,6 +311,8 @@ Protocol for user-defined test providers
 **Inherited members**
 
 ### [list_tests[()]{.muted}](#list_tests)
+
+<!-- class.qmd.jinja2 - member method signature -->
 
 ```python
 list_tests(self)
@@ -291,6 +325,8 @@ List all tests in the given namespace
 - A list of test IDs
 
 ### [load_test[()]{.muted}](#load_test)
+
+<!-- class.qmd.jinja2 - member method signature -->
 
 ```python
 load_test(self, test_id)

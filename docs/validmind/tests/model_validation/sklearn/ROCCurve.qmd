@@ -5,6 +5,8 @@ sidebar: validmind-reference
 
 ## ROCCurve[()]{.muted}
 
+<!-- function.qmd.jinja2 - function signature -->
+
 ```python
 def ROCCurve(
     model: VMModel,
@@ -39,6 +41,8 @@ First, this script selects the target model and datasets that require binary cla
 - At the extreme, the ROC curve could reflect high performance even when the majority of classifications are incorrect, provided that the model's ranking format is retained. This phenomenon is commonly termed the "Class Imbalance Problem".
 
 ## [class]{.muted} SkipTestError
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class SkipTestError(BaseError):

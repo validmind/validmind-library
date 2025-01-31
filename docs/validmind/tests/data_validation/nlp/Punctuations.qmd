@@ -7,6 +7,8 @@ Metrics functions for any Pandas-compatible datasets
 
 ## Punctuations[()]{.muted}
 
+<!-- function.qmd.jinja2 - function signature -->
+
 ```python
 def Punctuations(
     dataset,

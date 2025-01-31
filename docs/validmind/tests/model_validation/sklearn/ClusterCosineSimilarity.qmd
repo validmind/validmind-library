@@ -5,6 +5,8 @@ sidebar: validmind-reference
 
 ## ClusterCosineSimilarity[()]{.muted}
 
+<!-- function.qmd.jinja2 - function signature -->
+
 ```python
 def ClusterCosineSimilarity(
     model: VMModel,
@@ -40,6 +42,8 @@ This test works by first extracting the true and predicted clusters of the model
 - Lastly, although rare, perfect perpendicular vectors (cosine similarity = 0) could be within the same cluster, which may give an inaccurate representation of a 'bad' cluster due to low cosine similarity score.
 
 ## [class]{.muted} SkipTestError
+
+<!-- class.qmd.jinja2 - class definition -->
 
 ```python
 class SkipTestError(BaseError):

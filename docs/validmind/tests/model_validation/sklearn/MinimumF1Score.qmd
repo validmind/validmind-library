@@ -5,6 +5,8 @@ sidebar: validmind-reference
 
 ## MinimumF1Score[()]{.muted}
 
+<!-- function.qmd.jinja2 - function signature -->
+
 ```python
 def MinimumF1Score(
     dataset: VMDataset,

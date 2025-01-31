@@ -1,5 +1,6 @@
 ## [class]{.muted} {{ resolved.name }}
 
+<!-- class.qmd.jinja2 - class definition -->
 ```python
 class {{ resolved.name }}({% for base in resolved.bases %}{{ base.name }}{% if not loop.last %}, {% endif %}{% endfor %}):
 ```
@@ -32,6 +33,7 @@ class {{ resolved.name }}({% for base in resolved.bases %}{{ base.name }}{% if n
 {% if member.kind in ['method', 'function'] and not member.name.startswith('_') %}
 ### [{{ member.name }}[()]{.muted}](#{{ member.name }})
 
+<!-- class.qmd.jinja2 - member method signature -->
 ```python
 {{ member.name }}({{ member.parameters | map(attribute='name') | join(', ') }})
 ```

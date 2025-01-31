@@ -5,6 +5,8 @@ sidebar: validmind-reference
 
 ## simple_preprocess_booleans[()]{.muted}
 
+<!-- module.qmd.jinja2 - module level function alias -->
+
 ```python
 def simple_preprocess_booleans(
     df,    columns):
@@ -22,6 +24,8 @@ Preprocess boolean columns.
 - Preprocessed dataframe.
 
 ## simple_preprocess_categoricals[()]{.muted}
+
+<!-- module.qmd.jinja2 - module level function alias -->
 
 ```python
 def simple_preprocess_categoricals(
@@ -41,6 +45,8 @@ Preprocess categorical columns.
 
 ## simple_preprocess_numericals[()]{.muted}
 
+<!-- module.qmd.jinja2 - module level function alias -->
+
 ```python
 def simple_preprocess_numericals(
     df,    columns):
@@ -59,12 +65,16 @@ Preprocess numerical columns.
 
 ## load_data[()]{.muted}
 
+<!-- function.qmd.jinja2 - function signature -->
+
 ```python
 def load_data(
 ):
 ```
 
 ## preprocess[()]{.muted}
+
+<!-- function.qmd.jinja2 - function signature -->
 
 ```python
 def preprocess(
