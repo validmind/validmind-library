@@ -40,7 +40,7 @@ DEFAULT_MODEL_CUID = os.getenv(
 
 NOTEBOOKS_TO_RUN = [
     "notebooks/code_samples/quickstart_customer_churn_full_suite.ipynb",
-    "notebooks/code_samples/time_series/quickstart_time_series_full_suite.ipynb",
+    "notebooks/code_samples/time_series/quickstart_time_series_high_code.ipynb",
     "notebooks/code_samples/regression/quickstart_regression_full_suite.ipynb",
     "notebooks/how_to/run_unit_metrics.ipynb",
     "notebooks/code_samples/custom_tests/integrate_external_test_providers.ipynb",
