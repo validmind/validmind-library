@@ -14,6 +14,21 @@ def get_logger(
 
 Get a logger for the given module name
 
+## [class]{.muted} MissingDependencyError
+
+<!-- class.qmd.jinja2 - class definition -->
+
+```python
+class MissingDependencyError(BaseError):
+```
+
+When a required dependency is missing.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note
+
 ## calculate_fairness_metrics[()]{.muted}
 
 <!-- function.qmd.jinja2 - function signature -->
@@ -124,18 +139,3 @@ The test uses Fairlearn's ThresholdOptimizer to:
 - May lead to a decrease in overall model performance while improving fairness.
 - Requires access to protected attribute information at prediction time.
 - The effectiveness can vary depending on the chosen fairness constraint and objective.
-
-## [class]{.muted} MissingDependencyError
-
-<!-- class.qmd.jinja2 - class definition -->
-
-```python
-class MissingDependencyError(BaseError):
-```
-
-When a required dependency is missing.
-
-**Inherited members**
-
-- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
-- **From builtins.BaseException**: with_traceback, add_note

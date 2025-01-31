@@ -5,30 +5,6 @@ sidebar: validmind-reference
 
 Test suites for LLMs
 
-## [class]{.muted} LLMClassifierFullSuite
-
-<!-- class.qmd.jinja2 - class definition -->
-
-```python
-class LLMClassifierFullSuite(TestSuite):
-```
-
-Full test suite for LLM classification models.
-
-**Inherited members**
-
-## [class]{.muted} PromptValidation
-
-<!-- class.qmd.jinja2 - class definition -->
-
-```python
-class PromptValidation(TestSuite):
-```
-
-Test suite for prompt validation
-
-**Inherited members**
-
 ## [class]{.muted} ClassifierDiagnosis
 
 <!-- class.qmd.jinja2 - class definition -->
@@ -74,5 +50,29 @@ class TextDataQuality(TestSuite):
 ```
 
 Test suite for data quality on text data
+
+**Inherited members**
+
+## [class]{.muted} LLMClassifierFullSuite
+
+<!-- class.qmd.jinja2 - class definition -->
+
+```python
+class LLMClassifierFullSuite(TestSuite):
+```
+
+Full test suite for LLM classification models.
+
+**Inherited members**
+
+## [class]{.muted} PromptValidation
+
+<!-- class.qmd.jinja2 - class definition -->
+
+```python
+class PromptValidation(TestSuite):
+```
+
+Test suite for prompt validation
 
 **Inherited members**

@@ -14,6 +14,21 @@ def get_logger(
 
 Get a logger for the given module name
 
+## [class]{.muted} UnsupportedColumnTypeError
+
+<!-- class.qmd.jinja2 - class definition -->
+
+```python
+class UnsupportedColumnTypeError(BaseError):
+```
+
+When an unsupported column type is found on a dataset.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note
+
 ## DatasetDescription[()]{.muted}
 
 <!-- function.qmd.jinja2 - function signature -->
@@ -102,18 +117,3 @@ Returns a collection of histograms for a numerical column, each one with a diffe
 def infer_datatypes(
     df):
 ```
-
-## [class]{.muted} UnsupportedColumnTypeError
-
-<!-- class.qmd.jinja2 - class definition -->
-
-```python
-class UnsupportedColumnTypeError(BaseError):
-```
-
-When an unsupported column type is found on a dataset.
-
-**Inherited members**
-
-- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
-- **From builtins.BaseException**: with_traceback, add_note

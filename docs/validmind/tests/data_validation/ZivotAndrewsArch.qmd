@@ -14,6 +14,21 @@ def get_logger(
 
 Get a logger for the given module name
 
+## [class]{.muted} SkipTestError
+
+<!-- class.qmd.jinja2 - class definition -->
+
+```python
+class SkipTestError(BaseError):
+```
+
+Useful error to throw when a test cannot be executed.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note
+
 ## ZivotAndrewsArch[()]{.muted}
 
 <!-- function.qmd.jinja2 - function signature -->
@@ -47,18 +62,3 @@ The Zivot-Andrews unit root test is performed on each feature in the dataset usi
 
 - Assumes data is derived from a single-equation, autoregressive model, making it less appropriate for multivariate time series data or data not aligning with this model.
 - May not account for unexpected shocks or changes in the series trend, both of which can significantly impact data stationarity.
-
-## [class]{.muted} SkipTestError
-
-<!-- class.qmd.jinja2 - class definition -->
-
-```python
-class SkipTestError(BaseError):
-```
-
-Useful error to throw when a test cannot be executed.
-
-**Inherited members**
-
-- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
-- **From builtins.BaseException**: with_traceback, add_note

@@ -3,6 +3,21 @@ title: "[validmind](/reference/validmind.html).TimeSeriesOutliers"
 sidebar: validmind-reference
 ---
 
+## [class]{.muted} SkipTestError
+
+<!-- class.qmd.jinja2 - class definition -->
+
+```python
+class SkipTestError(BaseError):
+```
+
+Useful error to throw when a test cannot be executed.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note
+
 ## TimeSeriesOutliers[()]{.muted}
 
 <!-- function.qmd.jinja2 - function signature -->
@@ -44,18 +59,3 @@ The test processes a given dataset which must have datetime indexing, checks if 
 - The method relies on a subjective z-score threshold for deciding what constitutes an outlier, which might not always be suitable depending on the dataset and use case.
 - It does not address possible ways to handle identified outliers in the data.
 - The requirement for a datetime index could limit its application.
-
-## [class]{.muted} SkipTestError
-
-<!-- class.qmd.jinja2 - class definition -->
-
-```python
-class SkipTestError(BaseError):
-```
-
-Useful error to throw when a test cannot be executed.
-
-**Inherited members**
-
-- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
-- **From builtins.BaseException**: with_traceback, add_note

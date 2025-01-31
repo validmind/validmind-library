@@ -14,6 +14,21 @@ def get_logger(
 
 Get a logger for the given module name
 
+## [class]{.muted} SkipTestError
+
+<!-- class.qmd.jinja2 - class definition -->
+
+```python
+class SkipTestError(BaseError):
+```
+
+Useful error to throw when a test cannot be executed.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note
+
 ## WOEBinPlots[()]{.muted}
 
 <!-- function.qmd.jinja2 - function signature -->
@@ -54,18 +69,3 @@ The test implementation follows defined steps. Initially, it selects non-numeric
 - While excellent for categorical data, the encoding of continuous variables into categorical can sometimes lead to information loss.
 - Extreme or outlier values can dramatically affect the computation of WoE and IV, skewing results.
 - The method requires a sufficient number of events per bin to generate a reliable information value and weight of evidence.
-
-## [class]{.muted} SkipTestError
-
-<!-- class.qmd.jinja2 - class definition -->
-
-```python
-class SkipTestError(BaseError):
-```
-
-Useful error to throw when a test cannot be executed.
-
-**Inherited members**
-
-- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
-- **From builtins.BaseException**: with_traceback, add_note

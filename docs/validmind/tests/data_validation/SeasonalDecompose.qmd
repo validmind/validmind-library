@@ -14,6 +14,21 @@ def get_logger(
 
 Get a logger for the given module name
 
+## [class]{.muted} SkipTestError
+
+<!-- class.qmd.jinja2 - class definition -->
+
+```python
+class SkipTestError(BaseError):
+```
+
+Useful error to throw when a test cannot be executed.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note
+
 ## SeasonalDecompose[()]{.muted}
 
 <!-- function.qmd.jinja2 - function signature -->
@@ -51,18 +66,3 @@ The testing process leverages the `seasonal_decompose` function from the `statsm
 - **Dependence on Assumptions**: Assumes that dataset features are periodically distributed. Features with no inferable frequency are excluded from the test.
 - **Handling Non-Finite Values**: Disregards non-finite values during analysis, potentially resulting in an incomplete understanding of the dataset.
 - **Unreliability with Noisy Datasets**: Produces unreliable results when used with datasets that contain heavy noise.
-
-## [class]{.muted} SkipTestError
-
-<!-- class.qmd.jinja2 - class definition -->
-
-```python
-class SkipTestError(BaseError):
-```
-
-Useful error to throw when a test cannot be executed.
-
-**Inherited members**
-
-- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
-- **From builtins.BaseException**: with_traceback, add_note

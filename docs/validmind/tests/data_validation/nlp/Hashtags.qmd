@@ -3,6 +3,21 @@ title: "[validmind](/reference/validmind.html).Hashtags"
 sidebar: validmind-reference
 ---
 
+## [class]{.muted} SkipTestError
+
+<!-- class.qmd.jinja2 - class definition -->
+
+```python
+class SkipTestError(BaseError):
+```
+
+Useful error to throw when a test cannot be executed.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note
+
 ## Hashtags[()]{.muted}
 
 <!-- function.qmd.jinja2 - function signature -->
@@ -41,18 +56,3 @@ The test implements a regular expression (regex) to extract all hashtags from th
 - Language-specific limitations of hashtag formulations are not taken into account.
 - Does not account for typographical errors, variations, or synonyms in hashtags.
 - Does not provide context or sentiment associated with the hashtags, so the information provided may have limited utility on its own.
-
-## [class]{.muted} SkipTestError
-
-<!-- class.qmd.jinja2 - class definition -->
-
-```python
-class SkipTestError(BaseError):
-```
-
-Useful error to throw when a test cannot be executed.
-
-**Inherited members**
-
-- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
-- **From builtins.BaseException**: with_traceback, add_note

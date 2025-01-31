@@ -14,6 +14,21 @@ def get_logger(
 
 Get a logger for the given module name
 
+## [class]{.muted} SkipTestError
+
+<!-- class.qmd.jinja2 - class definition -->
+
+```python
+class SkipTestError(BaseError):
+```
+
+Useful error to throw when a test cannot be executed.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note
+
 ## RegressionFeatureSignificance[()]{.muted}
 
 <!-- function.qmd.jinja2 - function signature -->
@@ -51,18 +66,3 @@ The test mechanism involves extracting the model's coefficients and p-values for
 - The p-value strategy for feature selection doesn't take into account the magnitude of the effect, focusing solely on whether the feature is likely non-zero.
 - This test is specific to regression models and wouldn't be suitable for other types of ML models.
 - P-value thresholds are somewhat arbitrary and do not always indicate practical significance, only statistical significance.
-
-## [class]{.muted} SkipTestError
-
-<!-- class.qmd.jinja2 - class definition -->
-
-```python
-class SkipTestError(BaseError):
-```
-
-Useful error to throw when a test cannot be executed.
-
-**Inherited members**
-
-- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
-- **From builtins.BaseException**: with_traceback, add_note

@@ -203,23 +203,6 @@ The function may also include a docstring. This docstring will be used and logge
 
 - The decorated function.
 
-## register_test_provider[()]{.muted}
-
-<!-- function.qmd.jinja2 - function signature -->
-
-```python
-def register_test_provider(
-    namespace: str,
-    test_provider: TestProvider) -> None:
-```
-
-Register an external test provider
-
-**Parameters**
-
-- **namespace** str: The namespace of the test provider
-- **test_provider** TestProvider: The test provider
-
 ## [class]{.muted} LoadTestError
 
 <!-- class.qmd.jinja2 - class definition -->
@@ -345,3 +328,20 @@ Load the test function identified by the given test_id
 **Raises**
 
 - **FileNotFoundError**: If the test is not found
+
+## register_test_provider[()]{.muted}
+
+<!-- function.qmd.jinja2 - function signature -->
+
+```python
+def register_test_provider(
+    namespace: str,
+    test_provider: TestProvider) -> None:
+```
+
+Register an external test provider
+
+**Parameters**
+
+- **namespace** str: The namespace of the test provider
+- **test_provider** TestProvider: The test provider

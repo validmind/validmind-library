@@ -14,6 +14,21 @@ def get_logger(
 
 Get a logger for the given module name
 
+## [class]{.muted} SkipTestError
+
+<!-- class.qmd.jinja2 - class definition -->
+
+```python
+class SkipTestError(BaseError):
+```
+
+Useful error to throw when a test cannot be executed.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note
+
 ## DickeyFullerGLS[()]{.muted}
 
 <!-- function.qmd.jinja2 - function signature -->
@@ -48,18 +63,3 @@ This code implements the Dickey-Fuller GLS unit root test on each attribute of t
 - Despite its benefits, the DFGLS test does present some drawbacks. It can potentially lead to inaccurate conclusions if the time series data incorporates a structural break.
 - If the time series tends to follow a trend while still being stationary, the test might misinterpret it, necessitating further detrending.
 - The test also presents challenges when dealing with shorter time series data or volatile data, not producing reliable results in these cases.
-
-## [class]{.muted} SkipTestError
-
-<!-- class.qmd.jinja2 - class definition -->
-
-```python
-class SkipTestError(BaseError):
-```
-
-Useful error to throw when a test cannot be executed.
-
-**Inherited members**
-
-- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
-- **From builtins.BaseException**: with_traceback, add_note

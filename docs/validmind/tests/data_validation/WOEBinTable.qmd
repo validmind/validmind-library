@@ -3,6 +3,21 @@ title: "[validmind](/reference/validmind.html).WOEBinTable"
 sidebar: validmind-reference
 ---
 
+## [class]{.muted} SkipTestError
+
+<!-- class.qmd.jinja2 - class definition -->
+
+```python
+class SkipTestError(BaseError):
+```
+
+Useful error to throw when a test cannot be executed.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note
+
 ## WOEBinTable[()]{.muted}
 
 <!-- function.qmd.jinja2 - function signature -->
@@ -38,18 +53,3 @@ The test uses the `scorecardpy.woebin` method to perform automatic binning of th
 - Primarily designed for binary classification tasks, making it less applicable or reliable for multi-class classification or regression tasks.
 - Potential difficulties if the dataset has many features, non-binnable features, or non-numeric features.
 - The metric does not help in distinguishing whether the observed predictive factor is due to data randomness or a true phenomenon.
-
-## [class]{.muted} SkipTestError
-
-<!-- class.qmd.jinja2 - class definition -->
-
-```python
-class SkipTestError(BaseError):
-```
-
-Useful error to throw when a test cannot be executed.
-
-**Inherited members**
-
-- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
-- **From builtins.BaseException**: with_traceback, add_note

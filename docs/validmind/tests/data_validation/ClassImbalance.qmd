@@ -5,6 +5,21 @@ sidebar: validmind-reference
 
 Threshold based tests
 
+## [class]{.muted} SkipTestError
+
+<!-- class.qmd.jinja2 - class definition -->
+
+```python
+class SkipTestError(BaseError):
+```
+
+Useful error to throw when a test cannot be executed.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note
+
 ## ClassImbalance[()]{.muted}
 
 <!-- function.qmd.jinja2 - function signature -->
@@ -46,18 +61,3 @@ This Class Imbalance test operates by calculating the frequency (expressed as a 
 - Regardless of the percentage threshold, it doesn't account for varying costs or impacts of misclassifying different classes, which might fluctuate based on specific applications or domains.
 - While it can identify imbalances in class distribution, it doesn't provide direct methods to address or correct these imbalances.
 - The test is only applicable for classification operations and unsuitable for regression or clustering tasks.
-
-## [class]{.muted} SkipTestError
-
-<!-- class.qmd.jinja2 - class definition -->
-
-```python
-class SkipTestError(BaseError):
-```
-
-Useful error to throw when a test cannot be executed.
-
-**Inherited members**
-
-- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
-- **From builtins.BaseException**: with_traceback, add_note

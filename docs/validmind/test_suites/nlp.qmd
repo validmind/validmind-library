@@ -5,18 +5,6 @@ sidebar: validmind-reference
 
 Test suites for NLP models
 
-## [class]{.muted} NLPClassifierFullSuite
-
-<!-- class.qmd.jinja2 - class definition -->
-
-```python
-class NLPClassifierFullSuite(TestSuite):
-```
-
-Full test suite for NLP classification models.
-
-**Inherited members**
-
 ## [class]{.muted} ClassifierDiagnosis
 
 <!-- class.qmd.jinja2 - class definition -->
@@ -62,5 +50,17 @@ class TextDataQuality(TestSuite):
 ```
 
 Test suite for data quality on text data
+
+**Inherited members**
+
+## [class]{.muted} NLPClassifierFullSuite
+
+<!-- class.qmd.jinja2 - class definition -->
+
+```python
+class NLPClassifierFullSuite(TestSuite):
+```
+
+Full test suite for NLP classification models.
 
 **Inherited members**

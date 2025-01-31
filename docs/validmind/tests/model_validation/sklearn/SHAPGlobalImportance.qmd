@@ -14,6 +14,21 @@ def get_logger(
 
 Get a logger for the given module name
 
+## [class]{.muted} UnsupportedModelForSHAPError
+
+<!-- class.qmd.jinja2 - class definition -->
+
+```python
+class UnsupportedModelForSHAPError(BaseError):
+```
+
+When an unsupported model is used for SHAP importance.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note
+
 ## generate_shap_plot[()]{.muted}
 
 <!-- function.qmd.jinja2 - function signature -->
@@ -104,18 +119,3 @@ The exam begins with the selection of a suitable explainer which aligns with the
 
 - High-dimensional data can convolute interpretations.
 - Associating importance with tangible real-world impact still involves a certain degree of subjectivity.
-
-## [class]{.muted} UnsupportedModelForSHAPError
-
-<!-- class.qmd.jinja2 - class definition -->
-
-```python
-class UnsupportedModelForSHAPError(BaseError):
-```
-
-When an unsupported model is used for SHAP importance.
-
-**Inherited members**
-
-- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
-- **From builtins.BaseException**: with_traceback, add_note
