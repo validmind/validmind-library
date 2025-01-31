@@ -256,7 +256,7 @@ def _run_comparison_test(
     combined_outputs, combined_inputs, combined_params = combine_results(results)
 
     return build_test_result(
-        outputs=tuple(combined_outputs),
+        outputs=combined_outputs,
         test_id=test_id,
         test_doc=test_doc,
         inputs=combined_inputs,
