@@ -41,6 +41,13 @@ website:
           file: reference/validmind.qmd#test
         - text: "<span class='muted'>class</span> RawData"
           file: reference/validmind.qmd#class-rawdata
+          contents:
+            - text: "RawData<span class='muted'>()</span>"
+              file: reference/validmind.qmd#rawdata
+            - text: "inspect<span class='muted'>()</span>"
+              file: reference/validmind.qmd#inspect
+            - text: "serialize<span class='muted'>()</span>"
+              file: reference/validmind.qmd#serialize
         # All module documentation pages
         - text: "---"
         - text: "Submodules"

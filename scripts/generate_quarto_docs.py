@@ -193,7 +193,7 @@ def collect_documented_items(module: Dict[str, Any], path: List[str], full_data:
                             'text': heading,
                             'file': f"reference/validmind.qmd#{anchor}"
                         }
-                        if '[class]' in heading:
+                        if '<span class="muted">class</span>' in heading or '<span class=\'muted\'>class</span>' in heading:
                             item['contents'] = []
                             current_class = item
                             print(f"    Set current_class to: {heading}")
