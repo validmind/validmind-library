@@ -1,6 +1,8 @@
 ---
 title: "[validmind](/reference/validmind.html).text_data"
 sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
 ---
 
 Test suites for text datasets

@@ -1,6 +1,8 @@
 ---
 title: "[validmind](/reference/validmind.html).AutoStationarity"
 sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
 ---
 
 ## AutoStationarity[()]{.muted}

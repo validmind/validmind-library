@@ -1,6 +1,8 @@
 ---
 title: "[validmind](/reference/validmind.html).MissingValuesBarPlot"
 sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
 ---
 
 ## MissingValuesBarPlot[()]{.muted}

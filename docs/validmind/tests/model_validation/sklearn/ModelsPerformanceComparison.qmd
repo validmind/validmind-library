@@ -1,6 +1,8 @@
 ---
 title: "[validmind](/reference/validmind.html).ModelsPerformanceComparison"
 sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
 ---
 
 ## multiclass_roc_auc_score<span class='muted'>()</span>

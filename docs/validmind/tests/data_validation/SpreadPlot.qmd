@@ -1,6 +1,8 @@
 ---
 title: "[validmind](/reference/validmind.html).SpreadPlot"
 sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
 ---
 
 ## SpreadPlot[()]{.muted}

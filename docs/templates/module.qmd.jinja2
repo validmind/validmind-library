@@ -8,6 +8,8 @@ aliases:
   - index.html
 {% endif %}
 sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
 ---
 
 {% if module.docstring %}
@@ -37,12 +39,9 @@ sidebar: validmind-reference
 <!-- module.qmd.jinja2 - root level function alias -->
 ```python
 {% if target.labels and "async" in target.labels %}async {% endif %}
-def {{ member.name }}(
-{% for param in target.parameters %}
-    {{ '**' if param.kind == 'variadic keyword' else '*' if param.kind == 'variadic positional' else '' }}{{ param.name }}{% if param.annotation %}: {{ param.annotation.name if param.annotation.cls == "ExprName" else param.annotation.left.name if param.annotation.cls == "ExprSubscript" else "" }}{% endif %}{% if param.default is not none %} = {{ param.default }}{% endif %}{% if not loop.last %},
-{% endif %}
-{%- endfor %}
-){% if target.returns %} -> {{ types.format_module_return_type(target.returns, module, full_data) }}{% endif %}:
+def {{ member.name }}{% if target.parameters|length > 0 %}(
+{% for param in target.parameters %}    {{ '**' if param.kind == 'variadic keyword' else '*' if param.kind == 'variadic positional' else '' }}{{ param.name }}{% if param.annotation %}: {{ param.annotation.name if param.annotation.cls == "ExprName" else param.annotation.left.name if param.annotation.cls == "ExprSubscript" else "" }}{% endif %}{% if param.default is not none %} = {{ param.default }}{% endif %}{% if not loop.last %},
+{% endif %}{% endfor %}){% else %}(){% endif %}{% if target.returns %} -> {{ types.format_module_return_type(target.returns, module, full_data) }}{% endif %}:
 ```
 {% endif %}
 

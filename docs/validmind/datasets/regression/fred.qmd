@@ -1,6 +1,8 @@
 ---
 title: "[validmind](/reference/validmind.html).fred"
 sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
 ---
 
 ## load_all_data[()]{.muted}

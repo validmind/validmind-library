@@ -1,6 +1,8 @@
 ---
 title: "[validmind](/reference/validmind.html).credit_risk"
 sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
 ---
 
 Entrypoint for credit risk datasets.

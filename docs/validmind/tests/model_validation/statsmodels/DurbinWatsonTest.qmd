@@ -1,6 +1,8 @@
 ---
 title: "[validmind](/reference/validmind.html).DurbinWatsonTest"
 sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
 ---
 
 ## DurbinWatsonTest[()]{.muted}

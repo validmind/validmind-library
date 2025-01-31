@@ -1,6 +1,8 @@
 ---
 title: "[validmind](/reference/validmind.html).classifier"
 sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
 ---
 
 Test suites for sklearn-compatible classifier models Ideal setup is to have the API client to read a custom test suite from the project's configuration

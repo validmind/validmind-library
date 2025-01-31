@@ -1,6 +1,8 @@
 ---
 title: "[validmind](/reference/validmind.html).tabular_datasets"
 sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
 ---
 
 Test suites for tabular datasets

@@ -1,6 +1,8 @@
 ---
 title: "[validmind](/reference/validmind.html).TimeSeriesR2SquareBySegments"
 sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
 ---
 
 ## TimeSeriesR2SquareBySegments[()]{.muted}

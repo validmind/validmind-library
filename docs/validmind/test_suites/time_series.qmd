@@ -1,6 +1,8 @@
 ---
 title: "[validmind](/reference/validmind.html).time_series"
 sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
 ---
 
 Time Series Test Suites

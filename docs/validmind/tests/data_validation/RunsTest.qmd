@@ -1,6 +1,8 @@
 ---
 title: "[validmind](/reference/validmind.html).RunsTest"
 sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
 ---
 
 ## RunsTest[()]{.muted}

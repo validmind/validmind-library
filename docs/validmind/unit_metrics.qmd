@@ -1,6 +1,8 @@
 ---
 title: "[validmind](/reference/validmind.html).unit_metrics"
 sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
 ---
 
 ## describe_metric[()]{.muted}

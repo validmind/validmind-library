@@ -1,6 +1,8 @@
 ---
 title: "[validmind](/reference/validmind.html).RegressionR2SquareComparison"
 sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
 ---
 
 ## adj_r2_score<span class='muted'>()</span>

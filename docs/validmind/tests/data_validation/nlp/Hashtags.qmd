@@ -1,6 +1,8 @@
 ---
 title: "[validmind](/reference/validmind.html).Hashtags"
 sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
 ---
 
 ## Hashtags[()]{.muted}

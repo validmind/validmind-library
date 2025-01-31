@@ -1,6 +1,8 @@
 ---
 title: "[validmind](/reference/validmind.html).vm_models"
 sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
 ---
 
 Models entrypoint

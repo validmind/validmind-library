@@ -1,6 +1,8 @@
 ---
 title: "[validmind](/reference/validmind.html).TabularDescriptionTables"
 sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
 ---
 
 ## get_categorical_columns[()]{.muted}

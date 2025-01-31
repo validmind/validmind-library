@@ -1,6 +1,8 @@
 ---
 title: "[validmind](/reference/validmind.html).ModelMetadata"
 sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
 ---
 
 ## get_model_info<span class='muted'>()</span>

@@ -1,6 +1,8 @@
 ---
 title: "[validmind](/reference/validmind.html).RollingStatsPlot"
 sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
 ---
 
 ## plot_rolling_statistics[()]{.muted}

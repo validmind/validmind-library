@@ -1,6 +1,8 @@
 ---
 title: "[validmind](/reference/validmind.html).model_validation"
 sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
 ---
 
 - [BertScore](model_validation/BertScore.qmd)

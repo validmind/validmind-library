@@ -1,6 +1,8 @@
 ---
 title: "[validmind](/reference/validmind.html).lending_club_bias"
 sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
 ---
 
 ## compute_scores[()]{.muted}

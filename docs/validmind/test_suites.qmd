@@ -1,6 +1,8 @@
 ---
 title: "[validmind](/reference/validmind.html).test_suites"
 sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
 ---
 
 Entrypoint for test suites.

@@ -1,6 +1,8 @@
 ---
 title: "[validmind](/reference/validmind.html).BleuScore"
 sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
 ---
 
 ## validate_prediction<span class='muted'>()</span>

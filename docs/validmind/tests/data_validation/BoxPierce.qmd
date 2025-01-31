@@ -1,6 +1,8 @@
 ---
 title: "[validmind](/reference/validmind.html).BoxPierce"
 sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
 ---
 
 ## BoxPierce[()]{.muted}

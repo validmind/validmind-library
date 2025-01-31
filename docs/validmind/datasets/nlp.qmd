@@ -1,6 +1,8 @@
 ---
 title: "[validmind](/reference/validmind.html).nlp"
 sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
 ---
 
 Example datasets that can be used with the ValidMind Library.

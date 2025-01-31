@@ -1,6 +1,8 @@
 ---
 title: "[validmind](/reference/validmind.html).Punctuations"
 sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
 ---
 
 Metrics functions for any Pandas-compatible datasets

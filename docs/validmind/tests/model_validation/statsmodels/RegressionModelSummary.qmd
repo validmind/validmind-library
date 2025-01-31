@@ -1,6 +1,8 @@
 ---
 title: "[validmind](/reference/validmind.html).RegressionModelSummary"
 sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
 ---
 
 ## adj_r2_score<span class='muted'>()</span>

@@ -1,6 +1,8 @@
 ---
 title: "[validmind](/reference/validmind.html).TimeSeriesPredictionsPlot"
 sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
 ---
 
 ## TimeSeriesPredictionsPlot[()]{.muted}

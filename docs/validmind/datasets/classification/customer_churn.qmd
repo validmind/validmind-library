@@ -1,6 +1,8 @@
 ---
 title: "[validmind](/reference/validmind.html).customer_churn"
 sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
 ---
 
 ## simple_preprocess_booleans<span class='muted'>()</span>

@@ -1,6 +1,8 @@
 ---
 title: "[validmind](/reference/validmind.html).PhillipsPerronArch"
 sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
 ---
 
 ## get_logger<span class='muted'>()</span>

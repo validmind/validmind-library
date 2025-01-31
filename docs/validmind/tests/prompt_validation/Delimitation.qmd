@@ -1,6 +1,8 @@
 ---
 title: "[validmind](/reference/validmind.html).Delimitation"
 sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
 ---
 
 ## call_model<span class='muted'>()</span>

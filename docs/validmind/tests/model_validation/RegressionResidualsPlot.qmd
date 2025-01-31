@@ -1,6 +1,8 @@
 ---
 title: "[validmind](/reference/validmind.html).RegressionResidualsPlot"
 sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
 ---
 
 ## RegressionResidualsPlot[()]{.muted}

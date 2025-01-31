@@ -1,6 +1,8 @@
 ---
 title: "[validmind](/reference/validmind.html).DescriptiveStatistics"
 sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
 ---
 
 ## format_records<span class='muted'>()</span>

@@ -1,6 +1,8 @@
 ---
 title: "[validmind](/reference/validmind.html).embeddings"
 sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
 ---
 
 Test suites for embeddings models Ideal setup is to have the API client to read a custom test suite from the project's configuration

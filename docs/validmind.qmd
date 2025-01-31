@@ -3,6 +3,8 @@ title: "ValidMind Library"
 aliases:
   - index.html
 sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
 ---
 
 The ValidMind Library is a suite of developer tools and methods designed to automate the documentation and validation of your models. Designed to be model agnostic, the ValidMind Library provides all the standard functionality without requiring you to rewrite any functions as long as your model is built in Python.
@@ -221,8 +223,7 @@ Logs a unit metric Unit metrics are key-value pairs where the key is the metric 
 <!-- module.qmd.jinja2 - root level function alias -->
 
 ```python
-def preview_template(
-):
+def preview_template():
 ```
 
 Preview the documentation template for the current project This function will display the documentation template for the current project. If the project has not been initialized, then an error will be raised.
@@ -236,8 +237,7 @@ Preview the documentation template for the current project This function will di
 <!-- module.qmd.jinja2 - root level function alias -->
 
 ```python
-def print_env(
-):
+def print_env():
 ```
 
 Prints a log of the running environment for debugging. Output includes: ValidMind Library version, operating system details, installed dependencies, and the ISO 8601 timestamp at log creation.
@@ -247,8 +247,7 @@ Prints a log of the running environment for debugging. Output includes: ValidMin
 <!-- module.qmd.jinja2 - root level function alias -->
 
 ```python
-def reload(
-):
+def reload():
 ```
 
 Reconnect to the ValidMind API and reload the project configuration

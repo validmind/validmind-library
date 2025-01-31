@@ -1,6 +1,8 @@
 ---
 title: "[validmind](/reference/validmind.html).errors"
 sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
 ---
 
 This module contains all the custom errors that are used in the ValidMind Library. The following base errors are defined for others:

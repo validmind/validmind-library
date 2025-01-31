@@ -1,6 +1,8 @@
 ---
 title: "[validmind](/reference/validmind.html).MinimumF1Score"
 sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
 ---
 
 ## MinimumF1Score[()]{.muted}

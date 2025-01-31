@@ -1,6 +1,8 @@
 ---
 title: "[validmind](/reference/validmind.html).TabularDateTimeHistograms"
 sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
 ---
 
 ## TabularDateTimeHistograms[()]{.muted}

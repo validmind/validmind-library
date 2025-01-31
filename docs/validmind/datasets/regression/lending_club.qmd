@@ -1,6 +1,8 @@
 ---
 title: "[validmind](/reference/validmind.html).lending_club"
 sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
 ---
 
 ## load_data[()]{.muted}

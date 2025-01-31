@@ -1,6 +1,8 @@
 ---
 title: "[validmind](/reference/validmind.html).statsmodels"
 sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
 ---
 
 - [AutoARIMA](statsmodels/AutoARIMA.qmd)
