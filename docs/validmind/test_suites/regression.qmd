@@ -1,5 +1,5 @@
 ---
-title: regression
+title: "[validmind](/reference/validmind.html).regression"
 sidebar: validmind-reference
 ---
 

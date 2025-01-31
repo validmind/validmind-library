@@ -1,5 +1,5 @@
 ---
-title: AdjustedMutualInformation
+title: "[validmind](/reference/validmind.html).AdjustedMutualInformation"
 sidebar: validmind-reference
 ---
 

@@ -1,0 +1,10 @@
+---
+title: "[validmind](/reference/validmind.html).__version__"
+sidebar: validmind-reference
+---
+
+<!-- module.qmd.jinja2 - version number -->
+
+```python
+2.8.4
+```

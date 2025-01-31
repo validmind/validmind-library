@@ -1,5 +1,5 @@
 ---
-title: ClassifierThresholdOptimization
+title: "[validmind](/reference/validmind.html).ClassifierThresholdOptimization"
 sidebar: validmind-reference
 ---
 

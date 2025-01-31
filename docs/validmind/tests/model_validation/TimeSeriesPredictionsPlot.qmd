@@ -1,5 +1,5 @@
 ---
-title: TimeSeriesPredictionsPlot
+title: "[validmind](/reference/validmind.html).TimeSeriesPredictionsPlot"
 sidebar: validmind-reference
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: Skewness
+title: "[validmind](/reference/validmind.html).Skewness"
 sidebar: validmind-reference
 ---
 

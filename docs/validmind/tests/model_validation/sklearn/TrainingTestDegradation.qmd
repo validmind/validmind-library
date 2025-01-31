@@ -1,5 +1,5 @@
 ---
-title: TrainingTestDegradation
+title: "[validmind](/reference/validmind.html).TrainingTestDegradation"
 sidebar: validmind-reference
 ---
 

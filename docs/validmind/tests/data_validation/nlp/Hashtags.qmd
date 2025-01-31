@@ -1,5 +1,5 @@
 ---
-title: Hashtags
+title: "[validmind](/reference/validmind.html).Hashtags"
 sidebar: validmind-reference
 ---
 

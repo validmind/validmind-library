@@ -1,5 +1,5 @@
 ---
-title: MinimumAccuracy
+title: "[validmind](/reference/validmind.html).MinimumAccuracy"
 sidebar: validmind-reference
 ---
 

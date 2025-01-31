@@ -1,5 +1,5 @@
 ---
-title: DurbinWatsonTest
+title: "[validmind](/reference/validmind.html).DurbinWatsonTest"
 sidebar: validmind-reference
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: TimeSeriesFrequency
+title: "[validmind](/reference/validmind.html).TimeSeriesFrequency"
 sidebar: validmind-reference
 ---
 

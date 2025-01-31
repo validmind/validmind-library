@@ -1,5 +1,5 @@
 ---
-title: Mentions
+title: "[validmind](/reference/validmind.html).Mentions"
 sidebar: validmind-reference
 ---
 

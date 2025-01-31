@@ -1,5 +1,5 @@
 ---
-title: FowlkesMallowsScore
+title: "[validmind](/reference/validmind.html).FowlkesMallowsScore"
 sidebar: validmind-reference
 ---
 

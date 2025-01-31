@@ -1,5 +1,5 @@
 ---
-title: EngleGrangerCoint
+title: "[validmind](/reference/validmind.html).EngleGrangerCoint"
 sidebar: validmind-reference
 ---
 

@@ -1,9 +1,9 @@
 ---
-title: Bias
+title: "[validmind](/reference/validmind.html).Bias"
 sidebar: validmind-reference
 ---
 
-## call_model[()]{.muted}
+## call_model<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - module level function alias -->
 
@@ -14,7 +14,7 @@ def call_model(
 
 Call LLM with the given prompts and return the response
 
-## get_explanation[()]{.muted}
+## get_explanation<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - module level function alias -->
 
@@ -31,7 +31,7 @@ e.g. "Score: 8
 
 Explanation: <some-explanation>" -> "<some-explanation>"
 
-## get_score[()]{.muted}
+## get_score<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - module level function alias -->
 

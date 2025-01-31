@@ -1,5 +1,5 @@
 ---
-title: vm_models
+title: "[validmind](/reference/validmind.html).vm_models"
 sidebar: validmind-reference
 ---
 

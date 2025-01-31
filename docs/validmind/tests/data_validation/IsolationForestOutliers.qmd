@@ -1,5 +1,5 @@
 ---
-title: IsolationForestOutliers
+title: "[validmind](/reference/validmind.html).IsolationForestOutliers"
 sidebar: validmind-reference
 ---
 

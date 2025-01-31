@@ -123,19 +123,19 @@ def clean_anchor_text(heading: str) -> str:
     """Safely clean heading text for anchor generation.
     
     Handles:
-    - [()]{.muted}
-    - [class]{.muted}
-    - {.muted}
-    - Other Quarto formatting
+    - <span class="muted">()</span>
+    - <span class='muted'>class</span>
+    - Other HTML formatting
     """
     # First check if this is a class heading
-    if '[class]' in heading:
-        # Remove both [...] and {...} patterns from the class name
-        class_name = re.sub(r'(\[[^\]]*\]|\{[^}]*\})', '', heading)
+    if '<span class="muted">class</span>' in heading or '<span class=\'muted\'>class</span>' in heading:
+        # Remove the HTML span for class
+        class_name = re.sub(r'<span class=["\']muted["\']>class</span>\s*', '', heading)
         return 'class-' + class_name.strip().lower()
     
-    # For other headings, remove both [...] and {...} patterns
-    cleaned = re.sub(r'(\[[^\]]*\]|\{[^}]*\})', '', heading)
+    # For other headings, remove any HTML spans
+    cleaned = re.sub(r'<span class=["\']muted["\']>\(\)</span>', '', heading)
+    cleaned = re.sub(r'<span class=["\']muted["\']>[^<]*</span>', '', cleaned)
     return cleaned.strip().lower()
 
 def collect_documented_items(module: Dict[str, Any], path: List[str], full_data: Dict[str, Any], is_root: bool = False) -> Dict[str, List[Dict[str, str]]]:
@@ -304,6 +304,19 @@ def process_module(module: Dict[str, Any], path: List[str], env: Environment, fu
     full_path = os.path.join("docs", os.path.relpath(output_path, "docs"))
     # print(f"Wrote file: {full_path}")
     written_qmd_files[filename] = full_path
+    
+    # Generate version.qmd for root module
+    if module.get('name') == 'validmind' and module.get('members', {}).get('__version__'):
+        version_template = env.get_template('version.qmd.jinja2')
+        version_output = version_template.render(
+            module=module,
+            full_data=full_data
+        )
+        # Removed the underscores from the filename as Quarto treats files with underscores differently
+        version_path = os.path.join('docs/validmind', 'version.qmd')
+        with open(version_path, 'w') as f:
+            f.write(version_output)
+        written_qmd_files['version.qmd'] = version_path
     
     # Process submodules
     members = module.get('members', {})

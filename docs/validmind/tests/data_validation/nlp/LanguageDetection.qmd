@@ -1,5 +1,5 @@
 ---
-title: LanguageDetection
+title: "[validmind](/reference/validmind.html).LanguageDetection"
 sidebar: validmind-reference
 ---
 

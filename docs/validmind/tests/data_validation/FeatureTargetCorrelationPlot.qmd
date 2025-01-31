@@ -1,5 +1,5 @@
 ---
-title: FeatureTargetCorrelationPlot
+title: "[validmind](/reference/validmind.html).FeatureTargetCorrelationPlot"
 sidebar: validmind-reference
 ---
 

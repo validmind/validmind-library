@@ -1,9 +1,9 @@
 ---
-title: RegardScore
+title: "[validmind](/reference/validmind.html).RegardScore"
 sidebar: validmind-reference
 ---
 
-## validate_prediction[()]{.muted}
+## validate_prediction<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - module level function alias -->
 

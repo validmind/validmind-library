@@ -1,5 +1,5 @@
 ---
-title: MissingValuesBarPlot
+title: "[validmind](/reference/validmind.html).MissingValuesBarPlot"
 sidebar: validmind-reference
 ---
 

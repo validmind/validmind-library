@@ -1,9 +1,9 @@
 ---
-title: ModelsPerformanceComparison
+title: "[validmind](/reference/validmind.html).ModelsPerformanceComparison"
 sidebar: validmind-reference
 ---
 
-## multiclass_roc_auc_score[()]{.muted}
+## multiclass_roc_auc_score<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - module level function alias -->
 

@@ -1,5 +1,5 @@
 ---
-title: FeatureImportance
+title: "[validmind](/reference/validmind.html).FeatureImportance"
 sidebar: validmind-reference
 ---
 

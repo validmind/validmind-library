@@ -1,5 +1,5 @@
 ---
-title: AutoStationarity
+title: "[validmind](/reference/validmind.html).AutoStationarity"
 sidebar: validmind-reference
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: test_suites
+title: "[validmind](/reference/validmind.html).test_suites"
 sidebar: validmind-reference
 ---
 
@@ -18,7 +18,7 @@ Entrypoint for test suites.
 - [text_data](test_suites/text_data.qmd)
 - [time_series](test_suites/time_series.qmd)
 
-## format_dataframe[()]{.muted}
+## format_dataframe<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - module level function alias -->
 
@@ -29,7 +29,7 @@ def format_dataframe(
 
 Format a pandas DataFrame for display purposes
 
-## get_logger[()]{.muted}
+## get_logger<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - module level function alias -->
 
@@ -40,7 +40,7 @@ def get_logger(
 
 Get a logger for the given module name
 
-## test_id_to_name[()]{.muted}
+## test_id_to_name<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - module level function alias -->
 

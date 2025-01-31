@@ -1,9 +1,9 @@
 ---
-title: taiwan_credit
+title: "[validmind](/reference/validmind.html).taiwan_credit"
 sidebar: validmind-reference
 ---
 
-## simple_preprocess_booleans[()]{.muted}
+## simple_preprocess_booleans<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - module level function alias -->
 
@@ -23,7 +23,7 @@ Preprocess boolean columns.
 
 - Preprocessed dataframe.
 
-## simple_preprocess_categoricals[()]{.muted}
+## simple_preprocess_categoricals<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - module level function alias -->
 
@@ -43,7 +43,7 @@ Preprocess categorical columns.
 
 - Preprocessed dataframe.
 
-## simple_preprocess_numericals[()]{.muted}
+## simple_preprocess_numericals<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - module level function alias -->
 

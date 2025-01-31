@@ -1,5 +1,5 @@
 ---
-title: lending_club_bias
+title: "[validmind](/reference/validmind.html).lending_club_bias"
 sidebar: validmind-reference
 ---
 

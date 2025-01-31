@@ -1,5 +1,5 @@
 ---
-title: model_validation
+title: "[validmind](/reference/validmind.html).model_validation"
 sidebar: validmind-reference
 ---
 

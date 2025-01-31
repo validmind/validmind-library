@@ -1,5 +1,5 @@
 ---
-title: summarization
+title: "[validmind](/reference/validmind.html).summarization"
 sidebar: validmind-reference
 ---
 

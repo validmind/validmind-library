@@ -1,5 +1,5 @@
 ---
-title: datasets
+title: "[validmind](/reference/validmind.html).datasets"
 sidebar: validmind-reference
 ---
 

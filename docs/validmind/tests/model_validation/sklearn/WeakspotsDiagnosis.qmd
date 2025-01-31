@@ -1,5 +1,5 @@
 ---
-title: WeakspotsDiagnosis
+title: "[validmind](/reference/validmind.html).WeakspotsDiagnosis"
 sidebar: validmind-reference
 ---
 

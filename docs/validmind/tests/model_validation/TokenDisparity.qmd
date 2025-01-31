@@ -1,5 +1,5 @@
 ---
-title: TokenDisparity
+title: "[validmind](/reference/validmind.html).TokenDisparity"
 sidebar: validmind-reference
 ---
 

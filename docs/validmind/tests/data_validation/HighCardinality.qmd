@@ -1,5 +1,5 @@
 ---
-title: HighCardinality
+title: "[validmind](/reference/validmind.html).HighCardinality"
 sidebar: validmind-reference
 ---
 

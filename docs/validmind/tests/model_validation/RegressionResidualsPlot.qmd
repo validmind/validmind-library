@@ -1,5 +1,5 @@
 ---
-title: RegressionResidualsPlot
+title: "[validmind](/reference/validmind.html).RegressionResidualsPlot"
 sidebar: validmind-reference
 ---
 

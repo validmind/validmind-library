@@ -1,5 +1,5 @@
 ---
-title: JarqueBera
+title: "[validmind](/reference/validmind.html).JarqueBera"
 sidebar: validmind-reference
 ---
 

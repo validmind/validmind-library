@@ -1,5 +1,5 @@
 ---
-title: BoxPierce
+title: "[validmind](/reference/validmind.html).BoxPierce"
 sidebar: validmind-reference
 ---
 

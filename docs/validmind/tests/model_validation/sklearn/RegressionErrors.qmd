@@ -1,5 +1,5 @@
 ---
-title: RegressionErrors
+title: "[validmind](/reference/validmind.html).RegressionErrors"
 sidebar: validmind-reference
 ---
 

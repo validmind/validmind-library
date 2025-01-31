@@ -1,5 +1,5 @@
 ---
-title: errors
+title: "[validmind](/reference/validmind.html).errors"
 sidebar: validmind-reference
 ---
 

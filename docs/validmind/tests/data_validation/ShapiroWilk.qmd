@@ -1,5 +1,5 @@
 ---
-title: ShapiroWilk
+title: "[validmind](/reference/validmind.html).ShapiroWilk"
 sidebar: validmind-reference
 ---
 

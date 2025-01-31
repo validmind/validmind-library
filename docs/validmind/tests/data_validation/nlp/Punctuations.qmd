@@ -1,5 +1,5 @@
 ---
-title: Punctuations
+title: "[validmind](/reference/validmind.html).Punctuations"
 sidebar: validmind-reference
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: parameters_optimization
+title: "[validmind](/reference/validmind.html).parameters_optimization"
 sidebar: validmind-reference
 ---
 

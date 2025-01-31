@@ -1,5 +1,5 @@
 ---
-title: VMeasure
+title: "[validmind](/reference/validmind.html).VMeasure"
 sidebar: validmind-reference
 ---
 

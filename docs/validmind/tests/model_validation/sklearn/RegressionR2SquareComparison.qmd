@@ -1,9 +1,9 @@
 ---
-title: RegressionR2SquareComparison
+title: "[validmind](/reference/validmind.html).RegressionR2SquareComparison"
 sidebar: validmind-reference
 ---
 
-## adj_r2_score[()]{.muted}
+## adj_r2_score<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - module level function alias -->
 

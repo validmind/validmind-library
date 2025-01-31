@@ -1,5 +1,5 @@
 ---
-title: HomogeneityScore
+title: "[validmind](/reference/validmind.html).HomogeneityScore"
 sidebar: validmind-reference
 ---
 

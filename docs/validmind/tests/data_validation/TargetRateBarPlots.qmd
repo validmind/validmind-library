@@ -1,5 +1,5 @@
 ---
-title: TargetRateBarPlots
+title: "[validmind](/reference/validmind.html).TargetRateBarPlots"
 sidebar: validmind-reference
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: PrecisionRecallCurve
+title: "[validmind](/reference/validmind.html).PrecisionRecallCurve"
 sidebar: validmind-reference
 ---
 

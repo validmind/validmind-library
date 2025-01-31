@@ -1,5 +1,5 @@
 ---
-title: statsutils
+title: "[validmind](/reference/validmind.html).statsutils"
 sidebar: validmind-reference
 ---
 

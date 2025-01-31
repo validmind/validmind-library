@@ -1,5 +1,5 @@
 ---
-title: ConfusionMatrix
+title: "[validmind](/reference/validmind.html).ConfusionMatrix"
 sidebar: validmind-reference
 ---
 

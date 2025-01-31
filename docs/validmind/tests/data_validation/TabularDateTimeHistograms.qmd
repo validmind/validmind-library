@@ -1,5 +1,5 @@
 ---
-title: TabularDateTimeHistograms
+title: "[validmind](/reference/validmind.html).TabularDateTimeHistograms"
 sidebar: validmind-reference
 ---
 

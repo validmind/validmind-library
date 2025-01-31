@@ -1,5 +1,5 @@
 ---
-title: WOEBinTable
+title: "[validmind](/reference/validmind.html).WOEBinTable"
 sidebar: validmind-reference
 ---
 

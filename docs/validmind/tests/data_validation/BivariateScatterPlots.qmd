@@ -1,5 +1,5 @@
 ---
-title: BivariateScatterPlots
+title: "[validmind](/reference/validmind.html).BivariateScatterPlots"
 sidebar: validmind-reference
 ---
 

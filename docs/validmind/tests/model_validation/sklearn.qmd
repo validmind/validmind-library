@@ -1,5 +1,5 @@
 ---
-title: sklearn
+title: "[validmind](/reference/validmind.html).sklearn"
 sidebar: validmind-reference
 ---
 

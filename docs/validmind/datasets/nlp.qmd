@@ -1,5 +1,5 @@
 ---
-title: nlp
+title: "[validmind](/reference/validmind.html).nlp"
 sidebar: validmind-reference
 ---
 

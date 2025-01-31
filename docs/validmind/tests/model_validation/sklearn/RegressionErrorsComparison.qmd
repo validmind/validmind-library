@@ -1,9 +1,9 @@
 ---
-title: RegressionErrorsComparison
+title: "[validmind](/reference/validmind.html).RegressionErrorsComparison"
 sidebar: validmind-reference
 ---
 
-## get_logger[()]{.muted}
+## get_logger<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - module level function alias -->
 

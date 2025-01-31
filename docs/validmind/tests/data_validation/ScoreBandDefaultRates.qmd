@@ -1,5 +1,5 @@
 ---
-title: ScoreBandDefaultRates
+title: "[validmind](/reference/validmind.html).ScoreBandDefaultRates"
 sidebar: validmind-reference
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: embeddings
+title: "[validmind](/reference/validmind.html).embeddings"
 sidebar: validmind-reference
 ---
 

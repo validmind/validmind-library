@@ -1,5 +1,5 @@
 ---
-title: ai_powered_test
+title: "[validmind](/reference/validmind.html).ai_powered_test"
 sidebar: validmind-reference
 ---
 

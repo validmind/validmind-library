@@ -1,5 +1,5 @@
 ---
-title: Duplicates
+title: "[validmind](/reference/validmind.html).Duplicates"
 sidebar: validmind-reference
 ---
 

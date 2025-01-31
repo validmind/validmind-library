@@ -9,48 +9,43 @@ website:
         - text: "---"
         - text: "Python API"
         # Root level items from validmind.qmd
-        - text: "\\_\\_version\\_\\_"
-          file: reference/validmind.qmd#\\_\\_version\\_\\_
-        - text: "get_test_suite[()]{.muted}"
+        - text: "&#95;&#95;version__"
+          file: reference/validmind.qmd#&#95;&#95;version__
+        - text: "get_test_suite<span class='muted'>()</span>"
           file: reference/validmind.qmd#get_test_suite
-        - text: "init[()]{.muted}"
+        - text: "init<span class='muted'>()</span>"
           file: reference/validmind.qmd#init
-        - text: "init_dataset[()]{.muted}"
+        - text: "init_dataset<span class='muted'>()</span>"
           file: reference/validmind.qmd#init_dataset
-        - text: "init_model[()]{.muted}"
+        - text: "init_model<span class='muted'>()</span>"
           file: reference/validmind.qmd#init_model
-        - text: "init_r_model[()]{.muted}"
+        - text: "init_r_model<span class='muted'>()</span>"
           file: reference/validmind.qmd#init_r_model
-        - text: "log_metric[()]{.muted}"
+        - text: "log_metric<span class='muted'>()</span>"
           file: reference/validmind.qmd#log_metric
-        - text: "preview_template[()]{.muted}"
+        - text: "preview_template<span class='muted'>()</span>"
           file: reference/validmind.qmd#preview_template
-        - text: "print_env[()]{.muted}"
+        - text: "print_env<span class='muted'>()</span>"
           file: reference/validmind.qmd#print_env
-        - text: "reload[()]{.muted}"
+        - text: "reload<span class='muted'>()</span>"
           file: reference/validmind.qmd#reload
-        - text: "run_documentation_tests[()]{.muted}"
+        - text: "run_documentation_tests<span class='muted'>()</span>"
           file: reference/validmind.qmd#run_documentation_tests
-        - text: "run_test_suite[()]{.muted}"
+        - text: "run_test_suite<span class='muted'>()</span>"
           file: reference/validmind.qmd#run_test_suite
-        - text: "tags[()]{.muted}"
+        - text: "tags<span class='muted'>()</span>"
           file: reference/validmind.qmd#tags
-        - text: "tasks[()]{.muted}"
+        - text: "tasks<span class='muted'>()</span>"
           file: reference/validmind.qmd#tasks
-        - text: "test[()]{.muted}"
+        - text: "test<span class='muted'>()</span>"
           file: reference/validmind.qmd#test
-        - text: "[class]{.muted} RawData"
+        - text: "<span class='muted'>class</span> RawData"
           file: reference/validmind.qmd#class-rawdata
-          contents:
-            - text: "RawData[()]{.muted}"
-              file: reference/validmind.qmd#rawdata
-            - text: "inspect[()]{.muted}"
-              file: reference/validmind.qmd#inspect
-            - text: "serialize[()]{.muted}"
-              file: reference/validmind.qmd#serialize
         # All module documentation pages
         - text: "---"
         - text: "Submodules"
+        - text: "&#95;&#95;version__"
+          file: reference/validmind/version.qmd
         - text: "datasets"
           file: reference/validmind/datasets.qmd
           contents:

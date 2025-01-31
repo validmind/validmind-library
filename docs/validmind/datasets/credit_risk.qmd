@@ -1,5 +1,5 @@
 ---
-title: credit_risk
+title: "[validmind](/reference/validmind.html).credit_risk"
 sidebar: validmind-reference
 ---
 

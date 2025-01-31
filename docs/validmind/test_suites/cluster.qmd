@@ -1,5 +1,5 @@
 ---
-title: cluster
+title: "[validmind](/reference/validmind.html).cluster"
 sidebar: validmind-reference
 ---
 

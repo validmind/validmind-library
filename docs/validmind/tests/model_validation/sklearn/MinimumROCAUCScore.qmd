@@ -1,5 +1,5 @@
 ---
-title: MinimumROCAUCScore
+title: "[validmind](/reference/validmind.html).MinimumROCAUCScore"
 sidebar: validmind-reference
 ---
 

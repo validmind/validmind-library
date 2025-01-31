@@ -1,5 +1,5 @@
 ---
-title: ScorecardHistogram
+title: "[validmind](/reference/validmind.html).ScorecardHistogram"
 sidebar: validmind-reference
 ---
 

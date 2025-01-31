@@ -1,5 +1,5 @@
 ---
-title: classifier
+title: "[validmind](/reference/validmind.html).classifier"
 sidebar: validmind-reference
 ---
 

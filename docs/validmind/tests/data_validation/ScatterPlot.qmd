@@ -1,5 +1,5 @@
 ---
-title: ScatterPlot
+title: "[validmind](/reference/validmind.html).ScatterPlot"
 sidebar: validmind-reference
 ---
 

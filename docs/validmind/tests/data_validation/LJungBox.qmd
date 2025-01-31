@@ -1,5 +1,5 @@
 ---
-title: LJungBox
+title: "[validmind](/reference/validmind.html).LJungBox"
 sidebar: validmind-reference
 ---
 

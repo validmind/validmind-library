@@ -1,5 +1,5 @@
 ---
-title: HighPearsonCorrelation
+title: "[validmind](/reference/validmind.html).HighPearsonCorrelation"
 sidebar: validmind-reference
 ---
 

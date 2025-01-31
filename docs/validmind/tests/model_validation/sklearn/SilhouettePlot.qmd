@@ -1,5 +1,5 @@
 ---
-title: SilhouettePlot
+title: "[validmind](/reference/validmind.html).SilhouettePlot"
 sidebar: validmind-reference
 ---
 

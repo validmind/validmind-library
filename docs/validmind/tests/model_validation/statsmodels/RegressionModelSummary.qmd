@@ -1,9 +1,9 @@
 ---
-title: RegressionModelSummary
+title: "[validmind](/reference/validmind.html).RegressionModelSummary"
 sidebar: validmind-reference
 ---
 
-## adj_r2_score[()]{.muted}
+## adj_r2_score<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - module level function alias -->
 

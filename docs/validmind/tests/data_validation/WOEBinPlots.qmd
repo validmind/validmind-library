@@ -1,9 +1,9 @@
 ---
-title: WOEBinPlots
+title: "[validmind](/reference/validmind.html).WOEBinPlots"
 sidebar: validmind-reference
 ---
 
-## get_logger[()]{.muted}
+## get_logger<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - module level function alias -->
 

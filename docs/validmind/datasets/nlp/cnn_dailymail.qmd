@@ -1,5 +1,5 @@
 ---
-title: cnn_dailymail
+title: "[validmind](/reference/validmind.html).cnn_dailymail"
 sidebar: validmind-reference
 ---
 

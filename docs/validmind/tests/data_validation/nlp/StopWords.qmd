@@ -1,5 +1,5 @@
 ---
-title: StopWords
+title: "[validmind](/reference/validmind.html).StopWords"
 sidebar: validmind-reference
 ---
 

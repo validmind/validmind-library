@@ -1,9 +1,9 @@
 ---
-title: ModelMetadata
+title: "[validmind](/reference/validmind.html).ModelMetadata"
 sidebar: validmind-reference
 ---
 
-## get_model_info[()]{.muted}
+## get_model_info<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - module level function alias -->
 

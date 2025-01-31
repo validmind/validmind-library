@@ -1,5 +1,5 @@
 ---
-title: TextDescription
+title: "[validmind](/reference/validmind.html).TextDescription"
 sidebar: validmind-reference
 ---
 

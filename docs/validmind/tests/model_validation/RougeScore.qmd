@@ -1,5 +1,5 @@
 ---
-title: RougeScore
+title: "[validmind](/reference/validmind.html).RougeScore"
 sidebar: validmind-reference
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: ClusterPerformanceMetrics
+title: "[validmind](/reference/validmind.html).ClusterPerformanceMetrics"
 sidebar: validmind-reference
 ---
 

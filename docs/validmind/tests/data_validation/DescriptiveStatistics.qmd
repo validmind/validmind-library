@@ -1,9 +1,9 @@
 ---
-title: DescriptiveStatistics
+title: "[validmind](/reference/validmind.html).DescriptiveStatistics"
 sidebar: validmind-reference
 ---
 
-## format_records[()]{.muted}
+## format_records<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - module level function alias -->
 

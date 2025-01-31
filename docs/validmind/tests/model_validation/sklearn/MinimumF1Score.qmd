@@ -1,5 +1,5 @@
 ---
-title: MinimumF1Score
+title: "[validmind](/reference/validmind.html).MinimumF1Score"
 sidebar: validmind-reference
 ---
 

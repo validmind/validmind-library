@@ -2,7 +2,7 @@
 {% import "macros/types.jinja2" as types %}
 {% import "macros/navigation.jinja2" as nav %}
 ---
-title: {% if module.name == "validmind" %}ValidMind Library{% else %}{{ module.name }}{% endif +%}
+title: "{% if module.name == "validmind" %}ValidMind Library{% else %}[validmind](/reference/validmind.html).{{ module.name }}{% endif +%}"
 {% if module.name == "validmind" %}
 aliases:
   - index.html
@@ -18,7 +18,7 @@ sidebar: validmind-reference
 ## Python API
 
 {% if module.members.__version__ %}
-### \\_\\_version\\_\\_
+### &#95;&#95;version__
 
 <!-- module.qmd.jinja2 - version number -->
 ```python
@@ -31,7 +31,7 @@ sidebar: validmind-reference
 {% if is_public(member, module, full_data, is_root) and member.kind == "alias" %}
 {% set target = resolve_alias(member, full_data) %}
 {% if target and target.docstring %}
-### {{ member.name }}[()]{.muted}
+### {{ member.name }}<span class='muted'>()</span>
 
 {% if target.kind == "function" %}
 <!-- module.qmd.jinja2 - root level function alias -->
@@ -75,7 +75,7 @@ def {{ member.name }}(
 {% if is_public(member, module, full_data, is_root) and member.kind == "alias" %}
 {% set resolved = resolve_alias(member, full_data) %}
 {% if resolved.kind == "function" %}
-## {{ member.name }}[()]{.muted}
+## {{ member.name }}<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - module level function alias -->
 ```python
@@ -116,7 +116,7 @@ def {{ member.name }}(
 {% if member.kind == "class" or (member.kind == "alias" and member.target_path and member.target_path.split(".")[-1][0].isupper()) %}
 {% set target = resolve_alias(resolved, full_data) %}
 
-### [class]{.muted} {{ member.name }}
+### <span class='muted'>class</span> {{ member.name }}
 
 <!-- module.qmd.jinja2 - class definition -->
 ```python
@@ -131,7 +131,7 @@ class {{ member.name }}():
 {% for method_name, method in target.members.items() %}
 {% if method.kind == "function" and (not method_name.startswith('_') or method_name in ['__init__']) %}
 
-#### {{ member.name if method_name == '__init__' else method_name }}[()]{.muted}
+#### {{ member.name if method_name == '__init__' else method_name }}<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - class method definition -->
 ```python

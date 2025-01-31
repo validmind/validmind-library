@@ -1,5 +1,5 @@
 ---
-title: IQROutliersTable
+title: "[validmind](/reference/validmind.html).IQROutliersTable"
 sidebar: validmind-reference
 ---
 

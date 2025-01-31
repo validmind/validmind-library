@@ -1,5 +1,5 @@
 ---
-title: SpreadPlot
+title: "[validmind](/reference/validmind.html).SpreadPlot"
 sidebar: validmind-reference
 ---
 

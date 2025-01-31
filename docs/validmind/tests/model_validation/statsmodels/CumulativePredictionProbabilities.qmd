@@ -1,5 +1,5 @@
 ---
-title: CumulativePredictionProbabilities
+title: "[validmind](/reference/validmind.html).CumulativePredictionProbabilities"
 sidebar: validmind-reference
 ---
 

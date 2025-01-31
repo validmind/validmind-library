@@ -1,5 +1,5 @@
 ---
-title: LaggedCorrelationHeatmap
+title: "[validmind](/reference/validmind.html).LaggedCorrelationHeatmap"
 sidebar: validmind-reference
 ---
 

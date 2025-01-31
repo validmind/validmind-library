@@ -1,5 +1,5 @@
 ---
-title: ClassImbalance
+title: "[validmind](/reference/validmind.html).ClassImbalance"
 sidebar: validmind-reference
 ---
 

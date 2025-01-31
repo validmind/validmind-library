@@ -1,5 +1,5 @@
 ---
-title: TabularDescriptionTables
+title: "[validmind](/reference/validmind.html).TabularDescriptionTables"
 sidebar: validmind-reference
 ---
 

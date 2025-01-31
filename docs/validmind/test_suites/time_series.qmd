@@ -1,5 +1,5 @@
 ---
-title: time_series
+title: "[validmind](/reference/validmind.html).time_series"
 sidebar: validmind-reference
 ---
 

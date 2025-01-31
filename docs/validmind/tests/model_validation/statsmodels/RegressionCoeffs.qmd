@@ -1,5 +1,5 @@
 ---
-title: RegressionCoeffs
+title: "[validmind](/reference/validmind.html).RegressionCoeffs"
 sidebar: validmind-reference
 ---
 

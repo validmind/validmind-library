@@ -29,6 +29,10 @@ website:
         # All module documentation pages
         - text: "---"
         - text: "Submodules"
+        {% if module.members.__version__ %}
+        - text: "&#95;&#95;version__"
+          file: reference/validmind/version.qmd
+        {% endif %}
         {% for member in module.members | sort_members %}
         {% if is_public(member, module, full_data, is_root) and member.kind == "module" %}
         {% set module_name = member.name %}

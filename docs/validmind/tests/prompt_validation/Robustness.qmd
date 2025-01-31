@@ -1,9 +1,9 @@
 ---
-title: Robustness
+title: "[validmind](/reference/validmind.html).Robustness"
 sidebar: validmind-reference
 ---
 
-## call_model[()]{.muted}
+## call_model<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - module level function alias -->
 

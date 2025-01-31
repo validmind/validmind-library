@@ -1,5 +1,5 @@
 ---
-title: tests
+title: "[validmind](/reference/validmind.html).tests"
 sidebar: validmind-reference
 ---
 
@@ -9,7 +9,7 @@ ValidMind Tests Module
 - [model_validation](tests/model_validation.qmd)
 - [prompt_validation](tests/prompt_validation.qmd)
 
-## describe_test[()]{.muted}
+## describe_test<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - module level function alias -->
 
@@ -25,7 +25,7 @@ Get or show details about the test This function can be used to see test details
 - **test_id** str: The test ID. Defaults to None.
 - **raw** bool: If True, returns a dictionary with the test details. Defaults to False.
 
-## list_tags[()]{.muted}
+## list_tags<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - module level function alias -->
 
@@ -36,7 +36,7 @@ def list_tags(
 
 List unique tags from all test classes.
 
-## list_tasks[()]{.muted}
+## list_tasks<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - module level function alias -->
 
@@ -47,7 +47,7 @@ def list_tasks(
 
 List unique tasks from all test classes.
 
-## list_tasks_and_tags[()]{.muted}
+## list_tasks_and_tags<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - module level function alias -->
 
@@ -62,7 +62,7 @@ List all task types and their associated tags, with one row per task type and al
 
 - A DataFrame with 'Task Type' and concatenated 'Tags'.
 
-## list_tests[()]{.muted}
+## list_tests<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - module level function alias -->
 
@@ -85,7 +85,7 @@ List all tests in the tests directory.
 
 - list or pandas.DataFrame: A list of all tests or a formatted table.
 
-## load_test[()]{.muted}
+## load_test<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - module level function alias -->
 
@@ -101,7 +101,7 @@ Load a test by test ID Test IDs are in the format `namespace.path_to_module.Test
 - **test_id** str: The test ID in the format `namespace.path_to_module.TestName[:tag]`
 - **test_func** callable: The test function to load. If not provided, the test will be loaded from the test provider. Defaults to None.
 
-## run_test[()]{.muted}
+## run_test<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - module level function alias -->
 
@@ -139,7 +139,7 @@ Run a ValidMind or custom test This function is the main entry point for running
 - **ValueError**: If the test inputs are invalid
 - **LoadTestError**: If the test class fails to load
 
-## tags[()]{.muted}
+## tags<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - module level function alias -->
 
@@ -154,7 +154,7 @@ Decorator for specifying tags for a test.
 
 - \***tags**: The tags to apply to the test.
 
-## tasks[()]{.muted}
+## tasks<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - module level function alias -->
 
@@ -169,7 +169,7 @@ Decorator for specifying the task types that a test is designed for.
 
 - \***tasks**: The task types that the test is designed for.
 
-## test[()]{.muted}
+## test<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - module level function alias -->
 

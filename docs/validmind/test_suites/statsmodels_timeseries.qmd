@@ -1,5 +1,5 @@
 ---
-title: statsmodels_timeseries
+title: "[validmind](/reference/validmind.html).statsmodels_timeseries"
 sidebar: validmind-reference
 ---
 

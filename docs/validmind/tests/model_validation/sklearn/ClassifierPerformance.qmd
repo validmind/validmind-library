@@ -1,5 +1,5 @@
 ---
-title: ClassifierPerformance
+title: "[validmind](/reference/validmind.html).ClassifierPerformance"
 sidebar: validmind-reference
 ---
 

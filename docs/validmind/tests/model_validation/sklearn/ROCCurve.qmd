@@ -1,5 +1,5 @@
 ---
-title: ROCCurve
+title: "[validmind](/reference/validmind.html).ROCCurve"
 sidebar: validmind-reference
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: statsmodels
+title: "[validmind](/reference/validmind.html).statsmodels"
 sidebar: validmind-reference
 ---
 

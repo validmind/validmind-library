@@ -1,5 +1,5 @@
 ---
-title: text_data
+title: "[validmind](/reference/validmind.html).text_data"
 sidebar: validmind-reference
 ---
 

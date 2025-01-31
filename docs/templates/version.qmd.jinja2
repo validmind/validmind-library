@@ -1,0 +1,9 @@
+---
+title: "[validmind](/reference/validmind.html).__version__"
+sidebar: validmind-reference
+---
+
+<!-- module.qmd.jinja2 - version number -->
+```python
+{{ module.members.__version__.value | replace("'", "") if module.members.__version__.value else module.members.__version__.members.__version__.value | replace("'", "") }}
+```

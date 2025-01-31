@@ -1,5 +1,5 @@
 ---
-title: PolarityAndSubjectivity
+title: "[validmind](/reference/validmind.html).PolarityAndSubjectivity"
 sidebar: validmind-reference
 ---
 

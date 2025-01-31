@@ -1,5 +1,5 @@
 ---
-title: ValidMind Library
+title: "ValidMind Library"
 aliases:
   - index.html
 sidebar: validmind-reference
@@ -32,7 +32,7 @@ After you have pasted the code snippet into your development source code and exe
 
 ## Python API
 
-### \\_\\_version\\_\\_
+### \_\_version\_\_
 
 <!-- module.qmd.jinja2 - version number -->
 
@@ -40,7 +40,7 @@ After you have pasted the code snippet into your development source code and exe
 2.8.4
 ```
 
-### get_test_suite[()]{.muted}
+### get_test_suite<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - root level function alias -->
 
@@ -61,7 +61,7 @@ Gets a TestSuite object for the current project or a specific test suite This fu
 - **args**: Additional arguments to pass to the TestSuite
 - **kwargs**: Additional keyword arguments to pass to the TestSuite
 
-### init[()]{.muted}
+### init<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - root level function alias -->
 
@@ -94,7 +94,7 @@ If the API key and secret are not provided, the client will attempt to retrieve 
 
 - **ValueError**: If the API key and secret are not provided
 
-### init_dataset[()]{.muted}
+### init_dataset<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - root level function alias -->
 
@@ -131,7 +131,7 @@ Raises: ValueError: If the dataset type is not supported
 
 Returns: vm.vm.Dataset: A VM Dataset instance
 
-### init_model[()]{.muted}
+### init_model<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - root level function alias -->
 
@@ -163,7 +163,7 @@ Initializes a VM Model, which can then be passed to other functions that can per
 
 - **ValueError**: If the model type is not supported
 
-### init_r_model[()]{.muted}
+### init_r_model<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - root level function alias -->
 
@@ -191,7 +191,7 @@ LogisticRegression and LinearRegression models are converted to sklearn models b
 
 - A VM Model instance
 
-### log_metric[()]{.muted}
+### log_metric<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - root level function alias -->
 
@@ -216,7 +216,7 @@ Logs a unit metric Unit metrics are key-value pairs where the key is the metric 
 - **recorded_at** str: The timestamp of the metric. Server will use current time if not provided.
 - **thresholds** dict: Dictionary of thresholds for the metric.
 
-### preview_template[()]{.muted}
+### preview_template<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - root level function alias -->
 
@@ -231,7 +231,7 @@ Preview the documentation template for the current project This function will di
 
 - **ValueError**: If the project has not been initialized
 
-### print_env[()]{.muted}
+### print_env<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - root level function alias -->
 
@@ -242,7 +242,7 @@ def print_env(
 
 Prints a log of the running environment for debugging. Output includes: ValidMind Library version, operating system details, installed dependencies, and the ISO 8601 timestamp at log creation.
 
-### reload[()]{.muted}
+### reload<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - root level function alias -->
 
@@ -253,7 +253,7 @@ def reload(
 
 Reconnect to the ValidMind API and reload the project configuration
 
-### run_documentation_tests[()]{.muted}
+### run_documentation_tests<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - root level function alias -->
 
@@ -286,7 +286,7 @@ Collect and run all the tests associated with a template This function will anal
 
 - **ValueError**: If the project has not been initialized
 
-### run_test_suite[()]{.muted}
+### run_test_suite<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - root level function alias -->
 
@@ -319,7 +319,7 @@ High Level function for running a test suite This function provides a high level
 
 - **ValueError**: If the test suite name is not found or if there is an error initializing the test suite
 
-### tags[()]{.muted}
+### tags<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - root level function alias -->
 
@@ -334,7 +334,7 @@ Decorator for specifying tags for a test.
 
 - \***tags**: The tags to apply to the test.
 
-### tasks[()]{.muted}
+### tasks<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - root level function alias -->
 
@@ -349,7 +349,7 @@ Decorator for specifying the task types that a test is designed for.
 
 - \***tasks**: The task types that the test is designed for.
 
-### test[()]{.muted}
+### test<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - root level function alias -->
 
@@ -383,7 +383,7 @@ The function may also include a docstring. This docstring will be used and logge
 
 - The decorated function.
 
-### [class]{.muted} RawData
+### <span class='muted'>class</span> RawData
 
 <!-- module.qmd.jinja2 - class definition -->
 
@@ -393,7 +393,7 @@ class RawData():
 
 Holds raw data for a test result
 
-#### RawData[()]{.muted}
+#### RawData<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - class method definition -->
 
@@ -410,7 +410,7 @@ Create a new RawData object
 - **log** bool: If True, log the raw data to ValidMind
 - \*\***kwargs**: Keyword arguments to set as attributes e.g. `RawData(log=True, dataset_duplicates=df_duplicates)`
 
-#### inspect[()]{.muted}
+#### inspect<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - class method definition -->
 
@@ -421,7 +421,7 @@ def inspect(    self,
 
 Inspect the raw data
 
-#### serialize[()]{.muted}
+#### serialize<span class='muted'>()</span>
 
 <!-- module.qmd.jinja2 - class method definition -->
 
