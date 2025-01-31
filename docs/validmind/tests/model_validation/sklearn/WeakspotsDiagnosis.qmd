@@ -11,11 +11,11 @@ toc-expand: 4
 
 ```python
 def WeakspotsDiagnosis(
-    datasets: List,
+    datasets: {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'VMDataset'}},
     model: VMModel,
-    features_columns: Union = None,
-    metrics: Union = None,
-    thresholds: Union = None):
+    features_columns: {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Union'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'str'}}, 'None'], 'implicit': True}} = None,
+    metrics: {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Union'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Dict'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'str'}, {'cls': 'ExprName', 'name': 'Callable'}], 'implicit': True}}, 'None'], 'implicit': True}} = None,
+    thresholds: {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Union'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Dict'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'str'}, {'cls': 'ExprName', 'name': 'float'}], 'implicit': True}}, 'None'], 'implicit': True}} = None):
 ```
 
 Identifies and visualizes weak spots in a machine learning model's performance across various sections of the feature space.

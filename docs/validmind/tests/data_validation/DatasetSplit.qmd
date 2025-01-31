@@ -10,8 +10,7 @@ toc-expand: 4
 <!-- function.qmd.jinja2 - function signature -->
 
 ```python
-def DatasetSplit(
-    datasets: List):
+def DatasetSplit(datasets: {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'VMDataset'}}):
 ```
 
 Evaluates and visualizes the distribution proportions among training, testing, and validation datasets of an ML model.

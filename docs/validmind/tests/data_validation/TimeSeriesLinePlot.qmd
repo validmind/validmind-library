@@ -10,8 +10,7 @@ toc-expand: 4
 <!-- function.qmd.jinja2 - function signature -->
 
 ```python
-def TimeSeriesLinePlot(
-    dataset: VMDataset):
+def TimeSeriesLinePlot(dataset: VMDataset):
 ```
 
 Generates and analyses time-series data through line plots revealing trends, patterns, anomalies over time.

@@ -11,7 +11,8 @@ toc-expand: 4
 
 ```python
 def get_logger(
-    name = 'validmind',    log_level = None):
+    name = 'validmind',
+    log_level = None):
 ```
 
 Get a logger for the given module name
@@ -21,8 +22,7 @@ Get a logger for the given module name
 <!-- function.qmd.jinja2 - function signature -->
 
 ```python
-def PhillipsPerronArch(
-    dataset: VMDataset):
+def PhillipsPerronArch(dataset: VMDataset):
 ```
 
 Assesses the stationarity of time series data in each feature of the ML model using the Phillips-Perron test.

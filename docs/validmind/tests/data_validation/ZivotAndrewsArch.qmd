@@ -11,7 +11,8 @@ toc-expand: 4
 
 ```python
 def get_logger(
-    name = 'validmind',    log_level = None):
+    name = 'validmind',
+    log_level = None):
 ```
 
 Get a logger for the given module name
@@ -21,8 +22,7 @@ Get a logger for the given module name
 <!-- function.qmd.jinja2 - function signature -->
 
 ```python
-def ZivotAndrewsArch(
-    dataset: VMDataset):
+def ZivotAndrewsArch(dataset: VMDataset):
 ```
 
 Evaluates the order of integration and stationarity of time series data using the Zivot-Andrews unit root test.

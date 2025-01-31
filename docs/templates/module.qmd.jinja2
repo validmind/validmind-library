@@ -78,11 +78,9 @@ def {{ member.name }}{% if target.parameters|length > 0 %}(
 
 <!-- module.qmd.jinja2 - module level function alias -->
 ```python
-{% if resolved.labels and "async" in resolved.labels %}async {% endif %}def {{ member.name }}(
-{% for param in resolved.parameters %}
-    {{ param.name }}{% if param.annotation %}: {{ param.annotation }}{% endif %}{% if param.default %} = {{ param.default }}{% endif %}{% if not loop.last %},{% endif %}
-{% endfor %}
-){% if resolved.returns %} -> {{ resolved.returns }}{% endif %}:
+{% if resolved.labels and "async" in resolved.labels %}async {% endif %}def {{ member.name }}{% if resolved.parameters|length <= 1 %}({% for param in resolved.parameters %}{{ param.name }}{% if param.annotation %}: {{ param.annotation['name'] }}{% endif %}{% if param.default %} = {{ param.default }}{% endif %}{% endfor %}){% else %}(
+{% for param in resolved.parameters %}    {{ param.name }}{% if param.annotation %}: {{ param.annotation['name'] }}{% endif %}{% if param.default is not none %} = {{ param.default }}{% endif %}{% if not loop.last %},
+{% endif %}{% endfor %}){% endif %}{% if resolved.returns %} -> {{ resolved.returns['name'] if resolved.returns is mapping and 'name' in resolved.returns else resolved.returns }}{% endif %}:
 ```
 
 {% if resolved.docstring %}

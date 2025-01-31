@@ -25,8 +25,8 @@ def HyperParametersTuning(
     model: VMModel,
     dataset: VMDataset,
     param_grid: dict,
-    scoring: Union = None,
-    thresholds: Union = None,
+    scoring: {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Union'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'str'}, {'cls': 'ExprName', 'name': 'List'}, {'cls': 'ExprName', 'name': 'Dict'}], 'implicit': True}} = None,
+    thresholds: {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Union'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'float'}, {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'float'}}], 'implicit': True}} = None,
     fit_params: dict = None):
 ```
 

@@ -11,7 +11,10 @@ toc-expand: 4
 
 ```python
 def call_model(
-    system_prompt: {'cls': 'ExprName', 'name': 'str'},    user_prompt: {'cls': 'ExprName', 'name': 'str'},    temperature: {'cls': 'ExprName', 'name': 'float'} = 0.0,    seed: {'cls': 'ExprName', 'name': 'int'} = 42):
+    system_prompt: str,
+    user_prompt: str,
+    temperature: float = 0.0,
+    seed: int = 42):
 ```
 
 Call LLM with the given prompts and return the response

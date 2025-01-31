@@ -10,8 +10,7 @@ toc-expand: 4
 <!-- module.qmd.jinja2 - module level function alias -->
 
 ```python
-def get_model_info(
-    model):
+def get_model_info(model):
 ```
 
 Attempts to extract all model info from a model object instance
@@ -21,8 +20,7 @@ Attempts to extract all model info from a model object instance
 <!-- function.qmd.jinja2 - function signature -->
 
 ```python
-def ModelMetadata(
-    model):
+def ModelMetadata(model):
 ```
 
 Compare metadata of different models and generate a summary table with the results. **Purpose**: The purpose of this function is to compare the metadata of different models, including information about their architecture, framework, framework version, and programming language.

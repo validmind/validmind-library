@@ -11,7 +11,8 @@ toc-expand: 4
 
 ```python
 def get_logger(
-    name = 'validmind',    log_level = None):
+    name = 'validmind',
+    log_level = None):
 ```
 
 Get a logger for the given module name
@@ -21,8 +22,7 @@ Get a logger for the given module name
 <!-- function.qmd.jinja2 - function signature -->
 
 ```python
-def ADF(
-    dataset: VMDataset):
+def ADF(dataset: VMDataset):
 ```
 
 Assesses the stationarity of a time series dataset using the Augmented Dickey-Fuller (ADF) test.

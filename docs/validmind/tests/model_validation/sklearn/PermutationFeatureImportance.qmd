@@ -11,7 +11,8 @@ toc-expand: 4
 
 ```python
 def get_logger(
-    name = 'validmind',    log_level = None):
+    name = 'validmind',
+    log_level = None):
 ```
 
 Get a logger for the given module name
@@ -24,8 +25,8 @@ Get a logger for the given module name
 def PermutationFeatureImportance(
     model: VMModel,
     dataset: VMDataset,
-    fontsize: Union = None,
-    figure_height: Union = None):
+    fontsize: {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Union'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'int'}, 'None'], 'implicit': True}} = None,
+    figure_height: {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Union'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'int'}, 'None'], 'implicit': True}} = None):
 ```
 
 Assesses the significance of each feature in a model by evaluating the impact on model performance when feature values are randomly rearranged.

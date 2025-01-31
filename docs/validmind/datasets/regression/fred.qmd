@@ -10,8 +10,7 @@ toc-expand: 4
 <!-- function.qmd.jinja2 - function signature -->
 
 ```python
-def load_all_data(
-):
+def load_all_data():
 ```
 
 ## load_data[()]{.muted}
@@ -19,8 +18,7 @@ def load_all_data(
 <!-- function.qmd.jinja2 - function signature -->
 
 ```python
-def load_data(
-):
+def load_data():
 ```
 
 ## load_model[()]{.muted}
@@ -28,8 +26,7 @@ def load_data(
 <!-- function.qmd.jinja2 - function signature -->
 
 ```python
-def load_model(
-    model_name):
+def load_model(model_name):
 ```
 
 ## load_processed_data[()]{.muted}
@@ -37,8 +34,7 @@ def load_model(
 <!-- function.qmd.jinja2 - function signature -->
 
 ```python
-def load_processed_data(
-):
+def load_processed_data():
 ```
 
 ## load_test_dataset[()]{.muted}
@@ -46,8 +42,7 @@ def load_processed_data(
 <!-- function.qmd.jinja2 - function signature -->
 
 ```python
-def load_test_dataset(
-    model_name):
+def load_test_dataset(model_name):
 ```
 
 ## load_train_dataset[()]{.muted}
@@ -55,8 +50,7 @@ def load_test_dataset(
 <!-- function.qmd.jinja2 - function signature -->
 
 ```python
-def load_train_dataset(
-    model_path):
+def load_train_dataset(model_path):
 ```
 
 ## preprocess[()]{.muted}

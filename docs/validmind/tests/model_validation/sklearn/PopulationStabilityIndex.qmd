@@ -11,7 +11,8 @@ toc-expand: 4
 
 ```python
 def get_logger(
-    name = 'validmind',    log_level = None):
+    name = 'validmind',
+    log_level = None):
 ```
 
 Get a logger for the given module name
@@ -36,7 +37,7 @@ Taken from: https://towardsdatascience.com/checking-model-stability-and-populati
 
 ```python
 def PopulationStabilityIndex(
-    datasets: List,
+    datasets: {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'VMDataset'}},
     model: VMModel,
     num_bins: int = 10,
     mode: str = 'fixed'):

@@ -592,8 +592,7 @@ When an unsupported R model is used.
 <!-- function.qmd.jinja2 - function signature -->
 
 ```python
-def raise_api_error(
-    error_string):
+def raise_api_error(error_string):
 ```
 
 Safely try to parse JSON from the response message in case the API returns a non-JSON string or if the API returns a non-standard error
@@ -603,8 +602,7 @@ Safely try to parse JSON from the response message in case the API returns a non
 <!-- function.qmd.jinja2 - function signature -->
 
 ```python
-def should_raise_on_fail_fast(
-    error) -> bool:
+def should_raise_on_fail_fast(error) -> bool:
 ```
 
 Determine whether an error should be raised when fail_fast is True.

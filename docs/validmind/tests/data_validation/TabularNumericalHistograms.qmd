@@ -10,8 +10,7 @@ toc-expand: 4
 <!-- function.qmd.jinja2 - function signature -->
 
 ```python
-def TabularNumericalHistograms(
-    dataset: VMDataset):
+def TabularNumericalHistograms(dataset: VMDataset):
 ```
 
 Generates histograms for each numerical feature in a dataset to provide visual insights into data distribution and detect potential issues.

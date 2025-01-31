@@ -10,8 +10,7 @@ toc-expand: 4
 <!-- function.qmd.jinja2 - function signature -->
 
 ```python
-def compute_scores(
-    probabilities):
+def compute_scores(probabilities):
 ```
 
 ## load_data[()]{.muted}
@@ -19,8 +18,7 @@ def compute_scores(
 <!-- function.qmd.jinja2 - function signature -->
 
 ```python
-def load_data(
-):
+def load_data():
 ```
 
 Load data from the specified CSV file. :return: DataFrame containing the loaded data.
@@ -30,8 +28,7 @@ Load data from the specified CSV file. :return: DataFrame containing the loaded 
 <!-- function.qmd.jinja2 - function signature -->
 
 ```python
-def preprocess(
-    df):
+def preprocess(df):
 ```
 
 ## split[()]{.muted}

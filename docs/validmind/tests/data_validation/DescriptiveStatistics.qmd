@@ -10,8 +10,7 @@ toc-expand: 4
 <!-- module.qmd.jinja2 - module level function alias -->
 
 ```python
-def format_records(
-    df: {'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'pd'}, {'cls': 'ExprName', 'name': 'DataFrame'}]}) -> {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Dict'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'str'}, {'cls': 'ExprName', 'name': 'Any'}], 'implicit': True}}}:
+def format_records(df: ) -> {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Dict'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'str'}, {'cls': 'ExprName', 'name': 'Any'}], 'implicit': True}}}:
 ```
 
 Round the values on each dataframe's column to a given number of decimal places. The returned value is converted to a dict in "records" with Pandas's to_dict() function.
@@ -27,8 +26,7 @@ We do this for display purposes before sending data to ValidMind. Rules:
 <!-- function.qmd.jinja2 - function signature -->
 
 ```python
-def DescriptiveStatistics(
-    dataset: VMDataset):
+def DescriptiveStatistics(dataset: VMDataset):
 ```
 
 Performs a detailed descriptive statistical analysis of both numerical and categorical data within a model's dataset.

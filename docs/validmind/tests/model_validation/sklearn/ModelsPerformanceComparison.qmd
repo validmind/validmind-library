@@ -11,7 +11,9 @@ toc-expand: 4
 
 ```python
 def multiclass_roc_auc_score(
-    y_test,    y_pred,    average = 'macro'):
+    y_test,
+    y_pred,
+    average = 'macro'):
 ```
 
 ## ModelsPerformanceComparison[()]{.muted}
@@ -21,7 +23,7 @@ def multiclass_roc_auc_score(
 ```python
 def ModelsPerformanceComparison(
     dataset: VMDataset,
-    models: list):
+    models: {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'list'}, 'slice': {'cls': 'ExprName', 'name': 'VMModel'}}):
 ```
 
 Evaluates and compares the performance of multiple Machine Learning models using various metrics like accuracy, precision, recall, and F1 score.

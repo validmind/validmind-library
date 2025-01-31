@@ -17,7 +17,9 @@ ValidMind Tests Module
 
 ```python
 def describe_test(
-    test_id: {'cls': 'ExprName', 'name': 'TestID'} = None,    raw: {'cls': 'ExprName', 'name': 'bool'} = False,    show: {'cls': 'ExprName', 'name': 'bool'} = True):
+    test_id: TestID = None,
+    raw: bool = False,
+    show: bool = True):
 ```
 
 Get or show details about the test This function can be used to see test details including the test name, description, required inputs and default params. It can also be used to get a dictionary of the above information for programmatic use.
@@ -32,8 +34,7 @@ Get or show details about the test This function can be used to see test details
 <!-- module.qmd.jinja2 - module level function alias -->
 
 ```python
-def list_tags(
-):
+def list_tags():
 ```
 
 List unique tags from all test classes.
@@ -43,8 +44,7 @@ List unique tags from all test classes.
 <!-- module.qmd.jinja2 - module level function alias -->
 
 ```python
-def list_tasks(
-):
+def list_tasks():
 ```
 
 List unique tasks from all test classes.
@@ -54,8 +54,7 @@ List unique tasks from all test classes.
 <!-- module.qmd.jinja2 - module level function alias -->
 
 ```python
-def list_tasks_and_tags(
-    as_json = False):
+def list_tasks_and_tags(as_json = False):
 ```
 
 List all task types and their associated tags, with one row per task type and all tags for a task type in one row.
@@ -70,7 +69,11 @@ List all task types and their associated tags, with one row per task type and al
 
 ```python
 def list_tests(
-    filter = None,    task = None,    tags = None,    pretty = True,    truncate = True):
+    filter = None,
+    task = None,
+    tags = None,
+    pretty = True,
+    truncate = True):
 ```
 
 List all tests in the tests directory.
@@ -93,7 +96,9 @@ List all tests in the tests directory.
 
 ```python
 def load_test(
-    test_id: {'cls': 'ExprName', 'name': 'str'},    test_func: {'cls': 'ExprName', 'name': 'callable'} = None,    reload: {'cls': 'ExprName', 'name': 'bool'} = False):
+    test_id: str,
+    test_func: callable = None,
+    reload: bool = False):
 ```
 
 Load a test by test ID Test IDs are in the format `namespace.path_to_module.TestClassOrFuncName[:tag]`. The tag is optional and is used to distinguish between multiple results from the same test.
@@ -109,7 +114,18 @@ Load a test by test ID Test IDs are in the format `namespace.path_to_module.Test
 
 ```python
 def run_test(
-    test_id: {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Union'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'TestID'}, 'None'], 'implicit': True}} = None,    name: {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Union'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'str'}, 'None'], 'implicit': True}} = None,    unit_metrics: {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Union'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'TestID'}}, 'None'], 'implicit': True}} = None,    inputs: {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Union'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Dict'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'str'}, {'cls': 'ExprName', 'name': 'Any'}], 'implicit': True}}, 'None'], 'implicit': True}} = None,    input_grid: {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Union'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Dict'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'str'}, {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'Any'}}], 'implicit': True}}, {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Dict'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'str'}, {'cls': 'ExprName', 'name': 'Any'}], 'implicit': True}}}, 'None'], 'implicit': True}} = None,    params: {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Union'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Dict'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'str'}, {'cls': 'ExprName', 'name': 'Any'}], 'implicit': True}}, 'None'], 'implicit': True}} = None,    param_grid: {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Union'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Dict'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'str'}, {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'Any'}}], 'implicit': True}}, {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Dict'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'str'}, {'cls': 'ExprName', 'name': 'Any'}], 'implicit': True}}}, 'None'], 'implicit': True}} = None,    show: {'cls': 'ExprName', 'name': 'bool'} = True,    generate_description: {'cls': 'ExprName', 'name': 'bool'} = True,    title: {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Optional'}, 'slice': {'cls': 'ExprName', 'name': 'str'}} = None,    post_process_fn: {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Union'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Callable'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprList', 'elements': [{'cls': 'ExprName', 'name': 'TestResult'}]}, 'None'], 'implicit': True}}, 'None'], 'implicit': True}} = None,    kwargs = {}) -> {'cls': 'ExprName', 'name': 'TestResult'}:
+    test_id:  = None,
+    name:  = None,
+    unit_metrics:  = None,
+    inputs:  = None,
+    input_grid:  = None,
+    params:  = None,
+    param_grid:  = None,
+    show: bool = True,
+    generate_description: bool = True,
+    title:  = None,
+    post_process_fn:  = None,
+    kwargs = {}) -> TestResult:
 ```
 
 Run a ValidMind or custom test This function is the main entry point for running tests. It can run simple unit metrics, ValidMind and custom tests, composite tests made up of multiple unit metrics and comparison tests made up of multiple tests.
@@ -146,8 +162,7 @@ Run a ValidMind or custom test This function is the main entry point for running
 <!-- module.qmd.jinja2 - module level function alias -->
 
 ```python
-def tags(
-    tags = ()):
+def tags(tags = ()):
 ```
 
 Decorator for specifying tags for a test.
@@ -161,8 +176,7 @@ Decorator for specifying tags for a test.
 <!-- module.qmd.jinja2 - module level function alias -->
 
 ```python
-def tasks(
-    tasks = ()):
+def tasks(tasks = ()):
 ```
 
 Decorator for specifying the task types that a test is designed for.
@@ -176,8 +190,7 @@ Decorator for specifying the task types that a test is designed for.
 <!-- module.qmd.jinja2 - module level function alias -->
 
 ```python
-def test(
-    func_or_id):
+def test(func_or_id):
 ```
 
 Decorator for creating and registering custom tests This decorator registers the function it wraps as a test function within ValidMind under the provided ID. Once decorated, the function can be run using the `validmind.tests.run_test` function.

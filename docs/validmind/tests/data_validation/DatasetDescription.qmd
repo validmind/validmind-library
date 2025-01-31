@@ -11,7 +11,8 @@ toc-expand: 4
 
 ```python
 def get_logger(
-    name = 'validmind',    log_level = None):
+    name = 'validmind',
+    log_level = None):
 ```
 
 Get a logger for the given module name
@@ -21,8 +22,7 @@ Get a logger for the given module name
 <!-- function.qmd.jinja2 - function signature -->
 
 ```python
-def DatasetDescription(
-    dataset: VMDataset):
+def DatasetDescription(dataset: VMDataset):
 ```
 
 Provides comprehensive analysis and statistical summaries of each column in a machine learning model's dataset.
@@ -101,8 +101,7 @@ Returns a collection of histograms for a numerical column, each one with a diffe
 <!-- function.qmd.jinja2 - function signature -->
 
 ```python
-def infer_datatypes(
-    df):
+def infer_datatypes(df):
 ```
 
 ## [class]{.muted} UnsupportedColumnTypeError

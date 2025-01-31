@@ -10,8 +10,7 @@ toc-expand: 4
 <!-- function.qmd.jinja2 - function signature -->
 
 ```python
-def compute_scores(
-    probabilities):
+def compute_scores(probabilities):
 ```
 
 ## feature_engineering[()]{.muted}
@@ -50,8 +49,7 @@ Get demo test configuration.
 <!-- function.qmd.jinja2 - function signature -->
 
 ```python
-def init_vm_objects(
-    scorecard):
+def init_vm_objects(scorecard):
 ```
 
 ## load_data[()]{.muted}
@@ -71,8 +69,7 @@ Load data from either an online source or offline files, automatically dropping 
 <!-- function.qmd.jinja2 - function signature -->
 
 ```python
-def load_scorecard(
-):
+def load_scorecard():
 ```
 
 ## load_test_config[()]{.muted}
@@ -80,8 +77,7 @@ def load_scorecard(
 <!-- function.qmd.jinja2 - function signature -->
 
 ```python
-def load_test_config(
-    scorecard):
+def load_test_config(scorecard):
 ```
 
 ## preprocess[()]{.muted}

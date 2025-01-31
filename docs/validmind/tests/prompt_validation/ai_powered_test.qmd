@@ -24,8 +24,7 @@ Call LLM with the given prompts and return the response
 <!-- function.qmd.jinja2 - function signature -->
 
 ```python
-def get_explanation(
-    response: str):
+def get_explanation(response: str):
 ```
 
 Get just the explanation from the response string TODO: use json response mode instead of this
@@ -41,8 +40,7 @@ Explanation: <some-explanation>" -> "<some-explanation>"
 <!-- function.qmd.jinja2 - function signature -->
 
 ```python
-def get_score(
-    response: str):
+def get_score(response: str):
 ```
 
 Get just the score from the response string TODO: use json response mode instead of this

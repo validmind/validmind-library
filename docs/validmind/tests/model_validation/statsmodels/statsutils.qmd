@@ -11,8 +11,8 @@ toc-expand: 4
 
 ```python
 def adj_r2_score(
-    actual: ,
-    predicted: ,
+    actual: {'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'np'}, {'cls': 'ExprName', 'name': 'ndarray'}]},
+    predicted: {'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'np'}, {'cls': 'ExprName', 'name': 'ndarray'}]},
     rowcount: int,
     featurecount: int):
 ```

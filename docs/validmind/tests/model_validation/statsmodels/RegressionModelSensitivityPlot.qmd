@@ -11,7 +11,8 @@ toc-expand: 4
 
 ```python
 def get_logger(
-    name = 'validmind',    log_level = None):
+    name = 'validmind',
+    log_level = None):
 ```
 
 Get a logger for the given module name
@@ -34,8 +35,8 @@ def integrate_diff(
 def RegressionModelSensitivityPlot(
     dataset: VMDataset,
     model: VMModel,
-    shocks: List = {'cls': 'ExprList', 'elements': ['0.1']},
-    transformation: Union = None):
+    shocks: {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'float'}} = {'cls': 'ExprList', 'elements': ['0.1']},
+    transformation: {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Union'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'str'}, 'None'], 'implicit': True}} = None):
 ```
 
 Assesses the sensitivity of a regression model to changes in independent variables by applying shocks and visualizing the impact.

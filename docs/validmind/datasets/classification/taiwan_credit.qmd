@@ -11,7 +11,8 @@ toc-expand: 4
 
 ```python
 def simple_preprocess_booleans(
-    df,    columns):
+    df,
+    columns):
 ```
 
 Preprocess boolean columns.
@@ -31,7 +32,8 @@ Preprocess boolean columns.
 
 ```python
 def simple_preprocess_categoricals(
-    df,    columns):
+    df,
+    columns):
 ```
 
 Preprocess categorical columns.
@@ -51,7 +53,8 @@ Preprocess categorical columns.
 
 ```python
 def simple_preprocess_numericals(
-    df,    columns):
+    df,
+    columns):
 ```
 
 Preprocess numerical columns.
@@ -70,8 +73,7 @@ Preprocess numerical columns.
 <!-- function.qmd.jinja2 - function signature -->
 
 ```python
-def load_data(
-):
+def load_data():
 ```
 
 ## preprocess[()]{.muted}
@@ -79,6 +81,5 @@ def load_data(
 <!-- function.qmd.jinja2 - function signature -->
 
 ```python
-def preprocess(
-    df):
+def preprocess(df):
 ```

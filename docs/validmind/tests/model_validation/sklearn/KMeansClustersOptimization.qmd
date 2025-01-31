@@ -13,7 +13,7 @@ toc-expand: 4
 def KMeansClustersOptimization(
     model: VMModel,
     dataset: VMDataset,
-    n_clusters: Union = None):
+    n_clusters: {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Union'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'int'}}, 'None'], 'implicit': True}} = None):
 ```
 
 Optimizes the number of clusters in K-means models using Elbow and Silhouette methods.
