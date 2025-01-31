@@ -357,6 +357,9 @@ def combine_results(
     # handle threshold tests (i.e. tests that have pass/fail bool status)
     if results[0].passed is not None:
         combined_outputs.append(all(result.passed for result in results))
+    # handle raw data (if any)
+    if results[0].raw_data:
+        combined_outputs.append(_combine_raw_data(results))
 
     # combine inputs and params
     combined_inputs = {}
@@ -378,10 +381,8 @@ def combine_results(
     combined_inputs = _combine_dict_values(combined_inputs)
     combined_params = _combine_dict_values(combined_params)
 
-    combined_raw_data = _combine_raw_data(results)
-
     return (
-        (*combined_outputs, combined_raw_data),  # raw data is part of the output
+        tuple(combined_outputs),
         combined_inputs,
         combined_params,
     )
