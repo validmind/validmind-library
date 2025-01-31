@@ -3,30 +3,6 @@ title: "[validmind](/reference/validmind.html).regression"
 sidebar: validmind-reference
 ---
 
-## [class]{.muted} TabularDataQuality
-
-<!-- class.qmd.jinja2 - class definition -->
-
-```python
-class TabularDataQuality(TestSuite):
-```
-
-Test suite for data quality on tabular datasets
-
-**Inherited members**
-
-## [class]{.muted} TabularDatasetDescription
-
-<!-- class.qmd.jinja2 - class definition -->
-
-```python
-class TabularDatasetDescription(TestSuite):
-```
-
-Test suite to extract metadata and descriptive statistics from a tabular dataset
-
-**Inherited members**
-
 ## [class]{.muted} RegressionFullSuite
 
 <!-- class.qmd.jinja2 - class definition -->
@@ -60,5 +36,29 @@ class RegressionPerformance(TestSuite):
 ```
 
 Test suite for regression model performance
+
+**Inherited members**
+
+## [class]{.muted} TabularDataQuality
+
+<!-- class.qmd.jinja2 - class definition -->
+
+```python
+class TabularDataQuality(TestSuite):
+```
+
+Test suite for data quality on tabular datasets
+
+**Inherited members**
+
+## [class]{.muted} TabularDatasetDescription
+
+<!-- class.qmd.jinja2 - class definition -->
+
+```python
+class TabularDatasetDescription(TestSuite):
+```
+
+Test suite to extract metadata and descriptive statistics from a tabular dataset
 
 **Inherited members**

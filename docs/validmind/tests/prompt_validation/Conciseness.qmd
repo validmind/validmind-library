@@ -48,21 +48,6 @@ e.g. "Score: 8
 
 Explanation: <some-explanation>" -> 8
 
-## [class]{.muted} MissingRequiredTestInputError
-
-<!-- class.qmd.jinja2 - class definition -->
-
-```python
-class MissingRequiredTestInputError(BaseError):
-```
-
-When a required test context variable is missing.
-
-**Inherited members**
-
-- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
-- **From builtins.BaseException**: with_traceback, add_note
-
 ## Conciseness[()]{.muted}
 
 <!-- function.qmd.jinja2 - function signature -->
@@ -101,3 +86,18 @@ Using an LLM, this test conducts a conciseness analysis on input prompts. The an
 - The conciseness score is based on an AI's assessment, which might not fully capture human interpretation of conciseness.
 - The predefined threshold for conciseness could be subjective and might need adjustment based on application.
 - The test is dependent on the LLM’s understanding of conciseness, which might vary from model to model.
+
+## [class]{.muted} MissingRequiredTestInputError
+
+<!-- class.qmd.jinja2 - class definition -->
+
+```python
+class MissingRequiredTestInputError(BaseError):
+```
+
+When a required test context variable is missing.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note

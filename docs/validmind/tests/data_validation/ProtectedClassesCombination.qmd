@@ -14,21 +14,6 @@ def get_logger(
 
 Get a logger for the given module name
 
-## [class]{.muted} MissingDependencyError
-
-<!-- class.qmd.jinja2 - class definition -->
-
-```python
-class MissingDependencyError(BaseError):
-```
-
-When a required dependency is missing.
-
-**Inherited members**
-
-- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
-- **From builtins.BaseException**: with_traceback, add_note
-
 ## ProtectedClassesCombination[()]{.muted}
 
 <!-- function.qmd.jinja2 - function signature -->
@@ -71,3 +56,18 @@ The test performs the following steps:
 - May become complex and difficult to interpret with a large number of protected classes or combinations.
 - Does not provide statistical significance of observed differences.
 - Visualization alone may not capture all nuances of intersectional fairness.
+
+## [class]{.muted} MissingDependencyError
+
+<!-- class.qmd.jinja2 - class definition -->
+
+```python
+class MissingDependencyError(BaseError):
+```
+
+When a required dependency is missing.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note

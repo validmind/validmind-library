@@ -3,21 +3,6 @@ title: "[validmind](/reference/validmind.html).TimeSeriesMissingValues"
 sidebar: validmind-reference
 ---
 
-## [class]{.muted} SkipTestError
-
-<!-- class.qmd.jinja2 - class definition -->
-
-```python
-class SkipTestError(BaseError):
-```
-
-Useful error to throw when a test cannot be executed.
-
-**Inherited members**
-
-- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
-- **From builtins.BaseException**: with_traceback, add_note
-
 ## TimeSeriesMissingValues[()]{.muted}
 
 <!-- function.qmd.jinja2 - function signature -->
@@ -54,3 +39,18 @@ The test method commences by validating if the dataset has a datetime index; if 
 - The test demands that the dataset should have a datetime index, hence limiting its use only to time series analysis.
 - The test's sensitivity to the 'min_threshold' parameter may raise false alarms if set too strictly or may overlook problematic data if set too loosely.
 - Solely focuses on the 'missingness' of the data and might fall short in addressing other aspects of data quality.
+
+## [class]{.muted} SkipTestError
+
+<!-- class.qmd.jinja2 - class definition -->
+
+```python
+class SkipTestError(BaseError):
+```
+
+Useful error to throw when a test cannot be executed.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note

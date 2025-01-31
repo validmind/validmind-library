@@ -3,21 +3,6 @@ title: "[validmind](/reference/validmind.html).KMeansClustersOptimization"
 sidebar: validmind-reference
 ---
 
-## [class]{.muted} SkipTestError
-
-<!-- class.qmd.jinja2 - class definition -->
-
-```python
-class SkipTestError(BaseError):
-```
-
-Useful error to throw when a test cannot be executed.
-
-**Inherited members**
-
-- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
-- **From builtins.BaseException**: with_traceback, add_note
-
 ## KMeansClustersOptimization[()]{.muted}
 
 <!-- function.qmd.jinja2 - function signature -->
@@ -57,3 +42,18 @@ The test mechanism involves iterating over a predefined range of cluster numbers
 - Both methods may fail to provide definitive answers when the data lacks clear cluster structures.
 - Might not be straightforward to determine the 'elbow' point or maximize the silhouette average score, especially in larger and complicated datasets.
 - Assumes spherical clusters (due to using the Euclidean distance in the Elbow method), which might not align with the actual structure of the data.
+
+## [class]{.muted} SkipTestError
+
+<!-- class.qmd.jinja2 - class definition -->
+
+```python
+class SkipTestError(BaseError):
+```
+
+Useful error to throw when a test cannot be executed.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note

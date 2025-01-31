@@ -48,21 +48,6 @@ e.g. "Score: 8
 
 Explanation: <some-explanation>" -> 8
 
-## [class]{.muted} MissingRequiredTestInputError
-
-<!-- class.qmd.jinja2 - class definition -->
-
-```python
-class MissingRequiredTestInputError(BaseError):
-```
-
-When a required test context variable is missing.
-
-**Inherited members**
-
-- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
-- **From builtins.BaseException**: with_traceback, add_note
-
 ## Clarity[()]{.muted}
 
 <!-- function.qmd.jinja2 - function signature -->
@@ -99,3 +84,18 @@ The evaluation uses an LLM to scrutinize the clarity of prompts, factoring in co
 - Scoring system is subjective and relies on the AI’s interpretation of 'clarity'
 - The test assumes that all required factors (detail inclusion, persona adoption, step-by-step instructions, use of examples, and specification of output length) contribute equally to clarity, which might not always be the case
 - The evaluation may not be as effective if used on non-textual models
+
+## [class]{.muted} MissingRequiredTestInputError
+
+<!-- class.qmd.jinja2 - class definition -->
+
+```python
+class MissingRequiredTestInputError(BaseError):
+```
+
+When a required test context variable is missing.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note

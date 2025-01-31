@@ -14,36 +14,6 @@ def call_model(
 
 Call LLM with the given prompts and return the response
 
-## [class]{.muted} MissingRequiredTestInputError
-
-<!-- class.qmd.jinja2 - class definition -->
-
-```python
-class MissingRequiredTestInputError(BaseError):
-```
-
-When a required test context variable is missing.
-
-**Inherited members**
-
-- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
-- **From builtins.BaseException**: with_traceback, add_note
-
-## [class]{.muted} SkipTestError
-
-<!-- class.qmd.jinja2 - class definition -->
-
-```python
-class SkipTestError(BaseError):
-```
-
-Useful error to throw when a test cannot be executed.
-
-**Inherited members**
-
-- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
-- **From builtins.BaseException**: with_traceback, add_note
-
 ## Robustness[()]{.muted}
 
 <!-- function.qmd.jinja2 - function signature -->
@@ -81,3 +51,33 @@ The Robustness test appraises prompts under various conditions, alterations, and
 - Currently, the test only supports single-variable prompts, which restricts its application to more complex models.
 - When there are too many target classes (over 10), the test is skipped, which can leave potential vulnerabilities unchecked in complex multi-class models.
 - The test may not account for all potential conditions or alterations that could show up in practical use scenarios.
+
+## [class]{.muted} MissingRequiredTestInputError
+
+<!-- class.qmd.jinja2 - class definition -->
+
+```python
+class MissingRequiredTestInputError(BaseError):
+```
+
+When a required test context variable is missing.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note
+
+## [class]{.muted} SkipTestError
+
+<!-- class.qmd.jinja2 - class definition -->
+
+```python
+class SkipTestError(BaseError):
+```
+
+Useful error to throw when a test cannot be executed.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note

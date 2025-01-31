@@ -3,21 +3,6 @@ title: "[validmind](/reference/validmind.html).KolmogorovSmirnov"
 sidebar: validmind-reference
 ---
 
-## [class]{.muted} InvalidTestParametersError
-
-<!-- class.qmd.jinja2 - class definition -->
-
-```python
-class InvalidTestParametersError(BaseError):
-```
-
-When an invalid parameters for the test.
-
-**Inherited members**
-
-- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
-- **From builtins.BaseException**: with_traceback, add_note
-
 ## KolmogorovSmirnov[()]{.muted}
 
 <!-- function.qmd.jinja2 - function signature -->
@@ -55,3 +40,18 @@ This test calculates the KS statistic and corresponding p-value for each feature
 - The test's sensitivity to disparities in the tails of data distribution might cause false alarms about non-normality.
 - Less effective for multivariate distributions, as it is designed for univariate distributions.
 - Does not identify specific types of non-normality, such as skewness or kurtosis, which could impact model fitting.
+
+## [class]{.muted} InvalidTestParametersError
+
+<!-- class.qmd.jinja2 - class definition -->
+
+```python
+class InvalidTestParametersError(BaseError):
+```
+
+When an invalid parameters for the test.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note

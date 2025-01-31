@@ -48,21 +48,6 @@ e.g. "Score: 8
 
 Explanation: <some-explanation>" -> 8
 
-## [class]{.muted} MissingRequiredTestInputError
-
-<!-- class.qmd.jinja2 - class definition -->
-
-```python
-class MissingRequiredTestInputError(BaseError):
-```
-
-When a required test context variable is missing.
-
-**Inherited members**
-
-- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
-- **From builtins.BaseException**: with_traceback, add_note
-
 ## Specificity[()]{.muted}
 
 <!-- function.qmd.jinja2 - function signature -->
@@ -100,3 +85,18 @@ The Specificity Test employs an LLM to grade each prompt based on clarity, detai
 - This test doesn't consider the content comprehension capability of the LLM
 - High specificity score doesn't guarantee a high-quality response from the LLM, as the model's performance is also dependent on various other factors
 - Striking a balance between specificity and verbosity can be challenging, as overly detailed prompts might confuse or mislead the model
+
+## [class]{.muted} MissingRequiredTestInputError
+
+<!-- class.qmd.jinja2 - class definition -->
+
+```python
+class MissingRequiredTestInputError(BaseError):
+```
+
+When a required test context variable is missing.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note

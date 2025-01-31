@@ -14,21 +14,6 @@ def get_logger(
 
 Get a logger for the given module name
 
-## [class]{.muted} MissingOrInvalidModelPredictFnError
-
-<!-- class.qmd.jinja2 - class definition -->
-
-```python
-class MissingOrInvalidModelPredictFnError(BaseError):
-```
-
-When the pytorch model is missing a predict function or its predict method does not have the expected arguments.
-
-**Inherited members**
-
-- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
-- **From builtins.BaseException**: with_traceback, add_note
-
 ## RobustnessDiagnosis[()]{.muted}
 
 <!-- function.qmd.jinja2 - function signature -->
@@ -73,3 +58,18 @@ This test introduces Gaussian noise to the numeric input features of the dataset
 - Gaussian noise might not adequately represent all types of real-world data perturbations.
 - Performance thresholds are somewhat arbitrary and might need tuning.
 - The test may not account for more complex or unstructured noise patterns that could affect model robustness.
+
+## [class]{.muted} MissingOrInvalidModelPredictFnError
+
+<!-- class.qmd.jinja2 - class definition -->
+
+```python
+class MissingOrInvalidModelPredictFnError(BaseError):
+```
+
+When the pytorch model is missing a predict function or its predict method does not have the expected arguments.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note

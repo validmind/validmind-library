@@ -3,21 +3,6 @@ title: "[validmind](/reference/validmind.html).RollingStatsPlot"
 sidebar: validmind-reference
 ---
 
-## [class]{.muted} SkipTestError
-
-<!-- class.qmd.jinja2 - class definition -->
-
-```python
-class SkipTestError(BaseError):
-```
-
-Useful error to throw when a test cannot be executed.
-
-**Inherited members**
-
-- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
-- **From builtins.BaseException**: with_traceback, add_note
-
 ## plot_rolling_statistics[()]{.muted}
 
 <!-- function.qmd.jinja2 - function signature -->
@@ -67,3 +52,18 @@ This mechanism is comprised of two steps. Initially, the rolling mean and standa
 - For all columns, a fixed-size window is utilized. This may not accurately capture patterns in datasets where different features may require different optimal window sizes.
 - Requires the dataset to be indexed by date and time, hence it may not be usable for datasets without a timestamp index.
 - Primarily serves for data visualization as it does not facilitate any quantitative measures for stationarity, such as through statistical tests. Therefore, the interpretation is subjective and depends heavily on modeler discretion.
+
+## [class]{.muted} SkipTestError
+
+<!-- class.qmd.jinja2 - class definition -->
+
+```python
+class SkipTestError(BaseError):
+```
+
+Useful error to throw when a test cannot be executed.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note

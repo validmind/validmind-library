@@ -3,21 +3,6 @@ title: "[validmind](/reference/validmind.html).ChiSquaredFeaturesTable"
 sidebar: validmind-reference
 ---
 
-## [class]{.muted} SkipTestError
-
-<!-- class.qmd.jinja2 - class definition -->
-
-```python
-class SkipTestError(BaseError):
-```
-
-Useful error to throw when a test cannot be executed.
-
-**Inherited members**
-
-- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
-- **From builtins.BaseException**: with_traceback, add_note
-
 ## ChiSquaredFeaturesTable[()]{.muted}
 
 <!-- function.qmd.jinja2 - function signature -->
@@ -55,3 +40,18 @@ The function creates a contingency table for each categorical feature and the ta
 - The test is designed for classification tasks and is not applicable to regression problems.
 - As with all hypothesis tests, the Chi-Squared test can only detect associations, not causal relationships.
 - The choice of p-value threshold can affect the interpretation of feature relevance, and different thresholds may lead to different conclusions.
+
+## [class]{.muted} SkipTestError
+
+<!-- class.qmd.jinja2 - class definition -->
+
+```python
+class SkipTestError(BaseError):
+```
+
+Useful error to throw when a test cannot be executed.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note

@@ -14,21 +14,6 @@ def get_logger(
 
 Get a logger for the given module name
 
-## [class]{.muted} SkipTestError
-
-<!-- class.qmd.jinja2 - class definition -->
-
-```python
-class SkipTestError(BaseError):
-```
-
-Useful error to throw when a test cannot be executed.
-
-**Inherited members**
-
-- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
-- **From builtins.BaseException**: with_traceback, add_note
-
 ## FeaturesAUC[()]{.muted}
 
 <!-- function.qmd.jinja2 - function signature -->
@@ -65,3 +50,18 @@ For each feature, the metric treats the feature values as raw scores to compute 
 - Does not reflect the combined effects of features or any interaction between them, which can be critical in certain models.
 - The AUC values are calculated without considering the model's use of the features, which could lead to different interpretations of feature importance when considering the model holistically.
 - This metric is applicable only to binary classification tasks and cannot be directly extended to multiclass classification or regression without modifications.
+
+## [class]{.muted} SkipTestError
+
+<!-- class.qmd.jinja2 - class definition -->
+
+```python
+class SkipTestError(BaseError):
+```
+
+Useful error to throw when a test cannot be executed.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note

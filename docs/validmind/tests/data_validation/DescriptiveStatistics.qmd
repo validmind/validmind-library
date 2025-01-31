@@ -20,21 +20,6 @@ We do this for display purposes before sending data to ValidMind. Rules:
 - If the column's smallest number has more decimals 6, use that number's precision so we can avoid rendering a 0 instead
 - If the column's smallest number has less decimals than 6, use 6 decimal places
 
-## [class]{.muted} SkipTestError
-
-<!-- class.qmd.jinja2 - class definition -->
-
-```python
-class SkipTestError(BaseError):
-```
-
-Useful error to throw when a test cannot be executed.
-
-**Inherited members**
-
-- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
-- **From builtins.BaseException**: with_traceback, add_note
-
 ## DescriptiveStatistics[()]{.muted}
 
 <!-- function.qmd.jinja2 - function signature -->
@@ -91,3 +76,18 @@ def get_summary_statistics_numerical(
     df,
     numerical_fields):
 ```
+
+## [class]{.muted} SkipTestError
+
+<!-- class.qmd.jinja2 - class definition -->
+
+```python
+class SkipTestError(BaseError):
+```
+
+Useful error to throw when a test cannot be executed.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note

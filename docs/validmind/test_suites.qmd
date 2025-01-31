@@ -59,6 +59,61 @@ Convert a test ID to a human-readable name.
 
 - A human-readable name derived from the test ID.
 
+## describe_suite[()]{.muted}
+
+<!-- function.qmd.jinja2 - function signature -->
+
+```python
+def describe_suite(
+    test_suite_id: str,
+    verbose = False):
+```
+
+Describes a Test Suite by ID
+
+**Parameters**
+
+- **test_suite_id**: Test Suite ID
+- **verbose**: If True, describe all plans and tests in the Test Suite
+
+**Returns**
+
+- A formatted table with the Test Suite description
+
+## get_by_id[()]{.muted}
+
+<!-- function.qmd.jinja2 - function signature -->
+
+```python
+def get_by_id(
+    test_suite_id: str):
+```
+
+Returns the test suite by ID
+
+## list_suites[()]{.muted}
+
+<!-- function.qmd.jinja2 - function signature -->
+
+```python
+def list_suites(
+    pretty: bool = True):
+```
+
+Returns a list of all available test suites
+
+## register_test_suite[()]{.muted}
+
+<!-- function.qmd.jinja2 - function signature -->
+
+```python
+def register_test_suite(
+    suite_id: str,
+    suite: TestSuite):
+```
+
+Registers a custom test suite
+
 ## [class]{.muted} ClassifierDiagnosis
 
 <!-- class.qmd.jinja2 - class definition -->
@@ -420,58 +475,3 @@ This test suite provides a preliminary understanding of the target variable(s) u
 The raw time series data provides a visual inspection of the target variable's behavior over time. This helps to identify any patterns or trends in the data, as well as any potential outliers or anomalies. The histogram of the target variable displays the distribution of values, providing insight into the range and frequency of values observed in the data.
 
 **Inherited members**
-
-## describe_suite[()]{.muted}
-
-<!-- function.qmd.jinja2 - function signature -->
-
-```python
-def describe_suite(
-    test_suite_id: str,
-    verbose = False):
-```
-
-Describes a Test Suite by ID
-
-**Parameters**
-
-- **test_suite_id**: Test Suite ID
-- **verbose**: If True, describe all plans and tests in the Test Suite
-
-**Returns**
-
-- A formatted table with the Test Suite description
-
-## get_by_id[()]{.muted}
-
-<!-- function.qmd.jinja2 - function signature -->
-
-```python
-def get_by_id(
-    test_suite_id: str):
-```
-
-Returns the test suite by ID
-
-## list_suites[()]{.muted}
-
-<!-- function.qmd.jinja2 - function signature -->
-
-```python
-def list_suites(
-    pretty: bool = True):
-```
-
-Returns a list of all available test suites
-
-## register_test_suite[()]{.muted}
-
-<!-- function.qmd.jinja2 - function signature -->
-
-```python
-def register_test_suite(
-    suite_id: str,
-    suite: TestSuite):
-```
-
-Registers a custom test suite
