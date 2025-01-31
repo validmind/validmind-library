@@ -76,13 +76,17 @@ def sort_members(members, is_errors_module=False):
             else:
                 return ('6', '0', name)
         else:
-            # Default sorting for non-error modules
-            if kind == 'class':
-                return ('0', name.lower())
-            elif kind == 'function':
+            # Special handling for root-level aliases
+            if kind == 'alias':
+                if name == '__init__':
+                    return ('0', '0', name)  # Put __init__ aliases first
+                return ('0', '1', name.lower())  # Other aliases next
+            elif kind == 'class':
                 return ('1', name.lower())
-            else:
+            elif kind == 'function':
                 return ('2', name.lower())
+            else:
+                return ('3', name.lower())
     
     return sorted(members, key=get_sort_key)
 
