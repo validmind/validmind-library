@@ -21,11 +21,7 @@ Get a logger for the given module name
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def ProtectedClassesDescription(
-    dataset,
-    protected_classes = None):
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">ProtectedClassesDescription</span>( <span class="param"> <span class="n">dataset</span></span>, <span class="param"> <span class="n">protected_classes</span> <span class="o">=</span> <span class="kc">None</span></span>):</span> </span> :::
 
 Visualizes the distribution of protected classes in the dataset relative to the target variable and provides descriptive statistics.
 

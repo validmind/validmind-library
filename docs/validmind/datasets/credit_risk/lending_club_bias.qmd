@@ -9,17 +9,13 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def compute_scores(probabilities):
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">compute_scores</span>(<span class="param"><span class="n">probabilities</span></span>):</span> </span> :::
 
 ## load_data[()]{.muted}
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def load_data():
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">load_data</span>(<span class="param"><span class="n"></span></span>):</span> </span> :::
 
 Load data from the specified CSV file. :return: DataFrame containing the loaded data.
 
@@ -27,16 +23,10 @@ Load data from the specified CSV file. :return: DataFrame containing the loaded 
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def preprocess(df):
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">preprocess</span>(<span class="param"><span class="n">df</span></span>):</span> </span> :::
 
 ## split[()]{.muted}
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def split(
-    df,
-    test_size = 0.3):
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">split</span>( <span class="param"> <span class="n">df</span></span>, <span class="param"> <span class="n">test_size</span> <span class="o">=</span> <span class="kc">0.3</span></span>):</span> </span> :::

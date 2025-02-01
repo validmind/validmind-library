@@ -1,0 +1,32 @@
+.code-block {
+    font-family: 'JetBrains Mono', 'Fira Code', Menlo, Monaco, 'Courier New', monospace;
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 1em;
+    margin: 1em 0;
+    white-space: pre;
+    overflow-x: auto;
+    font-size: 0.9em;
+    line-height: 1.5;
+}
+
+.code-block .kw {
+    color: #0000FF;  /* Python keyword color */
+}
+
+.code-block .name {
+    color: #795E26;  /* Function name color */
+}
+
+.code-block .n {
+    color: #0550AE;  /* Parameter name color */
+}
+
+.code-block .ann {
+    color: #267F99;  /* Type annotation color */
+}
+
+.code-block .default {
+    color: #098658;  /* Default value color */
+}

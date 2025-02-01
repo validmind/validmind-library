@@ -72,9 +72,7 @@ Preprocess numerical columns.
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def get_demo_test_config(test_suite = None):
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">get_demo_test_config</span>(<span class="param"><span class="n">test_suite</span> <span class="o">=</span> <span class="kc">None</span></span>):</span> </span> :::
 
 Returns input configuration for the default documentation template assigned to this demo model
 
@@ -97,14 +95,10 @@ We assign the following inputs depending on the input config expected by each te
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def load_data(full_dataset = False):
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">load_data</span>(<span class="param"><span class="n">full_dataset</span> <span class="o">=</span> <span class="kc">False</span></span>):</span> </span> :::
 
 ## preprocess[()]{.muted}
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def preprocess(df):
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">preprocess</span>(<span class="param"><span class="n">df</span></span>):</span> </span> :::

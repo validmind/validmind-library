@@ -9,11 +9,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def TimeSeriesOutliers(
-    dataset: VMDataset,
-    zscore_threshold: int = 3):
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">TimeSeriesOutliers</span>( <span class="param"> <span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>, <span class="param"> <span class="n">zscore_threshold</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="kc">3</span></span>):</span> </span> :::
 
 Identifies and visualizes outliers in time-series data using the z-score method.
 

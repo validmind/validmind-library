@@ -9,11 +9,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def TooManyZeroValues(
-    dataset: VMDataset,
-    max_percent_threshold: float = 0.03):
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">TooManyZeroValues</span>( <span class="param"> <span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>, <span class="param"> <span class="n">max_percent_threshold</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="kc">0.03</span></span>):</span> </span> :::
 
 Identifies numerical columns in a dataset that contain an excessive number of zero values, defined by a threshold percentage.
 

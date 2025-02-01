@@ -9,11 +9,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def ModelParameters(
-    model,
-    model_params = None):
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">ModelParameters</span>( <span class="param"> <span class="n">model</span></span>, <span class="param"> <span class="n">model_params</span> <span class="o">=</span> <span class="kc">None</span></span>):</span> </span> :::
 
 Extracts and displays model parameters in a structured format for transparency and reproducibility.
 

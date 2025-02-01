@@ -23,11 +23,7 @@ Adjusted R2 Score
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def RegressionModelSummary(
-    dataset: VMDataset,
-    model: VMModel):
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">RegressionModelSummary</span>( <span class="param"> <span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>, <span class="param"> <span class="n">model</span><span class="p">:</span> <span class="n">VMModel</span></span>):</span> </span> :::
 
 Evaluates regression model performance using metrics including R-Squared, Adjusted R-Squared, MSE, and RMSE.
 

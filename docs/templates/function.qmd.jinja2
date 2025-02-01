@@ -3,13 +3,17 @@
 ## {{ member_name | default(member.name) }}[()]{.muted}
 
 <!-- function.qmd.jinja2 - function signature -->
-```python
-def {{ member.name }}{% if member.parameters|length <= 1 %}({% for param in member.parameters %}{{ param.name }}{% if param.annotation %}: {{ param.annotation['name'] if param.annotation is mapping and 'name' in param.annotation else param.annotation }}{% endif %}{% if param.default is not none %} = {{ param.default }}{% endif %}{% endfor %}){% else %}(
-{% for param in member.parameters %}    {{ param.name }}{% if param.annotation %}: {{ param.annotation['name'] if param.annotation is mapping and 'name' in param.annotation else param.annotation }}{% endif %}{% if param.default is not none %} = {{ param.default }}{% endif %}{% if not loop.last %},
-{% endif %}{% endfor %}){% endif %}{% if member.returns %} -> {{ member.returns['name'] if member.returns is mapping and 'name' in member.returns else member.returns }}{% endif %}:
-```
+::: {.signature}
+<span class="signature pdoc-code multiline">
+<span class="kw">def</span> <span class="name">{{ member.name }}</span>{% if member.parameters|length <= 1 %}(<span class="param"><span class="n">{{ member.parameters[0].name if member.parameters }}</span>{% if member.parameters and member.parameters[0].annotation %}<span class="p">:</span> <span class="n">{{ member.parameters[0].annotation['name'] if member.parameters[0].annotation is mapping and 'name' in member.parameters[0].annotation else member.parameters[0].annotation }}</span>{% endif %}{% if member.parameters and member.parameters[0].default is not none %} <span class="o">=</span> <span class="kc">{{ member.parameters[0].default }}</span>{% endif %}</span>){% else %}(
+{%- for param in member.parameters %}
+    <span class="param">	<span class="n">{{ param.name }}</span>{% if param.annotation %}<span class="p">:</span> <span class="n">{{ param.annotation['name'] if param.annotation is mapping and 'name' in param.annotation else param.annotation }}</span>{% endif %}{% if param.default is not none %} <span class="o">=</span> <span class="kc">{{ param.default }}</span>{% endif %}</span>{% if not loop.last %},{% endif -%}
+{% endfor %}
+){% endif %}{% if member.returns %} <span class="p">-></span> <span class="return-annotation">{{ member.returns['name'] if member.returns is mapping and 'name' in member.returns else member.returns }}</span>{% endif %}:</span>
+</span>
+:::
 
 {% if member.docstring %}
 {{ doc.format_docstring(member.docstring) }}
 {% endif %}
-{% endif %} 
+{% endif -%} 

@@ -21,13 +21,7 @@ Get a logger for the given module name
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def WOEBinPlots(
-    dataset: VMDataset,
-    breaks_adj: list = None,
-    fig_height: int = 600,
-    fig_width: int = 500):
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">WOEBinPlots</span>( <span class="param"> <span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>, <span class="param"> <span class="n">breaks_adj</span><span class="p">:</span> <span class="n">list</span> <span class="o">=</span> <span class="kc">None</span></span>, <span class="param"> <span class="n">fig_height</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="kc">600</span></span>, <span class="param"> <span class="n">fig_width</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="kc">500</span></span>):</span> </span> :::
 
 Generates visualizations of Weight of Evidence (WoE) and Information Value (IV) for understanding predictive power of categorical variables in a data set.
 

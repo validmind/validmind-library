@@ -9,21 +9,13 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def load_data():
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">load_data</span>(<span class="param"><span class="n"></span></span>):</span> </span> :::
 
 ## preprocess[()]{.muted}
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def preprocess(
-    df,
-    split_option = 'train_test_val',
-    train_size = 0.6,
-    test_size = 0.2):
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">preprocess</span>( <span class="param"> <span class="n">df</span></span>, <span class="param"> <span class="n">split_option</span> <span class="o">=</span> <span class="kc">'train_test_val'</span></span>, <span class="param"> <span class="n">train_size</span> <span class="o">=</span> <span class="kc">0.6</span></span>, <span class="param"> <span class="n">test_size</span> <span class="o">=</span> <span class="kc">0.2</span></span>):</span> </span> :::
 
 Split a time series DataFrame into train, validation, and test sets.
 
@@ -42,8 +34,4 @@ Split a time series DataFrame into train, validation, and test sets.
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def transform(
-    df,
-    transform_func = 'diff'):
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">transform</span>( <span class="param"> <span class="n">df</span></span>, <span class="param"> <span class="n">transform_func</span> <span class="o">=</span> <span class="kc">'diff'</span></span>):</span> </span> :::

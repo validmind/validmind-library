@@ -21,12 +21,7 @@ Get a logger for the given module name
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def RegressionFeatureSignificance(
-    model: VMModel,
-    fontsize: int = 10,
-    p_threshold: float = 0.05):
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">RegressionFeatureSignificance</span>( <span class="param"> <span class="n">model</span><span class="p">:</span> <span class="n">VMModel</span></span>, <span class="param"> <span class="n">fontsize</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="kc">10</span></span>, <span class="param"> <span class="n">p_threshold</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="kc">0.05</span></span>):</span> </span> :::
 
 Assesses and visualizes the statistical significance of features in a regression model.
 

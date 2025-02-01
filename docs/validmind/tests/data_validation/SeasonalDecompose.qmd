@@ -21,11 +21,7 @@ Get a logger for the given module name
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def SeasonalDecompose(
-    dataset: VMDataset,
-    seasonal_model: str = 'additive'):
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">SeasonalDecompose</span>( <span class="param"> <span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>, <span class="param"> <span class="n">seasonal_model</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="kc">'additive'</span></span>):</span> </span> :::
 
 Assesses patterns and seasonality in a time series dataset by decomposing its features into foundational components.
 

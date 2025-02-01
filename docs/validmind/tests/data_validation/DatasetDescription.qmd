@@ -21,9 +21,7 @@ Get a logger for the given module name
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def DatasetDescription(dataset: VMDataset):
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">DatasetDescription</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>):</span> </span> :::
 
 Provides comprehensive analysis and statistical summaries of each column in a machine learning model's dataset.
 
@@ -61,11 +59,7 @@ The DatasetDescription class accomplishes the purpose as follows: firstly, the t
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def describe_column(
-    df,
-    column):
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">describe_column</span>( <span class="param"> <span class="n">df</span></span>, <span class="param"> <span class="n">column</span></span>):</span> </span> :::
 
 Gets descriptive statistics for a single column in a Pandas DataFrame.
 
@@ -73,12 +67,7 @@ Gets descriptive statistics for a single column in a Pandas DataFrame.
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def get_column_histograms(
-    df,
-    column,
-    type_):
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">get_column_histograms</span>( <span class="param"> <span class="n">df</span></span>, <span class="param"> <span class="n">column</span></span>, <span class="param"> <span class="n">type\_</span></span>):</span> </span> :::
 
 Returns a collection of histograms for a numerical or categorical column. We store different combinations of bin sizes to allow analyzing the data better
 
@@ -88,11 +77,7 @@ Will be used in favor of \_get_histogram in the future
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def get_numerical_histograms(
-    df,
-    column):
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">get_numerical_histograms</span>( <span class="param"> <span class="n">df</span></span>, <span class="param"> <span class="n">column</span></span>):</span> </span> :::
 
 Returns a collection of histograms for a numerical column, each one with a different bin size
 
@@ -100,9 +85,7 @@ Returns a collection of histograms for a numerical column, each one with a diffe
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def infer_datatypes(df):
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">infer_datatypes</span>(<span class="param"><span class="n">df</span></span>):</span> </span> :::
 
 ## [class]{.muted} UnsupportedColumnTypeError
 

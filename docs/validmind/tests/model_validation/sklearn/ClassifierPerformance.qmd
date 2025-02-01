@@ -9,12 +9,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def ClassifierPerformance(
-    dataset: VMDataset,
-    model: VMModel,
-    average: str = 'macro'):
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">ClassifierPerformance</span>( <span class="param"> <span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>, <span class="param"> <span class="n">model</span><span class="p">:</span> <span class="n">VMModel</span></span>, <span class="param"> <span class="n">average</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="kc">'macro'</span></span>):</span> </span> :::
 
 Evaluates performance of binary or multiclass classification models using precision, recall, F1-Score, accuracy, and ROC AUC scores.
 
@@ -48,9 +43,4 @@ The test produces a report that includes precision, recall, F1-Score, and accura
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def multiclass_roc_auc_score(
-    y_test,
-    y_pred,
-    average = 'macro'):
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">multiclass_roc_auc_score</span>( <span class="param"> <span class="n">y_test</span></span>, <span class="param"> <span class="n">y_pred</span></span>, <span class="param"> <span class="n">average</span> <span class="o">=</span> <span class="kc">'macro'</span></span>):</span> </span> :::

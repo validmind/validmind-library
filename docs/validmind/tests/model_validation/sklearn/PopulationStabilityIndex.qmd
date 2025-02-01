@@ -21,13 +21,7 @@ Get a logger for the given module name
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def calculate_psi(
-    score_initial,
-    score_new,
-    num_bins = 10,
-    mode = 'fixed'):
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">calculate_psi</span>( <span class="param"> <span class="n">score_initial</span></span>, <span class="param"> <span class="n">score_new</span></span>, <span class="param"> <span class="n">num_bins</span> <span class="o">=</span> <span class="kc">10</span></span>, <span class="param"> <span class="n">mode</span> <span class="o">=</span> <span class="kc">'fixed'</span></span>):</span> </span> :::
 
 Taken from: https://towardsdatascience.com/checking-model-stability-and-population-shift-with-psi-and-csi-6d12af008783
 
@@ -35,13 +29,7 @@ Taken from: https://towardsdatascience.com/checking-model-stability-and-populati
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def PopulationStabilityIndex(
-    datasets: {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'VMDataset'}},
-    model: VMModel,
-    num_bins: int = 10,
-    mode: str = 'fixed'):
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">PopulationStabilityIndex</span>( <span class="param"> <span class="n">datasets</span><span class="p">:</span> <span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'VMDataset'}}</span></span>, <span class="param"> <span class="n">model</span><span class="p">:</span> <span class="n">VMModel</span></span>, <span class="param"> <span class="n">num_bins</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="kc">10</span></span>, <span class="param"> <span class="n">mode</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="kc">'fixed'</span></span>):</span> </span> :::
 
 Assesses the Population Stability Index (PSI) to quantify the stability of an ML model's predictions across different datasets.
 

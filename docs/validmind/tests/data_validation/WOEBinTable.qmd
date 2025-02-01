@@ -9,11 +9,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def WOEBinTable(
-    dataset: VMDataset,
-    breaks_adj: list = None):
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">WOEBinTable</span>( <span class="param"> <span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>, <span class="param"> <span class="n">breaks_adj</span><span class="p">:</span> <span class="n">list</span> <span class="o">=</span> <span class="kc">None</span></span>):</span> </span> :::
 
 Assesses the Weight of Evidence (WoE) and Information Value (IV) of each feature to evaluate its predictive power in a binary classification model.
 

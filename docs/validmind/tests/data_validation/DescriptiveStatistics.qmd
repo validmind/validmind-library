@@ -25,9 +25,7 @@ We do this for display purposes before sending data to ValidMind. Rules:
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def DescriptiveStatistics(dataset: VMDataset):
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">DescriptiveStatistics</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>):</span> </span> :::
 
 Performs a detailed descriptive statistical analysis of both numerical and categorical data within a model's dataset.
 
@@ -61,21 +59,13 @@ The testing mechanism utilizes two in-built functions of pandas dataframes: `des
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def get_summary_statistics_categorical(
-    df,
-    categorical_fields):
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">get_summary_statistics_categorical</span>( <span class="param"> <span class="n">df</span></span>, <span class="param"> <span class="n">categorical_fields</span></span>):</span> </span> :::
 
 ## get_summary_statistics_numerical[()]{.muted}
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def get_summary_statistics_numerical(
-    df,
-    numerical_fields):
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">get_summary_statistics_numerical</span>( <span class="param"> <span class="n">df</span></span>, <span class="param"> <span class="n">numerical_fields</span></span>):</span> </span> :::
 
 ## [class]{.muted} SkipTestError
 

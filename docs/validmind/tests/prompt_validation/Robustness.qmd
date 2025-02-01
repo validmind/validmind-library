@@ -23,12 +23,7 @@ Call LLM with the given prompts and return the response
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def Robustness(
-    model,
-    dataset,
-    num_tests = 10):
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">Robustness</span>( <span class="param"> <span class="n">model</span></span>, <span class="param"> <span class="n">dataset</span></span>, <span class="param"> <span class="n">num_tests</span> <span class="o">=</span> <span class="kc">10</span></span>):</span> </span> :::
 
 Assesses the robustness of prompts provided to a Large Language Model under varying conditions and contexts. This test specifically measures the model's ability to generate correct classifications with the given prompt even when the inputs are edge cases or otherwise difficult to classify.
 

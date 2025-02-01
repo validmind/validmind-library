@@ -21,14 +21,7 @@ Get a logger for the given module name
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def RobustnessDiagnosis(
-    datasets: {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'VMDataset'}},
-    model: VMModel,
-    metric: str = None,
-    scaling_factor_std_dev_list: {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'float'}} = {'cls': 'ExprName', 'name': 'DEFAULT_STD_DEV_LIST'},
-    performance_decay_threshold: float = {'cls': 'ExprName', 'name': 'DEFAULT_DECAY_THRESHOLD'}):
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">RobustnessDiagnosis</span>( <span class="param"> <span class="n">datasets</span><span class="p">:</span> <span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'VMDataset'}}</span></span>, <span class="param"> <span class="n">model</span><span class="p">:</span> <span class="n">VMModel</span></span>, <span class="param"> <span class="n">metric</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="kc">None</span></span>, <span class="param"> <span class="n">scaling_factor_std_dev_list</span><span class="p">:</span> <span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'float'}}</span> <span class="o">=</span> <span class="kc">{'cls': 'ExprName', 'name': 'DEFAULT_STD_DEV_LIST'}</span></span>, <span class="param"> <span class="n">performance_decay_threshold</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="kc">{'cls': 'ExprName', 'name': 'DEFAULT_DECAY_THRESHOLD'}</span></span>):</span> </span> :::
 
 Assesses the robustness of a machine learning model by evaluating performance decay under noisy conditions.
 

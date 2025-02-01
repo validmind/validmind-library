@@ -11,11 +11,7 @@ Threshold based tests
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def ClassImbalance(
-    dataset: VMDataset,
-    min_percent_threshold: int = 10) -> {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Tuple'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Dict'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'str'}, {'cls': 'ExprName', 'name': 'Any'}], 'implicit': True}}, {'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'go'}, {'cls': 'ExprName', 'name': 'Figure'}]}, {'cls': 'ExprName', 'name': 'bool'}], 'implicit': True}}:
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">ClassImbalance</span>( <span class="param"> <span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>, <span class="param"> <span class="n">min_percent_threshold</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="kc">10</span></span>) <span class="p">-></span> <span class="return-annotation">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Tuple'}, 'slice': {'cls': 'ExprTuple', 'elements': \[{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Dict'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'str'}, {'cls': 'ExprName', 'name': 'Any'}], 'implicit': True}}, {'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'go'}, {'cls': 'ExprName', 'name': 'Figure'}]}, {'cls': 'ExprName', 'name': 'bool'}\], 'implicit': True}}</span>:</span> </span> :::
 
 Evaluates and quantifies class distribution imbalance in a dataset used by a machine learning model.
 

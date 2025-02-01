@@ -9,12 +9,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def TrainingTestDegradation(
-    datasets: {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'VMDataset'}},
-    model: VMModel,
-    max_threshold: float = 0.1):
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">TrainingTestDegradation</span>( <span class="param"> <span class="n">datasets</span><span class="p">:</span> <span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'VMDataset'}}</span></span>, <span class="param"> <span class="n">model</span><span class="p">:</span> <span class="n">VMModel</span></span>, <span class="param"> <span class="n">max_threshold</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="kc">0.1</span></span>):</span> </span> :::
 
 Tests if model performance degradation between training and test datasets exceeds a predefined threshold.
 

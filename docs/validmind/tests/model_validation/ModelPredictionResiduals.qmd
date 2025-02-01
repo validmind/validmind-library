@@ -9,15 +9,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def ModelPredictionResiduals(
-    dataset,
-    model,
-    nbins = 100,
-    p_value_threshold = 0.05,
-    start_date = None,
-    end_date = None):
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">ModelPredictionResiduals</span>( <span class="param"> <span class="n">dataset</span></span>, <span class="param"> <span class="n">model</span></span>, <span class="param"> <span class="n">nbins</span> <span class="o">=</span> <span class="kc">100</span></span>, <span class="param"> <span class="n">p_value_threshold</span> <span class="o">=</span> <span class="kc">0.05</span></span>, <span class="param"> <span class="n">start_date</span> <span class="o">=</span> <span class="kc">None</span></span>, <span class="param"> <span class="n">end_date</span> <span class="o">=</span> <span class="kc">None</span></span>):</span> </span> :::
 
 Assesses normality and behavior of residuals in regression models through visualization and statistical tests.
 

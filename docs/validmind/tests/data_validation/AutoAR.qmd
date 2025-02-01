@@ -21,11 +21,7 @@ Get a logger for the given module name
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def AutoAR(
-    dataset: VMDataset,
-    max_ar_order: int = 3):
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">AutoAR</span>( <span class="param"> <span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>, <span class="param"> <span class="n">max_ar_order</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="kc">3</span></span>):</span> </span> :::
 
 Automatically identifies the optimal Autoregressive (AR) order for a time series using BIC and AIC criteria.
 

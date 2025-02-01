@@ -11,12 +11,7 @@ Threshold based tests
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def StopWords(
-    dataset: VMDataset,
-    min_percent_threshold: float = 0.5,
-    num_words: int = 25):
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">StopWords</span>( <span class="param"> <span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>, <span class="param"> <span class="n">min_percent_threshold</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="kc">0.5</span></span>, <span class="param"> <span class="n">num_words</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="kc">25</span></span>):</span> </span> :::
 
 Evaluates and visualizes the frequency of English stop words in a text dataset against a defined threshold.
 

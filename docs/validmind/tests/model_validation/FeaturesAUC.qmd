@@ -21,12 +21,7 @@ Get a logger for the given module name
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def FeaturesAUC(
-    dataset: VMDataset,
-    fontsize: int = 12,
-    figure_height: int = 500):
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">FeaturesAUC</span>( <span class="param"> <span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>, <span class="param"> <span class="n">fontsize</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="kc">12</span></span>, <span class="param"> <span class="n">figure_height</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="kc">500</span></span>):</span> </span> :::
 
 Evaluates the discriminatory power of each individual feature within a binary classification model by calculating the Area Under the Curve (AUC) for each feature separately.
 

@@ -9,11 +9,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def AdjustedRandIndex(
-    model: VMModel,
-    dataset: VMDataset):
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">AdjustedRandIndex</span>( <span class="param"> <span class="n">model</span><span class="p">:</span> <span class="n">VMModel</span></span>, <span class="param"> <span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>):</span> </span> :::
 
 Measures the similarity between two data clusters using the Adjusted Rand Index (ARI) metric in clustering machine learning models.
 

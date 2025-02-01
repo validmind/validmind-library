@@ -222,11 +222,7 @@ The function may also include a docstring. This docstring will be used and logge
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def register_test_provider(
-    namespace: str,
-    test_provider: TestProvider) -> None:
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">register_test_provider</span>( <span class="param"> <span class="n">namespace</span><span class="p">:</span> <span class="n">str</span></span>, <span class="param"> <span class="n">test_provider</span><span class="p">:</span> <span class="n">TestProvider</span></span>) <span class="p">-></span> <span class="return-annotation">None</span>:</span> </span> :::
 
 Register an external test provider
 

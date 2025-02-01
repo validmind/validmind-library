@@ -9,12 +9,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def FeatureImportance(
-    dataset: VMDataset,
-    model: VMModel,
-    num_features: int = 3):
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">FeatureImportance</span>( <span class="param"> <span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>, <span class="param"> <span class="n">model</span><span class="p">:</span> <span class="n">VMModel</span></span>, <span class="param"> <span class="n">num_features</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="kc">3</span></span>):</span> </span> :::
 
 Compute feature importance scores for a given model and generate a summary table with the top important features.
 

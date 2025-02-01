@@ -9,9 +9,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def LJungBox(dataset):
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">LJungBox</span>(<span class="param"><span class="n">dataset</span></span>):</span> </span> :::
 
 Assesses autocorrelations in dataset features by performing a Ljung-Box test on each feature.
 

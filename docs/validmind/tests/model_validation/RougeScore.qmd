@@ -9,12 +9,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def RougeScore(
-    dataset,
-    model,
-    metric = 'rouge-1'):
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">RougeScore</span>( <span class="param"> <span class="n">dataset</span></span>, <span class="param"> <span class="n">model</span></span>, <span class="param"> <span class="n">metric</span> <span class="o">=</span> <span class="kc">'rouge-1'</span></span>):</span> </span> :::
 
 Assesses the quality of machine-generated text using ROUGE metrics and visualizes the results to provide comprehensive performance insights.
 

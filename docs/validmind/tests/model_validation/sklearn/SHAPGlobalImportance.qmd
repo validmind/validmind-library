@@ -21,12 +21,7 @@ Get a logger for the given module name
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def generate_shap_plot(
-    type_,
-    shap_values,
-    x_test):
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">generate_shap_plot</span>( <span class="param"> <span class="n">type\_</span></span>, <span class="param"> <span class="n">shap_values</span></span>, <span class="param"> <span class="n">x_test</span></span>):</span> </span> :::
 
 Plots two types of SHAP global importance (SHAP).
 
@@ -44,11 +39,7 @@ Plots two types of SHAP global importance (SHAP).
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def select_shap_values(
-    shap_values,
-    class_of_interest):
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">select_shap_values</span>( <span class="param"> <span class="n">shap_values</span></span>, <span class="param"> <span class="n">class_of_interest</span></span>):</span> </span> :::
 
 Selects SHAP values for binary or multiclass classification. For regression models, returns the SHAP values directly as there are no classes.
 
@@ -69,14 +60,7 @@ Selects SHAP values for binary or multiclass classification. For regression mode
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def SHAPGlobalImportance(
-    model: VMModel,
-    dataset: VMDataset,
-    kernel_explainer_samples: int = 10,
-    tree_or_linear_explainer_samples: int = 200,
-    class_of_interest: int = None):
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">SHAPGlobalImportance</span>( <span class="param"> <span class="n">model</span><span class="p">:</span> <span class="n">VMModel</span></span>, <span class="param"> <span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>, <span class="param"> <span class="n">kernel_explainer_samples</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="kc">10</span></span>, <span class="param"> <span class="n">tree_or_linear_explainer_samples</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="kc">200</span></span>, <span class="param"> <span class="n">class_of_interest</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="kc">None</span></span>):</span> </span> :::
 
 Evaluates and visualizes global feature importance using SHAP values for model explanation and risk identification.
 

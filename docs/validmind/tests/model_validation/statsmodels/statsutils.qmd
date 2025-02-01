@@ -9,12 +9,6 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def adj_r2_score(
-    actual: {'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'np'}, {'cls': 'ExprName', 'name': 'ndarray'}]},
-    predicted: {'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'np'}, {'cls': 'ExprName', 'name': 'ndarray'}]},
-    rowcount: int,
-    featurecount: int):
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">adj_r2_score</span>( <span class="param"> <span class="n">actual</span><span class="p">:</span> <span class="n">{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'np'}, {'cls': 'ExprName', 'name': 'ndarray'}]}</span></span>, <span class="param"> <span class="n">predicted</span><span class="p">:</span> <span class="n">{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'np'}, {'cls': 'ExprName', 'name': 'ndarray'}]}</span></span>, <span class="param"> <span class="n">rowcount</span><span class="p">:</span> <span class="n">int</span></span>, <span class="param"> <span class="n">featurecount</span><span class="p">:</span> <span class="n">int</span></span>):</span> </span> :::
 
 Adjusted R2 Score

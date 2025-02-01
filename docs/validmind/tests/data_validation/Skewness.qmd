@@ -9,11 +9,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def Skewness(
-    dataset,
-    max_threshold = 1):
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">Skewness</span>( <span class="param"> <span class="n">dataset</span></span>, <span class="param"> <span class="n">max_threshold</span> <span class="o">=</span> <span class="kc">1</span></span>):</span> </span> :::
 
 Evaluates the skewness of numerical data in a dataset to check against a defined threshold, aiming to ensure data quality and optimize model performance.
 

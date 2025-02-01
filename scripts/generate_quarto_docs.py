@@ -157,14 +157,14 @@ def collect_documented_items(module: Dict[str, Any], path: List[str], full_data:
         qmd_path = written_qmd_files.get(qmd_filename)
         
         if qmd_path and os.path.exists(qmd_path):
-            print(f"\nParsing headings from: {qmd_path}")
+            # print(f"\nParsing headings from: {qmd_path}")
             with open(qmd_path, 'r') as f:
                 content = f.read()
             
-            print("\nRaw content:")
-            for line in content.split('\n'):
-                if line.startswith('#'):
-                    print(f"Found heading line: {line}")
+            # print("\nRaw content:")
+            # for line in content.split('\n'):
+            #     if line.startswith('#'):
+            #         print(f"Found heading line: {line}")
             
             # Track current class for nesting methods
             current_class = None
@@ -174,7 +174,7 @@ def collect_documented_items(module: Dict[str, Any], path: List[str], full_data:
             for line in content.split('\n'):
                 if line.startswith('## '):
                     heading = line[3:].strip()
-                    print(f"Found L2 heading: {heading}")
+                    # print(f"Found L2 heading: {heading}")
                     anchor = clean_anchor_text(heading)
                     item = {
                         'text': heading,
@@ -187,7 +187,7 @@ def collect_documented_items(module: Dict[str, Any], path: List[str], full_data:
                 elif line.startswith('### '):
                     if current_section:
                         heading = line[4:].strip()
-                        print(f"  Found L3 heading under {current_section['text']}: {heading}")
+                        # print(f"  Found L3 heading under {current_section['text']}: {heading}")
                         anchor = clean_anchor_text(heading)
                         item = {
                             'text': heading,
@@ -196,20 +196,20 @@ def collect_documented_items(module: Dict[str, Any], path: List[str], full_data:
                         if '<span class="muted">class</span>' in heading or '<span class=\'muted\'>class</span>' in heading:
                             item['contents'] = []
                             current_class = item
-                            print(f"    Set current_class to: {heading}")
+                            # print(f"    Set current_class to: {heading}")
                         current_section['contents'].append(item)
-                        print(f"    Current section contents: {current_section['contents']}")
+                        # print(f"    Current section contents: {current_section['contents']}")
                 elif line.startswith('#### '):
                     if current_class:
                         heading = line[5:].strip()
-                        print(f"    Found L4 heading under class {current_class['text']}: {heading}")
+                        # print(f"    Found L4 heading under class {current_class['text']}: {heading}")
                         anchor = clean_anchor_text(heading)
                         method_item = {
                             'text': heading,
                             'file': f"reference/validmind.qmd#{anchor}"
                         }
                         current_class['contents'].append(method_item)
-                        print(f"      Added method to class. Class contents now: {current_class['contents']}")
+                        # print(f"      Added method to class. Class contents now: {current_class['contents']}")
             
             # Clean up empty contents lists at the end
             for item in module_items:
@@ -220,27 +220,27 @@ def collect_documented_items(module: Dict[str, Any], path: List[str], full_data:
                         if child.get('contents') and not child['contents']:
                             del child['contents']
         
-            print("\nFinal structure:")
-            for item in module_items:
-                print(f"Section: {item['text']}")
-                if 'contents' in item:
-                    for child in item['contents']:
-                        print(f"  Child: {child['text']}")
-                        if 'contents' in child:
-                            for method in child['contents']:
-                                print(f"    Method: {method['text']}")
+            # print("\nFinal structure:")
+            # for item in module_items:
+            #     print(f"Section: {item['text']}")
+            #     if 'contents' in item:
+            #         for child in item['contents']:
+            #             print(f"  Child: {child['text']}")
+            #             if 'contents' in child:
+            #                 for method in child['contents']:
+            #                     print(f"    Method: {method['text']}")
         
         if module_items:
             result['root'] = module_items
-            print("\nCollected items:")
-            for item in module_items:
-                print(f"  {item['text']} -> {item['file']}")
-                if item.get('contents'):
-                    for child in item['contents']:
-                        print(f"    - {child['text']} -> {child['file']}")
-                        if child.get('contents'):  # Add this to show class methods
-                            for method in child['contents']:
-                                print(f"      * {method['text']} -> {method['file']}")
+            # print("\nCollected items:")
+            # for item in module_items:
+            #     print(f"  {item['text']} -> {item['file']}")
+            #     if item.get('contents'):
+            #         for child in item['contents']:
+            #             print(f"    - {child['text']} -> {child['file']}")
+            #             if child.get('contents'):  # Add this to show class methods
+            #                 for method in child['contents']:
+            #                     print(f"      * {method['text']} -> {method['file']}")
     
     # Recursively collect from submodules
     for member in sort_members(module['members'], module.get('name') == 'errors'):

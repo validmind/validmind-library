@@ -21,13 +21,7 @@ Get a logger for the given module name
 
 <!-- function.qmd.jinja2 - function signature -->
 
-```python
-def OverfitDiagnosis(
-    model: VMModel,
-    datasets: {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'VMDataset'}},
-    metric: str = None,
-    cut_off_threshold: float = {'cls': 'ExprName', 'name': 'DEFAULT_THRESHOLD'}):
-```
+::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">OverfitDiagnosis</span>( <span class="param"> <span class="n">model</span><span class="p">:</span> <span class="n">VMModel</span></span>, <span class="param"> <span class="n">datasets</span><span class="p">:</span> <span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'VMDataset'}}</span></span>, <span class="param"> <span class="n">metric</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="kc">None</span></span>, <span class="param"> <span class="n">cut_off_threshold</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="kc">{'cls': 'ExprName', 'name': 'DEFAULT_THRESHOLD'}</span></span>):</span> </span> :::
 
 Assesses potential overfitting in a model's predictions, identifying regions where performance between training and testing sets deviates significantly.
 
