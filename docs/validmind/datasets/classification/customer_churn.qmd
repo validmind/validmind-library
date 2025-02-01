@@ -7,13 +7,16 @@ toc-expand: 4
 
 ## simple_preprocess_booleans<span class='muted'>()</span>
 
-<!-- module.qmd.jinja2 - module level function alias -->
+<!-- function.qmd.jinja2 - function signature -->
 
-```python
-def simple_preprocess_booleans(
-    df,
-    columns):
-```
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">simple_preprocess_booleans</span>(
+    <span class="param"><span class="n">df</span></span>,    <span class="param"><span class="n">columns</span></span>):</span>
+</span>
+
+:::
 
 Preprocess boolean columns.
 
@@ -28,13 +31,16 @@ Preprocess boolean columns.
 
 ## simple_preprocess_categoricals<span class='muted'>()</span>
 
-<!-- module.qmd.jinja2 - module level function alias -->
+<!-- function.qmd.jinja2 - function signature -->
 
-```python
-def simple_preprocess_categoricals(
-    df,
-    columns):
-```
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">simple_preprocess_categoricals</span>(
+    <span class="param"><span class="n">df</span></span>,    <span class="param"><span class="n">columns</span></span>):</span>
+</span>
+
+:::
 
 Preprocess categorical columns.
 
@@ -49,13 +55,16 @@ Preprocess categorical columns.
 
 ## simple_preprocess_numericals<span class='muted'>()</span>
 
-<!-- module.qmd.jinja2 - module level function alias -->
+<!-- function.qmd.jinja2 - function signature -->
 
-```python
-def simple_preprocess_numericals(
-    df,
-    columns):
-```
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">simple_preprocess_numericals</span>(
+    <span class="param"><span class="n">df</span></span>,    <span class="param"><span class="n">columns</span></span>):</span>
+</span>
+
+:::
 
 Preprocess numerical columns.
 
@@ -72,7 +81,13 @@ Preprocess numerical columns.
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">get_demo_test_config</span>(<span class="param"><span class="n">test_suite</span> <span class="o">=</span> <span class="kc">None</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">get_demo_test_config</span>(<span class="param"><span class="n">test_suite</span> <span class="o">=</span> <span class="kc">None</span></span>):</span>
+</span>
+
+:::
 
 Returns input configuration for the default documentation template assigned to this demo model
 
@@ -95,10 +110,22 @@ We assign the following inputs depending on the input config expected by each te
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">load_data</span>(<span class="param"><span class="n">full_dataset</span> <span class="o">=</span> <span class="kc">False</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">load_data</span>(<span class="param"><span class="n">full_dataset</span> <span class="o">=</span> <span class="kc">False</span></span>):</span>
+</span>
+
+:::
 
 ## preprocess[()]{.muted}
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">preprocess</span>(<span class="param"><span class="n">df</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">preprocess</span>(<span class="param"><span class="n">df</span></span>):</span>
+</span>
+
+:::

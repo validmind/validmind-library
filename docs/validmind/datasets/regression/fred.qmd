@@ -9,43 +9,86 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">load_all_data</span>(<span class="param"><span class="n"></span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">load_all_data</span>(<span class="param"><span class="n"></span></span>):</span>
+</span>
+
+:::
 
 ## load_data[()]{.muted}
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">load_data</span>(<span class="param"><span class="n"></span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">load_data</span>(<span class="param"><span class="n"></span></span>):</span>
+</span>
+
+:::
 
 ## load_model[()]{.muted}
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">load_model</span>(<span class="param"><span class="n">model_name</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">load_model</span>(<span class="param"><span class="n">model_name</span></span>):</span>
+</span>
+
+:::
 
 ## load_processed_data[()]{.muted}
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">load_processed_data</span>(<span class="param"><span class="n"></span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">load_processed_data</span>(<span class="param"><span class="n"></span></span>):</span>
+</span>
+
+:::
 
 ## load_test_dataset[()]{.muted}
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">load_test_dataset</span>(<span class="param"><span class="n">model_name</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">load_test_dataset</span>(<span class="param"><span class="n">model_name</span></span>):</span>
+</span>
+
+:::
 
 ## load_train_dataset[()]{.muted}
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">load_train_dataset</span>(<span class="param"><span class="n">model_path</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">load_train_dataset</span>(<span class="param"><span class="n">model_path</span></span>):</span>
+</span>
+
+:::
 
 ## preprocess[()]{.muted}
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">preprocess</span>( <span class="param"> <span class="n">df</span></span>, <span class="param"> <span class="n">split_option</span> <span class="o">=</span> <span class="kc">'train_test_val'</span></span>, <span class="param"> <span class="n">train_size</span> <span class="o">=</span> <span class="kc">0.6</span></span>, <span class="param"> <span class="n">test_size</span> <span class="o">=</span> <span class="kc">0.2</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">preprocess</span>(
+    <span class="param"><span class="n">df</span></span>,    <span class="param"><span class="n">split_option</span> <span class="o">=</span> <span class="kc">'train_test_val'</span></span>,    <span class="param"><span class="n">train_size</span> <span class="o">=</span> <span class="kc">0.6</span></span>,    <span class="param"><span class="n">test_size</span> <span class="o">=</span> <span class="kc">0.2</span></span>):</span>
+</span>
+
+:::
 
 Split a time series DataFrame into train, validation, and test sets.
 
@@ -64,4 +107,11 @@ Split a time series DataFrame into train, validation, and test sets.
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">transform</span>( <span class="param"> <span class="n">df</span></span>, <span class="param"> <span class="n">transform_func</span> <span class="o">=</span> <span class="kc">'diff'</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">transform</span>(
+    <span class="param"><span class="n">df</span></span>,    <span class="param"><span class="n">transform_func</span> <span class="o">=</span> <span class="kc">'diff'</span></span>):</span>
+</span>
+
+:::

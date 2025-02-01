@@ -9,7 +9,14 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">display_nice</span>( <span class="param"> <span class="n">df</span></span>, <span class="param"> <span class="n">num_rows</span> <span class="o">=</span> <span class="kc">None</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">display_nice</span>(
+    <span class="param"><span class="n">df</span></span>,    <span class="param"><span class="n">num_rows</span> <span class="o">=</span> <span class="kc">None</span></span>):</span>
+</span>
+
+:::
 
 Primary function to format and display a DataFrame.
 
@@ -17,6 +24,13 @@ Primary function to format and display a DataFrame.
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">load_data</span>( <span class="param"> <span class="n">source</span> <span class="o">=</span> <span class="kc">'online'</span></span>, <span class="param"> <span class="n">dataset_size</span> <span class="o">=</span> <span class="kc">None</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">load_data</span>(
+    <span class="param"><span class="n">source</span> <span class="o">=</span> <span class="kc">'online'</span></span>,    <span class="param"><span class="n">dataset_size</span> <span class="o">=</span> <span class="kc">None</span></span>):</span>
+</span>
+
+:::
 
 Load data from either online source or offline files. :param source: 'online' for online data, 'offline' for offline data. Defaults to 'online'. :param dataset_size: Applicable if source is 'offline'. '300k' or '500k' for dataset size. Defaults to None. :return: DataFrame containing the loaded data.

@@ -9,7 +9,13 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">TimeSeriesDescription</span>(<span class="param"><span class="n">dataset</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">TimeSeriesDescription</span>(<span class="param"><span class="n">dataset</span></span>):</span>
+</span>
+
+:::
 
 Generates a detailed analysis for the provided time series dataset, summarizing key statistics to identify trends, patterns, and data quality issues.
 

@@ -9,7 +9,14 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">call_model</span>( <span class="param"> <span class="n">system_prompt</span><span class="p">:</span> <span class="n">str</span></span>, <span class="param"> <span class="n">user_prompt</span><span class="p">:</span> <span class="n">str</span></span>, <span class="param"> <span class="n">temperature</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="kc">0.0</span></span>, <span class="param"> <span class="n">seed</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="kc">42</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">call_model</span>(
+    <span class="param"><span class="n">system_prompt</span><span class="p">:</span> <span class="n">str</span></span>,    <span class="param"><span class="n">user_prompt</span><span class="p">:</span> <span class="n">str</span></span>,    <span class="param"><span class="n">temperature</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="kc">0.0</span></span>,    <span class="param"><span class="n">seed</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="kc">42</span></span>):</span>
+</span>
+
+:::
 
 Call LLM with the given prompts and return the response
 
@@ -17,7 +24,13 @@ Call LLM with the given prompts and return the response
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">get_explanation</span>(<span class="param"><span class="n">response</span><span class="p">:</span> <span class="n">str</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">get_explanation</span>(<span class="param"><span class="n">response</span><span class="p">:</span> <span class="n">str</span></span>):</span>
+</span>
+
+:::
 
 Get just the explanation from the response string TODO: use json response mode instead of this
 
@@ -31,7 +44,13 @@ Explanation: <some-explanation>" -> "<some-explanation>"
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">get_score</span>(<span class="param"><span class="n">response</span><span class="p">:</span> <span class="n">str</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">get_score</span>(<span class="param"><span class="n">response</span><span class="p">:</span> <span class="n">str</span></span>):</span>
+</span>
+
+:::
 
 Get just the score from the response string TODO: use json response mode instead of this
 

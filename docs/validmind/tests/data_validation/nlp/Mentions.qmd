@@ -9,7 +9,14 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">Mentions</span>( <span class="param"> <span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>, <span class="param"> <span class="n">top_mentions</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="kc">25</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">Mentions</span>(
+    <span class="param"><span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>,    <span class="param"><span class="n">top_mentions</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="kc">25</span></span>):</span>
+</span>
+
+:::
 
 Calculates and visualizes frequencies of '@' prefixed mentions in a text-based dataset for NLP model analysis.
 

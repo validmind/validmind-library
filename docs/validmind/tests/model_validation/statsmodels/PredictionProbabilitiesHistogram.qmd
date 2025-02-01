@@ -9,7 +9,14 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">PredictionProbabilitiesHistogram</span>( <span class="param"> <span class="n">dataset</span></span>, <span class="param"> <span class="n">model</span></span>, <span class="param"> <span class="n">title</span> <span class="o">=</span> <span class="kc">'Histogram of Predictive Probabilities'</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">PredictionProbabilitiesHistogram</span>(
+    <span class="param"><span class="n">dataset</span></span>,    <span class="param"><span class="n">model</span></span>,    <span class="param"><span class="n">title</span> <span class="o">=</span> <span class="kc">'Histogram of Predictive Probabilities'</span></span>):</span>
+</span>
+
+:::
 
 Assesses the predictive probability distribution for binary classification to evaluate model performance and potential overfitting or bias.
 

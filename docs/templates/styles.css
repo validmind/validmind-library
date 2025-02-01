@@ -1,32 +1,47 @@
-.code-block {
+
+.muted {
+    color: #747678;
+  }
+  
+  .signature {
     font-family: 'JetBrains Mono', 'Fira Code', Menlo, Monaco, 'Courier New', monospace;
-    background-color: #f8f8f8;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 1em;
+    background-color: #083E4420;
+    padding: 15px;
+    border-radius: 5px;
     margin: 1em 0;
     white-space: pre;
     overflow-x: auto;
     font-size: 0.9em;
     line-height: 1.5;
-}
-
-.code-block .kw {
-    color: #0000FF;  /* Python keyword color */
-}
-
-.code-block .name {
-    color: #795E26;  /* Function name color */
-}
-
-.code-block .n {
-    color: #0550AE;  /* Parameter name color */
-}
-
-.code-block .ann {
-    color: #267F99;  /* Type annotation color */
-}
-
-.code-block .default {
-    color: #098658;  /* Default value color */
-}
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    display: block;
+    position: relative;
+    left: 0;
+    right: 0;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  
+  .signature .kw {
+    color: #0000FF;
+    font-weight: bold;
+  }
+  
+  .signature .name {
+    color: #de257e;
+    font-weight: bold;
+  }
+  
+  .signature .n {
+    color: #0550AE;
+  }
+  
+  .signature .ann {
+    color: #267F99;
+  }
+  
+  .signature .default {
+    color: #098658;
+  }

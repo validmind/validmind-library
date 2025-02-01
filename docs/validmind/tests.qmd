@@ -13,14 +13,16 @@ ValidMind Tests Module
 
 ## describe_test<span class='muted'>()</span>
 
-<!-- module.qmd.jinja2 - module level function alias -->
+<!-- function.qmd.jinja2 - function signature -->
 
-```python
-def describe_test(
-    test_id: TestID = None,
-    raw: bool = False,
-    show: bool = True):
-```
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">describe_test</span>(
+    <span class="param"><span class="n">test_id</span><span class="p">:</span> <span class="n">TestID</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">raw</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="kc">False</span></span>,    <span class="param"><span class="n">show</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="kc">True</span></span>):</span>
+</span>
+
+:::
 
 Get or show details about the test This function can be used to see test details including the test name, description, required inputs and default params. It can also be used to get a dictionary of the above information for programmatic use.
 
@@ -31,31 +33,43 @@ Get or show details about the test This function can be used to see test details
 
 ## list_tags<span class='muted'>()</span>
 
-<!-- module.qmd.jinja2 - module level function alias -->
+<!-- function.qmd.jinja2 - function signature -->
 
-```python
-def list_tags():
-```
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">list_tags</span>(<span class="param"><span class="n"></span></span>):</span>
+</span>
+
+:::
 
 List unique tags from all test classes.
 
 ## list_tasks<span class='muted'>()</span>
 
-<!-- module.qmd.jinja2 - module level function alias -->
+<!-- function.qmd.jinja2 - function signature -->
 
-```python
-def list_tasks():
-```
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">list_tasks</span>(<span class="param"><span class="n"></span></span>):</span>
+</span>
+
+:::
 
 List unique tasks from all test classes.
 
 ## list_tasks_and_tags<span class='muted'>()</span>
 
-<!-- module.qmd.jinja2 - module level function alias -->
+<!-- function.qmd.jinja2 - function signature -->
 
-```python
-def list_tasks_and_tags(as_json = False):
-```
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">list_tasks_and_tags</span>(<span class="param"><span class="n">as_json</span> <span class="o">=</span> <span class="kc">False</span></span>):</span>
+</span>
+
+:::
 
 List all task types and their associated tags, with one row per task type and all tags for a task type in one row.
 
@@ -65,16 +79,16 @@ List all task types and their associated tags, with one row per task type and al
 
 ## list_tests<span class='muted'>()</span>
 
-<!-- module.qmd.jinja2 - module level function alias -->
+<!-- function.qmd.jinja2 - function signature -->
 
-```python
-def list_tests(
-    filter = None,
-    task = None,
-    tags = None,
-    pretty = True,
-    truncate = True):
-```
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">list_tests</span>(
+    <span class="param"><span class="n">filter</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">task</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">tags</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">pretty</span> <span class="o">=</span> <span class="kc">True</span></span>,    <span class="param"><span class="n">truncate</span> <span class="o">=</span> <span class="kc">True</span></span>):</span>
+</span>
+
+:::
 
 List all tests in the tests directory.
 
@@ -92,14 +106,16 @@ List all tests in the tests directory.
 
 ## load_test<span class='muted'>()</span>
 
-<!-- module.qmd.jinja2 - module level function alias -->
+<!-- function.qmd.jinja2 - function signature -->
 
-```python
-def load_test(
-    test_id: str,
-    test_func: callable = None,
-    reload: bool = False):
-```
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">load_test</span>(
+    <span class="param"><span class="n">test_id</span><span class="p">:</span> <span class="n">str</span></span>,    <span class="param"><span class="n">test_func</span><span class="p">:</span> <span class="n">callable</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">reload</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="kc">False</span></span>):</span>
+</span>
+
+:::
 
 Load a test by test ID Test IDs are in the format `namespace.path_to_module.TestClassOrFuncName[:tag]`. The tag is optional and is used to distinguish between multiple results from the same test.
 
@@ -110,23 +126,16 @@ Load a test by test ID Test IDs are in the format `namespace.path_to_module.Test
 
 ## run_test<span class='muted'>()</span>
 
-<!-- module.qmd.jinja2 - module level function alias -->
+<!-- function.qmd.jinja2 - function signature -->
 
-```python
-def run_test(
-    test_id:  = None,
-    name:  = None,
-    unit_metrics:  = None,
-    inputs:  = None,
-    input_grid:  = None,
-    params:  = None,
-    param_grid:  = None,
-    show: bool = True,
-    generate_description: bool = True,
-    title:  = None,
-    post_process_fn:  = None,
-    kwargs = {}) -> TestResult:
-```
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">run_test</span>(
+    <span class="param"><span class="n">test_id</span><span class="p">:</span> <span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Union'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'TestID'}, 'None'], 'implicit': True}}</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">name</span><span class="p">:</span> <span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Union'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'str'}, 'None'], 'implicit': True}}</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">unit_metrics</span><span class="p">:</span> <span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Union'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'TestID'}}, 'None'], 'implicit': True}}</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">inputs</span><span class="p">:</span> <span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Union'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Dict'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'str'}, {'cls': 'ExprName', 'name': 'Any'}], 'implicit': True}}, 'None'], 'implicit': True}}</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">input_grid</span><span class="p">:</span> <span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Union'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Dict'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'str'}, {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'Any'}}], 'implicit': True}}, {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Dict'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'str'}, {'cls': 'ExprName', 'name': 'Any'}], 'implicit': True}}}, 'None'], 'implicit': True}}</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">params</span><span class="p">:</span> <span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Union'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Dict'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'str'}, {'cls': 'ExprName', 'name': 'Any'}], 'implicit': True}}, 'None'], 'implicit': True}}</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">param_grid</span><span class="p">:</span> <span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Union'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Dict'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'str'}, {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'Any'}}], 'implicit': True}}, {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Dict'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'str'}, {'cls': 'ExprName', 'name': 'Any'}], 'implicit': True}}}, 'None'], 'implicit': True}}</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">show</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="kc">True</span></span>,    <span class="param"><span class="n">generate_description</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="kc">True</span></span>,    <span class="param"><span class="n">title</span><span class="p">:</span> <span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Optional'}, 'slice': {'cls': 'ExprName', 'name': 'str'}}</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">post_process_fn</span><span class="p">:</span> <span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Union'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Callable'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprList', 'elements': [{'cls': 'ExprName', 'name': 'TestResult'}]}, 'None'], 'implicit': True}}, 'None'], 'implicit': True}}</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">kwargs</span> <span class="o">=</span> <span class="kc">{}</span></span>) <span class="p">-></span> <span class="return-annotation">TestResult</span>:</span>
+</span>
+
+:::
 
 Run a ValidMind or custom test This function is the main entry point for running tests. It can run simple unit metrics, ValidMind and custom tests, composite tests made up of multiple unit metrics and comparison tests made up of multiple tests.
 
@@ -159,11 +168,15 @@ Run a ValidMind or custom test This function is the main entry point for running
 
 ## tags<span class='muted'>()</span>
 
-<!-- module.qmd.jinja2 - module level function alias -->
+<!-- function.qmd.jinja2 - function signature -->
 
-```python
-def tags(tags = ()):
-```
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">tags</span>(<span class="param"><span class="n">tags</span> <span class="o">=</span> <span class="kc">()</span></span>):</span>
+</span>
+
+:::
 
 Decorator for specifying tags for a test.
 
@@ -173,11 +186,15 @@ Decorator for specifying tags for a test.
 
 ## tasks<span class='muted'>()</span>
 
-<!-- module.qmd.jinja2 - module level function alias -->
+<!-- function.qmd.jinja2 - function signature -->
 
-```python
-def tasks(tasks = ()):
-```
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">tasks</span>(<span class="param"><span class="n">tasks</span> <span class="o">=</span> <span class="kc">()</span></span>):</span>
+</span>
+
+:::
 
 Decorator for specifying the task types that a test is designed for.
 
@@ -187,11 +204,15 @@ Decorator for specifying the task types that a test is designed for.
 
 ## test<span class='muted'>()</span>
 
-<!-- module.qmd.jinja2 - module level function alias -->
+<!-- function.qmd.jinja2 - function signature -->
 
-```python
-def test(func_or_id):
-```
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">test</span>(<span class="param"><span class="n">func_or_id</span></span>):</span>
+</span>
+
+:::
 
 Decorator for creating and registering custom tests This decorator registers the function it wraps as a test function within ValidMind under the provided ID. Once decorated, the function can be run using the `validmind.tests.run_test` function.
 
@@ -222,7 +243,14 @@ The function may also include a docstring. This docstring will be used and logge
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">register_test_provider</span>( <span class="param"> <span class="n">namespace</span><span class="p">:</span> <span class="n">str</span></span>, <span class="param"> <span class="n">test_provider</span><span class="p">:</span> <span class="n">TestProvider</span></span>) <span class="p">-></span> <span class="return-annotation">None</span>:</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">register_test_provider</span>(
+    <span class="param"><span class="n">namespace</span><span class="p">:</span> <span class="n">str</span></span>,    <span class="param"><span class="n">test_provider</span><span class="p">:</span> <span class="n">TestProvider</span></span>) <span class="p">-></span> <span class="return-annotation">None</span>:</span>
+</span>
+
+:::
 
 Register an external test provider
 
@@ -283,11 +311,15 @@ test = test_provider.load_test("my_namespace.my_test_class")
 
 ### [list_tests[()]{.muted}](#list_tests)
 
-<!-- class.qmd.jinja2 - member method signature -->
+<!-- function.qmd.jinja2 - function signature -->
 
-```python
-list_tests(self)
-```
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">list_tests</span>(<span class="param"><span class="n">self</span></span>):</span>
+</span>
+
+:::
 
 List all tests in the given namespace
 
@@ -297,11 +329,16 @@ List all tests in the given namespace
 
 ### [load_test[()]{.muted}](#load_test)
 
-<!-- class.qmd.jinja2 - member method signature -->
+<!-- function.qmd.jinja2 - function signature -->
 
-```python
-load_test(self, test_id)
-```
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">load_test</span>(
+    <span class="param"><span class="n">self</span></span>,    <span class="param"><span class="n">test_id</span><span class="p">:</span> <span class="n">str</span></span>):</span>
+</span>
+
+:::
 
 Load the test identified by the given test_id. Args: test_id (str): The identifier of the test. This corresponds to the relative path of the python file from the root folder, with slashes replaced by dots
 
@@ -323,11 +360,15 @@ Protocol for user-defined test providers
 
 ### [list_tests[()]{.muted}](#list_tests)
 
-<!-- class.qmd.jinja2 - member method signature -->
+<!-- function.qmd.jinja2 - function signature -->
 
-```python
-list_tests(self)
-```
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">list_tests</span>(<span class="param"><span class="n">self</span></span>) <span class="p">-></span> <span class="return-annotation">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'str'}}</span>:</span>
+</span>
+
+:::
 
 List all tests in the given namespace
 
@@ -337,11 +378,16 @@ List all tests in the given namespace
 
 ### [load_test[()]{.muted}](#load_test)
 
-<!-- class.qmd.jinja2 - member method signature -->
+<!-- function.qmd.jinja2 - function signature -->
 
-```python
-load_test(self, test_id)
-```
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">load_test</span>(
+    <span class="param"><span class="n">self</span></span>,    <span class="param"><span class="n">test_id</span><span class="p">:</span> <span class="n">str</span></span>) <span class="p">-></span> <span class="return-annotation">callable</span>:</span>
+</span>
+
+:::
 
 Load the test function identified by the given test_id
 

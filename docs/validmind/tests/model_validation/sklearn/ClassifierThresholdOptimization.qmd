@@ -9,7 +9,14 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">ClassifierThresholdOptimization</span>( <span class="param"> <span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>, <span class="param"> <span class="n">model</span><span class="p">:</span> <span class="n">VMModel</span></span>, <span class="param"> <span class="n">methods</span> <span class="o">=</span> <span class="kc">None</span></span>, <span class="param"> <span class="n">target_recall</span> <span class="o">=</span> <span class="kc">None</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">ClassifierThresholdOptimization</span>(
+    <span class="param"><span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>,    <span class="param"><span class="n">model</span><span class="p">:</span> <span class="n">VMModel</span></span>,    <span class="param"><span class="n">methods</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">target_recall</span> <span class="o">=</span> <span class="kc">None</span></span>):</span>
+</span>
+
+:::
 
 Analyzes and visualizes different threshold optimization methods for binary classification models.
 
@@ -77,7 +84,14 @@ The test implements multiple threshold optimization methods:
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">find_optimal_threshold</span>( <span class="param"> <span class="n">y_true</span></span>, <span class="param"> <span class="n">y_prob</span></span>, <span class="param"> <span class="n">method</span> <span class="o">=</span> <span class="kc">'youden'</span></span>, <span class="param"> <span class="n">target_recall</span> <span class="o">=</span> <span class="kc">None</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">find_optimal_threshold</span>(
+    <span class="param"><span class="n">y_true</span></span>,    <span class="param"><span class="n">y_prob</span></span>,    <span class="param"><span class="n">method</span> <span class="o">=</span> <span class="kc">'youden'</span></span>,    <span class="param"><span class="n">target_recall</span> <span class="o">=</span> <span class="kc">None</span></span>):</span>
+</span>
+
+:::
 
 Find the optimal classification threshold using various methods.
 

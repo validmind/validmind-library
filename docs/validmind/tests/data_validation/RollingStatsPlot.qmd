@@ -9,13 +9,27 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">plot_rolling_statistics</span>( <span class="param"> <span class="n">df</span></span>, <span class="param"> <span class="n">col</span></span>, <span class="param"> <span class="n">window_size</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">plot_rolling_statistics</span>(
+    <span class="param"><span class="n">df</span></span>,    <span class="param"><span class="n">col</span></span>,    <span class="param"><span class="n">window_size</span></span>):</span>
+</span>
+
+:::
 
 ## RollingStatsPlot[()]{.muted}
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">RollingStatsPlot</span>( <span class="param"> <span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>, <span class="param"> <span class="n">window_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="kc">12</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">RollingStatsPlot</span>(
+    <span class="param"><span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>,    <span class="param"><span class="n">window_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="kc">12</span></span>):</span>
+</span>
+
+:::
 
 Evaluates the stationarity of time series data by plotting its rolling mean and standard deviation over a specified window.
 

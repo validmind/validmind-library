@@ -9,7 +9,14 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">RegressionErrors</span>( <span class="param"> <span class="n">model</span></span>, <span class="param"> <span class="n">dataset</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">RegressionErrors</span>(
+    <span class="param"><span class="n">model</span></span>,    <span class="param"><span class="n">dataset</span></span>):</span>
+</span>
+
+:::
 
 Assesses the performance and error distribution of a regression model using various error metrics.
 

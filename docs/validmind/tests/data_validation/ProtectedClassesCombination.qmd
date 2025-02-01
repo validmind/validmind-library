@@ -7,13 +7,16 @@ toc-expand: 4
 
 ## get_logger<span class='muted'>()</span>
 
-<!-- module.qmd.jinja2 - module level function alias -->
+<!-- function.qmd.jinja2 - function signature -->
 
-```python
-def get_logger(
-    name = 'validmind',
-    log_level = None):
-```
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">get_logger</span>(
+    <span class="param"><span class="n">name</span> <span class="o">=</span> <span class="kc">'validmind'</span></span>,    <span class="param"><span class="n">log_level</span> <span class="o">=</span> <span class="kc">None</span></span>):</span>
+</span>
+
+:::
 
 Get a logger for the given module name
 
@@ -21,7 +24,14 @@ Get a logger for the given module name
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">ProtectedClassesCombination</span>( <span class="param"> <span class="n">dataset</span></span>, <span class="param"> <span class="n">model</span></span>, <span class="param"> <span class="n">protected_classes</span> <span class="o">=</span> <span class="kc">None</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">ProtectedClassesCombination</span>(
+    <span class="param"><span class="n">dataset</span></span>,    <span class="param"><span class="n">model</span></span>,    <span class="param"><span class="n">protected_classes</span> <span class="o">=</span> <span class="kc">None</span></span>):</span>
+</span>
+
+:::
 
 Visualizes combinations of protected classes and their corresponding error metric differences.
 

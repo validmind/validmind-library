@@ -9,13 +9,27 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">compute_outliers</span>( <span class="param"> <span class="n">series</span></span>, <span class="param"> <span class="n">threshold</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">compute_outliers</span>(
+    <span class="param"><span class="n">series</span></span>,    <span class="param"><span class="n">threshold</span></span>):</span>
+</span>
+
+:::
 
 ## IQROutliersBarPlot[()]{.muted}
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">IQROutliersBarPlot</span>( <span class="param"> <span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>, <span class="param"> <span class="n">threshold</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="kc">1.5</span></span>, <span class="param"> <span class="n">fig_width</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="kc">800</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">IQROutliersBarPlot</span>(
+    <span class="param"><span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>,    <span class="param"><span class="n">threshold</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="kc">1.5</span></span>,    <span class="param"><span class="n">fig_width</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="kc">800</span></span>):</span>
+</span>
+
+:::
 
 Visualizes outlier distribution across percentiles in numerical data using the Interquartile Range (IQR) method.
 

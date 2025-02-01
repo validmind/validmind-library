@@ -39,11 +39,16 @@ class BaseError(Exception):
 
 ### [description[()]{.muted}](#description)
 
-<!-- class.qmd.jinja2 - member method signature -->
+<!-- function.qmd.jinja2 - function signature -->
 
-```python
-description(self, args, kwargs)
-```
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">description</span>(
+    <span class="param"><span class="n">self</span></span>,    <span class="param"><span class="n">args</span> <span class="o">=</span> <span class="kc">()</span></span>,    <span class="param"><span class="n">kwargs</span> <span class="o">=</span> <span class="kc">{}</span></span>):</span>
+</span>
+
+:::
 
 ## [class]{.muted} GetTestSuiteError
 
@@ -90,11 +95,16 @@ class InvalidAPICredentialsError(APIRequestError):
 
 ### [description[()]{.muted}](#description)
 
-<!-- class.qmd.jinja2 - member method signature -->
+<!-- function.qmd.jinja2 - function signature -->
 
-```python
-description(self, args, kwargs)
-```
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">description</span>(
+    <span class="param"><span class="n">self</span></span>,    <span class="param"><span class="n">args</span> <span class="o">=</span> <span class="kc">()</span></span>,    <span class="param"><span class="n">kwargs</span> <span class="o">=</span> <span class="kc">{}</span></span>):</span>
+</span>
+
+:::
 
 ## [class]{.muted} InvalidContentIdPrefixError
 
@@ -156,11 +166,16 @@ class InvalidProjectError(APIRequestError):
 
 ### [description[()]{.muted}](#description)
 
-<!-- class.qmd.jinja2 - member method signature -->
+<!-- function.qmd.jinja2 - function signature -->
 
-```python
-description(self, args, kwargs)
-```
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">description</span>(
+    <span class="param"><span class="n">self</span></span>,    <span class="param"><span class="n">args</span> <span class="o">=</span> <span class="kc">()</span></span>,    <span class="param"><span class="n">kwargs</span> <span class="o">=</span> <span class="kc">{}</span></span>):</span>
+</span>
+
+:::
 
 ## [class]{.muted} InvalidRequestBodyError
 
@@ -297,11 +312,16 @@ class MissingAPICredentialsError(BaseError):
 
 ### [description[()]{.muted}](#description)
 
-<!-- class.qmd.jinja2 - member method signature -->
+<!-- function.qmd.jinja2 - function signature -->
 
-```python
-description(self, args, kwargs)
-```
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">description</span>(
+    <span class="param"><span class="n">self</span></span>,    <span class="param"><span class="n">args</span> <span class="o">=</span> <span class="kc">()</span></span>,    <span class="param"><span class="n">kwargs</span> <span class="o">=</span> <span class="kc">{}</span></span>):</span>
+</span>
+
+:::
 
 ## [class]{.muted} MissingCacheResultsArgumentsError
 
@@ -378,11 +398,16 @@ class MissingModelIdError(BaseError):
 
 ### [description[()]{.muted}](#description)
 
-<!-- class.qmd.jinja2 - member method signature -->
+<!-- function.qmd.jinja2 - function signature -->
 
-```python
-description(self, args, kwargs)
-```
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">description</span>(
+    <span class="param"><span class="n">self</span></span>,    <span class="param"><span class="n">args</span> <span class="o">=</span> <span class="kc">()</span></span>,    <span class="param"><span class="n">kwargs</span> <span class="o">=</span> <span class="kc">{}</span></span>):</span>
+</span>
+
+:::
 
 ## [class]{.muted} MissingOrInvalidModelPredictFnError
 
@@ -431,11 +456,16 @@ When the R extras have not been installed.
 
 ### [description[()]{.muted}](#description)
 
-<!-- class.qmd.jinja2 - member method signature -->
+<!-- function.qmd.jinja2 - function signature -->
 
-```python
-description(self, args, kwargs)
-```
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">description</span>(
+    <span class="param"><span class="n">self</span></span>,    <span class="param"><span class="n">args</span> <span class="o">=</span> <span class="kc">()</span></span>,    <span class="param"><span class="n">kwargs</span> <span class="o">=</span> <span class="kc">{}</span></span>):</span>
+</span>
+
+:::
 
 ## [class]{.muted} MissingTextContentIdError
 
@@ -591,7 +621,13 @@ When an unsupported R model is used.
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">raise_api_error</span>(<span class="param"><span class="n">error_string</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">raise_api_error</span>(<span class="param"><span class="n">error_string</span></span>):</span>
+</span>
+
+:::
 
 Safely try to parse JSON from the response message in case the API returns a non-JSON string or if the API returns a non-standard error
 
@@ -599,6 +635,12 @@ Safely try to parse JSON from the response message in case the API returns a non
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">should_raise_on_fail_fast</span>(<span class="param"><span class="n">error</span></span>) <span class="p">-></span> <span class="return-annotation">bool</span>:</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">should_raise_on_fail_fast</span>(<span class="param"><span class="n">error</span></span>) <span class="p">-></span> <span class="return-annotation">bool</span>:</span>
+</span>
+
+:::
 
 Determine whether an error should be raised when fail_fast is True.

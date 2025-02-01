@@ -9,7 +9,14 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">AutoStationarity</span>( <span class="param"> <span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>, <span class="param"> <span class="n">max_order</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="kc">5</span></span>, <span class="param"> <span class="n">threshold</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="kc">0.05</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">AutoStationarity</span>(
+    <span class="param"><span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>,    <span class="param"><span class="n">max_order</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="kc">5</span></span>,    <span class="param"><span class="n">threshold</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="kc">0.05</span></span>):</span>
+</span>
+
+:::
 
 Automates Augmented Dickey-Fuller test to assess stationarity across multiple time series in a DataFrame.
 

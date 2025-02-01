@@ -9,7 +9,14 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">TimeSeriesR2SquareBySegments</span>( <span class="param"> <span class="n">dataset</span></span>, <span class="param"> <span class="n">model</span></span>, <span class="param"> <span class="n">segments</span> <span class="o">=</span> <span class="kc">None</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">TimeSeriesR2SquareBySegments</span>(
+    <span class="param"><span class="n">dataset</span></span>,    <span class="param"><span class="n">model</span></span>,    <span class="param"><span class="n">segments</span> <span class="o">=</span> <span class="kc">None</span></span>):</span>
+</span>
+
+:::
 
 Evaluates the R-Squared values of regression models over specified time segments in time series data to assess segment-wise model performance.
 

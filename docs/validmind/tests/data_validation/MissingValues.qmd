@@ -9,7 +9,14 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">MissingValues</span>( <span class="param"> <span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>, <span class="param"> <span class="n">min_threshold</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="kc">1</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">MissingValues</span>(
+    <span class="param"><span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>,    <span class="param"><span class="n">min_threshold</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="kc">1</span></span>):</span>
+</span>
+
+:::
 
 Evaluates dataset quality by ensuring missing value ratio across all features does not exceed a set threshold.
 

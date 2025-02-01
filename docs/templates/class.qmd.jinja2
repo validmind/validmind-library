@@ -1,3 +1,6 @@
+{% import "macros/docstring.jinja2" as doc %}
+{% import "macros/signatures.jinja2" as signatures %}
+
 ## [class]{.muted} {{ resolved.name }}
 
 <!-- class.qmd.jinja2 - class definition -->
@@ -33,10 +36,7 @@ class {{ resolved.name }}({% for base in resolved.bases %}{{ base.name }}{% if n
 {% if member.kind in ['method', 'function'] and not member.name.startswith('_') %}
 ### [{{ member.name }}[()]{.muted}](#{{ member.name }})
 
-<!-- class.qmd.jinja2 - member method signature -->
-```python
-{{ member.name }}({{ member.parameters | map(attribute='name') | join(', ') }})
-```
+{{ signatures.render_function_signature(member) }}
 
 {% if member.docstring %}
 {{ doc.format_docstring(member.docstring) }}

@@ -9,7 +9,14 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">GINITable</span>( <span class="param"> <span class="n">dataset</span></span>, <span class="param"> <span class="n">model</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">GINITable</span>(
+    <span class="param"><span class="n">dataset</span></span>,    <span class="param"><span class="n">model</span></span>):</span>
+</span>
+
+:::
 
 Evaluates classification model performance using AUC, GINI, and KS metrics for training and test datasets.
 

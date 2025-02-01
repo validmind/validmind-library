@@ -9,7 +9,14 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">UniqueRows</span>( <span class="param"> <span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>, <span class="param"> <span class="n">min_percent_threshold</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="kc">1</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">UniqueRows</span>(
+    <span class="param"><span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>,    <span class="param"><span class="n">min_percent_threshold</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="kc">1</span></span>):</span>
+</span>
+
+:::
 
 Verifies the diversity of the dataset by ensuring that the count of unique rows exceeds a prescribed threshold.
 

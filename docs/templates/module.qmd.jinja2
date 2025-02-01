@@ -1,6 +1,7 @@
 {% import "macros/docstring.jinja2" as doc %}
 {% import "macros/types.jinja2" as types %}
 {% import "macros/navigation.jinja2" as nav %}
+{% import "macros/signatures.jinja2" as signatures %}
 ---
 title: "{% if module.name == "validmind" %}ValidMind Library{% else %}[validmind](/reference/validmind.html).{{ module.name }}{% endif +%}"
 {% if module.name == "validmind" %}
@@ -36,13 +37,7 @@ toc-expand: 4
 ### {{ member.name }}<span class='muted'>()</span>
 
 {% if target.kind == "function" %}
-<!-- module.qmd.jinja2 - root level function alias -->
-```python
-{% if target.labels and "async" in target.labels %}async {% endif %}
-def {{ member.name }}{% if target.parameters|length > 0 %}(
-{% for param in target.parameters %}    {{ '**' if param.kind == 'variadic keyword' else '*' if param.kind == 'variadic positional' else '' }}{{ param.name }}{% if param.annotation %}: {{ param.annotation.name if param.annotation.cls == "ExprName" else param.annotation.left.name if param.annotation.cls == "ExprSubscript" else "" }}{% endif %}{% if param.default is not none %} = {{ param.default }}{% endif %}{% if not loop.last %},
-{% endif %}{% endfor %}){% else %}(){% endif %}{% if target.returns %} -> {{ types.format_module_return_type(target.returns, module, full_data) }}{% endif %}:
-```
+{{ signatures.render_function_signature(target) }}
 {% endif %}
 
 {{ doc.format_docstring(target.docstring) }}
@@ -76,12 +71,7 @@ def {{ member.name }}{% if target.parameters|length > 0 %}(
 {% if resolved.kind == "function" %}
 ## {{ member.name }}<span class='muted'>()</span>
 
-<!-- module.qmd.jinja2 - module level function alias -->
-```python
-{% if resolved.labels and "async" in resolved.labels %}async {% endif %}def {{ member.name }}{% if resolved.parameters|length <= 1 %}({% for param in resolved.parameters %}{{ param.name }}{% if param.annotation %}: {{ param.annotation['name'] }}{% endif %}{% if param.default %} = {{ param.default }}{% endif %}{% endfor %}){% else %}(
-{% for param in resolved.parameters %}    {{ param.name }}{% if param.annotation %}: {{ param.annotation['name'] }}{% endif %}{% if param.default is not none %} = {{ param.default }}{% endif %}{% if not loop.last %},
-{% endif %}{% endfor %}){% endif %}{% if resolved.returns %} -> {{ resolved.returns['name'] if resolved.returns is mapping and 'name' in resolved.returns else resolved.returns }}{% endif %}:
-```
+{{ signatures.render_function_signature(resolved) }}
 
 {% if resolved.docstring %}
 {{ doc.format_docstring(resolved.docstring) }}
@@ -130,15 +120,7 @@ class {{ member.name }}():
 
 #### {{ member.name if method_name == '__init__' else method_name }}<span class='muted'>()</span>
 
-<!-- module.qmd.jinja2 - class method definition -->
-```python
-def {{ method_name }}(
-{%- for param in method.parameters %}
-    {{ param.name }}{% if param.annotation %}: {{ param.annotation.name if param.annotation.cls == "ExprName" else param.annotation }}{% endif %}{% if param.default is not none %} = {{ param.default }}{% endif %}{% if not loop.last %},
-{% endif %}
-{%- endfor %}
-):{% if method.returns %} -> {{ method.returns }}{% endif +%}
-```
+{{ signatures.render_function_signature(method) }}
 
 {% if method.docstring %}
 {{ doc.format_docstring(method.docstring) }}

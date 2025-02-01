@@ -7,14 +7,16 @@ toc-expand: 4
 
 ## validate_prediction<span class='muted'>()</span>
 
-<!-- module.qmd.jinja2 - module level function alias -->
+<!-- function.qmd.jinja2 - function signature -->
 
-```python
-def validate_prediction(
-    y_true,
-    y_pred,
-    dataset_id = None):
-```
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">validate_prediction</span>(
+    <span class="param"><span class="n">y_true</span></span>,    <span class="param"><span class="n">y_pred</span></span>,    <span class="param"><span class="n">dataset_id</span> <span class="o">=</span> <span class="kc">None</span></span>):</span>
+</span>
+
+:::
 
 Comprehensive validation of true and predicted value pairs. Handles NaN/None values and length mismatches.
 
@@ -32,7 +34,14 @@ Comprehensive validation of true and predicted value pairs. Handles NaN/None val
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">MeteorScore</span>( <span class="param"> <span class="n">dataset</span></span>, <span class="param"> <span class="n">model</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">MeteorScore</span>(
+    <span class="param"><span class="n">dataset</span></span>,    <span class="param"><span class="n">model</span></span>):</span>
+</span>
+
+:::
 
 Assesses the quality of machine-generated translations by comparing them to human-produced references using the METEOR score, which evaluates precision, recall, and word order.
 

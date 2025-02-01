@@ -7,13 +7,16 @@ toc-expand: 4
 
 ## get_logger<span class='muted'>()</span>
 
-<!-- module.qmd.jinja2 - module level function alias -->
+<!-- function.qmd.jinja2 - function signature -->
 
-```python
-def get_logger(
-    name = 'validmind',
-    log_level = None):
-```
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">get_logger</span>(
+    <span class="param"><span class="n">name</span> <span class="o">=</span> <span class="kc">'validmind'</span></span>,    <span class="param"><span class="n">log_level</span> <span class="o">=</span> <span class="kc">None</span></span>):</span>
+</span>
+
+:::
 
 Get a logger for the given module name
 
@@ -21,7 +24,13 @@ Get a logger for the given module name
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">DatasetDescription</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">DatasetDescription</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>):</span>
+</span>
+
+:::
 
 Provides comprehensive analysis and statistical summaries of each column in a machine learning model's dataset.
 
@@ -59,7 +68,14 @@ The DatasetDescription class accomplishes the purpose as follows: firstly, the t
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">describe_column</span>( <span class="param"> <span class="n">df</span></span>, <span class="param"> <span class="n">column</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">describe_column</span>(
+    <span class="param"><span class="n">df</span></span>,    <span class="param"><span class="n">column</span></span>):</span>
+</span>
+
+:::
 
 Gets descriptive statistics for a single column in a Pandas DataFrame.
 
@@ -67,7 +83,14 @@ Gets descriptive statistics for a single column in a Pandas DataFrame.
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">get_column_histograms</span>( <span class="param"> <span class="n">df</span></span>, <span class="param"> <span class="n">column</span></span>, <span class="param"> <span class="n">type\_</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">get_column_histograms</span>(
+    <span class="param"><span class="n">df</span></span>,    <span class="param"><span class="n">column</span></span>,    <span class="param"><span class="n">type_</span></span>):</span>
+</span>
+
+:::
 
 Returns a collection of histograms for a numerical or categorical column. We store different combinations of bin sizes to allow analyzing the data better
 
@@ -77,7 +100,14 @@ Will be used in favor of \_get_histogram in the future
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">get_numerical_histograms</span>( <span class="param"> <span class="n">df</span></span>, <span class="param"> <span class="n">column</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">get_numerical_histograms</span>(
+    <span class="param"><span class="n">df</span></span>,    <span class="param"><span class="n">column</span></span>):</span>
+</span>
+
+:::
 
 Returns a collection of histograms for a numerical column, each one with a different bin size
 
@@ -85,7 +115,13 @@ Returns a collection of histograms for a numerical column, each one with a diffe
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">infer_datatypes</span>(<span class="param"><span class="n">df</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">infer_datatypes</span>(<span class="param"><span class="n">df</span></span>):</span>
+</span>
+
+:::
 
 ## [class]{.muted} UnsupportedColumnTypeError
 

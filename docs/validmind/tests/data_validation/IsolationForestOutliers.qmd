@@ -9,7 +9,14 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">IsolationForestOutliers</span>( <span class="param"> <span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>, <span class="param"> <span class="n">random_state</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="kc">0</span></span>, <span class="param"> <span class="n">contamination</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="kc">0.1</span></span>, <span class="param"> <span class="n">feature_columns</span><span class="p">:</span> <span class="n">list</span> <span class="o">=</span> <span class="kc">None</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">IsolationForestOutliers</span>(
+    <span class="param"><span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>,    <span class="param"><span class="n">random_state</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="kc">0</span></span>,    <span class="param"><span class="n">contamination</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="kc">0.1</span></span>,    <span class="param"><span class="n">feature_columns</span><span class="p">:</span> <span class="n">list</span> <span class="o">=</span> <span class="kc">None</span></span>):</span>
+</span>
+
+:::
 
 Detects outliers in a dataset using the Isolation Forest algorithm and visualizes results through scatter plots.
 

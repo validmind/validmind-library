@@ -9,7 +9,14 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">describe_metric</span>( <span class="param"> <span class="n">metric_id</span><span class="p">:</span> <span class="n">str</span></span>, <span class="param"> <span class="n">kwargs</span> <span class="o">=</span> <span class="kc">{}</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">describe_metric</span>(
+    <span class="param"><span class="n">metric_id</span><span class="p">:</span> <span class="n">str</span></span>,    <span class="param"><span class="n">kwargs</span> <span class="o">=</span> <span class="kc">{}</span></span>):</span>
+</span>
+
+:::
 
 Describe a metric
 
@@ -17,7 +24,13 @@ Describe a metric
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">list_metrics</span>(<span class="param"><span class="n">kwargs</span> <span class="o">=</span> <span class="kc">{}</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">list_metrics</span>(<span class="param"><span class="n">kwargs</span> <span class="o">=</span> <span class="kc">{}</span></span>):</span>
+</span>
+
+:::
 
 List all metrics
 
@@ -25,6 +38,13 @@ List all metrics
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">run_metric</span>( <span class="param"> <span class="n">metric_id</span><span class="p">:</span> <span class="n">str</span></span>, <span class="param"> <span class="n">kwargs</span> <span class="o">=</span> <span class="kc">{}</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">run_metric</span>(
+    <span class="param"><span class="n">metric_id</span><span class="p">:</span> <span class="n">str</span></span>,    <span class="param"><span class="n">kwargs</span> <span class="o">=</span> <span class="kc">{}</span></span>):</span>
+</span>
+
+:::
 
 Run a metric

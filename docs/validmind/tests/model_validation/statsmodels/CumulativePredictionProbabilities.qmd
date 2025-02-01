@@ -9,7 +9,14 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">CumulativePredictionProbabilities</span>( <span class="param"> <span class="n">dataset</span></span>, <span class="param"> <span class="n">model</span></span>, <span class="param"> <span class="n">title</span> <span class="o">=</span> <span class="kc">'Cumulative Probabilities'</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">CumulativePredictionProbabilities</span>(
+    <span class="param"><span class="n">dataset</span></span>,    <span class="param"><span class="n">model</span></span>,    <span class="param"><span class="n">title</span> <span class="o">=</span> <span class="kc">'Cumulative Probabilities'</span></span>):</span>
+</span>
+
+:::
 
 Visualizes cumulative probabilities of positive and negative classes for both training and testing in classification models.
 

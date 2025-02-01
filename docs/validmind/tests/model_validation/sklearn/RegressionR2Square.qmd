@@ -7,15 +7,16 @@ toc-expand: 4
 
 ## adj_r2_score<span class='muted'>()</span>
 
-<!-- module.qmd.jinja2 - module level function alias -->
+<!-- function.qmd.jinja2 - function signature -->
 
-```python
-def adj_r2_score(
-    actual: ,
-    predicted: ,
-    rowcount: int,
-    featurecount: int):
-```
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">adj_r2_score</span>(
+    <span class="param"><span class="n">actual</span><span class="p">:</span> <span class="n">{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'np'}, {'cls': 'ExprName', 'name': 'ndarray'}]}</span></span>,    <span class="param"><span class="n">predicted</span><span class="p">:</span> <span class="n">{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'np'}, {'cls': 'ExprName', 'name': 'ndarray'}]}</span></span>,    <span class="param"><span class="n">rowcount</span><span class="p">:</span> <span class="n">int</span></span>,    <span class="param"><span class="n">featurecount</span><span class="p">:</span> <span class="n">int</span></span>):</span>
+</span>
+
+:::
 
 Adjusted R2 Score
 
@@ -23,7 +24,14 @@ Adjusted R2 Score
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">RegressionR2Square</span>( <span class="param"> <span class="n">dataset</span></span>, <span class="param"> <span class="n">model</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">RegressionR2Square</span>(
+    <span class="param"><span class="n">dataset</span></span>,    <span class="param"><span class="n">model</span></span>):</span>
+</span>
+
+:::
 
 Assesses the overall goodness-of-fit of a regression model by evaluating R-squared (R2) and Adjusted R-squared (Adj R2) scores to determine the model's explanatory power over the dependent variable.
 

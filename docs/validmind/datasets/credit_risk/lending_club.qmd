@@ -9,19 +9,39 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">compute_scores</span>(<span class="param"><span class="n">probabilities</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">compute_scores</span>(<span class="param"><span class="n">probabilities</span></span>):</span>
+</span>
+
+:::
 
 ## feature_engineering[()]{.muted}
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">feature_engineering</span>( <span class="param"> <span class="n">df</span></span>, <span class="param"> <span class="n">verbose</span> <span class="o">=</span> <span class="kc">True</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">feature_engineering</span>(
+    <span class="param"><span class="n">df</span></span>,    <span class="param"><span class="n">verbose</span> <span class="o">=</span> <span class="kc">True</span></span>):</span>
+</span>
+
+:::
 
 ## get_demo_test_config[()]{.muted}
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">get_demo_test_config</span>( <span class="param"> <span class="n">x_test</span> <span class="o">=</span> <span class="kc">None</span></span>, <span class="param"> <span class="n">y_test</span> <span class="o">=</span> <span class="kc">None</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">get_demo_test_config</span>(
+    <span class="param"><span class="n">x_test</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">y_test</span> <span class="o">=</span> <span class="kc">None</span></span>):</span>
+</span>
+
+:::
 
 Get demo test configuration.
 
@@ -38,13 +58,26 @@ Get demo test configuration.
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">init_vm_objects</span>(<span class="param"><span class="n">scorecard</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">init_vm_objects</span>(<span class="param"><span class="n">scorecard</span></span>):</span>
+</span>
+
+:::
 
 ## load_data[()]{.muted}
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">load_data</span>( <span class="param"> <span class="n">source</span> <span class="o">=</span> <span class="kc">'online'</span></span>, <span class="param"> <span class="n">verbose</span> <span class="o">=</span> <span class="kc">True</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">load_data</span>(
+    <span class="param"><span class="n">source</span> <span class="o">=</span> <span class="kc">'online'</span></span>,    <span class="param"><span class="n">verbose</span> <span class="o">=</span> <span class="kc">True</span></span>):</span>
+</span>
+
+:::
 
 Load data from either an online source or offline files, automatically dropping specified columns for offline data. :param source: 'online' for online data, 'offline' for offline files. Defaults to 'online'. :return: DataFrame containing the loaded data.
 
@@ -52,25 +85,51 @@ Load data from either an online source or offline files, automatically dropping 
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">load_scorecard</span>(<span class="param"><span class="n"></span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">load_scorecard</span>(<span class="param"><span class="n"></span></span>):</span>
+</span>
+
+:::
 
 ## load_test_config[()]{.muted}
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">load_test_config</span>(<span class="param"><span class="n">scorecard</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">load_test_config</span>(<span class="param"><span class="n">scorecard</span></span>):</span>
+</span>
+
+:::
 
 ## preprocess[()]{.muted}
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">preprocess</span>( <span class="param"> <span class="n">df</span></span>, <span class="param"> <span class="n">verbose</span> <span class="o">=</span> <span class="kc">True</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">preprocess</span>(
+    <span class="param"><span class="n">df</span></span>,    <span class="param"><span class="n">verbose</span> <span class="o">=</span> <span class="kc">True</span></span>):</span>
+</span>
+
+:::
 
 ## split[()]{.muted}
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">split</span>( <span class="param"> <span class="n">df</span></span>, <span class="param"> <span class="n">validation_size</span> <span class="o">=</span> <span class="kc">None</span></span>, <span class="param"> <span class="n">test_size</span> <span class="o">=</span> <span class="kc">0.2</span></span>, <span class="param"> <span class="n">add_constant</span> <span class="o">=</span> <span class="kc">False</span></span>, <span class="param"> <span class="n">verbose</span> <span class="o">=</span> <span class="kc">True</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">split</span>(
+    <span class="param"><span class="n">df</span></span>,    <span class="param"><span class="n">validation_size</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">test_size</span> <span class="o">=</span> <span class="kc">0.2</span></span>,    <span class="param"><span class="n">add_constant</span> <span class="o">=</span> <span class="kc">False</span></span>,    <span class="param"><span class="n">verbose</span> <span class="o">=</span> <span class="kc">True</span></span>):</span>
+</span>
+
+:::
 
 Split dataset into train, validation (optional), and test sets.
 
@@ -89,4 +148,11 @@ Split dataset into train, validation (optional), and test sets.
 
 <!-- function.qmd.jinja2 - function signature -->
 
-::: {.signature} <span class="signature pdoc-code multiline"> <span class="kw">def</span> <span class="name">woe_encoding</span>( <span class="param"> <span class="n">df</span></span>, <span class="param"> <span class="n">verbose</span> <span class="o">=</span> <span class="kc">True</span></span>):</span> </span> :::
+::: {.signature}
+
+<span class="signature">
+<span class="kw">def</span> <span class="name">woe_encoding</span>(
+    <span class="param"><span class="n">df</span></span>,    <span class="param"><span class="n">verbose</span> <span class="o">=</span> <span class="kc">True</span></span>):</span>
+</span>
+
+:::
