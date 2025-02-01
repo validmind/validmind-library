@@ -37,7 +37,7 @@ toc-expand: 4
 ### {{ member.name }}<span class='muted'>()</span>
 
 {% if target.kind == "function" %}
-{{ signatures.render_function_signature(target) }}
+{{ signatures.render_signature(target) }}
 {% endif %}
 
 {{ doc.format_docstring(target.docstring) }}
@@ -71,7 +71,7 @@ toc-expand: 4
 {% if resolved.kind == "function" %}
 ## {{ member.name }}<span class='muted'>()</span>
 
-{{ signatures.render_function_signature(resolved) }}
+{{ signatures.render_signature(resolved) }}
 
 {% if resolved.docstring %}
 {{ doc.format_docstring(resolved.docstring) }}
@@ -120,7 +120,7 @@ class {{ member.name }}():
 
 #### {{ member.name if method_name == '__init__' else method_name }}<span class='muted'>()</span>
 
-{{ signatures.render_function_signature(method) }}
+{{ signatures.render_signature(method) }}
 
 {% if method.docstring %}
 {{ doc.format_docstring(method.docstring) }}

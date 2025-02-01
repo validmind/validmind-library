@@ -36,7 +36,7 @@ class {{ resolved.name }}({% for base in resolved.bases %}{{ base.name }}{% if n
 {% if member.kind in ['method', 'function'] and not member.name.startswith('_') %}
 ### [{{ member.name }}[()]{.muted}](#{{ member.name }})
 
-{{ signatures.render_function_signature(member) }}
+{{ signatures.render_signature(member) }}
 
 {% if member.docstring %}
 {{ doc.format_docstring(member.docstring) }}

@@ -1,10 +1,10 @@
-{% from "macros/signatures.jinja2" import render_function_signature %}
+{% from "macros/signatures.jinja2" import render_signature %}
 
 {% if member.kind == "function" %}
 
 ## {{ member_name | default(member.name) }}[()]{.muted}
 
-{{ render_function_signature(member) }}
+{{ render_signature(member) }}
 
 {% if member.docstring %}
 {{ doc.format_docstring(member.docstring) }}
