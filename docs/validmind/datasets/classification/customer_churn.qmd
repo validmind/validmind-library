@@ -3,20 +3,20 @@ title: "[validmind](/reference/validmind.html).customer_churn"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
 
 ## simple_preprocess_booleans<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">simple_preprocess_booleans</span>(
-    <span class="param"><span class="n">df</span></span>,    <span class="param"><span class="n">columns</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">simple_preprocess_booleans</span>(<span class="param"><span class="n">df</span><span class="muted">,</span></span><span class="param"><span class="n">columns</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Preprocess boolean columns.
 
@@ -31,16 +31,15 @@ Preprocess boolean columns.
 
 ## simple_preprocess_categoricals<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">simple_preprocess_categoricals</span>(
-    <span class="param"><span class="n">df</span></span>,    <span class="param"><span class="n">columns</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">simple_preprocess_categoricals</span>(<span class="param"><span class="n">df</span><span class="muted">,</span></span><span class="param"><span class="n">columns</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Preprocess categorical columns.
 
@@ -55,16 +54,15 @@ Preprocess categorical columns.
 
 ## simple_preprocess_numericals<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">simple_preprocess_numericals</span>(
-    <span class="param"><span class="n">df</span></span>,    <span class="param"><span class="n">columns</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">simple_preprocess_numericals</span>(<span class="param"><span class="n">df</span><span class="muted">,</span></span><span class="param"><span class="n">columns</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Preprocess numerical columns.
 
@@ -77,17 +75,19 @@ Preprocess numerical columns.
 
 - Preprocessed dataframe.
 
+<!-- function.qmd.jinja2 -->
+
 ## get_demo_test_config[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">get_demo_test_config</span>(<span class="param"><span class="n">test_suite</span> <span class="o">=</span> <span class="kc">None</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">get_demo_test_config</span>(<span class="param"><span class="n">test_suite</span><span class="o">=</span><span class="kc">None</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Returns input configuration for the default documentation template assigned to this demo model
 
@@ -106,26 +106,26 @@ We assign the following inputs depending on the input config expected by each te
 - When a test expects "model" and "dataset" we use the model and test_dataset
 - The only exception is ClassifierPerformance since that runs twice: once with the train_dataset (in sample) and once with the test_dataset (out of sample)
 
+<!-- function.qmd.jinja2 -->
+
 ## load_data[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">load_data</span>(<span class="param"><span class="n">full_dataset</span> <span class="o">=</span> <span class="kc">False</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">load_data</span>(<span class="param"><span class="n">full_dataset</span><span class="o">=</span><span class="kc">False</span></span>)</span>
 
 :::
 
+<!-- function.qmd.jinja2 -->
+
 ## preprocess[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">preprocess</span>(<span class="param"><span class="n">df</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">preprocess</span>(<span class="param"><span class="n">df</span></span>)</span>
 
 :::

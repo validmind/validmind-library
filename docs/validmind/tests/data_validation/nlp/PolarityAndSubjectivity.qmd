@@ -3,20 +3,22 @@ title: "[validmind](/reference/validmind.html).PolarityAndSubjectivity"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- function.qmd.jinja2 -->
 
 ## PolarityAndSubjectivity[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">PolarityAndSubjectivity</span>(
-    <span class="param"><span class="n">dataset</span></span>,    <span class="param"><span class="n">threshold_subjectivity</span> <span class="o">=</span> <span class="kc">0.5</span></span>,    <span class="param"><span class="n">threshold_polarity</span> <span class="o">=</span> <span class="kc">0</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">PolarityAndSubjectivity</span>(<span class="param"><span class="n">dataset</span><span class="muted">,</span></span><span class="param"><span class="n">threshold_subjectivity</span><span class="o"> = </span><span class="kc">0.5</span><span class="muted">,</span></span><span class="param"><span class="n">threshold_polarity</span><span class="o"> = </span><span class="kc">0</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Analyzes the polarity and subjectivity of text data within a given dataset to visualize the sentiment distribution.
 

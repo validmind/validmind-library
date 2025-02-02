@@ -3,19 +3,22 @@ title: "[validmind](/reference/validmind.html).TabularCategoricalBarPlots"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- function.qmd.jinja2 -->
 
 ## TabularCategoricalBarPlots[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">TabularCategoricalBarPlots</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">TabularCategoricalBarPlots</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Generates and visualizes bar plots for each category in categorical features to evaluate the dataset's composition.
 
@@ -44,13 +47,19 @@ The provided dataset is first checked to determine if it contains any categorica
 - It does not provide informative value when there are too many categories, as the bar chart could become cluttered and hard to interpret.
 - Offers no insights into the model's performance or precision, but rather provides a descriptive analysis of the input.
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} SkipTestError
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class SkipTestError(BaseError):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">SkipTestError</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Useful error to throw when a test cannot be executed.
 

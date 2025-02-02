@@ -3,63 +3,94 @@ title: "[validmind](/reference/validmind.html).regression"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- class.qmd.jinja2 -->
 
 ## [class]{.muted} RegressionFullSuite
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class RegressionFullSuite(TestSuite):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">RegressionFullSuite</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Full test suite for regression models.
 
 **Inherited members**
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} RegressionMetrics
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class RegressionMetrics(TestSuite):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">RegressionMetrics</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Test suite for performance metrics of regression metrics
 
 **Inherited members**
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} RegressionPerformance
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class RegressionPerformance(TestSuite):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">RegressionPerformance</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Test suite for regression model performance
 
 **Inherited members**
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} TabularDataQuality
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class TabularDataQuality(TestSuite):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">TabularDataQuality</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Test suite for data quality on tabular datasets
 
 **Inherited members**
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} TabularDatasetDescription
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class TabularDatasetDescription(TestSuite):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">TabularDatasetDescription</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Test suite to extract metadata and descriptive statistics from a tabular dataset
 

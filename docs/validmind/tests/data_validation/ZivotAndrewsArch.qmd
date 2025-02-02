@@ -3,34 +3,36 @@ title: "[validmind](/reference/validmind.html).ZivotAndrewsArch"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
 
 ## get_logger<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">get_logger</span>(
-    <span class="param"><span class="n">name</span> <span class="o">=</span> <span class="kc">'validmind'</span></span>,    <span class="param"><span class="n">log_level</span> <span class="o">=</span> <span class="kc">None</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">get_logger</span>(<span class="param"><span class="n">name</span><span class="o"> = </span><span class="kc">'validmind'</span><span class="muted">,</span></span><span class="param"><span class="n">log_level</span><span class="o"> = </span><span class="kc">None</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Get a logger for the given module name
 
+<!-- function.qmd.jinja2 -->
+
 ## ZivotAndrewsArch[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">ZivotAndrewsArch</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">ZivotAndrewsArch</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Evaluates the order of integration and stationarity of time series data using the Zivot-Andrews unit root test.
 
@@ -57,13 +59,19 @@ The Zivot-Andrews unit root test is performed on each feature in the dataset usi
 - Assumes data is derived from a single-equation, autoregressive model, making it less appropriate for multivariate time series data or data not aligning with this model.
 - May not account for unexpected shocks or changes in the series trend, both of which can significantly impact data stationarity.
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} SkipTestError
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class SkipTestError(BaseError):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">SkipTestError</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Useful error to throw when a test cannot be executed.
 

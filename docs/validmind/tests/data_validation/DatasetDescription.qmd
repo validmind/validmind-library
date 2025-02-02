@@ -3,34 +3,36 @@ title: "[validmind](/reference/validmind.html).DatasetDescription"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
 
 ## get_logger<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">get_logger</span>(
-    <span class="param"><span class="n">name</span> <span class="o">=</span> <span class="kc">'validmind'</span></span>,    <span class="param"><span class="n">log_level</span> <span class="o">=</span> <span class="kc">None</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">get_logger</span>(<span class="param"><span class="n">name</span><span class="o"> = </span><span class="kc">'validmind'</span><span class="muted">,</span></span><span class="param"><span class="n">log_level</span><span class="o"> = </span><span class="kc">None</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Get a logger for the given module name
 
+<!-- function.qmd.jinja2 -->
+
 ## DatasetDescription[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">DatasetDescription</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">DatasetDescription</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Provides comprehensive analysis and statistical summaries of each column in a machine learning model's dataset.
 
@@ -64,72 +66,81 @@ The DatasetDescription class accomplishes the purpose as follows: firstly, the t
 - Columns with all null or missing values are not included in histogram computation.
 - This test only validates the quality of the dataset but doesn't address the model's performance directly.
 
+<!-- function.qmd.jinja2 -->
+
 ## describe_column[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">describe_column</span>(
-    <span class="param"><span class="n">df</span></span>,    <span class="param"><span class="n">column</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">describe_column</span>(<span class="param"><span class="n">df</span><span class="muted">,</span></span><span class="param"><span class="n">column</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Gets descriptive statistics for a single column in a Pandas DataFrame.
 
+<!-- function.qmd.jinja2 -->
+
 ## get_column_histograms[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">get_column_histograms</span>(
-    <span class="param"><span class="n">df</span></span>,    <span class="param"><span class="n">column</span></span>,    <span class="param"><span class="n">type_</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">get_column_histograms</span>(<span class="param"><span class="n">df</span><span class="muted">,</span></span><span class="param"><span class="n">column</span><span class="muted">,</span></span><span class="param"><span class="n">type\_</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Returns a collection of histograms for a numerical or categorical column. We store different combinations of bin sizes to allow analyzing the data better
 
 Will be used in favor of \_get_histogram in the future
 
+<!-- function.qmd.jinja2 -->
+
 ## get_numerical_histograms[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">get_numerical_histograms</span>(
-    <span class="param"><span class="n">df</span></span>,    <span class="param"><span class="n">column</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">get_numerical_histograms</span>(<span class="param"><span class="n">df</span><span class="muted">,</span></span><span class="param"><span class="n">column</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Returns a collection of histograms for a numerical column, each one with a different bin size
 
+<!-- function.qmd.jinja2 -->
+
 ## infer_datatypes[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">infer_datatypes</span>(<span class="param"><span class="n">df</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">infer_datatypes</span>(<span class="param"><span class="n">df</span></span>)</span>
 
 :::
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} UnsupportedColumnTypeError
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class UnsupportedColumnTypeError(BaseError):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">UnsupportedColumnTypeError</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 When an unsupported column type is found on a dataset.
 

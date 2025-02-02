@@ -3,19 +3,22 @@ title: "[validmind](/reference/validmind.html).TabularDateTimeHistograms"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- function.qmd.jinja2 -->
 
 ## TabularDateTimeHistograms[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">TabularDateTimeHistograms</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">TabularDateTimeHistograms</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Generates histograms to provide graphical insight into the distribution of time intervals in a model's datetime data.
 
@@ -45,13 +48,19 @@ This test operates by first identifying all datetime columns and extracting them
 - The test is only applicable to datasets containing datetime columns and will fail if such columns are unavailable.
 - The interpretation of the histograms relies heavily on the domain expertise and experience of the reviewer.
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} SkipTestError
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class SkipTestError(BaseError):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">SkipTestError</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Useful error to throw when a test cannot be executed.
 

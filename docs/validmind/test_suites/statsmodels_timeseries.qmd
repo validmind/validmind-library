@@ -3,29 +3,44 @@ title: "[validmind](/reference/validmind.html).statsmodels_timeseries"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- docstring.jinja2 -->
 
 Time Series Test Suites from statsmodels
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} RegressionModelDescription
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class RegressionModelDescription(TestSuite):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">RegressionModelDescription</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Test suite for performance metric of regression model of statsmodels library
 
 **Inherited members**
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} RegressionModelsEvaluation
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class RegressionModelsEvaluation(TestSuite):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">RegressionModelsEvaluation</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Test suite for metrics comparison of regression model of statsmodels library
 

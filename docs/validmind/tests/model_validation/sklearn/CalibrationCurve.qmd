@@ -3,20 +3,22 @@ title: "[validmind](/reference/validmind.html).CalibrationCurve"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- function.qmd.jinja2 -->
 
 ## CalibrationCurve[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">CalibrationCurve</span>(
-    <span class="param"><span class="n">model</span><span class="p">:</span> <span class="n">VMModel</span></span>,    <span class="param"><span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>,    <span class="param"><span class="n">n_bins</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="kc">10</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">CalibrationCurve</span>(<span class="param"><span class="n">model</span><span class="p">:</span><span class="n">VMModel</span><span class="muted">,</span></span><span class="param"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span><span class="muted">,</span></span><span class="param"><span class="n">n_bins</span><span class="p">:</span><span class="n">int</span><span class="o"> = </span><span class="kc">10</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Evaluates the calibration of probability estimates by comparing predicted probabilities against observed frequencies.
 

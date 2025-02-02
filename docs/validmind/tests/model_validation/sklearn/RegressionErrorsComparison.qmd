@@ -3,35 +3,36 @@ title: "[validmind](/reference/validmind.html).RegressionErrorsComparison"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
 
 ## get_logger<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">get_logger</span>(
-    <span class="param"><span class="n">name</span> <span class="o">=</span> <span class="kc">'validmind'</span></span>,    <span class="param"><span class="n">log_level</span> <span class="o">=</span> <span class="kc">None</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">get_logger</span>(<span class="param"><span class="n">name</span><span class="o"> = </span><span class="kc">'validmind'</span><span class="muted">,</span></span><span class="param"><span class="n">log_level</span><span class="o"> = </span><span class="kc">None</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Get a logger for the given module name
 
+<!-- function.qmd.jinja2 -->
+
 ## RegressionErrorsComparison[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">RegressionErrorsComparison</span>(
-    <span class="param"><span class="n">datasets</span></span>,    <span class="param"><span class="n">models</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">RegressionErrorsComparison</span>(<span class="param"><span class="n">datasets</span><span class="muted">,</span></span><span class="param"><span class="n">models</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Assesses multiple regression error metrics to compare model performance across different datasets, emphasizing systematic overestimation or underestimation and large percentage errors.
 

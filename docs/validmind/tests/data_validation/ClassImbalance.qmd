@@ -3,22 +3,26 @@ title: "[validmind](/reference/validmind.html).ClassImbalance"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- docstring.jinja2 -->
 
 Threshold based tests
 
+<!-- function.qmd.jinja2 -->
+
 ## ClassImbalance[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">ClassImbalance</span>(
-    <span class="param"><span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>,    <span class="param"><span class="n">min_percent_threshold</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="kc">10</span></span>) <span class="p">-></span> <span class="return-annotation">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Tuple'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Dict'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'str'}, {'cls': 'ExprName', 'name': 'Any'}], 'implicit': True}}, {'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'go'}, {'cls': 'ExprName', 'name': 'Figure'}]}, {'cls': 'ExprName', 'name': 'bool'}], 'implicit': True}}</span>:</span>
-</span>
+<span class="kw">def</span> <span class="name">ClassImbalance</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span><span class="muted">,</span></span><span class="param"><span class="n">min_percent_threshold</span><span class="p">:</span><span class="n">int</span><span class="o"> = </span><span class="kc">10</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-{'cls': 'exprsubscript', 'left': {'cls': 'exprname', 'name': 'tuple'}, 'slice': {'cls': 'exprtuple', 'elements': [{'cls': 'exprsubscript', 'left': {'cls': 'exprname', 'name': 'dict'}, 'slice': {'cls': 'exprtuple', 'elements': [{'cls': 'exprname', 'name': 'str'}, {'cls': 'exprname', 'name': 'any'}], 'implicit': true}}, {'cls': 'exprattribute', 'values': [{'cls': 'exprname', 'name': 'go'}, {'cls': 'exprname', 'name': 'figure'}]}, {'cls': 'exprname', 'name': 'bool'}], 'implicit': true}}">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Tuple'}, 'slice': {'cls': 'ExprTuple', 'elements': \[{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Dict'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'str'}, {'cls': 'ExprName', 'name': 'Any'}], 'implicit': True}}, {'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'go'}, {'cls': 'ExprName', 'name': 'Figure'}]}, {'cls': 'ExprName', 'name': 'bool'}\], 'implicit': True}}</a><span class="muted">:</span> </span></span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Evaluates and quantifies class distribution imbalance in a dataset used by a machine learning model.
 
@@ -52,13 +56,19 @@ This Class Imbalance test operates by calculating the frequency (expressed as a 
 - While it can identify imbalances in class distribution, it doesn't provide direct methods to address or correct these imbalances.
 - The test is only applicable for classification operations and unsuitable for regression or clustering tasks.
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} SkipTestError
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class SkipTestError(BaseError):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">SkipTestError</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Useful error to throw when a test cannot be executed.
 

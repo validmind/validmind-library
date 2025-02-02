@@ -1,12 +1,10 @@
 {% import "macros/docstring.jinja2" as doc %}
 {% import "macros/signatures.jinja2" as signatures %}
 
+<!-- class.qmd.jinja2 -->
 ## [class]{.muted} {{ resolved.name }}
 
-<!-- class.qmd.jinja2 - class definition -->
-```python
-class {{ resolved.name }}({% for base in resolved.bases %}{{ base.name }}{% if not loop.last %}, {% endif %}{% endfor %}):
-```
+{{ signatures.render_signature(resolved) }}
 
 {% if resolved.docstring %}
 {{ doc.format_docstring(resolved.docstring) }}

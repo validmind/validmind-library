@@ -3,19 +3,22 @@ title: "[validmind](/reference/validmind.html).Toxicity"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- function.qmd.jinja2 -->
 
 ## Toxicity[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">Toxicity</span>(<span class="param"><span class="n">dataset</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">Toxicity</span>(<span class="param"><span class="n">dataset</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Assesses the toxicity of text data within a dataset to visualize the distribution of toxicity scores.
 

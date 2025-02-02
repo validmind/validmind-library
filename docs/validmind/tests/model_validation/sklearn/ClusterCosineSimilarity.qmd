@@ -3,20 +3,22 @@ title: "[validmind](/reference/validmind.html).ClusterCosineSimilarity"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- function.qmd.jinja2 -->
 
 ## ClusterCosineSimilarity[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">ClusterCosineSimilarity</span>(
-    <span class="param"><span class="n">model</span><span class="p">:</span> <span class="n">VMModel</span></span>,    <span class="param"><span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">ClusterCosineSimilarity</span>(<span class="param"><span class="n">model</span><span class="p">:</span><span class="n">VMModel</span><span class="muted">,</span></span><span class="param"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Measures the intra-cluster similarity of a clustering model using cosine similarity.
 
@@ -46,13 +48,19 @@ This test works by first extracting the true and predicted clusters of the model
 - It primarily works with continuous variables and is not suitable for binary or categorical variables.
 - Lastly, although rare, perfect perpendicular vectors (cosine similarity = 0) could be within the same cluster, which may give an inaccurate representation of a 'bad' cluster due to low cosine similarity score.
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} SkipTestError
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class SkipTestError(BaseError):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">SkipTestError</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Useful error to throw when a test cannot be executed.
 

@@ -3,111 +3,108 @@ title: "[validmind](/reference/validmind.html).ProtectedClassesThresholdOptimize
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
 
 ## get_logger<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">get_logger</span>(
-    <span class="param"><span class="n">name</span> <span class="o">=</span> <span class="kc">'validmind'</span></span>,    <span class="param"><span class="n">log_level</span> <span class="o">=</span> <span class="kc">None</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">get_logger</span>(<span class="param"><span class="n">name</span><span class="o"> = </span><span class="kc">'validmind'</span><span class="muted">,</span></span><span class="param"><span class="n">log_level</span><span class="o"> = </span><span class="kc">None</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Get a logger for the given module name
 
+<!-- function.qmd.jinja2 -->
+
 ## calculate_fairness_metrics[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">calculate_fairness_metrics</span>(
-    <span class="param"><span class="n">test_df</span></span>,    <span class="param"><span class="n">target</span></span>,    <span class="param"><span class="n">y_pred_opt</span></span>,    <span class="param"><span class="n">protected_classes</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">calculate_fairness_metrics</span>(<span class="param"><span class="n">test_df</span><span class="muted">,</span></span><span class="param"><span class="n">target</span><span class="muted">,</span></span><span class="param"><span class="n">y_pred_opt</span><span class="muted">,</span></span><span class="param"><span class="n">protected_classes</span></span>)</span>
 
 :::
+
+<!-- function.qmd.jinja2 -->
 
 ## calculate_group_metrics[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">calculate_group_metrics</span>(
-    <span class="param"><span class="n">test_df</span></span>,    <span class="param"><span class="n">target</span></span>,    <span class="param"><span class="n">y_pred_opt</span></span>,    <span class="param"><span class="n">protected_classes</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">calculate_group_metrics</span>(<span class="param"><span class="n">test_df</span><span class="muted">,</span></span><span class="param"><span class="n">target</span><span class="muted">,</span></span><span class="param"><span class="n">y_pred_opt</span><span class="muted">,</span></span><span class="param"><span class="n">protected_classes</span></span>)</span>
 
 :::
+
+<!-- function.qmd.jinja2 -->
 
 ## get_thresholds_by_group[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">get_thresholds_by_group</span>(<span class="param"><span class="n">threshold_optimizer</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">get_thresholds_by_group</span>(<span class="param"><span class="n">threshold_optimizer</span></span>)</span>
 
 :::
+
+<!-- function.qmd.jinja2 -->
 
 ## initialize_and_fit_optimizer[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">initialize_and_fit_optimizer</span>(
-    <span class="param"><span class="n">pipeline</span></span>,    <span class="param"><span class="n">X_train</span></span>,    <span class="param"><span class="n">y_train</span></span>,    <span class="param"><span class="n">protected_classes_df</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">initialize_and_fit_optimizer</span>(<span class="param"><span class="n">pipeline</span><span class="muted">,</span></span><span class="param"><span class="n">X_train</span><span class="muted">,</span></span><span class="param"><span class="n">y_train</span><span class="muted">,</span></span><span class="param"><span class="n">protected_classes_df</span></span>)</span>
 
 :::
+
+<!-- function.qmd.jinja2 -->
 
 ## make_predictions[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">make_predictions</span>(
-    <span class="param"><span class="n">threshold_optimizer</span></span>,    <span class="param"><span class="n">test_df</span></span>,    <span class="param"><span class="n">protected_classes</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">make_predictions</span>(<span class="param"><span class="n">threshold_optimizer</span><span class="muted">,</span></span><span class="param"><span class="n">test_df</span><span class="muted">,</span></span><span class="param"><span class="n">protected_classes</span></span>)</span>
 
 :::
+
+<!-- function.qmd.jinja2 -->
 
 ## plot_thresholds[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">plot_thresholds</span>(<span class="param"><span class="n">threshold_optimizer</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">plot_thresholds</span>(<span class="param"><span class="n">threshold_optimizer</span></span>)</span>
 
 :::
+
+<!-- function.qmd.jinja2 -->
 
 ## ProtectedClassesThresholdOptimizer[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">ProtectedClassesThresholdOptimizer</span>(
-    <span class="param"><span class="n">dataset</span></span>,    <span class="param"><span class="n">pipeline</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">protected_classes</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">X_train</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">y_train</span> <span class="o">=</span> <span class="kc">None</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">ProtectedClassesThresholdOptimizer</span>(<span class="param"><span class="n">dataset</span><span class="muted">,</span></span><span class="param"><span class="n">pipeline</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">protected_classes</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">X_train</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">y_train</span><span class="o"> = </span><span class="kc">None</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Obtains a classifier by applying group-specific thresholds to the provided estimator.
 
@@ -142,13 +139,19 @@ The test uses Fairlearn's ThresholdOptimizer to:
 - Requires access to protected attribute information at prediction time.
 - The effectiveness can vary depending on the chosen fairness constraint and objective.
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} MissingDependencyError
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class MissingDependencyError(BaseError):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">MissingDependencyError</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 When a required dependency is missing.
 

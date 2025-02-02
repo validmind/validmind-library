@@ -3,33 +3,36 @@ title: "[validmind](/reference/validmind.html).ModelMetadata"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
 
 ## get_model_info<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">get_model_info</span>(<span class="param"><span class="n">model</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">get_model_info</span>(<span class="param"><span class="n">model</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Attempts to extract all model info from a model object instance
 
+<!-- function.qmd.jinja2 -->
+
 ## ModelMetadata[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">ModelMetadata</span>(<span class="param"><span class="n">model</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">ModelMetadata</span>(<span class="param"><span class="n">model</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Compare metadata of different models and generate a summary table with the results. **Purpose**: The purpose of this function is to compare the metadata of different models, including information about their architecture, framework, framework version, and programming language.
 

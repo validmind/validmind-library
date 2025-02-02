@@ -3,20 +3,22 @@ title: "[validmind](/reference/validmind.html).ChiSquaredFeaturesTable"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- function.qmd.jinja2 -->
 
 ## ChiSquaredFeaturesTable[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">ChiSquaredFeaturesTable</span>(
-    <span class="param"><span class="n">dataset</span></span>,    <span class="param"><span class="n">p_threshold</span> <span class="o">=</span> <span class="kc">0.05</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">ChiSquaredFeaturesTable</span>(<span class="param"><span class="n">dataset</span><span class="muted">,</span></span><span class="param"><span class="n">p_threshold</span><span class="o"> = </span><span class="kc">0.05</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Assesses the statistical association between categorical features and a target variable using the Chi-Squared test.
 
@@ -46,13 +48,19 @@ The function creates a contingency table for each categorical feature and the ta
 - As with all hypothesis tests, the Chi-Squared test can only detect associations, not causal relationships.
 - The choice of p-value threshold can affect the interpretation of feature relevance, and different thresholds may lead to different conclusions.
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} SkipTestError
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class SkipTestError(BaseError):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">SkipTestError</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Useful error to throw when a test cannot be executed.
 

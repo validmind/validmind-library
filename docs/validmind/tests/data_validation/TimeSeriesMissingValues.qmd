@@ -3,20 +3,22 @@ title: "[validmind](/reference/validmind.html).TimeSeriesMissingValues"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- function.qmd.jinja2 -->
 
 ## TimeSeriesMissingValues[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">TimeSeriesMissingValues</span>(
-    <span class="param"><span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>,    <span class="param"><span class="n">min_threshold</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="kc">1</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">TimeSeriesMissingValues</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span><span class="muted">,</span></span><span class="param"><span class="n">min_threshold</span><span class="p">:</span><span class="n">int</span><span class="o"> = </span><span class="kc">1</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Validates time-series data quality by confirming the count of missing values is below a certain threshold.
 
@@ -45,13 +47,19 @@ The test method commences by validating if the dataset has a datetime index; if 
 - The test's sensitivity to the 'min_threshold' parameter may raise false alarms if set too strictly or may overlook problematic data if set too loosely.
 - Solely focuses on the 'missingness' of the data and might fall short in addressing other aspects of data quality.
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} SkipTestError
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class SkipTestError(BaseError):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">SkipTestError</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Useful error to throw when a test cannot be executed.
 

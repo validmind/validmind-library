@@ -3,20 +3,22 @@ title: "[validmind](/reference/validmind.html).KMeansClustersOptimization"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- function.qmd.jinja2 -->
 
 ## KMeansClustersOptimization[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">KMeansClustersOptimization</span>(
-    <span class="param"><span class="n">model</span><span class="p">:</span> <span class="n">VMModel</span></span>,    <span class="param"><span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>,    <span class="param"><span class="n">n_clusters</span><span class="p">:</span> <span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Union'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'int'}}, 'None'], 'implicit': True}}</span> <span class="o">=</span> <span class="kc">None</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">KMeansClustersOptimization</span>(<span class="param"><span class="n">model</span><span class="p">:</span><span class="n">VMModel</span><span class="muted">,</span></span><span class="param"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span><span class="muted">,</span></span><span class="param"><span class="n">n_clusters</span><span class="p">:</span><span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Union'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'int'}}, 'None'], 'implicit': True}}</span><span class="o"> = </span><span class="kc">None</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Optimizes the number of clusters in K-means models using Elbow and Silhouette methods.
 
@@ -47,13 +49,19 @@ The test mechanism involves iterating over a predefined range of cluster numbers
 - Might not be straightforward to determine the 'elbow' point or maximize the silhouette average score, especially in larger and complicated datasets.
 - Assumes spherical clusters (due to using the Euclidean distance in the Elbow method), which might not align with the actual structure of the data.
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} SkipTestError
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class SkipTestError(BaseError):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">SkipTestError</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Useful error to throw when a test cannot be executed.
 

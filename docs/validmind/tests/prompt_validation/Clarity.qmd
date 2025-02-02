@@ -3,34 +3,34 @@ title: "[validmind](/reference/validmind.html).Clarity"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
 
 ## call_model<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">call_model</span>(
-    <span class="param"><span class="n">system_prompt</span><span class="p">:</span> <span class="n">str</span></span>,    <span class="param"><span class="n">user_prompt</span><span class="p">:</span> <span class="n">str</span></span>,    <span class="param"><span class="n">temperature</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="kc">0.0</span></span>,    <span class="param"><span class="n">seed</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="kc">42</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">call_model</span>(<span class="param"><span class="n">system_prompt</span><span class="p">:</span><span class="n">str</span><span class="muted">,</span></span><span class="param"><span class="n">user_prompt</span><span class="p">:</span><span class="n">str</span><span class="muted">,</span></span><span class="param"><span class="n">temperature</span><span class="p">:</span><span class="n">float</span><span class="o"> = </span><span class="kc">0.0</span><span class="muted">,</span></span><span class="param"><span class="n">seed</span><span class="p">:</span><span class="n">int</span><span class="o"> = </span><span class="kc">42</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Call LLM with the given prompts and return the response
 
 ## get_explanation<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">get_explanation</span>(<span class="param"><span class="n">response</span><span class="p">:</span> <span class="n">str</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">get_explanation</span>(<span class="param"><span class="n">response</span><span class="p">:</span><span class="n">str</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Get just the explanation from the response string TODO: use json response mode instead of this
 
@@ -42,15 +42,15 @@ Explanation: <some-explanation>" -> "<some-explanation>"
 
 ## get_score<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">get_score</span>(<span class="param"><span class="n">response</span><span class="p">:</span> <span class="n">str</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">get_score</span>(<span class="param"><span class="n">response</span><span class="p">:</span><span class="n">str</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Get just the score from the response string TODO: use json response mode instead of this
 
@@ -60,18 +60,19 @@ e.g. "Score: 8
 
 Explanation: <some-explanation>" -> 8
 
+<!-- function.qmd.jinja2 -->
+
 ## Clarity[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">Clarity</span>(
-    <span class="param"><span class="n">model</span></span>,    <span class="param"><span class="n">min_threshold</span> <span class="o">=</span> <span class="kc">7</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">Clarity</span>(<span class="param"><span class="n">model</span><span class="muted">,</span></span><span class="param"><span class="n">min_threshold</span><span class="o"> = </span><span class="kc">7</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Evaluates and scores the clarity of prompts in a Large Language Model based on specified guidelines.
 
@@ -100,13 +101,19 @@ The evaluation uses an LLM to scrutinize the clarity of prompts, factoring in co
 - The test assumes that all required factors (detail inclusion, persona adoption, step-by-step instructions, use of examples, and specification of output length) contribute equally to clarity, which might not always be the case
 - The evaluation may not be as effective if used on non-textual models
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} MissingRequiredTestInputError
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class MissingRequiredTestInputError(BaseError):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">MissingRequiredTestInputError</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 When a required test context variable is missing.
 

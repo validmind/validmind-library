@@ -3,20 +3,22 @@ title: "[validmind](/reference/validmind.html).GINITable"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- function.qmd.jinja2 -->
 
 ## GINITable[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">GINITable</span>(
-    <span class="param"><span class="n">dataset</span></span>,    <span class="param"><span class="n">model</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">GINITable</span>(<span class="param"><span class="n">dataset</span><span class="muted">,</span></span><span class="param"><span class="n">model</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Evaluates classification model performance using AUC, GINI, and KS metrics for training and test datasets.
 

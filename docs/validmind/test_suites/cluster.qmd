@@ -3,53 +3,80 @@ title: "[validmind](/reference/validmind.html).cluster"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- docstring.jinja2 -->
 
 Test suites for sklearn-compatible clustering models Ideal setup is to have the API client to read a custom test suite from the project's configuration
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} ClusterFullSuite
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class ClusterFullSuite(TestSuite):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">ClusterFullSuite</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Full test suite for clustering models.
 
 **Inherited members**
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} ClusterMetrics
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class ClusterMetrics(TestSuite):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">ClusterMetrics</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Test suite for sklearn clustering metrics
 
 **Inherited members**
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} ClusterPerformance
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class ClusterPerformance(TestSuite):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">ClusterPerformance</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Test suite for sklearn cluster performance
 
 **Inherited members**
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} KmeansParametersOptimization
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class KmeansParametersOptimization(TestSuite):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">KmeansParametersOptimization</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Test suite for sklearn hyperparameters optimization
 

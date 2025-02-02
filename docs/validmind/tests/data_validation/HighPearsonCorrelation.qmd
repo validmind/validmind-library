@@ -3,20 +3,22 @@ title: "[validmind](/reference/validmind.html).HighPearsonCorrelation"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- function.qmd.jinja2 -->
 
 ## HighPearsonCorrelation[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">HighPearsonCorrelation</span>(
-    <span class="param"><span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>,    <span class="param"><span class="n">max_threshold</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="kc">0.3</span></span>,    <span class="param"><span class="n">top_n_correlations</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="kc">10</span></span>,    <span class="param"><span class="n">feature_columns</span><span class="p">:</span> <span class="n">list</span> <span class="o">=</span> <span class="kc">None</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">HighPearsonCorrelation</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span><span class="muted">,</span></span><span class="param"><span class="n">max_threshold</span><span class="p">:</span><span class="n">float</span><span class="o"> = </span><span class="kc">0.3</span><span class="muted">,</span></span><span class="param"><span class="n">top_n_correlations</span><span class="p">:</span><span class="n">int</span><span class="o"> = </span><span class="kc">10</span><span class="muted">,</span></span><span class="param"><span class="n">feature_columns</span><span class="p">:</span><span class="n">list</span><span class="o"> = </span><span class="kc">None</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Identifies highly correlated feature pairs in a dataset suggesting feature redundancy or multicollinearity.
 

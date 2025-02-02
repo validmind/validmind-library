@@ -3,35 +3,36 @@ title: "[validmind](/reference/validmind.html).WOEBinPlots"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
 
 ## get_logger<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">get_logger</span>(
-    <span class="param"><span class="n">name</span> <span class="o">=</span> <span class="kc">'validmind'</span></span>,    <span class="param"><span class="n">log_level</span> <span class="o">=</span> <span class="kc">None</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">get_logger</span>(<span class="param"><span class="n">name</span><span class="o"> = </span><span class="kc">'validmind'</span><span class="muted">,</span></span><span class="param"><span class="n">log_level</span><span class="o"> = </span><span class="kc">None</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Get a logger for the given module name
 
+<!-- function.qmd.jinja2 -->
+
 ## WOEBinPlots[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">WOEBinPlots</span>(
-    <span class="param"><span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>,    <span class="param"><span class="n">breaks_adj</span><span class="p">:</span> <span class="n">list</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">fig_height</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="kc">600</span></span>,    <span class="param"><span class="n">fig_width</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="kc">500</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">WOEBinPlots</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span><span class="muted">,</span></span><span class="param"><span class="n">breaks_adj</span><span class="p">:</span><span class="n">list</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">fig_height</span><span class="p">:</span><span class="n">int</span><span class="o"> = </span><span class="kc">600</span><span class="muted">,</span></span><span class="param"><span class="n">fig_width</span><span class="p">:</span><span class="n">int</span><span class="o"> = </span><span class="kc">500</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Generates visualizations of Weight of Evidence (WoE) and Information Value (IV) for understanding predictive power of categorical variables in a data set.
 
@@ -62,13 +63,19 @@ The test implementation follows defined steps. Initially, it selects non-numeric
 - Extreme or outlier values can dramatically affect the computation of WoE and IV, skewing results.
 - The method requires a sufficient number of events per bin to generate a reliable information value and weight of evidence.
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} SkipTestError
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class SkipTestError(BaseError):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">SkipTestError</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Useful error to throw when a test cannot be executed.
 

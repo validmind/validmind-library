@@ -3,20 +3,20 @@ title: "[validmind](/reference/validmind.html).taiwan_credit"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
 
 ## simple_preprocess_booleans<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">simple_preprocess_booleans</span>(
-    <span class="param"><span class="n">df</span></span>,    <span class="param"><span class="n">columns</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">simple_preprocess_booleans</span>(<span class="param"><span class="n">df</span><span class="muted">,</span></span><span class="param"><span class="n">columns</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Preprocess boolean columns.
 
@@ -31,16 +31,15 @@ Preprocess boolean columns.
 
 ## simple_preprocess_categoricals<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">simple_preprocess_categoricals</span>(
-    <span class="param"><span class="n">df</span></span>,    <span class="param"><span class="n">columns</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">simple_preprocess_categoricals</span>(<span class="param"><span class="n">df</span><span class="muted">,</span></span><span class="param"><span class="n">columns</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Preprocess categorical columns.
 
@@ -55,16 +54,15 @@ Preprocess categorical columns.
 
 ## simple_preprocess_numericals<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">simple_preprocess_numericals</span>(
-    <span class="param"><span class="n">df</span></span>,    <span class="param"><span class="n">columns</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">simple_preprocess_numericals</span>(<span class="param"><span class="n">df</span><span class="muted">,</span></span><span class="param"><span class="n">columns</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Preprocess numerical columns.
 
@@ -77,26 +75,26 @@ Preprocess numerical columns.
 
 - Preprocessed dataframe.
 
+<!-- function.qmd.jinja2 -->
+
 ## load_data[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">load_data</span>(<span class="param"><span class="n"></span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">load_data</span>()</span>
 
 :::
 
+<!-- function.qmd.jinja2 -->
+
 ## preprocess[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">preprocess</span>(<span class="param"><span class="n">df</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">preprocess</span>(<span class="param"><span class="n">df</span></span>)</span>
 
 :::

@@ -3,34 +3,34 @@ title: "[validmind](/reference/validmind.html).Bias"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
 
 ## call_model<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">call_model</span>(
-    <span class="param"><span class="n">system_prompt</span><span class="p">:</span> <span class="n">str</span></span>,    <span class="param"><span class="n">user_prompt</span><span class="p">:</span> <span class="n">str</span></span>,    <span class="param"><span class="n">temperature</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="kc">0.0</span></span>,    <span class="param"><span class="n">seed</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="kc">42</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">call_model</span>(<span class="param"><span class="n">system_prompt</span><span class="p">:</span><span class="n">str</span><span class="muted">,</span></span><span class="param"><span class="n">user_prompt</span><span class="p">:</span><span class="n">str</span><span class="muted">,</span></span><span class="param"><span class="n">temperature</span><span class="p">:</span><span class="n">float</span><span class="o"> = </span><span class="kc">0.0</span><span class="muted">,</span></span><span class="param"><span class="n">seed</span><span class="p">:</span><span class="n">int</span><span class="o"> = </span><span class="kc">42</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Call LLM with the given prompts and return the response
 
 ## get_explanation<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">get_explanation</span>(<span class="param"><span class="n">response</span><span class="p">:</span> <span class="n">str</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">get_explanation</span>(<span class="param"><span class="n">response</span><span class="p">:</span><span class="n">str</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Get just the explanation from the response string TODO: use json response mode instead of this
 
@@ -42,15 +42,15 @@ Explanation: <some-explanation>" -> "<some-explanation>"
 
 ## get_score<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">get_score</span>(<span class="param"><span class="n">response</span><span class="p">:</span> <span class="n">str</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">get_score</span>(<span class="param"><span class="n">response</span><span class="p">:</span><span class="n">str</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Get just the score from the response string TODO: use json response mode instead of this
 
@@ -60,18 +60,19 @@ e.g. "Score: 8
 
 Explanation: <some-explanation>" -> 8
 
+<!-- function.qmd.jinja2 -->
+
 ## Bias[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">Bias</span>(
-    <span class="param"><span class="n">model</span></span>,    <span class="param"><span class="n">min_threshold</span> <span class="o">=</span> <span class="kc">7</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">Bias</span>(<span class="param"><span class="n">model</span><span class="muted">,</span></span><span class="param"><span class="n">min_threshold</span><span class="o"> = </span><span class="kc">7</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Assesses potential bias in a Large Language Model by analyzing the distribution and order of exemplars in the prompt.
 
@@ -105,13 +106,19 @@ For each test case, the LLM grades the input prompt on a scale of 1 to 10. It ev
 - The test's effectiveness will decrease if the quality or balance of positive and negative exemplars is not representative of the problem space the model is intended to solve.
 - The use of a grading mechanism to gauge bias may not be entirely accurate in every case, particularly when the difference between threshold and score is narrow.
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} MissingRequiredTestInputError
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class MissingRequiredTestInputError(BaseError):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">MissingRequiredTestInputError</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 When a required test context variable is missing.
 

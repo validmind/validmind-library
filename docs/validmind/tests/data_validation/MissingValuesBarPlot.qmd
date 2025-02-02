@@ -3,20 +3,22 @@ title: "[validmind](/reference/validmind.html).MissingValuesBarPlot"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- function.qmd.jinja2 -->
 
 ## MissingValuesBarPlot[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">MissingValuesBarPlot</span>(
-    <span class="param"><span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>,    <span class="param"><span class="n">threshold</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="kc">80</span></span>,    <span class="param"><span class="n">fig_height</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="kc">600</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">MissingValuesBarPlot</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span><span class="muted">,</span></span><span class="param"><span class="n">threshold</span><span class="p">:</span><span class="n">int</span><span class="o"> = </span><span class="kc">80</span><span class="muted">,</span></span><span class="param"><span class="n">fig_height</span><span class="p">:</span><span class="n">int</span><span class="o"> = </span><span class="kc">600</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Assesses the percentage and distribution of missing values in the dataset via a bar plot, with emphasis on identifying high-risk columns based on a user-defined threshold.
 

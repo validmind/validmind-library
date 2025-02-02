@@ -3,33 +3,34 @@ title: "[validmind](/reference/validmind.html).RollingStatsPlot"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- function.qmd.jinja2 -->
 
 ## plot_rolling_statistics[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">plot_rolling_statistics</span>(
-    <span class="param"><span class="n">df</span></span>,    <span class="param"><span class="n">col</span></span>,    <span class="param"><span class="n">window_size</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">plot_rolling_statistics</span>(<span class="param"><span class="n">df</span><span class="muted">,</span></span><span class="param"><span class="n">col</span><span class="muted">,</span></span><span class="param"><span class="n">window_size</span></span>)</span>
 
 :::
+
+<!-- function.qmd.jinja2 -->
 
 ## RollingStatsPlot[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">RollingStatsPlot</span>(
-    <span class="param"><span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>,    <span class="param"><span class="n">window_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="kc">12</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">RollingStatsPlot</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span><span class="muted">,</span></span><span class="param"><span class="n">window_size</span><span class="p">:</span><span class="n">int</span><span class="o"> = </span><span class="kc">12</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Evaluates the stationarity of time series data by plotting its rolling mean and standard deviation over a specified window.
 
@@ -60,13 +61,19 @@ This mechanism is comprised of two steps. Initially, the rolling mean and standa
 - Requires the dataset to be indexed by date and time, hence it may not be usable for datasets without a timestamp index.
 - Primarily serves for data visualization as it does not facilitate any quantitative measures for stationarity, such as through statistical tests. Therefore, the interpretation is subjective and depends heavily on modeler discretion.
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} SkipTestError
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class SkipTestError(BaseError):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">SkipTestError</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Useful error to throw when a test cannot be executed.
 

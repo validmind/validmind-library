@@ -3,35 +3,36 @@ title: "[validmind](/reference/validmind.html).RegressionR2SquareComparison"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
 
 ## adj_r2_score<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">adj_r2_score</span>(
-    <span class="param"><span class="n">actual</span><span class="p">:</span> <span class="n">{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'np'}, {'cls': 'ExprName', 'name': 'ndarray'}]}</span></span>,    <span class="param"><span class="n">predicted</span><span class="p">:</span> <span class="n">{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'np'}, {'cls': 'ExprName', 'name': 'ndarray'}]}</span></span>,    <span class="param"><span class="n">rowcount</span><span class="p">:</span> <span class="n">int</span></span>,    <span class="param"><span class="n">featurecount</span><span class="p">:</span> <span class="n">int</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">adj_r2_score</span>(<span class="param"><span class="n">actual</span><span class="p">:</span><span class="n">{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'np'}, {'cls': 'ExprName', 'name': 'ndarray'}]}</span><span class="muted">,</span></span><span class="param"><span class="n">predicted</span><span class="p">:</span><span class="n">{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'np'}, {'cls': 'ExprName', 'name': 'ndarray'}]}</span><span class="muted">,</span></span><span class="param"><span class="n">rowcount</span><span class="p">:</span><span class="n">int</span><span class="muted">,</span></span><span class="param"><span class="n">featurecount</span><span class="p">:</span><span class="n">int</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Adjusted R2 Score
 
+<!-- function.qmd.jinja2 -->
+
 ## RegressionR2SquareComparison[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">RegressionR2SquareComparison</span>(
-    <span class="param"><span class="n">datasets</span></span>,    <span class="param"><span class="n">models</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">RegressionR2SquareComparison</span>(<span class="param"><span class="n">datasets</span><span class="muted">,</span></span><span class="param"><span class="n">models</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Compares R-Squared and Adjusted R-Squared values for different regression models across multiple datasets to assess model performance and relevance of features.
 

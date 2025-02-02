@@ -3,20 +3,22 @@ title: "[validmind](/reference/validmind.html).PredictionProbabilitiesHistogram"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- function.qmd.jinja2 -->
 
 ## PredictionProbabilitiesHistogram[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">PredictionProbabilitiesHistogram</span>(
-    <span class="param"><span class="n">dataset</span></span>,    <span class="param"><span class="n">model</span></span>,    <span class="param"><span class="n">title</span> <span class="o">=</span> <span class="kc">'Histogram of Predictive Probabilities'</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">PredictionProbabilitiesHistogram</span>(<span class="param"><span class="n">dataset</span><span class="muted">,</span></span><span class="param"><span class="n">model</span><span class="muted">,</span></span><span class="param"><span class="n">title</span><span class="o"> = </span><span class="kc">'Histogram of Predictive Probabilities'</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Assesses the predictive probability distribution for binary classification to evaluate model performance and potential overfitting or bias.
 

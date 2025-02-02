@@ -3,22 +3,26 @@ title: "[validmind](/reference/validmind.html).Punctuations"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- docstring.jinja2 -->
 
 Metrics functions for any Pandas-compatible datasets
 
+<!-- function.qmd.jinja2 -->
+
 ## Punctuations[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">Punctuations</span>(
-    <span class="param"><span class="n">dataset</span></span>,    <span class="param"><span class="n">count_mode</span> <span class="o">=</span> <span class="kc">'token'</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">Punctuations</span>(<span class="param"><span class="n">dataset</span><span class="muted">,</span></span><span class="param"><span class="n">count_mode</span><span class="o"> = </span><span class="kc">'token'</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Analyzes and visualizes the frequency distribution of punctuation usage in a given text dataset.
 

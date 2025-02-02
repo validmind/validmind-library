@@ -3,33 +3,32 @@ title: "[validmind](/reference/validmind.html).ModelsPerformanceComparison"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
 
 ## multiclass_roc_auc_score<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">multiclass_roc_auc_score</span>(
-    <span class="param"><span class="n">y_test</span></span>,    <span class="param"><span class="n">y_pred</span></span>,    <span class="param"><span class="n">average</span> <span class="o">=</span> <span class="kc">'macro'</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">multiclass_roc_auc_score</span>(<span class="param"><span class="n">y_test</span><span class="muted">,</span></span><span class="param"><span class="n">y_pred</span><span class="muted">,</span></span><span class="param"><span class="n">average</span><span class="o"> = </span><span class="kc">'macro'</span></span>)</span>
 
 :::
+
+<!-- function.qmd.jinja2 -->
 
 ## ModelsPerformanceComparison[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">ModelsPerformanceComparison</span>(
-    <span class="param"><span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>,    <span class="param"><span class="n">models</span><span class="p">:</span> <span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'list'}, 'slice': {'cls': 'ExprName', 'name': 'VMModel'}}</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">ModelsPerformanceComparison</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span><span class="muted">,</span></span><span class="param"><span class="n">models</span><span class="p">:</span><span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'list'}, 'slice': {'cls': 'ExprName', 'name': 'VMModel'}}</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Evaluates and compares the performance of multiple Machine Learning models using various metrics like accuracy, precision, recall, and F1 score.
 

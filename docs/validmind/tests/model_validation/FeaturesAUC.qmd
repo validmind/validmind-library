@@ -3,35 +3,36 @@ title: "[validmind](/reference/validmind.html).FeaturesAUC"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
 
 ## get_logger<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">get_logger</span>(
-    <span class="param"><span class="n">name</span> <span class="o">=</span> <span class="kc">'validmind'</span></span>,    <span class="param"><span class="n">log_level</span> <span class="o">=</span> <span class="kc">None</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">get_logger</span>(<span class="param"><span class="n">name</span><span class="o"> = </span><span class="kc">'validmind'</span><span class="muted">,</span></span><span class="param"><span class="n">log_level</span><span class="o"> = </span><span class="kc">None</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Get a logger for the given module name
 
+<!-- function.qmd.jinja2 -->
+
 ## FeaturesAUC[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">FeaturesAUC</span>(
-    <span class="param"><span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>,    <span class="param"><span class="n">fontsize</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="kc">12</span></span>,    <span class="param"><span class="n">figure_height</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="kc">500</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">FeaturesAUC</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span><span class="muted">,</span></span><span class="param"><span class="n">fontsize</span><span class="p">:</span><span class="n">int</span><span class="o"> = </span><span class="kc">12</span><span class="muted">,</span></span><span class="param"><span class="n">figure_height</span><span class="p">:</span><span class="n">int</span><span class="o"> = </span><span class="kc">500</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Evaluates the discriminatory power of each individual feature within a binary classification model by calculating the Area Under the Curve (AUC) for each feature separately.
 
@@ -59,13 +60,19 @@ For each feature, the metric treats the feature values as raw scores to compute 
 - The AUC values are calculated without considering the model's use of the features, which could lead to different interpretations of feature importance when considering the model holistically.
 - This metric is applicable only to binary classification tasks and cannot be directly extended to multiclass classification or regression without modifications.
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} SkipTestError
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class SkipTestError(BaseError):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">SkipTestError</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Useful error to throw when a test cannot be executed.
 

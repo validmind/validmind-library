@@ -3,20 +3,22 @@ title: "[validmind](/reference/validmind.html).WOEBinTable"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- function.qmd.jinja2 -->
 
 ## WOEBinTable[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">WOEBinTable</span>(
-    <span class="param"><span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>,    <span class="param"><span class="n">breaks_adj</span><span class="p">:</span> <span class="n">list</span> <span class="o">=</span> <span class="kc">None</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">WOEBinTable</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span><span class="muted">,</span></span><span class="param"><span class="n">breaks_adj</span><span class="p">:</span><span class="n">list</span><span class="o"> = </span><span class="kc">None</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Assesses the Weight of Evidence (WoE) and Information Value (IV) of each feature to evaluate its predictive power in a binary classification model.
 
@@ -44,13 +46,19 @@ The test uses the `scorecardpy.woebin` method to perform automatic binning of th
 - Potential difficulties if the dataset has many features, non-binnable features, or non-numeric features.
 - The metric does not help in distinguishing whether the observed predictive factor is due to data randomness or a true phenomenon.
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} SkipTestError
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class SkipTestError(BaseError):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">SkipTestError</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Useful error to throw when a test cannot be executed.
 

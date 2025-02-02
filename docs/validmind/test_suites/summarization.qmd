@@ -3,17 +3,26 @@ title: "[validmind](/reference/validmind.html).summarization"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- docstring.jinja2 -->
 
 Test suites for llm summarization models
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} SummarizationMetrics
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class SummarizationMetrics(TestSuite):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">SummarizationMetrics</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Test suite for Summarization metrics
 

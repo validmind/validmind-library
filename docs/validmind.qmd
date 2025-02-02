@@ -5,7 +5,10 @@ aliases:
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- docstring.jinja2 -->
 
 The ValidMind Library is a suite of developer tools and methods designed to automate the documentation and validation of your models. Designed to be model agnostic, the ValidMind Library provides all the standard functionality without requiring you to rewrite any functions as long as your model is built in Python.
 
@@ -38,22 +41,23 @@ After you have pasted the code snippet into your development source code and exe
 
 <!-- module.qmd.jinja2 - version number -->
 
-```python
-2.8.4
-```
+::: {.signature}
+
+<span class="name">2.8.4</span>
+
+:::
 
 ### get_test_suite<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">get_test_suite</span>(
-    <span class="param"><span class="n">test_suite_id</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">section</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">args</span> <span class="o">=</span> <span class="kc">()</span></span>,    <span class="param"><span class="n">kwargs</span> <span class="o">=</span> <span class="kc">{}</span></span>) <span class="p">-></span> <span class="return-annotation">TestSuite</span>:</span>
-</span>
+<span class="kw">def</span> <span class="name">get_test_suite</span>(<span class="param"><span class="n">test_suite_id</span><span class="p">:</span><span class="n">str</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">section</span><span class="p">:</span><span class="n">str</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">args</span><span class="o"> = </span><span class="kc">()</span><span class="muted">,</span></span><span class="param"><span class="n">kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-testsuite">TestSuite</a><span class="muted">:</span> </span></span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Gets a TestSuite object for the current project or a specific test suite This function provides an interface to retrieve the TestSuite instance for the current project or a specific TestSuite instance identified by test_suite_id. The project Test Suite will contain sections for every section in the project's documentation template and these Test Suite Sections will contain all the tests associated with that template section.
 
@@ -66,16 +70,15 @@ Gets a TestSuite object for the current project or a specific test suite This fu
 
 ### init<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">init</span>(
-    <span class="param"><span class="n">project</span><span class="p">:</span> <span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Optional'}, 'slice': {'cls': 'ExprName', 'name': 'str'}}</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">api_key</span><span class="p">:</span> <span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Optional'}, 'slice': {'cls': 'ExprName', 'name': 'str'}}</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">api_secret</span><span class="p">:</span> <span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Optional'}, 'slice': {'cls': 'ExprName', 'name': 'str'}}</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">api_host</span><span class="p">:</span> <span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Optional'}, 'slice': {'cls': 'ExprName', 'name': 'str'}}</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">model</span><span class="p">:</span> <span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Optional'}, 'slice': {'cls': 'ExprName', 'name': 'str'}}</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">monitoring</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="kc">False</span></span>,    <span class="param"><span class="n">generate_descriptions</span><span class="p">:</span> <span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Optional'}, 'slice': {'cls': 'ExprName', 'name': 'bool'}}</span> <span class="o">=</span> <span class="kc">None</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">init</span>(<span class="param"><span class="n">project</span><span class="p">:</span><span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Optional'}, 'slice': {'cls': 'ExprName', 'name': 'str'}}</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">api_key</span><span class="p">:</span><span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Optional'}, 'slice': {'cls': 'ExprName', 'name': 'str'}}</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">api_secret</span><span class="p">:</span><span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Optional'}, 'slice': {'cls': 'ExprName', 'name': 'str'}}</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">api_host</span><span class="p">:</span><span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Optional'}, 'slice': {'cls': 'ExprName', 'name': 'str'}}</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">model</span><span class="p">:</span><span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Optional'}, 'slice': {'cls': 'ExprName', 'name': 'str'}}</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">monitoring</span><span class="p">:</span><span class="n">bool</span><span class="o"> = </span><span class="kc">False</span><span class="muted">,</span></span><span class="param"><span class="n">generate_descriptions</span><span class="p">:</span><span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Optional'}, 'slice': {'cls': 'ExprName', 'name': 'bool'}}</span><span class="o"> = </span><span class="kc">None</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Initializes the API client instances and calls the /ping endpoint to ensure the provided credentials are valid and we can connect to the ValidMind API.
 
@@ -97,16 +100,15 @@ If the API key and secret are not provided, the client will attempt to retrieve 
 
 ### init_dataset<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">init_dataset</span>(
-    <span class="param"><span class="n">dataset</span></span>,    <span class="param"><span class="n">model</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">index</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">index_name</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">date_time_index</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="kc">False</span></span>,    <span class="param"><span class="n">columns</span><span class="p">:</span> <span class="n">list</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">text_column</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">target_column</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">feature_columns</span><span class="p">:</span> <span class="n">list</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">extra_columns</span><span class="p">:</span> <span class="n">dict</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">class_labels</span><span class="p">:</span> <span class="n">dict</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">type</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">input_id</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">__log</span> <span class="o">=</span> <span class="kc">True</span></span>) <span class="p">-></span> <span class="return-annotation">VMDataset</span>:</span>
-</span>
+<span class="kw">def</span> <span class="name">init_dataset</span>(<span class="param"><span class="n">dataset</span><span class="muted">,</span></span><span class="param"><span class="n">model</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">index</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">index_name</span><span class="p">:</span><span class="n">str</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">date_time_index</span><span class="p">:</span><span class="n">bool</span><span class="o"> = </span><span class="kc">False</span><span class="muted">,</span></span><span class="param"><span class="n">columns</span><span class="p">:</span><span class="n">list</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">text_column</span><span class="p">:</span><span class="n">str</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">target_column</span><span class="p">:</span><span class="n">str</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">feature_columns</span><span class="p">:</span><span class="n">list</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">extra_columns</span><span class="p">:</span><span class="n">dict</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">class_labels</span><span class="p">:</span><span class="n">dict</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">type</span><span class="p">:</span><span class="n">str</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">input_id</span><span class="p">:</span><span class="n">str</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">\_\_log</span><span class="o"> = </span><span class="kc">True</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-vmdataset">VMDataset</a><span class="muted">:</span> </span></span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Initializes a VM Dataset, which can then be passed to other functions that can perform additional analysis and tests on the data. This function also ensures we are reading a valid dataset type.
 
@@ -125,16 +127,15 @@ Returns: vm.vm.Dataset: A VM Dataset instance
 
 ### init_model<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">init_model</span>(
-    <span class="param"><span class="n">model</span><span class="p">:</span> <span class="n">object</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">input_id</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="kc">'model'</span></span>,    <span class="param"><span class="n">attributes</span><span class="p">:</span> <span class="n">dict</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">predict_fn</span><span class="p">:</span> <span class="n">callable</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">__log</span> <span class="o">=</span> <span class="kc">True</span></span>,    <span class="param"><span class="n">kwargs</span> <span class="o">=</span> <span class="kc">{}</span></span>) <span class="p">-></span> <span class="return-annotation">VMModel</span>:</span>
-</span>
+<span class="kw">def</span> <span class="name">init_model</span>(<span class="param"><span class="n">model</span><span class="p">:</span><span class="n">object</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">input_id</span><span class="p">:</span><span class="n">str</span><span class="o"> = </span><span class="kc">'model'</span><span class="muted">,</span></span><span class="param"><span class="n">attributes</span><span class="p">:</span><span class="n">dict</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">predict_fn</span><span class="p">:</span><span class="n">callable</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">\_\_log</span><span class="o"> = </span><span class="kc">True</span><span class="muted">,</span></span><span class="param"><span class="n">kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-vmmodel">VMModel</a><span class="muted">:</span> </span></span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Initializes a VM Model, which can then be passed to other functions that can perform additional analysis and tests on the data. This function also ensures we are creating a model supported libraries.
 
@@ -156,16 +157,15 @@ Initializes a VM Model, which can then be passed to other functions that can per
 
 ### init_r_model<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">init_r_model</span>(
-    <span class="param"><span class="n">model_path</span><span class="p">:</span> <span class="n">str</span></span>,    <span class="param"><span class="n">input_id</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="kc">'model'</span></span>) <span class="p">-></span> <span class="return-annotation">VMModel</span>:</span>
-</span>
+<span class="kw">def</span> <span class="name">init_r_model</span>(<span class="param"><span class="n">model_path</span><span class="p">:</span><span class="n">str</span><span class="muted">,</span></span><span class="param"><span class="n">input_id</span><span class="p">:</span><span class="n">str</span><span class="o"> = </span><span class="kc">'model'</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-vmmodel">VMModel</a><span class="muted">:</span> </span></span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Initializes a VM Model for an R model R models must be saved to disk and the filetype depends on the model type... Currently we support the following model types:
 
@@ -187,16 +187,15 @@ LogisticRegression and LinearRegression models are converted to sklearn models b
 
 ### log_metric<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">log_metric</span>(
-    <span class="param"><span class="n">key</span><span class="p">:</span> <span class="n">str</span></span>,    <span class="param"><span class="n">value</span><span class="p">:</span> <span class="n">float</span></span>,    <span class="param"><span class="n">inputs</span><span class="p">:</span> <span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Optional'}, 'slice': {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'str'}}}</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">params</span><span class="p">:</span> <span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Optional'}, 'slice': {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Dict'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'str'}, {'cls': 'ExprName', 'name': 'Any'}], 'implicit': True}}}</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">recorded_at</span><span class="p">:</span> <span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Optional'}, 'slice': {'cls': 'ExprName', 'name': 'str'}}</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">thresholds</span><span class="p">:</span> <span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Optional'}, 'slice': {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Dict'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'str'}, {'cls': 'ExprName', 'name': 'Any'}], 'implicit': True}}}</span> <span class="o">=</span> <span class="kc">None</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">log_metric</span>(<span class="param"><span class="n">key</span><span class="p">:</span><span class="n">str</span><span class="muted">,</span></span><span class="param"><span class="n">value</span><span class="p">:</span><span class="n">float</span><span class="muted">,</span></span><span class="param"><span class="n">inputs</span><span class="p">:</span><span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Optional'}, 'slice': {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'str'}}}</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">params</span><span class="p">:</span><span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Optional'}, 'slice': {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Dict'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'str'}, {'cls': 'ExprName', 'name': 'Any'}], 'implicit': True}}}</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">recorded_at</span><span class="p">:</span><span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Optional'}, 'slice': {'cls': 'ExprName', 'name': 'str'}}</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">thresholds</span><span class="p">:</span><span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Optional'}, 'slice': {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Dict'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'str'}, {'cls': 'ExprName', 'name': 'Any'}], 'implicit': True}}}</span><span class="o"> = </span><span class="kc">None</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Logs a unit metric Unit metrics are key-value pairs where the key is the metric name and the value is a scalar (int or float). These key-value pairs are associated with the currently selected model (inventory model in the ValidMind Platform) and keys can be logged to over time to create a history of the metric. On the ValidMind Platform, these metrics will be used to create plots/visualizations for documentation and dashboards etc.
 
@@ -211,15 +210,15 @@ Logs a unit metric Unit metrics are key-value pairs where the key is the metric 
 
 ### preview_template<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">preview_template</span>(<span class="param"><span class="n"></span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">preview_template</span>()</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Preview the documentation template for the current project This function will display the documentation template for the current project. If the project has not been initialized, then an error will be raised.
 
@@ -229,44 +228,43 @@ Preview the documentation template for the current project This function will di
 
 ### print_env<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">print_env</span>(<span class="param"><span class="n"></span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">print_env</span>()</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Prints a log of the running environment for debugging. Output includes: ValidMind Library version, operating system details, installed dependencies, and the ISO 8601 timestamp at log creation.
 
 ### reload<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">reload</span>(<span class="param"><span class="n"></span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">reload</span>()</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Reconnect to the ValidMind API and reload the project configuration
 
 ### run_documentation_tests<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">run_documentation_tests</span>(
-    <span class="param"><span class="n">section</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">send</span> <span class="o">=</span> <span class="kc">True</span></span>,    <span class="param"><span class="n">fail_fast</span> <span class="o">=</span> <span class="kc">False</span></span>,    <span class="param"><span class="n">inputs</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">config</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">kwargs</span> <span class="o">=</span> <span class="kc">{}</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">run_documentation_tests</span>(<span class="param"><span class="n">section</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">send</span><span class="o"> = </span><span class="kc">True</span><span class="muted">,</span></span><span class="param"><span class="n">fail_fast</span><span class="o"> = </span><span class="kc">False</span><span class="muted">,</span></span><span class="param"><span class="n">inputs</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">config</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Collect and run all the tests associated with a template This function will analyze the current project's documentation template and collect all the tests associated with it into a test suite. It will then run the test suite, log the results to the ValidMind API, and display them to the user.
 
@@ -289,16 +287,15 @@ Collect and run all the tests associated with a template This function will anal
 
 ### run_test_suite<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">run_test_suite</span>(
-    <span class="param"><span class="n">test_suite_id</span></span>,    <span class="param"><span class="n">send</span> <span class="o">=</span> <span class="kc">True</span></span>,    <span class="param"><span class="n">fail_fast</span> <span class="o">=</span> <span class="kc">False</span></span>,    <span class="param"><span class="n">config</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">inputs</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">kwargs</span> <span class="o">=</span> <span class="kc">{}</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">run_test_suite</span>(<span class="param"><span class="n">test_suite_id</span><span class="muted">,</span></span><span class="param"><span class="n">send</span><span class="o"> = </span><span class="kc">True</span><span class="muted">,</span></span><span class="param"><span class="n">fail_fast</span><span class="o"> = </span><span class="kc">False</span><span class="muted">,</span></span><span class="param"><span class="n">config</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">inputs</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 High Level function for running a test suite This function provides a high level interface for running a test suite. A test suite is a collection of tests. This function will automatically find the correct test suite class based on the test_suite_id, initialize each of the tests, and run them.
 
@@ -321,15 +318,15 @@ High Level function for running a test suite This function provides a high level
 
 ### tags<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">tags</span>(<span class="param"><span class="n">tags</span> <span class="o">=</span> <span class="kc">()</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">tags</span>(<span class="param"><span class="n">tags</span><span class="o">=</span><span class="kc">()</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Decorator for specifying tags for a test.
 
@@ -339,15 +336,15 @@ Decorator for specifying tags for a test.
 
 ### tasks<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">tasks</span>(<span class="param"><span class="n">tasks</span> <span class="o">=</span> <span class="kc">()</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">tasks</span>(<span class="param"><span class="n">tasks</span><span class="o">=</span><span class="kc">()</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Decorator for specifying the task types that a test is designed for.
 
@@ -357,15 +354,15 @@ Decorator for specifying the task types that a test is designed for.
 
 ### test<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">test</span>(<span class="param"><span class="n">func_or_id</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">test</span>(<span class="param"><span class="n">func_or_id</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Decorator for creating and registering custom tests This decorator registers the function it wraps as a test function within ValidMind under the provided ID. Once decorated, the function can be run using the `validmind.tests.run_test` function.
 
@@ -394,26 +391,31 @@ The function may also include a docstring. This docstring will be used and logge
 
 ### <span class='muted'>class</span> RawData
 
-<!-- module.qmd.jinja2 - class definition -->
+<!-- module.qmd.jinja2 -->
 
-```python
-class RawData():
-```
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">RawData</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Holds raw data for a test result
 
 #### RawData<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">__init__</span>(
-    <span class="param"><span class="n">self</span></span>,    <span class="param"><span class="n">log</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="kc">False</span></span>,    <span class="param"><span class="n">kwargs</span> <span class="o">=</span> <span class="kc">{}</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">__init__</span>(<span class="param"><span class="n">self</span><span class="muted">,</span></span><span class="param"><span class="n">log</span><span class="p">:</span><span class="n">bool</span><span class="o"> = </span><span class="kc">False</span><span class="muted">,</span></span><span class="param"><span class="n">kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Create a new RawData object
 
@@ -424,27 +426,24 @@ Create a new RawData object
 
 #### inspect<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">inspect</span>(
-    <span class="param"><span class="n">self</span></span>,    <span class="param"><span class="n">show</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="kc">True</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">inspect</span>(<span class="param"><span class="n">self</span><span class="muted">,</span></span><span class="param"><span class="n">show</span><span class="p">:</span><span class="n">bool</span><span class="o"> = </span><span class="kc">True</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Inspect the raw data
 
 #### serialize<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">serialize</span>(<span class="param"><span class="n">self</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">serialize</span>(<span class="param"><span class="n">self</span></span>)</span>
 
 :::

@@ -3,35 +3,36 @@ title: "[validmind](/reference/validmind.html).OverfitDiagnosis"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
 
 ## get_logger<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">get_logger</span>(
-    <span class="param"><span class="n">name</span> <span class="o">=</span> <span class="kc">'validmind'</span></span>,    <span class="param"><span class="n">log_level</span> <span class="o">=</span> <span class="kc">None</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">get_logger</span>(<span class="param"><span class="n">name</span><span class="o"> = </span><span class="kc">'validmind'</span><span class="muted">,</span></span><span class="param"><span class="n">log_level</span><span class="o"> = </span><span class="kc">None</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Get a logger for the given module name
 
+<!-- function.qmd.jinja2 -->
+
 ## OverfitDiagnosis[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">OverfitDiagnosis</span>(
-    <span class="param"><span class="n">model</span><span class="p">:</span> <span class="n">VMModel</span></span>,    <span class="param"><span class="n">datasets</span><span class="p">:</span> <span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'VMDataset'}}</span></span>,    <span class="param"><span class="n">metric</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">cut_off_threshold</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="kc">{'cls': 'ExprName', 'name': 'DEFAULT_THRESHOLD'}</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">OverfitDiagnosis</span>(<span class="param"><span class="n">model</span><span class="p">:</span><span class="n">VMModel</span><span class="muted">,</span></span><span class="param"><span class="n">datasets</span><span class="p">:</span><span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'VMDataset'}}</span><span class="muted">,</span></span><span class="param"><span class="n">metric</span><span class="p">:</span><span class="n">str</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">cut_off_threshold</span><span class="p">:</span><span class="n">float</span><span class="o"> = </span><span class="kc">{'cls': 'ExprName', 'name': 'DEFAULT_THRESHOLD'}</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Assesses potential overfitting in a model's predictions, identifying regions where performance between training and testing sets deviates significantly.
 

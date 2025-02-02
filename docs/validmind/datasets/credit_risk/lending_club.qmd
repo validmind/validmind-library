@@ -3,45 +3,46 @@ title: "[validmind](/reference/validmind.html).lending_club"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- function.qmd.jinja2 -->
 
 ## compute_scores[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">compute_scores</span>(<span class="param"><span class="n">probabilities</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">compute_scores</span>(<span class="param"><span class="n">probabilities</span></span>)</span>
 
 :::
+
+<!-- function.qmd.jinja2 -->
 
 ## feature_engineering[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">feature_engineering</span>(
-    <span class="param"><span class="n">df</span></span>,    <span class="param"><span class="n">verbose</span> <span class="o">=</span> <span class="kc">True</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">feature_engineering</span>(<span class="param"><span class="n">df</span><span class="muted">,</span></span><span class="param"><span class="n">verbose</span><span class="o"> = </span><span class="kc">True</span></span>)</span>
 
 :::
+
+<!-- function.qmd.jinja2 -->
 
 ## get_demo_test_config[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">get_demo_test_config</span>(
-    <span class="param"><span class="n">x_test</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">y_test</span> <span class="o">=</span> <span class="kc">None</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">get_demo_test_config</span>(<span class="param"><span class="n">x_test</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">y_test</span><span class="o"> = </span><span class="kc">None</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Get demo test configuration.
 
@@ -54,82 +55,83 @@ Get demo test configuration.
 
 - Test configuration dictionary
 
+<!-- function.qmd.jinja2 -->
+
 ## init_vm_objects[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">init_vm_objects</span>(<span class="param"><span class="n">scorecard</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">init_vm_objects</span>(<span class="param"><span class="n">scorecard</span></span>)</span>
 
 :::
+
+<!-- function.qmd.jinja2 -->
 
 ## load_data[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">load_data</span>(
-    <span class="param"><span class="n">source</span> <span class="o">=</span> <span class="kc">'online'</span></span>,    <span class="param"><span class="n">verbose</span> <span class="o">=</span> <span class="kc">True</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">load_data</span>(<span class="param"><span class="n">source</span><span class="o"> = </span><span class="kc">'online'</span><span class="muted">,</span></span><span class="param"><span class="n">verbose</span><span class="o"> = </span><span class="kc">True</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Load data from either an online source or offline files, automatically dropping specified columns for offline data. :param source: 'online' for online data, 'offline' for offline files. Defaults to 'online'. :return: DataFrame containing the loaded data.
 
+<!-- function.qmd.jinja2 -->
+
 ## load_scorecard[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">load_scorecard</span>(<span class="param"><span class="n"></span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">load_scorecard</span>()</span>
 
 :::
+
+<!-- function.qmd.jinja2 -->
 
 ## load_test_config[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">load_test_config</span>(<span class="param"><span class="n">scorecard</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">load_test_config</span>(<span class="param"><span class="n">scorecard</span></span>)</span>
 
 :::
+
+<!-- function.qmd.jinja2 -->
 
 ## preprocess[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">preprocess</span>(
-    <span class="param"><span class="n">df</span></span>,    <span class="param"><span class="n">verbose</span> <span class="o">=</span> <span class="kc">True</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">preprocess</span>(<span class="param"><span class="n">df</span><span class="muted">,</span></span><span class="param"><span class="n">verbose</span><span class="o"> = </span><span class="kc">True</span></span>)</span>
 
 :::
+
+<!-- function.qmd.jinja2 -->
 
 ## split[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">split</span>(
-    <span class="param"><span class="n">df</span></span>,    <span class="param"><span class="n">validation_size</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">test_size</span> <span class="o">=</span> <span class="kc">0.2</span></span>,    <span class="param"><span class="n">add_constant</span> <span class="o">=</span> <span class="kc">False</span></span>,    <span class="param"><span class="n">verbose</span> <span class="o">=</span> <span class="kc">True</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">split</span>(<span class="param"><span class="n">df</span><span class="muted">,</span></span><span class="param"><span class="n">validation_size</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">test_size</span><span class="o"> = </span><span class="kc">0.2</span><span class="muted">,</span></span><span class="param"><span class="n">add_constant</span><span class="o"> = </span><span class="kc">False</span><span class="muted">,</span></span><span class="param"><span class="n">verbose</span><span class="o"> = </span><span class="kc">True</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Split dataset into train, validation (optional), and test sets.
 
@@ -144,15 +146,14 @@ Split dataset into train, validation (optional), and test sets.
 
 - If validation_size is None: train_df, test_df If validation_size is float: train_df, validation_df, test_df
 
+<!-- function.qmd.jinja2 -->
+
 ## woe_encoding[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">woe_encoding</span>(
-    <span class="param"><span class="n">df</span></span>,    <span class="param"><span class="n">verbose</span> <span class="o">=</span> <span class="kc">True</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">woe_encoding</span>(<span class="param"><span class="n">df</span><span class="muted">,</span></span><span class="param"><span class="n">verbose</span><span class="o"> = </span><span class="kc">True</span></span>)</span>
 
 :::

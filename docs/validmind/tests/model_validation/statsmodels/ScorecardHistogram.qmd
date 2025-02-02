@@ -3,20 +3,22 @@ title: "[validmind](/reference/validmind.html).ScorecardHistogram"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- function.qmd.jinja2 -->
 
 ## ScorecardHistogram[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">ScorecardHistogram</span>(
-    <span class="param"><span class="n">dataset</span></span>,    <span class="param"><span class="n">title</span> <span class="o">=</span> <span class="kc">'Histogram of Scores'</span></span>,    <span class="param"><span class="n">score_column</span> <span class="o">=</span> <span class="kc">'score'</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">ScorecardHistogram</span>(<span class="param"><span class="n">dataset</span><span class="muted">,</span></span><span class="param"><span class="n">title</span><span class="o"> = </span><span class="kc">'Histogram of Scores'</span><span class="muted">,</span></span><span class="param"><span class="n">score_column</span><span class="o"> = </span><span class="kc">'score'</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 The Scorecard Histogram test evaluates the distribution of credit scores between default and non-default instances, providing critical insights into the performance and generalizability of credit-risk models.
 

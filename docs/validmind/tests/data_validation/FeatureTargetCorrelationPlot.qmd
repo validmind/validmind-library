@@ -3,20 +3,22 @@ title: "[validmind](/reference/validmind.html).FeatureTargetCorrelationPlot"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- function.qmd.jinja2 -->
 
 ## FeatureTargetCorrelationPlot[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">FeatureTargetCorrelationPlot</span>(
-    <span class="param"><span class="n">dataset</span></span>,    <span class="param"><span class="n">fig_height</span> <span class="o">=</span> <span class="kc">600</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">FeatureTargetCorrelationPlot</span>(<span class="param"><span class="n">dataset</span><span class="muted">,</span></span><span class="param"><span class="n">fig_height</span><span class="o"> = </span><span class="kc">600</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Visualizes the correlation between input features and the model's target output in a color-coded horizontal bar plot.
 

@@ -1,4 +1,5 @@
 {% macro format_docstring(docstring) %}
+<!-- docstring.jinja2 -->
 {% if docstring is mapping %}
     {%- if docstring.parsed is defined and docstring.parsed is not none -%}
         {# Try to use docstring-parser output #}

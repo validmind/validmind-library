@@ -3,20 +3,22 @@ title: "[validmind](/reference/validmind.html).RegressionResidualsPlot"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- function.qmd.jinja2 -->
 
 ## RegressionResidualsPlot[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">RegressionResidualsPlot</span>(
-    <span class="param"><span class="n">model</span><span class="p">:</span> <span class="n">VMModel</span></span>,    <span class="param"><span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>,    <span class="param"><span class="n">bin_size</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="kc">0.1</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">RegressionResidualsPlot</span>(<span class="param"><span class="n">model</span><span class="p">:</span><span class="n">VMModel</span><span class="muted">,</span></span><span class="param"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span><span class="muted">,</span></span><span class="param"><span class="n">bin_size</span><span class="p">:</span><span class="n">float</span><span class="o"> = </span><span class="kc">0.1</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Evaluates regression model performance using residual distribution and actual vs. predicted plots.
 

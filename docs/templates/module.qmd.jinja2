@@ -11,6 +11,7 @@ aliases:
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
 
 {% if module.docstring %}
@@ -24,9 +25,11 @@ toc-expand: 4
 ### &#95;&#95;version__
 
 <!-- module.qmd.jinja2 - version number -->
-```python
-{{ module.members.__version__.value | replace("'", "") if module.members.__version__.value else module.members.__version__.members.__version__.value | replace("'", "") }}
-```
+::: {.signature}
+
+<span class="name">{{ module.members.__version__.value | replace("'", "") if module.members.__version__.value else module.members.__version__.members.__version__.value | replace("'", "") }}</span>
+
+:::
 {% endif %}
 
 {# Process root-level aliases #}
@@ -105,10 +108,10 @@ toc-expand: 4
 
 ### <span class='muted'>class</span> {{ member.name }}
 
-<!-- module.qmd.jinja2 - class definition -->
-```python
-class {{ member.name }}():
-```
+<!-- module.qmd.jinja2 -->
+
+{{ signatures.render_signature(target) }}
+
 
 {% if target.docstring %}
 {{ doc.format_docstring(target.docstring) }}

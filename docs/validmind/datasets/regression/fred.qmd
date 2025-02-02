@@ -3,92 +3,94 @@ title: "[validmind](/reference/validmind.html).fred"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- function.qmd.jinja2 -->
 
 ## load_all_data[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">load_all_data</span>(<span class="param"><span class="n"></span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">load_all_data</span>()</span>
 
 :::
+
+<!-- function.qmd.jinja2 -->
 
 ## load_data[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">load_data</span>(<span class="param"><span class="n"></span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">load_data</span>()</span>
 
 :::
+
+<!-- function.qmd.jinja2 -->
 
 ## load_model[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">load_model</span>(<span class="param"><span class="n">model_name</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">load_model</span>(<span class="param"><span class="n">model_name</span></span>)</span>
 
 :::
+
+<!-- function.qmd.jinja2 -->
 
 ## load_processed_data[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">load_processed_data</span>(<span class="param"><span class="n"></span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">load_processed_data</span>()</span>
 
 :::
+
+<!-- function.qmd.jinja2 -->
 
 ## load_test_dataset[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">load_test_dataset</span>(<span class="param"><span class="n">model_name</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">load_test_dataset</span>(<span class="param"><span class="n">model_name</span></span>)</span>
 
 :::
+
+<!-- function.qmd.jinja2 -->
 
 ## load_train_dataset[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">load_train_dataset</span>(<span class="param"><span class="n">model_path</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">load_train_dataset</span>(<span class="param"><span class="n">model_path</span></span>)</span>
 
 :::
+
+<!-- function.qmd.jinja2 -->
 
 ## preprocess[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">preprocess</span>(
-    <span class="param"><span class="n">df</span></span>,    <span class="param"><span class="n">split_option</span> <span class="o">=</span> <span class="kc">'train_test_val'</span></span>,    <span class="param"><span class="n">train_size</span> <span class="o">=</span> <span class="kc">0.6</span></span>,    <span class="param"><span class="n">test_size</span> <span class="o">=</span> <span class="kc">0.2</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">preprocess</span>(<span class="param"><span class="n">df</span><span class="muted">,</span></span><span class="param"><span class="n">split_option</span><span class="o"> = </span><span class="kc">'train_test_val'</span><span class="muted">,</span></span><span class="param"><span class="n">train_size</span><span class="o"> = </span><span class="kc">0.6</span><span class="muted">,</span></span><span class="param"><span class="n">test_size</span><span class="o"> = </span><span class="kc">0.2</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Split a time series DataFrame into train, validation, and test sets.
 
@@ -103,15 +105,14 @@ Split a time series DataFrame into train, validation, and test sets.
 
 - train_df (pandas.DataFrame): The training set. validation_df (pandas.DataFrame): The validation set (only returned if split_option is 'train_test_val'). test_df (pandas.DataFrame): The test set.
 
+<!-- function.qmd.jinja2 -->
+
 ## transform[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">transform</span>(
-    <span class="param"><span class="n">df</span></span>,    <span class="param"><span class="n">transform_func</span> <span class="o">=</span> <span class="kc">'diff'</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">transform</span>(<span class="param"><span class="n">df</span><span class="muted">,</span></span><span class="param"><span class="n">transform_func</span><span class="o"> = </span><span class="kc">'diff'</span></span>)</span>
 
 :::

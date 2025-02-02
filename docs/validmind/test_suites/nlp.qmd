@@ -3,65 +3,98 @@ title: "[validmind](/reference/validmind.html).nlp"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- docstring.jinja2 -->
 
 Test suites for NLP models
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} NLPClassifierFullSuite
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class NLPClassifierFullSuite(TestSuite):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">NLPClassifierFullSuite</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Full test suite for NLP classification models.
 
 **Inherited members**
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} ClassifierDiagnosis
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class ClassifierDiagnosis(TestSuite):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">ClassifierDiagnosis</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Test suite for sklearn classifier model diagnosis tests
 
 **Inherited members**
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} ClassifierMetrics
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class ClassifierMetrics(TestSuite):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">ClassifierMetrics</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Test suite for sklearn classifier metrics
 
 **Inherited members**
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} ClassifierPerformance
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class ClassifierPerformance(TestSuite):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">ClassifierPerformance</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Test suite for sklearn classifier models
 
 **Inherited members**
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} TextDataQuality
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class TextDataQuality(TestSuite):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">TextDataQuality</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Test suite for data quality on text data
 

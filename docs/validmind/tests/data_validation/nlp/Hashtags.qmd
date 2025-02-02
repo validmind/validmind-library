@@ -3,20 +3,22 @@ title: "[validmind](/reference/validmind.html).Hashtags"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- function.qmd.jinja2 -->
 
 ## Hashtags[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">Hashtags</span>(
-    <span class="param"><span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>,    <span class="param"><span class="n">top_hashtags</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="kc">25</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">Hashtags</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span><span class="muted">,</span></span><span class="param"><span class="n">top_hashtags</span><span class="p">:</span><span class="n">int</span><span class="o"> = </span><span class="kc">25</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Assesses hashtag frequency in a text column, highlighting usage trends and potential dataset bias or spam.
 
@@ -47,13 +49,19 @@ The test implements a regular expression (regex) to extract all hashtags from th
 - Does not account for typographical errors, variations, or synonyms in hashtags.
 - Does not provide context or sentiment associated with the hashtags, so the information provided may have limited utility on its own.
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} SkipTestError
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class SkipTestError(BaseError):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">SkipTestError</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Useful error to throw when a test cannot be executed.
 

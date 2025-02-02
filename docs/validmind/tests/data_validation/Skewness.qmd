@@ -3,20 +3,22 @@ title: "[validmind](/reference/validmind.html).Skewness"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- function.qmd.jinja2 -->
 
 ## Skewness[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">Skewness</span>(
-    <span class="param"><span class="n">dataset</span></span>,    <span class="param"><span class="n">max_threshold</span> <span class="o">=</span> <span class="kc">1</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">Skewness</span>(<span class="param"><span class="n">dataset</span><span class="muted">,</span></span><span class="param"><span class="n">max_threshold</span><span class="o"> = </span><span class="kc">1</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Evaluates the skewness of numerical data in a dataset to check against a defined threshold, aiming to ensure data quality and optimize model performance.
 

@@ -3,20 +3,22 @@ title: "[validmind](/reference/validmind.html).DurbinWatsonTest"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- function.qmd.jinja2 -->
 
 ## DurbinWatsonTest[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">DurbinWatsonTest</span>(
-    <span class="param"><span class="n">dataset</span></span>,    <span class="param"><span class="n">model</span></span>,    <span class="param"><span class="n">threshold</span> <span class="o">=</span> <span class="kc">{'cls': 'ExprList', 'elements': ['1.5', '2.5']}</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">DurbinWatsonTest</span>(<span class="param"><span class="n">dataset</span><span class="muted">,</span></span><span class="param"><span class="n">model</span><span class="muted">,</span></span><span class="param"><span class="n">threshold</span><span class="o"> = </span><span class="kc">{'cls': 'ExprList', 'elements': ['1.5', '2.5']}</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Assesses autocorrelation in time series data features using the Durbin-Watson statistic.
 

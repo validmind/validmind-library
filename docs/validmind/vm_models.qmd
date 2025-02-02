@@ -3,94 +3,114 @@ title: "[validmind](/reference/validmind.html).vm_models"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- docstring.jinja2 -->
 
 Models entrypoint
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} Figure
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class Figure():
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">Figure</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Figure objects track the schema supported by the ValidMind API
 
 ### [serialize[()]{.muted}](#serialize)
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">serialize</span>(<span class="param"><span class="n">self</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">serialize</span>(<span class="param"><span class="n">self</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Serializes the Figure to a dictionary so it can be sent to the API
 
 ### [serialize_files[()]{.muted}](#serialize_files)
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">serialize_files</span>(<span class="param"><span class="n">self</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">serialize_files</span>(<span class="param"><span class="n">self</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Creates a `requests`-compatible files object to be sent to the API
 
 ### [to_widget[()]{.muted}](#to_widget)
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">to_widget</span>(<span class="param"><span class="n">self</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">to_widget</span>(<span class="param"><span class="n">self</span></span>)</span>
 
 :::
 
+<!-- docstring.jinja2 -->
+
 Returns the ipywidget compatible representation of the figure. Ideally we would render images as-is, but Plotly FigureWidgets don't work well on Google Colab when they are combined with ipywidgets.
+
+<!-- class.qmd.jinja2 -->
 
 ## [class]{.muted} ModelAttributes
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class ModelAttributes():
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">ModelAttributes</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Model attributes definition
 
 ### [from_dict[()]{.muted}](#from_dict)
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">from_dict</span>(
-    <span class="param"><span class="n">cls</span></span>,    <span class="param"><span class="n">data</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">from_dict</span>(<span class="param"><span class="n">cls</span><span class="muted">,</span></span><span class="param"><span class="n">data</span></span>)</span>
 
 :::
 
+<!-- docstring.jinja2 -->
+
 Creates a ModelAttributes instance from a dictionary
+
+<!-- class.qmd.jinja2 -->
 
 ## [class]{.muted} TestSuite
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class TestSuite():
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">TestSuite</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Base class for test suites. Test suites are used to define a grouping of tests that can be run as a suite against datasets and models. Test Suites can be defined by inheriting from this base class and defining the list of tests as a class variable.
 
@@ -98,15 +118,15 @@ Tests can be a flat list of strings or may be nested into sections by using a di
 
 ### [get_default_config[()]{.muted}](#get_default_config)
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">get_default_config</span>(<span class="param"><span class="n">self</span></span>) <span class="p">-></span> <span class="return-annotation">dict</span>:</span>
-</span>
+<span class="kw">def</span> <span class="name">get_default_config</span>(<span class="param"><span class="n">self</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-dict">dict</a><span class="muted">:</span> </span></span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Returns the default configuration for the test suite Each test in a test suite can accept parameters and those parameters can have default values. Both the parameters and their defaults are set in the test class and a config object can be passed to the test suite's run method to override the defaults. This function returns a dictionary containing the parameters and their default values for every test to allow users to view and set values
 
@@ -116,68 +136,73 @@ Returns the default configuration for the test suite Each test in a test suite c
 
 ### [get_tests[()]{.muted}](#get_tests)
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">get_tests</span>(<span class="param"><span class="n">self</span></span>) <span class="p">-></span> <span class="return-annotation">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'str'}}</span>:</span>
-</span>
+<span class="kw">def</span> <span class="name">get_tests</span>(<span class="param"><span class="n">self</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-{'cls': 'exprsubscript', 'left': {'cls': 'exprname', 'name': 'list'}, 'slice': {'cls': 'exprname', 'name': 'str'}}">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'str'}}</a><span class="muted">:</span> </span></span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Get all test suite test objects from all sections
 
 ### [num_tests[()]{.muted}](#num_tests)
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">num_tests</span>(<span class="param"><span class="n">self</span></span>) <span class="p">-></span> <span class="return-annotation">int</span>:</span>
-</span>
+<span class="kw">def</span> <span class="name">num_tests</span>(<span class="param"><span class="n">self</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-int">int</a><span class="muted">:</span> </span></span>
 
 :::
 
+<!-- docstring.jinja2 -->
+
 Returns the total number of tests in the test suite
+
+<!-- class.qmd.jinja2 -->
 
 ## [class]{.muted} TestSuiteRunner
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class TestSuiteRunner():
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">TestSuiteRunner</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Runs a test suite
 
 ### [log_results[()]{.muted}](#log_results)
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">log_results</span>(<span class="param"><span class="n">self</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">log_results</span>(<span class="param"><span class="n">self</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Logs the results of the test suite to ValidMind This method will be called after the test suite has been run and all results have been collected. This method will log the results to ValidMind.
 
 ### [run[()]{.muted}](#run)
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">run</span>(
-    <span class="param"><span class="n">self</span></span>,    <span class="param"><span class="n">send</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="kc">True</span></span>,    <span class="param"><span class="n">fail_fast</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="kc">False</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">run</span>(<span class="param"><span class="n">self</span><span class="muted">,</span></span><span class="param"><span class="n">send</span><span class="p">:</span><span class="n">bool</span><span class="o"> = </span><span class="kc">True</span><span class="muted">,</span></span><span class="param"><span class="n">fail_fast</span><span class="p">:</span><span class="n">bool</span><span class="o"> = </span><span class="kc">False</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Runs the test suite, renders the summary and sends the results to ValidMind
 
@@ -188,24 +213,27 @@ Runs the test suite, renders the summary and sends the results to ValidMind
 
 ### [summarize[()]{.muted}](#summarize)
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">summarize</span>(
-    <span class="param"><span class="n">self</span></span>,    <span class="param"><span class="n">show_link</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="kc">True</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">summarize</span>(<span class="param"><span class="n">self</span><span class="muted">,</span></span><span class="param"><span class="n">show_link</span><span class="p">:</span><span class="n">bool</span><span class="o"> = </span><span class="kc">True</span></span>)</span>
 
 :::
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} VMDataset
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class VMDataset(VMInput):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">VMDataset</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Base class for VM datasets Child classes should be used to support new dataset types (tensor, polars etc) by converting the user's dataset into a numpy array collecting metadata like column names and then call this (parent) class `__init__` method.
 
@@ -230,16 +258,15 @@ This way we can support multiple dataset types but under the hood we only need t
 
 ### [add_extra_column[()]{.muted}](#add_extra_column)
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">add_extra_column</span>(
-    <span class="param"><span class="n">self</span></span>,    <span class="param"><span class="n">column_name</span></span>,    <span class="param"><span class="n">column_values</span> <span class="o">=</span> <span class="kc">None</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">add_extra_column</span>(<span class="param"><span class="n">self</span><span class="muted">,</span></span><span class="param"><span class="n">column_name</span><span class="muted">,</span></span><span class="param"><span class="n">column_values</span><span class="o"> = </span><span class="kc">None</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Adds an extra column to the dataset without modifying the dataset `features` and `target` columns.
 
@@ -250,16 +277,15 @@ Adds an extra column to the dataset without modifying the dataset `features` and
 
 ### [assign_predictions[()]{.muted}](#assign_predictions)
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">assign_predictions</span>(
-    <span class="param"><span class="n">self</span></span>,    <span class="param"><span class="n">model</span><span class="p">:</span> <span class="n">VMModel</span></span>,    <span class="param"><span class="n">prediction_column</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">prediction_values</span><span class="p">:</span> <span class="n">list</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">probability_column</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">probability_values</span><span class="p">:</span> <span class="n">list</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">prediction_probabilities</span><span class="p">:</span> <span class="n">list</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">kwargs</span> <span class="o">=</span> <span class="kc">{}</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">assign_predictions</span>(<span class="param"><span class="n">self</span><span class="muted">,</span></span><span class="param"><span class="n">model</span><span class="p">:</span><span class="n">VMModel</span><span class="muted">,</span></span><span class="param"><span class="n">prediction_column</span><span class="p">:</span><span class="n">str</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">prediction_values</span><span class="p">:</span><span class="n">list</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">probability_column</span><span class="p">:</span><span class="n">str</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">probability_values</span><span class="p">:</span><span class="n">list</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">prediction_probabilities</span><span class="p">:</span><span class="n">list</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Assign predictions and probabilities to the dataset.
 
@@ -275,60 +301,57 @@ Assign predictions and probabilities to the dataset.
 
 ### [prediction_column[()]{.muted}](#prediction_column)
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">prediction_column</span>(
-    <span class="param"><span class="n">self</span></span>,    <span class="param"><span class="n">model</span><span class="p">:</span> <span class="n">VMModel</span></span>,    <span class="param"><span class="n">column_name</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="kc">None</span></span>) <span class="p">-></span> <span class="return-annotation">str</span>:</span>
-</span>
+<span class="kw">def</span> <span class="name">prediction_column</span>(<span class="param"><span class="n">self</span><span class="muted">,</span></span><span class="param"><span class="n">model</span><span class="p">:</span><span class="n">VMModel</span><span class="muted">,</span></span><span class="param"><span class="n">column_name</span><span class="p">:</span><span class="n">str</span><span class="o"> = </span><span class="kc">None</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-str">str</a><span class="muted">:</span> </span></span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Get or set the prediction column for a model.
 
 ### [probability_column[()]{.muted}](#probability_column)
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">probability_column</span>(
-    <span class="param"><span class="n">self</span></span>,    <span class="param"><span class="n">model</span><span class="p">:</span> <span class="n">VMModel</span></span>,    <span class="param"><span class="n">column_name</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="kc">None</span></span>) <span class="p">-></span> <span class="return-annotation">str</span>:</span>
-</span>
+<span class="kw">def</span> <span class="name">probability_column</span>(<span class="param"><span class="n">self</span><span class="muted">,</span></span><span class="param"><span class="n">model</span><span class="p">:</span><span class="n">VMModel</span><span class="muted">,</span></span><span class="param"><span class="n">column_name</span><span class="p">:</span><span class="n">str</span><span class="o"> = </span><span class="kc">None</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-str">str</a><span class="muted">:</span> </span></span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Get or set the probability column for a model.
 
 ### [target_classes[()]{.muted}](#target_classes)
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">target_classes</span>(<span class="param"><span class="n">self</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">target_classes</span>(<span class="param"><span class="n">self</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Returns the target class labels or unique values of the target column.
 
 ### [with_options[()]{.muted}](#with_options)
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">with_options</span>(
-    <span class="param"><span class="n">self</span></span>,    <span class="param"><span class="n">kwargs</span> <span class="o">=</span> <span class="kc">{}</span></span>) <span class="p">-></span> <span class="return-annotation">VMDataset</span>:</span>
-</span>
+<span class="kw">def</span> <span class="name">with_options</span>(<span class="param"><span class="n">self</span><span class="muted">,</span></span><span class="param"><span class="n">kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-vmdataset">VMDataset</a><span class="muted">:</span> </span></span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Support options provided when passing an input to run_test or run_test_suite
 
@@ -343,44 +366,43 @@ Support options provided when passing an input to run_test or run_test_suite
 
 ### [x_df[()]{.muted}](#x_df)
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">x_df</span>(<span class="param"><span class="n">self</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">x_df</span>(<span class="param"><span class="n">self</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Returns a dataframe containing only the feature columns
 
 ### [y_df[()]{.muted}](#y_df)
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">y_df</span>(<span class="param"><span class="n">self</span></span>) <span class="p">-></span> <span class="return-annotation">{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'pd'}, {'cls': 'ExprName', 'name': 'DataFrame'}]}</span>:</span>
-</span>
+<span class="kw">def</span> <span class="name">y_df</span>(<span class="param"><span class="n">self</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-{'cls': 'exprattribute', 'values': [{'cls': 'exprname', 'name': 'pd'}, {'cls': 'exprname', 'name': 'dataframe'}]}">{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'pd'}, {'cls': 'ExprName', 'name': 'DataFrame'}]}</a><span class="muted">:</span> </span></span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Returns a dataframe containing the target column
 
 ### [y_pred[()]{.muted}](#y_pred)
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">y_pred</span>(
-    <span class="param"><span class="n">self</span></span>,    <span class="param"><span class="n">model</span></span>) <span class="p">-></span> <span class="return-annotation">{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'np'}, {'cls': 'ExprName', 'name': 'ndarray'}]}</span>:</span>
-</span>
+<span class="kw">def</span> <span class="name">y_pred</span>(<span class="param"><span class="n">self</span><span class="muted">,</span></span><span class="param"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-{'cls': 'exprattribute', 'values': [{'cls': 'exprname', 'name': 'np'}, {'cls': 'exprname', 'name': 'ndarray'}]}">{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'np'}, {'cls': 'ExprName', 'name': 'ndarray'}]}</a><span class="muted">:</span> </span></span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Returns the predictions for a given model. Attempts to stack complex prediction types (e.g., embeddings) into a single, multi-dimensional array.
 
@@ -394,31 +416,29 @@ Returns the predictions for a given model. Attempts to stack complex prediction 
 
 ### [y_pred_df[()]{.muted}](#y_pred_df)
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">y_pred_df</span>(
-    <span class="param"><span class="n">self</span></span>,    <span class="param"><span class="n">model</span></span>) <span class="p">-></span> <span class="return-annotation">{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'pd'}, {'cls': 'ExprName', 'name': 'DataFrame'}]}</span>:</span>
-</span>
+<span class="kw">def</span> <span class="name">y_pred_df</span>(<span class="param"><span class="n">self</span><span class="muted">,</span></span><span class="param"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-{'cls': 'exprattribute', 'values': [{'cls': 'exprname', 'name': 'pd'}, {'cls': 'exprname', 'name': 'dataframe'}]}">{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'pd'}, {'cls': 'ExprName', 'name': 'DataFrame'}]}</a><span class="muted">:</span> </span></span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Returns a dataframe containing the predictions for a given model
 
 ### [y_prob[()]{.muted}](#y_prob)
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">y_prob</span>(
-    <span class="param"><span class="n">self</span></span>,    <span class="param"><span class="n">model</span></span>) <span class="p">-></span> <span class="return-annotation">{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'np'}, {'cls': 'ExprName', 'name': 'ndarray'}]}</span>:</span>
-</span>
+<span class="kw">def</span> <span class="name">y_prob</span>(<span class="param"><span class="n">self</span><span class="muted">,</span></span><span class="param"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-{'cls': 'exprattribute', 'values': [{'cls': 'exprname', 'name': 'np'}, {'cls': 'exprname', 'name': 'ndarray'}]}">{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'np'}, {'cls': 'ExprName', 'name': 'ndarray'}]}</a><span class="muted">:</span> </span></span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Returns the probabilities for a given model.
 
@@ -432,26 +452,31 @@ Returns the probabilities for a given model.
 
 ### [y_prob_df[()]{.muted}](#y_prob_df)
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">y_prob_df</span>(
-    <span class="param"><span class="n">self</span></span>,    <span class="param"><span class="n">model</span></span>) <span class="p">-></span> <span class="return-annotation">{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'pd'}, {'cls': 'ExprName', 'name': 'DataFrame'}]}</span>:</span>
-</span>
+<span class="kw">def</span> <span class="name">y_prob_df</span>(<span class="param"><span class="n">self</span><span class="muted">,</span></span><span class="param"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-{'cls': 'exprattribute', 'values': [{'cls': 'exprname', 'name': 'pd'}, {'cls': 'exprname', 'name': 'dataframe'}]}">{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'pd'}, {'cls': 'ExprName', 'name': 'DataFrame'}]}</a><span class="muted">:</span> </span></span>
 
 :::
 
+<!-- docstring.jinja2 -->
+
 Returns a dataframe containing the probabilities for a given model
+
+<!-- class.qmd.jinja2 -->
 
 ## [class]{.muted} VMInput
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class VMInput(ABC):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">VMInput</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Base class for ValidMind Input types
 
@@ -459,16 +484,15 @@ Base class for ValidMind Input types
 
 ### [with_options[()]{.muted}](#with_options)
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">with_options</span>(
-    <span class="param"><span class="n">self</span></span>,    <span class="param"><span class="n">kwargs</span> <span class="o">=</span> <span class="kc">{}</span></span>) <span class="p">-></span> <span class="return-annotation">VMInput</span>:</span>
-</span>
+<span class="kw">def</span> <span class="name">with_options</span>(<span class="param"><span class="n">self</span><span class="muted">,</span></span><span class="param"><span class="n">kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-vminput">VMInput</a><span class="muted">:</span> </span></span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Allows for setting options on the input object that are passed by the user when using the input to run a test or set of tests
 
@@ -482,13 +506,19 @@ To allow options, just override this method in the subclass (see VMDataset) and 
 
 - A new instance of the input with the specified options set
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} VMModel
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class VMModel(VMInput):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">VMModel</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 An base class that wraps a trained model instance and its associated data.
 
@@ -503,44 +533,42 @@ An base class that wraps a trained model instance and its associated data.
 
 ### [predict[()]{.muted}](#predict)
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">predict</span>(
-    <span class="param"><span class="n">self</span></span>,    <span class="param"><span class="n">args</span> <span class="o">=</span> <span class="kc">()</span></span>,    <span class="param"><span class="n">kwargs</span> <span class="o">=</span> <span class="kc">{}</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">predict</span>(<span class="param"><span class="n">self</span><span class="muted">,</span></span><span class="param"><span class="n">args</span><span class="o"> = </span><span class="kc">()</span><span class="muted">,</span></span><span class="param"><span class="n">kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Predict method for the model. This is a wrapper around the model's
 
 ### [predict_proba[()]{.muted}](#predict_proba)
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">predict_proba</span>(
-    <span class="param"><span class="n">self</span></span>,    <span class="param"><span class="n">args</span> <span class="o">=</span> <span class="kc">()</span></span>,    <span class="param"><span class="n">kwargs</span> <span class="o">=</span> <span class="kc">{}</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">predict_proba</span>(<span class="param"><span class="n">self</span><span class="muted">,</span></span><span class="param"><span class="n">args</span><span class="o"> = </span><span class="kc">()</span><span class="muted">,</span></span><span class="param"><span class="n">kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Predict probabilties - must be implemented by subclass if needed
 
 ### [serialize[()]{.muted}](#serialize)
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">serialize</span>(<span class="param"><span class="n">self</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">serialize</span>(<span class="param"><span class="n">self</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Serializes the model to a dictionary so it can be sent to the API

@@ -3,20 +3,22 @@ title: "[validmind](/reference/validmind.html).TimeSeriesOutliers"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- function.qmd.jinja2 -->
 
 ## TimeSeriesOutliers[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">TimeSeriesOutliers</span>(
-    <span class="param"><span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>,    <span class="param"><span class="n">zscore_threshold</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="kc">3</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">TimeSeriesOutliers</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span><span class="muted">,</span></span><span class="param"><span class="n">zscore_threshold</span><span class="p">:</span><span class="n">int</span><span class="o"> = </span><span class="kc">3</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Identifies and visualizes outliers in time-series data using the z-score method.
 
@@ -50,13 +52,19 @@ The test processes a given dataset which must have datetime indexing, checks if 
 - It does not address possible ways to handle identified outliers in the data.
 - The requirement for a datetime index could limit its application.
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} SkipTestError
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class SkipTestError(BaseError):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">SkipTestError</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Useful error to throw when a test cannot be executed.
 

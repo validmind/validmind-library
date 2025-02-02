@@ -3,20 +3,22 @@ title: "[validmind](/reference/validmind.html).Mentions"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- function.qmd.jinja2 -->
 
 ## Mentions[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">Mentions</span>(
-    <span class="param"><span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>,    <span class="param"><span class="n">top_mentions</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="kc">25</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">Mentions</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span><span class="muted">,</span></span><span class="param"><span class="n">top_mentions</span><span class="p">:</span><span class="n">int</span><span class="o"> = </span><span class="kc">25</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Calculates and visualizes frequencies of '@' prefixed mentions in a text-based dataset for NLP model analysis.
 
@@ -45,13 +47,19 @@ The test first verifies the existence of a text column in the provided dataset. 
 - This test isn't suited for datasets devoid of textual data.
 - It does not provide insights on less frequently occurring data or outliers, which means potentially significant patterns could be overlooked.
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} SkipTestError
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class SkipTestError(BaseError):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">SkipTestError</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Useful error to throw when a test cannot be executed.
 

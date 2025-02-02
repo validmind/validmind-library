@@ -3,19 +3,22 @@ title: "[validmind](/reference/validmind.html).ShapiroWilk"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- function.qmd.jinja2 -->
 
 ## ShapiroWilk[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">ShapiroWilk</span>(<span class="param"><span class="n">dataset</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">ShapiroWilk</span>(<span class="param"><span class="n">dataset</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Evaluates feature-wise normality of training data using the Shapiro-Wilk test.
 

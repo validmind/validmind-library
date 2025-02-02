@@ -3,7 +3,10 @@ title: "[validmind](/reference/validmind.html).tests"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- docstring.jinja2 -->
 
 ValidMind Tests Module
 
@@ -13,16 +16,15 @@ ValidMind Tests Module
 
 ## describe_test<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">describe_test</span>(
-    <span class="param"><span class="n">test_id</span><span class="p">:</span> <span class="n">TestID</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">raw</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="kc">False</span></span>,    <span class="param"><span class="n">show</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="kc">True</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">describe_test</span>(<span class="param"><span class="n">test_id</span><span class="p">:</span><span class="n">TestID</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">raw</span><span class="p">:</span><span class="n">bool</span><span class="o"> = </span><span class="kc">False</span><span class="muted">,</span></span><span class="param"><span class="n">show</span><span class="p">:</span><span class="n">bool</span><span class="o"> = </span><span class="kc">True</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Get or show details about the test This function can be used to see test details including the test name, description, required inputs and default params. It can also be used to get a dictionary of the above information for programmatic use.
 
@@ -33,43 +35,43 @@ Get or show details about the test This function can be used to see test details
 
 ## list_tags<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">list_tags</span>(<span class="param"><span class="n"></span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">list_tags</span>()</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 List unique tags from all test classes.
 
 ## list_tasks<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">list_tasks</span>(<span class="param"><span class="n"></span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">list_tasks</span>()</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 List unique tasks from all test classes.
 
 ## list_tasks_and_tags<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">list_tasks_and_tags</span>(<span class="param"><span class="n">as_json</span> <span class="o">=</span> <span class="kc">False</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">list_tasks_and_tags</span>(<span class="param"><span class="n">as_json</span><span class="o">=</span><span class="kc">False</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 List all task types and their associated tags, with one row per task type and all tags for a task type in one row.
 
@@ -79,16 +81,15 @@ List all task types and their associated tags, with one row per task type and al
 
 ## list_tests<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">list_tests</span>(
-    <span class="param"><span class="n">filter</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">task</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">tags</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">pretty</span> <span class="o">=</span> <span class="kc">True</span></span>,    <span class="param"><span class="n">truncate</span> <span class="o">=</span> <span class="kc">True</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">list_tests</span>(<span class="param"><span class="n">filter</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">task</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">tags</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">pretty</span><span class="o"> = </span><span class="kc">True</span><span class="muted">,</span></span><span class="param"><span class="n">truncate</span><span class="o"> = </span><span class="kc">True</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 List all tests in the tests directory.
 
@@ -106,16 +107,15 @@ List all tests in the tests directory.
 
 ## load_test<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">load_test</span>(
-    <span class="param"><span class="n">test_id</span><span class="p">:</span> <span class="n">str</span></span>,    <span class="param"><span class="n">test_func</span><span class="p">:</span> <span class="n">callable</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">reload</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="kc">False</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">load_test</span>(<span class="param"><span class="n">test_id</span><span class="p">:</span><span class="n">str</span><span class="muted">,</span></span><span class="param"><span class="n">test_func</span><span class="p">:</span><span class="n">callable</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">reload</span><span class="p">:</span><span class="n">bool</span><span class="o"> = </span><span class="kc">False</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Load a test by test ID Test IDs are in the format `namespace.path_to_module.TestClassOrFuncName[:tag]`. The tag is optional and is used to distinguish between multiple results from the same test.
 
@@ -126,16 +126,15 @@ Load a test by test ID Test IDs are in the format `namespace.path_to_module.Test
 
 ## run_test<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">run_test</span>(
-    <span class="param"><span class="n">test_id</span><span class="p">:</span> <span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Union'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'TestID'}, 'None'], 'implicit': True}}</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">name</span><span class="p">:</span> <span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Union'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'str'}, 'None'], 'implicit': True}}</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">unit_metrics</span><span class="p">:</span> <span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Union'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'TestID'}}, 'None'], 'implicit': True}}</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">inputs</span><span class="p">:</span> <span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Union'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Dict'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'str'}, {'cls': 'ExprName', 'name': 'Any'}], 'implicit': True}}, 'None'], 'implicit': True}}</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">input_grid</span><span class="p">:</span> <span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Union'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Dict'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'str'}, {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'Any'}}], 'implicit': True}}, {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Dict'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'str'}, {'cls': 'ExprName', 'name': 'Any'}], 'implicit': True}}}, 'None'], 'implicit': True}}</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">params</span><span class="p">:</span> <span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Union'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Dict'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'str'}, {'cls': 'ExprName', 'name': 'Any'}], 'implicit': True}}, 'None'], 'implicit': True}}</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">param_grid</span><span class="p">:</span> <span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Union'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Dict'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'str'}, {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'Any'}}], 'implicit': True}}, {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Dict'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'str'}, {'cls': 'ExprName', 'name': 'Any'}], 'implicit': True}}}, 'None'], 'implicit': True}}</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">show</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="kc">True</span></span>,    <span class="param"><span class="n">generate_description</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="kc">True</span></span>,    <span class="param"><span class="n">title</span><span class="p">:</span> <span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Optional'}, 'slice': {'cls': 'ExprName', 'name': 'str'}}</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">post_process_fn</span><span class="p">:</span> <span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Union'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Callable'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprList', 'elements': [{'cls': 'ExprName', 'name': 'TestResult'}]}, 'None'], 'implicit': True}}, 'None'], 'implicit': True}}</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">kwargs</span> <span class="o">=</span> <span class="kc">{}</span></span>) <span class="p">-></span> <span class="return-annotation">TestResult</span>:</span>
-</span>
+<span class="kw">def</span> <span class="name">run_test</span>(<span class="param"><span class="n">test_id</span><span class="p">:</span><span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Union'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'TestID'}, 'None'], 'implicit': True}}</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">name</span><span class="p">:</span><span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Union'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'str'}, 'None'], 'implicit': True}}</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">unit_metrics</span><span class="p">:</span><span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Union'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'TestID'}}, 'None'], 'implicit': True}}</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">inputs</span><span class="p">:</span><span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Union'}, 'slice': {'cls': 'ExprTuple', 'elements': \[{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Dict'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'str'}, {'cls': 'ExprName', 'name': 'Any'}], 'implicit': True}}, 'None'\], 'implicit': True}}</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">input_grid</span><span class="p">:</span><span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Union'}, 'slice': {'cls': 'ExprTuple', 'elements': \[{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Dict'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'str'}, {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'Any'}}], 'implicit': True}}, {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Dict'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'str'}, {'cls': 'ExprName', 'name': 'Any'}], 'implicit': True}}}, 'None'\], 'implicit': True}}</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">params</span><span class="p">:</span><span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Union'}, 'slice': {'cls': 'ExprTuple', 'elements': \[{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Dict'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'str'}, {'cls': 'ExprName', 'name': 'Any'}], 'implicit': True}}, 'None'\], 'implicit': True}}</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">param_grid</span><span class="p">:</span><span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Union'}, 'slice': {'cls': 'ExprTuple', 'elements': \[{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Dict'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'str'}, {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'Any'}}], 'implicit': True}}, {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Dict'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'str'}, {'cls': 'ExprName', 'name': 'Any'}], 'implicit': True}}}, 'None'\], 'implicit': True}}</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">show</span><span class="p">:</span><span class="n">bool</span><span class="o"> = </span><span class="kc">True</span><span class="muted">,</span></span><span class="param"><span class="n">generate_description</span><span class="p">:</span><span class="n">bool</span><span class="o"> = </span><span class="kc">True</span><span class="muted">,</span></span><span class="param"><span class="n">title</span><span class="p">:</span><span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Optional'}, 'slice': {'cls': 'ExprName', 'name': 'str'}}</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">post_process_fn</span><span class="p">:</span><span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Union'}, 'slice': {'cls': 'ExprTuple', 'elements': \[{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Callable'}, 'slice': {'cls': 'ExprTuple', 'elements': \[{'cls': 'ExprList', 'elements': [{'cls': 'ExprName', 'name': 'TestResult'}]}, 'None'\], 'implicit': True}}, 'None'\], 'implicit': True}}</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-testresult">TestResult</a><span class="muted">:</span> </span></span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Run a ValidMind or custom test This function is the main entry point for running tests. It can run simple unit metrics, ValidMind and custom tests, composite tests made up of multiple unit metrics and comparison tests made up of multiple tests.
 
@@ -168,15 +167,15 @@ Run a ValidMind or custom test This function is the main entry point for running
 
 ## tags<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">tags</span>(<span class="param"><span class="n">tags</span> <span class="o">=</span> <span class="kc">()</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">tags</span>(<span class="param"><span class="n">tags</span><span class="o">=</span><span class="kc">()</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Decorator for specifying tags for a test.
 
@@ -186,15 +185,15 @@ Decorator for specifying tags for a test.
 
 ## tasks<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">tasks</span>(<span class="param"><span class="n">tasks</span> <span class="o">=</span> <span class="kc">()</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">tasks</span>(<span class="param"><span class="n">tasks</span><span class="o">=</span><span class="kc">()</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Decorator for specifying the task types that a test is designed for.
 
@@ -204,15 +203,15 @@ Decorator for specifying the task types that a test is designed for.
 
 ## test<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">test</span>(<span class="param"><span class="n">func_or_id</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">test</span>(<span class="param"><span class="n">func_or_id</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Decorator for creating and registering custom tests This decorator registers the function it wraps as a test function within ValidMind under the provided ID. Once decorated, the function can be run using the `validmind.tests.run_test` function.
 
@@ -239,18 +238,19 @@ The function may also include a docstring. This docstring will be used and logge
 
 - The decorated function.
 
+<!-- function.qmd.jinja2 -->
+
 ## register_test_provider[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">register_test_provider</span>(
-    <span class="param"><span class="n">namespace</span><span class="p">:</span> <span class="n">str</span></span>,    <span class="param"><span class="n">test_provider</span><span class="p">:</span> <span class="n">TestProvider</span></span>) <span class="p">-></span> <span class="return-annotation">None</span>:</span>
-</span>
+<span class="kw">def</span> <span class="name">register_test_provider</span>(<span class="param"><span class="n">namespace</span><span class="p">:</span><span class="n">str</span><span class="muted">,</span></span><span class="param"><span class="n">test_provider</span><span class="p">:</span><span class="n">TestProvider</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-none">None</a><span class="muted">:</span> </span></span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Register an external test provider
 
@@ -259,13 +259,19 @@ Register an external test provider
 - **namespace** str: The namespace of the test provider
 - **test_provider** TestProvider: The test provider
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} LoadTestError
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class LoadTestError(BaseError):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">LoadTestError</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Exception raised when an error occurs while loading a test
 
@@ -274,13 +280,19 @@ Exception raised when an error occurs while loading a test
 - **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
 - **From builtins.BaseException**: with_traceback, add_note
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} LocalTestProvider
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class LocalTestProvider():
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">LocalTestProvider</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Test providers in ValidMind are responsible for loading tests from different sources, such as local files, databases, or remote services. The LocalTestProvider specifically loads tests from the local file system.
 
@@ -311,15 +323,15 @@ test = test_provider.load_test("my_namespace.my_test_class")
 
 ### [list_tests[()]{.muted}](#list_tests)
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">list_tests</span>(<span class="param"><span class="n">self</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">list_tests</span>(<span class="param"><span class="n">self</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 List all tests in the given namespace
 
@@ -329,16 +341,15 @@ List all tests in the given namespace
 
 ### [load_test[()]{.muted}](#load_test)
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">load_test</span>(
-    <span class="param"><span class="n">self</span></span>,    <span class="param"><span class="n">test_id</span><span class="p">:</span> <span class="n">str</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">load_test</span>(<span class="param"><span class="n">self</span><span class="muted">,</span></span><span class="param"><span class="n">test_id</span><span class="p">:</span><span class="n">str</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Load the test identified by the given test_id. Args: test_id (str): The identifier of the test. This corresponds to the relative path of the python file from the root folder, with slashes replaced by dots
 
@@ -346,13 +357,19 @@ Returns: The test class that matches the last part of the test_id.
 
 Raises: LocalTestProviderLoadModuleError: If the test module cannot be imported LocalTestProviderLoadTestError: If the test class cannot be found in the module
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} TestProvider
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class TestProvider(Protocol):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">TestProvider</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Protocol for user-defined test providers
 
@@ -360,15 +377,15 @@ Protocol for user-defined test providers
 
 ### [list_tests[()]{.muted}](#list_tests)
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">list_tests</span>(<span class="param"><span class="n">self</span></span>) <span class="p">-></span> <span class="return-annotation">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'str'}}</span>:</span>
-</span>
+<span class="kw">def</span> <span class="name">list_tests</span>(<span class="param"><span class="n">self</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-{'cls': 'exprsubscript', 'left': {'cls': 'exprname', 'name': 'list'}, 'slice': {'cls': 'exprname', 'name': 'str'}}">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'str'}}</a><span class="muted">:</span> </span></span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 List all tests in the given namespace
 
@@ -378,16 +395,15 @@ List all tests in the given namespace
 
 ### [load_test[()]{.muted}](#load_test)
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">load_test</span>(
-    <span class="param"><span class="n">self</span></span>,    <span class="param"><span class="n">test_id</span><span class="p">:</span> <span class="n">str</span></span>) <span class="p">-></span> <span class="return-annotation">callable</span>:</span>
-</span>
+<span class="kw">def</span> <span class="name">load_test</span>(<span class="param"><span class="n">self</span><span class="muted">,</span></span><span class="param"><span class="n">test_id</span><span class="p">:</span><span class="n">str</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-callable">callable</a><span class="muted">:</span> </span></span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Load the test function identified by the given test_id
 

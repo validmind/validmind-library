@@ -3,6 +3,7 @@ title: "[validmind](/reference/validmind.html).sklearn"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
 
 - [AdjustedMutualInformation](sklearn/AdjustedMutualInformation.qmd)

@@ -3,41 +3,62 @@ title: "[validmind](/reference/validmind.html).embeddings"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- docstring.jinja2 -->
 
 Test suites for embeddings models Ideal setup is to have the API client to read a custom test suite from the project's configuration
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} EmbeddingsFullSuite
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class EmbeddingsFullSuite(TestSuite):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">EmbeddingsFullSuite</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Full test suite for embeddings models.
 
 **Inherited members**
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} EmbeddingsMetrics
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class EmbeddingsMetrics(TestSuite):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">EmbeddingsMetrics</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Test suite for embeddings metrics
 
 **Inherited members**
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} EmbeddingsPerformance
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class EmbeddingsPerformance(TestSuite):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">EmbeddingsPerformance</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Test suite for embeddings model performance
 

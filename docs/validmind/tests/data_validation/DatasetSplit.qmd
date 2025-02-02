@@ -3,19 +3,22 @@ title: "[validmind](/reference/validmind.html).DatasetSplit"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- function.qmd.jinja2 -->
 
 ## DatasetSplit[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">DatasetSplit</span>(<span class="param"><span class="n">datasets</span><span class="p">:</span> <span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'VMDataset'}}</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">DatasetSplit</span>(<span class="param"><span class="n">datasets</span><span class="p">:</span><span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'VMDataset'}}</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Evaluates and visualizes the distribution proportions among training, testing, and validation datasets of an ML model.
 

@@ -3,20 +3,22 @@ title: "[validmind](/reference/validmind.html).ClassifierPerformance"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- function.qmd.jinja2 -->
 
 ## ClassifierPerformance[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">ClassifierPerformance</span>(
-    <span class="param"><span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>,    <span class="param"><span class="n">model</span><span class="p">:</span> <span class="n">VMModel</span></span>,    <span class="param"><span class="n">average</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="kc">'macro'</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">ClassifierPerformance</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span><span class="muted">,</span></span><span class="param"><span class="n">model</span><span class="p">:</span><span class="n">VMModel</span><span class="muted">,</span></span><span class="param"><span class="n">average</span><span class="p">:</span><span class="n">str</span><span class="o"> = </span><span class="kc">'macro'</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Evaluates performance of binary or multiclass classification models using precision, recall, F1-Score, accuracy, and ROC AUC scores.
 
@@ -46,15 +48,14 @@ The test produces a report that includes precision, recall, F1-Score, and accura
 - Specifically designed for classification models and not suitable for regression models.
 - May provide limited insights if the test dataset does not represent real-world scenarios adequately.
 
+<!-- function.qmd.jinja2 -->
+
 ## multiclass_roc_auc_score[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">multiclass_roc_auc_score</span>(
-    <span class="param"><span class="n">y_test</span></span>,    <span class="param"><span class="n">y_pred</span></span>,    <span class="param"><span class="n">average</span> <span class="o">=</span> <span class="kc">'macro'</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">multiclass_roc_auc_score</span>(<span class="param"><span class="n">y_test</span><span class="muted">,</span></span><span class="param"><span class="n">y_pred</span><span class="muted">,</span></span><span class="param"><span class="n">average</span><span class="o"> = </span><span class="kc">'macro'</span></span>)</span>
 
 :::

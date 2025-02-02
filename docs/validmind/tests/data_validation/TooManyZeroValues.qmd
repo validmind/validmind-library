@@ -3,20 +3,22 @@ title: "[validmind](/reference/validmind.html).TooManyZeroValues"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- function.qmd.jinja2 -->
 
 ## TooManyZeroValues[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">TooManyZeroValues</span>(
-    <span class="param"><span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>,    <span class="param"><span class="n">max_percent_threshold</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="kc">0.03</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">TooManyZeroValues</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span><span class="muted">,</span></span><span class="param"><span class="n">max_percent_threshold</span><span class="p">:</span><span class="n">float</span><span class="o"> = </span><span class="kc">0.03</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Identifies numerical columns in a dataset that contain an excessive number of zero values, defined by a threshold percentage.
 

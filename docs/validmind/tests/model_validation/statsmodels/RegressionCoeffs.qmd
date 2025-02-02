@@ -3,19 +3,22 @@ title: "[validmind](/reference/validmind.html).RegressionCoeffs"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- function.qmd.jinja2 -->
 
 ## RegressionCoeffs[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">RegressionCoeffs</span>(<span class="param"><span class="n">model</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">RegressionCoeffs</span>(<span class="param"><span class="n">model</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Assesses the significance and uncertainty of predictor variables in a regression model through visualization of coefficients and their 95% confidence intervals.
 
@@ -44,13 +47,19 @@ The function operates by extracting the estimated coefficients and their standar
 - It does not address issues related to multi-collinearity among predictor variables, which can affect the interpretation of coefficients.
 - This metric is limited to regression tasks using tabular data and is not applicable to other types of machine learning tasks or data structures.
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} SkipTestError
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class SkipTestError(BaseError):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">SkipTestError</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Useful error to throw when a test cannot be executed.
 

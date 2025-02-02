@@ -1,4 +1,5 @@
 {% macro breadcrumbs(module) %}
+<!-- navigation.jinja2 -->
 {# {% set parts = module.path.split('.') %}
 [API Reference](../index.qmd)
 {% for part in parts %}
@@ -7,6 +8,7 @@
 {% endmacro %}
 
 {% macro module_tree(module) %}
+<!-- navigation.jinja2 -->
 {% if module.members %}
 ```
 {{ print_tree(module) }}
@@ -15,6 +17,7 @@
 {% endmacro %}
 
 {% macro print_tree(node, prefix='', is_last=True) %}
+<!-- navigation.jinja2 -->
 {{ prefix }}{{ '└── ' if is_last else '├── ' }}{{ node.name }}
 {% if node.members %}
 {% for member in node.members | sort_members %}

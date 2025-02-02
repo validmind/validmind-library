@@ -1,4 +1,5 @@
 {% macro format_type(type) %}
+<!-- types.jinja2 -->
 {% if type is mapping %}
 {% if type.kind == 'union' %}
 {{ type.types | map('format_type') | join(' | ') }}
@@ -13,6 +14,7 @@
 {% endmacro %}
 
 {%- macro format_return_type(returns) -%}
+<!-- types.jinja2 -->
 {%- if returns.cls == "ExprName" -%}
     {%- if returns.name in validmind.members.client.members and validmind.members.client.members[returns.name].kind == "alias" -%}
         {{ validmind.members.client.members[returns.name].target_path }}
@@ -33,6 +35,7 @@
 {%- endmacro %}
 
 {%- macro format_module_return_type(returns, module, full_data) -%}
+<!-- types.jinja2 -->
 {%- if returns.cls == "ExprName" -%}
     {%- if returns.name in module.members and module.members[returns.name].kind == "alias" -%}
         {{ module.members[returns.name].target_path }}

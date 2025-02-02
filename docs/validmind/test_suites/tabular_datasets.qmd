@@ -3,41 +3,62 @@ title: "[validmind](/reference/validmind.html).tabular_datasets"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- docstring.jinja2 -->
 
 Test suites for tabular datasets
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} TabularDataQuality
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class TabularDataQuality(TestSuite):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">TabularDataQuality</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Test suite for data quality on tabular datasets
 
 **Inherited members**
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} TabularDataset
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class TabularDataset(TestSuite):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">TabularDataset</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Test suite for tabular datasets.
 
 **Inherited members**
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} TabularDatasetDescription
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class TabularDatasetDescription(TestSuite):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">TabularDatasetDescription</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Test suite to extract metadata and descriptive statistics from a tabular dataset
 

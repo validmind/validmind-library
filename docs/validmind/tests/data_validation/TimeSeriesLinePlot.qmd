@@ -3,19 +3,22 @@ title: "[validmind](/reference/validmind.html).TimeSeriesLinePlot"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- function.qmd.jinja2 -->
 
 ## TimeSeriesLinePlot[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">TimeSeriesLinePlot</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">TimeSeriesLinePlot</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Generates and analyses time-series data through line plots revealing trends, patterns, anomalies over time.
 
@@ -46,13 +49,19 @@ The mechanism for this Python class involves extracting the column names from th
 - The metric necessitates that the time-specific data has been transformed into a datetime index, with the data formatted correctly.
 - The metric has an inherent limitation in that it cannot extract deeper statistical insights from the time series data, which can limit its efficacy with complex data structures and phenomena.
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} SkipTestError
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class SkipTestError(BaseError):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">SkipTestError</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 Useful error to throw when a test cannot be executed.
 

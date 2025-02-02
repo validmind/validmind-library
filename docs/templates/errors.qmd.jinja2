@@ -2,8 +2,9 @@
 {% import "macros/types.jinja2" as types %}
 ---
 title: errors
-toc-depth: 3
-toc-expand: 3
+toc-depth: 4
+toc-expand: 4
+# errors.qmd.jinja2
 ---
 
 {% if module.docstring %}
@@ -16,7 +17,6 @@ toc-expand: 3
 {% if member.kind == 'class' and member.name in ['BaseError', 'APIRequestError'] %}
 ### [class]{.muted} {{ member.name }}
 
-<!-- errors.qmd.jinja2 - error class definition -->
 ```python
 class {{ member.name }}({% for base in member.bases %}{{ base.name }}{% if not loop.last %}, {% endif %}{% endfor %}):
 ```

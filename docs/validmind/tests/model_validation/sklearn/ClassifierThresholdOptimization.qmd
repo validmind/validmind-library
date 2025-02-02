@@ -3,20 +3,22 @@ title: "[validmind](/reference/validmind.html).ClassifierThresholdOptimization"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- function.qmd.jinja2 -->
 
 ## ClassifierThresholdOptimization[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">ClassifierThresholdOptimization</span>(
-    <span class="param"><span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>,    <span class="param"><span class="n">model</span><span class="p">:</span> <span class="n">VMModel</span></span>,    <span class="param"><span class="n">methods</span> <span class="o">=</span> <span class="kc">None</span></span>,    <span class="param"><span class="n">target_recall</span> <span class="o">=</span> <span class="kc">None</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">ClassifierThresholdOptimization</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span><span class="muted">,</span></span><span class="param"><span class="n">model</span><span class="p">:</span><span class="n">VMModel</span><span class="muted">,</span></span><span class="param"><span class="n">methods</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">target_recall</span><span class="o"> = </span><span class="kc">None</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Analyzes and visualizes different threshold optimization methods for binary classification models.
 
@@ -80,18 +82,19 @@ The test implements multiple threshold optimization methods:
 - table: DataFrame comparing different threshold optimization methods (using weighted averages for precision, recall, and f1)
 - figure: Plotly figure showing ROC and PR curves with optimal thresholds
 
+<!-- function.qmd.jinja2 -->
+
 ## find_optimal_threshold[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">find_optimal_threshold</span>(
-    <span class="param"><span class="n">y_true</span></span>,    <span class="param"><span class="n">y_prob</span></span>,    <span class="param"><span class="n">method</span> <span class="o">=</span> <span class="kc">'youden'</span></span>,    <span class="param"><span class="n">target_recall</span> <span class="o">=</span> <span class="kc">None</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">find_optimal_threshold</span>(<span class="param"><span class="n">y_true</span><span class="muted">,</span></span><span class="param"><span class="n">y_prob</span><span class="muted">,</span></span><span class="param"><span class="n">method</span><span class="o"> = </span><span class="kc">'youden'</span><span class="muted">,</span></span><span class="param"><span class="n">target_recall</span><span class="o"> = </span><span class="kc">None</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Find the optimal classification threshold using various methods.
 

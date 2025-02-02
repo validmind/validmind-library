@@ -3,19 +3,22 @@ title: "[validmind](/reference/validmind.html).RunsTest"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- function.qmd.jinja2 -->
 
 ## RunsTest[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">RunsTest</span>(<span class="param"><span class="n">dataset</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">RunsTest</span>(<span class="param"><span class="n">dataset</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Executes Runs Test on ML model to detect non-random patterns in output data sequence.
 

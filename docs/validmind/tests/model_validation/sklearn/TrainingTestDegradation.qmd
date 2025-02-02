@@ -3,20 +3,22 @@ title: "[validmind](/reference/validmind.html).TrainingTestDegradation"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- function.qmd.jinja2 -->
 
 ## TrainingTestDegradation[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">TrainingTestDegradation</span>(
-    <span class="param"><span class="n">datasets</span><span class="p">:</span> <span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'VMDataset'}}</span></span>,    <span class="param"><span class="n">model</span><span class="p">:</span> <span class="n">VMModel</span></span>,    <span class="param"><span class="n">max_threshold</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="kc">0.1</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">TrainingTestDegradation</span>(<span class="param"><span class="n">datasets</span><span class="p">:</span><span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'VMDataset'}}</span><span class="muted">,</span></span><span class="param"><span class="n">model</span><span class="p">:</span><span class="n">VMModel</span><span class="muted">,</span></span><span class="param"><span class="n">max_threshold</span><span class="p">:</span><span class="n">float</span><span class="o"> = </span><span class="kc">0.1</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Tests if model performance degradation between training and test datasets exceeds a predefined threshold.
 

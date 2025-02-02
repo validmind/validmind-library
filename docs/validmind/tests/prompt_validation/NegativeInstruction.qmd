@@ -3,34 +3,34 @@ title: "[validmind](/reference/validmind.html).NegativeInstruction"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
 
 ## call_model<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">call_model</span>(
-    <span class="param"><span class="n">system_prompt</span><span class="p">:</span> <span class="n">str</span></span>,    <span class="param"><span class="n">user_prompt</span><span class="p">:</span> <span class="n">str</span></span>,    <span class="param"><span class="n">temperature</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="kc">0.0</span></span>,    <span class="param"><span class="n">seed</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="kc">42</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">call_model</span>(<span class="param"><span class="n">system_prompt</span><span class="p">:</span><span class="n">str</span><span class="muted">,</span></span><span class="param"><span class="n">user_prompt</span><span class="p">:</span><span class="n">str</span><span class="muted">,</span></span><span class="param"><span class="n">temperature</span><span class="p">:</span><span class="n">float</span><span class="o"> = </span><span class="kc">0.0</span><span class="muted">,</span></span><span class="param"><span class="n">seed</span><span class="p">:</span><span class="n">int</span><span class="o"> = </span><span class="kc">42</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Call LLM with the given prompts and return the response
 
 ## get_explanation<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">get_explanation</span>(<span class="param"><span class="n">response</span><span class="p">:</span> <span class="n">str</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">get_explanation</span>(<span class="param"><span class="n">response</span><span class="p">:</span><span class="n">str</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Get just the explanation from the response string TODO: use json response mode instead of this
 
@@ -42,15 +42,15 @@ Explanation: <some-explanation>" -> "<some-explanation>"
 
 ## get_score<span class='muted'>()</span>
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">get_score</span>(<span class="param"><span class="n">response</span><span class="p">:</span> <span class="n">str</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">get_score</span>(<span class="param"><span class="n">response</span><span class="p">:</span><span class="n">str</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Get just the score from the response string TODO: use json response mode instead of this
 
@@ -60,18 +60,19 @@ e.g. "Score: 8
 
 Explanation: <some-explanation>" -> 8
 
+<!-- function.qmd.jinja2 -->
+
 ## NegativeInstruction[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">NegativeInstruction</span>(
-    <span class="param"><span class="n">model</span></span>,    <span class="param"><span class="n">min_threshold</span> <span class="o">=</span> <span class="kc">7</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">NegativeInstruction</span>(<span class="param"><span class="n">model</span><span class="muted">,</span></span><span class="param"><span class="n">min_threshold</span><span class="o"> = </span><span class="kc">7</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Evaluates and grades the use of affirmative, proactive language over negative instructions in LLM prompts.
 
@@ -101,13 +102,19 @@ An LLM is employed to evaluate each prompt. The prompt is graded based on its us
 - A numeric scoring system, while straightforward, may oversimplify complex issues related to prompt designing and instruction clarity.
 - The effectiveness of the test hinges significantly on the predetermined threshold level, which can be subjective and may need to be adjusted according to specific use-cases.
 
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} MissingRequiredTestInputError
 
-<!-- class.qmd.jinja2 - class definition -->
+<!-- signatures.jinja2 -->
 
-```python
-class MissingRequiredTestInputError(BaseError):
-```
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">MissingRequiredTestInputError</span>()</span>
+
+:::
+
+<!-- docstring.jinja2 -->
 
 When a required test context variable is missing.
 

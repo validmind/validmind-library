@@ -3,22 +3,26 @@ title: "[validmind](/reference/validmind.html).StopWords"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
+# module.qmd.jinja2
 ---
+
+<!-- docstring.jinja2 -->
 
 Threshold based tests
 
+<!-- function.qmd.jinja2 -->
+
 ## StopWords[()]{.muted}
 
-<!-- function.qmd.jinja2 - function signature -->
+<!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="signature">
-<span class="kw">def</span> <span class="name">StopWords</span>(
-    <span class="param"><span class="n">dataset</span><span class="p">:</span> <span class="n">VMDataset</span></span>,    <span class="param"><span class="n">min_percent_threshold</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="kc">0.5</span></span>,    <span class="param"><span class="n">num_words</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="kc">25</span></span>):</span>
-</span>
+<span class="kw">def</span> <span class="name">StopWords</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span><span class="muted">,</span></span><span class="param"><span class="n">min_percent_threshold</span><span class="p">:</span><span class="n">float</span><span class="o"> = </span><span class="kc">0.5</span><span class="muted">,</span></span><span class="param"><span class="n">num_words</span><span class="p">:</span><span class="n">int</span><span class="o"> = </span><span class="kc">25</span></span>)</span>
 
 :::
+
+<!-- docstring.jinja2 -->
 
 Evaluates and visualizes the frequency of English stop words in a text dataset against a defined threshold.
 
