@@ -18,7 +18,7 @@ Time Series Test Suites
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">TimeSeriesDataQuality</span>()</span>
+<span class="kw">class</span> <span class="name">TimeSeriesDataQuality</span>()
 
 :::
 
@@ -36,7 +36,7 @@ Test suite for data quality on time series datasets
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">TimeSeriesDataset</span>()</span>
+<span class="kw">class</span> <span class="name">TimeSeriesDataset</span>()
 
 :::
 
@@ -54,7 +54,7 @@ Test suite for time series datasets.
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">TimeSeriesModelValidation</span>()</span>
+<span class="kw">class</span> <span class="name">TimeSeriesModelValidation</span>()
 
 :::
 
@@ -72,7 +72,7 @@ Test suite for time series model validation.
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">TimeSeriesMultivariate</span>()</span>
+<span class="kw">class</span> <span class="name">TimeSeriesMultivariate</span>()
 
 :::
 
@@ -90,7 +90,7 @@ This test suite provides a preliminary understanding of the features and relatio
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">TimeSeriesUnivariate</span>()</span>
+<span class="kw">class</span> <span class="name">TimeSeriesUnivariate</span>()
 
 :::
 
@@ -110,7 +110,7 @@ The raw time series data provides a visual inspection of the target variable's b
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">RegressionModelDescription</span>()</span>
+<span class="kw">class</span> <span class="name">RegressionModelDescription</span>()
 
 :::
 
@@ -128,7 +128,7 @@ Test suite for performance metric of regression model of statsmodels library
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">RegressionModelsEvaluation</span>()</span>
+<span class="kw">class</span> <span class="name">RegressionModelsEvaluation</span>()
 
 :::
 

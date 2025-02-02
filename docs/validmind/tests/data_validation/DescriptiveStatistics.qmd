@@ -12,7 +12,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">format_records</span>(<span class="param"><span class="n">df</span><span class="p">:</span><span class="n">{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'pd'}, {'cls': 'ExprName', 'name': 'DataFrame'}]}</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-{'cls': 'exprsubscript', 'left': {'cls': 'exprname', 'name': 'list'}, 'slice': {'cls': 'exprsubscript', 'left': {'cls': 'exprname', 'name': 'dict'}, 'slice': {'cls': 'exprtuple', 'elements': [{'cls': 'exprname', 'name': 'str'}, {'cls': 'exprname', 'name': 'any'}], 'implicit': true}}}">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Dict'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'str'}, {'cls': 'ExprName', 'name': 'Any'}], 'implicit': True}}}</a><span class="muted">:</span> </span></span>
+<span class="kw">def</span> <span class="name">format_records</span>(<span class="param"><span class="n">df</span><span class="p">:</span><span class="n">{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'pd'}, {'cls': 'ExprName', 'name': 'DataFrame'}]}</span></span>)<span class="p"> → </span><span class="return-annotation"></span>
 
 :::
 
@@ -34,7 +34,7 @@ We do this for display purposes before sending data to ValidMind. Rules:
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">DescriptiveStatistics</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span></span>)</span>
+<span class="kw">def</span> <span class="name">DescriptiveStatistics</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span></span>)
 
 :::
 
@@ -76,7 +76,7 @@ The testing mechanism utilizes two in-built functions of pandas dataframes: `des
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">get_summary_statistics_categorical</span>(<span class="param"><span class="n">df</span><span class="muted">,</span></span><span class="param"><span class="n">categorical_fields</span></span>)</span>
+<span class="kw">def</span> <span class="name">get_summary_statistics_categorical</span>(<span class="params"><span class="n">df</span><span class="muted">,</span></span><span class="params"><span class="n">categorical_fields</span></span>)
 
 :::
 
@@ -88,7 +88,7 @@ The testing mechanism utilizes two in-built functions of pandas dataframes: `des
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">get_summary_statistics_numerical</span>(<span class="param"><span class="n">df</span><span class="muted">,</span></span><span class="param"><span class="n">numerical_fields</span></span>)</span>
+<span class="kw">def</span> <span class="name">get_summary_statistics_numerical</span>(<span class="params"><span class="n">df</span><span class="muted">,</span></span><span class="params"><span class="n">numerical_fields</span></span>)
 
 :::
 
@@ -100,7 +100,7 @@ The testing mechanism utilizes two in-built functions of pandas dataframes: `des
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">SkipTestError</span>()</span>
+<span class="kw">class</span> <span class="name">SkipTestError</span>()
 
 :::
 

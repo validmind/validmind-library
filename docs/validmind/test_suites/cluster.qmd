@@ -18,7 +18,7 @@ Test suites for sklearn-compatible clustering models Ideal setup is to have the 
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">ClusterFullSuite</span>()</span>
+<span class="kw">class</span> <span class="name">ClusterFullSuite</span>()
 
 :::
 
@@ -36,7 +36,7 @@ Full test suite for clustering models.
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">ClusterMetrics</span>()</span>
+<span class="kw">class</span> <span class="name">ClusterMetrics</span>()
 
 :::
 
@@ -54,7 +54,7 @@ Test suite for sklearn clustering metrics
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">ClusterPerformance</span>()</span>
+<span class="kw">class</span> <span class="name">ClusterPerformance</span>()
 
 :::
 
@@ -72,7 +72,7 @@ Test suite for sklearn cluster performance
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">KmeansParametersOptimization</span>()</span>
+<span class="kw">class</span> <span class="name">KmeansParametersOptimization</span>()
 
 :::
 

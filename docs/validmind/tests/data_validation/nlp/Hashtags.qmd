@@ -14,7 +14,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">Hashtags</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span><span class="muted">,</span></span><span class="param"><span class="n">top_hashtags</span><span class="p">:</span><span class="n">int</span><span class="o"> = </span><span class="kc">25</span></span>)</span>
+<span class="kw">def</span> <span class="name">Hashtags</span>(<span class="params"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span><span class="muted">,</span></span><span class="params"><span class="n">top_hashtags</span><span class="p">:</span><span class="n">int</span><span class="o"> = </span><span class="kc">25</span></span>)
 
 :::
 
@@ -57,7 +57,7 @@ The test implements a regular expression (regex) to extract all hashtags from th
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">SkipTestError</span>()</span>
+<span class="kw">class</span> <span class="name">SkipTestError</span>()
 
 :::
 

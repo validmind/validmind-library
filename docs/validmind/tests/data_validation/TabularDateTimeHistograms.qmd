@@ -14,7 +14,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">TabularDateTimeHistograms</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span></span>)</span>
+<span class="kw">def</span> <span class="name">TabularDateTimeHistograms</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span></span>)
 
 :::
 
@@ -56,7 +56,7 @@ This test operates by first identifying all datetime columns and extracting them
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">SkipTestError</span>()</span>
+<span class="kw">class</span> <span class="name">SkipTestError</span>()
 
 :::
 

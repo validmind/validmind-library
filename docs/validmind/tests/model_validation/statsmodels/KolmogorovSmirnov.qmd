@@ -14,7 +14,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">KolmogorovSmirnov</span>(<span class="param"><span class="n">model</span><span class="p">:</span><span class="n">VMModel</span><span class="muted">,</span></span><span class="param"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span><span class="muted">,</span></span><span class="param"><span class="n">dist</span><span class="p">:</span><span class="n">str</span><span class="o"> = </span><span class="kc">'norm'</span></span>)</span>
+<span class="kw">def</span> <span class="name">KolmogorovSmirnov</span>(<span class="params"><span class="n">model</span><span class="p">:</span><span class="n">VMModel</span><span class="muted">,</span></span><span class="params"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span><span class="muted">,</span></span><span class="params"><span class="n">dist</span><span class="p">:</span><span class="n">str</span><span class="o"> = </span><span class="kc">'norm'</span></span>)
 
 :::
 
@@ -55,7 +55,7 @@ This test calculates the KS statistic and corresponding p-value for each feature
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">InvalidTestParametersError</span>()</span>
+<span class="kw">class</span> <span class="name">InvalidTestParametersError</span>()
 
 :::
 

@@ -14,7 +14,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">WOEBinTable</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span><span class="muted">,</span></span><span class="param"><span class="n">breaks_adj</span><span class="p">:</span><span class="n">list</span><span class="o"> = </span><span class="kc">None</span></span>)</span>
+<span class="kw">def</span> <span class="name">WOEBinTable</span>(<span class="params"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span><span class="muted">,</span></span><span class="params"><span class="n">breaks_adj</span><span class="p">:</span><span class="n">list</span><span class="o"> = </span><span class="kc">None</span></span>)
 
 :::
 
@@ -54,7 +54,7 @@ The test uses the `scorecardpy.woebin` method to perform automatic binning of th
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">SkipTestError</span>()</span>
+<span class="kw">class</span> <span class="name">SkipTestError</span>()
 
 :::
 

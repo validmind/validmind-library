@@ -1,3 +1,21 @@
+{%- macro extract_type(annotation) -%}
+  {%- if annotation is mapping -%}
+    {%- if 'name' in annotation -%}
+      {{ annotation.name }}
+    {%- elif 'slice' in annotation -%}
+      {{ extract_type(annotation.slice) }}
+    {%- elif 'left' in annotation and 'slice' in annotation -%}
+      {{ extract_type(annotation.left) }}[{{ extract_type(annotation.slice) }}]
+    {%- elif 'elements' in annotation -%}
+      {{ annotation.elements | map(attribute='name') | join(', ') }}
+    {%- else -%}
+      {{ annotation }}
+    {%- endif -%}
+  {%- else -%}
+    {{ annotation }}
+  {%- endif -%}
+{%- endmacro -%}
+
 {%- macro render_signature(member) -%}
 <!-- signatures.jinja2 -->
 ::: {.signature}
@@ -8,21 +26,21 @@
   {%- else -%}{{ member.kind }}
   {%- endif -%}
 </span>
-<span class="name">{{ member.name }}</span>{%- if member.parameters -%}(
-  {%- if member.parameters|length == 1 -%}
+<span class="name">{{ member.name }}</span>{%- if member.parameters -%}({{- '' -}}
+  {%- if member.parameters | length == 1 -%}
     <span class="param"><span class="n">{{ member.parameters[0].name }}</span>
     {%- if member.parameters[0].annotation -%}
-      <span class="p">:</span><span class="n">{{ member.parameters[0].annotation['name'] if member.parameters[0].annotation is mapping and 'name' in member.parameters[0].annotation else member.parameters[0].annotation }}</span>
+      <span class="p">:</span><span class="n">{{ extract_type(member.parameters[0].annotation) }}</span>
     {%- endif -%}
     {%- if member.parameters[0].default is not none -%}
-      <span class="o">=</span><span class="kc">{{ member.parameters[0].default }}</span>
+      <span class="o"> = </span><span class="kc">{{ member.parameters[0].default }}</span>
     {%- endif -%}
     </span>
   {%- else -%}
     {%- for param in member.parameters -%}
-      <span class="param"><span class="n">{{ param.name }}</span>
+      <span class="params"><span class="n">{{ param.name }}</span>
       {%- if param.annotation -%}
-        <span class="p">:</span><span class="n">{{ param.annotation['name'] if param.annotation is mapping and 'name' in param.annotation else param.annotation }}</span>
+        <span class="p">:</span><span class="n">{{ extract_type(param.annotation) }}</span>
       {%- endif -%}
       {%- if param.default is not none -%}
         <span class="o"> = </span><span class="kc">{{ param.default }}</span>
@@ -30,13 +48,27 @@
       {%- if not loop.last -%}<span class="muted">,</span>{%- endif -%}
       </span>
     {%- endfor -%}
-  {%- endif -%}
-){%- else -%}(){%- endif -%}{%- if member.returns -%}
+  {%- endif -%})
+  {%- else -%}()
+{%- endif -%}
+{%- if member.returns -%}
   <span class="p"> → </span><span class="return-annotation">
-  {%- set return_name = member.returns['name'] if member.returns is mapping and 'name' in member.returns else member.returns -%}
-  <a href="/reference/validmind/vm_models.html#class-{{ return_name|lower }}">{{ return_name }}</a><span class="muted">:</span>
+  {%- if member.returns is mapping -%}
+    {%- if 'values' in member.returns and member.returns.values is iterable -%}
+      {# Handle np.ndarray case #}
+      {{- member.returns.values | map(attribute='name') | join('.') -}}
+    {%- elif 'name' in member.returns -%}
+      {%- if member.returns.name in ['str', 'dict', 'list', 'bool', 'int', 'float'] -%}
+        {{- member.returns.name -}}
+      {%- else -%}
+        <a href="/reference/validmind/vm_models.html#class-{{ member.returns.name|lower }}">validmind.vm_models.{{ member.returns.name }}</a>
+      {%- endif -%}
+    {%- endif -%}
+  {%- else -%}
+    {{- member.returns -}}
+  {%- endif -%}
   </span>
-{%- endif -%}</span>
+{%- endif +%}
 
 :::
 {%- endmacro -%}

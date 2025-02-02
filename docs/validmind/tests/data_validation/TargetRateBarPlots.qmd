@@ -14,7 +14,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">TargetRateBarPlots</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span></span>)</span>
+<span class="kw">def</span> <span class="name">TargetRateBarPlots</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span></span>)
 
 :::
 
@@ -52,7 +52,7 @@ The test involves creating a pair of bar plots for each categorical feature in t
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">SkipTestError</span>()</span>
+<span class="kw">class</span> <span class="name">SkipTestError</span>()
 
 :::
 

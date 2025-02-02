@@ -53,7 +53,7 @@ After you have pasted the code snippet into your development source code and exe
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">get_test_suite</span>(<span class="param"><span class="n">test_suite_id</span><span class="p">:</span><span class="n">str</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">section</span><span class="p">:</span><span class="n">str</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">args</span><span class="o"> = </span><span class="kc">()</span><span class="muted">,</span></span><span class="param"><span class="n">kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-testsuite">TestSuite</a><span class="muted">:</span> </span></span>
+<span class="kw">def</span> <span class="name">get_test_suite</span>(<span class="params"><span class="n">test_suite_id</span><span class="p">:</span><span class="n">str</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">section</span><span class="p">:</span><span class="n">str</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">args</span><span class="o"> = </span><span class="kc">()</span><span class="muted">,</span></span><span class="params"><span class="n">kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-testsuite">validmind.vm_models.TestSuite</a></span>
 
 :::
 
@@ -74,7 +74,7 @@ Gets a TestSuite object for the current project or a specific test suite This fu
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">init</span>(<span class="param"><span class="n">project</span><span class="p">:</span><span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Optional'}, 'slice': {'cls': 'ExprName', 'name': 'str'}}</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">api_key</span><span class="p">:</span><span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Optional'}, 'slice': {'cls': 'ExprName', 'name': 'str'}}</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">api_secret</span><span class="p">:</span><span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Optional'}, 'slice': {'cls': 'ExprName', 'name': 'str'}}</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">api_host</span><span class="p">:</span><span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Optional'}, 'slice': {'cls': 'ExprName', 'name': 'str'}}</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">model</span><span class="p">:</span><span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Optional'}, 'slice': {'cls': 'ExprName', 'name': 'str'}}</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">monitoring</span><span class="p">:</span><span class="n">bool</span><span class="o"> = </span><span class="kc">False</span><span class="muted">,</span></span><span class="param"><span class="n">generate_descriptions</span><span class="p">:</span><span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Optional'}, 'slice': {'cls': 'ExprName', 'name': 'bool'}}</span><span class="o"> = </span><span class="kc">None</span></span>)</span>
+<span class="kw">def</span> <span class="name">init</span>(<span class="params"><span class="n">project</span><span class="p">:</span><span class="n">str</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">api_key</span><span class="p">:</span><span class="n">str</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">api_secret</span><span class="p">:</span><span class="n">str</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">api_host</span><span class="p">:</span><span class="n">str</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="p">:</span><span class="n">str</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">monitoring</span><span class="p">:</span><span class="n">bool</span><span class="o"> = </span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">generate_descriptions</span><span class="p">:</span><span class="n">bool</span><span class="o"> = </span><span class="kc">None</span></span>)
 
 :::
 
@@ -104,7 +104,7 @@ If the API key and secret are not provided, the client will attempt to retrieve 
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">init_dataset</span>(<span class="param"><span class="n">dataset</span><span class="muted">,</span></span><span class="param"><span class="n">model</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">index</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">index_name</span><span class="p">:</span><span class="n">str</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">date_time_index</span><span class="p">:</span><span class="n">bool</span><span class="o"> = </span><span class="kc">False</span><span class="muted">,</span></span><span class="param"><span class="n">columns</span><span class="p">:</span><span class="n">list</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">text_column</span><span class="p">:</span><span class="n">str</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">target_column</span><span class="p">:</span><span class="n">str</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">feature_columns</span><span class="p">:</span><span class="n">list</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">extra_columns</span><span class="p">:</span><span class="n">dict</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">class_labels</span><span class="p">:</span><span class="n">dict</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">type</span><span class="p">:</span><span class="n">str</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">input_id</span><span class="p">:</span><span class="n">str</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">\_\_log</span><span class="o"> = </span><span class="kc">True</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-vmdataset">VMDataset</a><span class="muted">:</span> </span></span>
+<span class="kw">def</span> <span class="name">init_dataset</span>(<span class="params"><span class="n">dataset</span><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">index</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">index_name</span><span class="p">:</span><span class="n">str</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">date_time_index</span><span class="p">:</span><span class="n">bool</span><span class="o"> = </span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">columns</span><span class="p">:</span><span class="n">list</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">text_column</span><span class="p">:</span><span class="n">str</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">target_column</span><span class="p">:</span><span class="n">str</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">feature_columns</span><span class="p">:</span><span class="n">list</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">extra_columns</span><span class="p">:</span><span class="n">dict</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">class_labels</span><span class="p">:</span><span class="n">dict</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">type</span><span class="p">:</span><span class="n">str</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">input_id</span><span class="p">:</span><span class="n">str</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">\_\_log</span><span class="o"> = </span><span class="kc">True</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-vmdataset">validmind.vm_models.VMDataset</a></span>
 
 :::
 
@@ -131,7 +131,7 @@ Returns: vm.vm.Dataset: A VM Dataset instance
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">init_model</span>(<span class="param"><span class="n">model</span><span class="p">:</span><span class="n">object</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">input_id</span><span class="p">:</span><span class="n">str</span><span class="o"> = </span><span class="kc">'model'</span><span class="muted">,</span></span><span class="param"><span class="n">attributes</span><span class="p">:</span><span class="n">dict</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">predict_fn</span><span class="p">:</span><span class="n">callable</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">\_\_log</span><span class="o"> = </span><span class="kc">True</span><span class="muted">,</span></span><span class="param"><span class="n">kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-vmmodel">VMModel</a><span class="muted">:</span> </span></span>
+<span class="kw">def</span> <span class="name">init_model</span>(<span class="params"><span class="n">model</span><span class="p">:</span><span class="n">object</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">input_id</span><span class="p">:</span><span class="n">str</span><span class="o"> = </span><span class="kc">'model'</span><span class="muted">,</span></span><span class="params"><span class="n">attributes</span><span class="p">:</span><span class="n">dict</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">predict_fn</span><span class="p">:</span><span class="n">callable</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">\_\_log</span><span class="o"> = </span><span class="kc">True</span><span class="muted">,</span></span><span class="params"><span class="n">kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-vmmodel">validmind.vm_models.VMModel</a></span>
 
 :::
 
@@ -161,7 +161,7 @@ Initializes a VM Model, which can then be passed to other functions that can per
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">init_r_model</span>(<span class="param"><span class="n">model_path</span><span class="p">:</span><span class="n">str</span><span class="muted">,</span></span><span class="param"><span class="n">input_id</span><span class="p">:</span><span class="n">str</span><span class="o"> = </span><span class="kc">'model'</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-vmmodel">VMModel</a><span class="muted">:</span> </span></span>
+<span class="kw">def</span> <span class="name">init_r_model</span>(<span class="params"><span class="n">model_path</span><span class="p">:</span><span class="n">str</span><span class="muted">,</span></span><span class="params"><span class="n">input_id</span><span class="p">:</span><span class="n">str</span><span class="o"> = </span><span class="kc">'model'</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-vmmodel">validmind.vm_models.VMModel</a></span>
 
 :::
 
@@ -191,7 +191,7 @@ LogisticRegression and LinearRegression models are converted to sklearn models b
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">log_metric</span>(<span class="param"><span class="n">key</span><span class="p">:</span><span class="n">str</span><span class="muted">,</span></span><span class="param"><span class="n">value</span><span class="p">:</span><span class="n">float</span><span class="muted">,</span></span><span class="param"><span class="n">inputs</span><span class="p">:</span><span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Optional'}, 'slice': {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'str'}}}</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">params</span><span class="p">:</span><span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Optional'}, 'slice': {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Dict'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'str'}, {'cls': 'ExprName', 'name': 'Any'}], 'implicit': True}}}</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">recorded_at</span><span class="p">:</span><span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Optional'}, 'slice': {'cls': 'ExprName', 'name': 'str'}}</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">thresholds</span><span class="p">:</span><span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Optional'}, 'slice': {'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Dict'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprName', 'name': 'str'}, {'cls': 'ExprName', 'name': 'Any'}], 'implicit': True}}}</span><span class="o"> = </span><span class="kc">None</span></span>)</span>
+<span class="kw">def</span> <span class="name">log_metric</span>(<span class="params"><span class="n">key</span><span class="p">:</span><span class="n">str</span><span class="muted">,</span></span><span class="params"><span class="n">value</span><span class="p">:</span><span class="n">float</span><span class="muted">,</span></span><span class="params"><span class="n">inputs</span><span class="p">:</span><span class="n">str</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">params</span><span class="p">:</span><span class="n">str, Any</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">recorded_at</span><span class="p">:</span><span class="n">str</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">thresholds</span><span class="p">:</span><span class="n">str, Any</span><span class="o"> = </span><span class="kc">None</span></span>)
 
 :::
 
@@ -214,7 +214,7 @@ Logs a unit metric Unit metrics are key-value pairs where the key is the metric 
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">preview_template</span>()</span>
+<span class="kw">def</span> <span class="name">preview_template</span>()
 
 :::
 
@@ -232,7 +232,7 @@ Preview the documentation template for the current project This function will di
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">print_env</span>()</span>
+<span class="kw">def</span> <span class="name">print_env</span>()
 
 :::
 
@@ -246,7 +246,7 @@ Prints a log of the running environment for debugging. Output includes: ValidMin
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">reload</span>()</span>
+<span class="kw">def</span> <span class="name">reload</span>()
 
 :::
 
@@ -260,7 +260,7 @@ Reconnect to the ValidMind API and reload the project configuration
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">run_documentation_tests</span>(<span class="param"><span class="n">section</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">send</span><span class="o"> = </span><span class="kc">True</span><span class="muted">,</span></span><span class="param"><span class="n">fail_fast</span><span class="o"> = </span><span class="kc">False</span><span class="muted">,</span></span><span class="param"><span class="n">inputs</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">config</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)</span>
+<span class="kw">def</span> <span class="name">run_documentation_tests</span>(<span class="params"><span class="n">section</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">send</span><span class="o"> = </span><span class="kc">True</span><span class="muted">,</span></span><span class="params"><span class="n">fail_fast</span><span class="o"> = </span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">inputs</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">config</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)
 
 :::
 
@@ -291,7 +291,7 @@ Collect and run all the tests associated with a template This function will anal
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">run_test_suite</span>(<span class="param"><span class="n">test_suite_id</span><span class="muted">,</span></span><span class="param"><span class="n">send</span><span class="o"> = </span><span class="kc">True</span><span class="muted">,</span></span><span class="param"><span class="n">fail_fast</span><span class="o"> = </span><span class="kc">False</span><span class="muted">,</span></span><span class="param"><span class="n">config</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">inputs</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)</span>
+<span class="kw">def</span> <span class="name">run_test_suite</span>(<span class="params"><span class="n">test_suite_id</span><span class="muted">,</span></span><span class="params"><span class="n">send</span><span class="o"> = </span><span class="kc">True</span><span class="muted">,</span></span><span class="params"><span class="n">fail_fast</span><span class="o"> = </span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">config</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">inputs</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)
 
 :::
 
@@ -322,7 +322,7 @@ High Level function for running a test suite This function provides a high level
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">tags</span>(<span class="param"><span class="n">tags</span><span class="o">=</span><span class="kc">()</span></span>)</span>
+<span class="kw">def</span> <span class="name">tags</span>(<span class="param"><span class="n">tags</span><span class="o"> = </span><span class="kc">()</span></span>)
 
 :::
 
@@ -340,7 +340,7 @@ Decorator for specifying tags for a test.
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">tasks</span>(<span class="param"><span class="n">tasks</span><span class="o">=</span><span class="kc">()</span></span>)</span>
+<span class="kw">def</span> <span class="name">tasks</span>(<span class="param"><span class="n">tasks</span><span class="o"> = </span><span class="kc">()</span></span>)
 
 :::
 
@@ -358,7 +358,7 @@ Decorator for specifying the task types that a test is designed for.
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">test</span>(<span class="param"><span class="n">func_or_id</span></span>)</span>
+<span class="kw">def</span> <span class="name">test</span>(<span class="param"><span class="n">func_or_id</span></span>)
 
 :::
 
@@ -397,7 +397,7 @@ The function may also include a docstring. This docstring will be used and logge
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">RawData</span>()</span>
+<span class="kw">class</span> <span class="name">RawData</span>()
 
 :::
 
@@ -411,7 +411,7 @@ Holds raw data for a test result
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">__init__</span>(<span class="param"><span class="n">self</span><span class="muted">,</span></span><span class="param"><span class="n">log</span><span class="p">:</span><span class="n">bool</span><span class="o"> = </span><span class="kc">False</span><span class="muted">,</span></span><span class="param"><span class="n">kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)</span>
+<span class="kw">def</span> <span class="name">__init__</span>(<span class="params"><span class="n">self</span><span class="muted">,</span></span><span class="params"><span class="n">log</span><span class="p">:</span><span class="n">bool</span><span class="o"> = </span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)
 
 :::
 
@@ -430,7 +430,7 @@ Create a new RawData object
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">inspect</span>(<span class="param"><span class="n">self</span><span class="muted">,</span></span><span class="param"><span class="n">show</span><span class="p">:</span><span class="n">bool</span><span class="o"> = </span><span class="kc">True</span></span>)</span>
+<span class="kw">def</span> <span class="name">inspect</span>(<span class="params"><span class="n">self</span><span class="muted">,</span></span><span class="params"><span class="n">show</span><span class="p">:</span><span class="n">bool</span><span class="o"> = </span><span class="kc">True</span></span>)
 
 :::
 
@@ -444,6 +444,6 @@ Inspect the raw data
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">serialize</span>(<span class="param"><span class="n">self</span></span>)</span>
+<span class="kw">def</span> <span class="name">serialize</span>(<span class="param"><span class="n">self</span></span>)
 
 :::

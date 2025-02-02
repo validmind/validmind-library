@@ -12,7 +12,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">get_logger</span>(<span class="param"><span class="n">name</span><span class="o"> = </span><span class="kc">'validmind'</span><span class="muted">,</span></span><span class="param"><span class="n">log_level</span><span class="o"> = </span><span class="kc">None</span></span>)</span>
+<span class="kw">def</span> <span class="name">get_logger</span>(<span class="params"><span class="n">name</span><span class="o"> = </span><span class="kc">'validmind'</span><span class="muted">,</span></span><span class="params"><span class="n">log_level</span><span class="o"> = </span><span class="kc">None</span></span>)
 
 :::
 
@@ -28,7 +28,7 @@ Get a logger for the given module name
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">calculate_psi</span>(<span class="param"><span class="n">score_initial</span><span class="muted">,</span></span><span class="param"><span class="n">score_new</span><span class="muted">,</span></span><span class="param"><span class="n">num_bins</span><span class="o"> = </span><span class="kc">10</span><span class="muted">,</span></span><span class="param"><span class="n">mode</span><span class="o"> = </span><span class="kc">'fixed'</span></span>)</span>
+<span class="kw">def</span> <span class="name">calculate_psi</span>(<span class="params"><span class="n">score_initial</span><span class="muted">,</span></span><span class="params"><span class="n">score_new</span><span class="muted">,</span></span><span class="params"><span class="n">num_bins</span><span class="o"> = </span><span class="kc">10</span><span class="muted">,</span></span><span class="params"><span class="n">mode</span><span class="o"> = </span><span class="kc">'fixed'</span></span>)
 
 :::
 
@@ -44,7 +44,7 @@ Taken from: https://towardsdatascience.com/checking-model-stability-and-populati
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">PopulationStabilityIndex</span>(<span class="param"><span class="n">datasets</span><span class="p">:</span><span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'VMDataset'}}</span><span class="muted">,</span></span><span class="param"><span class="n">model</span><span class="p">:</span><span class="n">VMModel</span><span class="muted">,</span></span><span class="param"><span class="n">num_bins</span><span class="p">:</span><span class="n">int</span><span class="o"> = </span><span class="kc">10</span><span class="muted">,</span></span><span class="param"><span class="n">mode</span><span class="p">:</span><span class="n">str</span><span class="o"> = </span><span class="kc">'fixed'</span></span>)</span>
+<span class="kw">def</span> <span class="name">PopulationStabilityIndex</span>(<span class="params"><span class="n">datasets</span><span class="p">:</span><span class="n">VMDataset</span><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="p">:</span><span class="n">VMModel</span><span class="muted">,</span></span><span class="params"><span class="n">num_bins</span><span class="p">:</span><span class="n">int</span><span class="o"> = </span><span class="kc">10</span><span class="muted">,</span></span><span class="params"><span class="n">mode</span><span class="p">:</span><span class="n">str</span><span class="o"> = </span><span class="kc">'fixed'</span></span>)
 
 :::
 
@@ -87,7 +87,7 @@ The implementation of the PSI in this script involves calculating the PSI for ea
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">SkipTestError</span>()</span>
+<span class="kw">class</span> <span class="name">SkipTestError</span>()
 
 :::
 

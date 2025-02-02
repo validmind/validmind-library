@@ -14,7 +14,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">KMeansClustersOptimization</span>(<span class="param"><span class="n">model</span><span class="p">:</span><span class="n">VMModel</span><span class="muted">,</span></span><span class="param"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span><span class="muted">,</span></span><span class="param"><span class="n">n_clusters</span><span class="p">:</span><span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'Union'}, 'slice': {'cls': 'ExprTuple', 'elements': [{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'int'}}, 'None'], 'implicit': True}}</span><span class="o"> = </span><span class="kc">None</span></span>)</span>
+<span class="kw">def</span> <span class="name">KMeansClustersOptimization</span>(<span class="params"><span class="n">model</span><span class="p">:</span><span class="n">VMModel</span><span class="muted">,</span></span><span class="params"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span><span class="muted">,</span></span><span class="params"><span class="n">n_clusters</span><span class="p">:</span><span class="n">, </span><span class="o"> = </span><span class="kc">None</span></span>)
 
 :::
 
@@ -57,7 +57,7 @@ The test mechanism involves iterating over a predefined range of cluster numbers
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">SkipTestError</span>()</span>
+<span class="kw">class</span> <span class="name">SkipTestError</span>()
 
 :::
 

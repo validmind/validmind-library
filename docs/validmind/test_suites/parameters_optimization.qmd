@@ -18,7 +18,7 @@ Test suites for sklearn-compatible hyper parameters tunning Ideal setup is to ha
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">KmeansParametersOptimization</span>()</span>
+<span class="kw">class</span> <span class="name">KmeansParametersOptimization</span>()
 
 :::
 

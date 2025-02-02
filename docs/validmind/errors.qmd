@@ -21,7 +21,7 @@ This module contains all the custom errors that are used in the ValidMind Librar
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">APIRequestError</span>()</span>
+<span class="kw">class</span> <span class="name">APIRequestError</span>()
 
 :::
 
@@ -42,7 +42,7 @@ Generic error for API request errors that are not known.
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">BaseError</span>()</span>
+<span class="kw">class</span> <span class="name">BaseError</span>()
 
 :::
 
@@ -56,7 +56,7 @@ Generic error for API request errors that are not known.
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">description</span>(<span class="param"><span class="n">self</span><span class="muted">,</span></span><span class="param"><span class="n">args</span><span class="o"> = </span><span class="kc">()</span><span class="muted">,</span></span><span class="param"><span class="n">kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)</span>
+<span class="kw">def</span> <span class="name">description</span>(<span class="params"><span class="n">self</span><span class="muted">,</span></span><span class="params"><span class="n">args</span><span class="o"> = </span><span class="kc">()</span><span class="muted">,</span></span><span class="params"><span class="n">kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)
 
 :::
 
@@ -68,7 +68,7 @@ Generic error for API request errors that are not known.
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">GetTestSuiteError</span>()</span>
+<span class="kw">class</span> <span class="name">GetTestSuiteError</span>()
 
 :::
 
@@ -89,7 +89,7 @@ When the test suite could not be found.
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">InitializeTestSuiteError</span>()</span>
+<span class="kw">class</span> <span class="name">InitializeTestSuiteError</span>()
 
 :::
 
@@ -110,7 +110,7 @@ When the test suite was found but could not be initialized.
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">InvalidAPICredentialsError</span>()</span>
+<span class="kw">class</span> <span class="name">InvalidAPICredentialsError</span>()
 
 :::
 
@@ -125,7 +125,7 @@ When the test suite was found but could not be initialized.
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">description</span>(<span class="param"><span class="n">self</span><span class="muted">,</span></span><span class="param"><span class="n">args</span><span class="o"> = </span><span class="kc">()</span><span class="muted">,</span></span><span class="param"><span class="n">kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)</span>
+<span class="kw">def</span> <span class="name">description</span>(<span class="params"><span class="n">self</span><span class="muted">,</span></span><span class="params"><span class="n">args</span><span class="o"> = </span><span class="kc">()</span><span class="muted">,</span></span><span class="params"><span class="n">kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)
 
 :::
 
@@ -137,7 +137,7 @@ When the test suite was found but could not be initialized.
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">InvalidContentIdPrefixError</span>()</span>
+<span class="kw">class</span> <span class="name">InvalidContentIdPrefixError</span>()
 
 :::
 
@@ -158,7 +158,7 @@ When an invalid text content_id is sent to the API.
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">InvalidInputError</span>()</span>
+<span class="kw">class</span> <span class="name">InvalidInputError</span>()
 
 :::
 
@@ -179,7 +179,7 @@ When an invalid input object.
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">InvalidMetricResultsError</span>()</span>
+<span class="kw">class</span> <span class="name">InvalidMetricResultsError</span>()
 
 :::
 
@@ -200,7 +200,7 @@ When an invalid metric results object is sent to the API.
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">InvalidProjectError</span>()</span>
+<span class="kw">class</span> <span class="name">InvalidProjectError</span>()
 
 :::
 
@@ -215,7 +215,7 @@ When an invalid metric results object is sent to the API.
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">description</span>(<span class="param"><span class="n">self</span><span class="muted">,</span></span><span class="param"><span class="n">args</span><span class="o"> = </span><span class="kc">()</span><span class="muted">,</span></span><span class="param"><span class="n">kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)</span>
+<span class="kw">def</span> <span class="name">description</span>(<span class="params"><span class="n">self</span><span class="muted">,</span></span><span class="params"><span class="n">args</span><span class="o"> = </span><span class="kc">()</span><span class="muted">,</span></span><span class="params"><span class="n">kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)
 
 :::
 
@@ -227,7 +227,7 @@ When an invalid metric results object is sent to the API.
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">InvalidRequestBodyError</span>()</span>
+<span class="kw">class</span> <span class="name">InvalidRequestBodyError</span>()
 
 :::
 
@@ -248,7 +248,7 @@ When a POST/PUT request is made with an invalid request body.
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">InvalidTestParametersError</span>()</span>
+<span class="kw">class</span> <span class="name">InvalidTestParametersError</span>()
 
 :::
 
@@ -269,7 +269,7 @@ When an invalid parameters for the test.
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">InvalidTestResultsError</span>()</span>
+<span class="kw">class</span> <span class="name">InvalidTestResultsError</span>()
 
 :::
 
@@ -290,7 +290,7 @@ When an invalid test results object is sent to the API.
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">InvalidTextObjectError</span>()</span>
+<span class="kw">class</span> <span class="name">InvalidTextObjectError</span>()
 
 :::
 
@@ -311,7 +311,7 @@ When an invalid Metadat (Text) object is sent to the API.
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">InvalidValueFormatterError</span>()</span>
+<span class="kw">class</span> <span class="name">InvalidValueFormatterError</span>()
 
 :::
 
@@ -332,7 +332,7 @@ When an invalid value formatter is provided when serializing results.
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">InvalidXGBoostTrainedModelError</span>()</span>
+<span class="kw">class</span> <span class="name">InvalidXGBoostTrainedModelError</span>()
 
 :::
 
@@ -353,7 +353,7 @@ When an invalid XGBoost trained model is used when calling init_r_model.
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">LoadTestError</span>()</span>
+<span class="kw">class</span> <span class="name">LoadTestError</span>()
 
 :::
 
@@ -374,7 +374,7 @@ Exception raised when an error occurs while loading a test
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">MismatchingClassLabelsError</span>()</span>
+<span class="kw">class</span> <span class="name">MismatchingClassLabelsError</span>()
 
 :::
 
@@ -395,7 +395,7 @@ When the class labels found in the dataset don't match the provided target label
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">MissingAPICredentialsError</span>()</span>
+<span class="kw">class</span> <span class="name">MissingAPICredentialsError</span>()
 
 :::
 
@@ -410,7 +410,7 @@ When the class labels found in the dataset don't match the provided target label
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">description</span>(<span class="param"><span class="n">self</span><span class="muted">,</span></span><span class="param"><span class="n">args</span><span class="o"> = </span><span class="kc">()</span><span class="muted">,</span></span><span class="param"><span class="n">kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)</span>
+<span class="kw">def</span> <span class="name">description</span>(<span class="params"><span class="n">self</span><span class="muted">,</span></span><span class="params"><span class="n">args</span><span class="o"> = </span><span class="kc">()</span><span class="muted">,</span></span><span class="params"><span class="n">kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)
 
 :::
 
@@ -422,7 +422,7 @@ When the class labels found in the dataset don't match the provided target label
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">MissingCacheResultsArgumentsError</span>()</span>
+<span class="kw">class</span> <span class="name">MissingCacheResultsArgumentsError</span>()
 
 :::
 
@@ -443,7 +443,7 @@ When the cache_results function is missing arguments.
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">MissingClassLabelError</span>()</span>
+<span class="kw">class</span> <span class="name">MissingClassLabelError</span>()
 
 :::
 
@@ -464,7 +464,7 @@ When the one or more class labels are missing from provided dataset targets.
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">MissingDependencyError</span>()</span>
+<span class="kw">class</span> <span class="name">MissingDependencyError</span>()
 
 :::
 
@@ -485,7 +485,7 @@ When a required dependency is missing.
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">MissingDocumentationTemplate</span>()</span>
+<span class="kw">class</span> <span class="name">MissingDocumentationTemplate</span>()
 
 :::
 
@@ -506,7 +506,7 @@ When the client config is missing the documentation template.
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">MissingModelIdError</span>()</span>
+<span class="kw">class</span> <span class="name">MissingModelIdError</span>()
 
 :::
 
@@ -521,7 +521,7 @@ When the client config is missing the documentation template.
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">description</span>(<span class="param"><span class="n">self</span><span class="muted">,</span></span><span class="param"><span class="n">args</span><span class="o"> = </span><span class="kc">()</span><span class="muted">,</span></span><span class="param"><span class="n">kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)</span>
+<span class="kw">def</span> <span class="name">description</span>(<span class="params"><span class="n">self</span><span class="muted">,</span></span><span class="params"><span class="n">args</span><span class="o"> = </span><span class="kc">()</span><span class="muted">,</span></span><span class="params"><span class="n">kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)
 
 :::
 
@@ -533,7 +533,7 @@ When the client config is missing the documentation template.
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">MissingOrInvalidModelPredictFnError</span>()</span>
+<span class="kw">class</span> <span class="name">MissingOrInvalidModelPredictFnError</span>()
 
 :::
 
@@ -554,7 +554,7 @@ When the pytorch model is missing a predict function or its predict method does 
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">MissingRequiredTestInputError</span>()</span>
+<span class="kw">class</span> <span class="name">MissingRequiredTestInputError</span>()
 
 :::
 
@@ -575,7 +575,7 @@ When a required test context variable is missing.
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">MissingRExtrasError</span>()</span>
+<span class="kw">class</span> <span class="name">MissingRExtrasError</span>()
 
 :::
 
@@ -594,7 +594,7 @@ When the R extras have not been installed.
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">description</span>(<span class="param"><span class="n">self</span><span class="muted">,</span></span><span class="param"><span class="n">args</span><span class="o"> = </span><span class="kc">()</span><span class="muted">,</span></span><span class="param"><span class="n">kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)</span>
+<span class="kw">def</span> <span class="name">description</span>(<span class="params"><span class="n">self</span><span class="muted">,</span></span><span class="params"><span class="n">args</span><span class="o"> = </span><span class="kc">()</span><span class="muted">,</span></span><span class="params"><span class="n">kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)
 
 :::
 
@@ -606,7 +606,7 @@ When the R extras have not been installed.
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">MissingTextContentIdError</span>()</span>
+<span class="kw">class</span> <span class="name">MissingTextContentIdError</span>()
 
 :::
 
@@ -627,7 +627,7 @@ When a Text object is sent to the API without a content_id.
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">MissingTextContentsError</span>()</span>
+<span class="kw">class</span> <span class="name">MissingTextContentsError</span>()
 
 :::
 
@@ -648,7 +648,7 @@ When a Text object is sent to the API without a "text" attribute.
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">SkipTestError</span>()</span>
+<span class="kw">class</span> <span class="name">SkipTestError</span>()
 
 :::
 
@@ -669,7 +669,7 @@ Useful error to throw when a test cannot be executed.
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">TestInputInvalidDatasetError</span>()</span>
+<span class="kw">class</span> <span class="name">TestInputInvalidDatasetError</span>()
 
 :::
 
@@ -690,7 +690,7 @@ When an invalid dataset is used in a test context.
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">UnsupportedColumnTypeError</span>()</span>
+<span class="kw">class</span> <span class="name">UnsupportedColumnTypeError</span>()
 
 :::
 
@@ -711,7 +711,7 @@ When an unsupported column type is found on a dataset.
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">UnsupportedDatasetError</span>()</span>
+<span class="kw">class</span> <span class="name">UnsupportedDatasetError</span>()
 
 :::
 
@@ -732,7 +732,7 @@ When an unsupported dataset is used.
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">UnsupportedFigureError</span>()</span>
+<span class="kw">class</span> <span class="name">UnsupportedFigureError</span>()
 
 :::
 
@@ -753,7 +753,7 @@ When an unsupported figure object is constructed.
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">UnsupportedModelError</span>()</span>
+<span class="kw">class</span> <span class="name">UnsupportedModelError</span>()
 
 :::
 
@@ -774,7 +774,7 @@ When an unsupported model is used.
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">UnsupportedModelForSHAPError</span>()</span>
+<span class="kw">class</span> <span class="name">UnsupportedModelForSHAPError</span>()
 
 :::
 
@@ -795,7 +795,7 @@ When an unsupported model is used for SHAP importance.
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">UnsupportedRModelError</span>()</span>
+<span class="kw">class</span> <span class="name">UnsupportedRModelError</span>()
 
 :::
 
@@ -816,7 +816,7 @@ When an unsupported R model is used.
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">raise_api_error</span>(<span class="param"><span class="n">error_string</span></span>)</span>
+<span class="kw">def</span> <span class="name">raise_api_error</span>(<span class="param"><span class="n">error_string</span></span>)
 
 :::
 
@@ -832,7 +832,7 @@ Safely try to parse JSON from the response message in case the API returns a non
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">should_raise_on_fail_fast</span>(<span class="param"><span class="n">error</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-bool">bool</a><span class="muted">:</span> </span></span>
+<span class="kw">def</span> <span class="name">should_raise_on_fail_fast</span>(<span class="param"><span class="n">error</span></span>)<span class="p"> → </span><span class="return-annotation">bool</span>
 
 :::
 

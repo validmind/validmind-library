@@ -12,7 +12,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">simple_preprocess_booleans</span>(<span class="param"><span class="n">df</span><span class="muted">,</span></span><span class="param"><span class="n">columns</span></span>)</span>
+<span class="kw">def</span> <span class="name">simple_preprocess_booleans</span>(<span class="params"><span class="n">df</span><span class="muted">,</span></span><span class="params"><span class="n">columns</span></span>)
 
 :::
 
@@ -35,7 +35,7 @@ Preprocess boolean columns.
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">simple_preprocess_categoricals</span>(<span class="param"><span class="n">df</span><span class="muted">,</span></span><span class="param"><span class="n">columns</span></span>)</span>
+<span class="kw">def</span> <span class="name">simple_preprocess_categoricals</span>(<span class="params"><span class="n">df</span><span class="muted">,</span></span><span class="params"><span class="n">columns</span></span>)
 
 :::
 
@@ -58,7 +58,7 @@ Preprocess categorical columns.
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">simple_preprocess_numericals</span>(<span class="param"><span class="n">df</span><span class="muted">,</span></span><span class="param"><span class="n">columns</span></span>)</span>
+<span class="kw">def</span> <span class="name">simple_preprocess_numericals</span>(<span class="params"><span class="n">df</span><span class="muted">,</span></span><span class="params"><span class="n">columns</span></span>)
 
 :::
 
@@ -83,7 +83,7 @@ Preprocess numerical columns.
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">load_data</span>()</span>
+<span class="kw">def</span> <span class="name">load_data</span>()
 
 :::
 
@@ -95,6 +95,6 @@ Preprocess numerical columns.
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">preprocess</span>(<span class="param"><span class="n">df</span></span>)</span>
+<span class="kw">def</span> <span class="name">preprocess</span>(<span class="param"><span class="n">df</span></span>)
 
 :::

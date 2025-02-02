@@ -14,7 +14,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">DatasetSplit</span>(<span class="param"><span class="n">datasets</span><span class="p">:</span><span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'List'}, 'slice': {'cls': 'ExprName', 'name': 'VMDataset'}}</span></span>)</span>
+<span class="kw">def</span> <span class="name">DatasetSplit</span>(<span class="param"><span class="n">datasets</span><span class="p">:</span><span class="n">VMDataset</span></span>)
 
 :::
 

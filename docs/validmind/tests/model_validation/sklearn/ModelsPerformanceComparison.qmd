@@ -12,7 +12,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">multiclass_roc_auc_score</span>(<span class="param"><span class="n">y_test</span><span class="muted">,</span></span><span class="param"><span class="n">y_pred</span><span class="muted">,</span></span><span class="param"><span class="n">average</span><span class="o"> = </span><span class="kc">'macro'</span></span>)</span>
+<span class="kw">def</span> <span class="name">multiclass_roc_auc_score</span>(<span class="params"><span class="n">y_test</span><span class="muted">,</span></span><span class="params"><span class="n">y_pred</span><span class="muted">,</span></span><span class="params"><span class="n">average</span><span class="o"> = </span><span class="kc">'macro'</span></span>)
 
 :::
 
@@ -24,7 +24,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">ModelsPerformanceComparison</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span><span class="muted">,</span></span><span class="param"><span class="n">models</span><span class="p">:</span><span class="n">{'cls': 'ExprSubscript', 'left': {'cls': 'ExprName', 'name': 'list'}, 'slice': {'cls': 'ExprName', 'name': 'VMModel'}}</span></span>)</span>
+<span class="kw">def</span> <span class="name">ModelsPerformanceComparison</span>(<span class="params"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span><span class="muted">,</span></span><span class="params"><span class="n">models</span><span class="p">:</span><span class="n">VMModel</span></span>)
 
 :::
 

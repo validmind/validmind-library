@@ -18,7 +18,7 @@ Test suites for sklearn-compatible classifier models Ideal setup is to have the 
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">ClassifierDiagnosis</span>()</span>
+<span class="kw">class</span> <span class="name">ClassifierDiagnosis</span>()
 
 :::
 
@@ -36,7 +36,7 @@ Test suite for sklearn classifier model diagnosis tests
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">ClassifierFullSuite</span>()</span>
+<span class="kw">class</span> <span class="name">ClassifierFullSuite</span>()
 
 :::
 
@@ -54,7 +54,7 @@ Full test suite for binary classification models.
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">ClassifierMetrics</span>()</span>
+<span class="kw">class</span> <span class="name">ClassifierMetrics</span>()
 
 :::
 
@@ -72,7 +72,7 @@ Test suite for sklearn classifier metrics
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">ClassifierModelValidation</span>()</span>
+<span class="kw">class</span> <span class="name">ClassifierModelValidation</span>()
 
 :::
 
@@ -90,7 +90,7 @@ Test suite for binary classification models.
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">ClassifierPerformance</span>()</span>
+<span class="kw">class</span> <span class="name">ClassifierPerformance</span>()
 
 :::
 
@@ -108,7 +108,7 @@ Test suite for sklearn classifier models
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">TabularDataQuality</span>()</span>
+<span class="kw">class</span> <span class="name">TabularDataQuality</span>()
 
 :::
 
@@ -126,7 +126,7 @@ Test suite for data quality on tabular datasets
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">TabularDatasetDescription</span>()</span>
+<span class="kw">class</span> <span class="name">TabularDatasetDescription</span>()
 
 :::
 

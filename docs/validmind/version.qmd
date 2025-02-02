@@ -3,8 +3,10 @@ title: "[validmind](/reference/validmind.html).__version__"
 sidebar: validmind-reference
 ---
 
-<!-- module.qmd.jinja2 - version number -->
+<!-- version.qmd.jinja2 -->
 
-```python
-2.8.4
-```
+::: {.signature}
+
+<span class="name">2.8.4</span>
+
+:::

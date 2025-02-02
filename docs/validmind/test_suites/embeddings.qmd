@@ -18,7 +18,7 @@ Test suites for embeddings models Ideal setup is to have the API client to read 
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">EmbeddingsFullSuite</span>()</span>
+<span class="kw">class</span> <span class="name">EmbeddingsFullSuite</span>()
 
 :::
 
@@ -36,7 +36,7 @@ Full test suite for embeddings models.
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">EmbeddingsMetrics</span>()</span>
+<span class="kw">class</span> <span class="name">EmbeddingsMetrics</span>()
 
 :::
 
@@ -54,7 +54,7 @@ Test suite for embeddings metrics
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">EmbeddingsPerformance</span>()</span>
+<span class="kw">class</span> <span class="name">EmbeddingsPerformance</span>()
 
 :::
 

@@ -14,7 +14,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">plot_rolling_statistics</span>(<span class="param"><span class="n">df</span><span class="muted">,</span></span><span class="param"><span class="n">col</span><span class="muted">,</span></span><span class="param"><span class="n">window_size</span></span>)</span>
+<span class="kw">def</span> <span class="name">plot_rolling_statistics</span>(<span class="params"><span class="n">df</span><span class="muted">,</span></span><span class="params"><span class="n">col</span><span class="muted">,</span></span><span class="params"><span class="n">window_size</span></span>)
 
 :::
 
@@ -26,7 +26,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">RollingStatsPlot</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span><span class="muted">,</span></span><span class="param"><span class="n">window_size</span><span class="p">:</span><span class="n">int</span><span class="o"> = </span><span class="kc">12</span></span>)</span>
+<span class="kw">def</span> <span class="name">RollingStatsPlot</span>(<span class="params"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span><span class="muted">,</span></span><span class="params"><span class="n">window_size</span><span class="p">:</span><span class="n">int</span><span class="o"> = </span><span class="kc">12</span></span>)
 
 :::
 
@@ -69,7 +69,7 @@ This mechanism is comprised of two steps. Initially, the rolling mean and standa
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">SkipTestError</span>()</span>
+<span class="kw">class</span> <span class="name">SkipTestError</span>()
 
 :::
 
