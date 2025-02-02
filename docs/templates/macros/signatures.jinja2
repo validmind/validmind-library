@@ -63,6 +63,9 @@
       {%- else -%}
         <a href="/reference/validmind/vm_models.html#class-{{ member.returns.name|lower }}">validmind.vm_models.{{ member.returns.name }}</a>
       {%- endif -%}
+    {%- else -%}
+      {# Fallback for other mappings - don't show raw JSON #}
+      Any
     {%- endif -%}
   {%- else -%}
     {{- member.returns -}}
