@@ -513,36 +513,6 @@ def get_inherited_members(base: Dict[str, Any], full_data: Dict[str, Any]) -> Li
     
     return members
 
-def generate_module_doc(module, full_data, env, output_dir):
-    """Generate documentation for a module."""
-    is_errors = module.get('name') == 'errors'
-    
-    # Choose template based on module name
-    template = env.get_template('errors.qmd.jinja2' if is_errors else 'module.qmd.jinja2')
-    
-    # For errors module, filter to only include classes and skip module-level functions
-    if is_errors:
-        filtered_members = {
-            name: member for name, member in module.get('members', {}).items()
-            if member.get('kind') == 'class'
-        }
-    else:
-        filtered_members = module.get('members', {})
-    
-    # Generate documentation
-    output = template.render(
-        module=module,
-        members=filtered_members,
-        full_data=full_data,
-        doc=doc_utils,
-        is_errors_module=is_errors
-    )
-    
-    # Write output
-    output_path = os.path.join(output_dir, f"{module['name']}.qmd")
-    with open(output_path, 'w') as f:
-        f.write(output)
-
 def get_child_files(files_dict: Dict[str, str], module_name: str) -> List[Dict[str, Any]]:
     """Get all child QMD files for a given module."""
     prefix = f'docs/validmind/{module_name}/'
