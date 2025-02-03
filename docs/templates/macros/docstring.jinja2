@@ -22,11 +22,11 @@
                     {%- if desc.endswith(')') and '(default:' in desc -%}
                         {%- set desc = desc[:-1] ~ ')' -%}
                     {%- endif -%}
+        
+                    {# Check if the parameter has a type annotation #}
                     {%- if param.type_name -%}
-                        {%- set type_info = '(' ~ param.type_name ~ ')' -%}
-                        {%- if type_info.endswith(')') and not type_info.startswith('(') -%}
-                            {%- set type_info = '(' ~ type_info -%}
-                        {%- endif -%}
+                        {%- set is_optional = param.value == "None" -%}
+                        {%- set type_info = '(' ~ param.type_name ~ (', optional' if is_optional else '') ~ ')' -%}
                         {%- set _ = sections.append("- **" ~ param.arg_name ~ "** " ~ type_info ~ ": " ~ desc) -%}
                     {%- else -%}
                         {%- set _ = sections.append("- **" ~ param.arg_name ~ "**: " ~ desc) -%}
@@ -34,7 +34,7 @@
                 {%- endif -%}
             {%- endfor -%}
         {%- endif -%}
-        
+
         {# Returns #}
         {%- if docstring.parsed.returns -%}
             {%- set _ = sections.append("\n**Returns**") -%}
