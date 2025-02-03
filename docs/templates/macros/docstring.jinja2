@@ -23,7 +23,7 @@
                         {%- set desc = desc[:-1] ~ ')' -%}
                     {%- endif -%}
                     {%- if param.type_name -%}
-                        {%- set type_info = param.type_name -%}
+                        {%- set type_info = '(' ~ param.type_name ~ ')' -%}
                         {%- if type_info.endswith(')') and not type_info.startswith('(') -%}
                             {%- set type_info = '(' ~ type_info -%}
                         {%- endif -%}
