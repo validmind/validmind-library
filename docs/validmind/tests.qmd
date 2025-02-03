@@ -30,7 +30,7 @@ Get or show details about the test This function can be used to see test details
 
 **Parameters**
 
-- **test_id** (str): The test ID. Defaults to None.
+- **test_id** (str, optional): The test ID. Defaults to None.
 - **raw** (bool): If True, returns a dictionary with the test details. Defaults to False.
 
 ## list_tags<span class='muted'>()</span>

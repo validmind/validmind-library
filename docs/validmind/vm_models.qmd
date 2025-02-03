@@ -292,11 +292,11 @@ Assign predictions and probabilities to the dataset.
 **Parameters**
 
 - **model** (VMModel): The model used to generate the predictions.
-- **prediction_column** (str): The name of the column containing the predictions. Defaults to None.
-- **prediction_values** (list): The values of the predictions. Defaults to None.
-- **probability_column** (str): The name of the column containing the probabilities. Defaults to None.
-- **probability_values** (list): The values of the probabilities. Defaults to None.
-- **prediction_probabilities** (list): DEPRECATED: The values of the probabilities. Defaults to None.
+- **prediction_column** (str, optional): The name of the column containing the predictions. Defaults to None.
+- **prediction_values** (list, optional): The values of the predictions. Defaults to None.
+- **probability_column** (str, optional): The name of the column containing the probabilities. Defaults to None.
+- **probability_values** (list, optional): The values of the probabilities. Defaults to None.
+- **prediction_probabilities** (list, optional): DEPRECATED: The values of the probabilities. Defaults to None.
 - **kwargs**: Additional keyword arguments that will get passed through to the model's `predict` method.
 
 ### [prediction_column[()]{.muted}](#prediction_column)
@@ -524,9 +524,9 @@ An base class that wraps a trained model instance and its associated data.
 
 **Parameters**
 
-- **model** (object): The trained model instance. Defaults to None.
-- **input_id** (str): The input ID for the model. Defaults to None.
-- **attributes** (ModelAttributes): The attributes of the model. Defaults to None.
+- **model** (object, optional): The trained model instance. Defaults to None.
+- **input_id** (str, optional): The input ID for the model. Defaults to None.
+- **attributes** (ModelAttributes, optional): The attributes of the model. Defaults to None.
 - **name** (str): The name of the model. Defaults to the class name.
 
 **Inherited members**

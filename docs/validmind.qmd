@@ -86,11 +86,11 @@ If the API key and secret are not provided, the client will attempt to retrieve 
 
 **Parameters**
 
-- **project** (str): The project CUID. Alias for model. Defaults to None. [DEPRECATED]
-- **model** (str): The model CUID. Defaults to None.
-- **api_key** (str): The API key. Defaults to None.
-- **api_secret** (str): The API secret. Defaults to None.
-- **api_host** (str): The API host. Defaults to None.
+- **project** (str, optional): The project CUID. Alias for model. Defaults to None. [DEPRECATED]
+- **model** (str, optional): The model CUID. Defaults to None.
+- **api_key** (str, optional): The API key. Defaults to None.
+- **api_secret** (str, optional): The API secret. Defaults to None.
+- **api_host** (str, optional): The API host. Defaults to None.
 - **monitoring** (bool): The ongoing monitoring flag. Defaults to False.
 - **generate_descriptions** (bool): Whether to use GenAI to generate test result descriptions. Defaults to True.
 
@@ -270,7 +270,7 @@ Collect and run all the tests associated with a template This function will anal
 
 **Parameters**
 
-- **section** (str or list): The section(s) to preview. Defaults to None.
+- **section** (str or list, optional): The section(s) to preview. Defaults to None.
 - **send** (bool): Whether to send the results to the ValidMind API. Defaults to True.
 - **fail_fast** (bool): Whether to stop running tests after the first failure. Defaults to False.
 - **inputs** (dict): A dictionary of test inputs to pass to the TestSuite
