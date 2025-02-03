@@ -381,7 +381,7 @@ Protocol for user-defined test providers
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">list_tests</span>(<span class="param"><span class="n">self</span></span>)<span class="p"> → </span><span class="return-annotation"></span>
+<span class="kw">def</span> <span class="name">list_tests</span>(<span class="param"><span class="n">self</span></span>)<span class="p"> → </span><span class="return-annotation">List[str]</span>
 
 :::
 

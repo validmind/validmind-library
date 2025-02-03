@@ -140,7 +140,7 @@ Returns the default configuration for the test suite Each test in a test suite c
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">get_tests</span>(<span class="param"><span class="n">self</span></span>)<span class="p"> → </span><span class="return-annotation"></span>
+<span class="kw">def</span> <span class="name">get_tests</span>(<span class="param"><span class="n">self</span></span>)<span class="p"> → </span><span class="return-annotation">List[str]</span>
 
 :::
 
@@ -384,7 +384,7 @@ Returns a dataframe containing only the feature columns
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">y_df</span>(<span class="param"><span class="n">self</span></span>)<span class="p"> → </span><span class="return-annotation"></span>
+<span class="kw">def</span> <span class="name">y_df</span>(<span class="param"><span class="n">self</span></span>)<span class="p"> → </span><span class="return-annotation"> Any</span>
 
 :::
 
@@ -398,7 +398,7 @@ Returns a dataframe containing the target column
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">y_pred</span>(<span class="params"><span class="n">self</span><span class="muted">,</span></span><span class="params"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"></span>
+<span class="kw">def</span> <span class="name">y_pred</span>(<span class="params"><span class="n">self</span><span class="muted">,</span></span><span class="params"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"> Any</span>
 
 :::
 
@@ -420,7 +420,7 @@ Returns the predictions for a given model. Attempts to stack complex prediction 
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">y_pred_df</span>(<span class="params"><span class="n">self</span><span class="muted">,</span></span><span class="params"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"></span>
+<span class="kw">def</span> <span class="name">y_pred_df</span>(<span class="params"><span class="n">self</span><span class="muted">,</span></span><span class="params"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"> Any</span>
 
 :::
 
@@ -434,7 +434,7 @@ Returns a dataframe containing the predictions for a given model
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">y_prob</span>(<span class="params"><span class="n">self</span><span class="muted">,</span></span><span class="params"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"></span>
+<span class="kw">def</span> <span class="name">y_prob</span>(<span class="params"><span class="n">self</span><span class="muted">,</span></span><span class="params"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"> Any</span>
 
 :::
 
@@ -456,7 +456,7 @@ Returns the probabilities for a given model.
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">y_prob_df</span>(<span class="params"><span class="n">self</span><span class="muted">,</span></span><span class="params"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"></span>
+<span class="kw">def</span> <span class="name">y_prob_df</span>(<span class="params"><span class="n">self</span><span class="muted">,</span></span><span class="params"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"> Any</span>
 
 :::
 

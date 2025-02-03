@@ -54,8 +54,7 @@
 {%- if member.returns -%}
   <span class="p"> → </span><span class="return-annotation">
   {%- if member.returns is mapping -%}
-    {%- if 'values' in member.returns and member.returns.values is iterable -%}
-      {# Handle np.ndarray case #}
+    {%- if 'values' in member.returns and member.returns.values is sequence -%}
       {{- member.returns.values | map(attribute='name') | join('.') -}}
     {%- elif 'name' in member.returns -%}
       {%- if member.returns.name in ['str', 'dict', 'list', 'bool', 'int', 'float'] -%}
@@ -63,12 +62,15 @@
       {%- else -%}
         <a href="/reference/validmind/vm_models.html#class-{{ member.returns.name|lower }}">validmind.vm_models.{{ member.returns.name }}</a>
       {%- endif -%}
+    {%- elif member.returns.cls == 'ExprSubscript' -%}
+      {# Handle generic types like List[str] #}
+      {{- member.returns.left.name }}[{{- member.returns.slice.name -}}]
     {%- else -%}
-      {# Fallback for other mappings - don't show raw JSON #}
+      {# Fallback for other mappings #}
       Any
     {%- endif -%}
   {%- else -%}
-    {{- member.returns -}}
+    {{- member.returns if member.returns else 'Any' -}}
   {%- endif -%}
   </span>
 {%- endif +%}
