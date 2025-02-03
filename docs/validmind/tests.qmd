@@ -30,8 +30,8 @@ Get or show details about the test This function can be used to see test details
 
 **Parameters**
 
-- **test_id** str: The test ID. Defaults to None.
-- **raw** bool: If True, returns a dictionary with the test details. Defaults to False.
+- **test_id** (str): The test ID. Defaults to None.
+- **raw** (bool): If True, returns a dictionary with the test details. Defaults to False.
 
 ## list_tags<span class='muted'>()</span>
 
@@ -95,11 +95,11 @@ List all tests in the tests directory.
 
 **Parameters**
 
-- **filter** str: Find tests where the ID, tasks or tags match the filter string. Defaults to None.
-- **task** str: Find tests that match the task. Can be used to narrow down matches from the filter string. Defaults to None.
-- **tags** list: Find tests that match list of tags. Can be used to narrow down matches from the filter string. Defaults to None.
-- **pretty** bool: If True, returns a pandas DataFrame with a formatted table. Defaults to True.
-- **truncate** bool: If True, truncates the test description to the first line. Defaults to True. (only used if pretty=True)
+- **filter** (str): Find tests where the ID, tasks or tags match the filter string. Defaults to None.
+- **task** (str): Find tests that match the task. Can be used to narrow down matches from the filter string. Defaults to None.
+- **tags** (list): Find tests that match list of tags. Can be used to narrow down matches from the filter string. Defaults to None.
+- **pretty** (bool): If True, returns a pandas DataFrame with a formatted table. Defaults to True.
+- **truncate** (bool): If True, truncates the test description to the first line. Defaults to True. (only used if pretty=True)
 
 **Returns**
 
@@ -121,8 +121,8 @@ Load a test by test ID Test IDs are in the format `namespace.path_to_module.Test
 
 **Parameters**
 
-- **test_id** str: The test ID in the format `namespace.path_to_module.TestName[:tag]`
-- **test_func** callable: The test function to load. If not provided, the test will be loaded from the test provider. Defaults to None.
+- **test_id** (str): The test ID in the format `namespace.path_to_module.TestName[:tag]`
+- **test_func** (callable): The test function to load. If not provided, the test will be loaded from the test provider. Defaults to None.
 
 ## run_test<span class='muted'>()</span>
 
@@ -140,21 +140,21 @@ Run a ValidMind or custom test This function is the main entry point for running
 
 **Parameters**
 
-- **test_id** TestID: Test ID to run. Not required if `name` and `unit_metrics` provided.
-- **params** dict: Parameters to customize test behavior. See test details for available parameters.
-- **param_grid** Union\[Dict\[str, List[Any]\], List\[Dict[str, Any]\]\]: For comparison tests, either:
+- **test_id** (TestID): Test ID to run. Not required if `name` and `unit_metrics` provided.
+- **params** (dict): Parameters to customize test behavior. See test details for available parameters.
+- **param_grid** (Union\[Dict\[str, List[Any]\], List\[Dict[str, Any]\]\]): For comparison tests, either:
 - Dict mapping parameter names to lists of values (creates Cartesian product)
 - List of parameter dictionaries to test
-- **inputs** Dict\[str, Any\]: Test inputs (models/datasets initialized with vm.init_model/dataset)
-- **input_grid** Union\[Dict\[str, List[Any]\], List\[Dict[str, Any]\]\]: For comparison tests, either:
+- **inputs** (Dict[str, Any]): Test inputs (models/datasets initialized with vm.init_model/dataset)
+- **input_grid** (Union\[Dict\[str, List[Any]\], List\[Dict[str, Any]\]\]): For comparison tests, either:
 - Dict mapping input names to lists of values (creates Cartesian product)
 - List of input dictionaries to test
-- **name** str: Test name (required for composite metrics)
-- **unit_metrics** list: Unit metric IDs to run as composite metric
-- **show** bool: Whether to display results. Defaults to True.
-- **generate_description** bool: Whether to generate a description. Defaults to True.
-- **title** str: Custom title for the test result
-- **post_process_fn** Callable\[[TestResult], None\]: Function to post-process the test result
+- **name** (str): Test name (required for composite metrics)
+- **unit_metrics** (list): Unit metric IDs to run as composite metric
+- **show** (bool): Whether to display results. Defaults to True.
+- **generate_description** (bool): Whether to generate a description. Defaults to True.
+- **title** (str): Custom title for the test result
+- **post_process_fn** (Callable\[[TestResult], None\]): Function to post-process the test result
 
 **Returns**
 
@@ -256,8 +256,8 @@ Register an external test provider
 
 **Parameters**
 
-- **namespace** str: The namespace of the test provider
-- **test_provider** TestProvider: The test provider
+- **namespace** (str): The namespace of the test provider
+- **test_provider** (TestProvider): The test provider
 
 <!-- class.qmd.jinja2 -->
 
@@ -319,7 +319,7 @@ test = test_provider.load_test("my_namespace.my_test_class")
 
 **Parameters**
 
-- **root_folder** str: The root directory for local tests.
+- **root_folder** (str): The root directory for local tests.
 
 ### [list_tests[()]{.muted}](#list_tests)
 
@@ -409,7 +409,7 @@ Load the test function identified by the given test_id
 
 **Parameters**
 
-- **test_id** str: The test ID (does not contain the namespace under which the test is registered)
+- **test_id** (str): The test ID (does not contain the namespace under which the test is registered)
 
 **Returns**
 

@@ -63,8 +63,8 @@ Gets a TestSuite object for the current project or a specific test suite This fu
 
 **Parameters**
 
-- **test_suite_id** str: The test suite name. If not passed, then the project's test suite will be returned. Defaults to None.
-- **section** str: The section of the documentation template from which to retrieve the test suite. This only applies if test_suite_id is None. Defaults to None.
+- **test_suite_id** (str): The test suite name. If not passed, then the project's test suite will be returned. Defaults to None.
+- **section** (str): The section of the documentation template from which to retrieve the test suite. This only applies if test_suite_id is None. Defaults to None.
 - **args**: Additional arguments to pass to the TestSuite
 - **kwargs**: Additional keyword arguments to pass to the TestSuite
 
@@ -86,13 +86,13 @@ If the API key and secret are not provided, the client will attempt to retrieve 
 
 **Parameters**
 
-- **project** str: The project CUID. Alias for model. Defaults to None. [DEPRECATED]
-- **model** str: The model CUID. Defaults to None.
-- **api_key** str: The API key. Defaults to None.
-- **api_secret** str: The API secret. Defaults to None.
-- **api_host** str: The API host. Defaults to None.
-- **monitoring** bool: The ongoing monitoring flag. Defaults to False.
-- **generate_descriptions** bool: Whether to use GenAI to generate test result descriptions. Defaults to True.
+- **project** (str): The project CUID. Alias for model. Defaults to None. [DEPRECATED]
+- **model** (str): The model CUID. Defaults to None.
+- **api_key** (str): The API key. Defaults to None.
+- **api_secret** (str): The API secret. Defaults to None.
+- **api_host** (str): The API host. Defaults to None.
+- **monitoring** (bool): The ongoing monitoring flag. Defaults to False.
+- **generate_descriptions** (bool): Whether to use GenAI to generate test result descriptions. Defaults to True.
 
 **Raises**
 
@@ -142,9 +142,9 @@ Initializes a VM Model, which can then be passed to other functions that can per
 **Parameters**
 
 - **model**: A trained model or VMModel instance
-- **input_id** str: The input ID for the model (e.g. "my_model"). By default, this will be set to `model` but if you are passing this model as a test input using some other key than `model`, then you should set this to the same key.
-- **attributes** dict: A dictionary of model attributes
-- **predict_fn** callable: A function that takes an input and returns a prediction
+- **input_id** (str): The input ID for the model (e.g. "my_model"). By default, this will be set to `model` but if you are passing this model as a test input using some other key than `model`, then you should set this to the same key.
+- **attributes** (dict): A dictionary of model attributes
+- **predict_fn** (callable): A function that takes an input and returns a prediction
 - \*\***kwargs**: Additional arguments to pass to the model
 
 **Returns**
@@ -178,8 +178,8 @@ LogisticRegression and LinearRegression models are converted to sklearn models b
 
 **Parameters**
 
-- **model_path** str: The path to the R model saved as an RDS or XGB file
-- **model_type** str: The type of the model (one of R_MODEL_TYPES)
+- **model_path** (str): The path to the R model saved as an RDS or XGB file
+- **model_type** (str): The type of the model (one of R_MODEL_TYPES)
 
 **Returns**
 
@@ -201,12 +201,12 @@ Logs a unit metric Unit metrics are key-value pairs where the key is the metric 
 
 **Parameters**
 
-- **key** str: The metric key
-- **value** float: The metric value
-- **inputs** list: A list of input IDs that were used to compute the metric.
-- **params** dict: Dictionary of parameters used to compute the metric.
-- **recorded_at** str: The timestamp of the metric. Server will use current time if not provided.
-- **thresholds** dict: Dictionary of thresholds for the metric.
+- **key** (str): The metric key
+- **value** (float): The metric value
+- **inputs** (list): A list of input IDs that were used to compute the metric.
+- **params** (dict): Dictionary of parameters used to compute the metric.
+- **recorded_at** (str): The timestamp of the metric. Server will use current time if not provided.
+- **thresholds** (dict): Dictionary of thresholds for the metric.
 
 ### preview_template<span class='muted'>()</span>
 
@@ -270,10 +270,10 @@ Collect and run all the tests associated with a template This function will anal
 
 **Parameters**
 
-- **section** str or list: The section(s) to preview. Defaults to None.
-- **send** bool: Whether to send the results to the ValidMind API. Defaults to True.
-- **fail_fast** bool: Whether to stop running tests after the first failure. Defaults to False.
-- **inputs** dict: A dictionary of test inputs to pass to the TestSuite
+- **section** (str or list): The section(s) to preview. Defaults to None.
+- **send** (bool): Whether to send the results to the ValidMind API. Defaults to True.
+- **fail_fast** (bool): Whether to stop running tests after the first failure. Defaults to False.
+- **inputs** (dict): A dictionary of test inputs to pass to the TestSuite
 - **config**: A dictionary of test parameters to override the defaults
 - \*\***kwargs**: backwards compatibility for passing in test inputs using keyword arguments
 
@@ -301,11 +301,11 @@ High Level function for running a test suite This function provides a high level
 
 **Parameters**
 
-- **test_suite_id** str: The test suite name (e.g. 'classifier_full_suite')
-- **config** dict: A dictionary of parameters to pass to the tests in the test suite. Defaults to None.
-- **send** bool: Whether to post the test results to the API. send=False is useful for testing. Defaults to True.
-- **fail_fast** bool: Whether to stop running tests after the first failure. Defaults to False.
-- **inputs** dict: A dictionary of test inputs to pass to the TestSuite e.g. `model`, `dataset` `models` etc. These inputs will be accessible by any test in the test suite. See the test documentation or `vm.describe_test()` for more details on the inputs required for each.
+- **test_suite_id** (str): The test suite name (e.g. 'classifier_full_suite')
+- **config** (dict): A dictionary of parameters to pass to the tests in the test suite. Defaults to None.
+- **send** (bool): Whether to post the test results to the API. send=False is useful for testing. Defaults to True.
+- **fail_fast** (bool): Whether to stop running tests after the first failure. Defaults to False.
+- **inputs** (dict): A dictionary of test inputs to pass to the TestSuite e.g. `model`, `dataset` `models` etc. These inputs will be accessible by any test in the test suite. See the test documentation or `vm.describe_test()` for more details on the inputs required for each.
 - \*\***kwargs**: backwards compatibility for passing in test inputs using keyword arguments
 
 **Returns**
@@ -421,7 +421,7 @@ Create a new RawData object
 
 **Parameters**
 
-- **log** bool: If True, log the raw data to ValidMind
+- **log** (bool): If True, log the raw data to ValidMind
 - \*\***kwargs**: Keyword arguments to set as attributes e.g. `RawData(log=True, dataset_duplicates=df_duplicates)`
 
 #### inspect<span class='muted'>()</span>
