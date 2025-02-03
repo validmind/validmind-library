@@ -347,7 +347,7 @@ Returns the target class labels or unique values of the target column.
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">with_options</span>(<span class="params"><span class="n">self</span><span class="muted">,</span></span><span class="params"><span class="n">kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-vmdataset">validmind.vm_models.VMDataset</a></span>
+<span class="kw">def</span> <span class="name">with_options</span>(<span class="params"><span class="n">self</span><span class="muted">,</span></span><span class="params"><span class="n">kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-vmdataset"> validmind.vm_models.VMDataset </a></span>
 
 :::
 
@@ -384,7 +384,7 @@ Returns a dataframe containing only the feature columns
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">y_df</span>(<span class="param"><span class="n">self</span></span>)<span class="p"> → </span><span class="return-annotation"> Any</span>
+<span class="kw">def</span> <span class="name">y_df</span>(<span class="param"><span class="n">self</span></span>)<span class="p"> → </span><span class="return-annotation">pd.DataFrame</span>
 
 :::
 
@@ -398,7 +398,7 @@ Returns a dataframe containing the target column
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">y_pred</span>(<span class="params"><span class="n">self</span><span class="muted">,</span></span><span class="params"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"> Any</span>
+<span class="kw">def</span> <span class="name">y_pred</span>(<span class="params"><span class="n">self</span><span class="muted">,</span></span><span class="params"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation">np.ndarray</span>
 
 :::
 
@@ -420,7 +420,7 @@ Returns the predictions for a given model. Attempts to stack complex prediction 
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">y_pred_df</span>(<span class="params"><span class="n">self</span><span class="muted">,</span></span><span class="params"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"> Any</span>
+<span class="kw">def</span> <span class="name">y_pred_df</span>(<span class="params"><span class="n">self</span><span class="muted">,</span></span><span class="params"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation">pd.DataFrame</span>
 
 :::
 
@@ -434,7 +434,7 @@ Returns a dataframe containing the predictions for a given model
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">y_prob</span>(<span class="params"><span class="n">self</span><span class="muted">,</span></span><span class="params"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"> Any</span>
+<span class="kw">def</span> <span class="name">y_prob</span>(<span class="params"><span class="n">self</span><span class="muted">,</span></span><span class="params"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation">np.ndarray</span>
 
 :::
 
@@ -456,7 +456,7 @@ Returns the probabilities for a given model.
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">y_prob_df</span>(<span class="params"><span class="n">self</span><span class="muted">,</span></span><span class="params"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"> Any</span>
+<span class="kw">def</span> <span class="name">y_prob_df</span>(<span class="params"><span class="n">self</span><span class="muted">,</span></span><span class="params"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation">pd.DataFrame</span>
 
 :::
 
@@ -488,7 +488,7 @@ Base class for ValidMind Input types
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">with_options</span>(<span class="params"><span class="n">self</span><span class="muted">,</span></span><span class="params"><span class="n">kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-vminput">validmind.vm_models.VMInput</a></span>
+<span class="kw">def</span> <span class="name">with_options</span>(<span class="params"><span class="n">self</span><span class="muted">,</span></span><span class="params"><span class="n">kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-vminput"> validmind.vm_models.VMInput </a></span>
 
 :::
 

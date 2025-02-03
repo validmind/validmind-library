@@ -52,26 +52,47 @@
   {%- else -%}()
 {%- endif -%}
 {%- if member.returns -%}
+
   <span class="p"> → </span><span class="return-annotation">
-  {%- if member.returns is mapping -%}
-    {%- if 'values' in member.returns and member.returns.values is sequence -%}
-      {{- member.returns.values | map(attribute='name') | join('.') -}}
-    {%- elif 'name' in member.returns -%}
-      {%- if member.returns.name in ['str', 'dict', 'list', 'bool', 'int', 'float'] -%}
-        {{- member.returns.name -}}
-      {%- else -%}
-        <a href="/reference/validmind/vm_models.html#class-{{ member.returns.name|lower }}">validmind.vm_models.{{ member.returns.name }}</a>
-      {%- endif -%}
-    {%- elif member.returns.cls == 'ExprSubscript' -%}
-      {# Handle generic types like List[str] #}
-      {{- member.returns.left.name }}[{{- member.returns.slice.name -}}]
+{%- if member.returns is mapping -%}
+  {%- if 'values' in member.returns and member.returns.values is sequence -%}
+    {{ member.returns.values | selectattr('name', 'defined') | map(attribute='name') | join('.') }}
+  {%- elif 'name' in member.returns -%}
+    {%- if member.returns.name in ['str', 'dict', 'list', 'bool', 'int', 'float'] -%}
+      {{ member.returns.name }}
     {%- else -%}
-      {# Fallback for other mappings #}
-      Any
+      <a href="/reference/validmind/vm_models.html#class-{{ member.returns.name|lower }}">
+        validmind.vm_models.{{ member.returns.name }}
+      </a>
     {%- endif -%}
-  {%- else -%}
-    {{- member.returns if member.returns else 'Any' -}}
+  {%- elif member.returns.cls == 'ExprAttribute' and 'values' in member.returns -%}
+      {%- set values_list = member.returns['values'] if member.returns['values'] is sequence else [] -%}
+      {%- set extracted_values = values_list | selectattr('name', 'defined') | map(attribute='name') | list -%}
+      {{ extracted_values | join('.') if extracted_values else 'ExprAttribute' }}
+{%- elif member.returns.cls == 'ExprSubscript' -%}
+    {%- if member.returns.slice.cls == 'ExprTuple' -%}
+        {%- set extracted_elements = [] -%}
+        {%- for element in member.returns.slice.elements -%}
+            {%- if element.cls == 'ExprSubscript' -%}
+                {{ extracted_elements.append(element.left.name ~ '[' ~ element.slice.elements | map(attribute='name') | join(', ') ~ ']') }}
+            {%- elif element.cls == 'ExprAttribute' and 'values' in element -%}
+                {%- set attr_values = element['values'] if element['values'] is sequence else [] -%}
+                {{ extracted_elements.append(attr_values | map(attribute='name') | join('.')) }}
+            {%- elif 'name' in element -%}
+                {{ extracted_elements.append(element.name) }}
+            {%- else -%}
+                {{ extracted_elements.append('Unknown') }}
+            {%- endif -%}
+        {%- endfor -%}
+
+        {{ member.returns.left.name }}[{{ extracted_elements | join(', ') }}]
+    {%- else -%}
+        {{ member.returns.left.name }}[{{ member.returns.slice.name }}]
+    {%- endif -%}
   {%- endif -%}
+{%- else -%}
+  {{ member.returns if member.returns else 'Any' }}
+{%- endif -%}
   </span>
 {%- endif +%}
 
