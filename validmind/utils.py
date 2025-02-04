@@ -165,11 +165,12 @@ class NumpyEncoder(json.JSONEncoder):
         return isinstance(obj, object)
 
     def handle_generic_object(self, obj):
-        return (
-            obj.__str__()
-            if type(obj).__dict__.get("__str__")
-            else str(obj).split(".")[1].split(" ")[0]
-        )
+        try:
+            if hasattr(obj, "__str__"):
+                return obj.__str__()
+            return obj.__class__.__name__
+        except Exception:
+            return str(type(obj).__name__)
 
     def encode(self, obj):
         obj = nan_to_none(obj)
@@ -189,6 +190,18 @@ class HumanReadableEncoder(NumpyEncoder):
             if len(obj) > 10
             else obj.tolist()
         )
+
+    def default(self, obj):
+        if self.is_dataframe(obj):
+            return {
+                "type": str(type(obj)),
+                "preview": obj.head(5).to_dict(orient="list"),
+                "shape": f"{obj.shape[0]} rows x {obj.shape[1]} columns",
+            }
+        return super().default(obj)
+
+    def is_dataframe(self, obj):
+        return isinstance(obj, pd.DataFrame)
 
 
 def get_full_typename(o: Any) -> Any:
