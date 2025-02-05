@@ -12,17 +12,13 @@ website:
         # Root level items from validmind.qmd
         {% if documented_items.get('root') %}
         {% for item in documented_items['root'] %}
+        - text: "{{ item.text }}"
+          file: {{ item.file }}
           {% if item.contents %}
-            {% for child in item.contents %}
-        - text: "{{ child.text }}"
-          file: {{ child.file }}
-              {% if child.contents %}
           contents:
-                {% for method in child.contents %}
+            {% for method in item.contents %}
             - text: "{{ method.text }}"
               file: {{ method.file }}
-                {% endfor %}
-              {% endif %}
             {% endfor %}
           {% endif %}
         {% endfor %}

@@ -42,13 +42,6 @@ website:
           file: reference/validmind.qmd#test
         - text: "<span class='muted'>class</span> RawData"
           file: reference/validmind.qmd#class-rawdata
-          contents:
-            - text: "RawData<span class='muted'>()</span>"
-              file: reference/validmind.qmd#rawdata
-            - text: "inspect<span class='muted'>()</span>"
-              file: reference/validmind.qmd#inspect
-            - text: "serialize<span class='muted'>()</span>"
-              file: reference/validmind.qmd#serialize
         # All module documentation pages
         - text: "---"
         - text: "Submodules"
@@ -67,6 +60,8 @@ website:
             - text: "credit_risk"
               file: reference/validmind/datasets/credit_risk.qmd
               contents:
+                - text: "lending_club"
+                  file: reference/validmind/datasets/credit_risk/lending_club.qmd
                 - text: "lending_club_bias"
                   file: reference/validmind/datasets/credit_risk/lending_club_bias.qmd
             - text: "nlp"
@@ -96,6 +91,8 @@ website:
               file: reference/validmind/test_suites/embeddings.qmd
             - text: "llm"
               file: reference/validmind/test_suites/llm.qmd
+            - text: "nlp"
+              file: reference/validmind/test_suites/nlp.qmd
             - text: "parameters_optimization"
               file: reference/validmind/test_suites/parameters_optimization.qmd
             - text: "regression"

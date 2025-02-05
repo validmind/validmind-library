@@ -12,7 +12,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">format_records</span>(<span class="param"><span class="n">df</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type -->{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'pd'}, {'cls': 'ExprName', 'name': 'DataFrame'}]}</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type -->List\[<!-- types.jinja2 - format_type -->Dict[str, Any]\]</span>
+<span class="kw">def</span> <span class="name">format_records</span>(<span class="param"><span class="n">df</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type -->{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'pd'}, {'cls': 'ExprName', 'name': 'DataFrame'}]}</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type -->List\[<!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type -->Dict\[<!-- types.jinja2 - format_type -->str, <!-- types.jinja2 - format_type -->Any\]\]</span>
 
 :::
 

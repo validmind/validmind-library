@@ -90,29 +90,20 @@ def is_public(member: Dict[str, Any], module: Dict[str, Any], full_data: Dict[st
     """Check if a member should be included in public documentation."""
     name = member.get('name', '')
     
-    # Add debug logging
-    # print(f"\nChecking visibility for: {name}")
-    # print(f"Is root: {is_root}")
-    
     # Skip private members except __init__ and __post_init__
     if name.startswith('_') and name not in {'__init__', '__post_init__'}:
-        # print(f"- Skipping private member: {name}")
         return False
     
     # At root level, only show items from __all__
     if is_root:
         root_all = get_all_members(full_data['validmind'].get('members', {}))
-        # print(f"- Root __all__: {root_all}")
         return name in root_all
     
     # If module has __all__, only include members listed there
     if module and '__all__' in module.get('members', {}):
         module_all = get_all_members(module.get('members', {}))
-        # print(f"- Module __all__: {module_all}")
-        # print(f"- Is {name} in module __all__? {name in module_all}")
         return name in module_all
     
-    # print(f"- No __all__ found, including {name}")
     return True
 
 def ensure_dir(path):
@@ -146,6 +137,9 @@ def collect_documented_items(module: Dict[str, Any], path: List[str], full_data:
     if not module.get('members'):
         return result
     
+    # Determine if this is the root module
+    is_root = module.get('name') == 'validmind' or is_root
+    
     # Build the current file path
     file_path = '/'.join(path)
     module_name = module.get('name', 'root')
@@ -157,92 +151,43 @@ def collect_documented_items(module: Dict[str, Any], path: List[str], full_data:
         qmd_path = written_qmd_files.get(qmd_filename)
         
         if qmd_path and os.path.exists(qmd_path):
-            # print(f"\nParsing headings from: {qmd_path}")
             with open(qmd_path, 'r') as f:
                 content = f.read()
-            
-            # print("\nRaw content:")
-            # for line in content.split('\n'):
-            #     if line.startswith('#'):
-            #         print(f"Found heading line: {line}")
             
             # Track current class for nesting methods
             current_class = None
             
-            # Parse headings
-            current_section = None
+            # Parse headings - only update the heading level checks
             for line in content.split('\n'):
-                if line.startswith('## '):
+                if line.startswith('## '):  # Main function/class level
                     heading = line[3:].strip()
-                    # print(f"Found L2 heading: {heading}")
                     anchor = clean_anchor_text(heading)
                     item = {
                         'text': heading,
-                        'file': f"reference/validmind.qmd#{anchor}",
-                        'contents': []
+                        'file': f"reference/validmind.qmd#{anchor}"
                     }
+                    if '<span class="muted">class</span>' in heading:
+                        item['contents'] = []
+                        current_class = item
                     module_items.append(item)
-                    current_section = item
-                    current_class = None
-                elif line.startswith('### '):
-                    if current_section:
-                        heading = line[4:].strip()
-                        # print(f"  Found L3 heading under {current_section['text']}: {heading}")
-                        anchor = clean_anchor_text(heading)
-                        item = {
-                            'text': heading,
-                            'file': f"reference/validmind.qmd#{anchor}"
-                        }
-                        if '<span class="muted">class</span>' in heading or '<span class=\'muted\'>class</span>' in heading:
-                            item['contents'] = []
-                            current_class = item
-                            # print(f"    Set current_class to: {heading}")
-                        current_section['contents'].append(item)
-                        # print(f"    Current section contents: {current_section['contents']}")
-                elif line.startswith('#### '):
-                    if current_class:
-                        heading = line[5:].strip()
-                        # print(f"    Found L4 heading under class {current_class['text']}: {heading}")
-                        anchor = clean_anchor_text(heading)
-                        method_item = {
-                            'text': heading,
-                            'file': f"reference/validmind.qmd#{anchor}"
-                        }
-                        current_class['contents'].append(method_item)
-                        # print(f"      Added method to class. Class contents now: {current_class['contents']}")
+                elif line.startswith('### ') and current_class:  # Method level
+                    heading = line[4:].strip()
+                    anchor = clean_anchor_text(heading)
+                    method_item = {
+                        'text': heading,
+                        'file': f"reference/validmind.qmd#{anchor}"
+                    }
+                    current_class['contents'].append(method_item)
             
-            # Clean up empty contents lists at the end
+            # Clean up empty contents lists
             for item in module_items:
-                if not item.get('contents'):
+                if 'contents' in item and not item['contents']:
                     del item['contents']
-                else:
-                    for child in item['contents']:
-                        if child.get('contents') and not child['contents']:
-                            del child['contents']
-        
-            # print("\nFinal structure:")
-            # for item in module_items:
-            #     print(f"Section: {item['text']}")
-            #     if 'contents' in item:
-            #         for child in item['contents']:
-            #             print(f"  Child: {child['text']}")
-            #             if 'contents' in child:
-            #                 for method in child['contents']:
-            #                     print(f"    Method: {method['text']}")
-        
-        if module_items:
-            result['root'] = module_items
-            # print("\nCollected items:")
-            # for item in module_items:
-            #     print(f"  {item['text']} -> {item['file']}")
-            #     if item.get('contents'):
-            #         for child in item['contents']:
-            #             print(f"    - {child['text']} -> {child['file']}")
-            #             if child.get('contents'):  # Add this to show class methods
-            #                 for method in child['contents']:
-            #                     print(f"      * {method['text']} -> {method['file']}")
+            
+            if module_items:
+                result['root'] = module_items
     
-    # Recursively collect from submodules
+    # Process submodules
     for member in sort_members(module['members'], module.get('name') == 'errors'):
         if member['kind'] == 'module' and is_public(member, module, full_data, is_root):
             submodule_path = path + [member['name']]
@@ -269,22 +214,9 @@ def process_module(module: Dict[str, Any], path: List[str], env: Environment, fu
     
     module_dir = os.path.join('docs', *path[:-1])
     ensure_dir(module_dir)
-    
+        
     # Get module template
     module_template = env.get_template('module.qmd.jinja2')
-    
-    # Debug template rendering for root module
-    # if len(path) <= 1:  # Root module
-    #     print("\nGenerating root module (validmind.qmd):")
-    #     for name, member in module.get('members', {}).items():
-    #         if member['kind'] != 'module':
-    #             print(f"\nMember: {name}")
-    #             print(f"  Kind: {member['kind']}")
-    #             print(f"  Has docstring: {'docstring' in member}")
-    #             if member.get('members'):
-    #                 print("  Methods:")
-    #                 for method_name, method in member['members'].items():
-    #                     print(f"    - {method_name} ({method.get('kind')})")
     
     # Generate module documentation
     output = module_template.render(
@@ -300,10 +232,10 @@ def process_module(module: Dict[str, Any], path: List[str], env: Environment, fu
     with open(output_path, 'w') as f:
         f.write(output)
     
-    # Track with full path and print full path
+    # Track with full relative path as key
+    rel_path = os.path.join(*path[1:], filename) if len(path) > 1 else filename
     full_path = os.path.join("docs", os.path.relpath(output_path, "docs"))
-    # print(f"Wrote file: {full_path}")
-    written_qmd_files[filename] = full_path
+    written_qmd_files[rel_path] = full_path
     
     # Generate version.qmd for root module
     if module.get('name') == 'validmind' and module.get('members', {}).get('__version__'):
@@ -444,7 +376,7 @@ def try_parse_docstring(docstring: str) -> Any:
             return parse(docstring, style=Style.REST)
         except Exception:
             return None
-
+        
 def parse_docstrings_recursively(data: Dict[str, Any]):
     """Recursively parse all docstrings in the data structure."""
     if isinstance(data, dict):

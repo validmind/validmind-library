@@ -19,10 +19,10 @@ toc-expand: 4
 {% endif %}
 
 {% if module.members and module.name == "validmind" %}
-## Python API
+<!-- # Python API -->
 
 {% if module.members.__version__ %}
-### &#95;&#95;version__
+## &#95;&#95;version__
 
 <!-- module.qmd.jinja2 - version number -->
 ::: {.signature}
@@ -37,7 +37,7 @@ toc-expand: 4
 {% if is_public(member, module, full_data, is_root) and member.kind == "alias" %}
 {% set target = resolve_alias(member, full_data) %}
 {% if target and target.docstring %}
-### {{ member.name }}<span class='muted'>()</span>
+## {{ member.name }}<span class='muted'>()</span>
 
 {% if target.kind == "function" %}
 {{ signatures.render_signature(target) }}
@@ -106,7 +106,7 @@ toc-expand: 4
 {% if member.kind == "class" or (member.kind == "alias" and member.target_path and member.target_path.split(".")[-1][0].isupper()) %}
 {% set target = resolve_alias(resolved, full_data) %}
 
-### <span class='muted'>class</span> {{ member.name }}
+## <span class='muted'>class</span> {{ member.name }}
 
 <!-- module.qmd.jinja2 -->
 
@@ -121,7 +121,7 @@ toc-expand: 4
 {% for method_name, method in target.members.items() %}
 {% if method.kind == "function" and (not method_name.startswith('_') or method_name in ['__init__']) %}
 
-#### {{ member.name if method_name == '__init__' else method_name }}<span class='muted'>()</span>
+### {{ member.name if method_name == '__init__' else method_name }}<span class='muted'>()</span>
 
 {{ signatures.render_signature(method) }}
 

@@ -35,9 +35,9 @@ vm.init(
 
 After you have pasted the code snippet into your development source code and executed the code, the Python Library API will register with ValidMind. You can now use the ValidMind Library to document and test your models, and to upload to the ValidMind Platform.
 
-## Python API
+<!-- # Python API -->
 
-### \_\_version\_\_
+## \_\_version\_\_
 
 <!-- module.qmd.jinja2 - version number -->
 
@@ -47,7 +47,7 @@ After you have pasted the code snippet into your development source code and exe
 
 :::
 
-### get_test_suite<span class='muted'>()</span>
+## get_test_suite<span class='muted'>()</span>
 
 <!-- signatures.jinja2 -->
 
@@ -68,13 +68,13 @@ Gets a TestSuite object for the current project or a specific test suite This fu
 - **args**: Additional arguments to pass to the TestSuite
 - **kwargs**: Additional keyword arguments to pass to the TestSuite
 
-### init<span class='muted'>()</span>
+## init<span class='muted'>()</span>
 
 <!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">init</span>(<span class="params"><span class="n">project</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type -->Optional\[<!-- types.jinja2 - format_type -->str\]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">api_key</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type -->Optional\[<!-- types.jinja2 - format_type -->str\]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">api_secret</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type -->Optional\[<!-- types.jinja2 - format_type -->str\]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">api_host</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type -->Optional\[<!-- types.jinja2 - format_type -->str\]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type -->Optional\[<!-- types.jinja2 - format_type -->str\]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">monitoring</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type -->bool</span><span class="o"> = </span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">generate_descriptions</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type -->Optional\[<!-- types.jinja2 - format_type -->bool\]</span><span class="o"> = </span><span class="kc">None</span></span>)
+<span class="kw">def</span> <span class="name">init</span>(<span class="params"><span class="n">project</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type -->Optional\[<!-- types.jinja2 - format_type -->str\]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">api_key</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type -->Optional\[<!-- types.jinja2 - format_type -->str\]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">api_secret</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type -->Optional\[<!-- types.jinja2 - format_type -->str\]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">api_host</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type -->Optional\[<!-- types.jinja2 - format_type -->str\]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type -->Optional\[<!-- types.jinja2 - format_type -->str\]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">monitoring</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type -->bool</span><span class="o"> = </span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">generate_descriptions</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type -->Optional\[<!-- types.jinja2 - format_type -->bool\]</span><span class="o"> = </span><span class="kc">None</span></span>)
 
 :::
 
@@ -98,7 +98,7 @@ If the API key and secret are not provided, the client will attempt to retrieve 
 
 - **ValueError**: If the API key and secret are not provided
 
-### init_dataset<span class='muted'>()</span>
+## init_dataset<span class='muted'>()</span>
 
 <!-- signatures.jinja2 -->
 
@@ -125,7 +125,7 @@ Raises: ValueError: If the dataset type is not supported
 
 Returns: vm.vm.Dataset: A VM Dataset instance
 
-### init_model<span class='muted'>()</span>
+## init_model<span class='muted'>()</span>
 
 <!-- signatures.jinja2 -->
 
@@ -155,7 +155,7 @@ Initializes a VM Model, which can then be passed to other functions that can per
 
 - **ValueError**: If the model type is not supported
 
-### init_r_model<span class='muted'>()</span>
+## init_r_model<span class='muted'>()</span>
 
 <!-- signatures.jinja2 -->
 
@@ -185,13 +185,13 @@ LogisticRegression and LinearRegression models are converted to sklearn models b
 
 - A VM Model instance
 
-### log_metric<span class='muted'>()</span>
+## log_metric<span class='muted'>()</span>
 
 <!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">log_metric</span>(<span class="params"><span class="n">key</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type -->str</span><span class="muted">,</span></span><span class="params"><span class="n">value</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type -->float</span><span class="muted">,</span></span><span class="params"><span class="n">inputs</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type -->Optional\[<!-- types.jinja2 - format_type -->List\[<!-- types.jinja2 - format_type -->str\]\]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">params</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type -->Optional\[<!-- types.jinja2 - format_type -->Dict[str, Any]\]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">recorded_at</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type -->Optional\[<!-- types.jinja2 - format_type -->str\]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">thresholds</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type -->Optional\[<!-- types.jinja2 - format_type -->Dict[str, Any]\]</span><span class="o"> = </span><span class="kc">None</span></span>)
+<span class="kw">def</span> <span class="name">log_metric</span>(<span class="params"><span class="n">key</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type -->str</span><span class="muted">,</span></span><span class="params"><span class="n">value</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type -->float</span><span class="muted">,</span></span><span class="params"><span class="n">inputs</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type -->Optional\[<!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type -->List\[<!-- types.jinja2 - format_type -->str\]\]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">params</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type -->Optional\[<!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type -->Dict\[<!-- types.jinja2 - format_type -->str, <!-- types.jinja2 - format_type -->Any\]\]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">recorded_at</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type -->Optional\[<!-- types.jinja2 - format_type -->str\]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">thresholds</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type -->Optional\[<!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type -->Dict\[<!-- types.jinja2 - format_type -->str, <!-- types.jinja2 - format_type -->Any\]\]</span><span class="o"> = </span><span class="kc">None</span></span>)
 
 :::
 
@@ -208,7 +208,7 @@ Logs a unit metric Unit metrics are key-value pairs where the key is the metric 
 - **recorded_at** (str): The timestamp of the metric. Server will use current time if not provided.
 - **thresholds** (dict): Dictionary of thresholds for the metric.
 
-### preview_template<span class='muted'>()</span>
+## preview_template<span class='muted'>()</span>
 
 <!-- signatures.jinja2 -->
 
@@ -226,7 +226,7 @@ Preview the documentation template for the current project This function will di
 
 - **ValueError**: If the project has not been initialized
 
-### print_env<span class='muted'>()</span>
+## print_env<span class='muted'>()</span>
 
 <!-- signatures.jinja2 -->
 
@@ -240,7 +240,7 @@ Preview the documentation template for the current project This function will di
 
 Prints a log of the running environment for debugging. Output includes: ValidMind Library version, operating system details, installed dependencies, and the ISO 8601 timestamp at log creation.
 
-### reload<span class='muted'>()</span>
+## reload<span class='muted'>()</span>
 
 <!-- signatures.jinja2 -->
 
@@ -254,7 +254,7 @@ Prints a log of the running environment for debugging. Output includes: ValidMin
 
 Reconnect to the ValidMind API and reload the project configuration
 
-### run_documentation_tests<span class='muted'>()</span>
+## run_documentation_tests<span class='muted'>()</span>
 
 <!-- signatures.jinja2 -->
 
@@ -285,7 +285,7 @@ Collect and run all the tests associated with a template This function will anal
 
 - **ValueError**: If the project has not been initialized
 
-### run_test_suite<span class='muted'>()</span>
+## run_test_suite<span class='muted'>()</span>
 
 <!-- signatures.jinja2 -->
 
@@ -316,7 +316,7 @@ High Level function for running a test suite This function provides a high level
 
 - **ValueError**: If the test suite name is not found or if there is an error initializing the test suite
 
-### tags<span class='muted'>()</span>
+## tags<span class='muted'>()</span>
 
 <!-- signatures.jinja2 -->
 
@@ -334,7 +334,7 @@ Decorator for specifying tags for a test.
 
 - \***tags**: The tags to apply to the test.
 
-### tasks<span class='muted'>()</span>
+## tasks<span class='muted'>()</span>
 
 <!-- signatures.jinja2 -->
 
@@ -352,7 +352,7 @@ Decorator for specifying the task types that a test is designed for.
 
 - \***tasks**: The task types that the test is designed for.
 
-### test<span class='muted'>()</span>
+## test<span class='muted'>()</span>
 
 <!-- signatures.jinja2 -->
 
@@ -389,7 +389,7 @@ The function may also include a docstring. This docstring will be used and logge
 
 - The decorated function.
 
-### <span class='muted'>class</span> RawData
+## <span class='muted'>class</span> RawData
 
 <!-- module.qmd.jinja2 -->
 
@@ -405,7 +405,7 @@ The function may also include a docstring. This docstring will be used and logge
 
 Holds raw data for a test result
 
-#### RawData<span class='muted'>()</span>
+### RawData<span class='muted'>()</span>
 
 <!-- signatures.jinja2 -->
 
@@ -424,7 +424,7 @@ Create a new RawData object
 - **log** (bool): If True, log the raw data to ValidMind
 - \*\***kwargs**: Keyword arguments to set as attributes e.g. `RawData(log=True, dataset_duplicates=df_duplicates)`
 
-#### inspect<span class='muted'>()</span>
+### inspect<span class='muted'>()</span>
 
 <!-- signatures.jinja2 -->
 
@@ -438,7 +438,7 @@ Create a new RawData object
 
 Inspect the raw data
 
-#### serialize<span class='muted'>()</span>
+### serialize<span class='muted'>()</span>
 
 <!-- signatures.jinja2 -->
 
