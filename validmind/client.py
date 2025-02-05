@@ -278,7 +278,7 @@ def init_r_model(
     """
     Initializes a VM Model for an R model
 
-    R models must be saved to disk and the filetype depends on the model type...
+    R models must be saved to disk and the filetype depends on the model type.
     Currently we support the following model types:
 
     - LogisticRegression `glm` model in R: saved as an RDS file with `saveRDS`
