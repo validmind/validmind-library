@@ -69,7 +69,7 @@ def init_dataset(
     - Torch TensorDataset
 
     Args:
-        dataset : dataset from various python libraries
+        dataset: Dataset from various Python libraries
         model (VMModel): ValidMind model object
         targets (vm.vm.DatasetTargets): A list of target variables
         target_column (str): The name of the target column in the dataset
