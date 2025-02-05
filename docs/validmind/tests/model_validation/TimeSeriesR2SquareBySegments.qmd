@@ -20,7 +20,9 @@ toc-expand: 4
 
 <!-- docstring.jinja2 -->
 
-Evaluates the R-Squared values of regression models over specified time segments in time series data to assess segment-wise model performance.
+Evaluates the R-Squared values of regression models over specified time segments in time series data to assess
+
+segment-wise model performance.
 
 ### Purpose
 

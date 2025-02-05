@@ -20,7 +20,9 @@ toc-expand: 4
 
 <!-- docstring.jinja2 -->
 
-Calculates and visualizes Silhouette Score, assessing the degree of data point suitability to its cluster in ML models.
+Calculates and visualizes Silhouette Score, assessing the degree of data point suitability to its cluster in ML
+
+models.
 
 ### Purpose
 

@@ -20,7 +20,9 @@ toc-expand: 4
 
 <!-- docstring.jinja2 -->
 
-Assesses the quality of machine-generated text using ROUGE metrics and visualizes the results to provide comprehensive performance insights.
+Assesses the quality of machine-generated text using ROUGE metrics and visualizes the results to provide
+
+comprehensive performance insights.
 
 ### Purpose
 

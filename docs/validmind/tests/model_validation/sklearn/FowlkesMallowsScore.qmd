@@ -20,7 +20,9 @@ toc-expand: 4
 
 <!-- docstring.jinja2 -->
 
-Evaluates the similarity between predicted and actual cluster assignments in a model using the Fowlkes-Mallows score.
+Evaluates the similarity between predicted and actual cluster assignments in a model using the Fowlkes-Mallows
+
+score.
 
 ### Purpose
 

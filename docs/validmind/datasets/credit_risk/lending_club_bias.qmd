@@ -32,7 +32,9 @@ toc-expand: 4
 
 <!-- docstring.jinja2 -->
 
-Load data from the specified CSV file. :return: DataFrame containing the loaded data.
+Load data from the specified CSV file.
+
+:return: DataFrame containing the loaded data.
 
 <!-- function.qmd.jinja2 -->
 

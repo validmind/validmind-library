@@ -210,7 +210,7 @@ written_qmd_files = {}
 def process_module(module: Dict[str, Any], path: List[str], env: Environment, full_data: Dict[str, Any]):
     """Process a module and its submodules."""
     # Parse docstrings first
-    parse_docstrings_recursively(module)
+    parse_docstrings(module)
     
     module_dir = os.path.join('docs', *path[:-1])
     ensure_dir(module_dir)
@@ -341,43 +341,7 @@ def format_google_docstring(docstring: str) -> str:
     
     return '\n'.join(lines)
 
-def format_rst_docstring(docstring: str) -> str:
-    """Format an RST-style docstring from JSON format back to proper structure."""
-    
-    # Split on ":param" and ":return:" to separate sections
-    parts = []
-    current = []
-    
-    for part in docstring.split():
-        if part.startswith(':param') or part.startswith(':return:'):
-            if current:
-                parts.append(' '.join(current))
-            current = [part]
-        else:
-            current.append(part)
-    if current:
-        parts.append(' '.join(current))
-    
-    # Join with newlines
-    result = '\n'.join(parts)
-    return result
-
-def try_parse_docstring(docstring: str) -> Any:
-    """Try to parse a docstring in multiple styles, defaulting to Google."""
-    # Convert escaped newlines to actual newlines
-    docstring = docstring.replace('\\n', '\n')
-    
-    # Try Google style first
-    try:
-        return parse(docstring, style=Style.GOOGLE)
-    except Exception:
-        # Fallback to RST style
-        try:
-            return parse(docstring, style=Style.REST)
-        except Exception:
-            return None
-        
-def parse_docstrings_recursively(data: Dict[str, Any]):
+def parse_docstrings(data: Dict[str, Any]):
     """Recursively parse all docstrings in the data structure."""
     if isinstance(data, dict):
         if 'docstring' in data:
@@ -388,16 +352,33 @@ def parse_docstrings_recursively(data: Dict[str, Any]):
             else:
                 original = str(data['docstring'])
             
-            # Parse docstring once and store both original and parsed versions
-            parsed = try_parse_docstring(original)
-            data['docstring'] = {
-                'value': original,
-                'parsed': parsed
-            } if parsed else {'value': original}
+            try:
+                # Debug original docstring
+                if 'Args:' in original:
+                    print(f"\nProcessing docstring for: {data.get('name', 'unknown')}")
+                    print(f"Original:\n{original}")
+                
+                parsed = parse(original, style=Style.GOOGLE)
+                
+                # Debug parsed result
+                if 'Args:' in original:
+                    print("\nParsed result:")
+                    print(f"- short_description: {parsed.short_description}")
+                    print(f"- long_description: {parsed.long_description}")
+                    print(f"- params: {[(p.arg_name, p.type_name, p.description) for p in parsed.params]}")
+                
+                data['docstring'] = {
+                    'value': original,
+                    'parsed': parsed
+                }
+            except Exception as e:
+                print(f"\nParsing failed for {data.get('name', 'unknown')}:")
+                print(f"Error: {str(e)}")
+                print(f"Original:\n{original}")
         
         if 'members' in data:
             for member in data['members'].values():
-                parse_docstrings_recursively(member)
+                parse_docstrings(member)
 
 def get_inherited_members(base: Dict[str, Any], full_data: Dict[str, Any]) -> List[Dict[str, Any]]:
     """Get all inherited members from a base class."""

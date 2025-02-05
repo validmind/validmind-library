@@ -20,7 +20,7 @@ toc-expand: 4
 
 Preprocess boolean columns.
 
-**Parameters**
+**Arguments**
 
 - **df** (pandas.DataFrame): Dataframe to preprocess.
 - **columns** (list): List of columns to preprocess.
@@ -43,7 +43,7 @@ Preprocess boolean columns.
 
 Preprocess categorical columns.
 
-**Parameters**
+**Arguments**
 
 - **df** (pandas.DataFrame): Dataframe to preprocess.
 - **columns** (list): List of columns to preprocess.
@@ -66,7 +66,7 @@ Preprocess categorical columns.
 
 Preprocess numerical columns.
 
-**Parameters**
+**Arguments**
 
 - **df** (pandas.DataFrame): Dataframe to preprocess.
 - **columns** (list): List of columns to preprocess.

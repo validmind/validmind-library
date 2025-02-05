@@ -20,7 +20,9 @@ toc-expand: 4
 
 <!-- docstring.jinja2 -->
 
-Assesses the performance of clustering models by comparing the distribution of cluster sizes in model predictions with the actual data.
+Assesses the performance of clustering models by comparing the distribution of cluster sizes in model predictions
+
+with the actual data.
 
 ### Purpose
 

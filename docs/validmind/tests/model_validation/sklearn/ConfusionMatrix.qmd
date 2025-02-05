@@ -20,7 +20,9 @@ toc-expand: 4
 
 <!-- docstring.jinja2 -->
 
-Evaluates and visually represents the classification ML model's predictive performance using a Confusion Matrix heatmap.
+Evaluates and visually represents the classification ML model's predictive performance using a Confusion Matrix
+
+heatmap.
 
 ### Purpose
 

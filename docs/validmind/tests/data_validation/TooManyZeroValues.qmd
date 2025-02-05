@@ -20,7 +20,9 @@ toc-expand: 4
 
 <!-- docstring.jinja2 -->
 
-Identifies numerical columns in a dataset that contain an excessive number of zero values, defined by a threshold percentage.
+Identifies numerical columns in a dataset that contain an excessive number of zero values, defined by a threshold
+
+percentage.
 
 ### Purpose
 

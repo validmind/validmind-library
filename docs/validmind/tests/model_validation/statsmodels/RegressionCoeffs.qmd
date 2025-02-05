@@ -20,7 +20,9 @@ toc-expand: 4
 
 <!-- docstring.jinja2 -->
 
-Assesses the significance and uncertainty of predictor variables in a regression model through visualization of coefficients and their 95% confidence intervals.
+Assesses the significance and uncertainty of predictor variables in a regression model through visualization of
+
+coefficients and their 95% confidence intervals.
 
 ### Purpose
 

@@ -20,7 +20,9 @@ toc-expand: 4
 
 <!-- docstring.jinja2 -->
 
-Evaluates the skewness of numerical data in a dataset to check against a defined threshold, aiming to ensure data quality and optimize model performance.
+Evaluates the skewness of numerical data in a dataset to check against a defined threshold, aiming to ensure data
+
+quality and optimize model performance.
 
 ### Purpose
 

@@ -66,7 +66,9 @@ Creates a `requests`-compatible files object to be sent to the API
 
 <!-- docstring.jinja2 -->
 
-Returns the ipywidget compatible representation of the figure. Ideally we would render images as-is, but Plotly FigureWidgets don't work well on Google Colab when they are combined with ipywidgets.
+Returns the ipywidget compatible representation of the figure. Ideally
+
+we would render images as-is, but Plotly FigureWidgets don't work well on Google Colab when they are combined with ipywidgets.
 
 <!-- class.qmd.jinja2 -->
 
@@ -112,7 +114,9 @@ Creates a ModelAttributes instance from a dictionary
 
 <!-- docstring.jinja2 -->
 
-Base class for test suites. Test suites are used to define a grouping of tests that can be run as a suite against datasets and models. Test Suites can be defined by inheriting from this base class and defining the list of tests as a class variable.
+Base class for test suites. Test suites are used to define a grouping of tests that
+
+can be run as a suite against datasets and models. Test Suites can be defined by inheriting from this base class and defining the list of tests as a class variable.
 
 Tests can be a flat list of strings or may be nested into sections by using a dict
 
@@ -128,7 +132,9 @@ Tests can be a flat list of strings or may be nested into sections by using a di
 
 <!-- docstring.jinja2 -->
 
-Returns the default configuration for the test suite Each test in a test suite can accept parameters and those parameters can have default values. Both the parameters and their defaults are set in the test class and a config object can be passed to the test suite's run method to override the defaults. This function returns a dictionary containing the parameters and their default values for every test to allow users to view and set values
+Returns the default configuration for the test suite
+
+Each test in a test suite can accept parameters and those parameters can have default values. Both the parameters and their defaults are set in the test class and a config object can be passed to the test suite's run method to override the defaults. This function returns a dictionary containing the parameters and their default values for every test to allow users to view and set values
 
 **Returns**
 
@@ -190,7 +196,9 @@ Runs a test suite
 
 <!-- docstring.jinja2 -->
 
-Logs the results of the test suite to ValidMind This method will be called after the test suite has been run and all results have been collected. This method will log the results to ValidMind.
+Logs the results of the test suite to ValidMind
+
+This method will be called after the test suite has been run and all results have been collected. This method will log the results to ValidMind.
 
 ### [run[()]{.muted}](#run)
 
@@ -206,7 +214,7 @@ Logs the results of the test suite to ValidMind This method will be called after
 
 Runs the test suite, renders the summary and sends the results to ValidMind
 
-**Parameters**
+**Arguments**
 
 - **send** (bool): Whether to send the results to ValidMind. Defaults to True.
 - **fail_fast** (bool): Whether to stop running tests after the first failure. Defaults to False.
@@ -235,11 +243,13 @@ Runs the test suite, renders the summary and sends the results to ValidMind
 
 <!-- docstring.jinja2 -->
 
-Base class for VM datasets Child classes should be used to support new dataset types (tensor, polars etc) by converting the user's dataset into a numpy array collecting metadata like column names and then call this (parent) class `__init__` method.
+Base class for VM datasets
+
+Child classes should be used to support new dataset types (tensor, polars etc) by converting the user's dataset into a numpy array collecting metadata like column names and then call this (parent) class `__init__` method.
 
 This way we can support multiple dataset types but under the hood we only need to work with numpy arrays and pandas dataframes in this class.
 
-**Parameters**
+**Arguments**
 
 - **raw_dataset** (np.ndarray): The raw dataset as a NumPy array.
 - **input_id** (str): Identifier for the dataset.
@@ -270,7 +280,7 @@ This way we can support multiple dataset types but under the hood we only need t
 
 Adds an extra column to the dataset without modifying the dataset `features` and `target` columns.
 
-**Parameters**
+**Arguments**
 
 - **column_name** (str): The name of the extra column.
 - **column_values** (np.ndarray): The values of the extra column.
@@ -289,7 +299,7 @@ Adds an extra column to the dataset without modifying the dataset `features` and
 
 Assign predictions and probabilities to the dataset.
 
-**Parameters**
+**Arguments**
 
 - **model** (VMModel): The model used to generate the predictions.
 - **prediction_column** (str, optional): The name of the column containing the predictions. Defaults to None.
@@ -355,7 +365,7 @@ Returns the target class labels or unique values of the target column.
 
 Support options provided when passing an input to run_test or run_test_suite
 
-**Parameters**
+**Arguments**
 
 - \*\***kwargs**: Options:
 - columns: Filter columns in the dataset
@@ -404,9 +414,11 @@ Returns a dataframe containing the target column
 
 <!-- docstring.jinja2 -->
 
-Returns the predictions for a given model. Attempts to stack complex prediction types (e.g., embeddings) into a single, multi-dimensional array.
+Returns the predictions for a given model.
 
-**Parameters**
+Attempts to stack complex prediction types (e.g., embeddings) into a single, multi-dimensional array.
+
+**Arguments**
 
 - **model** (VMModel): The model whose predictions are sought.
 
@@ -442,7 +454,7 @@ Returns a dataframe containing the predictions for a given model
 
 Returns the probabilities for a given model.
 
-**Parameters**
+**Arguments**
 
 - **model** (str): The ID of the model whose predictions are sought.
 
@@ -494,11 +506,13 @@ Base class for ValidMind Input types
 
 <!-- docstring.jinja2 -->
 
-Allows for setting options on the input object that are passed by the user when using the input to run a test or set of tests
+Allows for setting options on the input object that are passed by the user
+
+when using the input to run a test or set of tests
 
 To allow options, just override this method in the subclass (see VMDataset) and ensure that it returns a new instance of the input with the specified options set.
 
-**Parameters**
+**Arguments**
 
 - \*\***kwargs**: Arbitrary keyword arguments that will be passed to the input object
 
@@ -522,7 +536,7 @@ To allow options, just override this method in the subclass (see VMDataset) and 
 
 An base class that wraps a trained model instance and its associated data.
 
-**Parameters**
+**Arguments**
 
 - **model** (object, optional): The trained model instance. Defaults to None.
 - **input_id** (str, optional): The input ID for the model. Defaults to None.

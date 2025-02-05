@@ -34,7 +34,9 @@ Get a logger for the given module name
 
 <!-- docstring.jinja2 -->
 
-Generates visualizations of Weight of Evidence (WoE) and Information Value (IV) for understanding predictive power of categorical variables in a data set.
+Generates visualizations of Weight of Evidence (WoE) and Information Value (IV) for understanding predictive power
+
+of categorical variables in a data set.
 
 ### Purpose
 

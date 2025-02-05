@@ -20,7 +20,9 @@ toc-expand: 4
 
 <!-- docstring.jinja2 -->
 
-Compute feature importance scores for a given model and generate a summary table with the top important features.
+Compute feature importance scores for a given model and generate a summary table
+
+with the top important features.
 
 ### Purpose
 

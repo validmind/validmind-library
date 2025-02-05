@@ -20,7 +20,9 @@ toc-expand: 4
 
 <!-- docstring.jinja2 -->
 
-Evaluates binary classification model performance by generating and plotting the Receiver Operating Characteristic (ROC) curve and calculating the Area Under Curve (AUC) score.
+Evaluates binary classification model performance by generating and plotting the Receiver Operating Characteristic
+
+(ROC) curve and calculating the Area Under Curve (AUC) score.
 
 ### Purpose
 

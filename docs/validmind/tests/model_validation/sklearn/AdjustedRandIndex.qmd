@@ -20,7 +20,9 @@ toc-expand: 4
 
 <!-- docstring.jinja2 -->
 
-Measures the similarity between two data clusters using the Adjusted Rand Index (ARI) metric in clustering machine learning models.
+Measures the similarity between two data clusters using the Adjusted Rand Index (ARI) metric in clustering machine
+
+learning models.
 
 ### Purpose
 

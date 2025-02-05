@@ -20,7 +20,9 @@ toc-expand: 4
 
 <!-- docstring.jinja2 -->
 
-Generates histograms for each numerical feature in a dataset to provide visual insights into data distribution and detect potential issues.
+Generates histograms for each numerical feature in a dataset to provide visual insights into data distribution and
+
+detect potential issues.
 
 ### Purpose
 

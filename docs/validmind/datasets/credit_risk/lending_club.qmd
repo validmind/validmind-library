@@ -46,7 +46,7 @@ toc-expand: 4
 
 Get demo test configuration.
 
-**Parameters**
+**Arguments**
 
 - **x_test**: Test features DataFrame
 - **y_test**: Test target Series
@@ -81,7 +81,15 @@ Get demo test configuration.
 
 <!-- docstring.jinja2 -->
 
-Load data from either an online source or offline files, automatically dropping specified columns for offline data. :param source: 'online' for online data, 'offline' for offline files. Defaults to 'online'. :return: DataFrame containing the loaded data.
+Load data from either an online source or offline files, automatically dropping specified columns for offline data.
+
+**Arguments**
+
+- **source**: 'online' for online data, 'offline' for offline files. Defaults to 'online'.
+
+**Returns**
+
+- DataFrame containing the loaded data.
 
 <!-- function.qmd.jinja2 -->
 
@@ -135,7 +143,7 @@ Load data from either an online source or offline files, automatically dropping 
 
 Split dataset into train, validation (optional), and test sets.
 
-**Parameters**
+**Arguments**
 
 - **df**: Input DataFrame
 - **validation_split**: If None, returns train/test split. If float, returns train/val/test split

@@ -34,7 +34,9 @@ Get a logger for the given module name
 
 <!-- docstring.jinja2 -->
 
-Assesses multiple regression error metrics to compare model performance across different datasets, emphasizing systematic overestimation or underestimation and large percentage errors.
+Assesses multiple regression error metrics to compare model performance across different datasets, emphasizing
+
+systematic overestimation or underestimation and large percentage errors.
 
 ### Purpose
 

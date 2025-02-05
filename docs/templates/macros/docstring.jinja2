@@ -8,14 +8,16 @@
         {# Main description #}
         {%- if docstring.parsed.short_description -%}
             {%- set _ = sections.append(docstring.parsed.short_description) -%}
+            {%- if docstring.parsed.long_description -%}
+            {%- endif -%}
         {%- endif -%}
-        {%- if docstring.parsed.long_description -%}
-            {%- set _ = sections.append(docstring.parsed.long_description) -%}
-        {%- endif -%}
+        {% if docstring.parsed.long_description %}
+            {% set _ = sections.append(docstring.parsed.long_description) %}
+        {% endif %}
         
         {# Parameters #}
         {%- if docstring.parsed.params -%}
-            {%- set _ = sections.append("\n**Parameters**") -%}
+            {%- set _ = sections.append("\n**Arguments**") -%}
             {%- for param in docstring.parsed.params -%}
                 {%- if param.arg_name and param.description -%}
                     {%- set desc = param.description | trim -%}

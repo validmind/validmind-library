@@ -34,7 +34,9 @@ Get a logger for the given module name
 
 <!-- docstring.jinja2 -->
 
-Generates plots to visually compare the forecasted outcomes of a regression model against actual observed values over a specified date range.
+Generates plots to visually compare the forecasted outcomes of a regression model against actual observed values over
+
+a specified date range.
 
 ### Purpose
 

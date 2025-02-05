@@ -20,7 +20,9 @@ toc-expand: 4
 
 <!-- docstring.jinja2 -->
 
-Evaluates and visualizes the distribution proportions among training, testing, and validation datasets of an ML model.
+Evaluates and visualizes the distribution proportions among training, testing, and validation datasets of an ML
+
+model.
 
 ### Purpose
 

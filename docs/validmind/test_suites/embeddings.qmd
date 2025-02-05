@@ -8,7 +8,9 @@ toc-expand: 4
 
 <!-- docstring.jinja2 -->
 
-Test suites for embeddings models Ideal setup is to have the API client to read a custom test suite from the project's configuration
+Test suites for embeddings models
+
+Ideal setup is to have the API client to read a custom test suite from the project's configuration
 
 <!-- class.qmd.jinja2 -->
 

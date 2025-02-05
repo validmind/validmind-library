@@ -20,7 +20,9 @@ toc-expand: 4
 
 <!-- docstring.jinja2 -->
 
-Evaluates the calibration of probability estimates by comparing predicted probabilities against observed frequencies.
+Evaluates the calibration of probability estimates by comparing predicted probabilities against observed
+
+frequencies.
 
 ### Purpose
 

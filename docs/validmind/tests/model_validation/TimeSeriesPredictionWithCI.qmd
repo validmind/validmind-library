@@ -20,7 +20,9 @@ toc-expand: 4
 
 <!-- docstring.jinja2 -->
 
-Assesses predictive accuracy and uncertainty in time series models, highlighting breaches beyond confidence intervals.
+Assesses predictive accuracy and uncertainty in time series models, highlighting breaches beyond confidence
+
+intervals.
 
 ### Purpose
 

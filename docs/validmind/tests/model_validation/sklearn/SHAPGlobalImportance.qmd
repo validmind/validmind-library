@@ -36,7 +36,7 @@ Get a logger for the given module name
 
 Plots two types of SHAP global importance (SHAP).
 
-**Parameters**
+**Arguments**
 
 - **type\_**: The type of SHAP plot to generate. Must be "mean" or "summary".
 - **shap_values**: The SHAP values to plot.
@@ -60,9 +60,11 @@ Plots two types of SHAP global importance (SHAP).
 
 <!-- docstring.jinja2 -->
 
-Selects SHAP values for binary or multiclass classification. For regression models, returns the SHAP values directly as there are no classes.
+Selects SHAP values for binary or multiclass classification.
 
-**Parameters**
+For regression models, returns the SHAP values directly as there are no classes.
+
+**Arguments**
 
 - **shap_values**: The SHAP values returned by the SHAP explainer. For multiclass classification, this will be a list where each element corresponds to a class. For regression, this will be a single array of SHAP values.
 - **class_of_interest**: The class index for which to retrieve SHAP values. If None (default), the function will assume binary classification and use class 1 by default.

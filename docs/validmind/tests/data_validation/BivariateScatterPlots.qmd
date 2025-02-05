@@ -20,7 +20,9 @@ toc-expand: 4
 
 <!-- docstring.jinja2 -->
 
-Generates bivariate scatterplots to visually inspect relationships between pairs of numerical predictor variables in machine learning classification tasks.
+Generates bivariate scatterplots to visually inspect relationships between pairs of numerical predictor variables
+
+in machine learning classification tasks.
 
 ### Purpose
 

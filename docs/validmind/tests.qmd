@@ -26,9 +26,11 @@ ValidMind Tests Module
 
 <!-- docstring.jinja2 -->
 
-Get or show details about the test This function can be used to see test details including the test name, description, required inputs and default params. It can also be used to get a dictionary of the above information for programmatic use.
+Get or show details about the test
 
-**Parameters**
+This function can be used to see test details including the test name, description, required inputs and default params. It can also be used to get a dictionary of the above information for programmatic use.
+
+**Arguments**
 
 - **test_id** (str, optional): The test ID. Defaults to None.
 - **raw** (bool): If True, returns a dictionary with the test details. Defaults to False.
@@ -73,7 +75,9 @@ List unique tasks from all test classes.
 
 <!-- docstring.jinja2 -->
 
-List all task types and their associated tags, with one row per task type and all tags for a task type in one row.
+List all task types and their associated tags, with one row per task type and
+
+all tags for a task type in one row.
 
 **Returns**
 
@@ -93,7 +97,7 @@ List all task types and their associated tags, with one row per task type and al
 
 List all tests in the tests directory.
 
-**Parameters**
+**Arguments**
 
 - **filter** (str): Find tests where the ID, tasks or tags match the filter string. Defaults to None.
 - **task** (str): Find tests that match the task. Can be used to narrow down matches from the filter string. Defaults to None.
@@ -117,9 +121,11 @@ List all tests in the tests directory.
 
 <!-- docstring.jinja2 -->
 
-Load a test by test ID Test IDs are in the format `namespace.path_to_module.TestClassOrFuncName[:tag]`. The tag is optional and is used to distinguish between multiple results from the same test.
+Load a test by test ID
 
-**Parameters**
+Test IDs are in the format `namespace.path_to_module.TestClassOrFuncName[:tag]`. The tag is optional and is used to distinguish between multiple results from the same test.
+
+**Arguments**
 
 - **test_id** (str): The test ID in the format `namespace.path_to_module.TestName[:tag]`
 - **test_func** (callable): The test function to load. If not provided, the test will be loaded from the test provider. Defaults to None.
@@ -136,9 +142,11 @@ Load a test by test ID Test IDs are in the format `namespace.path_to_module.Test
 
 <!-- docstring.jinja2 -->
 
-Run a ValidMind or custom test This function is the main entry point for running tests. It can run simple unit metrics, ValidMind and custom tests, composite tests made up of multiple unit metrics and comparison tests made up of multiple tests.
+Run a ValidMind or custom test
 
-**Parameters**
+This function is the main entry point for running tests. It can run simple unit metrics, ValidMind and custom tests, composite tests made up of multiple unit metrics and comparison tests made up of multiple tests.
+
+**Arguments**
 
 - **test_id** (TestID): Test ID to run. Not required if `name` and `unit_metrics` provided.
 - **params** (dict): Parameters to customize test behavior. See test details for available parameters.
@@ -179,7 +187,7 @@ Run a ValidMind or custom test This function is the main entry point for running
 
 Decorator for specifying tags for a test.
 
-**Parameters**
+**Arguments**
 
 - \***tags**: The tags to apply to the test.
 
@@ -197,7 +205,7 @@ Decorator for specifying tags for a test.
 
 Decorator for specifying the task types that a test is designed for.
 
-**Parameters**
+**Arguments**
 
 - \***tasks**: The task types that the test is designed for.
 
@@ -213,7 +221,9 @@ Decorator for specifying the task types that a test is designed for.
 
 <!-- docstring.jinja2 -->
 
-Decorator for creating and registering custom tests This decorator registers the function it wraps as a test function within ValidMind under the provided ID. Once decorated, the function can be run using the `validmind.tests.run_test` function.
+Decorator for creating and registering custom tests
+
+This decorator registers the function it wraps as a test function within ValidMind under the provided ID. Once decorated, the function can be run using the `validmind.tests.run_test` function.
 
 The function can take two different types of arguments:
 
@@ -229,7 +239,7 @@ The function should return one of the following types:
 
 The function may also include a docstring. This docstring will be used and logged as the metric's description.
 
-**Parameters**
+**Arguments**
 
 - **func**: The function to decorate
 - **test_id**: The identifier for the metric. If not provided, the function name is used.
@@ -254,7 +264,7 @@ The function may also include a docstring. This docstring will be used and logge
 
 Register an external test provider
 
-**Parameters**
+**Arguments**
 
 - **namespace** (str): The namespace of the test provider
 - **test_provider** (TestProvider): The test provider
@@ -294,7 +304,9 @@ Exception raised when an error occurs while loading a test
 
 <!-- docstring.jinja2 -->
 
-Test providers in ValidMind are responsible for loading tests from different sources, such as local files, databases, or remote services. The LocalTestProvider specifically loads tests from the local file system.
+Test providers in ValidMind are responsible for loading tests from different sources,
+
+such as local files, databases, or remote services. The LocalTestProvider specifically loads tests from the local file system.
 
 To use the LocalTestProvider, you need to provide the root_folder, which is the root directory for local tests. The test_id is a combination of the namespace (set when registering the test provider) and the path to the test class module, where slashes are replaced by dots and the .py extension is left out.
 
@@ -317,7 +329,7 @@ test = test_provider.load_test("my_namespace.my_test_class")
 # full path to the test class module is /path/to/tests/folder/my_test_class.py
 ```
 
-**Parameters**
+**Arguments**
 
 - **root_folder** (str): The root directory for local tests.
 
@@ -351,11 +363,20 @@ List all tests in the given namespace
 
 <!-- docstring.jinja2 -->
 
-Load the test identified by the given test_id. Args: test_id (str): The identifier of the test. This corresponds to the relative path of the python file from the root folder, with slashes replaced by dots
+Load the test identified by the given test_id.
 
-Returns: The test class that matches the last part of the test_id.
+**Arguments**
 
-Raises: LocalTestProviderLoadModuleError: If the test module cannot be imported LocalTestProviderLoadTestError: If the test class cannot be found in the module
+- **test_id** (str): The identifier of the test. This corresponds to the relative path of the python file from the root folder, with slashes replaced by dots
+
+**Returns**
+
+- The test class that matches the last part of the test_id.
+
+**Raises**
+
+- **LocalTestProviderLoadModuleError**: If the test module cannot be imported
+- **LocalTestProviderLoadTestError**: If the test class cannot be found in the module
 
 <!-- class.qmd.jinja2 -->
 
@@ -407,7 +428,7 @@ List all tests in the given namespace
 
 Load the test function identified by the given test_id
 
-**Parameters**
+**Arguments**
 
 - **test_id** (str): The test ID (does not contain the namespace under which the test is registered)
 

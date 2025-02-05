@@ -32,7 +32,9 @@ Call LLM with the given prompts and return the response
 
 <!-- docstring.jinja2 -->
 
-Get just the explanation from the response string TODO: use json response mode instead of this
+Get just the explanation from the response string
+
+TODO: use json response mode instead of this
 
 ```
 e.g. "Score: 8
@@ -52,7 +54,9 @@ Explanation: <some-explanation>" -> "<some-explanation>"
 
 <!-- docstring.jinja2 -->
 
-Get just the score from the response string TODO: use json response mode instead of this
+Get just the score from the response string
+
+TODO: use json response mode instead of this
 
 ```
 e.g. "Score: 8
@@ -74,7 +78,9 @@ Explanation: <some-explanation>" -> 8
 
 <!-- docstring.jinja2 -->
 
-Assesses potential bias in a Large Language Model by analyzing the distribution and order of exemplars in the prompt.
+Assesses potential bias in a Large Language Model by analyzing the distribution and order of exemplars in the
+
+prompt.
 
 ### Purpose
 

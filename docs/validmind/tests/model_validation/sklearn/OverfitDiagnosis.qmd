@@ -34,7 +34,9 @@ Get a logger for the given module name
 
 <!-- docstring.jinja2 -->
 
-Assesses potential overfitting in a model's predictions, identifying regions where performance between training and testing sets deviates significantly.
+Assesses potential overfitting in a model's predictions, identifying regions where performance between training and
+
+testing sets deviates significantly.
 
 ### Purpose
 

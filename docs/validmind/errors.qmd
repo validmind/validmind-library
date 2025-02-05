@@ -8,7 +8,9 @@ toc-expand: 4
 
 <!-- docstring.jinja2 -->
 
-This module contains all the custom errors that are used in the ValidMind Library. The following base errors are defined for others:
+This module contains all the custom errors that are used in the ValidMind Library.
+
+The following base errors are defined for others:
 
 - BaseError
 - APIRequestError
@@ -539,7 +541,9 @@ When the client config is missing the documentation template.
 
 <!-- docstring.jinja2 -->
 
-When the pytorch model is missing a predict function or its predict method does not have the expected arguments.
+When the pytorch model is missing a predict function or its predict
+
+method does not have the expected arguments.
 
 **Inherited members**
 
@@ -822,7 +826,9 @@ When an unsupported R model is used.
 
 <!-- docstring.jinja2 -->
 
-Safely try to parse JSON from the response message in case the API returns a non-JSON string or if the API returns a non-standard error
+Safely try to parse JSON from the response message in case the API
+
+returns a non-JSON string or if the API returns a non-standard error
 
 <!-- function.qmd.jinja2 -->
 

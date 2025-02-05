@@ -20,7 +20,9 @@ toc-expand: 4
 
 <!-- docstring.jinja2 -->
 
-Generates histograms to provide graphical insight into the distribution of time intervals in a model's datetime data.
+Generates histograms to provide graphical insight into the distribution of time intervals in a model's datetime
+
+data.
 
 ### Purpose
 
