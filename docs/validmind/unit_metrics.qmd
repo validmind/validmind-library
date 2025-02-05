@@ -14,7 +14,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">describe_metric</span>(<span class="params"><span class="n">metric_id</span><span class="p">:</span><span class="n">str</span><span class="muted">,</span></span><span class="params"><span class="n">kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)
+<span class="kw">def</span> <span class="name">describe_metric</span>(<span class="params"><span class="n">metric_id</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type -->str</span><span class="muted">,</span></span><span class="params"><span class="n">kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)
 
 :::
 
@@ -46,7 +46,7 @@ List all metrics
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">run_metric</span>(<span class="params"><span class="n">metric_id</span><span class="p">:</span><span class="n">str</span><span class="muted">,</span></span><span class="params"><span class="n">kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)
+<span class="kw">def</span> <span class="name">run_metric</span>(<span class="params"><span class="n">metric_id</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type -->str</span><span class="muted">,</span></span><span class="params"><span class="n">kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)
 
 :::
 

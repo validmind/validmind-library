@@ -12,7 +12,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">adj_r2_score</span>(<span class="params"><span class="n">actual</span><span class="p">:</span><span class="n">{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'np'}, {'cls': 'ExprName', 'name': 'ndarray'}]}</span><span class="muted">,</span></span><span class="params"><span class="n">predicted</span><span class="p">:</span><span class="n">{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'np'}, {'cls': 'ExprName', 'name': 'ndarray'}]}</span><span class="muted">,</span></span><span class="params"><span class="n">rowcount</span><span class="p">:</span><span class="n">int</span><span class="muted">,</span></span><span class="params"><span class="n">featurecount</span><span class="p">:</span><span class="n">int</span></span>)
+<span class="kw">def</span> <span class="name">adj_r2_score</span>(<span class="params"><span class="n">actual</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type -->{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'np'}, {'cls': 'ExprName', 'name': 'ndarray'}]}</span><span class="muted">,</span></span><span class="params"><span class="n">predicted</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type -->{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'np'}, {'cls': 'ExprName', 'name': 'ndarray'}]}</span><span class="muted">,</span></span><span class="params"><span class="n">rowcount</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type -->int</span><span class="muted">,</span></span><span class="params"><span class="n">featurecount</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type -->int</span></span>)
 
 :::
 
@@ -28,7 +28,7 @@ Adjusted R2 Score
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">RegressionModelSummary</span>(<span class="params"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="p">:</span><span class="n">VMModel</span></span>)
+<span class="kw">def</span> <span class="name">RegressionModelSummary</span>(<span class="params"><span class="n">dataset</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-vmdataset">validmind.vm_models.VMDataset</a></span><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-vmmodel">validmind.vm_models.VMModel</a></span></span>)
 
 :::
 

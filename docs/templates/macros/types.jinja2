@@ -1,20 +1,51 @@
-{% macro format_type(type) %}
-<!-- types.jinja2 -->
-{% if type is mapping %}
-{% if type.kind == 'union' %}
-{{ type.types | map('format_type') | join(' | ') }}
-{% elif type.kind == 'generic' %}
-{{ type.base }}[{{ type.args | map('format_type') | join(', ') }}]
+{% macro format_type(type, module=None, add_links=false) %}
+<!-- types.jinja2 - format_type -->
+{%- if type is mapping -%}
+  {%- if type.kind == 'union' -%}
+    Union[
+    {%- for t in type.types -%}
+      {{ format_type(t, module, add_links) }}
+      {%- if not loop.last %}, {% endif -%}
+    {%- endfor -%}
+    ]
+  {%- elif type.kind == 'generic' -%}
+    {%- if type.base == 'Dict' -%}
+      Dict[{{ format_type(type.args[0], module, add_links) }}, {{ format_type(type.args[1], module, add_links) }}]
+    {%- elif type.base == 'List' -%}
+      List[{{ format_type(type.args[0], module, add_links) }}]
+    {%- else -%}
+      {{ type.base }}[{{ type.args | map(attribute='format_type') | join(', ') }}]
+    {%- endif -%}
+  {%- elif type.cls == "ExprName" -%}
+    {%- if module and type.name in module.members and module.members[type.name].kind == "alias" -%}
+      {{ module.members[type.name].target_path }}
+    {%- elif add_links and type.name not in ['str', 'dict', 'list', 'bool', 'int', 'float', 'Any'] -%}
+      <a href="/reference/validmind/vm_models.html#class-{{ type.name|lower }}">validmind.vm_models.{{ type.name }}</a>
+    {%- else -%}
+      {{ type.name }}
+    {%- endif -%}
+  {%- elif type.cls == "ExprAttribute" and type.values is sequence -%}
+    {{ type.values | map(attribute='name') | join('.') }}
+  {%- elif type.cls == "ExprSubscript" and type.left is defined -%}
+    {{ type.left.name }}[
+    {%- if type.slice.cls == "ExprTuple" -%}
+      {{ type.slice.elements|map(attribute="name")|join(", ") }}
+    {%- else -%}
+      {{ format_type(type.slice, module, add_links) }}
+    {%- endif -%}
+    ]
+  {%- elif type.name is defined and add_links and type.name not in ['str', 'dict', 'list', 'bool', 'int', 'float'] -%}
+    <a href="/reference/validmind/vm_models.html#class-{{ type.name|lower }}">validmind.vm_models.{{ type.name }}</a>
+  {%- else -%}
+    {{ type.name if 'name' in type else type|string }}
+  {%- endif -%}
 {% else %}
-{{ type.name }}
-{% endif %}
-{% else %}
-{{ type }}
+  {{ type }}
 {% endif %}
 {% endmacro %}
 
 {%- macro format_return_type(returns) -%}
-<!-- types.jinja2 -->
+<!-- types.jinja2 - format_return_type -->
 {%- if returns.cls == "ExprName" -%}
     {%- if returns.name in validmind.members.client.members and validmind.members.client.members[returns.name].kind == "alias" -%}
         {{ validmind.members.client.members[returns.name].target_path }}
@@ -35,7 +66,7 @@
 {%- endmacro %}
 
 {%- macro format_module_return_type(returns, module, full_data) -%}
-<!-- types.jinja2 -->
+<!-- types.jinja2 - format_module_return_type -->
 {%- if returns.cls == "ExprName" -%}
     {%- if returns.name in module.members and module.members[returns.name].kind == "alias" -%}
         {{ module.members[returns.name].target_path }}

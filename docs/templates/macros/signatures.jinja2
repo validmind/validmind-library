@@ -1,20 +1,4 @@
-{%- macro extract_type(annotation) -%}
-  {%- if annotation is mapping -%}
-    {%- if 'name' in annotation -%}
-      {{ annotation.name }}
-    {%- elif 'slice' in annotation -%}
-      {{ extract_type(annotation.slice) }}
-    {%- elif 'left' in annotation and 'slice' in annotation -%}
-      {{ extract_type(annotation.left) }}[{{ extract_type(annotation.slice) }}]
-    {%- elif 'elements' in annotation -%}
-      {{ annotation.elements | map(attribute='name') | join(', ') }}
-    {%- else -%}
-      {{ annotation }}
-    {%- endif -%}
-  {%- else -%}
-    {{ annotation }}
-  {%- endif -%}
-{%- endmacro -%}
+{%- from 'macros/types.jinja2' import format_type -%}
 
 {%- macro render_signature(member) -%}
 <!-- signatures.jinja2 -->
@@ -30,7 +14,7 @@
   {%- if member.parameters | length == 1 -%}
     <span class="param"><span class="n">{{ member.parameters[0].name }}</span>
     {%- if member.parameters[0].annotation -%}
-      <span class="p">:</span><span class="n">{{ extract_type(member.parameters[0].annotation) }}</span>
+      <span class="p">:</span><span class="n">{{ format_type(member.parameters[0].annotation, add_links=true) }}</span>
     {%- endif -%}
     {%- if member.parameters[0].default is not none -%}
       <span class="o"> = </span><span class="kc">{{ member.parameters[0].default }}</span>
@@ -40,7 +24,7 @@
     {%- for param in member.parameters -%}
       <span class="params"><span class="n">{{ param.name }}</span>
       {%- if param.annotation -%}
-        <span class="p">:</span><span class="n">{{ extract_type(param.annotation) }}</span>
+        <span class="p">:</span><span class="n">{{ format_type(param.annotation, add_links=true) }}</span>
       {%- endif -%}
       {%- if param.default is not none -%}
         <span class="o"> = </span><span class="kc">{{ param.default }}</span>
@@ -52,47 +36,8 @@
   {%- else -%}()
 {%- endif -%}
 {%- if member.returns -%}
-
   <span class="p"> → </span><span class="return-annotation">
-{%- if member.returns is mapping -%}
-  {%- if 'values' in member.returns and member.returns.values is sequence -%}
-    {{ member.returns.values | selectattr('name', 'defined') | map(attribute='name') | join('.') }}
-  {%- elif 'name' in member.returns -%}
-    {%- if member.returns.name in ['str', 'dict', 'list', 'bool', 'int', 'float'] -%}
-      {{ member.returns.name }}
-    {%- else -%}
-      <a href="/reference/validmind/vm_models.html#class-{{ member.returns.name|lower }}">
-        validmind.vm_models.{{ member.returns.name }}
-      </a>
-    {%- endif -%}
-  {%- elif member.returns.cls == 'ExprAttribute' and 'values' in member.returns -%}
-      {%- set values_list = member.returns['values'] if member.returns['values'] is sequence else [] -%}
-      {%- set extracted_values = values_list | selectattr('name', 'defined') | map(attribute='name') | list -%}
-      {{ extracted_values | join('.') if extracted_values else 'ExprAttribute' }}
-{%- elif member.returns.cls == 'ExprSubscript' -%}
-    {%- if member.returns.slice.cls == 'ExprTuple' -%}
-        {%- set extracted_elements = [] -%}
-        {%- for element in member.returns.slice.elements -%}
-            {%- if element.cls == 'ExprSubscript' -%}
-                {{ extracted_elements.append(element.left.name ~ '[' ~ element.slice.elements | map(attribute='name') | join(', ') ~ ']') }}
-            {%- elif element.cls == 'ExprAttribute' and 'values' in element -%}
-                {%- set attr_values = element['values'] if element['values'] is sequence else [] -%}
-                {{ extracted_elements.append(attr_values | map(attribute='name') | join('.')) }}
-            {%- elif 'name' in element -%}
-                {{ extracted_elements.append(element.name) }}
-            {%- else -%}
-                {{ extracted_elements.append('Unknown') }}
-            {%- endif -%}
-        {%- endfor -%}
-
-        {{ member.returns.left.name }}[{{ extracted_elements | join(', ') }}]
-    {%- else -%}
-        {{ member.returns.left.name }}[{{ member.returns.slice.name }}]
-    {%- endif -%}
-  {%- endif -%}
-{%- else -%}
-  {{ member.returns if member.returns else 'Any' }}
-{%- endif -%}
+    {{- format_type(member.returns, add_links=true) if member.returns else 'Any' -}}
   </span>
 {%- endif +%}
 

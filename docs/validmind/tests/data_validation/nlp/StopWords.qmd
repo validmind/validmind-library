@@ -18,7 +18,7 @@ Threshold based tests
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">StopWords</span>(<span class="params"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span><span class="muted">,</span></span><span class="params"><span class="n">min_percent_threshold</span><span class="p">:</span><span class="n">float</span><span class="o"> = </span><span class="kc">0.5</span><span class="muted">,</span></span><span class="params"><span class="n">num_words</span><span class="p">:</span><span class="n">int</span><span class="o"> = </span><span class="kc">25</span></span>)
+<span class="kw">def</span> <span class="name">StopWords</span>(<span class="params"><span class="n">dataset</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-vmdataset">validmind.vm_models.VMDataset</a></span><span class="muted">,</span></span><span class="params"><span class="n">min_percent_threshold</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type -->float</span><span class="o"> = </span><span class="kc">0.5</span><span class="muted">,</span></span><span class="params"><span class="n">num_words</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type -->int</span><span class="o"> = </span><span class="kc">25</span></span>)
 
 :::
 

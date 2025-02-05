@@ -14,7 +14,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">Lilliefors</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span></span>)
+<span class="kw">def</span> <span class="name">Lilliefors</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-vmdataset">validmind.vm_models.VMDataset</a></span></span>)
 
 :::
 

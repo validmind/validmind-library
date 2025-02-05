@@ -28,7 +28,7 @@ Get a logger for the given module name
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">RegressionFeatureSignificance</span>(<span class="params"><span class="n">model</span><span class="p">:</span><span class="n">VMModel</span><span class="muted">,</span></span><span class="params"><span class="n">fontsize</span><span class="p">:</span><span class="n">int</span><span class="o"> = </span><span class="kc">10</span><span class="muted">,</span></span><span class="params"><span class="n">p_threshold</span><span class="p">:</span><span class="n">float</span><span class="o"> = </span><span class="kc">0.05</span></span>)
+<span class="kw">def</span> <span class="name">RegressionFeatureSignificance</span>(<span class="params"><span class="n">model</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-vmmodel">validmind.vm_models.VMModel</a></span><span class="muted">,</span></span><span class="params"><span class="n">fontsize</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type -->int</span><span class="o"> = </span><span class="kc">10</span><span class="muted">,</span></span><span class="params"><span class="n">p_threshold</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type -->float</span><span class="o"> = </span><span class="kc">0.05</span></span>)
 
 :::
 
