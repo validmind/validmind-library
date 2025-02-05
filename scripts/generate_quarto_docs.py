@@ -2,14 +2,13 @@
 import json
 import os
 from pathlib import Path
-from typing import Any, Dict, Set, List, get_type_hints, ForwardRef
+from typing import Any, Dict, Set, List
 from jinja2 import Environment, FileSystemLoader
 import mdformat
 from docstring_parser import parse, Style
 from glob import glob
 import subprocess
 import re
-import inspect
 
 # Add at module level
 _alias_cache = {}  # Cache for resolved aliases
@@ -575,51 +574,6 @@ def find_qmd_files(base_path: str) -> Dict[str, str]:
             relative_paths[filename] = f'docs/{path}'
     return relative_paths
 
-def process_type_annotation(annotation, module_globals=None):
-    """Convert type annotation into a structured format."""
-    if isinstance(annotation, ForwardRef):
-        # Resolve forward references
-        try:
-            resolved = annotation._evaluate(module_globals, {})
-            return process_type_annotation(resolved)
-        except:
-            return {'name': annotation.__forward_arg__}
-            
-    if hasattr(annotation, '__origin__'):  # Generic types like List, Dict
-        origin = annotation.__origin__
-        args = annotation.__args__
-        
-        if origin == Union:
-            return {
-                'kind': 'union',
-                'types': [process_type_annotation(arg) for arg in args]
-            }
-        else:
-            return {
-                'kind': 'generic',
-                'base': origin.__name__,
-                'args': [process_type_annotation(arg) for arg in args]
-            }
-            
-    # Basic types
-    return {'name': getattr(annotation, '__name__', str(annotation))}
-
-def process_signature(member_data, module_globals):
-    """Pre-process signature type information."""
-    if 'parameters' in member_data:
-        for param in member_data['parameters']:
-            if 'annotation' in param:
-                param['annotation'] = process_type_annotation(
-                    param['annotation'], 
-                    module_globals
-                )
-    
-    if 'returns' in member_data:
-        member_data['returns'] = process_type_annotation(
-            member_data['returns'],
-            module_globals
-        )
-
 def generate_docs(json_path: str, template_dir: str, output_dir: str):
     """Generate documentation from JSON data using templates."""
     # print("\nEntering generate_docs()")
@@ -644,12 +598,6 @@ def generate_docs(json_path: str, template_dir: str, output_dir: str):
     env.globals['resolve_alias'] = resolve_alias
     env.globals['get_all_members'] = get_all_members
     env.globals['get_inherited_members'] = get_inherited_members
-    
-    # Pre-process type annotations
-    for module_name, module in data.items():
-        if 'members' in module:
-            for member in module['members'].values():
-                process_signature(member, module.get('globals', {}))
     
     # Start processing from root module
     if 'validmind' in data:
