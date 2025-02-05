@@ -84,9 +84,7 @@ This function provides an interface to retrieve the TestSuite instance for the c
 
 <!-- docstring.jinja2 -->
 
-Initializes the API client instances and calls the /ping endpoint to ensure
-
-the provided credentials are valid and we can connect to the ValidMind API.
+Initializes the API client instances and calls the /ping endpoint to ensure the provided credentials are valid and we can connect to the ValidMind API.
 
 If the API key and secret are not provided, the client will attempt to retrieve them from the environment variables `VM_API_KEY` and `VM_API_SECRET`.
 
@@ -116,9 +114,7 @@ If the API key and secret are not provided, the client will attempt to retrieve 
 
 <!-- docstring.jinja2 -->
 
-Initializes a VM Dataset, which can then be passed to other functions
-
-that can perform additional analysis and tests on the data. This function also ensures we are reading a valid dataset type.
+Initializes a VM Dataset, which can then be passed to other functions that can perform additional analysis and tests on the data. This function also ensures we are reading a valid dataset type.
 
 The following dataset types are supported:
 
@@ -159,9 +155,7 @@ The following dataset types are supported:
 
 <!-- docstring.jinja2 -->
 
-Initializes a VM Model, which can then be passed to other functions
-
-that can perform additional analysis and tests on the data. This function also ensures we are creating a model supported libraries.
+Initializes a VM Model, which can then be passed to other functions that can perform additional analysis and tests on the data. This function also ensures we are creating a model supported libraries.
 
 **Arguments**
 

@@ -506,9 +506,7 @@ Base class for ValidMind Input types
 
 <!-- docstring.jinja2 -->
 
-Allows for setting options on the input object that are passed by the user
-
-when using the input to run a test or set of tests
+Allows for setting options on the input object that are passed by the user when using the input to run a test or set of tests
 
 To allow options, just override this method in the subclass (see VMDataset) and ensure that it returns a new instance of the input with the specified options set.
 

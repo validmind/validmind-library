@@ -286,61 +286,6 @@ def lint_markdown_files(output_dir: str):
         with open(path, 'w') as f:
             f.write(formatted)
 
-def format_google_docstring(docstring: str) -> str:
-    """Format a Google-style docstring from JSON format back to proper structure."""
-    lines = []
-    sections = docstring.split('\n\n')
-    
-    for section in sections:
-        if section.startswith('Args:'):
-            lines.append('Args:')
-            args_text = section.replace('Args:', '').strip()
-            
-            current_param = None
-            param_desc = []
-            
-            parts = args_text.split()
-            i = 0
-            while i < len(parts):
-                part = parts[i]
-                
-                if ':' in part and not part.startswith('(default'):
-                    # If we have a previous parameter, add it
-                    if current_param:
-                        lines.append(f"    {current_param}: {' '.join(param_desc)}")
-                    current_param = part.split(':', 1)[0]
-                    param_desc = [part.split(':', 1)[1]]
-                
-                elif part.startswith('(default'):
-                    # Look ahead for the default value
-                    try:
-                        if ':' in part:
-                            default_value = part.split(':', 1)[1].rstrip(')')
-                            param_desc.append(f"(default: {default_value})")
-                        else:
-                            param_desc.append(part)
-                    except IndexError:
-                        param_desc.append(part)
-                
-                else:
-                    param_desc.append(part)
-                
-                i += 1
-            
-            # Add the last parameter
-            if current_param:
-                lines.append(f"    {current_param}: {' '.join(param_desc)}")
-        
-        elif section.startswith('Returns:'):
-            lines.append('\nReturns:')
-            returns_text = section.replace('Returns:', '').strip()
-            lines.append(f"    {returns_text}")
-        
-        else:
-            lines.append(section.strip())
-    
-    return '\n'.join(lines)
-
 def parse_docstrings(data: Dict[str, Any]):
     """Recursively parse all docstrings in the data structure."""
     if isinstance(data, dict):
@@ -356,13 +301,22 @@ def parse_docstrings(data: Dict[str, Any]):
                 # Debug original docstring
                 if 'Args:' in original:
                     print(f"\nProcessing docstring for: {data.get('name', 'unknown')}")
-                    print(f"Original:\n{original}")
+                    print(f"ORIGINAL:\n{original}")
+                    
+                    # Split on double newlines and join first section's lines
+                    sections = original.split('\n\n')
+                    sections[0] = ' '.join(sections[0].split('\n'))
+                    original = '\n\n'.join(sections)
+                    
+                    print("\nSections after double newline split:")
+                    for i, section in enumerate(sections):
+                        print(f"\nSection {i}:\n{section}")
                 
                 parsed = parse(original, style=Style.GOOGLE)
                 
                 # Debug parsed result
                 if 'Args:' in original:
-                    print("\nParsed result:")
+                    print("\nPARSED RESULT:")
                     print(f"- short_description: {parsed.short_description}")
                     print(f"- long_description: {parsed.long_description}")
                     print(f"- params: {[(p.arg_name, p.type_name, p.description) for p in parsed.params]}")

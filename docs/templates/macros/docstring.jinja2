@@ -9,6 +9,7 @@
         {%- if docstring.parsed.short_description -%}
             {%- set _ = sections.append(docstring.parsed.short_description) -%}
             {%- if docstring.parsed.long_description -%}
+                {%- set _ = sections.append('\n') -%}
             {%- endif -%}
         {%- endif -%}
         {% if docstring.parsed.long_description %}

@@ -18,9 +18,7 @@ toc-expand: 4
 
 <!-- docstring.jinja2 -->
 
-Comprehensive validation of true and predicted value pairs.
-
-Handles NaN/None values and length mismatches.
+Comprehensive validation of true and predicted value pairs. Handles NaN/None values and length mismatches.
 
 **Arguments**
 
