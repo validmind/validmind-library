@@ -26,9 +26,12 @@ def load_data(source="online", dataset_size=None):
     """
     Load data from either online source or offline files.
 
-    :param source: 'online' for online data, 'offline' for offline data. Defaults to 'online'.
-    :param dataset_size: Applicable if source is 'offline'. '300k' or '500k' for dataset size. Defaults to None.
-    :return: DataFrame containing the loaded data.
+    Args:
+        source: 'online' for online data, 'offline' for offline data. Defaults to 'online'.
+        dataset_size: Applicable if source is 'offline'. '300k' or '500k' for dataset size. Defaults to None.
+
+    Returns:
+        DataFrame containing the loaded data.
     """
     if source == "online":
         # Load online data without predictions

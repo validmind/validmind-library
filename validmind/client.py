@@ -75,7 +75,7 @@ def init_dataset(
         target_column (str): The name of the target column in the dataset
         feature_columns (list): A list of names of feature columns in the dataset
         extra_columns (dictionary):  A dictionary containing the names of the
-        prediction_column and group_by_columns in the dataset
+            prediction_column and group_by_columns in the dataset
         class_labels (dict): A list of class labels for classification problems
         type (str): The type of dataset (one of DATASET_TYPES)
         input_id (str): The input ID for the dataset (e.g. "my_dataset"). By default,

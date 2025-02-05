@@ -126,7 +126,7 @@ class LocalTestProvider:
 
         Args:
             test_id (str): The identifier of the test. This corresponds to the relative
-            path of the python file from the root folder, with slashes replaced by dots
+                path of the python file from the root folder, with slashes replaced by dots
 
         Returns:
             The test class that matches the last part of the test_id.
