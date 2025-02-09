@@ -10,19 +10,20 @@
   {%- else -%}{{ member.kind }}
   {%- endif -%}
 </span>
-<span class="name">{{ member.name }}</span>{%- if member.parameters -%}({{- '' -}}
-  {%- if member.parameters | length == 1 -%}
-    <span class="param"><span class="n">{{ member.parameters[0].name }}</span>
-    {%- if member.parameters[0].annotation -%}
-      <span class="p">:</span><span class="nb">{{ format_type(member.parameters[0].annotation, add_links=true) }}</span>
+<span class="name">{{ member.name if member.name != "__init__" else member.parent.name }}</span>{%- if member.parameters -%}({{- '' -}}
+  {%- set params = member.parameters | reject('equalto', 'self') | list -%}
+  {%- if params | length == 1 -%}
+    <span class="param"><span class="n">{{ params[0].name }}</span>
+    {%- if params[0].annotation -%}
+      <span class="p">:</span><span class="nb">{{ format_type(params[0].annotation, add_links=true) }}</span>
     {%- endif -%}
-    {%- if member.parameters[0].default is not none -%}
-      <span class="o"> = </span><span class="kc">{{ member.parameters[0].default }}</span>
+    {%- if params[0].default is not none -%}
+      <span class="o"> = </span><span class="kc">{{ params[0].default }}</span>
     {%- endif -%}
     </span>
   {%- else -%}
-    {%- for param in member.parameters -%}
-      <span class="params"><span class="n">{{ param.name }}</span>
+    {%- for param in params -%}
+      <span class="params"><span class="n">{{ "**" if param.name == "kwargs" else "" }}{{ param.name }}</span>
       {%- if param.annotation -%}
         <span class="p">:</span><span class="nb">{{ format_type(param.annotation, add_links=true) }}</span>
       {%- endif -%}
