@@ -14,7 +14,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">get_categorical_columns</span>(<span class="param"><span class="n">dataset</span></span>)
+<span class="kw">def</span><span class="name">get_categorical_columns</span>(<span class="params"><span class="n">dataset</span></span>)
 
 :::
 
@@ -26,7 +26,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">get_datetime_columns</span>(<span class="param"><span class="n">dataset</span></span>)
+<span class="kw">def</span><span class="name">get_datetime_columns</span>(<span class="params"><span class="n">dataset</span></span>)
 
 :::
 
@@ -38,7 +38,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">get_numerical_columns</span>(<span class="param"><span class="n">dataset</span></span>)
+<span class="kw">def</span><span class="name">get_numerical_columns</span>(<span class="params"><span class="n">dataset</span></span>)
 
 :::
 
@@ -50,7 +50,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">get_summary_statistics_categorical</span>(<span class="params"><span class="n">dataset</span><span class="muted">,</span></span><span class="params"><span class="n">categorical_fields</span></span>)
+<span class="kw">def</span><span class="name">get_summary_statistics_categorical</span>(<span class="params"><span class="n">dataset</span><span class="muted">,</span></span><span class="params"><span class="n">categorical_fields</span></span>)
 
 :::
 
@@ -62,7 +62,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">get_summary_statistics_datetime</span>(<span class="params"><span class="n">dataset</span><span class="muted">,</span></span><span class="params"><span class="n">datetime_fields</span></span>)
+<span class="kw">def</span><span class="name">get_summary_statistics_datetime</span>(<span class="params"><span class="n">dataset</span><span class="muted">,</span></span><span class="params"><span class="n">datetime_fields</span></span>)
 
 :::
 
@@ -74,7 +74,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">get_summary_statistics_numerical</span>(<span class="params"><span class="n">dataset</span><span class="muted">,</span></span><span class="params"><span class="n">numerical_fields</span></span>)
+<span class="kw">def</span><span class="name">get_summary_statistics_numerical</span>(<span class="params"><span class="n">dataset</span><span class="muted">,</span></span><span class="params"><span class="n">numerical_fields</span></span>)
 
 :::
 
@@ -86,7 +86,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">TabularDescriptionTables</span>(<span class="param"><span class="n">dataset</span></span>)
+<span class="kw">def</span><span class="name">TabularDescriptionTables</span>(<span class="params"><span class="n">dataset</span></span>)
 
 :::
 

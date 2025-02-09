@@ -12,7 +12,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">get_logger</span>(<span class="params"><span class="n">name</span><span class="o"> = </span><span class="kc">'validmind'</span><span class="muted">,</span></span><span class="params"><span class="n">log_level</span><span class="o"> = </span><span class="kc">None</span></span>)
+<span class="kw">def</span><span class="name">get_logger</span>(<span class="params"><span class="n">name</span><span class="o"> = </span><span class="s1">'validmind'</span><span class="muted">,</span></span><span class="params"><span class="n">log_level</span><span class="o"> = </span><span class="kc">None</span></span>)
 
 :::
 
@@ -28,7 +28,7 @@ Get a logger for the given module name
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">RegressionFeatureSignificance</span>(<span class="params"><span class="n">model</span><span class="p">:</span><span class="nb"><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-vmmodel">validmind.vm_models.VMModel</a></span><span class="muted">,</span></span><span class="params"><span class="n">fontsize</span><span class="p">:</span><span class="nb"><!-- types.jinja2 - format_type -->int</span><span class="o"> = </span><span class="kc">10</span><span class="muted">,</span></span><span class="params"><span class="n">p_threshold</span><span class="p">:</span><span class="nb"><!-- types.jinja2 - format_type -->float</span><span class="o"> = </span><span class="kc">0.05</span></span>)
+<span class="kw">def</span><span class="name">RegressionFeatureSignificance</span>(<span class="params"><span class="n">model</span><span class="p">: </span><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-vmmodel">validmind.vm_models.VMModel</a><span class="muted">,</span></span><span class="params"><span class="n">fontsize</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">int</span><span class="o"> = </span><span class="kc">10</span><span class="muted">,</span></span><span class="params"><span class="n">p_threshold</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">float</span><span class="o"> = </span><span class="kc">0.05</span></span>)
 
 :::
 
@@ -69,7 +69,7 @@ The test mechanism involves extracting the model's coefficients and p-values for
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">SkipTestError</span>()
+<span class="kw">class</span><span class="name">SkipTestError</span>()
 
 :::
 

@@ -14,7 +14,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">ModelPredictionResiduals</span>(<span class="params"><span class="n">dataset</span><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="muted">,</span></span><span class="params"><span class="n">nbins</span><span class="o"> = </span><span class="kc">100</span><span class="muted">,</span></span><span class="params"><span class="n">p_value_threshold</span><span class="o"> = </span><span class="kc">0.05</span><span class="muted">,</span></span><span class="params"><span class="n">start_date</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">end_date</span><span class="o"> = </span><span class="kc">None</span></span>)
+<span class="kw">def</span><span class="name">ModelPredictionResiduals</span>(<span class="params"><span class="n">dataset</span><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="muted">,</span></span><span class="params"><span class="n">nbins</span><span class="o"> = </span><span class="kc">100</span><span class="muted">,</span></span><span class="params"><span class="n">p_value_threshold</span><span class="o"> = </span><span class="kc">0.05</span><span class="muted">,</span></span><span class="params"><span class="n">start_date</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">end_date</span><span class="o"> = </span><span class="kc">None</span></span>)
 
 :::
 

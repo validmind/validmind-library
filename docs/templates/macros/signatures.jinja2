@@ -4,36 +4,39 @@
 <!-- signatures.jinja2 -->
 ::: {.signature}
 
+{# Skip 'def' for constructors #}
+{%- if not (member.name == "__init__" and member.kind == "method") -%}
 <span class="kw">
   {%- if member.kind == "class" or member.kind == "alias" -%}class
   {%- elif member.kind == "function" or member.kind == "method" -%}def
   {%- else -%}{{ member.kind }}
   {%- endif -%}
 </span>
-<span class="name">{{ member.name if member.name != "__init__" else member.parent.name }}</span>{%- if member.parameters -%}({{- '' -}}
-  {%- set params = member.parameters | reject('equalto', 'self') | list -%}
-  {%- if params | length == 1 -%}
-    <span class="param"><span class="n">{{ params[0].name }}</span>
-    {%- if params[0].annotation -%}
-      <span class="p">:</span><span class="nb">{{ format_type(params[0].annotation, add_links=true) }}</span>
+{%- endif -%}
+{# Use class name for constructors #}
+<span class="name">{{ member.parent.name if (member.name == "__init__" and member.kind == "method") else member.name }}</span>{%- if member.parameters -%}({{- '' -}}
+  {%- set params = [] -%}
+  {%- for param in member.parameters -%}
+    {%- if param.name != "self" -%}
+      {%- set _ = params.append(param) -%}
     {%- endif -%}
-    {%- if params[0].default is not none -%}
-      <span class="o"> = </span><span class="kc">{{ params[0].default }}</span>
+  {%- endfor -%}
+  {%- for param in params -%}
+    <span class="params"><span class="n">{{ "**" if param.name == "kwargs" else "" }}{{ param.name }}</span>
+    {%- if param.annotation -%}
+      <span class="p">: </span>{{ format_type(param.annotation, add_links=true) }}
     {%- endif -%}
+    {%- if param.default is not none -%}
+      <span class="o"> = </span>
+      {%- if param.default is string and param.default.startswith("'") and param.default.endswith("'") -%}
+        <span class="s1">{{ param.default }}</span>
+      {%- else -%}
+        <span class="kc">{{ param.default }}</span>
+      {%- endif -%}
+    {%- endif -%}
+    {%- if not loop.last -%}<span class="muted">,</span>{%- endif -%}
     </span>
-  {%- else -%}
-    {%- for param in params -%}
-      <span class="params"><span class="n">{{ "**" if param.name == "kwargs" else "" }}{{ param.name }}</span>
-      {%- if param.annotation -%}
-        <span class="p">:</span><span class="nb">{{ format_type(param.annotation, add_links=true) }}</span>
-      {%- endif -%}
-      {%- if param.default is not none -%}
-        <span class="o"> = </span><span class="kc">{{ param.default }}</span>
-      {%- endif -%}
-      {%- if not loop.last -%}<span class="muted">,</span>{%- endif -%}
-      </span>
-    {%- endfor -%}
-  {%- endif -%})
+  {%- endfor -%})
   {%- else -%}()
 {%- endif -%}
 {%- if member.returns -%}

@@ -14,7 +14,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">load_all_data</span>()
+<span class="kw">def</span><span class="name">load_all_data</span>()
 
 :::
 
@@ -26,7 +26,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">load_data</span>()
+<span class="kw">def</span><span class="name">load_data</span>()
 
 :::
 
@@ -38,7 +38,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">load_model</span>(<span class="param"><span class="n">model_name</span></span>)
+<span class="kw">def</span><span class="name">load_model</span>(<span class="params"><span class="n">model_name</span></span>)
 
 :::
 
@@ -50,7 +50,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">load_processed_data</span>()
+<span class="kw">def</span><span class="name">load_processed_data</span>()
 
 :::
 
@@ -62,7 +62,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">load_test_dataset</span>(<span class="param"><span class="n">model_name</span></span>)
+<span class="kw">def</span><span class="name">load_test_dataset</span>(<span class="params"><span class="n">model_name</span></span>)
 
 :::
 
@@ -74,7 +74,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">load_train_dataset</span>(<span class="param"><span class="n">model_path</span></span>)
+<span class="kw">def</span><span class="name">load_train_dataset</span>(<span class="params"><span class="n">model_path</span></span>)
 
 :::
 
@@ -86,7 +86,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">preprocess</span>(<span class="params"><span class="n">df</span><span class="muted">,</span></span><span class="params"><span class="n">split_option</span><span class="o"> = </span><span class="kc">'train_test_val'</span><span class="muted">,</span></span><span class="params"><span class="n">train_size</span><span class="o"> = </span><span class="kc">0.6</span><span class="muted">,</span></span><span class="params"><span class="n">test_size</span><span class="o"> = </span><span class="kc">0.2</span></span>)
+<span class="kw">def</span><span class="name">preprocess</span>(<span class="params"><span class="n">df</span><span class="muted">,</span></span><span class="params"><span class="n">split_option</span><span class="o"> = </span><span class="s1">'train_test_val'</span><span class="muted">,</span></span><span class="params"><span class="n">train_size</span><span class="o"> = </span><span class="kc">0.6</span><span class="muted">,</span></span><span class="params"><span class="n">test_size</span><span class="o"> = </span><span class="kc">0.2</span></span>)
 
 :::
 
@@ -96,10 +96,10 @@ Split a time series DataFrame into train, validation, and test sets.
 
 **Arguments**
 
-- **df** (pandas.DataFrame): The time series DataFrame to be split.
-- **split_option** (str): The split option to choose from: 'train_test_val' (default) or 'train_test'.
-- **train_size** (float): The proportion of the dataset to include in the training set. Default is 0.6.
-- **test_size** (float): The proportion of the dataset to include in the test set. Default is 0.2.
+- `df` (pandas.DataFrame): The time series DataFrame to be split.
+- `split_option` (str): The split option to choose from: 'train_test_val' (default) or 'train_test'.
+- `train_size` (float): The proportion of the dataset to include in the training set. Default is 0.6.
+- `test_size` (float): The proportion of the dataset to include in the test set. Default is 0.2.
 
 **Returns**
 
@@ -113,6 +113,6 @@ Split a time series DataFrame into train, validation, and test sets.
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">transform</span>(<span class="params"><span class="n">df</span><span class="muted">,</span></span><span class="params"><span class="n">transform_func</span><span class="o"> = </span><span class="kc">'diff'</span></span>)
+<span class="kw">def</span><span class="name">transform</span>(<span class="params"><span class="n">df</span><span class="muted">,</span></span><span class="params"><span class="n">transform_func</span><span class="o"> = </span><span class="s1">'diff'</span></span>)
 
 :::

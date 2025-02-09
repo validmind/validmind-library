@@ -20,7 +20,7 @@ Ideal setup is to have the API client to read a custom test suite from the proje
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">ClassifierDiagnosis</span>()
+<span class="kw">class</span><span class="name">ClassifierDiagnosis</span>()
 
 :::
 
@@ -38,7 +38,7 @@ Test suite for sklearn classifier model diagnosis tests
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">ClassifierFullSuite</span>()
+<span class="kw">class</span><span class="name">ClassifierFullSuite</span>()
 
 :::
 
@@ -56,7 +56,7 @@ Full test suite for binary classification models.
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">ClassifierMetrics</span>()
+<span class="kw">class</span><span class="name">ClassifierMetrics</span>()
 
 :::
 
@@ -74,7 +74,7 @@ Test suite for sklearn classifier metrics
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">ClassifierModelValidation</span>()
+<span class="kw">class</span><span class="name">ClassifierModelValidation</span>()
 
 :::
 
@@ -92,7 +92,7 @@ Test suite for binary classification models.
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">ClassifierPerformance</span>()
+<span class="kw">class</span><span class="name">ClassifierPerformance</span>()
 
 :::
 
@@ -110,7 +110,7 @@ Test suite for sklearn classifier models
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">TabularDataQuality</span>()
+<span class="kw">class</span><span class="name">TabularDataQuality</span>()
 
 :::
 
@@ -128,7 +128,7 @@ Test suite for data quality on tabular datasets
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">TabularDatasetDescription</span>()
+<span class="kw">class</span><span class="name">TabularDatasetDescription</span>()
 
 :::
 

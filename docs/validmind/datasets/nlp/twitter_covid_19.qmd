@@ -14,6 +14,6 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">load_data</span>(<span class="param"><span class="n">full_dataset</span><span class="o"> = </span><span class="kc">False</span></span>)
+<span class="kw">def</span><span class="name">load_data</span>(<span class="params"><span class="n">full_dataset</span><span class="o"> = </span><span class="kc">False</span></span>)
 
 :::

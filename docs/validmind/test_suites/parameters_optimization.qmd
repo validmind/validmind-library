@@ -20,7 +20,7 @@ Ideal setup is to have the API client to read a custom test suite from the proje
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">KmeansParametersOptimization</span>()
+<span class="kw">class</span><span class="name">KmeansParametersOptimization</span>()
 
 :::
 

@@ -12,7 +12,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">get_model_info</span>(<span class="param"><span class="n">model</span></span>)
+<span class="kw">def</span><span class="name">get_model_info</span>(<span class="params"><span class="n">model</span></span>)
 
 :::
 
@@ -28,7 +28,7 @@ Attempts to extract all model info from a model object instance
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">ModelMetadata</span>(<span class="param"><span class="n">model</span></span>)
+<span class="kw">def</span><span class="name">ModelMetadata</span>(<span class="params"><span class="n">model</span></span>)
 
 :::
 

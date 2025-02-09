@@ -14,7 +14,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">compute_scores</span>(<span class="param"><span class="n">probabilities</span></span>)
+<span class="kw">def</span><span class="name">compute_scores</span>(<span class="params"><span class="n">probabilities</span></span>)
 
 :::
 
@@ -26,7 +26,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">load_data</span>()
+<span class="kw">def</span><span class="name">load_data</span>()
 
 :::
 
@@ -44,7 +44,7 @@ Load data from the specified CSV file.
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">preprocess</span>(<span class="param"><span class="n">df</span></span>)
+<span class="kw">def</span><span class="name">preprocess</span>(<span class="params"><span class="n">df</span></span>)
 
 :::
 
@@ -56,6 +56,6 @@ Load data from the specified CSV file.
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">split</span>(<span class="params"><span class="n">df</span><span class="muted">,</span></span><span class="params"><span class="n">test_size</span><span class="o"> = </span><span class="kc">0.3</span></span>)
+<span class="kw">def</span><span class="name">split</span>(<span class="params"><span class="n">df</span><span class="muted">,</span></span><span class="params"><span class="n">test_size</span><span class="o"> = </span><span class="kc">0.3</span></span>)
 
 :::

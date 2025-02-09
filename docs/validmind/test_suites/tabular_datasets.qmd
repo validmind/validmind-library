@@ -18,7 +18,7 @@ Test suites for tabular datasets
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">TabularDataQuality</span>()
+<span class="kw">class</span><span class="name">TabularDataQuality</span>()
 
 :::
 
@@ -36,7 +36,7 @@ Test suite for data quality on tabular datasets
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">TabularDataset</span>()
+<span class="kw">class</span><span class="name">TabularDataset</span>()
 
 :::
 
@@ -54,7 +54,7 @@ Test suite for tabular datasets.
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">TabularDatasetDescription</span>()
+<span class="kw">class</span><span class="name">TabularDatasetDescription</span>()
 
 :::
 

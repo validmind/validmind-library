@@ -14,7 +14,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">RegressionCoeffs</span>(<span class="param"><span class="n">model</span></span>)
+<span class="kw">def</span><span class="name">RegressionCoeffs</span>(<span class="params"><span class="n">model</span></span>)
 
 :::
 
@@ -57,7 +57,7 @@ The function operates by extracting the estimated coefficients and their standar
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">SkipTestError</span>()
+<span class="kw">class</span><span class="name">SkipTestError</span>()
 
 :::
 

@@ -14,7 +14,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">TimeSeriesOutliers</span>(<span class="params"><span class="n">dataset</span><span class="p">:</span><span class="nb"><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-vmdataset">validmind.vm_models.VMDataset</a></span><span class="muted">,</span></span><span class="params"><span class="n">zscore_threshold</span><span class="p">:</span><span class="nb"><!-- types.jinja2 - format_type -->int</span><span class="o"> = </span><span class="kc">3</span></span>)
+<span class="kw">def</span><span class="name">TimeSeriesOutliers</span>(<span class="params"><span class="n">dataset</span><span class="p">: </span><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-vmdataset">validmind.vm_models.VMDataset</a><span class="muted">,</span></span><span class="params"><span class="n">zscore_threshold</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">int</span><span class="o"> = </span><span class="kc">3</span></span>)
 
 :::
 
@@ -60,7 +60,7 @@ The test processes a given dataset which must have datetime indexing, checks if 
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">SkipTestError</span>()
+<span class="kw">class</span><span class="name">SkipTestError</span>()
 
 :::
 

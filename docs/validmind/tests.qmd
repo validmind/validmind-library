@@ -20,7 +20,7 @@ ValidMind Tests Module
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">describe_test</span>(<span class="params"><span class="n">test_id</span><span class="p">:</span><span class="nb"><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-testid">validmind.vm_models.TestID</a></span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">raw</span><span class="p">:</span><span class="nb"><!-- types.jinja2 - format_type -->bool</span><span class="o"> = </span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">show</span><span class="p">:</span><span class="nb"><!-- types.jinja2 - format_type -->bool</span><span class="o"> = </span><span class="kc">True</span></span>)
+<span class="kw">def</span><span class="name">describe_test</span>(<span class="params"><span class="n">test_id</span><span class="p">: </span><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-testid">validmind.vm_models.TestID</a><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">raw</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">bool</span><span class="o"> = </span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">show</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">bool</span><span class="o"> = </span><span class="kc">True</span></span>)
 
 :::
 
@@ -32,8 +32,8 @@ This function can be used to see test details including the test name, descripti
 
 **Arguments**
 
-- **test_id** (str, optional): The test ID. Defaults to None.
-- **raw** (bool): If True, returns a dictionary with the test details. Defaults to False.
+- `test_id` (str, optional): The test ID. Defaults to None.
+- `raw` (bool): If True, returns a dictionary with the test details. Defaults to False.
 
 ## list_tags<span class='muted'>()</span>
 
@@ -41,7 +41,7 @@ This function can be used to see test details including the test name, descripti
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">list_tags</span>()
+<span class="kw">def</span><span class="name">list_tags</span>()
 
 :::
 
@@ -55,7 +55,7 @@ List unique tags from all test classes.
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">list_tasks</span>()
+<span class="kw">def</span><span class="name">list_tasks</span>()
 
 :::
 
@@ -69,7 +69,7 @@ List unique tasks from all test classes.
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">list_tasks_and_tags</span>(<span class="param"><span class="n">as_json</span><span class="o"> = </span><span class="kc">False</span></span>)
+<span class="kw">def</span><span class="name">list_tasks_and_tags</span>(<span class="params"><span class="n">as_json</span><span class="o"> = </span><span class="kc">False</span></span>)
 
 :::
 
@@ -89,7 +89,7 @@ all tags for a task type in one row.
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">list_tests</span>(<span class="params"><span class="n">filter</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">task</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">tags</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">pretty</span><span class="o"> = </span><span class="kc">True</span><span class="muted">,</span></span><span class="params"><span class="n">truncate</span><span class="o"> = </span><span class="kc">True</span></span>)
+<span class="kw">def</span><span class="name">list_tests</span>(<span class="params"><span class="n">filter</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">task</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">tags</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">pretty</span><span class="o"> = </span><span class="kc">True</span><span class="muted">,</span></span><span class="params"><span class="n">truncate</span><span class="o"> = </span><span class="kc">True</span></span>)
 
 :::
 
@@ -99,11 +99,11 @@ List all tests in the tests directory.
 
 **Arguments**
 
-- **filter** (str): Find tests where the ID, tasks or tags match the filter string. Defaults to None.
-- **task** (str): Find tests that match the task. Can be used to narrow down matches from the filter string. Defaults to None.
-- **tags** (list): Find tests that match list of tags. Can be used to narrow down matches from the filter string. Defaults to None.
-- **pretty** (bool): If True, returns a pandas DataFrame with a formatted table. Defaults to True.
-- **truncate** (bool): If True, truncates the test description to the first line. Defaults to True. (only used if pretty=True)
+- `filter` (str): Find tests where the ID, tasks or tags match the filter string. Defaults to None.
+- `task` (str): Find tests that match the task. Can be used to narrow down matches from the filter string. Defaults to None.
+- `tags` (list): Find tests that match list of tags. Can be used to narrow down matches from the filter string. Defaults to None.
+- `pretty` (bool): If True, returns a pandas DataFrame with a formatted table. Defaults to True.
+- `truncate` (bool): If True, truncates the test description to the first line. Defaults to True. (only used if pretty=True)
 
 **Returns**
 
@@ -115,7 +115,7 @@ List all tests in the tests directory.
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">load_test</span>(<span class="params"><span class="n">test_id</span><span class="p">:</span><span class="nb"><!-- types.jinja2 - format_type -->str</span><span class="muted">,</span></span><span class="params"><span class="n">test_func</span><span class="p">:</span><span class="nb"><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-callable">validmind.vm_models.callable</a></span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">reload</span><span class="p">:</span><span class="nb"><!-- types.jinja2 - format_type -->bool</span><span class="o"> = </span><span class="kc">False</span></span>)
+<span class="kw">def</span><span class="name">load_test</span>(<span class="params"><span class="n">test_id</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">test_func</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">callable</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">reload</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">bool</span><span class="o"> = </span><span class="kc">False</span></span>)
 
 :::
 
@@ -127,8 +127,8 @@ Test IDs are in the format `namespace.path_to_module.TestClassOrFuncName[:tag]`.
 
 **Arguments**
 
-- **test_id** (str): The test ID in the format `namespace.path_to_module.TestName[:tag]`
-- **test_func** (callable): The test function to load. If not provided, the test will be loaded from the test provider. Defaults to None.
+- `test_id` (str): The test ID in the format `namespace.path_to_module.TestName[:tag]`
+- `test_func` (callable): The test function to load. If not provided, the test will be loaded from the test provider. Defaults to None.
 
 ## run_test<span class='muted'>()</span>
 
@@ -136,7 +136,7 @@ Test IDs are in the format `namespace.path_to_module.TestClassOrFuncName[:tag]`.
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">run_test</span>(<span class="params"><span class="n">test_id</span><span class="p">:</span><span class="nb"><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type -->Union\[<!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-testid">validmind.vm_models.TestID</a>, <!-- types.jinja2 - format_type --> None \]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">name</span><span class="p">:</span><span class="nb"><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type -->Union\[<!-- types.jinja2 - format_type -->str, <!-- types.jinja2 - format_type --> None \]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">unit_metrics</span><span class="p">:</span><span class="nb"><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type -->Union\[<!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type -->List\[<!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-testid">validmind.vm_models.TestID</a>\], <!-- types.jinja2 - format_type --> None \]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">inputs</span><span class="p">:</span><span class="nb"><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type -->Union\[<!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type -->Dict\[<!-- types.jinja2 - format_type -->str, <!-- types.jinja2 - format_type -->Any\], <!-- types.jinja2 - format_type --> None \]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">input_grid</span><span class="p">:</span><span class="nb"><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type -->Union\[<!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type -->Dict\[<!-- types.jinja2 - format_type -->str, <!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type -->List\[<!-- types.jinja2 - format_type -->Any\]\], <!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type -->List\[<!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type -->Dict\[<!-- types.jinja2 - format_type -->str, <!-- types.jinja2 - format_type -->Any\]\], <!-- types.jinja2 - format_type --> None \]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">params</span><span class="p">:</span><span class="nb"><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type -->Union\[<!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type -->Dict\[<!-- types.jinja2 - format_type -->str, <!-- types.jinja2 - format_type -->Any\], <!-- types.jinja2 - format_type --> None \]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">param_grid</span><span class="p">:</span><span class="nb"><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type -->Union\[<!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type -->Dict\[<!-- types.jinja2 - format_type -->str, <!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type -->List\[<!-- types.jinja2 - format_type -->Any\]\], <!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type -->List\[<!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type -->Dict\[<!-- types.jinja2 - format_type -->str, <!-- types.jinja2 - format_type -->Any\]\], <!-- types.jinja2 - format_type --> None \]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">show</span><span class="p">:</span><span class="nb"><!-- types.jinja2 - format_type -->bool</span><span class="o"> = </span><span class="kc">True</span><span class="muted">,</span></span><span class="params"><span class="n">generate_description</span><span class="p">:</span><span class="nb"><!-- types.jinja2 - format_type -->bool</span><span class="o"> = </span><span class="kc">True</span><span class="muted">,</span></span><span class="params"><span class="n">title</span><span class="p">:</span><span class="nb"><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type -->Optional\[<!-- types.jinja2 - format_type -->str\]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">post_process_fn</span><span class="p">:</span><span class="nb"><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type -->Union\[<!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type -->Callable\[<!-- types.jinja2 - format_type -->{'cls': 'ExprList', 'elements': [{'cls': 'ExprName', 'name': 'TestResult'}]}, <!-- types.jinja2 - format_type --> None \], <!-- types.jinja2 - format_type --> None \]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-testresult">validmind.vm_models.TestResult</a></span>
+<span class="kw">def</span><span class="name">run_test</span>(<span class="params"><span class="n">test_id</span><span class="p">: </span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Union</span><span class="p">\[</span><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-testid">validmind.vm_models.TestID</a><span class="p">, </span><!-- types.jinja2 - format_type --><span class="n">None</span><span class="p">\]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">name</span><span class="p">: </span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Union</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="p">, </span><!-- types.jinja2 - format_type --><span class="n">None</span><span class="p">\]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">unit_metrics</span><span class="p">: </span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Union</span><span class="p">\[</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="nb">List</span><span class="p">\[</span><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-testid">validmind.vm_models.TestID</a><span class="p">\]</span><span class="p">, </span><!-- types.jinja2 - format_type --><span class="n">None</span><span class="p">\]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">inputs</span><span class="p">: </span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Union</span><span class="p">\[</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="nb">Dict</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="p">, </span><!-- types.jinja2 - format_type --><span class="n">Any</span><span class="p">\]</span><span class="p">, </span><!-- types.jinja2 - format_type --><span class="n">None</span><span class="p">\]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">input_grid</span><span class="p">: </span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Union</span><span class="p">\[</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="nb">Dict</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="p">, </span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="nb">List</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span><span class="p">, </span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="nb">List</span><span class="p">\[</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="nb">Dict</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="p">, </span><!-- types.jinja2 - format_type --><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span><span class="p">, </span><!-- types.jinja2 - format_type --><span class="n">None</span><span class="p">\]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">params</span><span class="p">: </span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Union</span><span class="p">\[</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="nb">Dict</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="p">, </span><!-- types.jinja2 - format_type --><span class="n">Any</span><span class="p">\]</span><span class="p">, </span><!-- types.jinja2 - format_type --><span class="n">None</span><span class="p">\]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">param_grid</span><span class="p">: </span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Union</span><span class="p">\[</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="nb">Dict</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="p">, </span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="nb">List</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span><span class="p">, </span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="nb">List</span><span class="p">\[</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="nb">Dict</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="p">, </span><!-- types.jinja2 - format_type --><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span><span class="p">, </span><!-- types.jinja2 - format_type --><span class="n">None</span><span class="p">\]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">show</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">bool</span><span class="o"> = </span><span class="kc">True</span><span class="muted">,</span></span><span class="params"><span class="n">generate_description</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">bool</span><span class="o"> = </span><span class="kc">True</span><span class="muted">,</span></span><span class="params"><span class="n">title</span><span class="p">: </span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Optional</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="p">\]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">post_process_fn</span><span class="p">: </span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Union</span><span class="p">\[</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="nb">Callable</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="n">{'cls': 'ExprList', 'elements': [{'cls': 'ExprName', 'name': 'TestResult'}]}</span><span class="p">, </span><!-- types.jinja2 - format_type --><span class="n">None</span><span class="p">\]</span><span class="p">, </span><!-- types.jinja2 - format_type --><span class="n">None</span><span class="p">\]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-testresult">validmind.vm_models.TestResult</a></span>
 
 :::
 
@@ -148,21 +148,21 @@ This function is the main entry point for running tests. It can run simple unit 
 
 **Arguments**
 
-- **test_id** (TestID): Test ID to run. Not required if `name` and `unit_metrics` provided.
-- **params** (dict): Parameters to customize test behavior. See test details for available parameters.
-- **param_grid** (Union\[Dict\[str, List[Any]\], List\[Dict[str, Any]\]\]): For comparison tests, either:
+- `test_id` (TestID): Test ID to run. Not required if `name` and `unit_metrics` provided.
+- `params` (dict): Parameters to customize test behavior. See test details for available parameters.
+- `param_grid` (Union\[Dict\[str, List[Any]\], List\[Dict[str, Any]\]\]): For comparison tests, either:
 - Dict mapping parameter names to lists of values (creates Cartesian product)
 - List of parameter dictionaries to test
-- **inputs** (Dict[str, Any]): Test inputs (models/datasets initialized with vm.init_model/dataset)
-- **input_grid** (Union\[Dict\[str, List[Any]\], List\[Dict[str, Any]\]\]): For comparison tests, either:
+- `inputs` (Dict[str, Any]): Test inputs (models/datasets initialized with vm.init_model/dataset)
+- `input_grid` (Union\[Dict\[str, List[Any]\], List\[Dict[str, Any]\]\]): For comparison tests, either:
 - Dict mapping input names to lists of values (creates Cartesian product)
 - List of input dictionaries to test
-- **name** (str): Test name (required for composite metrics)
-- **unit_metrics** (list): Unit metric IDs to run as composite metric
-- **show** (bool): Whether to display results. Defaults to True.
-- **generate_description** (bool): Whether to generate a description. Defaults to True.
-- **title** (str): Custom title for the test result
-- **post_process_fn** (Callable\[[TestResult], None\]): Function to post-process the test result
+- `name` (str): Test name (required for composite metrics)
+- `unit_metrics` (list): Unit metric IDs to run as composite metric
+- `show` (bool): Whether to display results. Defaults to True.
+- `generate_description` (bool): Whether to generate a description. Defaults to True.
+- `title` (str): Custom title for the test result
+- `post_process_fn` (Callable\[[TestResult], None\]): Function to post-process the test result
 
 **Returns**
 
@@ -170,8 +170,8 @@ This function is the main entry point for running tests. It can run simple unit 
 
 **Raises**
 
-- **ValueError**: If the test inputs are invalid
-- **LoadTestError**: If the test class fails to load
+- `ValueError`: If the test inputs are invalid
+- `LoadTestError`: If the test class fails to load
 
 ## tags<span class='muted'>()</span>
 
@@ -179,7 +179,7 @@ This function is the main entry point for running tests. It can run simple unit 
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">tags</span>(<span class="param"><span class="n">tags</span><span class="o"> = </span><span class="kc">()</span></span>)
+<span class="kw">def</span><span class="name">tags</span>(<span class="params"><span class="n">tags</span><span class="o"> = </span><span class="kc">()</span></span>)
 
 :::
 
@@ -189,7 +189,7 @@ Decorator for specifying tags for a test.
 
 **Arguments**
 
-- \***tags**: The tags to apply to the test.
+- `*tags`: The tags to apply to the test.
 
 ## tasks<span class='muted'>()</span>
 
@@ -197,7 +197,7 @@ Decorator for specifying tags for a test.
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">tasks</span>(<span class="param"><span class="n">tasks</span><span class="o"> = </span><span class="kc">()</span></span>)
+<span class="kw">def</span><span class="name">tasks</span>(<span class="params"><span class="n">tasks</span><span class="o"> = </span><span class="kc">()</span></span>)
 
 :::
 
@@ -207,7 +207,7 @@ Decorator for specifying the task types that a test is designed for.
 
 **Arguments**
 
-- \***tasks**: The task types that the test is designed for.
+- `*tasks`: The task types that the test is designed for.
 
 ## test<span class='muted'>()</span>
 
@@ -215,7 +215,7 @@ Decorator for specifying the task types that a test is designed for.
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">test</span>(<span class="param"><span class="n">func_or_id</span></span>)
+<span class="kw">def</span><span class="name">test</span>(<span class="params"><span class="n">func_or_id</span></span>)
 
 :::
 
@@ -241,8 +241,8 @@ The function may also include a docstring. This docstring will be used and logge
 
 **Arguments**
 
-- **func**: The function to decorate
-- **test_id**: The identifier for the metric. If not provided, the function name is used.
+- `func`: The function to decorate
+- `test_id`: The identifier for the metric. If not provided, the function name is used.
 
 **Returns**
 
@@ -256,7 +256,7 @@ The function may also include a docstring. This docstring will be used and logge
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">register_test_provider</span>(<span class="params"><span class="n">namespace</span><span class="p">:</span><span class="nb"><!-- types.jinja2 - format_type -->str</span><span class="muted">,</span></span><span class="params"><span class="n">test_provider</span><span class="p">:</span><span class="nb"><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-testprovider">validmind.vm_models.TestProvider</a></span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --> None </span>
+<span class="kw">def</span><span class="name">register_test_provider</span>(<span class="params"><span class="n">namespace</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">test_provider</span><span class="p">: </span><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-testprovider">validmind.vm_models.TestProvider</a></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><span class="n">None</span></span>
 
 :::
 
@@ -266,8 +266,8 @@ Register an external test provider
 
 **Arguments**
 
-- **namespace** (str): The namespace of the test provider
-- **test_provider** (TestProvider): The test provider
+- `namespace` (str): The namespace of the test provider
+- `test_provider` (TestProvider): The test provider
 
 <!-- class.qmd.jinja2 -->
 
@@ -277,7 +277,7 @@ Register an external test provider
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">LoadTestError</span>()
+<span class="kw">class</span><span class="name">LoadTestError</span>()
 
 :::
 
@@ -298,7 +298,7 @@ Exception raised when an error occurs while loading a test
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">LocalTestProvider</span>()
+<span class="kw">class</span><span class="name">LocalTestProvider</span>()
 
 :::
 
@@ -331,7 +331,7 @@ test = test_provider.load_test("my_namespace.my_test_class")
 
 **Arguments**
 
-- **root_folder** (str): The root directory for local tests.
+- `root_folder` (str): The root directory for local tests.
 
 ### [list_tests[()]{.muted}](#list_tests)
 
@@ -339,7 +339,7 @@ test = test_provider.load_test("my_namespace.my_test_class")
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">list_tests</span>(<span class="param"><span class="n">self</span></span>)
+<span class="kw">def</span><span class="name">list_tests</span>()
 
 :::
 
@@ -357,7 +357,7 @@ List all tests in the given namespace
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">load_test</span>(<span class="params"><span class="n">self</span><span class="muted">,</span></span><span class="params"><span class="n">test_id</span><span class="p">:</span><span class="nb"><!-- types.jinja2 - format_type -->str</span></span>)
+<span class="kw">def</span><span class="name">load_test</span>(<span class="params"><span class="n">test_id</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">str</span></span>)
 
 :::
 
@@ -367,7 +367,7 @@ Load the test identified by the given test_id.
 
 **Arguments**
 
-- **test_id** (str): The identifier of the test. This corresponds to the relative path of the python file from the root folder, with slashes replaced by dots
+- `test_id` (str): The identifier of the test. This corresponds to the relative path of the python file from the root folder, with slashes replaced by dots
 
 **Returns**
 
@@ -375,8 +375,8 @@ Load the test identified by the given test_id.
 
 **Raises**
 
-- **LocalTestProviderLoadModuleError**: If the test module cannot be imported
-- **LocalTestProviderLoadTestError**: If the test class cannot be found in the module
+- `LocalTestProviderLoadModuleError`: If the test module cannot be imported
+- `LocalTestProviderLoadTestError`: If the test class cannot be found in the module
 
 <!-- class.qmd.jinja2 -->
 
@@ -386,7 +386,7 @@ Load the test identified by the given test_id.
 
 ::: {.signature}
 
-<span class="kw">class</span> <span class="name">TestProvider</span>()
+<span class="kw">class</span><span class="name">TestProvider</span>()
 
 :::
 
@@ -402,7 +402,7 @@ Protocol for user-defined test providers
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">list_tests</span>(<span class="param"><span class="n">self</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type -->List\[<!-- types.jinja2 - format_type -->str\]</span>
+<span class="kw">def</span><span class="name">list_tests</span>()<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="nb">List</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="p">\]</span></span>
 
 :::
 
@@ -420,7 +420,7 @@ List all tests in the given namespace
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">load_test</span>(<span class="params"><span class="n">self</span><span class="muted">,</span></span><span class="params"><span class="n">test_id</span><span class="p">:</span><span class="nb"><!-- types.jinja2 - format_type -->str</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-callable">validmind.vm_models.callable</a></span>
+<span class="kw">def</span><span class="name">load_test</span>(<span class="params"><span class="n">test_id</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">str</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><span class="nb">callable</span></span>
 
 :::
 
@@ -430,7 +430,7 @@ Load the test function identified by the given test_id
 
 **Arguments**
 
-- **test_id** (str): The test ID (does not contain the namespace under which the test is registered)
+- `test_id` (str): The test ID (does not contain the namespace under which the test is registered)
 
 **Returns**
 
@@ -438,4 +438,4 @@ Load the test function identified by the given test_id
 
 **Raises**
 
-- **FileNotFoundError**: If the test is not found
+- `FileNotFoundError`: If the test is not found

@@ -14,7 +14,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">TimeSeriesDescriptiveStatistics</span>(<span class="param"><span class="n">dataset</span></span>)
+<span class="kw">def</span><span class="name">TimeSeriesDescriptiveStatistics</span>(<span class="params"><span class="n">dataset</span></span>)
 
 :::
 
