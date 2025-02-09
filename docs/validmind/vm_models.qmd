@@ -206,7 +206,7 @@ This method will be called after the test suite has been run and all results hav
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">run</span>(<span class="params"><span class="n">self</span><span class="muted">,</span></span><span class="params"><span class="n">send</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type -->bool</span><span class="o"> = </span><span class="kc">True</span><span class="muted">,</span></span><span class="params"><span class="n">fail_fast</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type -->bool</span><span class="o"> = </span><span class="kc">False</span></span>)
+<span class="kw">def</span> <span class="name">run</span>(<span class="params"><span class="n">self</span><span class="muted">,</span></span><span class="params"><span class="n">send</span><span class="p">:</span><span class="nb"><!-- types.jinja2 - format_type -->bool</span><span class="o"> = </span><span class="kc">True</span><span class="muted">,</span></span><span class="params"><span class="n">fail_fast</span><span class="p">:</span><span class="nb"><!-- types.jinja2 - format_type -->bool</span><span class="o"> = </span><span class="kc">False</span></span>)
 
 :::
 
@@ -225,7 +225,7 @@ Runs the test suite, renders the summary and sends the results to ValidMind
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">summarize</span>(<span class="params"><span class="n">self</span><span class="muted">,</span></span><span class="params"><span class="n">show_link</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type -->bool</span><span class="o"> = </span><span class="kc">True</span></span>)
+<span class="kw">def</span> <span class="name">summarize</span>(<span class="params"><span class="n">self</span><span class="muted">,</span></span><span class="params"><span class="n">show_link</span><span class="p">:</span><span class="nb"><!-- types.jinja2 - format_type -->bool</span><span class="o"> = </span><span class="kc">True</span></span>)
 
 :::
 
@@ -291,7 +291,7 @@ Adds an extra column to the dataset without modifying the dataset `features` and
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">assign_predictions</span>(<span class="params"><span class="n">self</span><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-vmmodel">validmind.vm_models.VMModel</a></span><span class="muted">,</span></span><span class="params"><span class="n">prediction_column</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type -->str</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">prediction_values</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type -->list</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">probability_column</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type -->str</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">probability_values</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type -->list</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">prediction_probabilities</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type -->list</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)
+<span class="kw">def</span> <span class="name">assign_predictions</span>(<span class="params"><span class="n">self</span><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="p">:</span><span class="nb"><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-vmmodel">validmind.vm_models.VMModel</a></span><span class="muted">,</span></span><span class="params"><span class="n">prediction_column</span><span class="p">:</span><span class="nb"><!-- types.jinja2 - format_type -->str</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">prediction_values</span><span class="p">:</span><span class="nb"><!-- types.jinja2 - format_type -->list</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">probability_column</span><span class="p">:</span><span class="nb"><!-- types.jinja2 - format_type -->str</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">probability_values</span><span class="p">:</span><span class="nb"><!-- types.jinja2 - format_type -->list</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">prediction_probabilities</span><span class="p">:</span><span class="nb"><!-- types.jinja2 - format_type -->list</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)
 
 :::
 
@@ -315,7 +315,7 @@ Assign predictions and probabilities to the dataset.
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">prediction_column</span>(<span class="params"><span class="n">self</span><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-vmmodel">validmind.vm_models.VMModel</a></span><span class="muted">,</span></span><span class="params"><span class="n">column_name</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type -->str</span><span class="o"> = </span><span class="kc">None</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type -->str</span>
+<span class="kw">def</span> <span class="name">prediction_column</span>(<span class="params"><span class="n">self</span><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="p">:</span><span class="nb"><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-vmmodel">validmind.vm_models.VMModel</a></span><span class="muted">,</span></span><span class="params"><span class="n">column_name</span><span class="p">:</span><span class="nb"><!-- types.jinja2 - format_type -->str</span><span class="o"> = </span><span class="kc">None</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type -->str</span>
 
 :::
 
@@ -329,7 +329,7 @@ Get or set the prediction column for a model.
 
 ::: {.signature}
 
-<span class="kw">def</span> <span class="name">probability_column</span>(<span class="params"><span class="n">self</span><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-vmmodel">validmind.vm_models.VMModel</a></span><span class="muted">,</span></span><span class="params"><span class="n">column_name</span><span class="p">:</span><span class="n"><!-- types.jinja2 - format_type -->str</span><span class="o"> = </span><span class="kc">None</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type -->str</span>
+<span class="kw">def</span> <span class="name">probability_column</span>(<span class="params"><span class="n">self</span><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="p">:</span><span class="nb"><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-vmmodel">validmind.vm_models.VMModel</a></span><span class="muted">,</span></span><span class="params"><span class="n">column_name</span><span class="p">:</span><span class="nb"><!-- types.jinja2 - format_type -->str</span><span class="o"> = </span><span class="kc">None</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type -->str</span>
 
 :::
 

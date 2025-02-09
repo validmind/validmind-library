@@ -14,7 +14,7 @@
   {%- if member.parameters | length == 1 -%}
     <span class="param"><span class="n">{{ member.parameters[0].name }}</span>
     {%- if member.parameters[0].annotation -%}
-      <span class="p">:</span><span class="n">{{ format_type(member.parameters[0].annotation, add_links=true) }}</span>
+      <span class="p">:</span><span class="nb">{{ format_type(member.parameters[0].annotation, add_links=true) }}</span>
     {%- endif -%}
     {%- if member.parameters[0].default is not none -%}
       <span class="o"> = </span><span class="kc">{{ member.parameters[0].default }}</span>
@@ -24,7 +24,7 @@
     {%- for param in member.parameters -%}
       <span class="params"><span class="n">{{ param.name }}</span>
       {%- if param.annotation -%}
-        <span class="p">:</span><span class="n">{{ format_type(param.annotation, add_links=true) }}</span>
+        <span class="p">:</span><span class="nb">{{ format_type(param.annotation, add_links=true) }}</span>
       {%- endif -%}
       {%- if param.default is not none -%}
         <span class="o"> = </span><span class="kc">{{ param.default }}</span>
