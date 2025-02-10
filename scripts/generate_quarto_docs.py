@@ -300,26 +300,26 @@ def parse_docstrings(data: Dict[str, Any]):
             try:
                 # Debug original docstring
                 if 'Args:' in original:
-                    print(f"\nProcessing docstring for: {data.get('name', 'unknown')}")
-                    print(f"ORIGINAL:\n{original}")
+                #     print(f"\nProcessing docstring for: {data.get('name', 'unknown')}")
+                #     print(f"ORIGINAL:\n{original}")
                     
                     # Split on double newlines and join first section's lines
                     sections = original.split('\n\n')
                     sections[0] = ' '.join(sections[0].split('\n'))
                     original = '\n\n'.join(sections)
                     
-                    print("\nSections after double newline split:")
-                    for i, section in enumerate(sections):
-                        print(f"\nSection {i}:\n{section}")
+                    # print("\nSections after double newline split:")
+                    # for i, section in enumerate(sections):
+                    #     print(f"\nSection {i}:\n{section}")
                 
                 parsed = parse(original, style=Style.GOOGLE)
                 
                 # Debug parsed result
-                if 'Args:' in original:
-                    print("\nPARSED RESULT:")
-                    print(f"- short_description: {parsed.short_description}")
-                    print(f"- long_description: {parsed.long_description}")
-                    print(f"- params: {[(p.arg_name, p.type_name, p.description) for p in parsed.params]}")
+                # if 'Args:' in original:
+                #     print("\nPARSED RESULT:")
+                #     print(f"- short_description: {parsed.short_description}")
+                #     print(f"- long_description: {parsed.long_description}")
+                #     print(f"- params: {[(p.arg_name, p.type_name, p.description) for p in parsed.params]}")
                 
                 data['docstring'] = {
                     'value': original,
