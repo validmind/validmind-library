@@ -49,8 +49,8 @@
   <span class="p"> → </span><span class="return-annotation">
     {{- format_type(member.returns, add_links=true) if member.returns else 'Any' -}}
   </span>
-{% else %}
-  {%- if not (member.name == "__init__") and member.kind == "function" -%}:{%- endif -%}
+{% endif %}
+{%- if not (member.name == "__init__") -%}:{%- endif -%}
 {%- endif +%}
 
 :::
