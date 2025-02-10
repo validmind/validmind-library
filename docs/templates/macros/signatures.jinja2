@@ -13,7 +13,7 @@
   {%- endif -%}
 </span>
 {%- endif -%}
-{# Use class name for constructors #}
+<!-- DEBUG: member.name = {{ member.name }}, member.kind = {{ member.kind }}, member.parent.name = {{ member.parent.name if member.parent is defined else 'no parent' }} -->
 <span class="name">{{ member.parent.name if (member.name == "__init__" and member.kind == "method") else member.name }}</span>{%- if member.parameters -%}({{- '' -}}
   {%- set params = [] -%}
   {%- for param in member.parameters -%}
