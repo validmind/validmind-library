@@ -55,7 +55,7 @@ After you have pasted the code snippet into your development source code and exe
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">get_test_suite</span>(<span class="params"><span class="n">test_suite_id</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">section</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">args</span><span class="o"> = </span><span class="kc">()</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-testsuite">validmind.vm_models.TestSuite</a></span>
+<span class="kw">def</span><span class="name">get_test_suite</span>(<span class="params"><span class="n">test_suite_id</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">section</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">args</span><span class="o"> = </span><span class="kc">()</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-testsuite">validmind.vm_models.TestSuite</a></span>
 
 :::
 
@@ -67,8 +67,8 @@ This function provides an interface to retrieve the TestSuite instance for the c
 
 **Arguments**
 
-- `test_suite_id` (str): The test suite name. If not passed, then the project's test suite will be returned. Defaults to None.
-- `section` (str): The section of the documentation template from which to retrieve the test suite. This only applies if test_suite_id is None. Defaults to None.
+- `test_suite_id` (str, optional): The test suite name. If not passed, then the project's test suite will be returned. Defaults to None.
+- `section` (str, optional): The section of the documentation template from which to retrieve the test suite. This only applies if test_suite_id is None. Defaults to None.
 - `args`: Additional arguments to pass to the TestSuite
 - `kwargs`: Additional keyword arguments to pass to the TestSuite
 
@@ -95,8 +95,8 @@ If the API key and secret are not provided, the client will attempt to retrieve 
 - `api_key` (str, optional): The API key. Defaults to None.
 - `api_secret` (str, optional): The API secret. Defaults to None.
 - `api_host` (str, optional): The API host. Defaults to None.
-- `monitoring` (bool): The ongoing monitoring flag. Defaults to False.
-- `generate_descriptions` (bool): Whether to use GenAI to generate test result descriptions. Defaults to True.
+- `monitoring` (bool, optional): The ongoing monitoring flag. Defaults to False.
+- `generate_descriptions` (bool, optional): Whether to use GenAI to generate test result descriptions. Defaults to True.
 
 **Raises**
 
@@ -149,7 +149,7 @@ The following dataset types are supported:
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">init_model</span>(<span class="params"><span class="n">model</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">object</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">input_id</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o"> = </span><span class="s1">'model'</span><span class="muted">,</span></span><span class="params"><span class="n">attributes</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">dict</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">predict_fn</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">callable</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">\_\_log</span><span class="o"> = </span><span class="kc">True</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-vmmodel">validmind.vm_models.VMModel</a></span>
+<span class="kw">def</span><span class="name">init_model</span>(<span class="params"><span class="n">model</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">object</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">input_id</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o"> = </span><span class="s1">'model'</span><span class="muted">,</span></span><span class="params"><span class="n">attributes</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">dict</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">predict_fn</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">callable</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">\_\_log</span><span class="o"> = </span><span class="kc">True</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-vmmodel">validmind.vm_models.VMModel</a></span>
 
 :::
 
@@ -211,7 +211,7 @@ LogisticRegression and LinearRegression models are converted to sklearn models b
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">log_metric</span>(<span class="params"><span class="n">key</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">value</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">float</span><span class="muted">,</span></span><span class="params"><span class="n">inputs</span><span class="p">: </span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Optional</span><span class="p">\[</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="nb">List</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="p">\]</span><span class="p">\]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">params</span><span class="p">: </span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Optional</span><span class="p">\[</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="nb">Dict</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="p">, </span><!-- types.jinja2 - format_type --><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">recorded_at</span><span class="p">: </span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Optional</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="p">\]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">thresholds</span><span class="p">: </span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Optional</span><span class="p">\[</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="nb">Dict</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="p">, </span><!-- types.jinja2 - format_type --><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span><span class="o"> = </span><span class="kc">None</span></span>)
+<span class="kw">def</span><span class="name">log_metric</span>(<span class="params"><span class="n">key</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">value</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">float</span><span class="muted">,</span></span><span class="params"><span class="n">inputs</span><span class="p">: </span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Optional</span><span class="p">\[</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">List</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="p">\]</span><span class="p">\]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">params</span><span class="p">: </span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Optional</span><span class="p">\[</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Dict</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="p">, </span><!-- types.jinja2 - format_type --><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">recorded_at</span><span class="p">: </span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Optional</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="p">\]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">thresholds</span><span class="p">: </span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Optional</span><span class="p">\[</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Dict</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="p">, </span><!-- types.jinja2 - format_type --><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span><span class="o"> = </span><span class="kc">None</span></span>)
 
 :::
 
@@ -286,7 +286,7 @@ Reconnect to the ValidMind API and reload the project configuration
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">run_documentation_tests</span>(<span class="params"><span class="n">section</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">send</span><span class="o"> = </span><span class="kc">True</span><span class="muted">,</span></span><span class="params"><span class="n">fail_fast</span><span class="o"> = </span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">inputs</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">config</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)
+<span class="kw">def</span><span class="name">run_documentation_tests</span>(<span class="params"><span class="n">section</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">send</span><span class="o"> = </span><span class="kc">True</span><span class="muted">,</span></span><span class="params"><span class="n">fail_fast</span><span class="o"> = </span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">inputs</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">config</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>)
 
 :::
 
@@ -299,8 +299,8 @@ This function will analyze the current project's documentation template and coll
 **Arguments**
 
 - `section` (str or list, optional): The section(s) to preview. Defaults to None.
-- `send` (bool): Whether to send the results to the ValidMind API. Defaults to True.
-- `fail_fast` (bool): Whether to stop running tests after the first failure. Defaults to False.
+- `send` (bool, optional): Whether to send the results to the ValidMind API. Defaults to True.
+- `fail_fast` (bool, optional): Whether to stop running tests after the first failure. Defaults to False.
 - `inputs` (dict): A dictionary of test inputs to pass to the TestSuite
 - `config`: A dictionary of test parameters to override the defaults
 - `**kwargs`: backwards compatibility for passing in test inputs using keyword arguments
@@ -319,7 +319,7 @@ This function will analyze the current project's documentation template and coll
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">run_test_suite</span>(<span class="params"><span class="n">test_suite_id</span><span class="muted">,</span></span><span class="params"><span class="n">send</span><span class="o"> = </span><span class="kc">True</span><span class="muted">,</span></span><span class="params"><span class="n">fail_fast</span><span class="o"> = </span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">config</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">inputs</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)
+<span class="kw">def</span><span class="name">run_test_suite</span>(<span class="params"><span class="n">test_suite_id</span><span class="muted">,</span></span><span class="params"><span class="n">send</span><span class="o"> = </span><span class="kc">True</span><span class="muted">,</span></span><span class="params"><span class="n">fail_fast</span><span class="o"> = </span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">config</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">inputs</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>)
 
 :::
 
@@ -332,10 +332,10 @@ This function provides a high level interface for running a test suite. A test s
 **Arguments**
 
 - `test_suite_id` (str): The test suite name (e.g. 'classifier_full_suite')
-- `config` (dict): A dictionary of parameters to pass to the tests in the test suite. Defaults to None.
-- `send` (bool): Whether to post the test results to the API. send=False is useful for testing. Defaults to True.
-- `fail_fast` (bool): Whether to stop running tests after the first failure. Defaults to False.
-- `inputs` (dict): A dictionary of test inputs to pass to the TestSuite e.g. `model`, `dataset` `models` etc. These inputs will be accessible by any test in the test suite. See the test documentation or `vm.describe_test()` for more details on the inputs required for each.
+- `config` (dict, optional): A dictionary of parameters to pass to the tests in the test suite. Defaults to None.
+- `send` (bool, optional): Whether to post the test results to the API. send=False is useful for testing. Defaults to True.
+- `fail_fast` (bool, optional): Whether to stop running tests after the first failure. Defaults to False.
+- `inputs` (dict, optional): A dictionary of test inputs to pass to the TestSuite, such as `model`, `dataset` `models`, etc. These inputs will be accessible by any test in the test suite. See the test documentation or `vm.describe_test()` for more details on the inputs required for each. Defaults to None.
 - `**kwargs`: backwards compatibility for passing in test inputs using keyword arguments
 
 **Returns**
@@ -443,7 +443,7 @@ Holds raw data for a test result
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">__init__</span>(<span class="params"><span class="n">log</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">bool</span><span class="o"> = </span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)
+<span class="kw">def</span><span class="name">__init__</span>(<span class="params"><span class="n">log</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">bool</span><span class="o"> = </span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>)
 
 :::
 

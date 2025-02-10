@@ -26,7 +26,7 @@
     {%- if param.annotation -%}
       <span class="p">: </span>{{ format_type(param.annotation, add_links=true) }}
     {%- endif -%}
-    {%- if param.default is not none -%}
+    {%- if param.default is not none and param.name != "kwargs" -%}
       <span class="o"> = </span>
       {%- if param.default is string and param.default.startswith("'") and param.default.endswith("'") -%}
         <span class="s1">{{ param.default }}</span>

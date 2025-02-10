@@ -27,7 +27,7 @@
                     {%- endif -%}
                     {%- if param.type_name -%}
                         {%- set type_info = '(' ~ param.type_name -%}
-                        {%- if param.default == "None" -%}
+                        {%- if param.default == "None" or param.default == "True" or param.default == "False" or "Defaults to" in desc -%}
                             {%- set type_info = type_info ~ ', optional' -%}
                         {%- endif -%}
                         {%- set type_info = type_info ~ ')' -%}

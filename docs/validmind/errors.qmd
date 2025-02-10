@@ -58,7 +58,7 @@ Generic error for API request errors that are not known.
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">description</span>(<span class="params"><span class="n">args</span><span class="o"> = </span><span class="kc">()</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)
+<span class="kw">def</span><span class="name">description</span>(<span class="params"><span class="n">args</span><span class="o"> = </span><span class="kc">()</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>)
 
 :::
 
@@ -127,7 +127,7 @@ When the test suite was found but could not be initialized.
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">description</span>(<span class="params"><span class="n">args</span><span class="o"> = </span><span class="kc">()</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)
+<span class="kw">def</span><span class="name">description</span>(<span class="params"><span class="n">args</span><span class="o"> = </span><span class="kc">()</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>)
 
 :::
 
@@ -217,7 +217,7 @@ When an invalid metric results object is sent to the API.
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">description</span>(<span class="params"><span class="n">args</span><span class="o"> = </span><span class="kc">()</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)
+<span class="kw">def</span><span class="name">description</span>(<span class="params"><span class="n">args</span><span class="o"> = </span><span class="kc">()</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>)
 
 :::
 
@@ -412,7 +412,7 @@ When the class labels found in the dataset don't match the provided target label
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">description</span>(<span class="params"><span class="n">args</span><span class="o"> = </span><span class="kc">()</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)
+<span class="kw">def</span><span class="name">description</span>(<span class="params"><span class="n">args</span><span class="o"> = </span><span class="kc">()</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>)
 
 :::
 
@@ -523,7 +523,7 @@ When the client config is missing the documentation template.
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">description</span>(<span class="params"><span class="n">args</span><span class="o"> = </span><span class="kc">()</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)
+<span class="kw">def</span><span class="name">description</span>(<span class="params"><span class="n">args</span><span class="o"> = </span><span class="kc">()</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>)
 
 :::
 
@@ -598,7 +598,7 @@ When the R extras have not been installed.
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">description</span>(<span class="params"><span class="n">args</span><span class="o"> = </span><span class="kc">()</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span><span class="o"> = </span><span class="kc">{}</span></span>)
+<span class="kw">def</span><span class="name">description</span>(<span class="params"><span class="n">args</span><span class="o"> = </span><span class="kc">()</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>)
 
 :::
 

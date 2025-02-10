@@ -35,12 +35,12 @@
   {%- elif type.cls == "ExprName" -%}
     {%- if module and type.name in module.members and module.members[type.name].kind == "alias" -%}
       {{ module.members[type.name].target_path }}
+    {%- elif type.name in type_keywords -%}
+      <span class="n">{{ type.name }}</span>
     {%- elif type.name|lower in builtin_types -%}
       <span class="nb">{{ type.name }}</span>
     {%- elif add_links and type.name not in type_keywords -%}
       <a href="/reference/validmind/vm_models.html#class-{{ type.name|lower }}">validmind.vm_models.{{ type.name }}</a>
-    {%- elif type.name in type_keywords -%}
-      <span class="n">{{ type.name }}</span>
     {%- else -%}
       <span class="n">{{ type.name }}</span>
     {%- endif -%}
@@ -68,10 +68,10 @@
     {%- endif -%}
   {%- endif -%}
 {% else %}
-  {%- if type|lower in builtin_types -%}
-    <span class="nb">{{ type }}</span>
-  {%- elif type in type_keywords -%}
+  {%- if type in type_keywords -%}
     <span class="n">{{ type }}</span>
+  {%- elif type|lower in builtin_types -%}
+    <span class="nb">{{ type }}</span>
   {%- else -%}
     <span class="n">{{ type }}</span>
   {%- endif -%}
