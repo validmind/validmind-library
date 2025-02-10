@@ -380,9 +380,9 @@ def run_test_suite(
         send (bool, optional): Whether to post the test results to the API. send=False
             is useful for testing. Defaults to True.
         fail_fast (bool, optional): Whether to stop running tests after the first failure. Defaults to False.
-        inputs (dict, optional): A dictionary of test inputs to pass to the TestSuite e.g. `model`, `dataset`
-            `models` etc. These inputs will be accessible by any test in the test suite. See the test
-            documentation or `vm.describe_test()` for more details on the inputs required for each.
+        inputs (dict, optional): A dictionary of test inputs to pass to the TestSuite, such as `model`, `dataset`
+            `models`, etc. These inputs will be accessible by any test in the test suite. See the test
+            documentation or `vm.describe_test()` for more details on the inputs required for each. Defaults to None.
         **kwargs: backwards compatibility for passing in test inputs using keyword arguments
 
     Raises:
