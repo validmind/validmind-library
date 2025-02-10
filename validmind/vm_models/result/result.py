@@ -50,7 +50,7 @@ class RawData:
 
         Args:
             log (bool): If True, log the raw data to ValidMind
-            **kwargs: Keyword arguments to set as attributes e.g.
+            **kwargs: Keyword arguments to set as attributes, such as
                 `RawData(log=True, dataset_duplicates=df_duplicates)`
         """
         self.log = log
