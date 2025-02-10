@@ -55,7 +55,7 @@ After you have pasted the code snippet into your development source code and exe
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">get_test_suite</span>(<span class="params"><span class="n">test_suite_id</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">section</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">args</span><span class="o"> = </span><span class="kc">()</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-testsuite">validmind.vm_models.TestSuite</a></span>
+<span class="kw">def</span><span class="name">get_test_suite</span>(<span class="params"><span class="n">test_suite_id</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">section</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">args</span><span class="o">=</span><span class="kc">()</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>):<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-testsuite">validmind.vm_models.TestSuite</a></span>
 
 :::
 
@@ -78,7 +78,7 @@ This function provides an interface to retrieve the TestSuite instance for the c
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">init</span>(<span class="params"><span class="n">project</span><span class="p">: </span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Optional</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="p">\]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">api_key</span><span class="p">: </span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Optional</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="p">\]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">api_secret</span><span class="p">: </span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Optional</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="p">\]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">api_host</span><span class="p">: </span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Optional</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="p">\]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="p">: </span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Optional</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="p">\]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">monitoring</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">bool</span><span class="o"> = </span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">generate_descriptions</span><span class="p">: </span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Optional</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="nb">bool</span><span class="p">\]</span><span class="o"> = </span><span class="kc">None</span></span>)
+<span class="kw">def</span><span class="name">init</span>(<span class="params"><span class="n">project</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Optional</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">api_key</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Optional</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">api_secret</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Optional</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">api_host</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Optional</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Optional</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">monitoring</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">generate_descriptions</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Optional</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="nb">bool</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span></span>):
 
 :::
 
@@ -108,7 +108,7 @@ If the API key and secret are not provided, the client will attempt to retrieve 
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">init_dataset</span>(<span class="params"><span class="n">dataset</span><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">index</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">index_name</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">date_time_index</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">bool</span><span class="o"> = </span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">columns</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">list</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">text_column</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">target_column</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">feature_columns</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">list</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">extra_columns</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">dict</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">class_labels</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">dict</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">type</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">input_id</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">\_\_log</span><span class="o"> = </span><span class="kc">True</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-vmdataset">validmind.vm_models.VMDataset</a></span>
+<span class="kw">def</span><span class="name">init_dataset</span>(<span class="params"><span class="n">dataset</span><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">index</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">index_name</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">date_time_index</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">columns</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">list</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">text_column</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">target_column</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">feature_columns</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">list</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">extra_columns</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">class_labels</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">type</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">input_id</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">\_\_log</span><span class="o">=</span><span class="kc">True</span></span>):<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-vmdataset">validmind.vm_models.VMDataset</a></span>
 
 :::
 
@@ -149,7 +149,7 @@ The following dataset types are supported:
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">init_model</span>(<span class="params"><span class="n">model</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">object</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">input_id</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o"> = </span><span class="s1">'model'</span><span class="muted">,</span></span><span class="params"><span class="n">attributes</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">dict</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">predict_fn</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">callable</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">\_\_log</span><span class="o"> = </span><span class="kc">True</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-vmmodel">validmind.vm_models.VMModel</a></span>
+<span class="kw">def</span><span class="name">init_model</span>(<span class="params"><span class="n">model</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">object</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">input_id</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o">=</span><span class="s1">'model'</span><span class="muted">,</span></span><span class="params"><span class="n">attributes</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">predict_fn</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">callable</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">\_\_log</span><span class="o">=</span><span class="kc">True</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>):<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-vmmodel">validmind.vm_models.VMModel</a></span>
 
 :::
 
@@ -179,7 +179,7 @@ Initializes a VM Model, which can then be passed to other functions that can per
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">init_r_model</span>(<span class="params"><span class="n">model_path</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">input_id</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o"> = </span><span class="s1">'model'</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-vmmodel">validmind.vm_models.VMModel</a></span>
+<span class="kw">def</span><span class="name">init_r_model</span>(<span class="params"><span class="n">model_path</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">input_id</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o">=</span><span class="s1">'model'</span></span>):<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-vmmodel">validmind.vm_models.VMModel</a></span>
 
 :::
 
@@ -211,7 +211,7 @@ LogisticRegression and LinearRegression models are converted to sklearn models b
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">log_metric</span>(<span class="params"><span class="n">key</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">value</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">float</span><span class="muted">,</span></span><span class="params"><span class="n">inputs</span><span class="p">: </span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Optional</span><span class="p">\[</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">List</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="p">\]</span><span class="p">\]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">params</span><span class="p">: </span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Optional</span><span class="p">\[</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Dict</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="p">, </span><!-- types.jinja2 - format_type --><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">recorded_at</span><span class="p">: </span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Optional</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="p">\]</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">thresholds</span><span class="p">: </span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Optional</span><span class="p">\[</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Dict</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="p">, </span><!-- types.jinja2 - format_type --><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span><span class="o"> = </span><span class="kc">None</span></span>)
+<span class="kw">def</span><span class="name">log_metric</span>(<span class="params"><span class="n">key</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">value</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">float</span><span class="muted">,</span></span><span class="params"><span class="n">inputs</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Optional</span><span class="p">\[</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">List</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">params</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Optional</span><span class="p">\[</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Dict</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="p">, </span><!-- types.jinja2 - format_type --><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">recorded_at</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Optional</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">thresholds</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Optional</span><span class="p">\[</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Dict</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="p">, </span><!-- types.jinja2 - format_type --><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span></span>):
 
 :::
 
@@ -236,7 +236,7 @@ Unit metrics are key-value pairs where the key is the metric name and the value 
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">preview_template</span>()
+<span class="kw">def</span><span class="name">preview_template</span>():
 
 :::
 
@@ -256,7 +256,7 @@ This function will display the documentation template for the current project. I
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">print_env</span>()
+<span class="kw">def</span><span class="name">print_env</span>():
 
 :::
 
@@ -272,7 +272,7 @@ Output includes: ValidMind Library version, operating system details, installed 
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">reload</span>()
+<span class="kw">def</span><span class="name">reload</span>():
 
 :::
 
@@ -286,7 +286,7 @@ Reconnect to the ValidMind API and reload the project configuration
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">run_documentation_tests</span>(<span class="params"><span class="n">section</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">send</span><span class="o"> = </span><span class="kc">True</span><span class="muted">,</span></span><span class="params"><span class="n">fail_fast</span><span class="o"> = </span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">inputs</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">config</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>)
+<span class="kw">def</span><span class="name">run_documentation_tests</span>(<span class="params"><span class="n">section</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">send</span><span class="o">=</span><span class="kc">True</span><span class="muted">,</span></span><span class="params"><span class="n">fail_fast</span><span class="o">=</span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">inputs</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">config</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>):
 
 :::
 
@@ -319,7 +319,7 @@ This function will analyze the current project's documentation template and coll
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">run_test_suite</span>(<span class="params"><span class="n">test_suite_id</span><span class="muted">,</span></span><span class="params"><span class="n">send</span><span class="o"> = </span><span class="kc">True</span><span class="muted">,</span></span><span class="params"><span class="n">fail_fast</span><span class="o"> = </span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">config</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">inputs</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>)
+<span class="kw">def</span><span class="name">run_test_suite</span>(<span class="params"><span class="n">test_suite_id</span><span class="muted">,</span></span><span class="params"><span class="n">send</span><span class="o">=</span><span class="kc">True</span><span class="muted">,</span></span><span class="params"><span class="n">fail_fast</span><span class="o">=</span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">config</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">inputs</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>):
 
 :::
 
@@ -352,7 +352,7 @@ This function provides a high level interface for running a test suite. A test s
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">tags</span>(<span class="params"><span class="n">tags</span><span class="o"> = </span><span class="kc">()</span></span>)
+<span class="kw">def</span><span class="name">tags</span>(<span class="params"><span class="n">tags</span><span class="o">=</span><span class="kc">()</span></span>):
 
 :::
 
@@ -370,7 +370,7 @@ Decorator for specifying tags for a test.
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">tasks</span>(<span class="params"><span class="n">tasks</span><span class="o"> = </span><span class="kc">()</span></span>)
+<span class="kw">def</span><span class="name">tasks</span>(<span class="params"><span class="n">tasks</span><span class="o">=</span><span class="kc">()</span></span>):
 
 :::
 
@@ -388,7 +388,7 @@ Decorator for specifying the task types that a test is designed for.
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">test</span>(<span class="params"><span class="n">func_or_id</span></span>)
+<span class="kw">def</span><span class="name">test</span>(<span class="params"><span class="n">func_or_id</span></span>):
 
 :::
 
@@ -421,15 +421,15 @@ The function may also include a docstring. This docstring will be used and logge
 
 - The decorated function.
 
-## <span class='muted'>class</span> RawData
-
 <!-- module.qmd.jinja2 -->
+
+## <span class='muted'>class</span> RawData
 
 <!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">RawData</span>()
+<span class="kw">class</span><span class="name">RawData</span>:
 
 :::
 
@@ -437,13 +437,15 @@ The function may also include a docstring. This docstring will be used and logge
 
 Holds raw data for a test result
 
+<!-- module.qmd.jinja2 -->
+
 ### RawData<span class='muted'>()</span>
 
 <!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">__init__</span>(<span class="params"><span class="n">log</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">bool</span><span class="o"> = </span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>)
+<span class="name">RawData</span>(<span class="param"><span class="n">log</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="muted">,</span></span><span class="param"><span class="n">\*\*kwargs</span></span>)
 
 :::
 
@@ -454,7 +456,9 @@ Create a new RawData object
 **Arguments**
 
 - `log` (bool): If True, log the raw data to ValidMind
-- `**kwargs`: Keyword arguments to set as attributes e.g. `RawData(log=True, dataset_duplicates=df_duplicates)`
+- `**kwargs`: Keyword arguments to set as attributes, such as `RawData(log=True, dataset_duplicates=df_duplicates)`
+
+<!-- module.qmd.jinja2 -->
 
 ### inspect<span class='muted'>()</span>
 
@@ -462,7 +466,7 @@ Create a new RawData object
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">inspect</span>(<span class="params"><span class="n">show</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">bool</span><span class="o"> = </span><span class="kc">True</span></span>)
+<span class="kw">def</span><span class="name">inspect</span>(<span class="param"><span class="bp">self</span><span class="muted">,</span></span><span class="param"><span class="n">show</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span></span>):
 
 :::
 
@@ -470,12 +474,14 @@ Create a new RawData object
 
 Inspect the raw data
 
+<!-- module.qmd.jinja2 -->
+
 ### serialize<span class='muted'>()</span>
 
 <!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">serialize</span>()
+<span class="kw">def</span><span class="name">serialize</span>(<span class="param"><span class="bp">self</span></span>):
 
 :::

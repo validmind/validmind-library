@@ -14,7 +14,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">ChiSquaredFeaturesTable</span>(<span class="params"><span class="n">dataset</span><span class="muted">,</span></span><span class="params"><span class="n">p_threshold</span><span class="o"> = </span><span class="kc">0.05</span></span>)
+<span class="kw">def</span><span class="name">ChiSquaredFeaturesTable</span>(<span class="params"><span class="n">dataset</span><span class="muted">,</span></span><span class="params"><span class="n">p_threshold</span><span class="o">=</span><span class="kc">0.05</span></span>):
 
 :::
 
@@ -56,7 +56,7 @@ The function creates a contingency table for each categorical feature and the ta
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">SkipTestError</span>()
+<span class="kw">class</span><span class="name">SkipTestError</span>:
 
 :::
 

@@ -14,7 +14,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">ClassifierPerformance</span>(<span class="params"><span class="n">dataset</span><span class="p">: </span><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-vmdataset">validmind.vm_models.VMDataset</a><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="p">: </span><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-vmmodel">validmind.vm_models.VMModel</a><span class="muted">,</span></span><span class="params"><span class="n">average</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o"> = </span><span class="s1">'macro'</span></span>)
+<span class="kw">def</span><span class="name">ClassifierPerformance</span>(<span class="params"><span class="n">dataset</span><span class="p">:</span><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-vmdataset">validmind.vm_models.VMDataset</a><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="p">:</span><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-vmmodel">validmind.vm_models.VMModel</a><span class="muted">,</span></span><span class="params"><span class="n">average</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o">=</span><span class="s1">'macro'</span></span>):
 
 :::
 
@@ -58,6 +58,6 @@ The test produces a report that includes precision, recall, F1-Score, and accura
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">multiclass_roc_auc_score</span>(<span class="params"><span class="n">y_test</span><span class="muted">,</span></span><span class="params"><span class="n">y_pred</span><span class="muted">,</span></span><span class="params"><span class="n">average</span><span class="o"> = </span><span class="s1">'macro'</span></span>)
+<span class="kw">def</span><span class="name">multiclass_roc_auc_score</span>(<span class="params"><span class="n">y_test</span><span class="muted">,</span></span><span class="params"><span class="n">y_pred</span><span class="muted">,</span></span><span class="params"><span class="n">average</span><span class="o">=</span><span class="s1">'macro'</span></span>):
 
 :::

@@ -14,7 +14,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">TimeSeriesPredictionWithCI</span>(<span class="params"><span class="n">dataset</span><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="muted">,</span></span><span class="params"><span class="n">confidence</span><span class="o"> = </span><span class="kc">0.95</span></span>)
+<span class="kw">def</span><span class="name">TimeSeriesPredictionWithCI</span>(<span class="params"><span class="n">dataset</span><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="muted">,</span></span><span class="params"><span class="n">confidence</span><span class="o">=</span><span class="kc">0.95</span></span>):
 
 :::
 

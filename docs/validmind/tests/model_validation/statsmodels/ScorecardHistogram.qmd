@@ -14,7 +14,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">ScorecardHistogram</span>(<span class="params"><span class="n">dataset</span><span class="muted">,</span></span><span class="params"><span class="n">title</span><span class="o"> = </span><span class="s1">'Histogram of Scores'</span><span class="muted">,</span></span><span class="params"><span class="n">score_column</span><span class="o"> = </span><span class="s1">'score'</span></span>)
+<span class="kw">def</span><span class="name">ScorecardHistogram</span>(<span class="params"><span class="n">dataset</span><span class="muted">,</span></span><span class="params"><span class="n">title</span><span class="o">=</span><span class="s1">'Histogram of Scores'</span><span class="muted">,</span></span><span class="params"><span class="n">score_column</span><span class="o">=</span><span class="s1">'score'</span></span>):
 
 :::
 

@@ -14,7 +14,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">ClassifierThresholdOptimization</span>(<span class="params"><span class="n">dataset</span><span class="p">: </span><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-vmdataset">validmind.vm_models.VMDataset</a><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="p">: </span><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-vmmodel">validmind.vm_models.VMModel</a><span class="muted">,</span></span><span class="params"><span class="n">methods</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">target_recall</span><span class="o"> = </span><span class="kc">None</span></span>)
+<span class="kw">def</span><span class="name">ClassifierThresholdOptimization</span>(<span class="params"><span class="n">dataset</span><span class="p">:</span><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-vmdataset">validmind.vm_models.VMDataset</a><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="p">:</span><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-vmmodel">validmind.vm_models.VMModel</a><span class="muted">,</span></span><span class="params"><span class="n">methods</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">target_recall</span><span class="o">=</span><span class="kc">None</span></span>):
 
 :::
 
@@ -90,7 +90,7 @@ The test implements multiple threshold optimization methods:
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">find_optimal_threshold</span>(<span class="params"><span class="n">y_true</span><span class="muted">,</span></span><span class="params"><span class="n">y_prob</span><span class="muted">,</span></span><span class="params"><span class="n">method</span><span class="o"> = </span><span class="s1">'youden'</span><span class="muted">,</span></span><span class="params"><span class="n">target_recall</span><span class="o"> = </span><span class="kc">None</span></span>)
+<span class="kw">def</span><span class="name">find_optimal_threshold</span>(<span class="params"><span class="n">y_true</span><span class="muted">,</span></span><span class="params"><span class="n">y_prob</span><span class="muted">,</span></span><span class="params"><span class="n">method</span><span class="o">=</span><span class="s1">'youden'</span><span class="muted">,</span></span><span class="params"><span class="n">target_recall</span><span class="o">=</span><span class="kc">None</span></span>):
 
 :::
 

@@ -18,7 +18,7 @@ Test suites for llm summarization models
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">SummarizationMetrics</span>()
+<span class="kw">class</span><span class="name">SummarizationMetrics</span>:
 
 :::
 

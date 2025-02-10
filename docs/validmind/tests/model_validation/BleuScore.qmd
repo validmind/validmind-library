@@ -12,7 +12,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">validate_prediction</span>(<span class="params"><span class="n">y_true</span><span class="muted">,</span></span><span class="params"><span class="n">y_pred</span><span class="muted">,</span></span><span class="params"><span class="n">dataset_id</span><span class="o"> = </span><span class="kc">None</span></span>)
+<span class="kw">def</span><span class="name">validate_prediction</span>(<span class="params"><span class="n">y_true</span><span class="muted">,</span></span><span class="params"><span class="n">y_pred</span><span class="muted">,</span></span><span class="params"><span class="n">dataset_id</span><span class="o">=</span><span class="kc">None</span></span>):
 
 :::
 
@@ -38,7 +38,7 @@ Comprehensive validation of true and predicted value pairs. Handles NaN/None val
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">BleuScore</span>(<span class="params"><span class="n">dataset</span><span class="muted">,</span></span><span class="params"><span class="n">model</span></span>)
+<span class="kw">def</span><span class="name">BleuScore</span>(<span class="params"><span class="n">dataset</span><span class="muted">,</span></span><span class="params"><span class="n">model</span></span>):
 
 :::
 

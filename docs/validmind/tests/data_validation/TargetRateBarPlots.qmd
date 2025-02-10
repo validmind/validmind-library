@@ -14,7 +14,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">TargetRateBarPlots</span>(<span class="params"><span class="n">dataset</span><span class="p">: </span><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-vmdataset">validmind.vm_models.VMDataset</a></span>)
+<span class="kw">def</span><span class="name">TargetRateBarPlots</span>(<span class="params"><span class="n">dataset</span><span class="p">:</span><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-vmdataset">validmind.vm_models.VMDataset</a></span>):
 
 :::
 
@@ -54,7 +54,7 @@ The test involves creating a pair of bar plots for each categorical feature in t
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">SkipTestError</span>()
+<span class="kw">class</span><span class="name">SkipTestError</span>:
 
 :::
 

@@ -18,7 +18,7 @@ Test suites for text datasets
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">TextDataQuality</span>()
+<span class="kw">class</span><span class="name">TextDataQuality</span>:
 
 :::
 

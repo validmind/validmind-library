@@ -5,7 +5,7 @@
 ::: {.signature}
 
 {# Skip 'def' for constructors #}
-{%- if not (member.name == "__init__" and member.kind == "method") -%}
+{%- if not (member.name == "__init__" and member.kind in ["method", "function"]) -%}
 <span class="kw">
   {%- if member.kind == "class" or member.kind == "alias" -%}class
   {%- elif member.kind == "function" or member.kind == "method" -%}def
@@ -13,21 +13,27 @@
   {%- endif -%}
 </span>
 {%- endif -%}
-<!-- DEBUG: member.name = {{ member.name }}, member.kind = {{ member.kind }}, member.parent.name = {{ member.parent.name if member.parent is defined else 'no parent' }} -->
-<span class="name">{{ member.parent.name if (member.name == "__init__" and member.kind == "method") else member.name }}</span>{%- if member.parameters -%}({{- '' -}}
+<span class="name">{{ member.parent.name if (member.name == "__init__" and member.parent is defined) else member.name }}</span>
+{%- if member.kind == "class" -%}:
+{%- elif member.parameters -%}({{- '' -}}
   {%- set params = [] -%}
   {%- for param in member.parameters -%}
-    {%- if param.name != "self" -%}
+    {%- if (param.name != "self" or member.parent is defined) and not (param.name == "self" and member.name == "__init__") -%}
       {%- set _ = params.append(param) -%}
     {%- endif -%}
   {%- endfor -%}
   {%- for param in params -%}
-    <span class="params"><span class="n">{{ "**" if param.name == "kwargs" else "" }}{{ param.name }}</span>
+    <span class="{{ 'param' if member.kind == 'class' or member.parent is defined else 'params' }}">
+    {%- if param.name == "self" -%}
+      <span class="bp">self</span>
+    {%- else -%}
+      <span class="n">{{ "**" if param.name == "kwargs" else "" }}{{ param.name }}</span>
+    {%- endif -%}
     {%- if param.annotation -%}
-      <span class="p">: </span>{{ format_type(param.annotation, add_links=true) }}
+      <span class="p">:</span>{{ format_type(param.annotation, add_links=true) }}
     {%- endif -%}
     {%- if param.default is not none and param.name != "kwargs" -%}
-      <span class="o"> = </span>
+      <span class="o">=</span>
       {%- if param.default is string and param.default.startswith("'") and param.default.endswith("'") -%}
         <span class="s1">{{ param.default }}</span>
       {%- else -%}
@@ -39,6 +45,7 @@
   {%- endfor -%})
   {%- else -%}()
 {%- endif -%}
+{%- if not (member.name == "__init__") and member.kind == "function" -%}:{%- endif -%}
 {%- if member.returns -%}
   <span class="p"> → </span><span class="return-annotation">
     {{- format_type(member.returns, add_links=true) if member.returns else 'Any' -}}

@@ -12,7 +12,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">get_logger</span>(<span class="params"><span class="n">name</span><span class="o"> = </span><span class="s1">'validmind'</span><span class="muted">,</span></span><span class="params"><span class="n">log_level</span><span class="o"> = </span><span class="kc">None</span></span>)
+<span class="kw">def</span><span class="name">get_logger</span>(<span class="params"><span class="n">name</span><span class="o">=</span><span class="s1">'validmind'</span><span class="muted">,</span></span><span class="params"><span class="n">log_level</span><span class="o">=</span><span class="kc">None</span></span>):
 
 :::
 
@@ -28,7 +28,7 @@ Get a logger for the given module name
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">ProtectedClassesDisparity</span>(<span class="params"><span class="n">dataset</span><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="muted">,</span></span><span class="params"><span class="n">protected_classes</span><span class="o"> = </span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">disparity_tolerance</span><span class="o"> = </span><span class="kc">1.25</span><span class="muted">,</span></span><span class="params"><span class="n">metrics</span><span class="o"> = </span><span class="kc">{'cls': 'ExprList', 'elements': ["'fnr'", "'fpr'", "'tpr'"]}</span></span>)
+<span class="kw">def</span><span class="name">ProtectedClassesDisparity</span>(<span class="params"><span class="n">dataset</span><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="muted">,</span></span><span class="params"><span class="n">protected_classes</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">disparity_tolerance</span><span class="o">=</span><span class="kc">1.25</span><span class="muted">,</span></span><span class="params"><span class="n">metrics</span><span class="o">=</span><span class="kc">{'cls': 'ExprList', 'elements': ["'fnr'", "'fpr'", "'tpr'"]}</span></span>):
 
 :::
 
@@ -76,7 +76,7 @@ The test performs the following steps:
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">MissingDependencyError</span>()
+<span class="kw">class</span><span class="name">MissingDependencyError</span>:
 
 :::
 

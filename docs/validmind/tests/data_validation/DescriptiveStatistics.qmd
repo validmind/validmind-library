@@ -12,7 +12,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">format_records</span>(<span class="params"><span class="n">df</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="n">{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'pd'}, {'cls': 'ExprName', 'name': 'DataFrame'}]}</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">List</span><span class="p">\[</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Dict</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="p">, </span><!-- types.jinja2 - format_type --><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span></span>
+<span class="kw">def</span><span class="name">format_records</span>(<span class="params"><span class="n">df</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'pd'}, {'cls': 'ExprName', 'name': 'DataFrame'}]}</span></span>):<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">List</span><span class="p">\[</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Dict</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="p">, </span><!-- types.jinja2 - format_type --><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span></span>
 
 :::
 
@@ -36,7 +36,7 @@ We do this for display purposes before sending data to ValidMind. Rules:
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">DescriptiveStatistics</span>(<span class="params"><span class="n">dataset</span><span class="p">: </span><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-vmdataset">validmind.vm_models.VMDataset</a></span>)
+<span class="kw">def</span><span class="name">DescriptiveStatistics</span>(<span class="params"><span class="n">dataset</span><span class="p">:</span><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-vmdataset">validmind.vm_models.VMDataset</a></span>):
 
 :::
 
@@ -80,7 +80,7 @@ The testing mechanism utilizes two in-built functions of pandas dataframes: `des
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">get_summary_statistics_categorical</span>(<span class="params"><span class="n">df</span><span class="muted">,</span></span><span class="params"><span class="n">categorical_fields</span></span>)
+<span class="kw">def</span><span class="name">get_summary_statistics_categorical</span>(<span class="params"><span class="n">df</span><span class="muted">,</span></span><span class="params"><span class="n">categorical_fields</span></span>):
 
 :::
 
@@ -92,7 +92,7 @@ The testing mechanism utilizes two in-built functions of pandas dataframes: `des
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">get_summary_statistics_numerical</span>(<span class="params"><span class="n">df</span><span class="muted">,</span></span><span class="params"><span class="n">numerical_fields</span></span>)
+<span class="kw">def</span><span class="name">get_summary_statistics_numerical</span>(<span class="params"><span class="n">df</span><span class="muted">,</span></span><span class="params"><span class="n">numerical_fields</span></span>):
 
 :::
 
@@ -104,7 +104,7 @@ The testing mechanism utilizes two in-built functions of pandas dataframes: `des
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">SkipTestError</span>()
+<span class="kw">class</span><span class="name">SkipTestError</span>:
 
 :::
 

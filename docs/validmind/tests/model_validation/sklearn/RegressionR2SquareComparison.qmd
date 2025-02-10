@@ -12,7 +12,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">adj_r2_score</span>(<span class="params"><span class="n">actual</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="n">{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'np'}, {'cls': 'ExprName', 'name': 'ndarray'}]}</span><span class="muted">,</span></span><span class="params"><span class="n">predicted</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="n">{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'np'}, {'cls': 'ExprName', 'name': 'ndarray'}]}</span><span class="muted">,</span></span><span class="params"><span class="n">rowcount</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">int</span><span class="muted">,</span></span><span class="params"><span class="n">featurecount</span><span class="p">: </span><!-- types.jinja2 - format_type --><span class="nb">int</span></span>)
+<span class="kw">def</span><span class="name">adj_r2_score</span>(<span class="params"><span class="n">actual</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'np'}, {'cls': 'ExprName', 'name': 'ndarray'}]}</span><span class="muted">,</span></span><span class="params"><span class="n">predicted</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'np'}, {'cls': 'ExprName', 'name': 'ndarray'}]}</span><span class="muted">,</span></span><span class="params"><span class="n">rowcount</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">int</span><span class="muted">,</span></span><span class="params"><span class="n">featurecount</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">int</span></span>):
 
 :::
 
@@ -28,7 +28,7 @@ Adjusted R2 Score
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">RegressionR2SquareComparison</span>(<span class="params"><span class="n">datasets</span><span class="muted">,</span></span><span class="params"><span class="n">models</span></span>)
+<span class="kw">def</span><span class="name">RegressionR2SquareComparison</span>(<span class="params"><span class="n">datasets</span><span class="muted">,</span></span><span class="params"><span class="n">models</span></span>):
 
 :::
 

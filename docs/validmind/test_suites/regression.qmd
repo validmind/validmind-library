@@ -14,7 +14,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">RegressionFullSuite</span>()
+<span class="kw">class</span><span class="name">RegressionFullSuite</span>:
 
 :::
 
@@ -32,7 +32,7 @@ Full test suite for regression models.
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">RegressionMetrics</span>()
+<span class="kw">class</span><span class="name">RegressionMetrics</span>:
 
 :::
 
@@ -50,7 +50,7 @@ Test suite for performance metrics of regression metrics
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">RegressionPerformance</span>()
+<span class="kw">class</span><span class="name">RegressionPerformance</span>:
 
 :::
 
@@ -68,7 +68,7 @@ Test suite for regression model performance
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">TabularDataQuality</span>()
+<span class="kw">class</span><span class="name">TabularDataQuality</span>:
 
 :::
 
@@ -86,7 +86,7 @@ Test suite for data quality on tabular datasets
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">TabularDatasetDescription</span>()
+<span class="kw">class</span><span class="name">TabularDatasetDescription</span>:
 
 :::
 

@@ -18,7 +18,7 @@ Test suites for NLP models
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">NLPClassifierFullSuite</span>()
+<span class="kw">class</span><span class="name">NLPClassifierFullSuite</span>:
 
 :::
 
@@ -36,7 +36,7 @@ Full test suite for NLP classification models.
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">ClassifierDiagnosis</span>()
+<span class="kw">class</span><span class="name">ClassifierDiagnosis</span>:
 
 :::
 
@@ -54,7 +54,7 @@ Test suite for sklearn classifier model diagnosis tests
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">ClassifierMetrics</span>()
+<span class="kw">class</span><span class="name">ClassifierMetrics</span>:
 
 :::
 
@@ -72,7 +72,7 @@ Test suite for sklearn classifier metrics
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">ClassifierPerformance</span>()
+<span class="kw">class</span><span class="name">ClassifierPerformance</span>:
 
 :::
 
@@ -90,7 +90,7 @@ Test suite for sklearn classifier models
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">TextDataQuality</span>()
+<span class="kw">class</span><span class="name">TextDataQuality</span>:
 
 :::
 

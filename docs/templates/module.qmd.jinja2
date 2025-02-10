@@ -106,12 +106,10 @@ toc-expand: 4
 {% if member.kind == "class" or (member.kind == "alias" and member.target_path and member.target_path.split(".")[-1][0].isupper()) %}
 {% set target = resolve_alias(resolved, full_data) %}
 
+<!-- module.qmd.jinja2 -->
 ## <span class='muted'>class</span> {{ member.name }}
 
-<!-- module.qmd.jinja2 -->
-
 {{ signatures.render_signature(target) }}
-
 
 {% if target.docstring %}
 {{ doc.format_docstring(target.docstring) }}
@@ -121,9 +119,12 @@ toc-expand: 4
 {% for method_name, method in target.members.items() %}
 {% if method.kind == "function" and (not method_name.startswith('_') or method_name in ['__init__']) %}
 
+<!-- module.qmd.jinja2 -->
 ### {{ member.name if method_name == '__init__' else method_name }}<span class='muted'>()</span>
 
-{{ signatures.render_signature(method) }}
+{% set method_with_parent = method %}
+{% set _ = method_with_parent.update({"parent": {"name": member.name}}) %}
+{{ signatures.render_signature(method_with_parent) }}
 
 {% if method.docstring %}
 {{ doc.format_docstring(method.docstring) }}

@@ -14,7 +14,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">Duplicates</span>(<span class="params"><span class="n">dataset</span><span class="muted">,</span></span><span class="params"><span class="n">min_threshold</span><span class="o"> = </span><span class="kc">1</span></span>)
+<span class="kw">def</span><span class="name">Duplicates</span>(<span class="params"><span class="n">dataset</span><span class="muted">,</span></span><span class="params"><span class="n">min_threshold</span><span class="o">=</span><span class="kc">1</span></span>):
 
 :::
 
