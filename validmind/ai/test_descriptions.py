@@ -7,6 +7,8 @@ import os
 from concurrent.futures import ThreadPoolExecutor
 from typing import List, Optional, Union
 
+import tiktoken
+
 from ..client_config import client_config
 from ..logging import get_logger
 from ..utils import NumpyEncoder, md_to_html, test_id_to_name
@@ -33,6 +35,25 @@ def _get_llm_global_context():
 
     # Only use context if it's enabled and not empty
     return context if context_enabled and context else None
+
+
+def _truncate_summary(summary: str, max_tokens: int = 100_000):
+    if len(summary) < max_tokens:
+        # since string itself is less than max_tokens, definitely small enough
+        return summary
+
+    # TODO: better context length handling
+    encoding = tiktoken.encoding_for_model("gpt-4o")
+    summary_tokens = encoding.encode(summary)
+
+    if len(summary_tokens) > max_tokens:
+        summary = (
+            encoding.decode(summary_tokens[:max_tokens])
+            + "...[truncated]"
+            + encoding.decode(summary_tokens[-100:])
+        )
+
+    return summary
 
 
 def generate_description(
@@ -107,7 +128,13 @@ def background_generate_description(
                 title=title,
             )
         except Exception as e:
-            logger.error(f"Failed to generate description: {e}")
+            if "maximum context length" in str(e):
+                logger.warning(
+                    f"Test result {test_id} is too large to generate a description"
+                )
+            else:
+                logger.warning(f"Failed to generate description for {test_id}: {e}")
+            logger.warning(f"Using default description for {test_id}")
 
             return test_description
 
