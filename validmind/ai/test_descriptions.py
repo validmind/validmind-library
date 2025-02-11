@@ -48,8 +48,8 @@ def _truncate_summary(summary: str, test_id: str, max_tokens: int = 100_000):
 
     if len(summary_tokens) > max_tokens:
         logger.warning(
-            "Truncating test result due to context length restrictions..."
-            f"Generated description for {test_id} may be innacurate"
+            f"Truncating {test_id} due to context length restrictions..."
+            " Generated description may be innacurate"
         )
         summary = (
             encoding.decode(summary_tokens[:max_tokens])
