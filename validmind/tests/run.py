@@ -3,11 +3,11 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 import platform
+import pprint
 import subprocess
 import time
 from datetime import datetime
 from inspect import getdoc
-import pprint
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 from uuid import uuid4
 
