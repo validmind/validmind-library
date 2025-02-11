@@ -37,7 +37,7 @@ def _get_llm_global_context():
     return context if context_enabled and context else None
 
 
-def _truncate_summary(summary: str, max_tokens: int = 100_000):
+def _truncate_summary(summary: str, test_id: str, max_tokens: int = 100_000):
     if len(summary) < max_tokens:
         # since string itself is less than max_tokens, definitely small enough
         return summary
@@ -47,6 +47,10 @@ def _truncate_summary(summary: str, max_tokens: int = 100_000):
     summary_tokens = encoding.encode(summary)
 
     if len(summary_tokens) > max_tokens:
+        logger.warning(
+            "Truncating test result due to context length restrictions..."
+            f"Generated description for {test_id} may be innacurate"
+        )
         summary = (
             encoding.decode(summary_tokens[:max_tokens])
             + "...[truncated]"
@@ -100,7 +104,7 @@ def generate_description(
             "test_name": test_name,
             "test_description": test_description,
             "title": title,
-            "summary": summary,
+            "summary": _truncate_summary(summary, test_id),
             "figures": [
                 figure._get_b64_url() for figure in ([] if tables else figures)
             ],
