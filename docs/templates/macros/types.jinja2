@@ -44,6 +44,11 @@
     {%- else -%}
       <span class="n">{{ type.name }}</span>
     {%- endif -%}
+  {%- elif type.cls == "ExprList" -%}
+    {%- for elem in type.elements -%}
+      {{ format_type(elem, module, add_links) }}
+      {%- if not loop.last -%}<span class="p">, </span>{%- endif -%}
+    {%- endfor -%}
   {%- elif type.cls == "ExprTuple" -%}
     {%- for elem in type.elements -%}
       {{ format_type(elem, module, add_links) }}
