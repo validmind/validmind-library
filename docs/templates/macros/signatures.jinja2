@@ -23,7 +23,7 @@
     {%- endif -%}
   {%- endfor -%}
   {%- for param in params -%}
-    <span class="{{ 'param' if member.kind == 'class' or member.parent is defined or member.decorators is defined else 'params' }}">
+    <span class="{{ 'param' if member.kind == 'class' or member.parent is defined or (member.parameters | length <= 1) else 'params' }}">
     {%- if param.name == "self" -%}
       <span class="bp">self</span>
     {%- else -%}
