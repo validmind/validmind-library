@@ -1,0 +1,90 @@
+---
+title: "[validmind](/reference/validmind.html).RobustnessDiagnosis"
+sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
+# module.qmd.jinja2
+---
+
+## get_logger<span class='muted'>()</span>
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">get_logger</span>(<span class="params"><span class="n">name</span><span class="o">=</span><span class="s1">'validmind'</span><span class="muted">,</span></span><span class="params"><span class="n">log_level</span><span class="o">=</span><span class="kc">None</span></span>):
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Get a logger for the given module name
+
+<!-- function.qmd.jinja2 -->
+
+## RobustnessDiagnosis[()]{.muted}
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">RobustnessDiagnosis</span>(<span class="params"><span class="n">datasets</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">List</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="n">VMDataset</span><span class="p">\]</span><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">VMModel</span><span class="muted">,</span></span><span class="params"><span class="n">metric</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">scaling_factor_std_dev_list</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">List</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="nb">float</span><span class="p">\]</span><span class="o">=</span><span class="kc">{'cls': 'ExprName', 'name': 'DEFAULT_STD_DEV_LIST'}</span><span class="muted">,</span></span><span class="params"><span class="n">performance_decay_threshold</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">float</span><span class="o">=</span><span class="kc">{'cls': 'ExprName', 'name': 'DEFAULT_DECAY_THRESHOLD'}</span></span>):
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Assesses the robustness of a machine learning model by evaluating performance decay under noisy conditions.
+
+### Purpose
+
+The Robustness Diagnosis test aims to evaluate the resilience of a machine learning model when subjected to perturbations or noise in its input data. This is essential for understanding the model's ability to handle real-world scenarios where data may be imperfect or corrupted.
+
+### Test Mechanism
+
+This test introduces Gaussian noise to the numeric input features of the datasets at varying scales of standard deviation. The performance of the model is then measured using a specified metric. The process includes:
+
+- Adding Gaussian noise to numerical input features based on scaling factors.
+- Evaluating the model's performance on the perturbed data using metrics like AUC for classification tasks and MSE for regression tasks.
+- Aggregating and plotting the results to visualize performance decay relative to perturbation size.
+
+### Signs of High Risk
+
+- A significant drop in performance metrics with minimal noise.
+- Performance decay values exceeding the specified threshold.
+- Consistent failure to meet performance standards across multiple perturbation scales.
+
+### Strengths
+
+- Provides insights into the model's robustness against noisy or corrupted data.
+- Utilizes a variety of performance metrics suitable for both classification and regression tasks.
+- Visualization helps in understanding the extent of performance degradation.
+
+### Limitations
+
+- Gaussian noise might not adequately represent all types of real-world data perturbations.
+- Performance thresholds are somewhat arbitrary and might need tuning.
+- The test may not account for more complex or unstructured noise patterns that could affect model robustness.
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} MissingOrInvalidModelPredictFnError
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">MissingOrInvalidModelPredictFnError</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+When the pytorch model is missing a predict function or its predict
+
+method does not have the expected arguments.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note

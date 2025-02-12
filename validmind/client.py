@@ -69,13 +69,13 @@ def init_dataset(
     - Torch TensorDataset
 
     Args:
-        dataset : dataset from various python libraries
+        dataset: Dataset from various Python libraries
         model (VMModel): ValidMind model object
         targets (vm.vm.DatasetTargets): A list of target variables
         target_column (str): The name of the target column in the dataset
         feature_columns (list): A list of names of feature columns in the dataset
         extra_columns (dictionary):  A dictionary containing the names of the
-        prediction_column and group_by_columns in the dataset
+            prediction_column and group_by_columns in the dataset
         class_labels (dict): A list of class labels for classification problems
         type (str): The type of dataset (one of DATASET_TYPES)
         input_id (str): The input ID for the dataset (e.g. "my_dataset"). By default,
@@ -278,7 +278,7 @@ def init_r_model(
     """
     Initializes a VM Model for an R model
 
-    R models must be saved to disk and the filetype depends on the model type...
+    R models must be saved to disk and the filetype depends on the model type.
     Currently we support the following model types:
 
     - LogisticRegression `glm` model in R: saved as an RDS file with `saveRDS`
@@ -380,9 +380,9 @@ def run_test_suite(
         send (bool, optional): Whether to post the test results to the API. send=False
             is useful for testing. Defaults to True.
         fail_fast (bool, optional): Whether to stop running tests after the first failure. Defaults to False.
-        inputs (dict, optional): A dictionary of test inputs to pass to the TestSuite e.g. `model`, `dataset`
-            `models` etc. These inputs will be accessible by any test in the test suite. See the test
-            documentation or `vm.describe_test()` for more details on the inputs required for each.
+        inputs (dict, optional): A dictionary of test inputs to pass to the TestSuite, such as `model`, `dataset`
+            `models`, etc. These inputs will be accessible by any test in the test suite. See the test
+            documentation or `vm.describe_test()` for more details on the inputs required for each. Defaults to None.
         **kwargs: backwards compatibility for passing in test inputs using keyword arguments
 
     Raises:

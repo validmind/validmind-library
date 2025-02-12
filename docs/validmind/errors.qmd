@@ -1,0 +1,847 @@
+---
+title: "[validmind](/reference/validmind.html).errors"
+sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
+# module.qmd.jinja2
+---
+
+<!-- docstring.jinja2 -->
+
+This module contains all the custom errors that are used in the ValidMind Library.
+
+The following base errors are defined for others:
+
+- BaseError
+- APIRequestError
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} APIRequestError
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">APIRequestError</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Generic error for API request errors that are not known.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} BaseError
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">BaseError</span>:
+
+:::
+
+**Inherited members**
+
+- **From builtins.BaseException**: with_traceback, add_note
+
+### [description[()]{.muted}](#description)
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">description</span>(<span class="params"><span class="n">\*args</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>):
+
+:::
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} GetTestSuiteError
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">GetTestSuiteError</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+When the test suite could not be found.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} InitializeTestSuiteError
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">InitializeTestSuiteError</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+When the test suite was found but could not be initialized.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} InvalidAPICredentialsError
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">InvalidAPICredentialsError</span>:
+
+:::
+
+**Inherited members**
+
+- **From APIRequestError**: [class APIRequestError[()]{.muted}](#class-apirequesterror)
+- **From builtins.BaseException**: with_traceback, add_note
+
+### [description[()]{.muted}](#description)
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">description</span>(<span class="params"><span class="n">\*args</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>):
+
+:::
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} InvalidContentIdPrefixError
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">InvalidContentIdPrefixError</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+When an invalid text content_id is sent to the API.
+
+**Inherited members**
+
+- **From APIRequestError**: [class APIRequestError[()]{.muted}](#class-apirequesterror)
+- **From builtins.BaseException**: with_traceback, add_note
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} InvalidInputError
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">InvalidInputError</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+When an invalid input object.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} InvalidMetricResultsError
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">InvalidMetricResultsError</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+When an invalid metric results object is sent to the API.
+
+**Inherited members**
+
+- **From APIRequestError**: [class APIRequestError[()]{.muted}](#class-apirequesterror)
+- **From builtins.BaseException**: with_traceback, add_note
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} InvalidProjectError
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">InvalidProjectError</span>:
+
+:::
+
+**Inherited members**
+
+- **From APIRequestError**: [class APIRequestError[()]{.muted}](#class-apirequesterror)
+- **From builtins.BaseException**: with_traceback, add_note
+
+### [description[()]{.muted}](#description)
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">description</span>(<span class="params"><span class="n">\*args</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>):
+
+:::
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} InvalidRequestBodyError
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">InvalidRequestBodyError</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+When a POST/PUT request is made with an invalid request body.
+
+**Inherited members**
+
+- **From APIRequestError**: [class APIRequestError[()]{.muted}](#class-apirequesterror)
+- **From builtins.BaseException**: with_traceback, add_note
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} InvalidTestParametersError
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">InvalidTestParametersError</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+When an invalid parameters for the test.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} InvalidTestResultsError
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">InvalidTestResultsError</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+When an invalid test results object is sent to the API.
+
+**Inherited members**
+
+- **From APIRequestError**: [class APIRequestError[()]{.muted}](#class-apirequesterror)
+- **From builtins.BaseException**: with_traceback, add_note
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} InvalidTextObjectError
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">InvalidTextObjectError</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+When an invalid Metadat (Text) object is sent to the API.
+
+**Inherited members**
+
+- **From APIRequestError**: [class APIRequestError[()]{.muted}](#class-apirequesterror)
+- **From builtins.BaseException**: with_traceback, add_note
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} InvalidValueFormatterError
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">InvalidValueFormatterError</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+When an invalid value formatter is provided when serializing results.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} InvalidXGBoostTrainedModelError
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">InvalidXGBoostTrainedModelError</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+When an invalid XGBoost trained model is used when calling init_r_model.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} LoadTestError
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">LoadTestError</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Exception raised when an error occurs while loading a test
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} MismatchingClassLabelsError
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">MismatchingClassLabelsError</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+When the class labels found in the dataset don't match the provided target labels.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} MissingAPICredentialsError
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">MissingAPICredentialsError</span>:
+
+:::
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note
+
+### [description[()]{.muted}](#description)
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">description</span>(<span class="params"><span class="n">\*args</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>):
+
+:::
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} MissingCacheResultsArgumentsError
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">MissingCacheResultsArgumentsError</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+When the cache_results function is missing arguments.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} MissingClassLabelError
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">MissingClassLabelError</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+When the one or more class labels are missing from provided dataset targets.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} MissingDependencyError
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">MissingDependencyError</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+When a required dependency is missing.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} MissingDocumentationTemplate
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">MissingDocumentationTemplate</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+When the client config is missing the documentation template.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} MissingModelIdError
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">MissingModelIdError</span>:
+
+:::
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note
+
+### [description[()]{.muted}](#description)
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">description</span>(<span class="params"><span class="n">\*args</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>):
+
+:::
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} MissingOrInvalidModelPredictFnError
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">MissingOrInvalidModelPredictFnError</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+When the pytorch model is missing a predict function or its predict
+
+method does not have the expected arguments.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} MissingRequiredTestInputError
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">MissingRequiredTestInputError</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+When a required test context variable is missing.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} MissingRExtrasError
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">MissingRExtrasError</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+When the R extras have not been installed.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note
+
+### [description[()]{.muted}](#description)
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">description</span>(<span class="params"><span class="n">\*args</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>):
+
+:::
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} MissingTextContentIdError
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">MissingTextContentIdError</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+When a Text object is sent to the API without a content_id.
+
+**Inherited members**
+
+- **From APIRequestError**: [class APIRequestError[()]{.muted}](#class-apirequesterror)
+- **From builtins.BaseException**: with_traceback, add_note
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} MissingTextContentsError
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">MissingTextContentsError</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+When a Text object is sent to the API without a "text" attribute.
+
+**Inherited members**
+
+- **From APIRequestError**: [class APIRequestError[()]{.muted}](#class-apirequesterror)
+- **From builtins.BaseException**: with_traceback, add_note
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} SkipTestError
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">SkipTestError</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Useful error to throw when a test cannot be executed.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} TestInputInvalidDatasetError
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">TestInputInvalidDatasetError</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+When an invalid dataset is used in a test context.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} UnsupportedColumnTypeError
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">UnsupportedColumnTypeError</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+When an unsupported column type is found on a dataset.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} UnsupportedDatasetError
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">UnsupportedDatasetError</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+When an unsupported dataset is used.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} UnsupportedFigureError
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">UnsupportedFigureError</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+When an unsupported figure object is constructed.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} UnsupportedModelError
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">UnsupportedModelError</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+When an unsupported model is used.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} UnsupportedModelForSHAPError
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">UnsupportedModelForSHAPError</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+When an unsupported model is used for SHAP importance.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} UnsupportedRModelError
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">UnsupportedRModelError</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+When an unsupported R model is used.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From builtins.BaseException**: with_traceback, add_note
+
+<!-- function.qmd.jinja2 -->
+
+## raise_api_error[()]{.muted}
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">raise_api_error</span>(<span class="param"><span class="n">error_string</span></span>):
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Safely try to parse JSON from the response message in case the API
+
+returns a non-JSON string or if the API returns a non-standard error
+
+<!-- function.qmd.jinja2 -->
+
+## should_raise_on_fail_fast[()]{.muted}
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">should_raise_on_fail_fast</span>(<span class="param"><span class="n">error</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><span class="nb">bool</span></span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Determine whether an error should be raised when fail_fast is True.

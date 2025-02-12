@@ -1,0 +1,12 @@
+---
+title: "[validmind](/reference/validmind.html).__version__"
+sidebar: validmind-reference
+---
+
+<!-- version.qmd.jinja2 -->
+
+::: {.signature}
+
+<span class="name">2.8.9</span>
+
+:::

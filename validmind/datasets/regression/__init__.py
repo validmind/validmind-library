@@ -17,8 +17,11 @@ def identify_frequencies(df):
     """
     Identify the frequency of each series in the DataFrame.
 
-    :param df: Time-series DataFrame
-    :return: DataFrame with two columns: 'Variable' and 'Frequency'
+    Args:
+        df: Time-series DataFrame.
+
+    Returns:
+        DataFrame with two columns: "Variable" and "Frequency".
     """
     frequencies = []
     for column in df.columns:

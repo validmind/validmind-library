@@ -1,0 +1,141 @@
+---
+title: "[validmind](/reference/validmind.html).classifier"
+sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
+# module.qmd.jinja2
+---
+
+<!-- docstring.jinja2 -->
+
+Test suites for sklearn-compatible classifier models
+
+Ideal setup is to have the API client to read a custom test suite from the project's configuration
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} ClassifierDiagnosis
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">ClassifierDiagnosis</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Test suite for sklearn classifier model diagnosis tests
+
+**Inherited members**
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} ClassifierFullSuite
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">ClassifierFullSuite</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Full test suite for binary classification models.
+
+**Inherited members**
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} ClassifierMetrics
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">ClassifierMetrics</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Test suite for sklearn classifier metrics
+
+**Inherited members**
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} ClassifierModelValidation
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">ClassifierModelValidation</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Test suite for binary classification models.
+
+**Inherited members**
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} ClassifierPerformance
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">ClassifierPerformance</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Test suite for sklearn classifier models
+
+**Inherited members**
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} TabularDataQuality
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">TabularDataQuality</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Test suite for data quality on tabular datasets
+
+**Inherited members**
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} TabularDatasetDescription
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">TabularDatasetDescription</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Test suite to extract metadata and descriptive
+
+statistics from a tabular dataset
+
+**Inherited members**

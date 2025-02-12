@@ -105,8 +105,11 @@ def load_data(source="online", verbose=True):
     """
     Load data from either an online source or offline files, automatically dropping specified columns for offline data.
 
-    :param source: 'online' for online data, 'offline' for offline files. Defaults to 'online'.
-    :return: DataFrame containing the loaded data.
+    Args:
+        source: 'online' for online data, 'offline' for offline files. Defaults to 'online'.
+
+    Returns:
+        DataFrame: DataFrame containing the loaded data.
     """
 
     if source == "online":
