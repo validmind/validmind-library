@@ -138,7 +138,7 @@ Returns a list of all available test suites
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">register_test_suite</span>(<span class="param"><span class="n">suite_id</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="muted">,</span></span><span class="param"><span class="n">suite</span><span class="p">:</span><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-testsuite">validmind.vm_models.TestSuite</a></span>):
+<span class="kw">def</span><span class="name">register_test_suite</span>(<span class="param"><span class="n">suite_id</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="muted">,</span></span><span class="param"><span class="n">suite</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">TestSuite</span></span>):
 
 :::
 

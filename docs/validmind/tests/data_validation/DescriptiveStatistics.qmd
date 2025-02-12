@@ -36,7 +36,7 @@ We do this for display purposes before sending data to ValidMind. Rules:
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">DescriptiveStatistics</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-vmdataset">validmind.vm_models.VMDataset</a></span>):
+<span class="kw">def</span><span class="name">DescriptiveStatistics</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">VMDataset</span></span>):
 
 :::
 
