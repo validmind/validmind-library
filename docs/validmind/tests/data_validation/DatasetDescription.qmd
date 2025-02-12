@@ -12,7 +12,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">get_logger</span>(<span class="param"><span class="n">name</span><span class="o">=</span><span class="s1">'validmind'</span><span class="muted">,</span></span><span class="param"><span class="n">log_level</span><span class="o">=</span><span class="kc">None</span></span>):
+<span class="kw">def</span><span class="name">get_logger</span>(<span class="params"><span class="n">name</span><span class="o">=</span><span class="s1">'validmind'</span><span class="muted">,</span></span><span class="params"><span class="n">log_level</span><span class="o">=</span><span class="kc">None</span></span>):
 
 :::
 
@@ -74,7 +74,7 @@ The DatasetDescription class accomplishes the purpose as follows: firstly, the t
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">describe_column</span>(<span class="param"><span class="n">df</span><span class="muted">,</span></span><span class="param"><span class="n">column</span></span>):
+<span class="kw">def</span><span class="name">describe_column</span>(<span class="params"><span class="n">df</span><span class="muted">,</span></span><span class="params"><span class="n">column</span></span>):
 
 :::
 
@@ -90,7 +90,7 @@ Gets descriptive statistics for a single column in a Pandas DataFrame.
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">get_column_histograms</span>(<span class="param"><span class="n">df</span><span class="muted">,</span></span><span class="param"><span class="n">column</span><span class="muted">,</span></span><span class="param"><span class="n">type\_</span></span>):
+<span class="kw">def</span><span class="name">get_column_histograms</span>(<span class="params"><span class="n">df</span><span class="muted">,</span></span><span class="params"><span class="n">column</span><span class="muted">,</span></span><span class="params"><span class="n">type\_</span></span>):
 
 :::
 
@@ -110,7 +110,7 @@ Will be used in favor of \_get_histogram in the future
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">get_numerical_histograms</span>(<span class="param"><span class="n">df</span><span class="muted">,</span></span><span class="param"><span class="n">column</span></span>):
+<span class="kw">def</span><span class="name">get_numerical_histograms</span>(<span class="params"><span class="n">df</span><span class="muted">,</span></span><span class="params"><span class="n">column</span></span>):
 
 :::
 

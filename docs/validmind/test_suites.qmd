@@ -43,7 +43,7 @@ Format a pandas DataFrame for display purposes
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">get_logger</span>(<span class="param"><span class="n">name</span><span class="o">=</span><span class="s1">'validmind'</span><span class="muted">,</span></span><span class="param"><span class="n">log_level</span><span class="o">=</span><span class="kc">None</span></span>):
+<span class="kw">def</span><span class="name">get_logger</span>(<span class="params"><span class="n">name</span><span class="o">=</span><span class="s1">'validmind'</span><span class="muted">,</span></span><span class="params"><span class="n">log_level</span><span class="o">=</span><span class="kc">None</span></span>):
 
 :::
 
@@ -81,7 +81,7 @@ Convert a test ID to a human-readable name.
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">describe_suite</span>(<span class="param"><span class="n">test_suite_id</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="muted">,</span></span><span class="param"><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span></span>):
+<span class="kw">def</span><span class="name">describe_suite</span>(<span class="params"><span class="n">test_suite_id</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span></span>):
 
 :::
 
@@ -138,7 +138,7 @@ Returns a list of all available test suites
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">register_test_suite</span>(<span class="param"><span class="n">suite_id</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="muted">,</span></span><span class="param"><span class="n">suite</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">TestSuite</span></span>):
+<span class="kw">def</span><span class="name">register_test_suite</span>(<span class="params"><span class="n">suite_id</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">suite</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">TestSuite</span></span>):
 
 :::
 

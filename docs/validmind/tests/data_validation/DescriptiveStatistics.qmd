@@ -80,7 +80,7 @@ The testing mechanism utilizes two in-built functions of pandas dataframes: `des
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">get_summary_statistics_categorical</span>(<span class="param"><span class="n">df</span><span class="muted">,</span></span><span class="param"><span class="n">categorical_fields</span></span>):
+<span class="kw">def</span><span class="name">get_summary_statistics_categorical</span>(<span class="params"><span class="n">df</span><span class="muted">,</span></span><span class="params"><span class="n">categorical_fields</span></span>):
 
 :::
 
@@ -92,7 +92,7 @@ The testing mechanism utilizes two in-built functions of pandas dataframes: `des
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">get_summary_statistics_numerical</span>(<span class="param"><span class="n">df</span><span class="muted">,</span></span><span class="param"><span class="n">numerical_fields</span></span>):
+<span class="kw">def</span><span class="name">get_summary_statistics_numerical</span>(<span class="params"><span class="n">df</span><span class="muted">,</span></span><span class="params"><span class="n">numerical_fields</span></span>):
 
 :::
 

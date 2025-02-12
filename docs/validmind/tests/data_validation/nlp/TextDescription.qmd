@@ -14,7 +14,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">create_metrics_df</span>(<span class="param"><span class="n">df</span><span class="muted">,</span></span><span class="param"><span class="n">text_column</span><span class="muted">,</span></span><span class="param"><span class="n">unwanted_tokens</span><span class="muted">,</span></span><span class="param"><span class="n">lang</span></span>):
+<span class="kw">def</span><span class="name">create_metrics_df</span>(<span class="params"><span class="n">df</span><span class="muted">,</span></span><span class="params"><span class="n">text_column</span><span class="muted">,</span></span><span class="params"><span class="n">unwanted_tokens</span><span class="muted">,</span></span><span class="params"><span class="n">lang</span></span>):
 
 :::
 
@@ -26,7 +26,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">TextDescription</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">VMDataset</span><span class="muted">,</span></span><span class="param"><span class="n">unwanted_tokens</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">set</span><span class="o">=</span><span class="kc">{'cls': 'ExprSet', 'elements': ["'s'", '"s'"', "'mr'", "'ms'", "'mrs'", "'dr'", '"'s"', "' '", '"''"', "'dollar'", "'us'", "'\`\`'"]}</span><span class="muted">,</span></span><span class="param"><span class="n">lang</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o">=</span><span class="s1">'english'</span></span>):
+<span class="kw">def</span><span class="name">TextDescription</span>(<span class="params"><span class="n">dataset</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">VMDataset</span><span class="muted">,</span></span><span class="params"><span class="n">unwanted_tokens</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">set</span><span class="o">=</span><span class="kc">{'cls': 'ExprSet', 'elements': ["'s'", '"s'"', "'mr'", "'ms'", "'mrs'", "'dr'", '"'s"', "' '", '"''"', "'dollar'", "'us'", "'\`\`'"]}</span><span class="muted">,</span></span><span class="params"><span class="n">lang</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o">=</span><span class="s1">'english'</span></span>):
 
 :::
 

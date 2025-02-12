@@ -12,7 +12,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">get_logger</span>(<span class="param"><span class="n">name</span><span class="o">=</span><span class="s1">'validmind'</span><span class="muted">,</span></span><span class="param"><span class="n">log_level</span><span class="o">=</span><span class="kc">None</span></span>):
+<span class="kw">def</span><span class="name">get_logger</span>(<span class="params"><span class="n">name</span><span class="o">=</span><span class="s1">'validmind'</span><span class="muted">,</span></span><span class="params"><span class="n">log_level</span><span class="o">=</span><span class="kc">None</span></span>):
 
 :::
 
@@ -28,7 +28,7 @@ Get a logger for the given module name
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">RegressionModelForecastPlot</span>(<span class="param"><span class="n">model</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">VMModel</span><span class="muted">,</span></span><span class="param"><span class="n">dataset</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">VMDataset</span><span class="muted">,</span></span><span class="param"><span class="n">start_date</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Union</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="p">, </span><!-- types.jinja2 - format_type --><span class="n">None</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">end_date</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Union</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="p">, </span><!-- types.jinja2 - format_type --><span class="n">None</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span></span>):
+<span class="kw">def</span><span class="name">RegressionModelForecastPlot</span>(<span class="params"><span class="n">model</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">VMModel</span><span class="muted">,</span></span><span class="params"><span class="n">dataset</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">VMDataset</span><span class="muted">,</span></span><span class="params"><span class="n">start_date</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Union</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="p">, </span><!-- types.jinja2 - format_type --><span class="n">None</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">end_date</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Union</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="p">, </span><!-- types.jinja2 - format_type --><span class="n">None</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span></span>):
 
 :::
 

@@ -12,7 +12,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">call_model</span>(<span class="param"><span class="n">system_prompt</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="muted">,</span></span><span class="param"><span class="n">user_prompt</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="muted">,</span></span><span class="param"><span class="n">temperature</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">float</span><span class="o">=</span><span class="kc">0.0</span><span class="muted">,</span></span><span class="param"><span class="n">seed</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">int</span><span class="o">=</span><span class="kc">42</span></span>):
+<span class="kw">def</span><span class="name">call_model</span>(<span class="params"><span class="n">system_prompt</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">user_prompt</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">temperature</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">float</span><span class="o">=</span><span class="kc">0.0</span><span class="muted">,</span></span><span class="params"><span class="n">seed</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">int</span><span class="o">=</span><span class="kc">42</span></span>):
 
 :::
 
@@ -72,7 +72,7 @@ Explanation: <some-explanation>" -> 8
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">Specificity</span>(<span class="param"><span class="n">model</span><span class="muted">,</span></span><span class="param"><span class="n">min_threshold</span><span class="o">=</span><span class="kc">7</span></span>):
+<span class="kw">def</span><span class="name">Specificity</span>(<span class="params"><span class="n">model</span><span class="muted">,</span></span><span class="params"><span class="n">min_threshold</span><span class="o">=</span><span class="kc">7</span></span>):
 
 :::
 

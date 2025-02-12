@@ -14,7 +14,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">AdjustedMutualInformation</span>(<span class="param"><span class="n">model</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">VMModel</span><span class="muted">,</span></span><span class="param"><span class="n">dataset</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">VMDataset</span></span>):
+<span class="kw">def</span><span class="name">AdjustedMutualInformation</span>(<span class="params"><span class="n">model</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">VMModel</span><span class="muted">,</span></span><span class="params"><span class="n">dataset</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">VMDataset</span></span>):
 
 :::
 
