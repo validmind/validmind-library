@@ -14,7 +14,7 @@
 </span>
 {%- endif -%}
 <span class="name">{{ member.parent.name if (member.name == "__init__" and member.parent is defined) else member.name }}</span>
-{%- if member.kind == "class" -%}:
+{%- if member.kind == "class" -%}
 {%- elif member.parameters -%}({{- '' -}}
   {%- set params = [] -%}
   {%- for param in member.parameters -%}
@@ -23,16 +23,16 @@
     {%- endif -%}
   {%- endfor -%}
   {%- for param in params -%}
-    <span class="{{ 'param' if member.kind == 'class' or member.parent is defined else 'params' }}">
+    <span class="{{ 'param' if member.kind == 'class' or member.parent is defined or member.decorators is defined else 'params' }}">
     {%- if param.name == "self" -%}
       <span class="bp">self</span>
     {%- else -%}
-      <span class="n">{{ "**" if param.name == "kwargs" else "" }}{{ param.name }}</span>
+      <span class="n">{{ "**" if param.name == "kwargs" else "*" if param.kind == "variadic positional" else "" }}{{ param.name }}</span>
     {%- endif -%}
     {%- if param.annotation -%}
       <span class="p">:</span>{{ format_type(param.annotation, add_links=true) }}
     {%- endif -%}
-    {%- if param.default is not none and param.name != "kwargs" -%}
+    {%- if param.default is not none and param.name != "kwargs" and param.kind != "variadic positional" -%}
       <span class="o">=</span>
       {%- if param.default is string and param.default.startswith("'") and param.default.endswith("'") -%}
         <span class="s1">{{ param.default }}</span>
@@ -49,9 +49,8 @@
   <span class="p"> → </span><span class="return-annotation">
     {{- format_type(member.returns, add_links=true) if member.returns else 'Any' -}}
   </span>
-{% endif %}
-{%- if not (member.name == "__init__") -%}:{%- endif -%}
-{%- endif +%}
+{%- endif -%}
+{%- if not (member.name == "__init__") -%}:{%- endif +%}
 
 :::
 {%- endmacro -%}
