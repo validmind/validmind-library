@@ -50,19 +50,24 @@ class TestTimeSeriesPredictionsPlot(unittest.TestCase):
 
     def test_return_types(self):
         """Test if function returns a tuple with a Plotly figure and raw data."""
-        result = TimeSeriesPredictionsPlot(self.vm_dataset, self.vm_model)
-        self.assertIsInstance(result, go.Figure)
+        fig, raw_data = TimeSeriesPredictionsPlot(self.vm_dataset, self.vm_model)
+
+        # Check if first element is a Plotly figure
+        self.assertIsInstance(fig, go.Figure)
+
+        # Check if second element is a RawData object
+        self.assertIsInstance(raw_data, vm.RawData)
 
     def test_figure_properties(self):
         """Test if figure has expected properties."""
-        fig = TimeSeriesPredictionsPlot(self.vm_dataset, self.vm_model)
+        fig, raw_data = TimeSeriesPredictionsPlot(self.vm_dataset, self.vm_model)
 
         # Check if figure has exactly two traces (Actual and Predicted)
         self.assertEqual(len(fig.data), 2)
 
     def test_data_length(self):
         """Test if the plotted data has correct length."""
-        fig = TimeSeriesPredictionsPlot(self.vm_dataset, self.vm_model)
+        fig, raw_data = TimeSeriesPredictionsPlot(self.vm_dataset, self.vm_model)
 
         # Both traces should have same length as input data
         self.assertEqual(len(fig.data[0].x), len(self.df))
@@ -72,7 +77,7 @@ class TestTimeSeriesPredictionsPlot(unittest.TestCase):
 
     def test_datetime_index(self):
         """Test if x-axis uses datetime values."""
-        fig = TimeSeriesPredictionsPlot(self.vm_dataset, self.vm_model)
+        fig, raw_data = TimeSeriesPredictionsPlot(self.vm_dataset, self.vm_model)
 
         # Check if x values are datetime objects
         self.assertTrue(
