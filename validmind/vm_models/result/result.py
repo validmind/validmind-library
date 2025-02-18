@@ -440,6 +440,9 @@ class TestResult(Result):
             unsafe (bool): If True, log the result even if it contains sensitive data
                 i.e. raw data from input datasets
         """
+
+        self.check_result_id_exist()
+
         if not unsafe:
             for table in self.tables or []:
                 check_for_sensitive_data(table.data, self._get_flat_inputs())
@@ -448,3 +451,24 @@ class TestResult(Result):
             self._validate_section_id_for_block(section_id, position)
 
         run_async(self.log_async, section_id=section_id, position=position)
+
+    def check_result_id_exist(self) -> bool:
+        """Check if the result_id exists in any test block across all sections"""
+        api_client.reload()
+        client_config = api_client.client_config
+
+        # Iterate through all sections
+        for section in client_config.documentation_template["sections"]:
+            blocks = section.get("contents", [])
+            # Check each block in the section
+            for block in blocks:
+                if (
+                    block.get("content_type") == "test"
+                    and block.get("content_id") == self.result_id
+                ):
+                    return True
+
+        logger.info(
+            f"Test driven block with result_id {self.result_id} does not exist in document template"
+        )
+        return False
