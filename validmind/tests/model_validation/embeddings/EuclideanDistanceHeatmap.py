@@ -79,4 +79,6 @@ def EuclideanDistanceHeatmap(
         yaxis_title=yaxis_title,
     )
 
-    return fig, RawData(distance_matrix=distance_matrix)
+    return fig, RawData(
+        distance_matrix=distance_matrix, model=model.input_id, dataset=dataset.input_id
+    )

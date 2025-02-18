@@ -209,5 +209,9 @@ def PopulationStabilityIndex(
             ],
         },
         fig,
-        RawData(psi_raw=psi_results),
+        RawData(
+            psi_raw=psi_results,
+            model=model.input_id,
+            datasets=[datasets[0].input_id, datasets[1].input_id],
+        ),
     )

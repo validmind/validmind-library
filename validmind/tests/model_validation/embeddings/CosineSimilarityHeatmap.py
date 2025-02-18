@@ -81,4 +81,8 @@ def CosineSimilarityHeatmap(
         yaxis_title=yaxis_title,
     )
 
-    return fig, RawData(similarity_matrix=similarity_matrix)
+    return fig, RawData(
+        similarity_matrix=similarity_matrix,
+        model=model.input_id,
+        dataset=dataset.input_id,
+    )

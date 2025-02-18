@@ -14,7 +14,7 @@ from sklearn import metrics
 
 from validmind.errors import MissingOrInvalidModelPredictFnError
 from validmind.logging import get_logger
-from validmind.tests import tags, tasks
+from validmind.tests import RawData, tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 
 logger = get_logger(__name__)
@@ -327,4 +327,11 @@ def RobustnessDiagnosis(
         results_df["Perturbation Size"] == 0.0, "Perturbation Size"
     ] = "Baseline (0.0)"
 
-    return results_df, fig, all(results_df["Passed"])
+    return (
+        results_df,
+        fig,
+        all(results_df["Passed"]),
+        RawData(
+            model=model.input_id, datasets=[dataset.input_id for dataset in datasets]
+        ),
+    )

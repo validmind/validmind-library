@@ -4,7 +4,7 @@
 
 from sklearn.metrics import mean_squared_error, r2_score
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 
 from .statsutils import adj_r2_score
@@ -58,4 +58,6 @@ def RegressionModelSummary(dataset: VMDataset, model: VMModel):
             "MSE": mean_squared_error(y_true, y_pred, squared=True),
             "RMSE": mean_squared_error(y_true, y_pred, squared=False),
         }
-    ]
+    ], RawData(
+        y_true=y_true, y_pred=y_pred, model=model.input_id, dataset=dataset.input_id
+    )

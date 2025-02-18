@@ -111,4 +111,8 @@ def PermutationFeatureImportance(
         height=figure_height,
     )
 
-    return fig, RawData(permutation_importance=pfi_values)
+    return fig, RawData(
+        permutation_importance=pfi_values,
+        model=model.input_id,
+        dataset=dataset.input_id,
+    )
