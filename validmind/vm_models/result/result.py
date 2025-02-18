@@ -452,7 +452,7 @@ class TestResult(Result):
 
         run_async(self.log_async, section_id=section_id, position=position)
 
-    def check_result_id_exist(self) -> bool:
+    def check_result_id_exist(self):
         """Check if the result_id exists in any test block across all sections"""
         api_client.reload()
         client_config = api_client.client_config
@@ -466,9 +466,8 @@ class TestResult(Result):
                     block.get("content_type") == "test"
                     and block.get("content_id") == self.result_id
                 ):
-                    return True
+                    return
 
         logger.info(
             f"Test driven block with result_id {self.result_id} does not exist in document template"
         )
-        return False
