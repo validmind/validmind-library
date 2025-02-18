@@ -10,7 +10,7 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from scipy import stats
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 
 
@@ -201,4 +201,15 @@ def PredictionProbabilitiesHistogramDrift(
             }
         )
 
-    return fig, tables, all_passed
+    return (
+        fig,
+        tables,
+        all_passed,
+        RawData(
+            reference_probabilities=y_prob_ref,
+            monitoring_probabilities=y_prob_mon,
+            model=model.input_id,
+            dataset_reference=datasets[0].input_id,
+            dataset_monitoring=datasets[1].input_id,
+        ),
+    )
