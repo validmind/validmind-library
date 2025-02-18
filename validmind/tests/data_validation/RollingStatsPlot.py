@@ -117,5 +117,3 @@ def RollingStatsPlot(dataset: VMDataset, window_size: int = 12):
             dataset=dataset.input_id,
         ),
     )
-
-    return tuple(returns)
