@@ -336,8 +336,18 @@ class TestResult(Result):
         if cls._client_config_cache is None:
             api_client.reload()
             cls._client_config_cache = api_client.client_config
-        else:
-            return cls._client_config_cache
+
+            if cls._client_config_cache is None:
+                raise ValueError(
+                    "Failed to load client config: api_client.client_config is None"
+                )
+
+            if not hasattr(cls._client_config_cache, "documentation_template"):
+                raise ValueError(
+                    "Invalid client config: missing documentation_template"
+                )
+
+        return cls._client_config_cache
 
     def check_result_id_exist(self):
         """Check if the result_id exists in any test block across all sections"""
