@@ -10,6 +10,7 @@ PR instructions for release notes:
 - `enhancement`
 - `bug`
 - `chore`
+- `breaking-change`
 - `deprecation`
 - `documentation`
 
