@@ -171,6 +171,7 @@ class TestResult(Result):
     metadata: Optional[Dict[str, Any]] = None
     _was_description_generated: bool = False
     _unsafe: bool = False
+    _client_config_cache: Optional[Any] = None
 
     def __post_init__(self):
         if self.ref_id is None:
@@ -329,13 +330,40 @@ class TestResult(Result):
 
         return VBox(widgets)
 
+    @classmethod
+    def _get_client_config(cls):
+        """Get the client config, loading it if not cached"""
+        if cls._client_config_cache is None:
+            api_client.reload()
+            cls._client_config_cache = api_client.client_config
+        else:
+            return cls._client_config_cache
+
+    def check_result_id_exist(self):
+        """Check if the result_id exists in any test block across all sections"""
+        client_config = self._get_client_config()
+
+        # Iterate through all sections
+        for section in client_config.documentation_template["sections"]:
+            blocks = section.get("contents", [])
+            # Check each block in the section
+            for block in blocks:
+                if (
+                    block.get("content_type") == "test"
+                    and block.get("content_id") == self.result_id
+                ):
+                    return
+
+        logger.info(
+            f"Test driven block with result_id {self.result_id} does not exist in model's document"
+        )
+
     def _validate_section_id_for_block(
         self, section_id: str, position: Union[int, None] = None
     ):
         """Validate the section_id exits on the template before logging"""
-        api_client.reload()
+        client_config = self._get_client_config()
         found = False
-        client_config = api_client.client_config
 
         for section in client_config.documentation_template["sections"]:
             if section["id"] == section_id:
@@ -451,23 +479,3 @@ class TestResult(Result):
             self._validate_section_id_for_block(section_id, position)
 
         run_async(self.log_async, section_id=section_id, position=position)
-
-    def check_result_id_exist(self):
-        """Check if the result_id exists in any test block across all sections"""
-        api_client.reload()
-        client_config = api_client.client_config
-
-        # Iterate through all sections
-        for section in client_config.documentation_template["sections"]:
-            blocks = section.get("contents", [])
-            # Check each block in the section
-            for block in blocks:
-                if (
-                    block.get("content_type") == "test"
-                    and block.get("content_id") == self.result_id
-                ):
-                    return
-
-        logger.info(
-            f"Test driven block with result_id {self.result_id} does not exist in document template"
-        )
