@@ -24,7 +24,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">ModelsPerformanceComparison</span>(<span class="params"><span class="n">dataset</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- Mapping --><!-- ExprName --><span class="n">VMDataset</span><span class="muted">,</span></span><span class="params"><span class="n">models</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- Mapping --><!-- types.jinja2 - format_type --><!-- Mapping --><!-- ExprName --><span class="nb">list</span><span class="p">\[</span><!-- types.jinja2 - format_type --><!-- Mapping --><!-- ExprName --><span class="n">VMModel</span><span class="p">\]</span></span>):
+<span class="kw">def</span><span class="name">ModelsPerformanceComparison</span>(<span class="params"><span class="n">dataset</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">VMDataset</span><span class="muted">,</span></span><span class="params"><span class="n">models</span><span class="p">:</span><!-- types.jinja2 - format_type --></span>):
 
 :::
 

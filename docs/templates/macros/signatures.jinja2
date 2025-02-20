@@ -36,6 +36,8 @@
       <span class="o">=</span>
       {%- if param.default is string and param.default.startswith("'") and param.default.endswith("'") -%}
         <span class="s1">{{ param.default }}</span>
+      {%- elif param.default is mapping and param.default.cls is defined -%}
+        {{ format_type(param.default, module, add_links) }}
       {%- else -%}
         <span class="kc">{{ param.default }}</span>
       {%- endif -%}

@@ -838,7 +838,7 @@ returns a non-JSON string or if the API returns a non-standard error
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">should_raise_on_fail_fast</span>(<span class="param"><span class="n">error</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><!-- Mapping --><!-- ExprName --><span class="nb">bool</span></span>:
+<span class="kw">def</span><span class="name">should_raise_on_fail_fast</span>(<span class="param"><span class="n">error</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><span class="n">bool</span></span>:
 
 :::
 

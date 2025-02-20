@@ -14,7 +14,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">DatasetSplit</span>(<span class="param"><span class="n">datasets</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- Mapping --><!-- types.jinja2 - format_type --><!-- Mapping --><!-- ExprName --><span class="n">List</span><span class="p">\[</span><!-- types.jinja2 - format_type --><!-- Mapping --><!-- ExprName --><span class="n">VMDataset</span><span class="p">\]</span></span>):
+<span class="kw">def</span><span class="name">DatasetSplit</span>(<span class="param"><span class="n">datasets</span><span class="p">:</span><!-- types.jinja2 - format_type --></span>):
 
 :::
 
