@@ -45,17 +45,17 @@ def RegressionModelSummary(dataset: VMDataset, model: VMModel):
     - A high R-Squared or Adjusted R-Squared may not necessarily indicate a good model, especially in cases of
     overfitting.
     """
+    y_true = dataset.y
+    y_pred = dataset.y_pred(model)
+
     return [
         {
             "Independent Variables": dataset.feature_columns,
-            "R-Squared": r2_score(dataset.y, dataset.y_pred(model)),
+            "R-Squared": r2_score(y_true, y_pred),
             "Adjusted R-Squared": adj_r2_score(
-                dataset.y,
-                dataset.y_pred(model),
-                len(dataset.y),
-                len(dataset.feature_columns),
+                y_true, y_pred, len(y_true), len(dataset.feature_columns)
             ),
-            "MSE": mean_squared_error(dataset.y, dataset.y_pred(model), squared=True),
-            "RMSE": mean_squared_error(dataset.y, dataset.y_pred(model), squared=False),
+            "MSE": mean_squared_error(y_true, y_pred, squared=True),
+            "RMSE": mean_squared_error(y_true, y_pred, squared=False),
         }
     ]

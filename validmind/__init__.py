@@ -30,7 +30,11 @@ vm.init(
 
 After you have pasted the code snippet into your development source code and executed the code, the Python Library API will register with ValidMind. You can now use the ValidMind Library to document and test your models, and to upload to the ValidMind Platform.
 """
+import threading
 import warnings
+
+import pkg_resources
+from IPython.display import HTML, display
 
 # Ignore Numba warnings. We are not requiring this package directly
 from numba.core.errors import NumbaDeprecationWarning, NumbaPendingDeprecationWarning
@@ -51,30 +55,74 @@ from .client import (  # noqa: E402
 )
 from .tests.decorator import tags, tasks, test
 from .tests.run import print_env
+from .utils import is_notebook, parse_version
 from .vm_models.result import RawData
+
+__shown = False
+
+
+def show_warning(installed, running):
+    global __shown
+
+    if __shown:
+        return
+    __shown = True
+
+    message = (
+        f"⚠️ This kernel is running an older version of validmind ({running}) "
+        f"than the latest version installed on your system ({installed}).\n\n"
+        "You may need to restart the kernel if you are experiencing issues."
+    )
+    display(HTML(f"<div style='color: red;'>{message}</div>"))
+
+
+def check_version():
+    # get the installed vs running version of validmind
+    # to make sure we are using the latest installed version
+    # in case user has updated the package but forgot to restart the kernel
+    installed = pkg_resources.get_distribution("validmind").version
+    running = __version__
+
+    if parse_version(installed) > parse_version(running):
+        show_warning(installed, running)
+
+    # Schedule the next check for 5 minutes from now
+    timer = threading.Timer(300, check_version)
+    timer.daemon = True
+    timer.start()
+
+
+if is_notebook():
+    check_version()
 
 __all__ = [  # noqa
     "__version__",
-    # Python Library API
-    "datasets",
-    "errors",
-    "get_test_suite",
+    # main library API
     "init",
+    "reload",
     "init_dataset",
     "init_model",
     "init_r_model",
     "preview_template",
-    "print_env",
-    "RawData",
-    "reload",
     "run_documentation_tests",
+    # log metric function (for direct/bulk/retroactive logging of metrics)
+    "log_metric",
+    # test suite functions (less common)
+    "get_test_suite",
     "run_test_suite",
+    # helper functions (for troubleshooting)
+    "print_env",
+    # decorators (for building tests
     "tags",
     "tasks",
     "test",
-    "tests",
-    "test_suites",
+    # raw data (for post-processing test results and building tests)
+    "RawData",
+    # submodules
+    "datasets",
+    "errors",
     "vm_models",
+    "tests",
     "unit_metrics",
-    "log_metric",
+    "test_suites",
 ]
