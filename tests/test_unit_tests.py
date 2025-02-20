@@ -166,4 +166,6 @@ print_coverage_statistics()
 
 # Exit with failure if any tests failed
 if not all_tests_passed:
-    sys.exit(1)
+    raise Exception(
+        f"Tests failed: {FAILED_TESTS}\n\n See output above for more details."
+    )
