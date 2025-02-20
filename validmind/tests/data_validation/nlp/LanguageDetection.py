@@ -71,5 +71,5 @@ def LanguageDetection(dataset):
             title="Language Distribution",
             labels={"x": "Language Codes"},
         ),
-        RawData(detected_languages=languages),
+        RawData(detected_languages=languages, dataset=dataset.input_id),
     )

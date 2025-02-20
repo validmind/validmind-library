@@ -38,10 +38,11 @@ class TestIQROutliersTable(unittest.TestCase):
         )
 
     def test_outliers_structure(self):
-        result = IQROutliersTable(self.vm_dataset)
+        result, raw_data = IQROutliersTable(self.vm_dataset)
 
         # Check basic structure
         self.assertIsInstance(result, dict)
+        self.assertIsInstance(raw_data, vm.RawData)
         self.assertIn("Summary of Outliers Detected by IQR Method", result)
 
         # Check result structure
@@ -59,7 +60,7 @@ class TestIQROutliersTable(unittest.TestCase):
             self.assertIn("Maximum Outlier Value", summary)
 
     def test_outliers_detection(self):
-        result = IQROutliersTable(self.vm_dataset)
+        result, raw_data = IQROutliersTable(self.vm_dataset)
         outliers_summary = result["Summary of Outliers Detected by IQR Method"]
 
         # Check that outliers are detected in the 'with_outliers' column
@@ -76,7 +77,7 @@ class TestIQROutliersTable(unittest.TestCase):
         self.assertIsNone(normal_summary)
 
     def test_binary_exclusion(self):
-        result = IQROutliersTable(self.vm_dataset)
+        result, raw_data = IQROutliersTable(self.vm_dataset)
         outliers_summary = result["Summary of Outliers Detected by IQR Method"]
 
         # Verify binary column is not in results

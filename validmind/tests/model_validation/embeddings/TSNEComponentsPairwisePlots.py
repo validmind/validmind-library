@@ -110,5 +110,10 @@ def TSNEComponentsPairwisePlots(
 
     return (
         *figures,
-        RawData(embeddings_scaled=embeddings_scaled, tsne_results=tsne_results),
+        RawData(
+            embeddings_scaled=embeddings_scaled,
+            tsne_results=tsne_results,
+            model=model.input_id,
+            dataset=dataset.input_id,
+        ),
     )

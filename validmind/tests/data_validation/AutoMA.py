@@ -116,4 +116,4 @@ def AutoMA(dataset: VMDataset, max_ma_order: int = 3):
     return {
         "Auto MA Analysis Results": summary_ma_analysis,
         "Best MA Order Results": best_ma_order,
-    }, RawData(raw_series_data=df)
+    }, RawData(raw_series_data=df, dataset=dataset.input_id)

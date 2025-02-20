@@ -71,4 +71,4 @@ def WOEBinTable(dataset: VMDataset, breaks_adj: list = None):
 
     return {
         "Weight of Evidence (WoE) and Information Value (IV)": result_table
-    }, RawData(woe_bins=bins)
+    }, RawData(woe_bins=bins, dataset=dataset.input_id)

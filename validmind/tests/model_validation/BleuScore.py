@@ -114,4 +114,10 @@ def BleuScore(dataset, model):
     # Create a DataFrame from all collected statistics
     result_df = pd.DataFrame(stats_df).reset_index().rename(columns={"index": "Metric"})
 
-    return (result_df, *figures, RawData(bleu_scores_df=metrics_df))
+    return (
+        result_df,
+        *figures,
+        RawData(
+            bleu_scores_df=metrics_df, model=model.input_id, dataset=dataset.input_id
+        ),
+    )

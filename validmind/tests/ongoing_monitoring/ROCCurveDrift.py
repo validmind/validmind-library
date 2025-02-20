@@ -8,7 +8,7 @@ import numpy as np
 import plotly.graph_objects as go
 from sklearn.metrics import roc_auc_score, roc_curve
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.errors import SkipTestError
 from validmind.vm_models import VMDataset, VMModel
 
@@ -147,4 +147,18 @@ def ROCCurveDrift(datasets: List[VMDataset], model: VMModel):
         height=500,
     )
 
-    return fig1, fig2
+    return (
+        fig1,
+        fig2,
+        RawData(
+            fpr_ref=fpr_ref,
+            tpr_ref=tpr_ref,
+            auc_ref=auc_ref,
+            fpr_mon=fpr_mon,
+            tpr_mon=tpr_mon,
+            auc_mon=auc_mon,
+            model=model.input_id,
+            dataset_reference=datasets[0].input_id,
+            dataset_monitoring=datasets[1].input_id,
+        ),
+    )

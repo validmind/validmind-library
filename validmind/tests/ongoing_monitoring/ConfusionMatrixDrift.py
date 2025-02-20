@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import confusion_matrix
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 
 
@@ -190,4 +190,11 @@ def ConfusionMatrixDrift(
     return (
         {"Confusion Matrix Metrics": metrics_df, "Sample Counts": counts_df},
         pass_fail_bool,
+        RawData(
+            confusion_matrix_reference=cm_ref,
+            confusion_matrix_monitoring=cm_mon,
+            model=model.input_id,
+            dataset_reference=datasets[0].input_id,
+            dataset_monitoring=datasets[1].input_id,
+        ),
     )

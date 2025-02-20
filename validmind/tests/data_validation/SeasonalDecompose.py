@@ -166,4 +166,4 @@ def SeasonalDecompose(dataset: VMDataset, seasonal_model: str = "additive"):
     if not figures:
         raise SkipTestError("No valid features found for seasonal decomposition")
 
-    return (*figures, RawData(decomposed_components=raw_data))
+    return (*figures, RawData(decomposed_components=raw_data, dataset=dataset.input_id))

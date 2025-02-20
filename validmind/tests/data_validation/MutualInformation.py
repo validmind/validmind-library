@@ -123,5 +123,6 @@ def MutualInformation(
     return fig, RawData(
         mutual_information_scores={
             feature: score for feature, score in zip(sorted_features, sorted_scores)
-        }
+        },
+        dataset=dataset.input_id,
     )

@@ -64,7 +64,11 @@ def CumulativePredictionProbabilities(dataset, model, title="Cumulative Probabil
 
     fig, fig_data = _plot_cumulative_prob(df, dataset.target_column, title)
 
-    return fig, RawData(cumulative_probabilities=fig_data)
+    return fig, RawData(
+        cumulative_probabilities=fig_data,
+        model=model.input_id,
+        dataset=dataset.input_id,
+    )
 
 
 def _plot_cumulative_prob(df, target_col, title):

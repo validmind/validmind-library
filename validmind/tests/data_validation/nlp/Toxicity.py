@@ -73,4 +73,4 @@ def Toxicity(dataset):
 
     plt.close()
 
-    return fig, RawData(toxicity_scores=toxicity_scores)
+    return fig, RawData(toxicity_scores=toxicity_scores, dataset=dataset.input_id)

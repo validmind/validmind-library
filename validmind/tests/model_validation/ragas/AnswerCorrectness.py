@@ -144,5 +144,5 @@ def AnswerCorrectness(
         },
         fig_histogram,
         fig_box,
-        RawData(evaluation_results=result_df),
+        RawData(evaluation_results=result_df, dataset=dataset.input_id),
     )

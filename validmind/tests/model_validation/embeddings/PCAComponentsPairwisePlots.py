@@ -90,4 +90,7 @@ def PCAComponentsPairwisePlots(dataset, model, n_components=3):
         )
         figures.append(fig)
 
-    return (*figures, RawData(pca_results=pca_df))
+    return (
+        *figures,
+        RawData(pca_results=pca_df, model=model.input_id, dataset=dataset.input_id),
+    )

@@ -173,4 +173,4 @@ def TextDescription(
             )
         )
 
-    return (*figures, RawData(metrics_dataframe=metrics_df))
+    return (*figures, RawData(metrics_dataframe=metrics_df, dataset=dataset.input_id))

@@ -102,4 +102,8 @@ def ModelPredictionResiduals(
     # Create a summary DataFrame for the KS normality test results
     summary_df = pd.DataFrame([summary])
 
-    return (summary_df, *figures, RawData(residuals=residuals))
+    return (
+        summary_df,
+        *figures,
+        RawData(residuals=residuals, model=model.input_id, dataset=dataset.input_id),
+    )

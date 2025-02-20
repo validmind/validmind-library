@@ -118,11 +118,13 @@ def IQROutliersBarPlot(
         )
         figures.append(fig)
 
+    outliers_by_feature = df[dataset.feature_columns_numeric].apply(
+        lambda col: compute_outliers(col, threshold)
+    )
+
     return (
         *figures,
         RawData(
-            outlier_counts_by_feature=df[dataset.feature_columns_numeric].apply(
-                lambda col: compute_outliers(col, threshold)
-            )
+            outlier_counts_by_feature=outliers_by_feature, dataset=dataset.input_id
         ),
     )

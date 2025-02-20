@@ -108,4 +108,7 @@ def TargetRateBarPlots(dataset: VMDataset):
 
         figures.append(fig)
 
-    return (*figures, RawData(target_rates_by_category=raw_data))
+    return (
+        *figures,
+        RawData(target_rates_by_category=raw_data, dataset=dataset.input_id),
+    )

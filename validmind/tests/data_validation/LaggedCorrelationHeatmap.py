@@ -101,4 +101,4 @@ def LaggedCorrelationHeatmap(dataset: VMDataset, num_lags: int = 10):
         xaxis_title="Lags",
     )
 
-    return fig, RawData(correlation_matrix=correlation_df)
+    return fig, RawData(correlation_matrix=correlation_df, dataset=dataset.input_id)

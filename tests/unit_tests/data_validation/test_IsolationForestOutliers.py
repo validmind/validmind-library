@@ -28,25 +28,19 @@ class TestIsolationForestOutliers(unittest.TestCase):
         )
 
     def test_outliers_detection(self):
-        result = IsolationForestOutliers(self.vm_dataset, contamination=0.1)
+        figure, raw_data = IsolationForestOutliers(self.vm_dataset, contamination=0.1)
 
-        # Check return type
-        self.assertIsInstance(result, tuple)
+        # Check return types
+        self.assertIsInstance(figure, plt.Figure)
+        self.assertIsInstance(raw_data, vm.RawData)
 
-        # Separate figures and raw data
-        figures = result
-
-        # Check that at least one figure is returned
-        self.assertGreater(len(figures), 0)
-
-        # Check each figure
-        for fig in figures:
-            self.assertIsInstance(fig, plt.Figure)
+        # Check that the figure has at least one axes
+        self.assertGreater(len(figure.axes), 0)
 
     def test_feature_columns_validation(self):
         # Test with valid feature columns
         try:
-            IsolationForestOutliers(
+            figure, raw_data = IsolationForestOutliers(
                 self.vm_dataset, feature_columns=["feature1", "feature2"]
             )
         except ValueError:
@@ -60,13 +54,13 @@ class TestIsolationForestOutliers(unittest.TestCase):
 
     def test_contamination_parameter(self):
         # Test with different contamination levels
-        figures_low_contamination = IsolationForestOutliers(
+        figure_low, raw_data_low = IsolationForestOutliers(
             self.vm_dataset, contamination=0.05
         )
-        figures_high_contamination = IsolationForestOutliers(
+        figure_high, raw_data_high = IsolationForestOutliers(
             self.vm_dataset, contamination=0.2
         )
 
-        # Check that figures are returned for both contamination levels
-        self.assertGreater(len(figures_low_contamination), 0)
-        self.assertGreater(len(figures_high_contamination), 0)
+        # Check that figures have at least one axes
+        self.assertGreater(len(figure_low.axes), 0)
+        self.assertGreater(len(figure_high.axes), 0)

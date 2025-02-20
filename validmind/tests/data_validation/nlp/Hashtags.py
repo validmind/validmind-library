@@ -76,4 +76,4 @@ def Hashtags(dataset: VMDataset, top_hashtags: int = 25):
         xaxis_tickangle=-45,
     )
 
-    return fig, RawData(top_hashtag_counts=top_hashtag_counts)
+    return fig, RawData(top_hashtag_counts=top_hashtag_counts, dataset=dataset.input_id)

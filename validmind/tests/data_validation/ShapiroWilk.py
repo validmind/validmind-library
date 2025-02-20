@@ -5,7 +5,7 @@
 import pandas as pd
 from scipy import stats
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 
 
 @tasks("classification", "regression")
@@ -66,4 +66,4 @@ def ShapiroWilk(dataset):
     sw_df.reset_index(inplace=True)
     sw_df.columns = ["column", "stat", "pvalue"]
 
-    return sw_df
+    return sw_df, RawData(shapiro_results=sw_values, dataset=dataset.input_id)

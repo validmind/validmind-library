@@ -58,7 +58,7 @@ def FeatureTargetCorrelationPlot(dataset, fig_height=600):
         df, dataset.target_column, fig_height
     )
 
-    return fig, RawData(correlation_data=correlations)
+    return fig, RawData(correlation_data=correlations, dataset=dataset.input_id)
 
 
 def _visualize_feature_target_correlation(df, target_column, fig_height):

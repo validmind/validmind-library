@@ -6,7 +6,7 @@
 import plotly.graph_objects as go
 from matplotlib import cm
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 
 
 @tags("visualization", "credit_risk")
@@ -60,7 +60,11 @@ def PredictionProbabilitiesHistogram(
 
     fig = _plot_prob_histogram(df, dataset.target_column, title)
 
-    return fig
+    return fig, RawData(
+        probabilities=df["probabilities"],
+        model=model.input_id,
+        dataset=dataset.input_id,
+    )
 
 
 def _plot_prob_histogram(df, target_col, title):

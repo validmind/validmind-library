@@ -8,7 +8,7 @@ import numpy as np
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 
 
@@ -83,6 +83,7 @@ def CumulativePredictionProbabilitiesDrift(
     diff_color = "rgba(148, 103, 189, 0.8)"  # Purple with 0.8 opacity
 
     figures = []
+    raw_data = {}
     for class_value in classes:
         # Create figure with secondary y-axis
         fig = make_subplots(
@@ -175,4 +176,19 @@ def CumulativePredictionProbabilitiesDrift(
 
         figures.append(fig)
 
-    return tuple(figures)
+        # Store raw data for current class
+        raw_data[f"class_{class_value}_ref_probs"] = ref_probs
+        raw_data[f"class_{class_value}_mon_probs"] = mon_probs
+        raw_data[f"class_{class_value}_ref_sorted"] = ref_sorted
+        raw_data[f"class_{class_value}_ref_cumsum"] = ref_cumsum
+        raw_data[f"class_{class_value}_mon_sorted"] = mon_sorted
+        raw_data[f"class_{class_value}_mon_cumsum"] = mon_cumsum
+
+    return tuple(figures) + (
+        RawData(
+            model=model.input_id,
+            dataset_reference=datasets[0].input_id,
+            dataset_monitoring=datasets[1].input_id,
+            **raw_data,
+        ),
+    )

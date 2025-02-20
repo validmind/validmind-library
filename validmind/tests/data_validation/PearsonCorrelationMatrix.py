@@ -88,4 +88,4 @@ def PearsonCorrelationMatrix(dataset):
 
     fig = go.Figure(data=[heatmap], layout=layout)
 
-    return fig, RawData(correlation_matrix=corr_matrix)
+    return fig, RawData(correlation_matrix=corr_matrix, dataset=dataset.input_id)

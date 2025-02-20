@@ -4,7 +4,7 @@
 
 from sklearn import metrics
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 
 
@@ -48,11 +48,14 @@ def VMeasure(dataset: VMDataset, model: VMModel):
     the other. The V Measure Score does not provide flexibility in assigning different weights to homogeneity and
     completeness.
     """
-    return [
-        {
-            "V Measure": metrics.v_measure_score(
-                labels_true=dataset.y,
-                labels_pred=dataset.y_pred(model),
-            )
-        }
-    ]
+    v_measure = metrics.v_measure_score(
+        labels_true=dataset.y,
+        labels_pred=dataset.y_pred(model),
+    )
+
+    return (
+        [{"V Measure": v_measure}],
+        RawData(
+            v_measure_score=v_measure, model=model.input_id, dataset=dataset.input_id
+        ),
+    )

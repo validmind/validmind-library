@@ -83,4 +83,8 @@ def HighCardinality(
         if not passed:
             all_passed = False
 
-    return table, all_passed, RawData(raw_cardinality_details=raw_data)
+    return (
+        table,
+        all_passed,
+        RawData(raw_cardinality_details=raw_data, dataset=dataset.input_id),
+    )

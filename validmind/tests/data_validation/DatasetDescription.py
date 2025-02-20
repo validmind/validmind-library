@@ -242,4 +242,4 @@ def DatasetDescription(dataset: VMDataset):
             }
             for column in results
         ]
-    }, RawData(raw_data=raw_data)
+    }, RawData(raw_data=raw_data, dataset=dataset.input_id)

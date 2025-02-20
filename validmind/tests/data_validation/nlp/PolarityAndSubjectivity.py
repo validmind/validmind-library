@@ -144,4 +144,8 @@ def PolarityAndSubjectivity(dataset, threshold_subjectivity=0.5, threshold_polar
 
     statistics_tables = {"Quadrant Distribution": quadrant_df, "Statistics": stats_df}
 
-    return fig, statistics_tables, RawData(sentiment_data=data)
+    return (
+        fig,
+        statistics_tables,
+        RawData(sentiment_data=data, dataset=dataset.input_id),
+    )

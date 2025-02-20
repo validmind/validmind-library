@@ -106,5 +106,5 @@ def Clarity(model, min_threshold=7):
             }
         ],
         passed,
-        RawData(response=response),
+        RawData(response=response, model=model.input_id),
     )

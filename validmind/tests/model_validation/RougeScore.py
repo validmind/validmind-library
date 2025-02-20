@@ -121,5 +121,7 @@ def RougeScore(dataset, model, metric="rouge-1"):
     return (
         pd.DataFrame(stats_df).reset_index().rename(columns={"index": "Metric"}),
         *figures,
-        RawData(rouge_scores_df=df_scores),
+        RawData(
+            rouge_scores_df=df_scores, model=model.input_id, dataset=dataset.input_id
+        ),
     )

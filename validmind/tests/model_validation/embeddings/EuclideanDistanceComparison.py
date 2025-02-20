@@ -57,7 +57,7 @@ def EuclideanDistanceComparison(dataset, models):
     figures = []
     all_stats = []
 
-    distance_matrices = {}
+    distance_matrices = []
 
     # Generate all pairs of models for comparison
     for model_A, model_B in combinations(models, 2):
@@ -105,6 +105,10 @@ def EuclideanDistanceComparison(dataset, models):
     stats_df = pd.DataFrame(all_stats)
 
     # Add raw data to return
-    raw_data = RawData(distance_matrices=pd.DataFrame(distance_matrices))
+    raw_data = RawData(
+        distance_matrices=pd.DataFrame(distance_matrices),
+        dataset=dataset.input_id,
+        models=[model.input_id for model in models],
+    )
 
     return (stats_df, *figures, raw_data)

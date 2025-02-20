@@ -2,7 +2,7 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset
 
 
@@ -64,6 +64,7 @@ def IQROutliersTable(dataset: VMDataset, threshold: float = 1.5):
     df = dataset.df
 
     outliers_table = []
+    all_outliers = {}
 
     for col in dataset.feature_columns_numeric:
         # Skip binary features
@@ -71,6 +72,8 @@ def IQROutliersTable(dataset: VMDataset, threshold: float = 1.5):
             continue
 
         outliers = compute_outliers(df[col], threshold)
+        all_outliers[col] = outliers
+
         if outliers.empty:
             continue
 
@@ -89,4 +92,4 @@ def IQROutliersTable(dataset: VMDataset, threshold: float = 1.5):
 
     return {
         "Summary of Outliers Detected by IQR Method": outliers_table,
-    }
+    }, RawData(all_outliers=all_outliers, dataset=dataset.input_id)

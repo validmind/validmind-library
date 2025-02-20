@@ -117,5 +117,7 @@ def MissingValuesBarPlot(
                 height=fig_height,
             ),
         ),
-        RawData(missing_percentages=missing_percentages_sorted),
+        RawData(
+            missing_percentages=missing_percentages_sorted, dataset=dataset.input_id
+        ),
     )

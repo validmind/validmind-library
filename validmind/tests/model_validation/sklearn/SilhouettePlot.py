@@ -110,5 +110,9 @@ def SilhouettePlot(model: VMModel, dataset: VMDataset):
             "Silhouette Score": silhouette_avg,
         },
         fig,
-        RawData(sample_silhouette_values=sample_silhouette_values),
+        RawData(
+            sample_silhouette_values=sample_silhouette_values,
+            model=model.input_id,
+            dataset=dataset.input_id,
+        ),
     )

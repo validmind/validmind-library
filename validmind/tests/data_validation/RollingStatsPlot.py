@@ -113,6 +113,7 @@ def RollingStatsPlot(dataset: VMDataset, window_size: int = 12):
                     "rolling_std": dataset.df[col].rolling(window=window_size).std(),
                 }
                 for col in dataset.feature_columns
-            }
+            },
+            dataset=dataset.input_id,
         ),
     )

@@ -83,4 +83,9 @@ def PrecisionRecallCurve(model: VMModel, dataset: VMDataset):
         ),
     )
 
-    return fig, RawData(precision=precision, recall=recall)
+    return fig, RawData(
+        precision=precision,
+        recall=recall,
+        model=model.input_id,
+        dataset=dataset.input_id,
+    )

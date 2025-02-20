@@ -84,5 +84,5 @@ def HighPearsonCorrelation(
     return (
         pairs,
         all(p["Pass/Fail"] == "Pass" for p in pairs),
-        RawData(correlation_matrix=corr),
+        RawData(correlation_matrix=corr, dataset=dataset.input_id),
     )

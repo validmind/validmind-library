@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import roc_auc_score, roc_curve
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 
 
 @tags("model_performance")
@@ -76,4 +76,11 @@ def GINITable(dataset, model):
             "GINI": [gini],
             "KS": [max(tpr - fpr)],
         }
+    ), RawData(
+        fpr=fpr,
+        tpr=tpr,
+        y_true=y_true,
+        y_prob=y_prob,
+        model=model.input_id,
+        dataset=dataset.input_id,
     )

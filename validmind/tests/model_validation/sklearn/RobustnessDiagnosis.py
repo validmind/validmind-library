@@ -327,4 +327,8 @@ def RobustnessDiagnosis(
         results_df["Perturbation Size"] == 0.0, "Perturbation Size"
     ] = "Baseline (0.0)"
 
-    return results_df, fig, all(results_df["Passed"])
+    return (
+        results_df,
+        fig,
+        all(results_df["Passed"]),
+    )

@@ -107,5 +107,5 @@ def TimeSeriesFrequency(dataset: VMDataset):
         frequencies,
         fig,
         len(set(item["Frequency"] for item in frequencies)) == 1,
-        RawData(time_diff_days=time_diff_days),
+        RawData(time_diff_days=time_diff_days, dataset=dataset.input_id),
     )

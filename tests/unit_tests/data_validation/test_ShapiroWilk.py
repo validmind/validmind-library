@@ -30,10 +30,13 @@ class TestShapiroWilk(unittest.TestCase):
 
     def test_returns_dataframe_and_rawdata(self):
         # Run the function
-        result_df = ShapiroWilk(self.vm_dataset)
+        result_df, raw_data = ShapiroWilk(self.vm_dataset)
 
         # Check if result_df is a DataFrame
         self.assertIsInstance(result_df, pd.DataFrame)
+
+        # Check if raw_data is a RawData object
+        self.assertIsInstance(raw_data, vm.RawData)
 
         # Check if the DataFrame has the expected columns
         expected_columns = ["column", "stat", "pvalue"]
@@ -44,7 +47,7 @@ class TestShapiroWilk(unittest.TestCase):
 
     def test_handles_different_distributions(self):
         # Run the function
-        result_df = ShapiroWilk(self.vm_dataset)
+        result_df, raw_data = ShapiroWilk(self.vm_dataset)
 
         # The normal distribution should have a higher p-value than the exponential distribution
         normal_pvalue = result_df[result_df["column"] == "normal_dist"]["pvalue"].iloc[

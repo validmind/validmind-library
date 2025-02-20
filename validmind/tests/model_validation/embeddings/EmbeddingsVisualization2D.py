@@ -89,4 +89,8 @@ def EmbeddingsVisualization2D(
     fig = px.scatter(**scatter_kwargs)
     fig.update_layout(width=500, height=500)
 
-    return fig, RawData(tsne_embeddings=reduced_embeddings)
+    return fig, RawData(
+        tsne_embeddings=reduced_embeddings,
+        model=model.input_id,
+        dataset=dataset.input_id,
+    )

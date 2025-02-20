@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 from sklearn.metrics import accuracy_score
 
+from validmind import RawData
 from validmind.tests import tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 
@@ -50,10 +51,14 @@ def MinimumAccuracy(dataset: VMDataset, model: VMModel, min_threshold: float = 0
     """
     accuracy = accuracy_score(dataset.y, dataset.y_pred(model))
 
-    return [
-        {
-            "Score": accuracy,
-            "Threshold": min_threshold,
-            "Pass/Fail": "Pass" if accuracy > min_threshold else "Fail",
-        }
-    ], accuracy > min_threshold
+    return (
+        [
+            {
+                "Score": accuracy,
+                "Threshold": min_threshold,
+                "Pass/Fail": "Pass" if accuracy > min_threshold else "Fail",
+            }
+        ],
+        accuracy > min_threshold,
+        RawData(model=model.input_id, dataset=dataset.input_id),
+    )

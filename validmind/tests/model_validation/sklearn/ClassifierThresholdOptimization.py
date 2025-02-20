@@ -8,7 +8,7 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from sklearn.metrics import confusion_matrix, precision_recall_curve, roc_curve
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 
 
@@ -255,4 +255,17 @@ def ClassifierThresholdOptimization(
     # Create results table and sort by threshold descending
     table = pd.DataFrame(results).sort_values("threshold", ascending=False)
 
-    return fig, table
+    return (
+        fig,
+        table,
+        RawData(
+            fpr=fpr,
+            tpr=tpr,
+            precision=precision,
+            recall=recall,
+            thresholds_roc=thresholds_roc,
+            thresholds_pr=thresholds_pr,
+            model=model.input_id,
+            dataset=dataset.input_id,
+        ),
+    )

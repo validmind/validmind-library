@@ -2,7 +2,7 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset
 
 
@@ -49,12 +49,16 @@ def MissingValues(dataset: VMDataset, min_threshold: int = 1):
     df = dataset.df
     missing = df.isna().sum()
 
-    return [
-        {
-            "Column": col,
-            "Number of Missing Values": missing[col],
-            "Percentage of Missing Values (%)": missing[col] / df.shape[0] * 100,
-            "Pass/Fail": "Pass" if missing[col] < min_threshold else "Fail",
-        }
-        for col in missing.index
-    ], all(missing[col] < min_threshold for col in missing.index)
+    return (
+        [
+            {
+                "Column": col,
+                "Number of Missing Values": missing[col],
+                "Percentage of Missing Values (%)": missing[col] / df.shape[0] * 100,
+                "Pass/Fail": "Pass" if missing[col] < min_threshold else "Fail",
+            }
+            for col in missing.index
+        ],
+        all(missing[col] < min_threshold for col in missing.index),
+        RawData(missing_values=missing, dataset=dataset.input_id),
+    )

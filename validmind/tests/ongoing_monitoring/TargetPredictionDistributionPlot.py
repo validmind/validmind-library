@@ -7,7 +7,7 @@ import plotly.figure_factory as ff
 import plotly.graph_objects as go
 from scipy.stats import kurtosis, skew
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 
 
 @tags("visualization")
@@ -142,4 +142,15 @@ def TargetPredictionDistributionPlot(datasets, model, drift_pct_threshold=20):
 
     pass_fail_bool = (moments["Pass/Fail"] == "Pass").all()
 
-    return ({"Distribution Moments": moments}, fig, pass_fail_bool)
+    return (
+        {"Distribution Moments": moments},
+        fig,
+        pass_fail_bool,
+        RawData(
+            pred_ref=pred_ref,
+            pred_monitor=pred_monitor,
+            model=model.input_id,
+            dataset_reference=datasets[0].input_id,
+            dataset_monitoring=datasets[1].input_id,
+        ),
+    )

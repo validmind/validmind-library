@@ -5,7 +5,7 @@
 import pandas as pd
 from sklearn import metrics
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.tests.model_validation.statsmodels.statsutils import adj_r2_score
 
 
@@ -55,11 +55,14 @@ def RegressionR2Square(dataset, model):
     y_pred = dataset.y_pred(model)
     y_true = y_true.astype(y_pred.dtype)
 
+    r2 = metrics.r2_score(y_true, y_pred)
+    adj_r2 = adj_r2_score(y_true, y_pred, len(y_true), len(dataset.feature_columns))
+
     return pd.DataFrame(
         {
-            "R-squared (R2) Score": [metrics.r2_score(y_true, y_pred)],
-            "Adjusted R-squared (R2) Score": [
-                adj_r2_score(y_true, y_pred, len(y_true), len(dataset.feature_columns))
-            ],
+            "R-squared (R2) Score": [r2],
+            "Adjusted R-squared (R2) Score": [adj_r2],
         }
+    ), RawData(
+        y_true=y_true, y_pred=y_pred, model=model.input_id, dataset=dataset.input_id
     )

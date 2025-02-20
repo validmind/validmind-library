@@ -58,10 +58,15 @@ class TestPredictionProbabilitiesHistogram(unittest.TestCase):
 
     def test_returns_figure_and_raw_data(self):
         # Run the function
-        figure = PredictionProbabilitiesHistogram(self.vm_dataset, self.vm_model)
+        figure, raw_data = PredictionProbabilitiesHistogram(
+            self.vm_dataset, self.vm_model
+        )
 
-        # Check if result contains a Plotly Figure and RawData
+        # Check if figure is a Plotly Figure
         self.assertIsInstance(figure, go.Figure)
+
+        # Check if raw_data is a RawData object
+        self.assertIsInstance(raw_data, vm.RawData)
 
         # Check if figure has traces
         self.assertGreater(len(figure.data), 0)
@@ -98,13 +103,17 @@ class TestPredictionProbabilitiesHistogram(unittest.TestCase):
         vm_perfect_dataset.assign_predictions(vm_perfect_model)
 
         # Generate histogram
-        figure = PredictionProbabilitiesHistogram(vm_perfect_dataset, vm_perfect_model)
+        figure, raw_data = PredictionProbabilitiesHistogram(
+            vm_perfect_dataset, vm_perfect_model
+        )
 
         # Check if there are exactly two traces (one for each class)
         self.assertEqual(len(figure.data), 2)
 
     def test_probability_ranges(self):
-        figure = PredictionProbabilitiesHistogram(self.vm_dataset, self.vm_model)
+        figure, raw_data = PredictionProbabilitiesHistogram(
+            self.vm_dataset, self.vm_model
+        )
 
         # Check if probabilities are within [0, 1] range
         for trace in figure.data:

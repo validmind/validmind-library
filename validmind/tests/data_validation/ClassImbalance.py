@@ -104,5 +104,5 @@ def ClassImbalance(
         },
         go.Figure(data=[trace], layout=layout),
         all(row["Pass/Fail"] == "Pass" for row in imbalanced_classes),
-        RawData(imbalance_percentages=imbalance_percentages),
+        RawData(imbalance_percentages=imbalance_percentages, dataset=dataset.input_id),
     )

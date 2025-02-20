@@ -72,4 +72,6 @@ def ClusterSizeDistribution(dataset: VMDataset, model: VMModel):
     fig.update_yaxes(title_text="Counts", showgrid=False)
     fig.update_layout(title_text="Cluster distribution", title_x=0.5, barmode="group")
 
-    return fig, RawData(cluster_counts=df_counts)
+    return fig, RawData(
+        cluster_counts=df_counts, model=model.input_id, dataset=dataset.input_id
+    )

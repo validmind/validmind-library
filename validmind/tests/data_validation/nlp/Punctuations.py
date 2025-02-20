@@ -65,7 +65,7 @@ def Punctuations(dataset, count_mode="token"):
     punctuation_counts = _count_punctuations(corpus, count_mode)
     fig = _create_punctuation_plot(punctuation_counts)
 
-    return fig, RawData(punctuation_counts=punctuation_counts)
+    return fig, RawData(punctuation_counts=punctuation_counts, dataset=dataset.input_id)
 
 
 def _create_punctuation_plot(punctuation_counts):

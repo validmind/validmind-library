@@ -5,7 +5,7 @@
 
 import matplotlib.pyplot as plt
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 
 
 @tags("visualization")
@@ -74,4 +74,10 @@ def PredictionAcrossEachFeature(datasets, model):
         figures_to_save.append(fig)
         plt.close()
 
-    return tuple(figures_to_save)
+    return tuple(figures_to_save), RawData(
+        y_prob_reference=y_prob_reference,
+        y_prob_monitoring=y_prob_monitoring,
+        model=model.input_id,
+        dataset_reference=datasets[0].input_id,
+        dataset_monitoring=datasets[1].input_id,
+    )

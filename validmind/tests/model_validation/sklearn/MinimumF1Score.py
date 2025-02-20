@@ -5,6 +5,7 @@
 import numpy as np
 from sklearn.metrics import f1_score
 
+from validmind import RawData
 from validmind.tests import tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 
@@ -58,10 +59,14 @@ def MinimumF1Score(dataset: VMDataset, model: VMModel, min_threshold: float = 0.
     else:
         score = f1_score(dataset.y, dataset.y_pred(model))
 
-    return [
-        {
-            "Score": score,
-            "Threshold": min_threshold,
-            "Pass/Fail": "Pass" if score > min_threshold else "Fail",
-        }
-    ], score > min_threshold
+    return (
+        [
+            {
+                "Score": score,
+                "Threshold": min_threshold,
+                "Pass/Fail": "Pass" if score > min_threshold else "Fail",
+            }
+        ],
+        score > min_threshold,
+        RawData(score=score, model=model.input_id, dataset=dataset.input_id),
+    )

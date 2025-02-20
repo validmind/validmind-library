@@ -94,4 +94,7 @@ def ACFandPACFPlot(dataset: VMDataset):
         figures.append(pacf_fig)
         pacf_store[col] = pacf_values
 
-    return (*figures, RawData(acf_values=acf_store, pacf_values=pacf_store))
+    return (
+        *figures,
+        RawData(acf_values=acf_store, pacf_values=pacf_store, dataset=dataset.input_id),
+    )

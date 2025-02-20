@@ -77,5 +77,7 @@ def DescriptiveAnalytics(dataset: VMDataset, model: VMModel):
             embedding_means=embedding_means,
             embedding_medians=embedding_medians,
             embedding_stds=embedding_stds,
+            model=model.input_id,
+            dataset=dataset.input_id,
         ),
     )

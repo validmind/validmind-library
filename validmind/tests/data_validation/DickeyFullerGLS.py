@@ -97,4 +97,4 @@ def DickeyFullerGLS(dataset: VMDataset):
 
     return {
         "DFGLS Test Results": dfgls_values,
-    }, RawData(df=df)
+    }, RawData(df=df, dataset=dataset.input_id)

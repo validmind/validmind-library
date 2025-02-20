@@ -59,4 +59,8 @@ def CosineSimilarityDistribution(dataset: VMDataset, model: VMModel):
         nbins=100,
         title="Cosine Similarity Distribution",
         labels={"x": "Cosine Similarity"},
-    ), RawData(similarity_scores=similarity_scores)
+    ), RawData(
+        similarity_scores=similarity_scores,
+        model=model.input_id,
+        dataset=dataset.input_id,
+    )

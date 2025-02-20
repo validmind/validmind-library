@@ -47,7 +47,7 @@ class TestRegressionCoeffs(unittest.TestCase):
 
         # Check if result is a tuple
         self.assertIsInstance(result, tuple)
-        self.assertEqual(len(result), 2)
+        self.assertEqual(len(result), 3)  # Now expecting 3 values
 
         # Check if first element is a Plotly Figure
         self.assertIsInstance(result[0], go.Figure)
@@ -55,9 +55,12 @@ class TestRegressionCoeffs(unittest.TestCase):
         # Check if second element is a table (DataFrame)
         self.assertIsInstance(result[1], pd.DataFrame)
 
+        # Check if third element is a RawData object
+        self.assertIsInstance(result[2], vm.RawData)
+
     def test_plot_properties(self):
         # Run the function
-        fig, _ = RegressionCoeffs(self.vm_model)
+        fig, df, raw_data = RegressionCoeffs(self.vm_model)  # Unpack all three values
 
         # Check if there is exactly one trace (bar plot)
         self.assertEqual(len(fig.data), 1)

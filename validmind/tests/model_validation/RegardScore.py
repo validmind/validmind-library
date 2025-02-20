@@ -145,5 +145,10 @@ def RegardScore(dataset, model):
     return (
         result_df,
         *figures,
-        RawData(true_regard=true_df, pred_regard=pred_df),
+        RawData(
+            true_regard=true_df,
+            pred_regard=pred_df,
+            model=model.input_id,
+            dataset=dataset.input_id,
+        ),
     )

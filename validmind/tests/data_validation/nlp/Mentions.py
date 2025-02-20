@@ -82,5 +82,5 @@ def Mentions(dataset: VMDataset, top_mentions: int = 25):
             values="Percentage",
             title="Tree of Mentions",
         ),
-        RawData(mention_counts=mention_counts),
+        RawData(mention_counts=mention_counts, dataset=dataset.input_id),
     )

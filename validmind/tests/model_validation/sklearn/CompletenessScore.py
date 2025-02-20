@@ -4,7 +4,7 @@
 
 from sklearn.metrics import completeness_score
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 
 
@@ -47,11 +47,10 @@ def CompletenessScore(model: VMModel, dataset: VMDataset):
     - The Completeness Score only applies to clustering models; it cannot be used for other types of machine learning
     models.
     """
-    return [
-        {
-            "Completeness Score": completeness_score(
-                labels_true=dataset.y,
-                labels_pred=dataset.y_pred(model),
-            )
-        }
-    ]
+    score = completeness_score(
+        labels_true=dataset.y,
+        labels_pred=dataset.y_pred(model),
+    )
+    return [{"Completeness Score": score}], RawData(
+        score=score, model=model.input_id, dataset=dataset.input_id
+    )

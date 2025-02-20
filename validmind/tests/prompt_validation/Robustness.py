@@ -130,5 +130,10 @@ def Robustness(model, dataset, num_tests=10):
     return (
         results,
         all(result["Pass/Fail"] == "Pass" for result in results),
-        RawData(generated_inputs=generated_inputs, responses=responses),
+        RawData(
+            generated_inputs=generated_inputs,
+            responses=responses,
+            model=model.input_id,
+            dataset=dataset.input_id,
+        ),
     )

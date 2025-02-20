@@ -28,11 +28,13 @@ class TestMissingValues(unittest.TestCase):
         )
 
     def test_missing_values_structure(self):
-        summary, passed = MissingValues(self.vm_dataset)
+        # Run the function
+        summary, passed, raw_data = MissingValues(self.vm_dataset)
 
         # Check return types
         self.assertIsInstance(summary, list)
         self.assertIsInstance(passed, bool)
+        self.assertIsInstance(raw_data, vm.RawData)
 
         # Check summary structure
         for column_summary in summary:
@@ -42,7 +44,7 @@ class TestMissingValues(unittest.TestCase):
             self.assertIn("Pass/Fail", column_summary)
 
     def test_missing_values_counts(self):
-        summary, passed = MissingValues(self.vm_dataset)
+        summary, passed, raw_data = MissingValues(self.vm_dataset)
 
         # Get results for each column
         no_missing = next(s for s in summary if s["Column"] == "no_missing")
@@ -69,7 +71,7 @@ class TestMissingValues(unittest.TestCase):
 
     def test_threshold_parameter(self):
         # Test with higher threshold that allows some missing values
-        summary, passed = MissingValues(self.vm_dataset, min_threshold=25)
+        summary, passed, raw_data = MissingValues(self.vm_dataset, min_threshold=25)
 
         # Get results
         some_missing = next(s for s in summary if s["Column"] == "some_missing")
