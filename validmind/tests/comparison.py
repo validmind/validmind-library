@@ -15,7 +15,7 @@ from validmind.vm_models.figure import (
     is_png_image,
 )
 from validmind.vm_models.input import VMInput
-from validmind.vm_models.result import ResultTable, TestResult
+from validmind.vm_models.result import RawData, ResultTable, TestResult
 
 logger = get_logger(__name__)
 
@@ -312,6 +312,25 @@ def get_comparison_test_configs(
     return test_configs
 
 
+def _combine_raw_data(results: List[TestResult]) -> RawData:
+    """Combine RawData objects"""
+    attribute_names = results[0].raw_data.__dict__.keys()
+
+    # check that all the raw data objects have the same attributes
+    for result in results:
+        if not isinstance(result.raw_data, RawData):
+            raise ValueError("All raw data objects must be of type RawData")
+        if result.raw_data.__dict__.keys() != attribute_names:
+            raise ValueError("RawData objects must have the same attributes")
+
+    return RawData(
+        **{
+            key: [getattr(result.raw_data, key) for result in results]
+            for key in attribute_names
+        }
+    )
+
+
 def combine_results(
     results: List[TestResult],
 ) -> Tuple[List[Any], Dict[str, List[Any]], Dict[str, List[Any]]]:
@@ -338,6 +357,9 @@ def combine_results(
     # handle threshold tests (i.e. tests that have pass/fail bool status)
     if results[0].passed is not None:
         combined_outputs.append(all(result.passed for result in results))
+    # handle raw data (if any)
+    if results[0].raw_data:
+        combined_outputs.append(_combine_raw_data(results))
 
     # combine inputs and params
     combined_inputs = {}
@@ -359,4 +381,8 @@ def combine_results(
     combined_inputs = _combine_dict_values(combined_inputs)
     combined_params = _combine_dict_values(combined_params)
 
-    return combined_outputs, combined_inputs, combined_params
+    return (
+        tuple(combined_outputs),
+        combined_inputs,
+        combined_params,
+    )

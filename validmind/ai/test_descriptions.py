@@ -4,70 +4,24 @@
 
 import json
 import os
-import re
 from concurrent.futures import ThreadPoolExecutor
 from typing import List, Optional, Union
 
 import tiktoken
-from jinja2 import Template
 
 from ..client_config import client_config
 from ..logging import get_logger
 from ..utils import NumpyEncoder, md_to_html, test_id_to_name
 from ..vm_models.figure import Figure
 from ..vm_models.result import ResultTable
-from .utils import DescriptionFuture, get_client_and_model
+from .utils import DescriptionFuture
 
 __executor = ThreadPoolExecutor()
-__prompt = None
 
 logger = get_logger(__name__)
 
 
-def _load_prompt():
-    global __prompt
-
-    if not __prompt:
-        folder_path = os.path.join(os.path.dirname(__file__), "test_result_description")
-        with open(os.path.join(folder_path, "system.jinja"), "r") as f:
-            system_prompt = f.read()
-        with open(os.path.join(folder_path, "user.jinja"), "r") as f:
-            user_prompt = f.read()
-
-        __prompt = (Template(system_prompt), Template(user_prompt))
-
-    return __prompt
-
-
-def prompt_to_message(role, prompt):
-    if "[[IMAGE:" not in prompt:
-        return {"role": role, "content": prompt}
-
-    content = []
-
-    # Regex pattern to find [[IMAGE:<b64-data>]] markers
-    pattern = re.compile(r"\[\[IMAGE:(.*?)\]\]", re.DOTALL)
-
-    last_index = 0
-    for match in pattern.finditer(prompt):
-        # Text before the image marker
-        start, end = match.span()
-        if start > last_index:
-            content.append({"type": "text", "text": prompt[last_index:start]})
-
-        content.append({"type": "image_url", "image_url": {"url": match.group(1)}})
-
-        last_index = end
-
-    # Text after the last image
-    if last_index < len(prompt):
-        content.append({"type": "text", "text": prompt[last_index:]})
-
-    return {"role": role, "content": content}
-
-
 def _get_llm_global_context():
-
     # Get the context from the environment variable
     context = os.getenv("VALIDMIND_LLM_DESCRIPTIONS_CONTEXT", "")
 
@@ -115,12 +69,12 @@ def generate_description(
     title: Optional[str] = None,
 ):
     """Generate the description for the test results"""
+    from validmind.api_client import generate_test_result_description
+
     if not tables and not figures and not metric:
         raise ValueError(
             "No tables, unit metric or figures provided - cannot generate description"
         )
-
-    client, model = get_client_and_model()
 
     # get last part of test id
     test_name = title or test_id.split(".")[-1]
@@ -145,29 +99,18 @@ def generate_description(
     else:
         summary = None
 
-    context = _get_llm_global_context()
-
-    input_data = {
-        "test_name": test_name,
-        "test_description": test_description,
-        "title": title,
-        "summary": _truncate_summary(summary, test_id),
-        "figures": [figure._get_b64_url() for figure in ([] if tables else figures)],
-        "context": context,
-    }
-    system, user = _load_prompt()
-
-    messages = [
-        prompt_to_message("system", system.render(input_data)),
-        prompt_to_message("user", user.render(input_data)),
-    ]
-    response = client.chat.completions.create(
-        model=model,
-        temperature=0.0,
-        messages=messages,
-    )
-
-    return response.choices[0].message.content
+    return generate_test_result_description(
+        {
+            "test_name": test_name,
+            "test_description": test_description,
+            "title": title,
+            "summary": _truncate_summary(summary, test_id),
+            "figures": [
+                figure._get_b64_url() for figure in ([] if tables else figures)
+            ],
+            "context": _get_llm_global_context(),
+        }
+    )["content"]
 
 
 def background_generate_description(
@@ -238,7 +181,8 @@ def get_result_description(
     # Check the feature flag first, then the environment variable
     llm_descriptions_enabled = (
         client_config.can_generate_llm_test_descriptions()
-        and os.getenv("VALIDMIND_LLM_DESCRIPTIONS_ENABLED", "1") not in ["0", "false"]
+        and os.getenv("VALIDMIND_LLM_DESCRIPTIONS_ENABLED", "1").lower()
+        not in ["0", "false"]
     )
 
     # TODO: fix circular import

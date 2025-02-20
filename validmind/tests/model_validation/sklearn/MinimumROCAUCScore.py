@@ -62,18 +62,14 @@ def MinimumROCAUCScore(dataset: VMDataset, model: VMModel, min_threshold: float 
         lb = LabelBinarizer()
         lb.fit(y_true)
 
-        y_true_binarized = lb.transform(y_true)
-        y_score_binarized = lb.transform(dataset.y_pred(model))
-
         roc_auc = roc_auc_score(
-            y_true=y_true_binarized,
-            y_score=y_score_binarized,
+            y_true=lb.transform(y_true),
+            y_score=lb.transform(dataset.y_pred(model)),
             average="macro",
         )
 
     else:
-        y_score_prob = dataset.y_prob(model)
-        roc_auc = roc_auc_score(y_true=y_true, y_score=y_score_prob)
+        roc_auc = roc_auc_score(y_true=y_true, y_score=dataset.y_prob(model))
 
     return [
         {

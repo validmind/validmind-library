@@ -5,6 +5,7 @@
 import numpy as np
 import pandas as pd
 
+from validmind.errors import MissingRExtrasError
 from validmind.logging import get_logger
 from validmind.vm_models.model import VMModel
 
@@ -125,7 +126,10 @@ class RModel(VMModel):
         """
         Converts the predicted probabilities to classes
         """
-        from rpy2.robjects import pandas2ri
+        try:
+            from rpy2.robjects import pandas2ri
+        except ImportError:
+            raise MissingRExtrasError()
 
         # Activate the pandas conversion for rpy2
         pandas2ri.activate()
