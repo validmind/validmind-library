@@ -296,7 +296,7 @@ Exception raised when an error occurs while loading a test
 
 ::: {.signature}
 
-<span class="name">LoadTestError</span>(<span class="param"><span class="n">message</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="muted">,</span></span><span class="param"><span class="n">original_error</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Optional</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="n">Exception</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span></span>)
+<span class="name">LoadTestError</span>(<span class="params"><span class="n">message</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">original_error</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Optional</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="n">Exception</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span></span>)
 
 :::
 
@@ -349,7 +349,7 @@ test = test_provider.load_test("my_namespace.my_test_class")
 
 ::: {.signature}
 
-<span class="name">LocalTestProvider</span>(<span class="param"><span class="n">root_folder</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span></span>)
+<span class="name">LocalTestProvider</span>(<span class="params"><span class="n">root_folder</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span></span>)
 
 :::
 

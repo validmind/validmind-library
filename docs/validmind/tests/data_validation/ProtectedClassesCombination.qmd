@@ -94,7 +94,7 @@ When a required dependency is missing.
 
 ::: {.signature}
 
-<span class="name">MissingDependencyError</span>(<span class="param"><span class="n">message</span><span class="o">=</span><span class="s1">''</span><span class="muted">,</span></span><span class="param"><span class="n">required_dependencies</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">extra</span><span class="o">=</span><span class="kc">None</span></span>)
+<span class="name">MissingDependencyError</span>(<span class="params"><span class="n">message</span><span class="o">=</span><span class="s1">''</span><span class="muted">,</span></span><span class="params"><span class="n">required_dependencies</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">extra</span><span class="o">=</span><span class="kc">None</span></span>)
 
 :::
 

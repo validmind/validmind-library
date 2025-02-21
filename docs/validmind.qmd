@@ -445,7 +445,7 @@ Holds raw data for a test result
 
 ::: {.signature}
 
-<span class="name">RawData</span>(<span class="param"><span class="n">log</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="muted">,</span></span><span class="param"><span class="n">\*\*kwargs</span></span>)
+<span class="name">RawData</span>(<span class="params"><span class="n">log</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>)
 
 :::
 
