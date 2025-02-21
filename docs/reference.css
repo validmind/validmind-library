@@ -56,7 +56,7 @@ p code:not(.sourceCode), li code:not(.sourceCode), td code:not(.sourceCode) {
 .signature .o {
   color: #5E5E5E;
   padding-left: 2px;
-  padding-right: 2px;
+  padding-right: 4px;
 }
 
 .signature .p {
@@ -88,7 +88,7 @@ p code:not(.sourceCode), li code:not(.sourceCode), td code:not(.sourceCode) {
 
 .signature .decorators {
   display: block; 
-  margin-bottom: -10px;
+  margin-bottom: -20px;
 }
 
 .signature .decorator {

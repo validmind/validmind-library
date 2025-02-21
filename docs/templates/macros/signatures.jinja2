@@ -19,8 +19,23 @@
 {%- if member.kind == "class" -%}
 {%- elif member.parameters -%}({{- '' -}}
   {%- set params = [] -%}
+  {# Add self parameter for methods that aren't __init__ #}
+  {%- if member.kind == "method" and member.name != "__init__" -%}
+    {%- set has_self = false -%}
+    {%- for param in member.parameters -%}
+      {%- if param.name == "self" -%}
+        {%- set has_self = true -%}
+      {%- endif -%}
+    {%- endfor -%}
+    {%- if not has_self -%}
+      {%- set self_param = {'name': 'self'} -%}
+      {%- set _ = params.append(self_param) -%}
+    {%- endif -%}
+  {%- endif -%}
   {%- for param in member.parameters -%}
-    {%- if (param.name != "self" or member.parent is defined) and not (param.name == "self" and member.name == "__init__") -%}
+    {%- if param.name == "self" and member.name != "__init__" -%}
+      {%- set _ = params.append(param) -%}
+    {%- elif param.name != "self" -%}
       {%- set _ = params.append(param) -%}
     {%- endif -%}
   {%- endfor -%}

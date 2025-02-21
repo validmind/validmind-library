@@ -367,7 +367,7 @@ Initialize the LocalTestProvider with the given root_folder (see class docstring
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">list_tests</span>():
+<span class="kw">def</span><span class="name">list_tests</span>(<span class="param"><span class="bp">self</span></span>):
 
 :::
 
@@ -385,7 +385,7 @@ List all tests in the given namespace
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">load_test</span>(<span class="params"><span class="n">test_id</span><span class="p">:</span><span class="nb">str</span></span>):
+<span class="kw">def</span><span class="name">load_test</span>(<span class="params"><span class="bp">self</span><span class="muted">,</span></span><span class="params"><span class="n">test_id</span><span class="p">:</span><span class="nb">str</span></span>):
 
 :::
 
@@ -430,7 +430,7 @@ Protocol for user-defined test providers
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">list_tests</span>()<span class="p"> → </span><span class="return-annotation"><span class="n">List</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span></span>:
+<span class="kw">def</span><span class="name">list_tests</span>(<span class="param"><span class="bp">self</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">List</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span></span>:
 
 :::
 
@@ -448,7 +448,7 @@ List all tests in the given namespace
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">load_test</span>(<span class="params"><span class="n">test_id</span><span class="p">:</span><span class="nb">str</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="nb">callable</span></span>:
+<span class="kw">def</span><span class="name">load_test</span>(<span class="params"><span class="bp">self</span><span class="muted">,</span></span><span class="params"><span class="n">test_id</span><span class="p">:</span><span class="nb">str</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="nb">callable</span></span>:
 
 :::
 
