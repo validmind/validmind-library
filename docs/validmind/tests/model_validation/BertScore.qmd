@@ -38,7 +38,7 @@ Comprehensive validation of true and predicted value pairs. Handles NaN/None val
 
 ::: {.signature}
 
-<div class="decorator">@</div><div class="decorator">@</div>
+<div class="decorator">@<!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n"></span><span class="p">(</span><span class="p">)</span></div><div class="decorator">@<!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n"></span><span class="p">(</span><span class="p">)</span></div>
 <span class="kw">def</span><span class="name">BertScore</span>(<span class="params"><span class="n">dataset</span><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="muted">,</span></span><span class="params"><span class="n">evaluation_model</span><span class="o">=</span><span class="s1">'distilbert-base-uncased'</span></span>):
 
 :::

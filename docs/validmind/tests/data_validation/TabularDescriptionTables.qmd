@@ -86,7 +86,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<div class="decorator">@</div><div class="decorator">@</div>
+<div class="decorator">@<!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n"></span><span class="p">(</span><span class="p">)</span></div><div class="decorator">@<!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n"></span><span class="p">(</span><span class="p">)</span></div>
 <span class="kw">def</span><span class="name">TabularDescriptionTables</span>(<span class="param"><span class="n">dataset</span></span>):
 
 :::

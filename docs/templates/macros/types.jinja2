@@ -3,19 +3,7 @@
 
 {% macro format_type(type, module=None, add_links=false) %}
 <!-- types.jinja2 - format_type -->
-{%- if type is string -%}
-  {%- if type.startswith('{') and type.endswith('}') -%}
-    {{ format_type(type|fromjson, module, add_links) }}
-  {%- elif type.startswith("'") or type.startswith('"') -%}
-    <span class="s">{{ type }}</span>
-  {%- elif type in type_keywords -%}
-    <span class="n">{{ type }}</span>
-  {%- elif type|lower in builtin_types -%}
-    <span class="nb">{{ type }}</span>
-  {%- else -%}
-    <span class="n">{{ type }}</span>
-  {%- endif -%}
-{%- elif type is mapping -%}
+{%- if type is mapping -%}
   {%- if type.cls is defined -%}
     {%- if type.cls == "ExprAttribute" and type.values is sequence -%}
       {%- for value in type.values -%}
@@ -68,26 +56,8 @@
         {{ format_type(type.slice, module, add_links) }}
       {%- endif -%}
       <span class="p">]</span>
-    {%- elif type.cls == "ExprCall" -%}
-      {{ format_type(type.func, module, add_links) }}<span class="p">(</span>
-      {%- for arg in type.args -%}
-        {{ format_type(arg, module, add_links) }}
-        {%- if not loop.last -%}<span class="p">, </span>{%- endif -%}
-      {%- endfor -%}
-      <span class="p">)</span>
-    {%- elif type.cls == "ExprBinOp" -%}
-      {{ format_type(type.left, module, add_links) }}<span class="p">{{ type.op }}</span>{{ format_type(type.right, module, add_links) }}
-    {%- elif type.cls == "ExprDecorator" -%}
-      @{{ format_type(type.value, module, add_links) }}
-    {%- elif type.cls == "ExprInit" -%}
-      <span class="kw">def</span> <span class="name">__init__</span>(<span class="params">
-      {%- for param in type.params -%}
-        {{ format_type(param, module, add_links) }}
-        {%- if not loop.last -%}, {% endif -%}
-      {%- endfor -%}
-      </span>):
     {%- else -%}
-      {{ format_type(type|string, module, add_links) }}
+      <span class="n">{{ type|string }}</span>
     {%- endif -%}
   {%- elif type.kind is defined -%}
     {%- if type.kind == "union" -%}
@@ -106,10 +76,20 @@
       <span class="p">]</span>
     {%- endif -%}
   {%- else -%}
-    {{ format_type(type|string, module, add_links) }}
+    <span class="n">{{ type|string }}</span>
+  {%- endif -%}
+{%- elif type is string -%}
+  {%- if type.startswith("'") or type.startswith('"') -%}
+    <span class="s">{{ type }}</span>
+  {%- elif type in type_keywords -%}
+    <span class="n">{{ type }}</span>
+  {%- elif type|lower in builtin_types -%}
+    <span class="nb">{{ type }}</span>
+  {%- else -%}
+    <span class="n">{{ type }}</span>
   {%- endif -%}
 {%- else -%}
-  {{ format_type(type|string, module, add_links) }}
+  <span class="n">{{ type|string }}</span>
 {%- endif -%}
 {% endmacro %}
 

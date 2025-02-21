@@ -14,8 +14,8 @@ toc-expand: 4
 
 ::: {.signature}
 
-<div class="decorator">@</div><div class="decorator">@</div>
-<span class="kw">def</span><span class="name">TrainingTestDegradation</span>(<span class="params"><span class="n">datasets</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">VMModel</span><span class="muted">,</span></span><span class="params"><span class="n">max_threshold</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">float</span><span class="o">=</span><span class="kc">0.1</span></span>):
+<div class="decorator">@<!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n"></span><span class="p">(</span><span class="p">)</span></div><div class="decorator">@<!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n"></span><span class="p">(</span><span class="p">)</span></div>
+<span class="kw">def</span><span class="name">TrainingTestDegradation</span>(<span class="params"><span class="n">datasets</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">List</span><span class="p">[</span><!-- types.jinja2 - format_type --><span class="n">VMDataset</span><span class="p">]</span><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">VMModel</span><span class="muted">,</span></span><span class="params"><span class="n">max_threshold</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">float</span><span class="o">=</span><span class="kc">0.1</span></span>):
 
 :::
 

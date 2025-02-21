@@ -12,7 +12,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">call_model</span>(<span class="params"><span class="n">system_prompt</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">str</span><span class="muted">,</span></span><span class="params"><span class="n">user_prompt</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">str</span><span class="muted">,</span></span><span class="params"><span class="n">temperature</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">float</span><span class="o">=</span><span class="kc">0.0</span><span class="muted">,</span></span><span class="params"><span class="n">seed</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">int</span><span class="o">=</span><span class="kc">42</span></span>):
+<span class="kw">def</span><span class="name">call_model</span>(<span class="params"><span class="n">system_prompt</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">user_prompt</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">temperature</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">float</span><span class="o">=</span><span class="kc">0.0</span><span class="muted">,</span></span><span class="params"><span class="n">seed</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">int</span><span class="o">=</span><span class="kc">42</span></span>):
 
 :::
 
@@ -26,7 +26,7 @@ Call LLM with the given prompts and return the response
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">get_explanation</span>(<span class="param"><span class="n">response</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">str</span></span>):
+<span class="kw">def</span><span class="name">get_explanation</span>(<span class="param"><span class="n">response</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span></span>):
 
 :::
 
@@ -48,7 +48,7 @@ Explanation: <some-explanation>" -> "<some-explanation>"
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">get_score</span>(<span class="param"><span class="n">response</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">str</span></span>):
+<span class="kw">def</span><span class="name">get_score</span>(<span class="param"><span class="n">response</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span></span>):
 
 :::
 
@@ -72,7 +72,7 @@ Explanation: <some-explanation>" -> 8
 
 ::: {.signature}
 
-<div class="decorator">@</div><div class="decorator">@</div>
+<div class="decorator">@<!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n"></span><span class="p">(</span><span class="p">)</span></div><div class="decorator">@<!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n"></span><span class="p">(</span><span class="p">)</span></div>
 <span class="kw">def</span><span class="name">NegativeInstruction</span>(<span class="params"><span class="n">model</span><span class="muted">,</span></span><span class="params"><span class="n">min_threshold</span><span class="o">=</span><span class="kc">7</span></span>):
 
 :::

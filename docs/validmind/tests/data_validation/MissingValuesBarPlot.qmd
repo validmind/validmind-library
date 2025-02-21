@@ -14,8 +14,8 @@ toc-expand: 4
 
 ::: {.signature}
 
-<div class="decorator">@</div><div class="decorator">@</div>
-<span class="kw">def</span><span class="name">MissingValuesBarPlot</span>(<span class="params"><span class="n">dataset</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">VMDataset</span><span class="muted">,</span></span><span class="params"><span class="n">threshold</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">int</span><span class="o">=</span><span class="kc">80</span><span class="muted">,</span></span><span class="params"><span class="n">fig_height</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">int</span><span class="o">=</span><span class="kc">600</span></span>):
+<div class="decorator">@<!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n"></span><span class="p">(</span><span class="p">)</span></div><div class="decorator">@<!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n"></span><span class="p">(</span><span class="p">)</span></div>
+<span class="kw">def</span><span class="name">MissingValuesBarPlot</span>(<span class="params"><span class="n">dataset</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">VMDataset</span><span class="muted">,</span></span><span class="params"><span class="n">threshold</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">int</span><span class="o">=</span><span class="kc">80</span><span class="muted">,</span></span><span class="params"><span class="n">fig_height</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">int</span><span class="o">=</span><span class="kc">600</span></span>):
 
 :::
 
