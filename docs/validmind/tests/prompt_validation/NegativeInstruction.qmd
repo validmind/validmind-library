@@ -72,7 +72,7 @@ Explanation: <some-explanation>" -> 8
 
 ::: {.signature}
 
-<div class="decorator">@<!-- types.jinja2 - format_type --><span class="n">{'arguments': ["'llm'", "'zero_shot'", "'few_shot'"], 'cls': 'ExprCall', 'function': {'cls': 'ExprName', 'name': 'tags'}}</span></div><div class="decorator">@<!-- types.jinja2 - format_type --><span class="n">{'arguments': ["'text_classification'", "'text_summarization'"], 'cls': 'ExprCall', 'function': {'cls': 'ExprName', 'name': 'tasks'}}</span></div>
+<div class="decorator">@<!-- types.jinja2 - format_type --><span class="n">@tags('llm', 'zero_shot', 'few_shot')</span></div><div class="decorator">@<!-- types.jinja2 - format_type --><span class="n">@tasks('text_classification', 'text_summarization')</span></div>
 <span class="kw">def</span><span class="name">NegativeInstruction</span>(<span class="params"><span class="n">model</span><span class="muted">,</span></span><span class="params"><span class="n">min_threshold</span><span class="o">=</span><span class="kc">7</span></span>):
 
 :::

@@ -24,7 +24,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<div class="decorator">@<!-- types.jinja2 - format_type --><span class="n">{'arguments': ["'sklearn'", "'binary_classification'", "'multiclass_classification'", "'model_performance'", "'model_comparison'"], 'cls': 'ExprCall', 'function': {'cls': 'ExprName', 'name': 'tags'}}</span></div><div class="decorator">@<!-- types.jinja2 - format_type --><span class="n">{'arguments': ["'classification'", "'text_classification'"], 'cls': 'ExprCall', 'function': {'cls': 'ExprName', 'name': 'tasks'}}</span></div>
+<div class="decorator">@<!-- types.jinja2 - format_type --><span class="n">@tags('sklearn', 'binary_classification', 'multiclass_classification', 'model_performance', 'model_comparison')</span></div><div class="decorator">@<!-- types.jinja2 - format_type --><span class="n">@tasks('classification', 'text_classification')</span></div>
 <span class="kw">def</span><span class="name">ModelsPerformanceComparison</span>(<span class="params"><span class="n">dataset</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">VMDataset</span><span class="muted">,</span></span><span class="params"><span class="n">models</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="nb">list</span><span class="p">[</span><!-- types.jinja2 - format_type --><span class="n">VMModel</span><span class="p">]</span></span>):
 
 :::

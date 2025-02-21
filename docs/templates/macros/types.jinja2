@@ -28,11 +28,20 @@
   <span class="p">]</span>
 {%- endmacro -%}
 
-{% macro format_type(type, module=None, add_links=false) %}
+{%- macro format_type(type, module=None, add_links=false) -%}
 <!-- types.jinja2 - format_type -->
 {%- if type is mapping -%}
   {%- if type.cls is defined -%}
-    {%- if type.cls == "ExprAttribute" -%}
+    {%- if type.cls == "ExprCall" -%}
+      {%- if type.function and type.function.name in ["tags", "tasks"] -%}
+        <span class="n">@{{ type.function.name }}(
+        {%- for arg in type.arguments -%}
+          {{ arg }}
+          {%- if not loop.last -%}, {% endif -%}
+        {%- endfor -%}
+        )</span>
+      {%- endif -%}
+    {%- elif type.cls == "ExprAttribute" -%}
       {%- if type.get('values') is sequence -%}
         {%- for value in type.get('values') -%}
           {%- if value.cls == "ExprName" -%}
@@ -83,15 +92,13 @@
     <span class="n">{{ type }}</span>
   {%- elif type|lower in builtin_types -%}
     <span class="nb">{{ type }}</span>
-  {%- elif type is string and type.startswith("{'cls'") -%}
-    {{ format_type(type|tojson|fromjson, module, add_links) }}
   {%- else -%}
     <span class="n">{{ type }}</span>
   {%- endif -%}
 {%- else -%}
   <span class="n">{{ type|string }}</span>
 {%- endif -%}
-{% endmacro %}
+{%- endmacro -%}
 
 {%- macro format_return_type(returns) -%}
 <!-- types.jinja2 - format_return_type -->
