@@ -8,7 +8,7 @@
     {%- if type.cls == "ExprAttribute" and type.values is sequence -%}
       {%- for value in type.values -%}
         {{ format_type(value, module, add_links) }}
-        {%- if not loop.last -%}.<span class="p"></span>{%- endif -%}
+        {%- if not loop.last -%}<span class="o">.</span>{%- endif -%}
       {%- endfor -%}
     {%- elif type.cls == "ExprName" -%}
       {%- if module and type.name in module.members and module.members[type.name].kind == "alias" -%}

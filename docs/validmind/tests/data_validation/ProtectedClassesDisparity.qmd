@@ -28,7 +28,7 @@ Get a logger for the given module name
 
 ::: {.signature}
 
-<div class="decorator">@<!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n"></span><span class="p">(</span><span class="p">)</span></div><div class="decorator">@<!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n"></span><span class="p">(</span><span class="p">)</span></div>
+<div class="decorator">@<!-- types.jinja2 - format_type --><span class="n">{'arguments': ["'bias_and_fairness'"], 'cls': 'ExprCall', 'function': {'cls': 'ExprName', 'name': 'tags'}}</span></div><div class="decorator">@<!-- types.jinja2 - format_type --><span class="n">{'arguments': ["'classification'", "'regression'"], 'cls': 'ExprCall', 'function': {'cls': 'ExprName', 'name': 'tasks'}}</span></div>
 <span class="kw">def</span><span class="name">ProtectedClassesDisparity</span>(<span class="params"><span class="n">dataset</span><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="muted">,</span></span><span class="params"><span class="n">protected_classes</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">disparity_tolerance</span><span class="o">=</span><span class="kc">1.25</span><span class="muted">,</span></span><span class="params"><span class="n">metrics</span><span class="o">=</span><!-- types.jinja2 - format_type --><span class="p">[</span><!-- types.jinja2 - format_type --><span class="s">'fnr'</span><span class="p">, </span><!-- types.jinja2 - format_type --><span class="s">'fpr'</span><span class="p">, </span><!-- types.jinja2 - format_type --><span class="s">'tpr'</span><span class="p">]</span></span>):
 
 :::
@@ -89,3 +89,17 @@ When a required dependency is missing.
 
 - **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
 - **From builtins.BaseException**: with_traceback, add_note
+
+### [MissingDependencyError[()]{.muted}](#__init__)
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="name">__init__</span>(<span class="params"><span class="n">message</span><span class="o">=</span><span class="s1">''</span><span class="muted">,</span></span><span class="params"><span class="n">required_dependencies</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">extra</span><span class="o">=</span><span class="kc">None</span></span>)
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Args: message (str): The error message. required_dependencies (list): A list of required dependencies. extra (str): The particular validmind `extra` that will install the missing dependencies.

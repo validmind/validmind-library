@@ -290,6 +290,16 @@ Exception raised when an error occurs while loading a test
 - **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
 - **From builtins.BaseException**: with_traceback, add_note
 
+### [LoadTestError[()]{.muted}](#__init__)
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="name">__init__</span>(<span class="params"><span class="n">message</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">original_error</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Optional</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="n">Exception</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span></span>)
+
+:::
+
 <!-- class.qmd.jinja2 -->
 
 ## [class]{.muted} LocalTestProvider
@@ -328,6 +338,24 @@ test_provider.list_tests()
 test = test_provider.load_test("my_namespace.my_test_class")
 # full path to the test class module is /path/to/tests/folder/my_test_class.py
 ```
+
+**Arguments**
+
+- `root_folder` (str): The root directory for local tests.
+
+### [LocalTestProvider[()]{.muted}](#__init__)
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="name">__init__</span>(<span class="params"><span class="n">root_folder</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span></span>)
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Initialize the LocalTestProvider with the given root_folder (see class docstring for details)
 
 **Arguments**
 

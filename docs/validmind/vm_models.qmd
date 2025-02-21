@@ -27,6 +27,16 @@ Models entrypoint
 
 Figure objects track the schema supported by the ValidMind API
 
+### [Figure[()]{.muted}](#__init__)
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="name">__init__</span>(<span class="params"><span class="n">key</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">figure</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Union</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="n">{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'matplotlib'}, {'cls': 'ExprName', 'name': 'figure'}, {'cls': 'ExprName', 'name': 'Figure'}]}</span><span class="p">, </span><!-- types.jinja2 - format_type --><span class="n">{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'go'}, {'cls': 'ExprName', 'name': 'Figure'}]}</span><span class="p">, </span><!-- types.jinja2 - format_type --><span class="n">{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'go'}, {'cls': 'ExprName', 'name': 'FigureWidget'}]}</span><span class="p">, </span><!-- types.jinja2 - format_type --><span class="n">bytes</span><span class="p">\]</span><span class="muted">,</span></span><span class="params"><span class="n">ref_id</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">\_type</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o">=</span><span class="s1">'plot'</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><span class="n">None</span></span>
+
+:::
+
 ### [serialize[()]{.muted}](#serialize)
 
 <!-- signatures.jinja2 -->
@@ -88,6 +98,16 @@ we would render images as-is, but Plotly FigureWidgets don't work well on Google
 
 Model attributes definition
 
+### [ModelAttributes[()]{.muted}](#__init__)
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="name">__init__</span>(<span class="params"><span class="n">architecture</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">framework</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">framework_version</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">language</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">task</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">ModelTask</span><span class="o">=</span><span class="kc">None</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><span class="n">None</span></span>
+
+:::
+
 ### [from_dict[()]{.muted}](#from_dict)
 
 <!-- signatures.jinja2 -->
@@ -123,6 +143,16 @@ Base class for test suites. Test suites are used to define a grouping of tests t
 can be run as a suite against datasets and models. Test Suites can be defined by inheriting from this base class and defining the list of tests as a class variable.
 
 Tests can be a flat list of strings or may be nested into sections by using a dict
+
+### [TestSuite[()]{.muted}](#__init__)
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="name">__init__</span>(<span class="params"><span class="n">sections</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">List</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="n">TestSuiteSection</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><span class="n">None</span></span>
+
+:::
 
 ### [get_default_config[()]{.muted}](#get_default_config)
 
@@ -187,6 +217,16 @@ Returns the total number of tests in the test suite
 <!-- docstring.jinja2 -->
 
 Runs a test suite
+
+### [TestSuiteRunner[()]{.muted}](#__init__)
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="name">__init__</span>(<span class="params"><span class="n">suite</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">TestSuite</span><span class="muted">,</span></span><span class="params"><span class="n">config</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">inputs</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">dict</span><span class="o">=</span><span class="kc">None</span></span>)
+
+:::
 
 ### [log_results[()]{.muted}](#log_results)
 
@@ -269,6 +309,34 @@ This way we can support multiple dataset types but under the hood we only need t
 - `extra_columns` (Dict): Extra columns to include in the dataset.
 
 **Inherited members**
+
+### [VMDataset[()]{.muted}](#__init__)
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="name">__init__</span>(<span class="params"><span class="n">raw_dataset</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'np'}, {'cls': 'ExprName', 'name': 'ndarray'}]}</span><span class="muted">,</span></span><span class="params"><span class="n">input_id</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">VMModel</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">index</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'np'}, {'cls': 'ExprName', 'name': 'ndarray'}]}</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">index_name</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">date_time_index</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">columns</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">list</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">target_column</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">feature_columns</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">list</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">text_column</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">extra_columns</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">target_class_labels</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">dict</span><span class="o">=</span><span class="kc">None</span></span>)
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Initializes a VMDataset instance.
+
+**Arguments**
+
+- `raw_dataset` (np.ndarray): The raw dataset as a NumPy array.
+- `input_id` (str): Identifier for the dataset.
+- `model` (VMModel): Model associated with the dataset.
+- `index` (np.ndarray): The raw dataset index as a NumPy array.
+- `index_name` (str): The raw dataset index name as a NumPy array.
+- `date_time_index` (bool): Whether the index is a datetime index.
+- `columns` (List[str], optional): The column names of the dataset. Defaults to None.
+- `target_column` (str, optional): The target column name of the dataset. Defaults to None.
+- `feature_columns` (str, optional): The feature column names of the dataset. Defaults to None.
+- `text_column` (str, optional): The text column name of the dataset for nlp tasks. Defaults to None.
+- `target_class_labels` (Dict, optional): The class labels for the target columns. Defaults to None.
 
 ### [add_extra_column[()]{.muted}](#add_extra_column)
 
@@ -398,7 +466,7 @@ Returns a dataframe containing only the feature columns
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">y_df</span>()<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="s">"{\\u0027cls\\u0027: \\u0027ExprAttribute\\u0027, \\u0027values\\u0027: [{\\u0027cls\\u0027: \\u0027ExprName\\u0027, \\u0027name\\u0027: \\u0027pd\\u0027}, {\\u0027cls\\u0027: \\u0027ExprName\\u0027, \\u0027name\\u0027: \\u0027DataFrame\\u0027}]}"</span></span>:
+<span class="kw">def</span><span class="name">y_df</span>()<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><span class="n">{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'pd'}, {'cls': 'ExprName', 'name': 'DataFrame'}]}</span></span>:
 
 :::
 
@@ -412,7 +480,7 @@ Returns a dataframe containing the target column
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">y_pred</span>(<span class="params"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="s">"{\\u0027cls\\u0027: \\u0027ExprAttribute\\u0027, \\u0027values\\u0027: [{\\u0027cls\\u0027: \\u0027ExprName\\u0027, \\u0027name\\u0027: \\u0027np\\u0027}, {\\u0027cls\\u0027: \\u0027ExprName\\u0027, \\u0027name\\u0027: \\u0027ndarray\\u0027}]}"</span></span>:
+<span class="kw">def</span><span class="name">y_pred</span>(<span class="params"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><span class="n">{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'np'}, {'cls': 'ExprName', 'name': 'ndarray'}]}</span></span>:
 
 :::
 
@@ -436,7 +504,7 @@ Attempts to stack complex prediction types (e.g., embeddings) into a single, mul
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">y_pred_df</span>(<span class="params"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="s">"{\\u0027cls\\u0027: \\u0027ExprAttribute\\u0027, \\u0027values\\u0027: [{\\u0027cls\\u0027: \\u0027ExprName\\u0027, \\u0027name\\u0027: \\u0027pd\\u0027}, {\\u0027cls\\u0027: \\u0027ExprName\\u0027, \\u0027name\\u0027: \\u0027DataFrame\\u0027}]}"</span></span>:
+<span class="kw">def</span><span class="name">y_pred_df</span>(<span class="params"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><span class="n">{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'pd'}, {'cls': 'ExprName', 'name': 'DataFrame'}]}</span></span>:
 
 :::
 
@@ -450,7 +518,7 @@ Returns a dataframe containing the predictions for a given model
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">y_prob</span>(<span class="params"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="s">"{\\u0027cls\\u0027: \\u0027ExprAttribute\\u0027, \\u0027values\\u0027: [{\\u0027cls\\u0027: \\u0027ExprName\\u0027, \\u0027name\\u0027: \\u0027np\\u0027}, {\\u0027cls\\u0027: \\u0027ExprName\\u0027, \\u0027name\\u0027: \\u0027ndarray\\u0027}]}"</span></span>:
+<span class="kw">def</span><span class="name">y_prob</span>(<span class="params"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><span class="n">{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'np'}, {'cls': 'ExprName', 'name': 'ndarray'}]}</span></span>:
 
 :::
 
@@ -472,7 +540,7 @@ Returns the probabilities for a given model.
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">y_prob_df</span>(<span class="params"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="s">"{\\u0027cls\\u0027: \\u0027ExprAttribute\\u0027, \\u0027values\\u0027: [{\\u0027cls\\u0027: \\u0027ExprName\\u0027, \\u0027name\\u0027: \\u0027pd\\u0027}, {\\u0027cls\\u0027: \\u0027ExprName\\u0027, \\u0027name\\u0027: \\u0027DataFrame\\u0027}]}"</span></span>:
+<span class="kw">def</span><span class="name">y_prob_df</span>(<span class="params"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><span class="n">{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'pd'}, {'cls': 'ExprName', 'name': 'DataFrame'}]}</span></span>:
 
 :::
 
@@ -546,6 +614,16 @@ An base class that wraps a trained model instance and its associated data.
 - `name` (str, optional): The name of the model. Defaults to the class name.
 
 **Inherited members**
+
+### [VMModel[()]{.muted}](#__init__)
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="name">__init__</span>(<span class="params"><span class="n">input_id</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">object</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">attributes</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">ModelAttributes</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">name</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>)
+
+:::
 
 ### [predict[()]{.muted}](#predict)
 

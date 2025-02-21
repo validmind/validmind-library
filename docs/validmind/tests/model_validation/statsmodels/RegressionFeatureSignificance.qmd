@@ -28,7 +28,7 @@ Get a logger for the given module name
 
 ::: {.signature}
 
-<div class="decorator">@<!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n"></span><span class="p">(</span><span class="p">)</span></div><div class="decorator">@<!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n"></span><span class="p">(</span><span class="p">)</span></div>
+<div class="decorator">@<!-- types.jinja2 - format_type --><span class="n">{'arguments': ["'statistical_test'", "'model_interpretation'", "'visualization'", "'feature_importance'"], 'cls': 'ExprCall', 'function': {'cls': 'ExprName', 'name': 'tags'}}</span></div><div class="decorator">@<!-- types.jinja2 - format_type --><span class="n">{'arguments': ["'regression'"], 'cls': 'ExprCall', 'function': {'cls': 'ExprName', 'name': 'tasks'}}</span></div>
 <span class="kw">def</span><span class="name">RegressionFeatureSignificance</span>(<span class="params"><span class="n">model</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">VMModel</span><span class="muted">,</span></span><span class="params"><span class="n">fontsize</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">int</span><span class="o">=</span><span class="kc">10</span><span class="muted">,</span></span><span class="params"><span class="n">p_threshold</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">float</span><span class="o">=</span><span class="kc">0.05</span></span>):
 
 :::

@@ -31,8 +31,8 @@
 
 {% if resolved.members %}
 {% for member in resolved.members.values() | sort(attribute='name') %}
-{% if member.kind in ['method', 'function'] and not member.name.startswith('_') %}
-### [{{ member.name }}[()]{.muted}](#{{ member.name }})
+{% if member.kind in ['method', 'function'] and (not member.name.startswith('_') or member.name == '__init__') %}
+### [{{ member.name if member.name != '__init__' else resolved.name }}[()]{.muted}](#{{ member.name }})
 
 {{ signatures.render_signature(member) }}
 
