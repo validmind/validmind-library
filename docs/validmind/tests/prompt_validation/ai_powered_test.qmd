@@ -14,7 +14,39 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">call_model</span>(<span class="params"><span class="n">system_prompt</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">user_prompt</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">temperature</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">float</span><span class="o">=</span><span class="kc">0.0</span><span class="muted">,</span></span><span class="params"><span class="n">seed</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">int</span><span class="o">=</span><span class="kc">42</span></span>):
+<span class="kw">def</span><span class="name">call_model</span>(<span class="params"><span class="n">system_prompt</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">str</span><!-- DEBUG is_mapping: True -->
+
+<!-- DEBUG type_class: dict -->
+
+<!-- DEBUG cls_value: ExprName -->
+
+<!-- DEBUG cls_type: str -->
+
+<span class="muted">,</span></span><span class="params"><span class="n">user_prompt</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">str</span><!-- DEBUG is_mapping: True -->
+
+<!-- DEBUG type_class: dict -->
+
+<!-- DEBUG cls_value: ExprName -->
+
+<!-- DEBUG cls_type: str -->
+
+<span class="muted">,</span></span><span class="params"><span class="n">temperature</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">float</span><!-- DEBUG is_mapping: True -->
+
+<!-- DEBUG type_class: dict -->
+
+<!-- DEBUG cls_value: ExprName -->
+
+<!-- DEBUG cls_type: str -->
+
+<span class="o">=</span><span class="kc">0.0</span><span class="muted">,</span></span><span class="params"><span class="n">seed</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">int</span><!-- DEBUG is_mapping: True -->
+
+<!-- DEBUG type_class: dict -->
+
+<!-- DEBUG cls_value: ExprName -->
+
+<!-- DEBUG cls_type: str -->
+
+<span class="o">=</span><span class="kc">42</span></span>):
 
 :::
 
@@ -30,7 +62,15 @@ Call LLM with the given prompts and return the response
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">get_explanation</span>(<span class="param"><span class="n">response</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span></span>):
+<span class="kw">def</span><span class="name">get_explanation</span>(<span class="param"><span class="n">response</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">str</span><!-- DEBUG is_mapping: True -->
+
+<!-- DEBUG type_class: dict -->
+
+<!-- DEBUG cls_value: ExprName -->
+
+<!-- DEBUG cls_type: str -->
+
+</span>):
 
 :::
 
@@ -54,7 +94,15 @@ Explanation: <some-explanation>" -> "<some-explanation>"
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">get_score</span>(<span class="param"><span class="n">response</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span></span>):
+<span class="kw">def</span><span class="name">get_score</span>(<span class="param"><span class="n">response</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">str</span><!-- DEBUG is_mapping: True -->
+
+<!-- DEBUG type_class: dict -->
+
+<!-- DEBUG cls_value: ExprName -->
+
+<!-- DEBUG cls_type: str -->
+
+</span>):
 
 :::
 

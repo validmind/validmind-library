@@ -12,7 +12,43 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">adj_r2_score</span>(<span class="params"><span class="n">actual</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'np'}, {'cls': 'ExprName', 'name': 'ndarray'}]}</span><span class="muted">,</span></span><span class="params"><span class="n">predicted</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'np'}, {'cls': 'ExprName', 'name': 'ndarray'}]}</span><span class="muted">,</span></span><span class="params"><span class="n">rowcount</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">int</span><span class="muted">,</span></span><span class="params"><span class="n">featurecount</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">int</span></span>):
+<span class="kw">def</span><span class="name">adj_r2_score</span>(<span class="params"><span class="n">actual</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprAttribute --><!-- DEBUG values: [{'cls': 'ExprName', 'name': 'np'}, {'cls': 'ExprName', 'name': 'ndarray'}] -->
+
+<!-- DEBUG values_type: list --><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><!-- DEBUG is_mapping: True -->
+
+<!-- DEBUG type_class: dict -->
+
+<!-- DEBUG cls_value: ExprAttribute -->
+
+<!-- DEBUG cls_type: str -->
+
+<span class="muted">,</span></span><span class="params"><span class="n">predicted</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprAttribute --><!-- DEBUG values: [{'cls': 'ExprName', 'name': 'np'}, {'cls': 'ExprName', 'name': 'ndarray'}] -->
+
+<!-- DEBUG values_type: list --><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><!-- DEBUG is_mapping: True -->
+
+<!-- DEBUG type_class: dict -->
+
+<!-- DEBUG cls_value: ExprAttribute -->
+
+<!-- DEBUG cls_type: str -->
+
+<span class="muted">,</span></span><span class="params"><span class="n">rowcount</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">int</span><!-- DEBUG is_mapping: True -->
+
+<!-- DEBUG type_class: dict -->
+
+<!-- DEBUG cls_value: ExprName -->
+
+<!-- DEBUG cls_type: str -->
+
+<span class="muted">,</span></span><span class="params"><span class="n">featurecount</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">int</span><!-- DEBUG is_mapping: True -->
+
+<!-- DEBUG type_class: dict -->
+
+<!-- DEBUG cls_value: ExprName -->
+
+<!-- DEBUG cls_type: str -->
+
+</span>):
 
 :::
 
@@ -28,7 +64,15 @@ Adjusted R2 Score
 
 ::: {.signature}
 
-<div class="decorator">@<!-- types.jinja2 - format_type --><span class="n">{'arguments': ["'model_performance'", "'sklearn'"], 'cls': 'ExprCall', 'function': {'cls': 'ExprName', 'name': 'tags'}}</span></div><div class="decorator">@<!-- types.jinja2 - format_type --><span class="n">{'arguments': ["'regression'", "'time_series_forecasting'"], 'cls': 'ExprCall', 'function': {'cls': 'ExprName', 'name': 'tasks'}}</span></div>
+<div class="decorator">@<!-- types.jinja2 - format_type --><!-- DEBUG: ExprCall --><span class="n">{'arguments': ["'model_performance'", "'sklearn'"], 'cls': 'ExprCall', 'function': {'cls': 'ExprName', 'name': 'tags'}}</span><!-- DEBUG is_mapping: True -->
+<!-- DEBUG type_class: dict -->
+<!-- DEBUG cls_value: ExprCall -->
+<!-- DEBUG cls_type: str -->
+</div><div class="decorator">@<!-- types.jinja2 - format_type --><!-- DEBUG: ExprCall --><span class="n">{'arguments': ["'regression'", "'time_series_forecasting'"], 'cls': 'ExprCall', 'function': {'cls': 'ExprName', 'name': 'tasks'}}</span><!-- DEBUG is_mapping: True -->
+<!-- DEBUG type_class: dict -->
+<!-- DEBUG cls_value: ExprCall -->
+<!-- DEBUG cls_type: str -->
+</div>
 <span class="kw">def</span><span class="name">RegressionR2SquareComparison</span>(<span class="params"><span class="n">datasets</span><span class="muted">,</span></span><span class="params"><span class="n">models</span></span>):
 
 :::

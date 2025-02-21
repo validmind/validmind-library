@@ -28,8 +28,24 @@ Get a logger for the given module name
 
 ::: {.signature}
 
-<div class="decorator">@<!-- types.jinja2 - format_type --><span class="n">{'arguments': ["'time_series_data'", "'seasonality'", "'statsmodels'"], 'cls': 'ExprCall', 'function': {'cls': 'ExprName', 'name': 'tags'}}</span></div><div class="decorator">@<!-- types.jinja2 - format_type --><span class="n">{'arguments': ["'regression'"], 'cls': 'ExprCall', 'function': {'cls': 'ExprName', 'name': 'tasks'}}</span></div>
-<span class="kw">def</span><span class="name">SeasonalDecompose</span>(<span class="params"><span class="n">dataset</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">VMDataset</span><span class="muted">,</span></span><span class="params"><span class="n">seasonal_model</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o">=</span><span class="s1">'additive'</span></span>):
+<div class="decorator">@<!-- types.jinja2 - format_type --><!-- DEBUG: ExprCall --><span class="n">{'arguments': ["'time_series_data'", "'seasonality'", "'statsmodels'"], 'cls': 'ExprCall', 'function': {'cls': 'ExprName', 'name': 'tags'}}</span><!-- DEBUG is_mapping: True -->
+<!-- DEBUG type_class: dict -->
+<!-- DEBUG cls_value: ExprCall -->
+<!-- DEBUG cls_type: str -->
+</div><div class="decorator">@<!-- types.jinja2 - format_type --><!-- DEBUG: ExprCall --><span class="n">{'arguments': ["'regression'"], 'cls': 'ExprCall', 'function': {'cls': 'ExprName', 'name': 'tasks'}}</span><!-- DEBUG is_mapping: True -->
+<!-- DEBUG type_class: dict -->
+<!-- DEBUG cls_value: ExprCall -->
+<!-- DEBUG cls_type: str -->
+</div>
+<span class="kw">def</span><span class="name">SeasonalDecompose</span>(<span class="params"><span class="n">dataset</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="n">VMDataset</span><!-- DEBUG is_mapping: True -->
+<!-- DEBUG type_class: dict -->
+<!-- DEBUG cls_value: ExprName -->
+<!-- DEBUG cls_type: str -->
+<span class="muted">,</span></span><span class="params"><span class="n">seasonal_model</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">str</span><!-- DEBUG is_mapping: True -->
+<!-- DEBUG type_class: dict -->
+<!-- DEBUG cls_value: ExprName -->
+<!-- DEBUG cls_type: str -->
+<span class="o">=</span><span class="s1">'additive'</span></span>):
 
 :::
 

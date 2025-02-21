@@ -5,11 +5,20 @@
 <!-- types.jinja2 - format_type -->
 {%- if type is mapping -%}
   {%- if type.cls is defined -%}
-    {%- if type.cls == "ExprAttribute" and type.values is sequence -%}
-      {%- for value in type.values -%}
-        {{ format_type(value, module, add_links) }}
-        {%- if not loop.last -%}<span class="o">.</span>{%- endif -%}
-      {%- endfor -%}
+<!-- DEBUG: {{ type.cls }} -->
+    {%- if type.cls == "ExprAttribute" -%}
+<!-- DEBUG values: {{ type.get('values') }} -->
+<!-- DEBUG values_type: {{ type.get('values').__class__.__name__ if type.get('values') is defined else 'undefined' }} -->
+      {%- if type.get('values') is sequence -%}
+        {%- for value in type.get('values') -%}
+          {%- if value.cls == "ExprName" -%}
+            <span class="n">{{ value.name }}</span>
+          {%- endif -%}
+          {%- if not loop.last -%}<span class="o">.</span>{%- endif -%}
+        {%- endfor -%}
+      {%- else -%}
+        <span class="n">{{ type|string }}</span>
+      {%- endif -%}
     {%- elif type.cls == "ExprName" -%}
       {%- if module and type.name in module.members and module.members[type.name].kind == "alias" -%}
         {{ module.members[type.name].target_path }}
@@ -85,12 +94,18 @@
     <span class="n">{{ type }}</span>
   {%- elif type|lower in builtin_types -%}
     <span class="nb">{{ type }}</span>
+  {%- elif type is string and type.startswith("{'cls'") -%}
+    {{ format_type(type|tojson|fromjson, module, add_links) }}
   {%- else -%}
     <span class="n">{{ type }}</span>
   {%- endif -%}
 {%- else -%}
   <span class="n">{{ type|string }}</span>
 {%- endif -%}
+<!-- DEBUG is_mapping: {{ type is mapping }} -->
+<!-- DEBUG type_class: {{ type.__class__.__name__ }} -->
+<!-- DEBUG cls_value: {{ type.cls if type.cls is defined else 'undefined' }} -->
+<!-- DEBUG cls_type: {{ type.cls.__class__.__name__ if type.cls is defined else 'undefined' }} -->
 {% endmacro %}
 
 {%- macro format_return_type(returns) -%}

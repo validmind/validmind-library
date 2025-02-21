@@ -12,7 +12,65 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">format_records</span>(<span class="param"><span class="n">df</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'pd'}, {'cls': 'ExprName', 'name': 'DataFrame'}]}</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">List</span><span class="p">\[</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Dict</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="p">, </span><!-- types.jinja2 - format_type --><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span></span>:
+<span class="kw">def</span><span class="name">format_records</span>(<span class="param"><span class="n">df</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprAttribute --><!-- DEBUG values: [{'cls': 'ExprName', 'name': 'pd'}, {'cls': 'ExprName', 'name': 'DataFrame'}] -->
+
+<!-- DEBUG values_type: list --><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><!-- DEBUG is_mapping: True -->
+
+<!-- DEBUG type_class: dict -->
+
+<!-- DEBUG cls_value: ExprAttribute -->
+
+<!-- DEBUG cls_type: str -->
+
+</span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><!-- DEBUG: ExprSubscript --><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="n">List</span><!-- DEBUG is_mapping: True -->
+
+<!-- DEBUG type_class: dict -->
+
+<!-- DEBUG cls_value: ExprName -->
+
+<!-- DEBUG cls_type: str -->
+
+<span class="p">\[</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprSubscript --><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="n">Dict</span><!-- DEBUG is_mapping: True -->
+
+<!-- DEBUG type_class: dict -->
+
+<!-- DEBUG cls_value: ExprName -->
+
+<!-- DEBUG cls_type: str -->
+
+<span class="p">\[</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">str</span><!-- DEBUG is_mapping: True -->
+
+<!-- DEBUG type_class: dict -->
+
+<!-- DEBUG cls_value: ExprName -->
+
+<!-- DEBUG cls_type: str -->
+
+<span class="p">, </span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="n">Any</span><!-- DEBUG is_mapping: True -->
+
+<!-- DEBUG type_class: dict -->
+
+<!-- DEBUG cls_value: ExprName -->
+
+<!-- DEBUG cls_type: str -->
+
+<span class="p">\]</span><!-- DEBUG is_mapping: True -->
+
+<!-- DEBUG type_class: dict -->
+
+<!-- DEBUG cls_value: ExprSubscript -->
+
+<!-- DEBUG cls_type: str -->
+
+<span class="p">\]</span><!-- DEBUG is_mapping: True -->
+
+<!-- DEBUG type_class: dict -->
+
+<!-- DEBUG cls_value: ExprSubscript -->
+
+<!-- DEBUG cls_type: str -->
+
+</span>:
 
 :::
 
@@ -36,8 +94,20 @@ We do this for display purposes before sending data to ValidMind. Rules:
 
 ::: {.signature}
 
-<div class="decorator">@<!-- types.jinja2 - format_type --><span class="n">{'arguments': ["'tabular_data'", "'time_series_data'"], 'cls': 'ExprCall', 'function': {'cls': 'ExprName', 'name': 'tags'}}</span></div><div class="decorator">@<!-- types.jinja2 - format_type --><span class="n">{'arguments': ["'classification'", "'regression'"], 'cls': 'ExprCall', 'function': {'cls': 'ExprName', 'name': 'tasks'}}</span></div>
-<span class="kw">def</span><span class="name">DescriptiveStatistics</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">VMDataset</span></span>):
+<div class="decorator">@<!-- types.jinja2 - format_type --><!-- DEBUG: ExprCall --><span class="n">{'arguments': ["'tabular_data'", "'time_series_data'"], 'cls': 'ExprCall', 'function': {'cls': 'ExprName', 'name': 'tags'}}</span><!-- DEBUG is_mapping: True -->
+<!-- DEBUG type_class: dict -->
+<!-- DEBUG cls_value: ExprCall -->
+<!-- DEBUG cls_type: str -->
+</div><div class="decorator">@<!-- types.jinja2 - format_type --><!-- DEBUG: ExprCall --><span class="n">{'arguments': ["'classification'", "'regression'"], 'cls': 'ExprCall', 'function': {'cls': 'ExprName', 'name': 'tasks'}}</span><!-- DEBUG is_mapping: True -->
+<!-- DEBUG type_class: dict -->
+<!-- DEBUG cls_value: ExprCall -->
+<!-- DEBUG cls_type: str -->
+</div>
+<span class="kw">def</span><span class="name">DescriptiveStatistics</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="n">VMDataset</span><!-- DEBUG is_mapping: True -->
+<!-- DEBUG type_class: dict -->
+<!-- DEBUG cls_value: ExprName -->
+<!-- DEBUG cls_type: str -->
+</span>):
 
 :::
 

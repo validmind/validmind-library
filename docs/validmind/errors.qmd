@@ -384,7 +384,39 @@ Exception raised when an error occurs while loading a test
 
 ::: {.signature}
 
-<span class="name">__init__</span>(<span class="params"><span class="n">message</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">original_error</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Optional</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="n">Exception</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span></span>)
+<span class="name">__init__</span>(<span class="params"><span class="n">message</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">str</span><!-- DEBUG is_mapping: True -->
+
+<!-- DEBUG type_class: dict -->
+
+<!-- DEBUG cls_value: ExprName -->
+
+<!-- DEBUG cls_type: str -->
+
+<span class="muted">,</span></span><span class="params"><span class="n">original_error</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprSubscript --><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="n">Optional</span><!-- DEBUG is_mapping: True -->
+
+<!-- DEBUG type_class: dict -->
+
+<!-- DEBUG cls_value: ExprName -->
+
+<!-- DEBUG cls_type: str -->
+
+<span class="p">\[</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="n">Exception</span><!-- DEBUG is_mapping: True -->
+
+<!-- DEBUG type_class: dict -->
+
+<!-- DEBUG cls_value: ExprName -->
+
+<!-- DEBUG cls_type: str -->
+
+<span class="p">\]</span><!-- DEBUG is_mapping: True -->
+
+<!-- DEBUG type_class: dict -->
+
+<!-- DEBUG cls_value: ExprSubscript -->
+
+<!-- DEBUG cls_type: str -->
+
+<span class="o">=</span><span class="kc">None</span></span>)
 
 :::
 
@@ -872,7 +904,15 @@ returns a non-JSON string or if the API returns a non-standard error
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">should_raise_on_fail_fast</span>(<span class="param"><span class="n">error</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><span class="nb">bool</span></span>:
+<span class="kw">def</span><span class="name">should_raise_on_fail_fast</span>(<span class="param"><span class="n">error</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">bool</span><!-- DEBUG is_mapping: True -->
+
+<!-- DEBUG type_class: dict -->
+
+<!-- DEBUG cls_value: ExprName -->
+
+<!-- DEBUG cls_type: str -->
+
+</span>:
 
 :::
 

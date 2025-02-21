@@ -14,7 +14,15 @@ toc-expand: 4
 
 ::: {.signature}
 
-<div class="decorator">@<!-- types.jinja2 - format_type --><span class="n">{'arguments': ["'model_predictions'", "'visualization'"], 'cls': 'ExprCall', 'function': {'cls': 'ExprName', 'name': 'tags'}}</span></div><div class="decorator">@<!-- types.jinja2 - format_type --><span class="n">{'arguments': ["'regression'", "'time_series_forecasting'"], 'cls': 'ExprCall', 'function': {'cls': 'ExprName', 'name': 'tasks'}}</span></div>
+<div class="decorator">@<!-- types.jinja2 - format_type --><!-- DEBUG: ExprCall --><span class="n">{'arguments': ["'model_predictions'", "'visualization'"], 'cls': 'ExprCall', 'function': {'cls': 'ExprName', 'name': 'tags'}}</span><!-- DEBUG is_mapping: True -->
+<!-- DEBUG type_class: dict -->
+<!-- DEBUG cls_value: ExprCall -->
+<!-- DEBUG cls_type: str -->
+</div><div class="decorator">@<!-- types.jinja2 - format_type --><!-- DEBUG: ExprCall --><span class="n">{'arguments': ["'regression'", "'time_series_forecasting'"], 'cls': 'ExprCall', 'function': {'cls': 'ExprName', 'name': 'tasks'}}</span><!-- DEBUG is_mapping: True -->
+<!-- DEBUG type_class: dict -->
+<!-- DEBUG cls_value: ExprCall -->
+<!-- DEBUG cls_type: str -->
+</div>
 <span class="kw">def</span><span class="name">TimeSeriesPredictionsPlot</span>(<span class="params"><span class="n">dataset</span><span class="muted">,</span></span><span class="params"><span class="n">model</span></span>):
 
 :::

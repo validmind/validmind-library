@@ -29,7 +29,27 @@ Entrypoint for test suites.
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">format_dataframe</span>(<span class="param"><span class="n">df</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'pd'}, {'cls': 'ExprName', 'name': 'DataFrame'}]}</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><span class="n">{'cls': 'ExprAttribute', 'values': [{'cls': 'ExprName', 'name': 'pd'}, {'cls': 'ExprName', 'name': 'DataFrame'}]}</span></span>:
+<span class="kw">def</span><span class="name">format_dataframe</span>(<span class="param"><span class="n">df</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprAttribute --><!-- DEBUG values: [{'cls': 'ExprName', 'name': 'pd'}, {'cls': 'ExprName', 'name': 'DataFrame'}] -->
+
+<!-- DEBUG values_type: list --><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><!-- DEBUG is_mapping: True -->
+
+<!-- DEBUG type_class: dict -->
+
+<!-- DEBUG cls_value: ExprAttribute -->
+
+<!-- DEBUG cls_type: str -->
+
+</span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><!-- DEBUG: ExprAttribute --><!-- DEBUG values: [{'cls': 'ExprName', 'name': 'pd'}, {'cls': 'ExprName', 'name': 'DataFrame'}] -->
+
+<!-- DEBUG values_type: list --><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><!-- DEBUG is_mapping: True -->
+
+<!-- DEBUG type_class: dict -->
+
+<!-- DEBUG cls_value: ExprAttribute -->
+
+<!-- DEBUG cls_type: str -->
+
+</span>:
 
 :::
 
@@ -57,7 +77,23 @@ Get a logger for the given module name
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">test_id_to_name</span>(<span class="param"><span class="n">test_id</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><span class="nb">str</span></span>:
+<span class="kw">def</span><span class="name">test_id_to_name</span>(<span class="param"><span class="n">test_id</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">str</span><!-- DEBUG is_mapping: True -->
+
+<!-- DEBUG type_class: dict -->
+
+<!-- DEBUG cls_value: ExprName -->
+
+<!-- DEBUG cls_type: str -->
+
+</span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">str</span><!-- DEBUG is_mapping: True -->
+
+<!-- DEBUG type_class: dict -->
+
+<!-- DEBUG cls_value: ExprName -->
+
+<!-- DEBUG cls_type: str -->
+
+</span>:
 
 :::
 
@@ -81,7 +117,15 @@ Convert a test ID to a human-readable name.
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">describe_suite</span>(<span class="params"><span class="n">test_suite_id</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span></span>):
+<span class="kw">def</span><span class="name">describe_suite</span>(<span class="params"><span class="n">test_suite_id</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">str</span><!-- DEBUG is_mapping: True -->
+
+<!-- DEBUG type_class: dict -->
+
+<!-- DEBUG cls_value: ExprName -->
+
+<!-- DEBUG cls_type: str -->
+
+<span class="muted">,</span></span><span class="params"><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span></span>):
 
 :::
 
@@ -106,7 +150,15 @@ Describes a Test Suite by ID
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">get_by_id</span>(<span class="param"><span class="n">test_suite_id</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span></span>):
+<span class="kw">def</span><span class="name">get_by_id</span>(<span class="param"><span class="n">test_suite_id</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">str</span><!-- DEBUG is_mapping: True -->
+
+<!-- DEBUG type_class: dict -->
+
+<!-- DEBUG cls_value: ExprName -->
+
+<!-- DEBUG cls_type: str -->
+
+</span>):
 
 :::
 
@@ -122,7 +174,15 @@ Returns the test suite by ID
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">list_suites</span>(<span class="param"><span class="n">pretty</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span></span>):
+<span class="kw">def</span><span class="name">list_suites</span>(<span class="param"><span class="n">pretty</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">bool</span><!-- DEBUG is_mapping: True -->
+
+<!-- DEBUG type_class: dict -->
+
+<!-- DEBUG cls_value: ExprName -->
+
+<!-- DEBUG cls_type: str -->
+
+<span class="o">=</span><span class="kc">True</span></span>):
 
 :::
 
@@ -138,7 +198,23 @@ Returns a list of all available test suites
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">register_test_suite</span>(<span class="params"><span class="n">suite_id</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">suite</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">TestSuite</span></span>):
+<span class="kw">def</span><span class="name">register_test_suite</span>(<span class="params"><span class="n">suite_id</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">str</span><!-- DEBUG is_mapping: True -->
+
+<!-- DEBUG type_class: dict -->
+
+<!-- DEBUG cls_value: ExprName -->
+
+<!-- DEBUG cls_type: str -->
+
+<span class="muted">,</span></span><span class="params"><span class="n">suite</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="n">TestSuite</span><!-- DEBUG is_mapping: True -->
+
+<!-- DEBUG type_class: dict -->
+
+<!-- DEBUG cls_value: ExprName -->
+
+<!-- DEBUG cls_type: str -->
+
+</span>):
 
 :::
 
