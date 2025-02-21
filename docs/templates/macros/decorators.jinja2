@@ -3,7 +3,7 @@
 {%- macro render_decorators(member) -%}
 {%- if member.decorators -%}
 {%- for decorator in member.decorators -%}
-<div class="decorator">@{%- if decorator is mapping -%}{{ format_type(decorator.value) }}{%- else -%}{{ decorator }}{%- endif -%}</div>
+<div class="decorator">{%- if decorator is mapping -%}{{ format_type(decorator.value) }}{%- else -%}{{ decorator }}{%- endif -%}</div>
 {%- endfor -%}
 {%- endif -%}
 {%- endmacro -%} 

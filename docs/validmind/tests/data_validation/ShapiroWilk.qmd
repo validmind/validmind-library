@@ -14,7 +14,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<div class="decorator">@<!-- types.jinja2 - format_type --><span class="n">@tasks('classification', 'regression')</span></div><div class="decorator">@<!-- types.jinja2 - format_type --><span class="n">@tags('tabular_data', 'data_distribution', 'statistical_test')</span></div>
+<div class="decorator"><span class="n">@tasks(<span class="s">'classification'</span>, <span class="s">'regression'</span>)</span></div><div class="decorator"><span class="n">@tags(<span class="s">'tabular_data'</span>, <span class="s">'data_distribution'</span>, <span class="s">'statistical_test'</span>)</span></div>
 <span class="kw">def</span><span class="name">ShapiroWilk</span>(<span class="param"><span class="n">dataset</span></span>):
 
 :::

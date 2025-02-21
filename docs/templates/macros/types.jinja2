@@ -29,26 +29,33 @@
 {%- endmacro -%}
 
 {%- macro format_type(type, module=None, add_links=false) -%}
-<!-- types.jinja2 - format_type -->
 {%- if type is mapping -%}
   {%- if type.cls is defined -%}
     {%- if type.cls == "ExprCall" -%}
       {%- if type.function and type.function.name in ["tags", "tasks"] -%}
         <span class="n">@{{ type.function.name }}(
         {%- for arg in type.arguments -%}
-          {{ arg }}
+          {{ format_type(arg, module, add_links) }}
           {%- if not loop.last -%}, {% endif -%}
         {%- endfor -%}
         )</span>
+      {%- else -%}
+        {# General ExprCall handling #}
+        {{ format_type(type.function, module, add_links) }}(
+        {%- for arg in type.arguments -%}
+          {{ format_type(arg, module, add_links) }}
+          {%- if not loop.last -%}, {% endif -%}
+        {%- endfor -%}
+        )
       {%- endif -%}
     {%- elif type.cls == "ExprAttribute" -%}
       {%- if type.get('values') is sequence -%}
         {%- for value in type.get('values') -%}
-          {%- if value.cls == "ExprName" -%}
-            <span class="n">{{ value.name }}</span>
-          {%- endif -%}
+          {{ format_type(value, module, add_links) }}
           {%- if not loop.last -%}<span class="o">.</span>{%- endif -%}
         {%- endfor -%}
+      {%- elif type.value is defined and type.attr is defined -%}
+        {{ format_type(type.value, module, add_links) }}<span class="o">.</span>{{ format_type(type.attr, module, add_links) }}
       {%- else -%}
         <span class="n">{{ type|string }}</span>
       {%- endif -%}
@@ -63,6 +70,32 @@
       <span class="p">{{ ']' if type.cls == "ExprList" else '}' }}</span>
     {%- elif type.cls == "ExprSubscript" -%}
       {{ format_expr_subscript(type, module, add_links) }}
+    {%- elif type.cls == "ExprConstant" -%}
+      {%- if type.value is string -%}
+        <span class="s">{{ type.value }}</span>
+      {%- elif type.value is number -%}
+        <span class="n">{{ type.value }}</span>
+      {%- else -%}
+        <span class="kc">{{ type.value }}</span>
+      {%- endif -%}
+    {%- elif type.cls == "ExprDict" -%}
+      <span class="p">{</span>
+      {%- for key, value in type.items -%}
+        {{ format_type(key, module, add_links) }}: {{ format_type(value, module, add_links) }}
+        {%- if not loop.last -%}, {% endif -%}
+      {%- endfor -%}
+      <span class="p">}</span>
+    {%- elif type.cls == "ExprTuple" -%}
+      <span class="p">(</span>
+      {%- for elem in type.elements -%}
+        {{ format_type(elem, module, add_links) }}
+        {%- if not loop.last -%}, {% endif -%}
+      {%- endfor -%}
+      <span class="p">)</span>
+    {%- elif type.cls == "ExprUnary" -%}
+      <span class="o">{{ type.op }}</span>{{ format_type(type.operand, module, add_links) }}
+    {%- elif type.cls == "ExprBinary" -%}
+      {{ format_type(type.left, module, add_links) }} <span class="o">{{ type.op }}</span> {{ format_type(type.right, module, add_links) }}
     {%- else -%}
       <span class="n">{{ type|string }}</span>
     {%- endif -%}

@@ -14,8 +14,8 @@ toc-expand: 4
 
 ::: {.signature}
 
-<div class="decorator">@<!-- types.jinja2 - format_type --><span class="n">@tags('tabular_data')</span></div><div class="decorator">@<!-- types.jinja2 - format_type --><span class="n">@tasks('regression', 'classification')</span></div>
-<span class="kw">def</span><span class="name">UniqueRows</span>(<span class="params"><span class="n">dataset</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">VMDataset</span><span class="muted">,</span></span><span class="params"><span class="n">min_percent_threshold</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">float</span><span class="o">=</span><span class="kc">1</span></span>):
+<div class="decorator"><span class="n">@tags(<span class="s">'tabular_data'</span>)</span></div><div class="decorator"><span class="n">@tasks(<span class="s">'regression'</span>, <span class="s">'classification'</span>)</span></div>
+<span class="kw">def</span><span class="name">UniqueRows</span>(<span class="params"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span><span class="muted">,</span></span><span class="params"><span class="n">min_percent_threshold</span><span class="p">:</span><span class="nb">float</span><span class="o">=</span><span class="kc">1</span></span>):
 
 :::
 
