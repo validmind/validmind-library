@@ -28,7 +28,8 @@ Get a logger for the given module name
 
 ::: {.signature}
 
-<div class="decorator"><span class="n">@tags(<span class="s">'feature_importance'</span>, <span class="s">'AUC'</span>, <span class="s">'visualization'</span>)</span></div><div class="decorator"><span class="n">@tasks(<span class="s">'classification'</span>)</span></div>
+<span class="decorators"><span class="decorator"><span class="n">@tags(<span class="s">'feature_importance'</span>, <span class="s">'AUC'</span>, <span class="s">'visualization'</span>)</span></span><span class="decorator"><span class="n">@tasks(<span class="s">'classification'</span>)</span></span></span>
+
 <span class="kw">def</span><span class="name">FeaturesAUC</span>(<span class="params"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span><span class="muted">,</span></span><span class="params"><span class="n">fontsize</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="kc">12</span><span class="muted">,</span></span><span class="params"><span class="n">figure_height</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="kc">500</span></span>):
 
 :::
