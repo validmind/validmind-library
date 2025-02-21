@@ -20,20 +20,13 @@ ValidMind Tests Module
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">describe_test</span>(<span class="params"><span class="n">test_id</span><span class="p">:</span><span class="n">TestID</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">raw</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">show</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span></span>):
+<span class="kw">def</span><span class="name">describe_test</span>(<span class="params"><span class="n">test_id</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">TestID</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">raw</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">show</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">Union</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><a href="/reference/validmind/vm_models.html#class-html">validmind.vm_models.HTML</a><span class="p">, </span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span></span>:
 
 :::
 
 <!-- docstring.jinja2 -->
 
-Get or show details about the test
-
-This function can be used to see test details including the test name, description, required inputs and default params. It can also be used to get a dictionary of the above information for programmatic use.
-
-**Arguments**
-
-- `test_id` (str, optional): The test ID. Defaults to None.
-- `raw` (bool, optional): If True, returns a dictionary with the test details. Defaults to False.
+Describe a test's functionality and parameters
 
 ## list_tags<span class='muted'>()</span>
 
@@ -41,13 +34,13 @@ This function can be used to see test details including the test name, descripti
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">list_tags</span>():
+<span class="kw">def</span><span class="name">list_tags</span>()<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-set">validmind.vm_models.Set</a><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span></span>:
 
 :::
 
 <!-- docstring.jinja2 -->
 
-List unique tags from all test classes.
+List all available tags
 
 ## list_tasks<span class='muted'>()</span>
 
@@ -55,13 +48,13 @@ List unique tags from all test classes.
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">list_tasks</span>():
+<span class="kw">def</span><span class="name">list_tasks</span>()<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-set">validmind.vm_models.Set</a><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span></span>:
 
 :::
 
 <!-- docstring.jinja2 -->
 
-List unique tasks from all test classes.
+List all available tasks
 
 ## list_tasks_and_tags<span class='muted'>()</span>
 
@@ -69,19 +62,13 @@ List unique tasks from all test classes.
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">list_tasks_and_tags</span>(<span class="param"><span class="n">as_json</span><span class="o">=</span><span class="kc">False</span></span>):
+<span class="kw">def</span><span class="name">list_tasks_and_tags</span>(<span class="param"><span class="n">as_json</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">Union</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">List</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="p">\]</span><span class="p">\]</span></span>:
 
 :::
 
 <!-- docstring.jinja2 -->
 
-List all task types and their associated tags, with one row per task type and
-
-all tags for a task type in one row.
-
-**Returns**
-
-- A DataFrame with 'Task Type' and concatenated 'Tags'.
+List all available tasks and tags
 
 ## list_tests<span class='muted'>()</span>
 
@@ -89,25 +76,13 @@ all tags for a task type in one row.
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">list_tests</span>(<span class="params"><span class="n">filter</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">task</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">tags</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">pretty</span><span class="o">=</span><span class="kc">True</span><span class="muted">,</span></span><span class="params"><span class="n">truncate</span><span class="o">=</span><span class="kc">True</span></span>):
+<span class="kw">def</span><span class="name">list_tests</span>(<span class="params"><span class="n">filter</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">task</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">tags</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">List</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">pretty</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="muted">,</span></span><span class="params"><span class="n">truncate</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">Union</span><span class="p">\[</span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Callable</span><span class="p">\[</span><span class="n">...</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span><span class="p">, </span><span class="n">None</span><span class="p">\]</span></span>:
 
 :::
 
 <!-- docstring.jinja2 -->
 
-List all tests in the tests directory.
-
-**Arguments**
-
-- `filter` (str, optional): Find tests where the ID, tasks or tags match the filter string. Defaults to None.
-- `task` (str, optional): Find tests that match the task. Can be used to narrow down matches from the filter string. Defaults to None.
-- `tags` (list, optional): Find tests that match list of tags. Can be used to narrow down matches from the filter string. Defaults to None.
-- `pretty` (bool, optional): If True, returns a pandas DataFrame with a formatted table. Defaults to True.
-- `truncate` (bool, optional): If True, truncates the test description to the first line. Defaults to True. (only used if pretty=True)
-
-**Returns**
-
-- list or pandas.DataFrame: A list of all tests or a formatted table.
+List all available tests with optional filtering
 
 ## load_test<span class='muted'>()</span>
 
@@ -115,7 +90,7 @@ List all tests in the tests directory.
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">load_test</span>(<span class="params"><span class="n">test_id</span><span class="p">:</span><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">test_func</span><span class="p">:</span><span class="nb">callable</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">reload</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span></span>):
+<span class="kw">def</span><span class="name">load_test</span>(<span class="params"><span class="n">test_id</span><span class="p">:</span><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">test_func</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">Callable</span><span class="p">\[</span><span class="n">...</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">reload</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">Callable</span><span class="p">\[</span><span class="n">...</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span></span>:
 
 :::
 
@@ -179,7 +154,7 @@ This function is the main entry point for running tests. It can run simple unit 
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">tags</span>(<span class="param"><span class="n">\*tags</span></span>):
+<span class="kw">def</span><span class="name">tags</span>(<span class="param"><span class="n">\*tags</span><span class="p">:</span><span class="nb">str</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">Callable</span><span class="p">\[</span><span class="p">\[</span><a href="/reference/validmind/vm_models.html#class-f">validmind.vm_models.F</a><span class="p">\]</span><span class="p">, </span><a href="/reference/validmind/vm_models.html#class-f">validmind.vm_models.F</a><span class="p">\]</span></span>:
 
 :::
 
@@ -197,7 +172,7 @@ Decorator for specifying tags for a test.
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">tasks</span>(<span class="param"><span class="n">\*tasks</span></span>):
+<span class="kw">def</span><span class="name">tasks</span>(<span class="param"><span class="n">\*tasks</span><span class="p">:</span><span class="nb">str</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">Callable</span><span class="p">\[</span><span class="p">\[</span><a href="/reference/validmind/vm_models.html#class-f">validmind.vm_models.F</a><span class="p">\]</span><span class="p">, </span><a href="/reference/validmind/vm_models.html#class-f">validmind.vm_models.F</a><span class="p">\]</span></span>:
 
 :::
 
@@ -215,7 +190,7 @@ Decorator for specifying the task types that a test is designed for.
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">test</span>(<span class="param"><span class="n">func_or_id</span></span>):
+<span class="kw">def</span><span class="name">test</span>(<span class="param"><span class="n">func_or_id</span><span class="p">:</span><span class="n">Union</span><span class="p">\[</span><span class="n">Callable</span><span class="p">\[</span><span class="n">...</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span><span class="p">, </span><span class="nb">str</span><span class="p">, </span><span class="n">None</span><span class="p">\]</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">Callable</span><span class="p">\[</span><span class="p">\[</span><a href="/reference/validmind/vm_models.html#class-f">validmind.vm_models.F</a><span class="p">\]</span><span class="p">, </span><a href="/reference/validmind/vm_models.html#class-f">validmind.vm_models.F</a><span class="p">\]</span></span>:
 
 :::
 
@@ -241,8 +216,7 @@ The function may also include a docstring. This docstring will be used and logge
 
 **Arguments**
 
-- `func`: The function to decorate
-- `test_id`: The identifier for the metric. If not provided, the function name is used.
+- `func_or_id` (Union\[Callable[..., Any], str, None\]): Either the function to decorate or the test ID. If None, the function name is used.
 
 **Returns**
 
@@ -367,7 +341,7 @@ Initialize the LocalTestProvider with the given root_folder (see class docstring
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">list_tests</span>(<span class="param"><span class="bp">self</span></span>):
+<span class="kw">def</span><span class="name">list_tests</span>(<span class="param"><span class="bp">self</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">List</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span></span>:
 
 :::
 
@@ -385,26 +359,25 @@ List all tests in the given namespace
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">load_test</span>(<span class="params"><span class="bp">self</span><span class="muted">,</span></span><span class="params"><span class="n">test_id</span><span class="p">:</span><span class="nb">str</span></span>):
+<span class="kw">def</span><span class="name">load_test</span>(<span class="params"><span class="bp">self</span><span class="muted">,</span></span><span class="params"><span class="n">test_id</span><span class="p">:</span><span class="nb">str</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">Callable</span><span class="p">\[</span><span class="n">...</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span></span>:
 
 :::
 
 <!-- docstring.jinja2 -->
 
-Load the test identified by the given test_id.
+Load the test function identified by the given test_id
 
 **Arguments**
 
-- `test_id` (str): The identifier of the test. This corresponds to the relative path of the python file from the root folder, with slashes replaced by dots
+- `test_id` (str): The test ID (does not contain the namespace under which the test is registered)
 
 **Returns**
 
-- The test class that matches the last part of the test_id.
+- The test function
 
 **Raises**
 
-- `LocalTestProviderLoadModuleError`: If the test module cannot be imported
-- `LocalTestProviderLoadTestError`: If the test class cannot be found in the module
+- `FileNotFoundError`: If the test is not found
 
 <!-- class.qmd.jinja2 -->
 

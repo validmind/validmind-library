@@ -367,7 +367,7 @@ Adds an extra column to the dataset without modifying the dataset `features` and
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">assign_predictions</span>(<span class="params"><span class="bp">self</span><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="p">:</span><span class="n">VMModel</span><span class="muted">,</span></span><span class="params"><span class="n">prediction_column</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">prediction_values</span><span class="p">:</span><span class="nb">list</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">probability_column</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">probability_values</span><span class="p">:</span><span class="nb">list</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">prediction_probabilities</span><span class="p">:</span><span class="nb">list</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>):
+<span class="kw">def</span><span class="name">assign_predictions</span>(<span class="params"><span class="bp">self</span><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="p">:</span><span class="n">VMModel</span><span class="muted">,</span></span><span class="params"><span class="n">prediction_column</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">prediction_values</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">List</span><span class="p">\[</span><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">probability_column</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">probability_values</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">List</span><span class="p">\[</span><span class="nb">float</span><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">prediction_probabilities</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">List</span><span class="p">\[</span><span class="nb">float</span><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span><span class="p">:</span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span></span>):
 
 :::
 
@@ -378,12 +378,12 @@ Assign predictions and probabilities to the dataset.
 **Arguments**
 
 - `model` (VMModel): The model used to generate the predictions.
-- `prediction_column` (str, optional): The name of the column containing the predictions. Defaults to None.
-- `prediction_values` (list, optional): The values of the predictions. Defaults to None.
-- `probability_column` (str, optional): The name of the column containing the probabilities. Defaults to None.
-- `probability_values` (list, optional): The values of the probabilities. Defaults to None.
-- `prediction_probabilities` (list, optional): DEPRECATED: The values of the probabilities. Defaults to None.
-- `kwargs`: Additional keyword arguments that will get passed through to the model's `predict` method.
+- `prediction_column` (Optional[str]): The name of the column containing the predictions.
+- `prediction_values` (Optional\[List[Any]\]): The values of the predictions.
+- `probability_column` (Optional[str]): The name of the column containing the probabilities.
+- `probability_values` (Optional\[List[float]\]): The values of the probabilities.
+- `prediction_probabilities` (Optional\[List[float]\]): DEPRECATED: The values of the probabilities.
+- `**kwargs`: Additional keyword arguments that will get passed through to the model's `predict` method.
 
 ### [prediction_column[()]{.muted}](#prediction_column)
 
@@ -433,7 +433,7 @@ Returns the target class labels or unique values of the target column.
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">with_options</span>(<span class="params"><span class="bp">self</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-vmdataset">validmind.vm_models.VMDataset</a></span>:
+<span class="kw">def</span><span class="name">with_options</span>(<span class="params"><span class="bp">self</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span><span class="p">:</span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-vmdataset">validmind.vm_models.VMDataset</a></span>:
 
 :::
 
@@ -576,7 +576,7 @@ Base class for ValidMind Input types
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">with_options</span>(<span class="params"><span class="bp">self</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-vminput">validmind.vm_models.VMInput</a></span>:
+<span class="kw">def</span><span class="name">with_options</span>(<span class="params"><span class="bp">self</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span><span class="p">:</span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-vminput">validmind.vm_models.VMInput</a></span>:
 
 :::
 

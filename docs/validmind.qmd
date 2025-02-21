@@ -55,7 +55,7 @@ After you have pasted the code snippet into your development source code and exe
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">get_test_suite</span>(<span class="params"><span class="n">test_suite_id</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">section</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">\*args</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-testsuite">validmind.vm_models.TestSuite</a></span>:
+<span class="kw">def</span><span class="name">get_test_suite</span>(<span class="params"><span class="n">test_suite_id</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">section</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">\*args</span><span class="p">:</span><span class="n">Any</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span><span class="p">:</span><span class="n">Any</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-testsuite">validmind.vm_models.TestSuite</a></span>:
 
 :::
 
@@ -108,7 +108,7 @@ If the API key and secret are not provided, the client will attempt to retrieve 
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">init_dataset</span>(<span class="params"><span class="n">dataset</span><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">index</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">index_name</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">date_time_index</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">columns</span><span class="p">:</span><span class="nb">list</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">text_column</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">target_column</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">feature_columns</span><span class="p">:</span><span class="nb">list</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">extra_columns</span><span class="p">:</span><span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">class_labels</span><span class="p">:</span><span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">type</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">input_id</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">\_\_log</span><span class="o">=</span><span class="kc">True</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-vmdataset">validmind.vm_models.VMDataset</a></span>:
+<span class="kw">def</span><span class="name">init_dataset</span>(<span class="params"><span class="n">dataset</span><span class="p">:</span><span class="n">Union</span><span class="p">\[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">, </span><span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">, </span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">, </span><span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Dataset</span><span class="p">\]</span><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">VMModel</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">index</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">Any</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">index_name</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">date_time_index</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">columns</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">List</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">text_column</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">target_column</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">feature_columns</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">List</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">extra_columns</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">class_labels</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">type</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">input_id</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">\_\_log</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-vmdataset">validmind.vm_models.VMDataset</a></span>:
 
 :::
 
@@ -127,13 +127,18 @@ The following dataset types are supported:
 
 - `dataset`: Dataset from various Python libraries
 - `model` (VMModel): ValidMind model object
-- `targets` (vm.vm.DatasetTargets): A list of target variables
+- `index` (Any): Index for the dataset
+- `index_name` (str): Name of the index column
+- `date_time_index` (bool): Whether the index is a datetime index
+- `columns` (List[str]): List of column names
+- `text_column` (str): Name of the text column
 - `target_column` (str): The name of the target column in the dataset
-- `feature_columns` (list): A list of names of feature columns in the dataset
-- `extra_columns` (dictionary): A dictionary containing the names of the prediction_column and group_by_columns in the dataset
-- `class_labels` (dict): A list of class labels for classification problems
-- `type` (str): The type of dataset (one of DATASET_TYPES)
+- `feature_columns` (List[str]): A list of names of feature columns in the dataset
+- `extra_columns` (Dict[str, Any]): A dictionary containing the names of the prediction_column and group_by_columns in the dataset
+- `class_labels` (Dict[str, Any]): A list of class labels for classification problems
+- `type` (str): The type of dataset (one of DATASET_TYPES) - DEPRECATED
 - `input_id` (str): The input ID for the dataset (e.g. "my_dataset"). By default, this will be set to `dataset` but if you are passing this dataset as a test input using some other key than `dataset`, then you should set this to the same key.
+- `__log` (bool, optional): Whether to log the input. Defaults to True.
 
 **Returns**
 
@@ -149,7 +154,7 @@ The following dataset types are supported:
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">init_model</span>(<span class="params"><span class="n">model</span><span class="p">:</span><span class="nb">object</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">input_id</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s1">'model'</span><span class="muted">,</span></span><span class="params"><span class="n">attributes</span><span class="p">:</span><span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">predict_fn</span><span class="p">:</span><span class="nb">callable</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">\_\_log</span><span class="o">=</span><span class="kc">True</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-vmmodel">validmind.vm_models.VMModel</a></span>:
+<span class="kw">def</span><span class="name">init_model</span>(<span class="params"><span class="n">model</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">object</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">input_id</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s1">'model'</span><span class="muted">,</span></span><span class="params"><span class="n">attributes</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">predict_fn</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">Callable</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">\_\_log</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span><span class="p">:</span><span class="n">Any</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-vmmodel">validmind.vm_models.VMModel</a></span>:
 
 :::
 
@@ -199,7 +204,7 @@ LogisticRegression and LinearRegression models are converted to sklearn models b
 **Arguments**
 
 - `model_path` (str): The path to the R model saved as an RDS or XGB file
-- `model_type` (str): The type of the model (one of R_MODEL_TYPES)
+- `input_id` (str, optional): The input ID for the model. Defaults to "model".
 
 **Returns**
 
@@ -286,7 +291,7 @@ Reconnect to the ValidMind API and reload the project configuration
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">run_documentation_tests</span>(<span class="params"><span class="n">section</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">send</span><span class="o">=</span><span class="kc">True</span><span class="muted">,</span></span><span class="params"><span class="n">fail_fast</span><span class="o">=</span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">inputs</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">config</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>):
+<span class="kw">def</span><span class="name">run_documentation_tests</span>(<span class="params"><span class="n">section</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">send</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="muted">,</span></span><span class="params"><span class="n">fail_fast</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">inputs</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">config</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span><span class="p">:</span><span class="n">Any</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span></span>:
 
 :::
 
@@ -319,7 +324,7 @@ This function will analyze the current project's documentation template and coll
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">run_test_suite</span>(<span class="params"><span class="n">test_suite_id</span><span class="muted">,</span></span><span class="params"><span class="n">send</span><span class="o">=</span><span class="kc">True</span><span class="muted">,</span></span><span class="params"><span class="n">fail_fast</span><span class="o">=</span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">config</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">inputs</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>):
+<span class="kw">def</span><span class="name">run_test_suite</span>(<span class="params"><span class="n">test_suite_id</span><span class="p">:</span><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">send</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="muted">,</span></span><span class="params"><span class="n">fail_fast</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">config</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">inputs</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span><span class="p">:</span><span class="n">Any</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span></span>:
 
 :::
 
@@ -352,7 +357,7 @@ This function provides a high level interface for running a test suite. A test s
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">tags</span>(<span class="param"><span class="n">\*tags</span></span>):
+<span class="kw">def</span><span class="name">tags</span>(<span class="param"><span class="n">\*tags</span><span class="p">:</span><span class="nb">str</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">Callable</span><span class="p">\[</span><span class="p">\[</span><a href="/reference/validmind/vm_models.html#class-f">validmind.vm_models.F</a><span class="p">\]</span><span class="p">, </span><a href="/reference/validmind/vm_models.html#class-f">validmind.vm_models.F</a><span class="p">\]</span></span>:
 
 :::
 
@@ -370,7 +375,7 @@ Decorator for specifying tags for a test.
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">tasks</span>(<span class="param"><span class="n">\*tasks</span></span>):
+<span class="kw">def</span><span class="name">tasks</span>(<span class="param"><span class="n">\*tasks</span><span class="p">:</span><span class="nb">str</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">Callable</span><span class="p">\[</span><span class="p">\[</span><a href="/reference/validmind/vm_models.html#class-f">validmind.vm_models.F</a><span class="p">\]</span><span class="p">, </span><a href="/reference/validmind/vm_models.html#class-f">validmind.vm_models.F</a><span class="p">\]</span></span>:
 
 :::
 
@@ -388,7 +393,7 @@ Decorator for specifying the task types that a test is designed for.
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">test</span>(<span class="param"><span class="n">func_or_id</span></span>):
+<span class="kw">def</span><span class="name">test</span>(<span class="param"><span class="n">func_or_id</span><span class="p">:</span><span class="n">Union</span><span class="p">\[</span><span class="n">Callable</span><span class="p">\[</span><span class="n">...</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span><span class="p">, </span><span class="nb">str</span><span class="p">, </span><span class="n">None</span><span class="p">\]</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">Callable</span><span class="p">\[</span><span class="p">\[</span><a href="/reference/validmind/vm_models.html#class-f">validmind.vm_models.F</a><span class="p">\]</span><span class="p">, </span><a href="/reference/validmind/vm_models.html#class-f">validmind.vm_models.F</a><span class="p">\]</span></span>:
 
 :::
 
@@ -414,8 +419,7 @@ The function may also include a docstring. This docstring will be used and logge
 
 **Arguments**
 
-- `func`: The function to decorate
-- `test_id`: The identifier for the metric. If not provided, the function name is used.
+- `func_or_id` (Union\[Callable[..., Any], str, None\]): Either the function to decorate or the test ID. If None, the function name is used.
 
 **Returns**
 
@@ -445,7 +449,7 @@ Holds raw data for a test result
 
 ::: {.signature}
 
-<span class="name">RawData</span>(<span class="params"><span class="n">log</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>)
+<span class="name">RawData</span>(<span class="params"><span class="n">log</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span><span class="p">:</span><span class="n">Any</span></span>)
 
 :::
 
@@ -466,13 +470,21 @@ Create a new RawData object
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">inspect</span>(<span class="param"><span class="bp">self</span><span class="muted">,</span></span><span class="param"><span class="n">show</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span></span>):
+<span class="kw">def</span><span class="name">inspect</span>(<span class="param"><span class="bp">self</span><span class="muted">,</span></span><span class="param"><span class="n">show</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">Optional</span><span class="p">\[</span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span></span>:
 
 :::
 
 <!-- docstring.jinja2 -->
 
 Inspect the raw data
+
+**Arguments**
+
+- `show` (bool): If True, print the raw data. If False, return it.
+
+**Returns**
+
+- The raw data if show is False, None otherwise
 
 <!-- module.qmd.jinja2 -->
 
@@ -482,6 +494,14 @@ Inspect the raw data
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">serialize</span>(<span class="param"><span class="bp">self</span></span>):
+<span class="kw">def</span><span class="name">serialize</span>(<span class="param"><span class="bp">self</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span></span>:
 
 :::
+
+<!-- docstring.jinja2 -->
+
+Serialize the raw data to a dictionary
+
+**Returns**
+
+- The serialized raw data
