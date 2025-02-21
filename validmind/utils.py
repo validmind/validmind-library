@@ -12,7 +12,7 @@ import sys
 import warnings
 from datetime import date, datetime, time
 from platform import python_version
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional, TypeVar, Union, Callable, Awaitable
 
 import matplotlib.pylab as pylab
 import mistune
@@ -59,6 +59,7 @@ pylab.rcParams.update(params)
 
 logger = get_logger(__name__)
 
+T = TypeVar('T')
 
 def parse_version(version: str) -> tuple[int, ...]:
     """
@@ -355,7 +356,12 @@ def format_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     return df.set_table_styles([dict(selector="th", props=[("text-align", "left")])])
 
 
-def run_async(func, *args, name=None, **kwargs):
+def run_async(
+    func: Callable[..., Awaitable[T]], 
+    *args: Any,
+    name: Optional[str] = None,
+    **kwargs: Any
+) -> T:
     """Helper function to run functions asynchronously
 
     This takes care of the complexity of running the logging functions asynchronously. It will
@@ -363,8 +369,9 @@ def run_async(func, *args, name=None, **kwargs):
     function accordingly.
 
     Args:
-        func (function): The function to run asynchronously
+        func: The function to run asynchronously
         *args: The arguments to pass to the function
+        name: Optional name for the task
         **kwargs: The keyword arguments to pass to the function
 
     Returns:
@@ -386,8 +393,21 @@ def run_async(func, *args, name=None, **kwargs):
     return asyncio.get_event_loop().run_until_complete(func(*args, **kwargs))
 
 
-def run_async_check(func, *args, **kwargs):
-    """Helper function to run functions asynchronously if the task doesn't already exist"""
+def run_async_check(
+    func: Callable[..., Awaitable[T]], 
+    *args: Any,
+    **kwargs: Any
+) -> Optional[asyncio.Task[T]]:
+    """Helper function to run functions asynchronously if the task doesn't already exist
+
+    Args:
+        func: The function to run asynchronously
+        *args: The arguments to pass to the function
+        **kwargs: The keyword arguments to pass to the function
+
+    Returns:
+        Optional[asyncio.Task[T]]: The task if created or found, None otherwise
+    """
     if __loop:
         return  # we don't need this if we are using our own loop
 
@@ -404,7 +424,7 @@ def run_async_check(func, *args, **kwargs):
         pass
 
 
-def fuzzy_match(string: str, search_string: str, threshold=0.7):
+def fuzzy_match(string: str, search_string: str, threshold: float = 0.7) -> bool:
     """Check if a string matches another string using fuzzy matching
 
     Args:
@@ -413,7 +433,7 @@ def fuzzy_match(string: str, search_string: str, threshold=0.7):
         threshold (float): The similarity threshold to use (Default: 0.7)
 
     Returns:
-        True if the string matches the search string, False otherwise
+        bool: True if the string matches the search string, False otherwise
     """
     score = difflib.SequenceMatcher(None, string, search_string).ratio()
 

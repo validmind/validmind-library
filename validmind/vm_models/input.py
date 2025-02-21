@@ -5,6 +5,7 @@
 """Base class for ValidMind Input types"""
 
 from abc import ABC
+from typing import Any, Dict
 
 
 class VMInput(ABC):
@@ -12,7 +13,7 @@ class VMInput(ABC):
     Base class for ValidMind Input types
     """
 
-    def with_options(self, **kwargs) -> "VMInput":
+    def with_options(self, **kwargs: Dict[str, Any]) -> "VMInput":
         """
         Allows for setting options on the input object that are passed by the user
         when using the input to run a test or set of tests

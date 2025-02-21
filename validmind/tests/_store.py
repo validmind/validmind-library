@@ -6,6 +6,7 @@
 
 
 from .test_providers import TestProvider, ValidMindTestProvider
+from typing import Any, Callable, Optional
 
 
 def singleton(cls):
@@ -65,19 +66,24 @@ class TestStore:
     def __init__(self):
         self.tests = {}
 
-    def get_test(self, test_id: str):
+    def get_test(self, test_id: str) -> Optional[Callable[..., Any]]:
         """Get a test by test ID
 
         Args:
             test_id (str): The test ID
 
         Returns:
-            object: The test class or function
+            Optional[Callable[..., Any]]: The test function if found, None otherwise
         """
         return self.tests.get(test_id)
 
-    def register_test(self, test_id: str, test: object = None):
-        """Register a test"""
+    def register_test(self, test_id: str, test: Optional[Callable[..., Any]] = None) -> None:
+        """Register a test
+
+        Args:
+            test_id (str): The test ID
+            test (Optional[Callable[..., Any]], optional): The test function. Defaults to None.
+        """
         self.tests[test_id] = test
 
 

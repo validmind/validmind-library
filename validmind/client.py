@@ -8,6 +8,7 @@ Client interface for all data and model validation functions
 
 import pandas as pd
 import polars as pl
+from typing import Any, Callable, Dict, List, Optional, Union
 
 from .api_client import log_input as log_input
 from .client_config import client_config
@@ -42,20 +43,20 @@ logger = get_logger(__name__)
 
 
 def init_dataset(
-    dataset,
-    model=None,
-    index=None,
-    index_name: str = None,
+    dataset: Union[pd.DataFrame, pl.DataFrame, "np.ndarray", "torch.utils.data.Dataset"],
+    model: Optional[VMModel] = None,
+    index: Optional[Any] = None,
+    index_name: Optional[str] = None,
     date_time_index: bool = False,
-    columns: list = None,
-    text_column: str = None,
-    target_column: str = None,
-    feature_columns: list = None,
-    extra_columns: dict = None,
-    class_labels: dict = None,
-    type: str = None,
-    input_id: str = None,
-    __log=True,
+    columns: Optional[List[str]] = None,
+    text_column: Optional[str] = None,
+    target_column: Optional[str] = None,
+    feature_columns: Optional[List[str]] = None,
+    extra_columns: Optional[Dict[str, Any]] = None,
+    class_labels: Optional[Dict[str, Any]] = None,
+    type: Optional[str] = None,
+    input_id: Optional[str] = None,
+    __log: bool = True,
 ) -> VMDataset:
     """
     Initializes a VM Dataset, which can then be passed to other functions
@@ -71,23 +72,28 @@ def init_dataset(
     Args:
         dataset: Dataset from various Python libraries
         model (VMModel): ValidMind model object
-        targets (vm.vm.DatasetTargets): A list of target variables
-        target_column (str): The name of the target column in the dataset
-        feature_columns (list): A list of names of feature columns in the dataset
-        extra_columns (dictionary):  A dictionary containing the names of the
+        index (Any, optional): Index for the dataset
+        index_name (str, optional): Name of the index column
+        date_time_index (bool): Whether the index is a datetime index
+        columns (List[str], optional): List of column names
+        text_column (str, optional): Name of the text column
+        target_column (str, optional): The name of the target column in the dataset
+        feature_columns (List[str], optional): A list of names of feature columns in the dataset
+        extra_columns (Dict[str, Any], optional): A dictionary containing the names of the
             prediction_column and group_by_columns in the dataset
-        class_labels (dict): A list of class labels for classification problems
-        type (str): The type of dataset (one of DATASET_TYPES)
-        input_id (str): The input ID for the dataset (e.g. "my_dataset"). By default,
+        class_labels (Dict[str, Any], optional): A list of class labels for classification problems
+        type (str, optional): The type of dataset (one of DATASET_TYPES) - DEPRECATED
+        input_id (str, optional): The input ID for the dataset (e.g. "my_dataset"). By default,
             this will be set to `dataset` but if you are passing this dataset as a
             test input using some other key than `dataset`, then you should set
             this to the same key.
+        __log (bool): Whether to log the input. Defaults to True.
 
     Raises:
         ValueError: If the dataset type is not supported
 
     Returns:
-        vm.vm.Dataset: A VM Dataset instance
+        VMDataset: A VM Dataset instance
     """
     # Show deprecation notice if type is passed
     if type is not None:
@@ -171,12 +177,12 @@ def init_dataset(
 
 
 def init_model(
-    model: object = None,
+    model: Optional[object] = None,
     input_id: str = "model",
-    attributes: dict = None,
-    predict_fn: callable = None,
-    __log=True,
-    **kwargs,
+    attributes: Optional[Dict[str, Any]] = None,
+    predict_fn: Optional[Callable] = None,
+    __log: bool = True,
+    **kwargs: Any,
 ) -> VMModel:
     """
     Initializes a VM Model, which can then be passed to other functions
@@ -292,10 +298,10 @@ def init_r_model(
 
     Args:
         model_path (str): The path to the R model saved as an RDS or XGB file
-        model_type (str): The type of the model (one of R_MODEL_TYPES)
+        input_id (str): The input ID for the model. Defaults to "model".
 
     Returns:
-        vm.vm.Model: A VM Model instance
+        VMModel: A VM Model instance
     """
 
     # TODO: proper check for supported models
@@ -329,10 +335,10 @@ def init_r_model(
 
 
 def get_test_suite(
-    test_suite_id: str = None,
-    section: str = None,
-    *args,
-    **kwargs,
+    test_suite_id: Optional[str] = None,
+    section: Optional[str] = None,
+    *args: Any,
+    **kwargs: Any,
 ) -> TestSuite:
     """Gets a TestSuite object for the current project or a specific test suite
 
@@ -365,8 +371,13 @@ def get_test_suite(
 
 
 def run_test_suite(
-    test_suite_id, send=True, fail_fast=False, config=None, inputs=None, **kwargs
-):
+    test_suite_id: str,
+    send: bool = True,
+    fail_fast: bool = False,
+    config: Optional[Dict[str, Any]] = None,
+    inputs: Optional[Dict[str, Any]] = None,
+    **kwargs: Any,
+) -> Dict[str, Any]:
     """High Level function for running a test suite
 
     This function provides a high level interface for running a test suite. A test suite is
@@ -414,7 +425,7 @@ def run_test_suite(
     return suite
 
 
-def preview_template():
+def preview_template() -> None:
     """Preview the documentation template for the current project
 
     This function will display the documentation template for the current project. If
@@ -432,8 +443,13 @@ def preview_template():
 
 
 def run_documentation_tests(
-    section=None, send=True, fail_fast=False, inputs=None, config=None, **kwargs
-):
+    section: Optional[str] = None,
+    send: bool = True,
+    fail_fast: bool = False,
+    inputs: Optional[Dict[str, Any]] = None,
+    config: Optional[Dict[str, Any]] = None,
+    **kwargs: Any,
+) -> Dict[str, Any]:
     """Collect and run all the tests associated with a template
 
     This function will analyze the current project's documentation template and collect
@@ -487,8 +503,14 @@ def run_documentation_tests(
 
 
 def _run_documentation_section(
-    template, section, send=True, fail_fast=False, config=None, inputs=None, **kwargs
-):
+    template: str,
+    section: str,
+    send: bool = True,
+    fail_fast: bool = False,
+    config: Optional[Dict[str, Any]] = None,
+    inputs: Optional[Dict[str, Any]] = None,
+    **kwargs: Any,
+) -> Dict[str, Any]:
     """Run all tests in a template section
 
     This function will collect all tests used in a template section into a TestSuite and then

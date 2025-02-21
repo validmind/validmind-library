@@ -8,6 +8,7 @@ Dataset class wrapper
 
 import warnings
 from copy import deepcopy
+from typing import Any, Dict, List, Optional, Union
 
 import numpy as np
 import pandas as pd
@@ -200,7 +201,7 @@ class VMDataset(VMInput):
                 "Cannot use precomputed probabilities without precomputed predictions"
             )
 
-    def with_options(self, **kwargs) -> "VMDataset":
+    def with_options(self, **kwargs: Dict[str, Any]) -> "VMDataset":
         """Support options provided when passing an input to run_test or run_test_suite
 
         Example:
@@ -253,23 +254,23 @@ class VMDataset(VMInput):
     def assign_predictions(
         self,
         model: VMModel,
-        prediction_column: str = None,
-        prediction_values: list = None,
-        probability_column: str = None,
-        probability_values: list = None,
-        prediction_probabilities: list = None,  # DEPRECATED: use probability_values
-        **kwargs,
-    ):
+        prediction_column: Optional[str] = None,
+        prediction_values: Optional[List[Any]] = None,
+        probability_column: Optional[str] = None,
+        probability_values: Optional[List[float]] = None,
+        prediction_probabilities: Optional[List[float]] = None,  # DEPRECATED: use probability_values
+        **kwargs: Dict[str, Any]
+    ) -> None:
         """Assign predictions and probabilities to the dataset.
 
         Args:
             model (VMModel): The model used to generate the predictions.
-            prediction_column (str, optional): The name of the column containing the predictions. Defaults to None.
-            prediction_values (list, optional): The values of the predictions. Defaults to None.
-            probability_column (str, optional): The name of the column containing the probabilities. Defaults to None.
-            probability_values (list, optional): The values of the probabilities. Defaults to None.
-            prediction_probabilities (list, optional): DEPRECATED: The values of the probabilities. Defaults to None.
-            kwargs: Additional keyword arguments that will get passed through to the model's `predict` method.
+            prediction_column (Optional[str]): The name of the column containing the predictions.
+            prediction_values (Optional[List[Any]]): The values of the predictions.
+            probability_column (Optional[str]): The name of the column containing the probabilities.
+            probability_values (Optional[List[float]]): The values of the probabilities.
+            prediction_probabilities (Optional[List[float]]): DEPRECATED: The values of the probabilities.
+            **kwargs: Additional keyword arguments that will get passed through to the model's `predict` method.
         """
         if prediction_probabilities is not None:
             warnings.warn(

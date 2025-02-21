@@ -6,14 +6,15 @@
 Entrypoint for regression datasets
 """
 import pandas as pd
+from typing import List
 
-__all__ = [
+__all__: List[str] = [
     "fred",
     "lending_club",
 ]
 
 
-def identify_frequencies(df):
+def identify_frequencies(df: pd.DataFrame) -> pd.DataFrame:
     """
     Identify the frequency of each series in the DataFrame.
 
@@ -39,7 +40,17 @@ def identify_frequencies(df):
     return freq_df
 
 
-def resample_to_common_frequency(df, common_frequency="MS"):
+def resample_to_common_frequency(df: pd.DataFrame, common_frequency: str = "MS") -> pd.DataFrame:
+    """
+    Resample time series data to a common frequency.
+
+    Args:
+        df: Time-series DataFrame.
+        common_frequency: Target frequency for resampling. Defaults to "MS" (month start).
+
+    Returns:
+        DataFrame with data resampled to the common frequency.
+    """
     # Make sure the index is a datetime index
     if not isinstance(df.index, pd.DatetimeIndex):
         df.index = pd.to_datetime(df.index)

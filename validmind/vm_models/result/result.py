@@ -45,7 +45,7 @@ logger = get_logger(__name__)
 class RawData:
     """Holds raw data for a test result"""
 
-    def __init__(self, log: bool = False, **kwargs):
+    def __init__(self, log: bool = False, **kwargs: Any) -> None:
         """Create a new RawData object
 
         Args:
@@ -61,8 +61,15 @@ class RawData:
     def __repr__(self) -> str:
         return f"RawData({', '.join(self.__dict__.keys())})"
 
-    def inspect(self, show: bool = True):
-        """Inspect the raw data"""
+    def inspect(self, show: bool = True) -> Optional[Dict[str, Any]]:
+        """Inspect the raw data
+        
+        Args:
+            show (bool): If True, print the raw data. If False, return it.
+            
+        Returns:
+            Optional[Dict[str, Any]]: The raw data if show is False, None otherwise
+        """
         raw_data = {
             key: getattr(self, key)
             for key in self.__dict__
@@ -73,8 +80,14 @@ class RawData:
             return raw_data
 
         print(json.dumps(raw_data, indent=2, cls=HumanReadableEncoder))
+        return None
 
-    def serialize(self):
+    def serialize(self) -> Dict[str, Any]:
+        """Serialize the raw data to a dictionary
+        
+        Returns:
+            Dict[str, Any]: The serialized raw data
+        """
         return {key: getattr(self, key) for key in self.__dict__}
 
 
@@ -266,14 +279,19 @@ class TestResult(Result):
             bytes,
             Figure,
         ],
-    ):
-        """Add a new figure to the result
+    ) -> None:
+        """Add a new figure to the result.
 
         Args:
-            figure (Union[matplotlib.figure.Figure, go.Figure, go.FigureWidget,
-                bytes, Figure]): The figure to add (can be either a VM Figure object,
-                a raw figure object from the supported libraries, or a png image as
-                raw bytes)
+            figure: The figure to add. Can be one of:
+                - matplotlib.figure.Figure: A matplotlib figure
+                - plotly.graph_objs.Figure: A plotly figure
+                - plotly.graph_objs.FigureWidget: A plotly figure widget
+                - bytes: A PNG image as raw bytes
+                - validmind.vm_models.figure.Figure: A ValidMind figure object
+
+        Returns:
+            None
         """
         if self.figures is None:
             self.figures = []

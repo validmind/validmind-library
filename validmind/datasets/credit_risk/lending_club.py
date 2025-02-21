@@ -5,6 +5,7 @@
 import logging
 import os
 import warnings
+from typing import Dict, List, Optional, Tuple, Union, Any
 
 import numpy as np
 import pandas as pd
@@ -101,7 +102,7 @@ score_params = {
 }
 
 
-def load_data(source="online", verbose=True):
+def load_data(source: str = "online", verbose: bool = True) -> pd.DataFrame:
     """
     Load data from either an online source or offline files, automatically dropping specified columns for offline data.
 
@@ -139,7 +140,7 @@ def load_data(source="online", verbose=True):
     return df
 
 
-def _clean_data(df, verbose=True):
+def _clean_data(df: pd.DataFrame, verbose: bool = True) -> pd.DataFrame:
     df = df.copy()
 
     # Drop columns not relevant for application scorecards
@@ -185,7 +186,7 @@ def _clean_data(df, verbose=True):
     return df
 
 
-def preprocess(df, verbose=True):
+def preprocess(df: pd.DataFrame, verbose: bool = True) -> pd.DataFrame:
     df = df.copy()
 
     # Convert the target variable to integer type for modeling.
@@ -248,7 +249,7 @@ def preprocess(df, verbose=True):
     return df
 
 
-def _preprocess_term(df):
+def _preprocess_term(df: pd.DataFrame) -> pd.DataFrame:
     df = df.copy()
 
     # Remove ' months' and convert to integer
@@ -257,7 +258,7 @@ def _preprocess_term(df):
     return df
 
 
-def _preprocess_emp_length(df):
+def _preprocess_emp_length(df: pd.DataFrame) -> pd.DataFrame:
     df = df.copy()
 
     # Mapping string values to numbers
@@ -284,7 +285,7 @@ def _preprocess_emp_length(df):
     return df
 
 
-def feature_engineering(df, verbose=True):
+def feature_engineering(df: pd.DataFrame, verbose: bool = True) -> pd.DataFrame:
     df = df.copy()
 
     # WoE encoding of numerical and categorical features
@@ -298,7 +299,7 @@ def feature_engineering(df, verbose=True):
     return df
 
 
-def woe_encoding(df, verbose=True):
+def woe_encoding(df: pd.DataFrame, verbose: bool = True) -> pd.DataFrame:
     df = df.copy()
 
     woe = _woebin(df, verbose=verbose)
@@ -319,7 +320,7 @@ def woe_encoding(df, verbose=True):
     return df
 
 
-def _woe_to_bins(woe):
+def _woe_to_bins(woe: Dict[str, Any]) -> Dict[str, Any]:
     # Select and rename columns
     transformed_df = woe[
         [
@@ -353,7 +354,7 @@ def _woe_to_bins(woe):
     return bins
 
 
-def _woebin(df, verbose=True):
+def _woebin(df: pd.DataFrame, verbose: bool = True) -> Dict[str, Any]:
     """
     This function performs automatic binning using WoE.
     df: A pandas dataframe
@@ -383,7 +384,13 @@ def _woebin(df, verbose=True):
         return bins_df
 
 
-def split(df, validation_size=None, test_size=0.2, add_constant=False, verbose=True):
+def split(
+    df: pd.DataFrame,
+    validation_split: Optional[float] = None,
+    test_size: float = 0.2,
+    add_constant: bool = False,
+    verbose: bool = True
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """
     Split dataset into train, validation (optional), and test sets.
 
@@ -407,7 +414,7 @@ def split(df, validation_size=None, test_size=0.2, add_constant=False, verbose=T
     if add_constant:
         test_df = sm.add_constant(test_df)
 
-    if validation_size is None:
+    if validation_split is None:
         if add_constant:
             train_val_df = sm.add_constant(train_val_df)
 
@@ -426,7 +433,7 @@ def split(df, validation_size=None, test_size=0.2, add_constant=False, verbose=T
         return train_val_df, test_df
 
     # Calculate validation size as proportion of remaining data
-    val_size = validation_size / (1 - test_size)
+    val_size = validation_split / (1 - test_size)
     train_df, validation_df = train_test_split(
         train_val_df, test_size=val_size, random_state=42
     )
@@ -454,7 +461,7 @@ def split(df, validation_size=None, test_size=0.2, add_constant=False, verbose=T
     return train_df, validation_df, test_df
 
 
-def compute_scores(probabilities):
+def compute_scores(probabilities: np.ndarray) -> np.ndarray:
     target_score = score_params["target_score"]
     target_odds = score_params["target_odds"]
     pdo = score_params["pdo"]
@@ -468,7 +475,10 @@ def compute_scores(probabilities):
     return scores
 
 
-def get_demo_test_config(x_test=None, y_test=None):
+def get_demo_test_config(
+    x_test: Optional[np.ndarray] = None,
+    y_test: Optional[np.ndarray] = None
+) -> Dict[str, Any]:
     """Get demo test configuration.
 
     Args:

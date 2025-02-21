@@ -7,7 +7,7 @@ import os
 import re
 import sys
 from pathlib import Path
-from typing import List, Protocol
+from typing import List, Protocol, Callable, Any
 
 from validmind.logging import get_logger
 
@@ -95,45 +95,38 @@ class LocalTestProvider:
         """
         self.root_folder = os.path.abspath(root_folder)
 
-    def list_tests(self):
+    def list_tests(self) -> List[str]:
         """List all tests in the given namespace
 
         Returns:
             list: A list of test IDs
         """
-        test_ids = []
-
+        test_files = []
         for root, _, files in os.walk(self.root_folder):
-            for filename in files:
-                if not filename.endswith(".py") or filename.startswith("__"):
+            for file in files:
+                if not file.endswith(".py"):
                     continue
 
-                path = Path(root) / filename
-                if not _is_test_file(path):
-                    continue
+                path = Path(os.path.join(root, file))
+                if _is_test_file(path):
+                    rel_path = os.path.relpath(path, self.root_folder)
+                    test_id = os.path.splitext(rel_path)[0].replace(os.sep, ".")
+                    test_files.append(test_id)
 
-                rel_path = path.relative_to(self.root_folder)
+        return test_files
 
-                test_id_parts = [p.stem for p in rel_path.parents if p.stem][::-1]
-                test_id_parts.append(path.stem)
-                test_ids.append(".".join(test_id_parts))
-
-        return sorted(test_ids)
-
-    def load_test(self, test_id: str):
-        """
-        Load the test identified by the given test_id.
+    def load_test(self, test_id: str) -> Callable[..., Any]:
+        """Load the test function identified by the given test_id
 
         Args:
-            test_id (str): The identifier of the test. This corresponds to the relative
-                path of the python file from the root folder, with slashes replaced by dots
+            test_id (str): The test ID (does not contain the namespace under which
+                the test is registered)
 
         Returns:
-            The test class that matches the last part of the test_id.
+            callable: The test function
 
         Raises:
-            LocalTestProviderLoadModuleError: If the test module cannot be imported
-            LocalTestProviderLoadTestError: If the test class cannot be found in the module
+            FileNotFoundError: If the test is not found
         """
         # Convert test_id to file path
         file_path = os.path.join(self.root_folder, f"{test_id.replace('.', '/')}.py")
@@ -162,28 +155,23 @@ class LocalTestProvider:
 
 
 class ValidMindTestProvider:
-    """Test provider for ValidMind tests"""
+    """Provider for built-in ValidMind tests"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         # two subproviders: unit_metrics and normal tests
-        self.metrics_provider = LocalTestProvider(
+        self.unit_metrics_provider = LocalTestProvider(
             os.path.join(os.path.dirname(__file__), "..", "unit_metrics")
         )
-        self.tests_provider = LocalTestProvider(os.path.dirname(__file__))
+        self.test_provider = LocalTestProvider(os.path.dirname(__file__))
 
     def list_tests(self) -> List[str]:
-        """List all tests in the ValidMind test provider"""
-        metric_ids = [
-            f"unit_metrics.{test}" for test in self.metrics_provider.list_tests()
-        ]
-        test_ids = self.tests_provider.list_tests()
+        """List all tests in the given namespace"""
+        return self.unit_metrics_provider.list_tests() + self.test_provider.list_tests()
 
-        return metric_ids + test_ids
-
-    def load_test(self, test_id: str) -> callable:
-        """Load a ValidMind test or unit metric"""
+    def load_test(self, test_id: str) -> Callable[..., Any]:
+        """Load the test function identified by the given test_id"""
         return (
-            self.metrics_provider.load_test(test_id.replace("unit_metrics.", ""))
+            self.unit_metrics_provider.load_test(test_id.replace("unit_metrics.", ""))
             if test_id.startswith("unit_metrics.")
-            else self.tests_provider.load_test(test_id)
+            else self.test_provider.load_test(test_id)
         )

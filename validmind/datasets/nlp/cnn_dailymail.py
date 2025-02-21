@@ -4,6 +4,7 @@
 
 import os
 import textwrap
+from typing import Tuple, Optional
 
 import pandas as pd
 from datasets import load_dataset
@@ -22,7 +23,7 @@ current_path = os.path.dirname(os.path.abspath(__file__))
 dataset_path = os.path.join(current_path, "datasets")
 
 
-def load_data(source="online", dataset_size=None):
+def load_data(source: str = "online", dataset_size: Optional[str] = None) -> Tuple[pd.DataFrame, pd.DataFrame]:
     """
     Load data from either online source or offline files.
 
@@ -31,7 +32,7 @@ def load_data(source="online", dataset_size=None):
         dataset_size: Applicable if source is 'offline'. '300k' or '500k' for dataset size. Defaults to None.
 
     Returns:
-        DataFrame containing the loaded data.
+        Tuple containing (train_df, test_df) DataFrames with the loaded data.
     """
     if source == "online":
         # Load online data without predictions
