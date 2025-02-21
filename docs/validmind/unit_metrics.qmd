@@ -14,15 +14,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">describe_metric</span>(<span class="params"><span class="n">metric_id</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">str</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>):
+<span class="kw">def</span><span class="name">describe_metric</span>(<span class="params"><span class="n">metric_id</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>):
 
 :::
 
@@ -54,15 +46,7 @@ List all metrics
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">run_metric</span>(<span class="params"><span class="n">metric_id</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">str</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>):
+<span class="kw">def</span><span class="name">run_metric</span>(<span class="params"><span class="n">metric_id</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>):
 
 :::
 

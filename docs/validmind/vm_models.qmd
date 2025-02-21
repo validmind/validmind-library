@@ -18,11 +18,7 @@ Models entrypoint
 
 ::: {.signature}
 
-<div class="decorator">@<!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="n">dataclass</span><!-- DEBUG is_mapping: True -->
-<!-- DEBUG type_class: dict -->
-<!-- DEBUG cls_value: ExprName -->
-<!-- DEBUG cls_type: str -->
-</div>
+<div class="decorator">@<!-- types.jinja2 - format_type --><span class="n">dataclass</span></div>
 <span class="kw">class</span><span class="name">Figure</span>:
 
 :::
@@ -37,93 +33,7 @@ Figure objects track the schema supported by the ValidMind API
 
 ::: {.signature}
 
-<span class="name">__init__</span>(<span class="params"><span class="n">key</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">str</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="muted">,</span></span><span class="params"><span class="n">figure</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprSubscript --><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="n">Union</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="p">\[</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprAttribute --><!-- DEBUG values: [{'cls': 'ExprName', 'name': 'matplotlib'}, {'cls': 'ExprName', 'name': 'figure'}, {'cls': 'ExprName', 'name': 'Figure'}] -->
-
-<!-- DEBUG values_type: list --><span class="n">matplotlib</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">Figure</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprAttribute -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="p">, </span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprAttribute --><!-- DEBUG values: [{'cls': 'ExprName', 'name': 'go'}, {'cls': 'ExprName', 'name': 'Figure'}] -->
-
-<!-- DEBUG values_type: list --><span class="n">go</span><span class="o">.</span><span class="n">Figure</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprAttribute -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="p">, </span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprAttribute --><!-- DEBUG values: [{'cls': 'ExprName', 'name': 'go'}, {'cls': 'ExprName', 'name': 'FigureWidget'}] -->
-
-<!-- DEBUG values_type: list --><span class="n">go</span><span class="o">.</span><span class="n">FigureWidget</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprAttribute -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="p">, </span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="n">bytes</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="p">\]</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprSubscript -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="muted">,</span></span><span class="params"><span class="n">ref_id</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">str</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="muted">,</span></span><span class="params"><span class="n">\_type</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">str</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="o">=</span><span class="s1">'plot'</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><span class="n">None</span><!-- DEBUG is_mapping: False -->
-
-<!-- DEBUG type_class: str -->
-
-<!-- DEBUG cls_value: undefined -->
-
-<!-- DEBUG cls_type: undefined -->
-
-</span>
+<span class="name">__init__</span>(<span class="params"><span class="n">key</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">figure</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Union</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="n">matplotlib</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">Figure</span><span class="p">, </span><!-- types.jinja2 - format_type --><span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">, </span><!-- types.jinja2 - format_type --><span class="n">go</span><span class="o">.</span><span class="n">FigureWidget</span><span class="p">, </span><!-- types.jinja2 - format_type --><span class="n">bytes</span><span class="p">\]</span><span class="muted">,</span></span><span class="params"><span class="n">ref_id</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">\_type</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o">=</span><span class="s1">'plot'</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><span class="n">None</span></span>
 
 :::
 
@@ -179,11 +89,7 @@ we would render images as-is, but Plotly FigureWidgets don't work well on Google
 
 ::: {.signature}
 
-<div class="decorator">@<!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="n">dataclass</span><!-- DEBUG is_mapping: True -->
-<!-- DEBUG type_class: dict -->
-<!-- DEBUG cls_value: ExprName -->
-<!-- DEBUG cls_type: str -->
-</div>
+<div class="decorator">@<!-- types.jinja2 - format_type --><span class="n">dataclass</span></div>
 <span class="kw">class</span><span class="name">ModelAttributes</span>:
 
 :::
@@ -198,55 +104,7 @@ Model attributes definition
 
 ::: {.signature}
 
-<span class="name">__init__</span>(<span class="params"><span class="n">architecture</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">str</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">framework</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">str</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">framework_version</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">str</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">language</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">str</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">task</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="n">ModelTask</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="o">=</span><span class="kc">None</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><span class="n">None</span><!-- DEBUG is_mapping: False -->
-
-<!-- DEBUG type_class: str -->
-
-<!-- DEBUG cls_value: undefined -->
-
-<!-- DEBUG cls_type: undefined -->
-
-</span>
+<span class="name">__init__</span>(<span class="params"><span class="n">architecture</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">framework</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">framework_version</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">language</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">task</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">ModelTask</span><span class="o">=</span><span class="kc">None</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><span class="n">None</span></span>
 
 :::
 
@@ -256,11 +114,7 @@ Model attributes definition
 
 ::: {.signature}
 
-<div class="decorator">@<!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="n">classmethod</span><!-- DEBUG is_mapping: True -->
-<!-- DEBUG type_class: dict -->
-<!-- DEBUG cls_value: ExprName -->
-<!-- DEBUG cls_type: str -->
-</div>
+<div class="decorator">@<!-- types.jinja2 - format_type --><span class="n">classmethod</span></div>
 <span class="kw">def</span><span class="name">from_dict</span>(<span class="params"><span class="n">cls</span><span class="muted">,</span></span><span class="params"><span class="n">data</span></span>):
 
 :::
@@ -277,11 +131,7 @@ Creates a ModelAttributes instance from a dictionary
 
 ::: {.signature}
 
-<div class="decorator">@<!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="n">dataclass</span><!-- DEBUG is_mapping: True -->
-<!-- DEBUG type_class: dict -->
-<!-- DEBUG cls_value: ExprName -->
-<!-- DEBUG cls_type: str -->
-</div>
+<div class="decorator">@<!-- types.jinja2 - format_type --><span class="n">dataclass</span></div>
 <span class="kw">class</span><span class="name">TestSuite</span>:
 
 :::
@@ -300,39 +150,7 @@ Tests can be a flat list of strings or may be nested into sections by using a di
 
 ::: {.signature}
 
-<span class="name">__init__</span>(<span class="params"><span class="n">sections</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprSubscript --><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="n">List</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="p">\[</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="n">TestSuiteSection</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="p">\]</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprSubscript -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="o">=</span><span class="kc">None</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><span class="n">None</span><!-- DEBUG is_mapping: False -->
-
-<!-- DEBUG type_class: str -->
-
-<!-- DEBUG cls_value: undefined -->
-
-<!-- DEBUG cls_type: undefined -->
-
-</span>
+<span class="name">__init__</span>(<span class="params"><span class="n">sections</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">List</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="n">TestSuiteSection</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><span class="n">None</span></span>
 
 :::
 
@@ -342,15 +160,7 @@ Tests can be a flat list of strings or may be nested into sections by using a di
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">get_default_config</span>()<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">dict</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-</span>:
+<span class="kw">def</span><span class="name">get_default_config</span>()<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><span class="nb">dict</span></span>:
 
 :::
 
@@ -370,31 +180,7 @@ Each test in a test suite can accept parameters and those parameters can have de
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">get_tests</span>()<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><!-- DEBUG: ExprSubscript --><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="n">List</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="p">\[</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">str</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="p">\]</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprSubscript -->
-
-<!-- DEBUG cls_type: str -->
-
-</span>:
+<span class="kw">def</span><span class="name">get_tests</span>()<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">List</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="p">\]</span></span>:
 
 :::
 
@@ -408,15 +194,7 @@ Get all test suite test objects from all sections
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">num_tests</span>()<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">int</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-</span>:
+<span class="kw">def</span><span class="name">num_tests</span>()<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><span class="nb">int</span></span>:
 
 :::
 
@@ -446,31 +224,7 @@ Runs a test suite
 
 ::: {.signature}
 
-<span class="name">__init__</span>(<span class="params"><span class="n">suite</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="n">TestSuite</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="muted">,</span></span><span class="params"><span class="n">config</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">dict</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">inputs</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">dict</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="o">=</span><span class="kc">None</span></span>)
+<span class="name">__init__</span>(<span class="params"><span class="n">suite</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">TestSuite</span><span class="muted">,</span></span><span class="params"><span class="n">config</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">inputs</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">dict</span><span class="o">=</span><span class="kc">None</span></span>)
 
 :::
 
@@ -496,23 +250,7 @@ This method will be called after the test suite has been run and all results hav
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">run</span>(<span class="params"><span class="n">send</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">bool</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="o">=</span><span class="kc">True</span><span class="muted">,</span></span><span class="params"><span class="n">fail_fast</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">bool</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="o">=</span><span class="kc">False</span></span>):
+<span class="kw">def</span><span class="name">run</span>(<span class="params"><span class="n">send</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="muted">,</span></span><span class="params"><span class="n">fail_fast</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span></span>):
 
 :::
 
@@ -531,15 +269,7 @@ Runs the test suite, renders the summary and sends the results to ValidMind
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">summarize</span>(<span class="params"><span class="n">show_link</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">bool</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="o">=</span><span class="kc">True</span></span>):
+<span class="kw">def</span><span class="name">summarize</span>(<span class="params"><span class="n">show_link</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span></span>):
 
 :::
 
@@ -586,107 +316,7 @@ This way we can support multiple dataset types but under the hood we only need t
 
 ::: {.signature}
 
-<span class="name">__init__</span>(<span class="params"><span class="n">raw_dataset</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprAttribute --><!-- DEBUG values: [{'cls': 'ExprName', 'name': 'np'}, {'cls': 'ExprName', 'name': 'ndarray'}] -->
-
-<!-- DEBUG values_type: list --><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprAttribute -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="muted">,</span></span><span class="params"><span class="n">input_id</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">str</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="n">VMModel</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">index</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprAttribute --><!-- DEBUG values: [{'cls': 'ExprName', 'name': 'np'}, {'cls': 'ExprName', 'name': 'ndarray'}] -->
-
-<!-- DEBUG values_type: list --><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprAttribute -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">index_name</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">str</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">date_time_index</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">bool</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="o">=</span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">columns</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">list</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">target_column</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">str</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">feature_columns</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">list</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">text_column</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">str</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">extra_columns</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">dict</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">target_class_labels</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">dict</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="o">=</span><span class="kc">None</span></span>)
+<span class="name">__init__</span>(<span class="params"><span class="n">raw_dataset</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="muted">,</span></span><span class="params"><span class="n">input_id</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">VMModel</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">index</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">index_name</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">date_time_index</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">columns</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">list</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">target_column</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">feature_columns</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">list</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">text_column</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">extra_columns</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">target_class_labels</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">dict</span><span class="o">=</span><span class="kc">None</span></span>)
 
 :::
 
@@ -733,55 +363,7 @@ Adds an extra column to the dataset without modifying the dataset `features` and
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">assign_predictions</span>(<span class="params"><span class="n">model</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="n">VMModel</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="muted">,</span></span><span class="params"><span class="n">prediction_column</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">str</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">prediction_values</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">list</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">probability_column</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">str</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">probability_values</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">list</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">prediction_probabilities</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">list</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>):
+<span class="kw">def</span><span class="name">assign_predictions</span>(<span class="params"><span class="n">model</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">VMModel</span><span class="muted">,</span></span><span class="params"><span class="n">prediction_column</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">prediction_values</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">list</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">probability_column</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">probability_values</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">list</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">prediction_probabilities</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">list</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>):
 
 :::
 
@@ -805,31 +387,7 @@ Assign predictions and probabilities to the dataset.
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">prediction_column</span>(<span class="params"><span class="n">model</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="n">VMModel</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="muted">,</span></span><span class="params"><span class="n">column_name</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">str</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="o">=</span><span class="kc">None</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">str</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-</span>:
+<span class="kw">def</span><span class="name">prediction_column</span>(<span class="params"><span class="n">model</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">VMModel</span><span class="muted">,</span></span><span class="params"><span class="n">column_name</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o">=</span><span class="kc">None</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><span class="nb">str</span></span>:
 
 :::
 
@@ -843,31 +401,7 @@ Get or set the prediction column for a model.
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">probability_column</span>(<span class="params"><span class="n">model</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="n">VMModel</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="muted">,</span></span><span class="params"><span class="n">column_name</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">str</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="o">=</span><span class="kc">None</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">str</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-</span>:
+<span class="kw">def</span><span class="name">probability_column</span>(<span class="params"><span class="n">model</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">VMModel</span><span class="muted">,</span></span><span class="params"><span class="n">column_name</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o">=</span><span class="kc">None</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><span class="nb">str</span></span>:
 
 :::
 
@@ -895,15 +429,7 @@ Returns the target class labels or unique values of the target column.
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">with_options</span>(<span class="params"><span class="n">\*\*kwargs</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><a href="/reference/validmind/vm_models.html#class-vmdataset">validmind.vm_models.VMDataset</a><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-</span>:
+<span class="kw">def</span><span class="name">with_options</span>(<span class="params"><span class="n">\*\*kwargs</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-vmdataset">validmind.vm_models.VMDataset</a></span>:
 
 :::
 
@@ -940,17 +466,7 @@ Returns a dataframe containing only the feature columns
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">y_df</span>()<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><!-- DEBUG: ExprAttribute --><!-- DEBUG values: [{'cls': 'ExprName', 'name': 'pd'}, {'cls': 'ExprName', 'name': 'DataFrame'}] -->
-
-<!-- DEBUG values_type: list --><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprAttribute -->
-
-<!-- DEBUG cls_type: str -->
-
-</span>:
+<span class="kw">def</span><span class="name">y_df</span>()<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span></span>:
 
 :::
 
@@ -964,17 +480,7 @@ Returns a dataframe containing the target column
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">y_pred</span>(<span class="params"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><!-- DEBUG: ExprAttribute --><!-- DEBUG values: [{'cls': 'ExprName', 'name': 'np'}, {'cls': 'ExprName', 'name': 'ndarray'}] -->
-
-<!-- DEBUG values_type: list --><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprAttribute -->
-
-<!-- DEBUG cls_type: str -->
-
-</span>:
+<span class="kw">def</span><span class="name">y_pred</span>(<span class="params"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span></span>:
 
 :::
 
@@ -998,17 +504,7 @@ Attempts to stack complex prediction types (e.g., embeddings) into a single, mul
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">y_pred_df</span>(<span class="params"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><!-- DEBUG: ExprAttribute --><!-- DEBUG values: [{'cls': 'ExprName', 'name': 'pd'}, {'cls': 'ExprName', 'name': 'DataFrame'}] -->
-
-<!-- DEBUG values_type: list --><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprAttribute -->
-
-<!-- DEBUG cls_type: str -->
-
-</span>:
+<span class="kw">def</span><span class="name">y_pred_df</span>(<span class="params"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span></span>:
 
 :::
 
@@ -1022,17 +518,7 @@ Returns a dataframe containing the predictions for a given model
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">y_prob</span>(<span class="params"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><!-- DEBUG: ExprAttribute --><!-- DEBUG values: [{'cls': 'ExprName', 'name': 'np'}, {'cls': 'ExprName', 'name': 'ndarray'}] -->
-
-<!-- DEBUG values_type: list --><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprAttribute -->
-
-<!-- DEBUG cls_type: str -->
-
-</span>:
+<span class="kw">def</span><span class="name">y_prob</span>(<span class="params"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span></span>:
 
 :::
 
@@ -1054,17 +540,7 @@ Returns the probabilities for a given model.
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">y_prob_df</span>(<span class="params"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><!-- DEBUG: ExprAttribute --><!-- DEBUG values: [{'cls': 'ExprName', 'name': 'pd'}, {'cls': 'ExprName', 'name': 'DataFrame'}] -->
-
-<!-- DEBUG values_type: list --><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprAttribute -->
-
-<!-- DEBUG cls_type: str -->
-
-</span>:
+<span class="kw">def</span><span class="name">y_prob_df</span>(<span class="params"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span></span>:
 
 :::
 
@@ -1096,15 +572,7 @@ Base class for ValidMind Input types
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">with_options</span>(<span class="params"><span class="n">\*\*kwargs</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><a href="/reference/validmind/vm_models.html#class-vminput">validmind.vm_models.VMInput</a><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-</span>:
+<span class="kw">def</span><span class="name">with_options</span>(<span class="params"><span class="n">\*\*kwargs</span></span>)<span class="p"> → </span><span class="return-annotation"><!-- types.jinja2 - format_type --><a href="/reference/validmind/vm_models.html#class-vminput">validmind.vm_models.VMInput</a></span>:
 
 :::
 
@@ -1153,39 +621,7 @@ An base class that wraps a trained model instance and its associated data.
 
 ::: {.signature}
 
-<span class="name">__init__</span>(<span class="params"><span class="n">input_id</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">str</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">object</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">attributes</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="n">ModelAttributes</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">name</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">str</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>)
+<span class="name">__init__</span>(<span class="params"><span class="n">input_id</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">object</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">attributes</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">ModelAttributes</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">name</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>)
 
 :::
 
@@ -1195,11 +631,7 @@ An base class that wraps a trained model instance and its associated data.
 
 ::: {.signature}
 
-<div class="decorator">@<!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="n">abstractmethod</span><!-- DEBUG is_mapping: True -->
-<!-- DEBUG type_class: dict -->
-<!-- DEBUG cls_value: ExprName -->
-<!-- DEBUG cls_type: str -->
-</div>
+<div class="decorator">@<!-- types.jinja2 - format_type --><span class="n">abstractmethod</span></div>
 <span class="kw">def</span><span class="name">predict</span>(<span class="params"><span class="n">*args</span><span class="muted">,</span></span><span class="params"><span class="n">**kwargs</span></span>):
 
 :::

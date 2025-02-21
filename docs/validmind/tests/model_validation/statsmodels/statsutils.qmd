@@ -14,43 +14,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">adj_r2_score</span>(<span class="params"><span class="n">actual</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprAttribute --><!-- DEBUG values: [{'cls': 'ExprName', 'name': 'np'}, {'cls': 'ExprName', 'name': 'ndarray'}] -->
-
-<!-- DEBUG values_type: list --><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprAttribute -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="muted">,</span></span><span class="params"><span class="n">predicted</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprAttribute --><!-- DEBUG values: [{'cls': 'ExprName', 'name': 'np'}, {'cls': 'ExprName', 'name': 'ndarray'}] -->
-
-<!-- DEBUG values_type: list --><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprAttribute -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="muted">,</span></span><span class="params"><span class="n">rowcount</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">int</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-<span class="muted">,</span></span><span class="params"><span class="n">featurecount</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- DEBUG: ExprName --><span class="nb">int</span><!-- DEBUG is_mapping: True -->
-
-<!-- DEBUG type_class: dict -->
-
-<!-- DEBUG cls_value: ExprName -->
-
-<!-- DEBUG cls_type: str -->
-
-</span>):
+<span class="kw">def</span><span class="name">adj_r2_score</span>(<span class="params"><span class="n">actual</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="muted">,</span></span><span class="params"><span class="n">predicted</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="muted">,</span></span><span class="params"><span class="n">rowcount</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">int</span><span class="muted">,</span></span><span class="params"><span class="n">featurecount</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">int</span></span>):
 
 :::
 
