@@ -1,0 +1,4 @@
+format:
+  html:
+    page-layout: full
+    css: reference.css 
