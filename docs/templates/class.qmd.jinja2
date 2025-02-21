@@ -34,7 +34,13 @@
 {% if member.kind in ['method', 'function'] and (not member.name.startswith('_') or member.name == '__init__') %}
 ### [{{ member.name if member.name != '__init__' else resolved.name }}[()]{.muted}](#{{ member.name }})
 
+{% if member.name == '__init__' %}
+{% set member_with_parent = member.copy() %}
+{% set _ = member_with_parent.update({'parent': {'name': resolved.name}}) %}
+{{ signatures.render_signature(member_with_parent) }}
+{% else %}
 {{ signatures.render_signature(member) }}
+{% endif %}
 
 {% if member.docstring %}
 {{ doc.format_docstring(member.docstring) }}

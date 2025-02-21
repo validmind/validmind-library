@@ -58,7 +58,7 @@ Generic error for API request errors that are not known.
 
 ::: {.signature}
 
-<span class="name">__init__</span>(<span class="params"><span class="n">message</span><span class="o">=</span><span class="s1">''</span></span>)
+<span class="name">BaseError</span>(<span class="param"><span class="n">message</span><span class="o">=</span><span class="s1">''</span></span>)
 
 :::
 
@@ -384,7 +384,7 @@ Exception raised when an error occurs while loading a test
 
 ::: {.signature}
 
-<span class="name">__init__</span>(<span class="params"><span class="n">message</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">original_error</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Optional</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="n">Exception</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span></span>)
+<span class="name">LoadTestError</span>(<span class="param"><span class="n">message</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="nb">str</span><span class="muted">,</span></span><span class="param"><span class="n">original_error</span><span class="p">:</span><!-- types.jinja2 - format_type --><!-- types.jinja2 - format_type --><span class="n">Optional</span><span class="p">\[</span><!-- types.jinja2 - format_type --><span class="n">Exception</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span></span>)
 
 :::
 
@@ -505,7 +505,7 @@ When a required dependency is missing.
 
 ::: {.signature}
 
-<span class="name">__init__</span>(<span class="params"><span class="n">message</span><span class="o">=</span><span class="s1">''</span><span class="muted">,</span></span><span class="params"><span class="n">required_dependencies</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">extra</span><span class="o">=</span><span class="kc">None</span></span>)
+<span class="name">MissingDependencyError</span>(<span class="param"><span class="n">message</span><span class="o">=</span><span class="s1">''</span><span class="muted">,</span></span><span class="param"><span class="n">required_dependencies</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="param"><span class="n">extra</span><span class="o">=</span><span class="kc">None</span></span>)
 
 :::
 
