@@ -52,7 +52,7 @@
   {%- endfor -%})
   {%- else -%}()
 {%- endif -%}
-{%- if member.returns -%}
+{%- if member.returns and member.returns != "None" -%}
   <span class="p"> → </span><span class="return-annotation">
     {{- format_type(member.returns, add_links=true) if member.returns else 'Any' -}}
   </span>

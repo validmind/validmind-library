@@ -256,7 +256,7 @@ The function may also include a docstring. This docstring will be used and logge
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">register_test_provider</span>(<span class="params"><span class="n">namespace</span><span class="p">:</span><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">test_provider</span><span class="p">:</span><span class="n">TestProvider</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">None</span></span>:
+<span class="kw">def</span><span class="name">register_test_provider</span>(<span class="params"><span class="n">namespace</span><span class="p">:</span><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">test_provider</span><span class="p">:</span><span class="n">TestProvider</span></span>):
 
 :::
 

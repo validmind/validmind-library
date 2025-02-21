@@ -18,7 +18,7 @@ Models entrypoint
 
 ::: {.signature}
 
-<span class="decorators"><span class="decorator"><span class="n">dataclass</span></span></span>
+<span class="decorators"><span class="decorator">@<span class="n">dataclass</span></span></span>
 
 <span class="kw">class</span><span class="name">Figure</span>:
 
@@ -34,7 +34,7 @@ Figure objects track the schema supported by the ValidMind API
 
 ::: {.signature}
 
-<span class="name">Figure</span>(<span class="params"><span class="n">key</span><span class="p">:</span><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">figure</span><span class="p">:</span><span class="n">Union</span><span class="p">\[</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">Figure</span><span class="p">, </span><span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">, </span><span class="n">go</span><span class="o">.</span><span class="n">FigureWidget</span><span class="p">, </span><span class="n">bytes</span><span class="p">\]</span><span class="muted">,</span></span><span class="params"><span class="n">ref_id</span><span class="p">:</span><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">\_type</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s1">'plot'</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">None</span></span>
+<span class="name">Figure</span>(<span class="params"><span class="n">key</span><span class="p">:</span><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">figure</span><span class="p">:</span><span class="n">Union</span><span class="p">\[</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">Figure</span><span class="p">, </span><span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">, </span><span class="n">go</span><span class="o">.</span><span class="n">FigureWidget</span><span class="p">, </span><span class="n">bytes</span><span class="p">\]</span><span class="muted">,</span></span><span class="params"><span class="n">ref_id</span><span class="p">:</span><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">\_type</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s1">'plot'</span></span>)
 
 :::
 
@@ -90,7 +90,7 @@ we would render images as-is, but Plotly FigureWidgets don't work well on Google
 
 ::: {.signature}
 
-<span class="decorators"><span class="decorator"><span class="n">dataclass</span></span></span>
+<span class="decorators"><span class="decorator">@<span class="n">dataclass</span></span></span>
 
 <span class="kw">class</span><span class="name">ModelAttributes</span>:
 
@@ -106,7 +106,7 @@ Model attributes definition
 
 ::: {.signature}
 
-<span class="name">ModelAttributes</span>(<span class="params"><span class="n">architecture</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">framework</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">framework_version</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">language</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">task</span><span class="p">:</span><span class="n">ModelTask</span><span class="o">=</span><span class="kc">None</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">None</span></span>
+<span class="name">ModelAttributes</span>(<span class="params"><span class="n">architecture</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">framework</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">framework_version</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">language</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">task</span><span class="p">:</span><span class="n">ModelTask</span><span class="o">=</span><span class="kc">None</span></span>)
 
 :::
 
@@ -116,7 +116,7 @@ Model attributes definition
 
 ::: {.signature}
 
-<span class="decorators"><span class="decorator"><span class="n">classmethod</span></span></span>
+<span class="decorators"><span class="decorator">@<span class="n">classmethod</span></span></span>
 
 <span class="kw">def</span><span class="name">from_dict</span>(<span class="params"><span class="n">cls</span><span class="muted">,</span></span><span class="params"><span class="n">data</span></span>):
 
@@ -134,7 +134,7 @@ Creates a ModelAttributes instance from a dictionary
 
 ::: {.signature}
 
-<span class="decorators"><span class="decorator"><span class="n">dataclass</span></span></span>
+<span class="decorators"><span class="decorator">@<span class="n">dataclass</span></span></span>
 
 <span class="kw">class</span><span class="name">TestSuite</span>:
 
@@ -154,7 +154,7 @@ Tests can be a flat list of strings or may be nested into sections by using a di
 
 ::: {.signature}
 
-<span class="name">TestSuite</span>(<span class="params"><span class="n">sections</span><span class="p">:</span><span class="n">List</span><span class="p">\[</span><span class="n">TestSuiteSection</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">None</span></span>
+<span class="name">TestSuite</span>(<span class="params"><span class="n">sections</span><span class="p">:</span><span class="n">List</span><span class="p">\[</span><span class="n">TestSuiteSection</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span></span>)
 
 :::
 
@@ -635,7 +635,7 @@ An base class that wraps a trained model instance and its associated data.
 
 ::: {.signature}
 
-<span class="decorators"><span class="decorator"><span class="n">abstractmethod</span></span></span>
+<span class="decorators"><span class="decorator">@<span class="n">abstractmethod</span></span></span>
 
 <span class="kw">def</span><span class="name">predict</span>(<span class="params"><span class="n">\*args</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>):
 
