@@ -37,8 +37,10 @@ def _get_llm_global_context():
     return context if context_enabled and context else None
 
 
-def _truncate_summary(summary: str, test_id: str, max_tokens: int = 100_000):
-    if len(summary) < max_tokens:
+def _truncate_summary(
+    summary: Union[str, None], test_id: str, max_tokens: int = 100_000
+):
+    if summary is None or len(summary) < max_tokens:
         # since string itself is less than max_tokens, definitely small enough
         return summary
 
