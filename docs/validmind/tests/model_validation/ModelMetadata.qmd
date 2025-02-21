@@ -28,6 +28,7 @@ Attempts to extract all model info from a model object instance
 
 ::: {.signature}
 
+<div class="decorator">@</div><div class="decorator">@</div>
 <span class="kw">def</span><span class="name">ModelMetadata</span>(<span class="param"><span class="n">model</span></span>):
 
 :::

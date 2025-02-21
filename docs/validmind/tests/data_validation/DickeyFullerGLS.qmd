@@ -28,6 +28,7 @@ Get a logger for the given module name
 
 ::: {.signature}
 
+<div class="decorator">@</div><div class="decorator">@</div>
 <span class="kw">def</span><span class="name">DickeyFullerGLS</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">VMDataset</span></span>):
 
 :::

@@ -1,0 +1,9 @@
+{%- from 'macros/types.jinja2' import format_type -%}
+
+{%- macro render_decorators(member) -%}
+{%- if member.decorators -%}
+{%- for decorator in member.decorators -%}
+<div class="decorator">@{%- if decorator is mapping -%}{{ format_type(decorator.value) }}{%- else -%}{{ decorator }}{%- endif -%}</div>
+{%- endfor -%}
+{%- endif -%}
+{%- endmacro -%} 

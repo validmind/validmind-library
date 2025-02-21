@@ -18,6 +18,7 @@ Models entrypoint
 
 ::: {.signature}
 
+<div class="decorator">@dataclass</div>
 <span class="kw">class</span><span class="name">Figure</span>:
 
 :::
@@ -78,6 +79,7 @@ we would render images as-is, but Plotly FigureWidgets don't work well on Google
 
 ::: {.signature}
 
+<div class="decorator">@dataclass</div>
 <span class="kw">class</span><span class="name">ModelAttributes</span>:
 
 :::
@@ -92,6 +94,7 @@ Model attributes definition
 
 ::: {.signature}
 
+<div class="decorator">@classmethod</div>
 <span class="kw">def</span><span class="name">from_dict</span>(<span class="params"><span class="n">cls</span><span class="muted">,</span></span><span class="params"><span class="n">data</span></span>):
 
 :::
@@ -108,6 +111,7 @@ Creates a ModelAttributes instance from a dictionary
 
 ::: {.signature}
 
+<div class="decorator">@dataclass</div>
 <span class="kw">class</span><span class="name">TestSuite</span>:
 
 :::
@@ -549,7 +553,8 @@ An base class that wraps a trained model instance and its associated data.
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">predict</span>(<span class="params"><span class="n">\*args</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>):
+<div class="decorator">@abstractmethod</div>
+<span class="kw">def</span><span class="name">predict</span>(<span class="params"><span class="n">*args</span><span class="muted">,</span></span><span class="params"><span class="n">**kwargs</span></span>):
 
 :::
 

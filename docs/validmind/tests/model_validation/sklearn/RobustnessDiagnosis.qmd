@@ -28,6 +28,7 @@ Get a logger for the given module name
 
 ::: {.signature}
 
+<div class="decorator">@</div><div class="decorator">@</div>
 <span class="kw">def</span><span class="name">RobustnessDiagnosis</span>(<span class="params"><span class="n">datasets</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">VMModel</span><span class="muted">,</span></span><span class="params"><span class="n">metric</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">scaling_factor_std_dev_list</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="o">=</span><!-- types.jinja2 - format_type --><span class="n">DEFAULT_STD_DEV_LIST</span><span class="muted">,</span></span><span class="params"><span class="n">performance_decay_threshold</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">float</span><span class="o">=</span><!-- types.jinja2 - format_type --><span class="n">DEFAULT_DECAY_THRESHOLD</span></span>):
 
 :::

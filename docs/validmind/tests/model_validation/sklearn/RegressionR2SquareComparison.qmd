@@ -28,6 +28,7 @@ Adjusted R2 Score
 
 ::: {.signature}
 
+<div class="decorator">@</div><div class="decorator">@</div>
 <span class="kw">def</span><span class="name">RegressionR2SquareComparison</span>(<span class="params"><span class="n">datasets</span><span class="muted">,</span></span><span class="params"><span class="n">models</span></span>):
 
 :::

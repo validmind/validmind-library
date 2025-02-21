@@ -14,6 +14,7 @@ toc-expand: 4
 
 ::: {.signature}
 
+<div class="decorator">@</div><div class="decorator">@</div>
 <span class="kw">def</span><span class="name">ScoreBandDefaultRates</span>(<span class="params"><span class="n">dataset</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">VMDataset</span><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">VMModel</span><span class="muted">,</span></span><span class="params"><span class="n">score_column</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">str</span><span class="o">=</span><span class="s1">'score'</span><span class="muted">,</span></span><span class="params"><span class="n">score_bands</span><span class="p">:</span><!-- types.jinja2 - format_type --><span class="n">list</span><span class="o">=</span><span class="kc">None</span></span>):
 
 :::

@@ -1,9 +1,11 @@
 {%- from 'macros/types.jinja2' import format_type -%}
+{%- from 'macros/decorators.jinja2' import render_decorators -%}
 
 {%- macro render_signature(member) -%}
 <!-- signatures.jinja2 -->
 ::: {.signature}
 
+{{ render_decorators(member) }}
 {# Skip 'def' for constructors #}
 {%- if not (member.name == "__init__" and member.kind in ["method", "function"]) -%}
 <span class="kw">

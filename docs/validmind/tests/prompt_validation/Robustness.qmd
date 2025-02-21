@@ -28,6 +28,7 @@ Call LLM with the given prompts and return the response
 
 ::: {.signature}
 
+<div class="decorator">@</div><div class="decorator">@</div>
 <span class="kw">def</span><span class="name">Robustness</span>(<span class="params"><span class="n">model</span><span class="muted">,</span></span><span class="params"><span class="n">dataset</span><span class="muted">,</span></span><span class="params"><span class="n">num_tests</span><span class="o">=</span><span class="kc">10</span></span>):
 
 :::
