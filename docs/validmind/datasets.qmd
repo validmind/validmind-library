@@ -1,0 +1,16 @@
+---
+title: "[validmind](/validmind/validmind.html).datasets"
+sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
+# module.qmd.jinja2
+---
+
+<!-- docstring.jinja2 -->
+
+Example datasets that can be used with the ValidMind Library.
+
+- [classification](datasets/classification.qmd)
+- [credit_risk](datasets/credit_risk.qmd)
+- [nlp](datasets/nlp.qmd)
+- [regression](datasets/regression.qmd)

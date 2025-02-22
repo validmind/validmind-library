@@ -28,7 +28,7 @@ _result_template = None
 
 
 def get_result_template():
-    """Get the jinja html template for rendering test results"""
+    """Get the Jinja2 HTML template for rendering test results."""
     global _result_template
 
     if _result_template is None:
@@ -39,7 +39,7 @@ def get_result_template():
 
 
 async def update_metadata(content_id: str, text: str, _json: Union[Dict, List] = None):
-    """Create or Update a Metadata Object"""
+    """Create or update a metadata object."""
     parts = content_id.split("::")
     content_id = parts[0]
     revision_name = parts[1] if len(parts) > 1 else None
@@ -72,7 +72,7 @@ async def update_metadata(content_id: str, text: str, _json: Union[Dict, List] =
 
 
 def check_for_sensitive_data(data: pd.DataFrame, inputs: List[VMInput]):
-    """Check if a table contains raw data from input datasets"""
+    """Check if the data contains sensitive information from input datasets."""
     dataset_columns = {
         col: len(input_obj.df)
         for input_obj in inputs
@@ -96,7 +96,7 @@ def check_for_sensitive_data(data: pd.DataFrame, inputs: List[VMInput]):
 
 
 def tables_to_widgets(tables: List["ResultTable"]):
-    """Convert summary (list of json tables) into a list of ipywidgets"""
+    """Convert a list of tables to ipywidgets."""
     widgets = [
         HTML("<h3>Tables</h3>"),
     ]
@@ -147,7 +147,7 @@ def tables_to_widgets(tables: List["ResultTable"]):
 
 
 def figures_to_widgets(figures: List[Figure]) -> list:
-    """Plot figures to a ipywidgets GridBox"""
+    """Convert a list of figures to ipywidgets."""
     num_columns = 2 if len(figures) > 1 else 1
 
     plot_widgets = GridBox(

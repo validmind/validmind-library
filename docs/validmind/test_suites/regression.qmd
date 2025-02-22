@@ -1,0 +1,97 @@
+---
+title: "[validmind](/validmind/validmind.html).regression"
+sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
+# module.qmd.jinja2
+---
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} RegressionFullSuite
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">RegressionFullSuite</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Full test suite for regression models.
+
+**Inherited members**
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} RegressionMetrics
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">RegressionMetrics</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Test suite for performance metrics of regression metrics
+
+**Inherited members**
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} RegressionPerformance
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">RegressionPerformance</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Test suite for regression model performance
+
+**Inherited members**
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} TabularDataQuality
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">TabularDataQuality</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Test suite for data quality on tabular datasets
+
+**Inherited members**
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} TabularDatasetDescription
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">TabularDatasetDescription</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Test suite to extract metadata and descriptive statistics from a tabular dataset
+
+**Inherited members**

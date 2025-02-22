@@ -1,0 +1,31 @@
+---
+title: "[validmind](/validmind/validmind.html).parameters_optimization"
+sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
+# module.qmd.jinja2
+---
+
+<!-- docstring.jinja2 -->
+
+Test suites for sklearn-compatible hyper parameters tunning
+
+Ideal setup is to have the API client to read a custom test suite from the project's configuration
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} KmeansParametersOptimization
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">KmeansParametersOptimization</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Test suite for sklearn hyperparameters optimization
+
+**Inherited members**

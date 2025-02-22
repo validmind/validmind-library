@@ -1,0 +1,51 @@
+{% import "macros/docstring.jinja2" as doc %}
+{% import "macros/signatures.jinja2" as signatures %}
+
+<!-- class.qmd.jinja2 -->
+## [class]{.muted} {{ resolved.name }}
+
+{{ signatures.render_signature(resolved) }}
+
+{% if resolved.docstring %}
+{{ doc.format_docstring(resolved.docstring) }}
+{% endif %}
+
+{% if resolved.bases %}
+**Inherited members**
+
+{% set base_members = get_inherited_members(resolved.bases[0], full_data) %}
+{% if base_members %}
+{% set grouped = {} %}
+{% for member in base_members %}
+    {% if member.base not in grouped %}
+        {% set _ = grouped.update({member.base: []}) %}
+    {% endif %}
+    {% set _ = grouped[member.base].append(member) %}
+{% endfor %}
+{% for base, members in grouped.items() %}
+- **From {{ base }}**: {% for member in members %}{% if member.kind == 'builtin' %}{{ member.name }}{% else %}[{% if member.kind == 'class' %}class {% endif %}{{ member.name }}[()]{.muted}](#{% if member.kind == 'class' %}class-{% endif %}{{ member.name | lower }}){% endif %}{% if not loop.last %}, {% endif %}{% endfor %}
+
+{% endfor %}
+{% endif %}
+{% endif %}
+
+{% if resolved.members %}
+{% for member in resolved.members.values() | sort(attribute='name') %}
+{% if member.kind in ['method', 'function'] and (not member.name.startswith('_') or member.name == '__init__') %}
+### [{{ member.name if member.name != '__init__' else resolved.name }}[()]{.muted}](#{{ member.name }})
+
+{% if member.name == '__init__' %}
+{% set member_with_parent = member.copy() %}
+{% set _ = member_with_parent.update({'parent': {'name': resolved.name}}) %}
+{{ signatures.render_signature(member_with_parent) }}
+{% else %}
+{{ signatures.render_signature(member) }}
+{% endif %}
+
+{% if member.docstring %}
+{{ doc.format_docstring(member.docstring) }}
+{% endif %}
+
+{% endif %}
+{% endfor %}
+{% endif %}

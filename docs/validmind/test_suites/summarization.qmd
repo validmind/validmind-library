@@ -1,0 +1,29 @@
+---
+title: "[validmind](/validmind/validmind.html).summarization"
+sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
+# module.qmd.jinja2
+---
+
+<!-- docstring.jinja2 -->
+
+Test suites for llm summarization models
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} SummarizationMetrics
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">SummarizationMetrics</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Test suite for Summarization metrics
+
+**Inherited members**

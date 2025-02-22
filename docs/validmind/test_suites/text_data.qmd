@@ -1,0 +1,29 @@
+---
+title: "[validmind](/validmind/validmind.html).text_data"
+sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
+# module.qmd.jinja2
+---
+
+<!-- docstring.jinja2 -->
+
+Test suites for text datasets
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} TextDataQuality
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">TextDataQuality</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Test suite for data quality on text data
+
+**Inherited members**

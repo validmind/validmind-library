@@ -7,6 +7,7 @@
 import inspect
 import os
 from functools import wraps
+from typing import Any, Callable, List, Optional, Union, TypeVar
 
 from validmind.logging import get_logger
 
@@ -15,8 +16,10 @@ from .load import load_test
 
 logger = get_logger(__name__)
 
+F = TypeVar('F', bound=Callable[..., Any])
 
-def _get_save_func(func, test_id):
+
+def _get_save_func(func: Callable[..., Any], test_id: str) -> Callable[..., None]:
     """Helper function to save a decorated function to a file
 
     Useful when a custom test function has been created inline in a notebook or
@@ -29,7 +32,7 @@ def _get_save_func(func, test_id):
     # remove decorator line
     source = source.split("\n", 1)[1]
 
-    def save(root_folder=".", imports=None):
+    def save(root_folder: str = ".", imports: Optional[List[str]] = None) -> None:
         parts = test_id.split(".")
 
         if len(parts) > 1:
@@ -84,7 +87,7 @@ def _get_save_func(func, test_id):
     return save
 
 
-def test(func_or_id):
+def test(func_or_id: Union[Callable[..., Any], str, None]) -> Callable[[F], F]:
     """Decorator for creating and registering custom tests
 
     This decorator registers the function it wraps as a test function within ValidMind
@@ -109,14 +112,14 @@ def test(func_or_id):
     as the metric's description.
 
     Args:
-        func: The function to decorate
-        test_id: The identifier for the metric. If not provided, the function name is used.
+        func_or_id (Union[Callable[..., Any], str, None]): Either the function to decorate
+            or the test ID. If None, the function name is used.
 
     Returns:
-        The decorated function.
+        Callable[[F], F]: The decorated function.
     """
 
-    def decorator(func):
+    def decorator(func: F) -> F:
         test_id = func_or_id or f"validmind.custom_metrics.{func.__name__}"
         test_func = load_test(test_id, func, reload=True)
         test_store.register_test(test_id, test_func)
@@ -136,28 +139,28 @@ def test(func_or_id):
     return decorator
 
 
-def tasks(*tasks):
+def tasks(*tasks: str) -> Callable[[F], F]:
     """Decorator for specifying the task types that a test is designed for.
 
     Args:
         *tasks: The task types that the test is designed for.
     """
 
-    def decorator(func):
+    def decorator(func: F) -> F:
         func.__tasks__ = list(tasks)
         return func
 
     return decorator
 
 
-def tags(*tags):
+def tags(*tags: str) -> Callable[[F], F]:
     """Decorator for specifying tags for a test.
 
     Args:
         *tags: The tags to apply to the test.
     """
 
-    def decorator(func):
+    def decorator(func: F) -> F:
         func.__tags__ = list(tags)
         return func
 

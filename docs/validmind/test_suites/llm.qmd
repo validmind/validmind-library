@@ -1,0 +1,119 @@
+---
+title: "[validmind](/validmind/validmind.html).llm"
+sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
+# module.qmd.jinja2
+---
+
+<!-- docstring.jinja2 -->
+
+Test suites for LLMs
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} LLMClassifierFullSuite
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">LLMClassifierFullSuite</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Full test suite for LLM classification models.
+
+**Inherited members**
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} PromptValidation
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">PromptValidation</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Test suite for prompt validation
+
+**Inherited members**
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} ClassifierDiagnosis
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">ClassifierDiagnosis</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Test suite for sklearn classifier model diagnosis tests
+
+**Inherited members**
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} ClassifierMetrics
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">ClassifierMetrics</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Test suite for sklearn classifier metrics
+
+**Inherited members**
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} ClassifierPerformance
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">ClassifierPerformance</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Test suite for sklearn classifier models
+
+**Inherited members**
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} TextDataQuality
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">TextDataQuality</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Test suite for data quality on text data
+
+**Inherited members**

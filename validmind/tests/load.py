@@ -7,7 +7,7 @@
 import inspect
 import json
 from pprint import pformat
-from typing import List
+from typing import Any, Callable, Dict, List, Optional, Set, Tuple, Union
 from uuid import uuid4
 
 import pandas as pd
@@ -32,7 +32,8 @@ INPUT_TYPE_MAP = {
 }
 
 
-def _inspect_signature(test_func: callable):
+def _inspect_signature(test_func: Callable[..., Any]) -> Tuple[Dict[str, Dict[str, Any]], Dict[str, Dict[str, Any]]]:
+    """Inspect a test function's signature to get inputs and parameters"""
     inputs = {}
     params = {}
 
@@ -56,7 +57,11 @@ def _inspect_signature(test_func: callable):
     return inputs, params
 
 
-def load_test(test_id: str, test_func: callable = None, reload: bool = False):
+def load_test(
+    test_id: str,
+    test_func: Optional[Callable[..., Any]] = None,
+    reload: bool = False
+) -> Callable[..., Any]:
     """Load a test by test ID
 
     Test IDs are in the format `namespace.path_to_module.TestClassOrFuncName[:tag]`.
@@ -109,7 +114,8 @@ def load_test(test_id: str, test_func: callable = None, reload: bool = False):
     return test_store.get_test(test_id)
 
 
-def _list_test_ids():
+def _list_test_ids() -> List[str]:
+    """List all available test IDs"""
     test_ids = []
 
     for namespace, test_provider in test_provider_store.test_providers.items():
@@ -120,184 +126,111 @@ def _list_test_ids():
     return test_ids
 
 
-def _load_tests(test_ids):
+def _load_tests(test_ids: List[str]) -> Dict[str, Callable[..., Any]]:
     """Load a set of tests, handling missing dependencies."""
     tests = {}
-
     for test_id in test_ids:
         try:
             tests[test_id] = load_test(test_id)
-        except LoadTestError as e:
-            if not e.original_error or not isinstance(
-                e.original_error, MissingDependencyError
-            ):
-                raise e
+        except MissingDependencyError as e:
+            logger.debug(f"Skipping test {test_id} due to missing dependency: {str(e)}")
+    return tests
 
-            e = e.original_error
 
-            logger.debug(str(e))
+def _test_description(test_description: str, num_lines: int = 5) -> str:
+    """Format a test description"""
+    if len(test_description.split("\n")) > num_lines:
+        return test_description.strip().split("\n")[0] + "..."
+    return test_description
 
-            if e.extra:
-                logger.info(
-                    f"Skipping `{test_id}` as it requires extra dependencies: {e.required_dependencies}."
-                    f" Please run `pip install validmind[{e.extra}]` to view and run this test."
-                )
-            else:
-                logger.info(
-                    f"Skipping `{test_id}` as it requires missing dependencies: {e.required_dependencies}."
-                    " Please install the missing dependencies to view and run this test."
-                )
+
+def _pretty_list_tests(tests: Dict[str, Callable[..., Any]], truncate: bool = True) -> None:
+    """Pretty print a list of tests"""
+    for test_id, test_func in sorted(tests.items()):
+        print(f"\n{test_id_to_name(test_id)}")
+        if test_func.__doc__:
+            print(_test_description(test_func.__doc__, 5 if truncate else None))
+
+
+def list_tags() -> Set[str]:
+    """List all available tags"""
+    tags = set()
+    for test_func in test_store.tests.values():
+        if hasattr(test_func, "__tags__"):
+            tags.update(test_func.__tags__)
+    return tags
+
+
+def list_tasks_and_tags(as_json: bool = False) -> Union[str, Dict[str, List[str]]]:
+    """List all available tasks and tags"""
+    tasks = list(list_tasks())
+    tags = list(list_tags())
+
+    if as_json:
+        return json.dumps({"tasks": tasks, "tags": tags}, indent=2)
+
+    return {
+        "tasks": tasks,
+        "tags": tags,
+    }
+
+
+def list_tasks() -> Set[str]:
+    """List all available tasks"""
+    tasks = set()
+    for test_func in test_store.tests.values():
+        if hasattr(test_func, "__tasks__"):
+            tasks.update(test_func.__tasks__)
+    return tasks
+
+
+def list_tests(
+    filter: Optional[str] = None,
+    task: Optional[str] = None,
+    tags: Optional[List[str]] = None,
+    pretty: bool = True,
+    truncate: bool = True
+) -> Union[Dict[str, Callable[..., Any]], None]:
+    """List all available tests with optional filtering"""
+    test_ids = _list_test_ids()
+
+    if filter:
+        test_ids = [
+            test_id
+            for test_id in test_ids
+            if fuzzy_match(filter, test_id_to_name(test_id))
+        ]
+
+    tests = _load_tests(test_ids)
+
+    if task:
+        tests = {
+            test_id: test_func
+            for test_id, test_func in tests.items()
+            if hasattr(test_func, "__tasks__") and task in test_func.__tasks__
+        }
+
+    if tags:
+        tests = {
+            test_id: test_func
+            for test_id, test_func in tests.items()
+            if hasattr(test_func, "__tags__")
+            and all(tag in test_func.__tags__ for tag in tags)
+        }
+
+    if pretty:
+        _pretty_list_tests(tests, truncate=truncate)
+        return None
 
     return tests
 
 
-def _test_description(test_description: str, num_lines: int = 5):
-    description = test_description.strip("\n").strip()
-
-    if len(description.split("\n")) > num_lines:
-        return description.strip().split("\n")[0] + "..."
-
-    return description
-
-
-def _pretty_list_tests(tests, truncate=True):
-    table = [
-        {
-            "ID": test_id,
-            "Name": test_id_to_name(test_id),
-            "Description": _test_description(
-                inspect.getdoc(test),
-                num_lines=(5 if truncate else 999999),
-            ),
-            "Required Inputs": list(test.inputs.keys()),
-            "Params": test.params,
-        }
-        for test_id, test in tests.items()
-    ]
-
-    return format_dataframe(pd.DataFrame(table))
-
-
-def list_tags():
-    """
-    List unique tags from all test classes.
-    """
-
-    unique_tags = set()
-
-    for test in _load_tests(list_tests(pretty=False)).values():
-        unique_tags.update(test.__tags__)
-
-    return list(unique_tags)
-
-
-def list_tasks_and_tags(as_json=False):
-    """
-    List all task types and their associated tags, with one row per task type and
-    all tags for a task type in one row.
-
-    Returns:
-        pandas.DataFrame: A DataFrame with 'Task Type' and concatenated 'Tags'.
-    """
-    task_tags_dict = {}
-
-    for test in _load_tests(list_tests(pretty=False)).values():
-        for task in test.__tasks__:
-            task_tags_dict.setdefault(task, set()).update(test.__tags__)
-
-    if as_json:
-        return task_tags_dict
-
-    return format_dataframe(
-        pd.DataFrame(
-            [
-                {"Task": task, "Tags": ", ".join(tags)}
-                for task, tags in task_tags_dict.items()
-            ]
-        )
-    )
-
-
-def list_tasks():
-    """
-    List unique tasks from all test classes.
-    """
-
-    unique_tasks = set()
-
-    for test in _load_tests(list_tests(pretty=False)).values():
-        unique_tasks.update(test.__tasks__)
-
-    return list(unique_tasks)
-
-
-def list_tests(filter=None, task=None, tags=None, pretty=True, truncate=True):
-    """List all tests in the tests directory.
-
-    Args:
-        filter (str, optional): Find tests where the ID, tasks or tags match the
-            filter string. Defaults to None.
-        task (str, optional): Find tests that match the task. Can be used to
-            narrow down matches from the filter string. Defaults to None.
-        tags (list, optional): Find tests that match list of tags. Can be used to
-            narrow down matches from the filter string. Defaults to None.
-        pretty (bool, optional): If True, returns a pandas DataFrame with a
-            formatted table. Defaults to True.
-        truncate (bool, optional): If True, truncates the test description to the first
-            line. Defaults to True. (only used if pretty=True)
-
-    Returns:
-        list or pandas.DataFrame: A list of all tests or a formatted table.
-    """
-    test_ids = _list_test_ids()
-
-    # no need to load test funcs (takes a while) if we're just returning the test ids
-    if not filter and not task and not tags and not pretty:
-        return test_ids
-
-    tests = _load_tests(test_ids)
-
-    # first search by the filter string since it's the most general search
-    if filter is not None:
-        tests = {
-            test_id: test
-            for test_id, test in tests.items()
-            if filter.lower() in test_id.lower()
-            or any(filter.lower() in task.lower() for task in test.__tasks__)
-            or any(fuzzy_match(tag, filter.lower()) for tag in test.__tags__)
-        }
-
-    # then filter by task type and tags since they are more specific
-    if task is not None:
-        tests = {
-            test_id: test for test_id, test in tests.items() if task in test.__tasks__
-        }
-
-    if tags is not None:
-        tests = {
-            test_id: test
-            for test_id, test in tests.items()
-            if all(tag in test.__tags__ for tag in tags)
-        }
-
-    if not pretty:
-        return list(tests.keys())
-
-    return _pretty_list_tests(tests, truncate=truncate)
-
-
-def describe_test(test_id: TestID = None, raw: bool = False, show: bool = True):
-    """Get or show details about the test
-
-    This function can be used to see test details including the test name, description,
-    required inputs and default params. It can also be used to get a dictionary of the
-    above information for programmatic use.
-
-    Args:
-        test_id (str, optional): The test ID. Defaults to None.
-        raw (bool, optional): If True, returns a dictionary with the test details.
-            Defaults to False.
-    """
+def describe_test(
+    test_id: Optional[TestID] = None,
+    raw: bool = False,
+    show: bool = True
+) -> Union[str, HTML, Dict[str, Any]]:
+    """Describe a test's functionality and parameters"""
     test = load_test(test_id)
 
     details = {

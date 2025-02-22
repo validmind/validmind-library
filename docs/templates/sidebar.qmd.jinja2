@@ -1,0 +1,60 @@
+# sidebar.qmd.jinja2
+website:
+  sidebar:
+    - id: validmind-reference
+      title: "ValidMind Library"
+      collapsed: false
+      collapse-level: 2
+      contents:
+        - validmind/validmind.qmd
+        - text: "---"
+        - text: "Python API"
+        # Root level items from validmind.qmd
+        {% if documented_items.get('root') %}
+        {% for item in documented_items['root'] %}
+        - text: "{{ item.text }}"
+          file: {{ item.file }}
+          {% if item.contents %}
+          contents:
+            {% for method in item.contents %}
+            - text: "{{ method.text }}"
+              file: {{ method.file }}
+            {% endfor %}
+          {% endif %}
+        {% endfor %}
+        {% endif %}
+        # All module documentation pages
+        - text: "---"
+        - text: "Submodules"
+        {% if module.members.__version__ %}
+        - text: "&#95;&#95;version__"
+          file: validmind/validmind/version.qmd
+        {% endif %}
+        {% for member in module.members | sort_members %}
+        {% if is_public(member, module, full_data, is_root) and member.kind == "module" %}
+        {% set module_name = member.name %}
+        {% set has_children = qmd_files | has_subfiles(module_name) %}
+        {% if has_children %}
+        - text: "{{ module_name }}"
+          file: validmind/validmind/{{ module_name }}.qmd
+          contents:
+            {% for item in qmd_files | get_child_files(module_name) %}
+            {% if item.contents is defined %}
+            - text: "{{ item.text }}"
+              file: {{ item.file }}
+              contents:
+                {% for child in item.contents %}
+                - text: "{{ child.text }}"
+                  file: {{ child.file }}
+                {% endfor %}
+            {% else %}
+            - text: "{{ item.text }}"
+              file: {{ item.file }}
+            {% endif %}
+            {% endfor %}
+        {% else %}
+        - text: "{{ module_name }}"
+          file: validmind/validmind/{{ module_name }}.qmd
+        {% endif %}
+        {% endif %}
+        {% endfor %} 

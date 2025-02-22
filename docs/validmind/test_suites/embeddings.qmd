@@ -1,0 +1,67 @@
+---
+title: "[validmind](/validmind/validmind.html).embeddings"
+sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
+# module.qmd.jinja2
+---
+
+<!-- docstring.jinja2 -->
+
+Test suites for embeddings models
+
+Ideal setup is to have the API client to read a custom test suite from the project's configuration
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} EmbeddingsFullSuite
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">EmbeddingsFullSuite</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Full test suite for embeddings models.
+
+**Inherited members**
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} EmbeddingsMetrics
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">EmbeddingsMetrics</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Test suite for embeddings metrics
+
+**Inherited members**
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} EmbeddingsPerformance
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">EmbeddingsPerformance</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Test suite for embeddings model performance
+
+**Inherited members**

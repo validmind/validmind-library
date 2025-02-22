@@ -1,0 +1,689 @@
+---
+title: "[validmind](/validmind/validmind.html).test_suites"
+sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
+# module.qmd.jinja2
+---
+
+<!-- docstring.jinja2 -->
+
+Entrypoint for test suites.
+
+- [classifier](test_suites/classifier.qmd)
+- [cluster](test_suites/cluster.qmd)
+- [embeddings](test_suites/embeddings.qmd)
+- [llm](test_suites/llm.qmd)
+- [nlp](test_suites/nlp.qmd)
+- [parameters_optimization](test_suites/parameters_optimization.qmd)
+- [regression](test_suites/regression.qmd)
+- [statsmodels_timeseries](test_suites/statsmodels_timeseries.qmd)
+- [summarization](test_suites/summarization.qmd)
+- [tabular_datasets](test_suites/tabular_datasets.qmd)
+- [text_data](test_suites/text_data.qmd)
+- [time_series](test_suites/time_series.qmd)
+
+## format_dataframe<span class='muted'>()</span>
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">format_dataframe</span>(<span class="param"><span class="n">df</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/validmind/validmind/vm_models.html#class-pd">validmind.vm_models.pd</a><span class="o">.</span><a href="/validmind/validmind/vm_models.html#class-dataframe">validmind.vm_models.DataFrame</a></span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Format a pandas DataFrame for display purposes.
+
+## get_logger<span class='muted'>()</span>
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">get_logger</span>(<span class="params"><span class="n">name</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s1">'validmind'</span><span class="muted">,</span></span><span class="params"><span class="n">log_level</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">int</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/validmind/validmind/vm_models.html#class-logging">validmind.vm_models.logging</a><span class="o">.</span><a href="/validmind/validmind/vm_models.html#class-logger">validmind.vm_models.Logger</a></span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Get a logger for the given module name.
+
+## test_id_to_name<span class='muted'>()</span>
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">test_id_to_name</span>(<span class="param"><span class="n">test_id</span><span class="p">:</span><span class="nb">str</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="nb">str</span></span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Convert a test ID to a human-readable name.
+
+**Arguments**
+
+- `test_id` (str): The test identifier, typically in CamelCase or snake_case.
+
+**Returns**
+
+- A human-readable name derived from the test ID.
+
+<!-- function.qmd.jinja2 -->
+
+## describe_suite[()]{.muted}
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">describe_suite</span>(<span class="params"><span class="n">test_suite_id</span><span class="p">:</span><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">verbose</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/validmind/validmind/vm_models.html#class-pd">validmind.vm_models.pd</a><span class="o">.</span><a href="/validmind/validmind/vm_models.html#class-dataframe">validmind.vm_models.DataFrame</a></span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Describes a Test Suite by ID
+
+**Arguments**
+
+- `test_suite_id`: Test Suite ID
+- `verbose`: If True, describe all plans and tests in the Test Suite
+
+**Returns**
+
+- A formatted table with the Test Suite description
+
+<!-- function.qmd.jinja2 -->
+
+## get_by_id[()]{.muted}
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">get_by_id</span>(<span class="param"><span class="n">test_suite_id</span><span class="p">:</span><span class="nb">str</span></span>):
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Returns the test suite by ID
+
+<!-- function.qmd.jinja2 -->
+
+## list_suites[()]{.muted}
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">list_suites</span>(<span class="param"><span class="n">pretty</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span></span>):
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Returns a list of all available test suites
+
+<!-- function.qmd.jinja2 -->
+
+## register_test_suite[()]{.muted}
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">register_test_suite</span>(<span class="params"><span class="n">suite_id</span><span class="p">:</span><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">suite</span><span class="p">:</span><span class="n">TestSuite</span></span>):
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Registers a custom test suite
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} ClassifierDiagnosis
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">ClassifierDiagnosis</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Test suite for sklearn classifier model diagnosis tests
+
+**Inherited members**
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} ClassifierFullSuite
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">ClassifierFullSuite</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Full test suite for binary classification models.
+
+**Inherited members**
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} ClassifierMetrics
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">ClassifierMetrics</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Test suite for sklearn classifier metrics
+
+**Inherited members**
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} ClassifierModelValidation
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">ClassifierModelValidation</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Test suite for binary classification models.
+
+**Inherited members**
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} ClassifierPerformance
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">ClassifierPerformance</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Test suite for sklearn classifier models
+
+**Inherited members**
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} ClusterFullSuite
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">ClusterFullSuite</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Full test suite for clustering models.
+
+**Inherited members**
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} ClusterMetrics
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">ClusterMetrics</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Test suite for sklearn clustering metrics
+
+**Inherited members**
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} ClusterPerformance
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">ClusterPerformance</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Test suite for sklearn cluster performance
+
+**Inherited members**
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} EmbeddingsFullSuite
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">EmbeddingsFullSuite</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Full test suite for embeddings models.
+
+**Inherited members**
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} EmbeddingsMetrics
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">EmbeddingsMetrics</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Test suite for embeddings metrics
+
+**Inherited members**
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} EmbeddingsPerformance
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">EmbeddingsPerformance</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Test suite for embeddings model performance
+
+**Inherited members**
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} KmeansParametersOptimization
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">KmeansParametersOptimization</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Test suite for sklearn hyperparameters optimization
+
+**Inherited members**
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} LLMClassifierFullSuite
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">LLMClassifierFullSuite</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Full test suite for LLM classification models.
+
+**Inherited members**
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} NLPClassifierFullSuite
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">NLPClassifierFullSuite</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Full test suite for NLP classification models.
+
+**Inherited members**
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} PromptValidation
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">PromptValidation</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Test suite for prompt validation
+
+**Inherited members**
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} RegressionFullSuite
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">RegressionFullSuite</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Full test suite for regression models.
+
+**Inherited members**
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} RegressionMetrics
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">RegressionMetrics</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Test suite for performance metrics of regression metrics
+
+**Inherited members**
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} RegressionModelDescription
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">RegressionModelDescription</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Test suite for performance metric of regression model of statsmodels library
+
+**Inherited members**
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} RegressionModelsEvaluation
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">RegressionModelsEvaluation</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Test suite for metrics comparison of regression model of statsmodels library
+
+**Inherited members**
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} RegressionPerformance
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">RegressionPerformance</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Test suite for regression model performance
+
+**Inherited members**
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} SummarizationMetrics
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">SummarizationMetrics</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Test suite for Summarization metrics
+
+**Inherited members**
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} TabularDataQuality
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">TabularDataQuality</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Test suite for data quality on tabular datasets
+
+**Inherited members**
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} TabularDataset
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">TabularDataset</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Test suite for tabular datasets.
+
+**Inherited members**
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} TabularDatasetDescription
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">TabularDatasetDescription</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Test suite to extract metadata and descriptive statistics from a tabular dataset
+
+**Inherited members**
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} TextDataQuality
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">TextDataQuality</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Test suite for data quality on text data
+
+**Inherited members**
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} TimeSeriesDataQuality
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">TimeSeriesDataQuality</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Test suite for data quality on time series datasets
+
+**Inherited members**
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} TimeSeriesDataset
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">TimeSeriesDataset</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Test suite for time series datasets.
+
+**Inherited members**
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} TimeSeriesModelValidation
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">TimeSeriesModelValidation</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Test suite for time series model validation.
+
+**Inherited members**
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} TimeSeriesMultivariate
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">TimeSeriesMultivariate</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+This test suite provides a preliminary understanding of the features and relationship in multivariate dataset. It presents various multivariate visualizations that can help identify patterns, trends, and relationships between pairs of variables. The visualizations are designed to explore the relationships between multiple features simultaneously. They allow you to quickly identify any patterns or trends in the data, as well as any potential outliers or anomalies. The individual feature distribution can also be explored to provide insight into the range and frequency of values observed in the data. This multivariate analysis test suite aims to provide an overview of the data structure and guide further exploration and modeling.
+
+**Inherited members**
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} TimeSeriesUnivariate
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">TimeSeriesUnivariate</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+This test suite provides a preliminary understanding of the target variable(s) used in the time series dataset. It visualizations that present the raw time series data and a histogram of the target variable(s).
+
+The raw time series data provides a visual inspection of the target variable's behavior over time. This helps to identify any patterns or trends in the data, as well as any potential outliers or anomalies. The histogram of the target variable displays the distribution of values, providing insight into the range and frequency of values observed in the data.
+
+**Inherited members**

@@ -52,7 +52,7 @@ class MissingCacheResultsArgumentsError(BaseError):
 
 class MissingOrInvalidModelPredictFnError(BaseError):
     """
-    When the pytorch model is missing a predict function or its predict
+    When the PyTorch model is missing a predict function or its predict
     method does not have the expected arguments.
     """
 
@@ -71,7 +71,7 @@ class InvalidAPICredentialsError(APIRequestError):
     def description(self, *args, **kwargs):
         return (
             self.message
-            or "Invalid API credentials. Please ensure that you have provided the correct values for api_key and api_secret."
+            or "Invalid API credentials. Please ensure that you have provided the correct values for API_KEY and API_SECRET."
         )
 
 
@@ -115,7 +115,7 @@ class InvalidTestResultsError(APIRequestError):
 
 class InvalidTestParametersError(BaseError):
     """
-    When an invalid parameters for the test.
+    When invalid parameters are provided for the test.
     """
 
     pass
@@ -123,7 +123,7 @@ class InvalidTestParametersError(BaseError):
 
 class InvalidInputError(BaseError):
     """
-    When an invalid input object.
+    When an invalid input object is provided.
     """
 
     pass
@@ -131,7 +131,7 @@ class InvalidInputError(BaseError):
 
 class InvalidTextObjectError(APIRequestError):
     """
-    When an invalid Metadat (Text) object is sent to the API.
+    When an invalid Metadata (Text) object is sent to the API.
     """
 
     pass
@@ -155,7 +155,7 @@ class InvalidXGBoostTrainedModelError(BaseError):
 
 class LoadTestError(BaseError):
     """
-    Exception raised when an error occurs while loading a test
+    Exception raised when an error occurs while loading a test.
     """
 
     def __init__(self, message: str, original_error: Optional[Exception] = None):
@@ -323,7 +323,7 @@ class SkipTestError(BaseError):
 def raise_api_error(error_string):
     """
     Safely try to parse JSON from the response message in case the API
-    returns a non-JSON string or if the API returns a non-standard error
+    returns a non-JSON string or if the API returns a non-standard error.
     """
     try:
         json_response = json.loads(error_string)
