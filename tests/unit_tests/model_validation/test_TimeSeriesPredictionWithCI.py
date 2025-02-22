@@ -124,5 +124,8 @@ class TestTimeSeriesPredictionWithCI(unittest.TestCase):
         # Check if x values are datetime objects for all traces
         for trace in fig.data:
             self.assertTrue(
-                all(isinstance(x, (pd.Timestamp, datetime)) for x in trace.x)
+                all(
+                    isinstance(x, (pd.Timestamp, np.datetime64, datetime))
+                    for x in trace.x
+                )
             )
