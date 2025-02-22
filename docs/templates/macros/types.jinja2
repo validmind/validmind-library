@@ -9,7 +9,7 @@
   {%- elif name|lower in builtin_types -%}
     <span class="nb">{{ name }}</span>
   {%- elif add_links and name not in type_keywords -%}
-    <a href="/reference/validmind/vm_models.html#class-{{ name|lower }}">validmind.vm_models.{{ name }}</a>
+    <a href="/validmind/validmind/vm_models.html#class-{{ name|lower }}">validmind.vm_models.{{ name }}</a>
   {%- else -%}
     <span class="n">{{ name }}</span>
   {%- endif -%}

@@ -6,7 +6,7 @@ website:
       collapsed: false
       collapse-level: 2
       contents:
-        - reference/validmind.qmd
+        - validmind/validmind.qmd
         - text: "---"
         - text: "Python API"
         # Root level items from validmind.qmd
@@ -28,7 +28,7 @@ website:
         - text: "Submodules"
         {% if module.members.__version__ %}
         - text: "&#95;&#95;version__"
-          file: reference/validmind/version.qmd
+          file: validmind/validmind/version.qmd
         {% endif %}
         {% for member in module.members | sort_members %}
         {% if is_public(member, module, full_data, is_root) and member.kind == "module" %}
@@ -36,7 +36,7 @@ website:
         {% set has_children = qmd_files | has_subfiles(module_name) %}
         {% if has_children %}
         - text: "{{ module_name }}"
-          file: reference/validmind/{{ module_name }}.qmd
+          file: validmind/validmind/{{ module_name }}.qmd
           contents:
             {% for item in qmd_files | get_child_files(module_name) %}
             {% if item.contents is defined %}
@@ -54,7 +54,7 @@ website:
             {% endfor %}
         {% else %}
         - text: "{{ module_name }}"
-          file: reference/validmind/{{ module_name }}.qmd
+          file: validmind/validmind/{{ module_name }}.qmd
         {% endif %}
         {% endif %}
         {% endfor %} 

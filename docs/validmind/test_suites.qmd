@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/reference/validmind.html).test_suites"
+title: "[validmind](/validmind/validmind.html).test_suites"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
@@ -29,7 +29,7 @@ Entrypoint for test suites.
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">format_dataframe</span>(<span class="param"><span class="n">df</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-pd">validmind.vm_models.pd</a><span class="o">.</span><a href="/reference/validmind/vm_models.html#class-dataframe">validmind.vm_models.DataFrame</a></span>:
+<span class="kw">def</span><span class="name">format_dataframe</span>(<span class="param"><span class="n">df</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/validmind/validmind/vm_models.html#class-pd">validmind.vm_models.pd</a><span class="o">.</span><a href="/validmind/validmind/vm_models.html#class-dataframe">validmind.vm_models.DataFrame</a></span>:
 
 :::
 
@@ -43,7 +43,7 @@ Format a pandas DataFrame for display purposes
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">get_logger</span>(<span class="params"><span class="n">name</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s1">'validmind'</span><span class="muted">,</span></span><span class="params"><span class="n">log_level</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">int</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-logging">validmind.vm_models.logging</a><span class="o">.</span><a href="/reference/validmind/vm_models.html#class-logger">validmind.vm_models.Logger</a></span>:
+<span class="kw">def</span><span class="name">get_logger</span>(<span class="params"><span class="n">name</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s1">'validmind'</span><span class="muted">,</span></span><span class="params"><span class="n">log_level</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">int</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/validmind/validmind/vm_models.html#class-logging">validmind.vm_models.logging</a><span class="o">.</span><a href="/validmind/validmind/vm_models.html#class-logger">validmind.vm_models.Logger</a></span>:
 
 :::
 
@@ -81,7 +81,7 @@ Convert a test ID to a human-readable name.
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">describe_suite</span>(<span class="params"><span class="n">test_suite_id</span><span class="p">:</span><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">verbose</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/reference/validmind/vm_models.html#class-pd">validmind.vm_models.pd</a><span class="o">.</span><a href="/reference/validmind/vm_models.html#class-dataframe">validmind.vm_models.DataFrame</a></span>:
+<span class="kw">def</span><span class="name">describe_suite</span>(<span class="params"><span class="n">test_suite_id</span><span class="p">:</span><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">verbose</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/validmind/validmind/vm_models.html#class-pd">validmind.vm_models.pd</a><span class="o">.</span><a href="/validmind/validmind/vm_models.html#class-dataframe">validmind.vm_models.DataFrame</a></span>:
 
 :::
 

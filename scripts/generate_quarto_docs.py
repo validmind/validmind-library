@@ -164,7 +164,7 @@ def collect_documented_items(module: Dict[str, Any], path: List[str], full_data:
                     anchor = clean_anchor_text(heading)
                     item = {
                         'text': heading,
-                        'file': f"reference/validmind.qmd#{anchor}"
+                        'file': f"validmind/validmind.qmd#{anchor}"
                     }
                     if '<span class="muted">class</span>' in heading:
                         item['contents'] = []
@@ -175,7 +175,7 @@ def collect_documented_items(module: Dict[str, Any], path: List[str], full_data:
                     anchor = clean_anchor_text(heading)
                     method_item = {
                         'text': heading,
-                        'file': f"reference/validmind.qmd#{anchor}"
+                        'file': f"validmind/validmind.qmd#{anchor}"
                     }
                     current_class['contents'].append(method_item)
             
@@ -398,14 +398,14 @@ def get_child_files(files_dict: Dict[str, str], module_name: str) -> List[Dict[s
                 if dir_name not in directory_structure:
                     directory_structure[dir_name] = {
                         'text': dir_name,
-                        'file': f'reference/{rel_path}'  # Add reference/ prefix
+                        'file': f'validmind/{rel_path}'  # Add validmind/ prefix
                     }
             else:  # Nested file
                 dir_name = parts[0]
                 if dir_name not in directory_structure:
                     directory_structure[dir_name] = {
                         'text': dir_name,
-                        'file': f'reference/validmind/{module_name}/{dir_name}.qmd'  # Add reference/ prefix
+                        'file': f'validmind/validmind/{module_name}/{dir_name}.qmd'  # Add validmind/ prefix
                     }
                 
                 # Add to contents if it's a child file
@@ -414,7 +414,7 @@ def get_child_files(files_dict: Dict[str, str], module_name: str) -> List[Dict[s
                 
                 directory_structure[dir_name]['contents'].append({
                     'text': Path(parts[-1]).stem,
-                    'file': f'reference/{rel_path}'  # Add reference/ prefix
+                    'file': f'validmind/{rel_path}'  # Add validmind/ prefix
                 })
     
     # Sort children within each directory

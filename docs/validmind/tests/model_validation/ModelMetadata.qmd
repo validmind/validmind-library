@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/reference/validmind.html).ModelMetadata"
+title: "[validmind](/validmind/validmind.html).ModelMetadata"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
@@ -28,7 +28,7 @@ Attempts to extract all model info from a model object instance
 
 ::: {.signature}
 
-<span class="decorators"><span class="decorator">@<span class="n">@tags(<span class="s">'model_training'</span>, <span class="s">'metadata'</span>)</span></span><span class="decorator">@<span class="n">@tasks(<span class="s">'regression'</span>, <span class="s">'time_series_forecasting'</span>)</span></span></span>
+<span class="decorators"><span class="decorator">@<span class="n">tags(<span class="s">'model_training'</span>, <span class="s">'metadata'</span>)</span></span><span class="decorator">@<span class="n">tasks(<span class="s">'regression'</span>, <span class="s">'time_series_forecasting'</span>)</span></span></span>
 
 <span class="kw">def</span><span class="name">ModelMetadata</span>(<span class="param"><span class="n">model</span></span>):
 

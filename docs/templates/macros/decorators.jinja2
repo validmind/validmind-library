@@ -4,9 +4,14 @@
 {%- if member.decorators -%}
 <span class="decorators">
 {%- for decorator in member.decorators -%}
-<span class="decorator">{%- if decorator is mapping -%}@{{ format_type(decorator.value) }}{%- else -%}{{ '@' if not decorator.startswith('@') }}{{ decorator }}{%- endif -%}</span>
+<span class="decorator">
+{%- if decorator is mapping -%}
+@{{ format_type(decorator.value) | replace('@', '') }}
+{%- else -%}
+{%- if not decorator.startswith('@') -%}@{%- endif -%}{{ decorator | replace('@', '') }}
+{%- endif -%}
+</span>
 {%- endfor -%}
 </span>
-
 {%+ endif +%}
 {%+ endmacro +%} 
