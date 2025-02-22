@@ -1,4 +1,6 @@
 format:
   html:
     page-layout: full
-    css: validmind.css, /developer/developer.css 
+    css:
+      - validmind.css
+      - /developer/developer.css
