@@ -288,9 +288,7 @@ Exception raised when an error occurs while loading a test.
 
 <!-- docstring.jinja2 -->
 
-Test providers in ValidMind are responsible for loading tests from different sources,
-
-such as local files, databases, or remote services. The LocalTestProvider specifically loads tests from the local file system.
+Test providers in ValidMind are responsible for loading tests from different sources, such as local files, databases, or remote services. The LocalTestProvider specifically loads tests from the local file system.
 
 To use the LocalTestProvider, you need to provide the root_folder, which is the root directory for local tests. The test_id is a combination of the namespace (set when registering the test provider) and the path to the test class module, where slashes are replaced by dots and the .py extension is left out.
 

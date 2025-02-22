@@ -22,9 +22,7 @@ toc-expand: 4
 
 <!-- docstring.jinja2 -->
 
-Assesses and visualizes correlation between target variable and lagged independent variables in a time-series
-
-dataset.
+Assesses and visualizes correlation between target variable and lagged independent variables in a time-series dataset.
 
 ### Purpose
 

@@ -22,9 +22,7 @@ toc-expand: 4
 
 <!-- docstring.jinja2 -->
 
-Evaluates clustering model performance by measuring mutual information between true and predicted labels, adjusting
-
-for chance.
+Evaluates clustering model performance by measuring mutual information between true and predicted labels, adjusting for chance.
 
 ### Purpose
 

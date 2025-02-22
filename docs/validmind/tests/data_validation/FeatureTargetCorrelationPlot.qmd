@@ -22,9 +22,7 @@ toc-expand: 4
 
 <!-- docstring.jinja2 -->
 
-Visualizes the correlation between input features and the model's target output in a color-coded horizontal bar
-
-plot.
+Visualizes the correlation between input features and the model's target output in a color-coded horizontal bar plot.
 
 ### Purpose
 

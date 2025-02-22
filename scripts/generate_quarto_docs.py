@@ -298,28 +298,15 @@ def parse_docstrings(data: Dict[str, Any]):
                 original = str(data['docstring'])
             
             try:
-                # Debug original docstring
-                if 'Args:' in original:
-                #     print(f"\nProcessing docstring for: {data.get('name', 'unknown')}")
-                #     print(f"ORIGINAL:\n{original}")
-                    
-                    # Split on double newlines and join first section's lines
-                    sections = original.split('\n\n')
+                # Pre-process all docstrings to normalize newlines
+                sections = original.split('\n\n')
+                # Join lines in the first section (description) with spaces
+                if sections:
                     sections[0] = ' '.join(sections[0].split('\n'))
-                    original = '\n\n'.join(sections)
-                    
-                    # print("\nSections after double newline split:")
-                    # for i, section in enumerate(sections):
-                    #     print(f"\nSection {i}:\n{section}")
+                # Keep other sections as-is
+                original = '\n\n'.join(sections)
                 
                 parsed = parse(original, style=Style.GOOGLE)
-                
-                # Debug parsed result
-                # if 'Args:' in original:
-                #     print("\nPARSED RESULT:")
-                #     print(f"- short_description: {parsed.short_description}")
-                #     print(f"- long_description: {parsed.long_description}")
-                #     print(f"- params: {[(p.arg_name, p.type_name, p.description) for p in parsed.params]}")
                 
                 data['docstring'] = {
                     'value': original,

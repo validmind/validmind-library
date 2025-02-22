@@ -22,9 +22,7 @@ toc-expand: 4
 
 <!-- docstring.jinja2 -->
 
-Assesses potential correlations between pairs of time series variables through visualization to enhance
-
-understanding of their relationships.
+Assesses potential correlations between pairs of time series variables through visualization to enhance understanding of their relationships.
 
 ### Purpose
 

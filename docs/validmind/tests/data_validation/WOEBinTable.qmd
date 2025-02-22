@@ -22,9 +22,7 @@ toc-expand: 4
 
 <!-- docstring.jinja2 -->
 
-Assesses the Weight of Evidence (WoE) and Information Value (IV) of each feature to evaluate its predictive power
-
-in a binary classification model.
+Assesses the Weight of Evidence (WoE) and Information Value (IV) of each feature to evaluate its predictive power in a binary classification model.
 
 ### Purpose
 

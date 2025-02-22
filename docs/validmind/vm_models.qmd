@@ -78,9 +78,7 @@ Creates a `requests`-compatible files object to be sent to the API.
 
 <!-- docstring.jinja2 -->
 
-Returns the ipywidget compatible representation of the figure. Ideally
-
-we would render images as-is, but Plotly FigureWidgets don't work well on Google Colab when they are combined with ipywidgets.
+Returns the ipywidget compatible representation of the figure. Ideally we would render images as-is, but Plotly FigureWidgets don't work well on Google Colab when they are combined with ipywidgets.
 
 <!-- class.qmd.jinja2 -->
 
@@ -142,9 +140,7 @@ Creates a ModelAttributes instance from a dictionary.
 
 <!-- docstring.jinja2 -->
 
-Base class for test suites. Test suites are used to define a grouping of tests that
-
-can be run as a suite against datasets and models. Test Suites can be defined by inheriting from this base class and defining the list of tests as a class variable.
+Base class for test suites. Test suites are used to define a grouping of tests that can be run as a suite against datasets and models. Test Suites can be defined by inheriting from this base class and defining the list of tests as a class variable.
 
 Tests can be a flat list of strings or may be nested into sections by using a dict.
 

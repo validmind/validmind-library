@@ -34,9 +34,7 @@ toc-expand: 4
 
 <!-- docstring.jinja2 -->
 
-Evaluates the stationarity of time series data by plotting its rolling mean and standard deviation over a specified
-
-window.
+Evaluates the stationarity of time series data by plotting its rolling mean and standard deviation over a specified window.
 
 ### Purpose
 

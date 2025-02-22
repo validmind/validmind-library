@@ -36,9 +36,7 @@ Adjusted R2 Score
 
 <!-- docstring.jinja2 -->
 
-Assesses the overall goodness-of-fit of a regression model by evaluating R-squared (R2) and Adjusted R-squared (Adj
-
-R2) scores to determine the model's explanatory power over the dependent variable.
+Assesses the overall goodness-of-fit of a regression model by evaluating R-squared (R2) and Adjusted R-squared (Adj R2) scores to determine the model's explanatory power over the dependent variable.
 
 ### Purpose
 

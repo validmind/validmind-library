@@ -34,9 +34,7 @@ toc-expand: 4
 
 <!-- docstring.jinja2 -->
 
-Conducts comprehensive textual analysis on a dataset using NLTK to evaluate various parameters and generate
-
-visualizations.
+Conducts comprehensive textual analysis on a dataset using NLTK to evaluate various parameters and generate visualizations.
 
 ### Purpose
 

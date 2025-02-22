@@ -36,15 +36,9 @@ Call LLM with the given prompts and return the response
 
 <!-- docstring.jinja2 -->
 
-Get just the explanation from the response string
+Get just the explanation from the response string TODO: use json response mode instead of this
 
-TODO: use json response mode instead of this
-
-```
-e.g. "Score: 8
-```
-
-Explanation: <some-explanation>" -> "<some-explanation>"
+e.g. "Score: 8 Explanation: <some-explanation>" -> "<some-explanation>"
 
 <!-- function.qmd.jinja2 -->
 
@@ -60,12 +54,6 @@ Explanation: <some-explanation>" -> "<some-explanation>"
 
 <!-- docstring.jinja2 -->
 
-Get just the score from the response string
+Get just the score from the response string TODO: use json response mode instead of this
 
-TODO: use json response mode instead of this
-
-```
-e.g. "Score: 8
-```
-
-Explanation: <some-explanation>" -> 8
+e.g. "Score: 8 Explanation: <some-explanation>" -> 8

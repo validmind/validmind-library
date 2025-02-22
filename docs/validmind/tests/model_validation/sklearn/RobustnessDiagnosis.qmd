@@ -82,9 +82,7 @@ This test introduces Gaussian noise to the numeric input features of the dataset
 
 <!-- docstring.jinja2 -->
 
-When the PyTorch model is missing a predict function or its predict
-
-method does not have the expected arguments.
+When the PyTorch model is missing a predict function or its predict method does not have the expected arguments.
 
 **Inherited members**
 

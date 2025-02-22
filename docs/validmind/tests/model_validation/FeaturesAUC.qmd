@@ -36,9 +36,7 @@ Get a logger for the given module name.
 
 <!-- docstring.jinja2 -->
 
-Evaluates the discriminatory power of each individual feature within a binary classification model by calculating
-
-the Area Under the Curve (AUC) for each feature separately.
+Evaluates the discriminatory power of each individual feature within a binary classification model by calculating the Area Under the Curve (AUC) for each feature separately.
 
 ### Purpose
 

@@ -60,8 +60,6 @@ Test suite for tabular datasets.
 
 <!-- docstring.jinja2 -->
 
-Test suite to extract metadata and descriptive
-
-statistics from a tabular dataset
+Test suite to extract metadata and descriptive statistics from a tabular dataset
 
 **Inherited members**

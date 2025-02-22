@@ -22,9 +22,7 @@ toc-expand: 4
 
 <!-- docstring.jinja2 -->
 
-Generates a detailed analysis for the provided time series dataset, summarizing key statistics to identify trends,
-
-patterns, and data quality issues.
+Generates a detailed analysis for the provided time series dataset, summarizing key statistics to identify trends, patterns, and data quality issues.
 
 ### Purpose
 

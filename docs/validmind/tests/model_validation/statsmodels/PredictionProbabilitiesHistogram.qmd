@@ -22,9 +22,7 @@ toc-expand: 4
 
 <!-- docstring.jinja2 -->
 
-Assesses the predictive probability distribution for binary classification to evaluate model performance and
-
-potential overfitting or bias.
+Assesses the predictive probability distribution for binary classification to evaluate model performance and potential overfitting or bias.
 
 ### Purpose
 

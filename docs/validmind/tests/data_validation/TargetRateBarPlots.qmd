@@ -22,9 +22,7 @@ toc-expand: 4
 
 <!-- docstring.jinja2 -->
 
-Generates bar plots visualizing the default rates of categorical features for a classification machine learning
-
-model.
+Generates bar plots visualizing the default rates of categorical features for a classification machine learning model.
 
 ### Purpose
 

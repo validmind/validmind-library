@@ -22,9 +22,7 @@ toc-expand: 4
 
 <!-- docstring.jinja2 -->
 
-Assesses if the model's F1 score on the validation set meets a predefined minimum threshold, ensuring balanced
-
-performance between precision and recall.
+Assesses if the model's F1 score on the validation set meets a predefined minimum threshold, ensuring balanced performance between precision and recall.
 
 ### Purpose
 

@@ -34,9 +34,7 @@ Get a logger for the given module name.
 
 <!-- docstring.jinja2 -->
 
-Taken from:
-
-https://towardsdatascience.com/checking-model-stability-and-population-shift-with-psi-and-csi-6d12af008783
+Taken from: https://towardsdatascience.com/checking-model-stability-and-population-shift-with-psi-and-csi-6d12af008783
 
 <!-- function.qmd.jinja2 -->
 
@@ -54,9 +52,7 @@ https://towardsdatascience.com/checking-model-stability-and-population-shift-wit
 
 <!-- docstring.jinja2 -->
 
-Assesses the Population Stability Index (PSI) to quantify the stability of an ML model's predictions across
-
-different datasets.
+Assesses the Population Stability Index (PSI) to quantify the stability of an ML model's predictions across different datasets.
 
 ### Purpose
 

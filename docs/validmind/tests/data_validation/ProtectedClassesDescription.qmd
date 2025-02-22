@@ -36,9 +36,7 @@ Get a logger for the given module name.
 
 <!-- docstring.jinja2 -->
 
-Visualizes the distribution of protected classes in the dataset relative to the target variable
-
-and provides descriptive statistics.
+Visualizes the distribution of protected classes in the dataset relative to the target variable and provides descriptive statistics.
 
 ### Purpose
 

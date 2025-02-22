@@ -48,9 +48,7 @@ Get a logger for the given module name.
 
 <!-- docstring.jinja2 -->
 
-Assesses the sensitivity of a regression model to changes in independent variables by applying shocks and
-
-visualizing the impact.
+Assesses the sensitivity of a regression model to changes in independent variables by applying shocks and visualizing the impact.
 
 ### Purpose
 

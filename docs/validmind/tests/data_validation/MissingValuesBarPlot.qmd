@@ -22,9 +22,7 @@ toc-expand: 4
 
 <!-- docstring.jinja2 -->
 
-Assesses the percentage and distribution of missing values in the dataset via a bar plot, with emphasis on
-
-identifying high-risk columns based on a user-defined threshold.
+Assesses the percentage and distribution of missing values in the dataset via a bar plot, with emphasis on identifying high-risk columns based on a user-defined threshold.
 
 ### Purpose
 

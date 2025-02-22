@@ -98,9 +98,7 @@ Gets descriptive statistics for a single column in a Pandas DataFrame.
 
 <!-- docstring.jinja2 -->
 
-Returns a collection of histograms for a numerical or categorical column.
-
-We store different combinations of bin sizes to allow analyzing the data better
+Returns a collection of histograms for a numerical or categorical column. We store different combinations of bin sizes to allow analyzing the data better
 
 Will be used in favor of \_get_histogram in the future
 
@@ -118,9 +116,7 @@ Will be used in favor of \_get_histogram in the future
 
 <!-- docstring.jinja2 -->
 
-Returns a collection of histograms for a numerical column, each one
-
-with a different bin size
+Returns a collection of histograms for a numerical column, each one with a different bin size
 
 <!-- function.qmd.jinja2 -->
 

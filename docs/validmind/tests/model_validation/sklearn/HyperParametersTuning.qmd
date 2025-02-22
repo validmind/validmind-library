@@ -36,9 +36,7 @@ toc-expand: 4
 
 <!-- docstring.jinja2 -->
 
-Performs exhaustive grid search over specified parameter ranges to find optimal model configurations
-
-across different metrics and decision thresholds.
+Performs exhaustive grid search over specified parameter ranges to find optimal model configurations across different metrics and decision thresholds.
 
 ### Purpose
 

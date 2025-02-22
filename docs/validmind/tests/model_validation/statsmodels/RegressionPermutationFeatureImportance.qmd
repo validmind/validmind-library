@@ -36,9 +36,7 @@ Get a logger for the given module name.
 
 <!-- docstring.jinja2 -->
 
-Assesses the significance of each feature in a model by evaluating the impact on model performance when feature
-
-values are randomly rearranged.
+Assesses the significance of each feature in a model by evaluating the impact on model performance when feature values are randomly rearranged.
 
 ### Purpose
 

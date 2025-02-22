@@ -18,9 +18,7 @@ toc-expand: 4
 
 <!-- docstring.jinja2 -->
 
-Round the values on each dataframe's column to a given number of decimal places.
-
-The returned value is converted to a dict in "records" with Pandas's to_dict() function.
+Round the values on each dataframe's column to a given number of decimal places. The returned value is converted to a dict in "records" with Pandas's to_dict() function.
 
 We do this for display purposes before sending data to ValidMind. Rules:
 
@@ -44,9 +42,7 @@ We do this for display purposes before sending data to ValidMind. Rules:
 
 <!-- docstring.jinja2 -->
 
-Performs a detailed descriptive statistical analysis of both numerical and categorical data within a model's
-
-dataset.
+Performs a detailed descriptive statistical analysis of both numerical and categorical data within a model's dataset.
 
 ### Purpose
 

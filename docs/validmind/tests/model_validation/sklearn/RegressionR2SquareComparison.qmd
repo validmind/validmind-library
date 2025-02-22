@@ -36,9 +36,7 @@ Adjusted R2 Score
 
 <!-- docstring.jinja2 -->
 
-Compares R-Squared and Adjusted R-Squared values for different regression models across multiple datasets to assess
-
-model performance and relevance of features.
+Compares R-Squared and Adjusted R-Squared values for different regression models across multiple datasets to assess model performance and relevance of features.
 
 ### Purpose
 

@@ -32,9 +32,7 @@ toc-expand: 4
 
 <!-- docstring.jinja2 -->
 
-Evaluates and compares the performance of multiple Machine Learning models using various metrics like accuracy,
-
-precision, recall, and F1 score.
+Evaluates and compares the performance of multiple Machine Learning models using various metrics like accuracy, precision, recall, and F1 score.
 
 ### Purpose
 
