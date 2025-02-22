@@ -257,7 +257,7 @@ Register an external test provider
 
 <!-- docstring.jinja2 -->
 
-Exception raised when an error occurs while loading a test
+Exception raised when an error occurs while loading a test.
 
 **Inherited members**
 

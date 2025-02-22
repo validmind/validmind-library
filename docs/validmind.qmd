@@ -61,7 +61,7 @@ After you have pasted the code snippet into your development source code and exe
 
 <!-- docstring.jinja2 -->
 
-Gets a TestSuite object for the current project or a specific test suite
+Gets a TestSuite object for the current project or a specific test suite.
 
 This function provides an interface to retrieve the TestSuite instance for the current project or a specific TestSuite instance identified by test_suite_id. The project Test Suite will contain sections for every section in the project's documentation template and these Test Suite Sections will contain all the tests associated with that template section.
 
@@ -69,8 +69,12 @@ This function provides an interface to retrieve the TestSuite instance for the c
 
 - `test_suite_id` (str, optional): The test suite name. If not passed, then the project's test suite will be returned. Defaults to None.
 - `section` (str, optional): The section of the documentation template from which to retrieve the test suite. This only applies if test_suite_id is None. Defaults to None.
-- `args`: Additional arguments to pass to the TestSuite
-- `kwargs`: Additional keyword arguments to pass to the TestSuite
+- `args`: Additional arguments to pass to the TestSuite.
+- `kwargs`: Additional keyword arguments to pass to the TestSuite.
+
+**Returns**
+
+- The TestSuite instance.
 
 ## init<span class='muted'>()</span>
 
@@ -125,28 +129,28 @@ The following dataset types are supported:
 
 **Arguments**
 
-- `dataset`: Dataset from various Python libraries
-- `model` (VMModel): ValidMind model object
-- `index` (Any): Index for the dataset
-- `index_name` (str): Name of the index column
-- `date_time_index` (bool): Whether the index is a datetime index
-- `columns` (List[str]): List of column names
-- `text_column` (str): Name of the text column
-- `target_column` (str): The name of the target column in the dataset
-- `feature_columns` (List[str]): A list of names of feature columns in the dataset
-- `extra_columns` (Dict[str, Any]): A dictionary containing the names of the prediction_column and group_by_columns in the dataset
-- `class_labels` (Dict[str, Any]): A list of class labels for classification problems
-- `type` (str): The type of dataset (one of DATASET_TYPES) - DEPRECATED
+- `dataset`: Dataset from various Python libraries.
+- `model` (VMModel): ValidMind model object.
+- `index` (Any): Index for the dataset.
+- `index_name` (str): Name of the index column.
+- `date_time_index` (bool): Whether the index is a datetime index.
+- `columns` (List[str]): List of column names.
+- `text_column` (str): Name of the text column.
+- `target_column` (str): The name of the target column in the dataset.
+- `feature_columns` (List[str]): A list of names of feature columns in the dataset.
+- `extra_columns` (Dict[str, Any]): A dictionary containing the names of the prediction_column and group_by_columns in the dataset.
+- `class_labels` (Dict[str, Any]): A list of class labels for classification problems.
+- `type` (str): The type of dataset (one of DATASET_TYPES) - DEPRECATED.
 - `input_id` (str): The input ID for the dataset (e.g. "my_dataset"). By default, this will be set to `dataset` but if you are passing this dataset as a test input using some other key than `dataset`, then you should set this to the same key.
 - `__log` (bool, optional): Whether to log the input. Defaults to True.
 
 **Returns**
 
-- A VM Dataset instance
+- A VM Dataset instance.
 
 **Raises**
 
-- `ValueError`: If the dataset type is not supported
+- `ValueError`: If the dataset type is not supported.
 
 ## init_model<span class='muted'>()</span>
 
@@ -164,19 +168,19 @@ Initializes a VM Model, which can then be passed to other functions that can per
 
 **Arguments**
 
-- `model`: A trained model or VMModel instance
+- `model`: A trained model or VMModel instance.
 - `input_id` (str): The input ID for the model (e.g. "my_model"). By default, this will be set to `model` but if you are passing this model as a test input using some other key than `model`, then you should set this to the same key.
-- `attributes` (dict): A dictionary of model attributes
-- `predict_fn` (callable): A function that takes an input and returns a prediction
-- `**kwargs`: Additional arguments to pass to the model
+- `attributes` (dict): A dictionary of model attributes.
+- `predict_fn` (callable): A function that takes an input and returns a prediction.
+- `**kwargs`: Additional arguments to pass to the model.
 
 **Returns**
 
-- A VM Model instance
+- A VM Model instance.
 
 **Raises**
 
-- `ValueError`: If the model type is not supported
+- `ValueError`: If the model type is not supported.
 
 ## init_r_model<span class='muted'>()</span>
 
@@ -190,25 +194,18 @@ Initializes a VM Model, which can then be passed to other functions that can per
 
 <!-- docstring.jinja2 -->
 
-Initializes a VM Model for an R model
+Initialize a VM Model from an R model.
 
-R models must be saved to disk and the filetype depends on the model type. Currently we support the following model types:
-
-- LogisticRegression `glm` model in R: saved as an RDS file with `saveRDS`
-- LinearRegression `lm` model in R: saved as an RDS file with `saveRDS`
-- XGBClassifier: saved as a .json or .bin file with `xgb.save`
-- XGBRegressor: saved as a .json or .bin file with `xgb.save`
-
-LogisticRegression and LinearRegression models are converted to sklearn models by extracting the coefficients and intercept from the R model. XGB models are loaded using the xgboost since xgb models saved in .json or .bin format can be loaded directly with either Python or R
+LogisticRegression and LinearRegression models are converted to sklearn models by extracting the coefficients and intercept from the R model. XGB models are loaded using the xgboost since xgb models saved in .json or .bin format can be loaded directly with either Python or R.
 
 **Arguments**
 
-- `model_path` (str): The path to the R model saved as an RDS or XGB file
+- `model_path` (str): The path to the R model saved as an RDS or XGB file.
 - `input_id` (str, optional): The input ID for the model. Defaults to "model".
 
 **Returns**
 
-- A VM Model instance
+- A VM Model instance.
 
 ## log_metric<span class='muted'>()</span>
 
@@ -222,7 +219,7 @@ LogisticRegression and LinearRegression models are converted to sklearn models b
 
 <!-- docstring.jinja2 -->
 
-Logs a unit metric
+Logs a unit metric.
 
 Unit metrics are key-value pairs where the key is the metric name and the value is a scalar (int or float). These key-value pairs are associated with the currently selected model (inventory model in the ValidMind Platform) and keys can be logged to over time to create a history of the metric. On the ValidMind Platform, these metrics will be used to create plots/visualizations for documentation and dashboards etc.
 
@@ -247,13 +244,13 @@ Unit metrics are key-value pairs where the key is the metric name and the value 
 
 <!-- docstring.jinja2 -->
 
-Preview the documentation template for the current project
+Preview the documentation template for the current project.
 
 This function will display the documentation template for the current project. If the project has not been initialized, then an error will be raised.
 
 **Raises**
 
-- `ValueError`: If the project has not been initialized
+- `ValueError`: If the project has not been initialized.
 
 ## print_env<span class='muted'>()</span>
 
@@ -283,7 +280,7 @@ Output includes: ValidMind Library version, operating system details, installed 
 
 <!-- docstring.jinja2 -->
 
-Reconnect to the ValidMind API and reload the project configuration
+Reconnect to the ValidMind API and reload the project configuration.
 
 ## run_documentation_tests<span class='muted'>()</span>
 
@@ -297,7 +294,7 @@ Reconnect to the ValidMind API and reload the project configuration
 
 <!-- docstring.jinja2 -->
 
-Collect and run all the tests associated with a template
+Collect and run all the tests associated with a template.
 
 This function will analyze the current project's documentation template and collect all the tests associated with it into a test suite. It will then run the test suite, log the results to the ValidMind API, and display them to the user.
 
@@ -306,9 +303,9 @@ This function will analyze the current project's documentation template and coll
 - `section` (str or list, optional): The section(s) to preview. Defaults to None.
 - `send` (bool, optional): Whether to send the results to the ValidMind API. Defaults to True.
 - `fail_fast` (bool, optional): Whether to stop running tests after the first failure. Defaults to False.
-- `inputs` (dict): A dictionary of test inputs to pass to the TestSuite
-- `config`: A dictionary of test parameters to override the defaults
-- `**kwargs`: backwards compatibility for passing in test inputs using keyword arguments
+- `inputs` (dict): A dictionary of test inputs to pass to the TestSuite.
+- `config`: A dictionary of test parameters to override the defaults.
+- `**kwargs`: backwards compatibility for passing in test inputs using keyword arguments.
 
 **Returns**
 
@@ -316,7 +313,7 @@ This function will analyze the current project's documentation template and coll
 
 **Raises**
 
-- `ValueError`: If the project has not been initialized
+- `ValueError`: If the project has not been initialized.
 
 ## run_test_suite<span class='muted'>()</span>
 
@@ -330,26 +327,26 @@ This function will analyze the current project's documentation template and coll
 
 <!-- docstring.jinja2 -->
 
-High Level function for running a test suite
+High Level function for running a test suite.
 
 This function provides a high level interface for running a test suite. A test suite is a collection of tests. This function will automatically find the correct test suite class based on the test_suite_id, initialize each of the tests, and run them.
 
 **Arguments**
 
-- `test_suite_id` (str): The test suite name (e.g. 'classifier_full_suite')
+- `test_suite_id` (str): The test suite name. For example, 'classifier_full_suite'.
 - `config` (dict, optional): A dictionary of parameters to pass to the tests in the test suite. Defaults to None.
 - `send` (bool, optional): Whether to post the test results to the API. send=False is useful for testing. Defaults to True.
 - `fail_fast` (bool, optional): Whether to stop running tests after the first failure. Defaults to False.
 - `inputs` (dict, optional): A dictionary of test inputs to pass to the TestSuite, such as `model`, `dataset` `models`, etc. These inputs will be accessible by any test in the test suite. See the test documentation or `vm.describe_test()` for more details on the inputs required for each. Defaults to None.
-- `**kwargs`: backwards compatibility for passing in test inputs using keyword arguments
+- `**kwargs`: backwards compatibility for passing in test inputs using keyword arguments.
 
 **Returns**
 
-- the TestSuite instance
+- The TestSuite instance.
 
 **Raises**
 
-- `ValueError`: If the test suite name is not found or if there is an error initializing the test suite
+- `ValueError`: If the test suite name is not found or if there is an error initializing the test suite.
 
 ## tags<span class='muted'>()</span>
 
@@ -439,7 +436,7 @@ The function may also include a docstring. This docstring will be used and logge
 
 <!-- docstring.jinja2 -->
 
-Holds raw data for a test result
+Holds raw data for a test result.
 
 <!-- module.qmd.jinja2 -->
 
@@ -455,12 +452,12 @@ Holds raw data for a test result
 
 <!-- docstring.jinja2 -->
 
-Create a new RawData object
+Create a new RawData object.
 
 **Arguments**
 
-- `log` (bool): If True, log the raw data to ValidMind
-- `**kwargs`: Keyword arguments to set as attributes, such as `RawData(log=True, dataset_duplicates=df_duplicates)`
+- `log` (bool): If True, log the raw data to ValidMind.
+- `**kwargs`: Keyword arguments to set as attributes, such as `RawData(log=True, dataset_duplicates=df_duplicates)`.
 
 <!-- module.qmd.jinja2 -->
 

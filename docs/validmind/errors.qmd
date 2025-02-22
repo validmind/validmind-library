@@ -176,7 +176,7 @@ When an invalid text content_id is sent to the API.
 
 <!-- docstring.jinja2 -->
 
-When an invalid input object.
+When an invalid input object is provided.
 
 **Inherited members**
 
@@ -266,7 +266,7 @@ When a POST/PUT request is made with an invalid request body.
 
 <!-- docstring.jinja2 -->
 
-When an invalid parameters for the test.
+When invalid parameters are provided for the test.
 
 **Inherited members**
 
@@ -308,7 +308,7 @@ When an invalid test results object is sent to the API.
 
 <!-- docstring.jinja2 -->
 
-When an invalid Metadat (Text) object is sent to the API.
+When an invalid Metadata (Text) object is sent to the API.
 
 **Inherited members**
 
@@ -371,7 +371,7 @@ When an invalid XGBoost trained model is used when calling init_r_model.
 
 <!-- docstring.jinja2 -->
 
-Exception raised when an error occurs while loading a test
+Exception raised when an error occurs while loading a test.
 
 **Inherited members**
 
@@ -575,7 +575,7 @@ When the client config is missing the documentation template.
 
 <!-- docstring.jinja2 -->
 
-When the pytorch model is missing a predict function or its predict
+When the PyTorch model is missing a predict function or its predict
 
 method does not have the expected arguments.
 
@@ -862,7 +862,7 @@ When an unsupported R model is used.
 
 Safely try to parse JSON from the response message in case the API
 
-returns a non-JSON string or if the API returns a non-standard error
+returns a non-JSON string or if the API returns a non-standard error.
 
 <!-- function.qmd.jinja2 -->
 

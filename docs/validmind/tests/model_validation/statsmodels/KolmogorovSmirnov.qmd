@@ -63,7 +63,7 @@ This test calculates the KS statistic and corresponding p-value for each feature
 
 <!-- docstring.jinja2 -->
 
-When an invalid parameters for the test.
+When invalid parameters are provided for the test.
 
 **Inherited members**
 

@@ -18,7 +18,7 @@ toc-expand: 4
 
 <!-- docstring.jinja2 -->
 
-Get a logger for the given module name
+Get a logger for the given module name.
 
 <!-- function.qmd.jinja2 -->
 

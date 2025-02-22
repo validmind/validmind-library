@@ -18,7 +18,7 @@ toc-expand: 4
 
 <!-- docstring.jinja2 -->
 
-Get a logger for the given module name
+Get a logger for the given module name.
 
 <!-- function.qmd.jinja2 -->
 
@@ -82,7 +82,7 @@ This test introduces Gaussian noise to the numeric input features of the dataset
 
 <!-- docstring.jinja2 -->
 
-When the pytorch model is missing a predict function or its predict
+When the PyTorch model is missing a predict function or its predict
 
 method does not have the expected arguments.
 

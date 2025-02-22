@@ -26,7 +26,7 @@ Models entrypoint
 
 <!-- docstring.jinja2 -->
 
-Figure objects track the schema supported by the ValidMind API
+Figure objects track the schema supported by the ValidMind API.
 
 ### [Figure[()]{.muted}](#__init__)
 
@@ -50,7 +50,7 @@ Figure objects track the schema supported by the ValidMind API
 
 <!-- docstring.jinja2 -->
 
-Serializes the Figure to a dictionary so it can be sent to the API
+Serializes the Figure to a dictionary so it can be sent to the API.
 
 ### [serialize_files[()]{.muted}](#serialize_files)
 
@@ -64,7 +64,7 @@ Serializes the Figure to a dictionary so it can be sent to the API
 
 <!-- docstring.jinja2 -->
 
-Creates a `requests`-compatible files object to be sent to the API
+Creates a `requests`-compatible files object to be sent to the API.
 
 ### [to_widget[()]{.muted}](#to_widget)
 
@@ -98,7 +98,7 @@ we would render images as-is, but Plotly FigureWidgets don't work well on Google
 
 <!-- docstring.jinja2 -->
 
-Model attributes definition
+Model attributes definition.
 
 ### [ModelAttributes[()]{.muted}](#__init__)
 
@@ -124,7 +124,7 @@ Model attributes definition
 
 <!-- docstring.jinja2 -->
 
-Creates a ModelAttributes instance from a dictionary
+Creates a ModelAttributes instance from a dictionary.
 
 <!-- class.qmd.jinja2 -->
 
@@ -146,7 +146,7 @@ Base class for test suites. Test suites are used to define a grouping of tests t
 
 can be run as a suite against datasets and models. Test Suites can be defined by inheriting from this base class and defining the list of tests as a class variable.
 
-Tests can be a flat list of strings or may be nested into sections by using a dict
+Tests can be a flat list of strings or may be nested into sections by using a dict.
 
 ### [TestSuite[()]{.muted}](#__init__)
 
@@ -170,13 +170,13 @@ Tests can be a flat list of strings or may be nested into sections by using a di
 
 <!-- docstring.jinja2 -->
 
-Returns the default configuration for the test suite
+Returns the default configuration for the test suite.
 
-Each test in a test suite can accept parameters and those parameters can have default values. Both the parameters and their defaults are set in the test class and a config object can be passed to the test suite's run method to override the defaults. This function returns a dictionary containing the parameters and their default values for every test to allow users to view and set values
+Each test in a test suite can accept parameters and those parameters can have default values. Both the parameters and their defaults are set in the test class and a config object can be passed to the test suite's run method to override the defaults. This function returns a dictionary containing the parameters and their default values for every test to allow users to view and set values.
 
 **Returns**
 
-- A dictionary of test names and their default parameters
+- A dictionary of test names and their default parameters.
 
 ### [get_tests[()]{.muted}](#get_tests)
 
@@ -190,7 +190,7 @@ Each test in a test suite can accept parameters and those parameters can have de
 
 <!-- docstring.jinja2 -->
 
-Get all test suite test objects from all sections
+Get all test suite test objects from all sections.
 
 ### [num_tests[()]{.muted}](#num_tests)
 
@@ -204,7 +204,7 @@ Get all test suite test objects from all sections
 
 <!-- docstring.jinja2 -->
 
-Returns the total number of tests in the test suite
+Returns the total number of tests in the test suite.
 
 <!-- class.qmd.jinja2 -->
 
@@ -220,7 +220,7 @@ Returns the total number of tests in the test suite
 
 <!-- docstring.jinja2 -->
 
-Runs a test suite
+Runs a test suite.
 
 ### [TestSuiteRunner[()]{.muted}](#__init__)
 
@@ -244,7 +244,7 @@ Runs a test suite
 
 <!-- docstring.jinja2 -->
 
-Logs the results of the test suite to ValidMind
+Logs the results of the test suite to ValidMind.
 
 This method will be called after the test suite has been run and all results have been collected. This method will log the results to ValidMind.
 
@@ -260,7 +260,7 @@ This method will be called after the test suite has been run and all results hav
 
 <!-- docstring.jinja2 -->
 
-Runs the test suite, renders the summary and sends the results to ValidMind
+Runs the test suite, renders the summary and sends the results to ValidMind.
 
 **Arguments**
 
@@ -291,9 +291,9 @@ Runs the test suite, renders the summary and sends the results to ValidMind
 
 <!-- docstring.jinja2 -->
 
-Base class for VM datasets
+Base class for VM datasets.
 
-Child classes should be used to support new dataset types (tensor, polars etc) by converting the user's dataset into a numpy array collecting metadata like column names and then call this (parent) class `__init__` method.
+Child classes should be used to support new dataset types (tensor, polars etc.) by converting the user's dataset into a numpy array collecting metadata like column names and then call this (parent) class `__init__` method.
 
 This way we can support multiple dataset types but under the hood we only need to work with numpy arrays and pandas dataframes in this class.
 
@@ -566,7 +566,7 @@ Returns a dataframe containing the probabilities for a given model
 
 <!-- docstring.jinja2 -->
 
-Base class for ValidMind Input types
+Base class for ValidMind Input types.
 
 **Inherited members**
 
@@ -582,17 +582,17 @@ Base class for ValidMind Input types
 
 <!-- docstring.jinja2 -->
 
-Allows for setting options on the input object that are passed by the user when using the input to run a test or set of tests
+Allows for setting options on the input object that are passed by the user when using the input to run a test or set of tests.
 
 To allow options, just override this method in the subclass (see VMDataset) and ensure that it returns a new instance of the input with the specified options set.
 
 **Arguments**
 
-- `**kwargs`: Arbitrary keyword arguments that will be passed to the input object
+- `**kwargs`: Arbitrary keyword arguments that will be passed to the input object.
 
 **Returns**
 
-- A new instance of the input with the specified options set
+- A new instance of the input with the specified options set.
 
 <!-- class.qmd.jinja2 -->
 

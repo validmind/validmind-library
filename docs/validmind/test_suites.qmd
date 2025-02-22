@@ -35,7 +35,7 @@ Entrypoint for test suites.
 
 <!-- docstring.jinja2 -->
 
-Format a pandas DataFrame for display purposes
+Format a pandas DataFrame for display purposes.
 
 ## get_logger<span class='muted'>()</span>
 
@@ -49,7 +49,7 @@ Format a pandas DataFrame for display purposes
 
 <!-- docstring.jinja2 -->
 
-Get a logger for the given module name
+Get a logger for the given module name.
 
 ## test_id_to_name<span class='muted'>()</span>
 
