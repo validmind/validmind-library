@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 """
-Result Objects for test results
+Result objects for test results
 """
 import asyncio
 import json
@@ -43,15 +43,15 @@ logger = get_logger(__name__)
 
 
 class RawData:
-    """Holds raw data for a test result"""
+    """Holds raw data for a test result."""
 
     def __init__(self, log: bool = False, **kwargs: Any) -> None:
-        """Create a new RawData object
+        """Create a new RawData object.
 
         Args:
-            log (bool): If True, log the raw data to ValidMind
+            log (bool): If True, log the raw data to ValidMind.
             **kwargs: Keyword arguments to set as attributes, such as
-                `RawData(log=True, dataset_duplicates=df_duplicates)`
+                `RawData(log=True, dataset_duplicates=df_duplicates)`.
         """
         self.log = log
 
@@ -94,7 +94,7 @@ class RawData:
 @dataclass
 class ResultTable:
     """
-    A dataclass that holds the table summary of result
+    A dataclass that holds the table summary of result.
     """
 
     data: Union[List[Any], pd.DataFrame]
@@ -123,33 +123,33 @@ class ResultTable:
 
 @dataclass
 class Result:
-    """Base Class for test suite results"""
+    """Base Class for test suite results."""
 
     result_id: str = None
     name: str = None
 
     def __str__(self) -> str:
-        """May be overridden by subclasses"""
+        """May be overridden by subclasses."""
         return self.__class__.__name__
 
     @abstractmethod
     def to_widget(self):
-        """Create an ipywdiget representation of the result... Must be overridden by subclasses"""
+        """Create an ipywidget representation of the result... Must be overridden by subclasses."""
         raise NotImplementedError
 
     @abstractmethod
     def log(self):
-        """Log the result... Must be overridden by subclasses"""
+        """Log the result... Must be overridden by subclasses."""
         raise NotImplementedError
 
     def show(self):
-        """Display the result... May be overridden by subclasses"""
+        """Display the result... May be overridden by subclasses."""
         display(self.to_widget())
 
 
 @dataclass
 class ErrorResult(Result):
-    """Result for test suites that fail to load or run properly"""
+    """Result for test suites that fail to load or run properly."""
 
     name: str = "Failed Test"
     error: Exception = None
@@ -167,7 +167,7 @@ class ErrorResult(Result):
 
 @dataclass
 class TestResult(Result):
-    """Test result"""
+    """Test result."""
 
     name: str = "Test Result"
     ref_id: str = None
@@ -245,12 +245,12 @@ class TestResult(Result):
         table: Union[ResultTable, pd.DataFrame, List[Dict[str, Any]]],
         title: Optional[str] = None,
     ):
-        """Add a new table to the result
+        """Add a new table to the result.
 
         Args:
-            table (Union[ResultTable, pd.DataFrame, List[Dict[str, Any]]]): The table to add
+            table (Union[ResultTable, pd.DataFrame, List[Dict[str, Any]]]): The table to add.
             title (Optional[str]): The title of the table (can optionally be provided for
-                pd.DataFrame and List[Dict[str, Any]] tables)
+                pd.DataFrame and List[Dict[str, Any]] tables).
         """
         if self.tables is None:
             self.tables = []
@@ -261,10 +261,10 @@ class TestResult(Result):
         self.tables.append(table)
 
     def remove_table(self, index: int):
-        """Remove a table from the result by index
+        """Remove a table from the result by index.
 
         Args:
-            index (int): The index of the table to remove (default is 0)
+            index (int): The index of the table to remove (default is 0).
         """
         if self.tables is None:
             return
@@ -289,10 +289,10 @@ class TestResult(Result):
                 - plotly.graph_objs.Figure: A plotly figure
                 - plotly.graph_objs.FigureWidget: A plotly figure widget
                 - bytes: A PNG image as raw bytes
-                - validmind.vm_models.figure.Figure: A ValidMind figure object
+                - validmind.vm_models.figure.Figure: A ValidMind figure object.
 
         Returns:
-            None
+            None.
         """
         if self.figures is None:
             self.figures = []
@@ -311,10 +311,10 @@ class TestResult(Result):
         self.figures.append(figure)
 
     def remove_figure(self, index: int = 0):
-        """Remove a figure from the result by index
+        """Remove a figure from the result by index.
 
         Args:
-            index (int): The index of the figure to remove (default is 0)
+            index (int): The index of the figure to remove (default is 0).
         """
         if self.figures is None:
             return
@@ -350,7 +350,7 @@ class TestResult(Result):
 
     @classmethod
     def _get_client_config(cls):
-        """Get the client config, loading it if not cached"""
+        """Get the client config, loading it if not cached."""
         if cls._client_config_cache is None:
             api_client.reload()
             cls._client_config_cache = api_client.client_config
@@ -368,7 +368,7 @@ class TestResult(Result):
         return cls._client_config_cache
 
     def check_result_id_exist(self):
-        """Check if the result_id exists in any test block across all sections"""
+        """Check if the result_id exists in any test block across all sections."""
         client_config = self._get_client_config()
 
         # Iterate through all sections
@@ -389,7 +389,7 @@ class TestResult(Result):
     def _validate_section_id_for_block(
         self, section_id: str, position: Union[int, None] = None
     ):
-        """Validate the section_id exits on the template before logging"""
+        """Validate the section_id exits on the template before logging."""
         client_config = self._get_client_config()
         found = False
 
@@ -428,7 +428,7 @@ class TestResult(Result):
                 )
 
     def serialize(self):
-        """Serialize the result for the API"""
+        """Serialize the result for the API."""
         return {
             "test_name": self.result_id,
             "title": self.title,
@@ -486,15 +486,15 @@ class TestResult(Result):
         return await asyncio.gather(*tasks)
 
     def log(self, section_id: str = None, position: int = None, unsafe: bool = False):
-        """Log the result to ValidMind
+        """Log the result to ValidMind.
 
         Args:
             section_id (str): The section ID within the model document to insert the
-                test result
+                test result.
             position (int): The position (index) within the section to insert the test
-                result
+                result.
             unsafe (bool): If True, log the result even if it contains sensitive data
-                i.e. raw data from input datasets
+                i.e. raw data from input datasets.
         """
 
         self.check_result_id_exist()

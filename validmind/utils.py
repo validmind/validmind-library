@@ -63,20 +63,20 @@ T = TypeVar('T')
 
 def parse_version(version: str) -> tuple[int, ...]:
     """
-    Parse a semver version string into a tuple of major, minor, patch integers
+    Parse a semver version string into a tuple of major, minor, patch integers.
 
     Args:
-        version (str): The semantic version string to parse
+        version (str): The semantic version string to parse.
 
     Returns:
-        tuple[int, ...]: A tuple of major, minor, patch integers
+        tuple[int, ...]: A tuple of major, minor, patch integers.
     """
     return tuple(int(x) for x in version.split(".")[:3])
 
 
 def is_notebook() -> bool:
     """
-    Checks if the code is running in a Jupyter notebook or IPython shell
+    Checks if the code is running in a Jupyter notebook or IPython shell.
 
     https://stackoverflow.com/questions/15411967/how-can-i-check-if-code-is-executed-in-the-ipython-notebook
     """
@@ -210,9 +210,7 @@ class HumanReadableEncoder(NumpyEncoder):
 
 
 def get_full_typename(o: Any) -> Any:
-    """We determine types based on type names so we don't have to import
-    (and therefore depend on) PyTorch, TensorFlow, etc.
-    """
+    """We determine types based on type names so we don't have to import."""
     instance_name = o.__class__.__module__ + "." + o.__class__.__name__
     if instance_name in ["builtins.module", "__builtin__.module"]:
         return o.__name__
@@ -314,9 +312,9 @@ def format_key_values(key_values: Dict[str, Any]) -> Dict[str, Any]:
 
 def summarize_data_quality_results(results):
     """
-    TODO: generalize this to work with metrics and test results
+    TODO: generalize this to work with metrics and test results.
 
-    Summarize the results of the data quality test suite
+    Summarize the results of the data quality test suite.
     """
     test_results = []
     for result in results:
@@ -355,7 +353,7 @@ def format_number(number):
 
 
 def format_dataframe(df: pd.DataFrame) -> pd.DataFrame:
-    """Format a pandas DataFrame for display purposes"""
+    """Format a pandas DataFrame for display purposes."""
     df = df.style.set_properties(**{"text-align": "left"}).hide(axis="index")
     return df.set_table_styles([dict(selector="th", props=[("text-align", "left")])])
 
@@ -366,20 +364,20 @@ def run_async(
     name: Optional[str] = None,
     **kwargs: Any
 ) -> T:
-    """Helper function to run functions asynchronously
+    """Helper function to run functions asynchronously.
 
     This takes care of the complexity of running the logging functions asynchronously. It will
-    detect the type of environment we are running in (ipython notebook or not) and run the
+    detect the type of environment we are running in (IPython notebook or not) and run the
     function accordingly.
 
     Args:
-        func: The function to run asynchronously
-        *args: The arguments to pass to the function
-        name: Optional name for the task
-        **kwargs: The keyword arguments to pass to the function
+        func: The function to run asynchronously.
+        *args: The arguments to pass to the function.
+        name: Optional name for the task.
+        **kwargs: The keyword arguments to pass to the function.
 
     Returns:
-        The result of the function
+        The result of the function.
     """
     try:
         if asyncio.get_event_loop().is_running() and is_notebook():
@@ -402,15 +400,15 @@ def run_async_check(
     *args: Any,
     **kwargs: Any
 ) -> Optional[asyncio.Task[T]]:
-    """Helper function to run functions asynchronously if the task doesn't already exist
+    """Helper function to run functions asynchronously if the task doesn't already exist.
 
     Args:
-        func: The function to run asynchronously
-        *args: The arguments to pass to the function
-        **kwargs: The keyword arguments to pass to the function
+        func: The function to run asynchronously.
+        *args: The arguments to pass to the function.
+        **kwargs: The keyword arguments to pass to the function.
 
     Returns:
-        Optional[asyncio.Task[T]]: The task if created or found, None otherwise
+        Optional[asyncio.Task[T]]: The task if created or found, None otherwise.
     """
     if __loop:
         return  # we don't need this if we are using our own loop
@@ -429,15 +427,15 @@ def run_async_check(
 
 
 def fuzzy_match(string: str, search_string: str, threshold: float = 0.7) -> bool:
-    """Check if a string matches another string using fuzzy matching
+    """Check if a string matches another string using fuzzy matching.
 
     Args:
-        string (str): The string to check
-        search_string (str): The string to search for
-        threshold (float): The similarity threshold to use (Default: 0.7)
+        string (str): The string to check.
+        search_string (str): The string to search for.
+        threshold (float): The similarity threshold to use (Default: 0.7).
 
     Returns:
-        bool: True if the string matches the search string, False otherwise
+        bool: True if the string matches the search string, False otherwise.
     """
     score = difflib.SequenceMatcher(None, string, search_string).ratio()
 
@@ -468,7 +466,7 @@ def test_id_to_name(test_id: str) -> str:
 
 
 def get_model_info(model):
-    """Attempts to extract all model info from a model object instance"""
+    """Attempts to extract all model info from a model object instance."""
     architecture = model.name
     framework = model.library
     framework_version = model.library_version
@@ -492,7 +490,7 @@ def get_model_info(model):
 
 
 def get_dataset_info(dataset):
-    """Attempts to extract all dataset info from a dataset object instance"""
+    """Attempts to extract all dataset info from a dataset object instance."""
     num_rows, num_cols = dataset.df.shape
     schema = dataset.df.dtypes.apply(lambda x: x.name).to_dict()
     description = (
@@ -511,7 +509,7 @@ def preview_test_config(config):
     """Preview test configuration in a collapsible HTML section.
 
     Args:
-        config (dict): Test configuration dictionary
+        config (dict): Test configuration dictionary.
     """
 
     try:
@@ -535,7 +533,7 @@ def preview_test_config(config):
 
 
 def display(widget_or_html, syntax_highlighting=True, mathjax=True):
-    """Display widgets with extra goodies (syntax highlighting, MathJax, etc.)"""
+    """Display widgets with extra goodies (syntax highlighting, MathJax, etc.)."""
     if isinstance(widget_or_html, str):
         ipy_display(HTML(widget_or_html))
         # if html we can auto-detect if we actually need syntax highlighting or MathJax
@@ -552,7 +550,7 @@ def display(widget_or_html, syntax_highlighting=True, mathjax=True):
 
 
 def md_to_html(md: str, mathml=False) -> str:
-    """Converts Markdown to HTML using mistune with plugins"""
+    """Converts Markdown to HTML using mistune with plugins."""
     # use mistune with math plugin to convert to html
     html = mistune.create_markdown(
         plugins=["math", "table", "strikethrough", "footnotes"]

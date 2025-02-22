@@ -2,7 +2,7 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-"""ValidMind logging module."""
+"""ValidMind logging module"""
 
 import logging
 import os
@@ -18,7 +18,7 @@ __dsn = "https://48f446843657444aa1e2c0d716ef864b@o1241367.ingest.sentry.io/4505
 
 
 def _get_log_level() -> int:
-    """Get the log level from the environment variable"""
+    """Get the log level from the environment variable."""
     log_level_str = os.getenv("LOG_LEVEL", "INFO").upper()
 
     if log_level_str not in ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]:
@@ -31,7 +31,7 @@ def get_logger(
     name: str = "validmind",
     log_level: Optional[int] = None
 ) -> logging.Logger:
-    """Get a logger for the given module name"""
+    """Get a logger for the given module name."""
     formatter = logging.Formatter(
         fmt="%(asctime)s - %(levelname)s(%(name)s): %(message)s"
     )
@@ -57,20 +57,20 @@ def get_logger(
 
 
 def init_sentry(server_config: Dict[str, Any]) -> None:
-    """Initialize Sentry SDK for sending logs back to ValidMind
+    """Initialize Sentry SDK for sending logs back to ValidMind.
 
-    This will usually only be called by the api_client module to initialize the
-    sentry connection after the user calls `validmind.init()`. This is because the DSN
+    This will usually only be called by the API client module to initialize the
+    Sentry connection after the user calls `validmind.init()`. This is because the DSN
     and other config options will be returned by the API.
 
     Args:
-        server_config (Dict[str, Any]): The config dictionary returned by the API
-            - send_logs (bool): Whether to send logs to Sentry (gets removed)
-            - dsn (str): The Sentry DSN
-            ...: Other config options for Sentry
+        server_config (Dict[str, Any]): The config dictionary returned by the API.
+            - send_logs (bool): Whether to send logs to Sentry (gets removed).
+            - dsn (str): The Sentry DSN.
+            ...: Other config options for Sentry.
 
     Returns:
-        None
+        None.
     """
     if os.getenv("VM_NO_TELEMETRY", False):
         return
@@ -103,15 +103,15 @@ def log_performance(
     logger: Optional[logging.Logger] = None,
     force: bool = False
 ) -> Callable[[F], F]:
-    """Decorator to log the time it takes to run a function
+    """Decorator to log the time it takes to run a function.
 
     Args:
         name (str, optional): The name of the function. Defaults to None.
         logger (logging.Logger, optional): The logger to use. Defaults to None.
-        force (bool, optional): Whether to force logging even if env var is off
+        force (bool, optional): Whether to force logging even if env var is off.
 
     Returns:
-        Callable: The decorated function
+        Callable: The decorated function.
     """
     def decorator(func: F) -> F:
         # check if log level is set to debug
@@ -169,10 +169,10 @@ async def log_performance_async(
 
 
 def send_single_error(error: Exception) -> None:
-    """Send a single error to Sentry
+    """Send a single error to Sentry.
 
     Args:
-        error (Exception): The exception to send
+        error (Exception): The exception to send.
     """
     event, hint = event_from_exception(exc_info_from_error(error))
     client = sentry_sdk.Client(__dsn, release=f"validmind-python@{__version__}")

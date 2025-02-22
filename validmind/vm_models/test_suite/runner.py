@@ -17,7 +17,7 @@ logger = get_logger(__name__)
 
 class TestSuiteRunner:
     """
-    Runs a test suite
+    Runs a test suite.
     """
 
     suite: TestSuite = None
@@ -36,7 +36,7 @@ class TestSuiteRunner:
         self._load_config(inputs)
 
     def _load_config(self, inputs: dict = None):
-        """Splits the config into a global config and test configs"""
+        """Splits the config into a global config and test configs."""
         self._test_configs = {
             test.test_id: {"inputs": inputs or {}} for test in self.suite.get_tests()
         }
@@ -59,7 +59,7 @@ class TestSuiteRunner:
 
     def _start_progress_bar(self, send: bool = True):
         """
-        Initializes the progress bar elements
+        Initializes the progress bar elements.
         """
         # TODO: make this work for when user runs only a section of the test suite
         # if we are sending then there is a task for each test and logging its result
@@ -76,7 +76,7 @@ class TestSuiteRunner:
         self.pbar.close()
 
     async def log_results(self):
-        """Logs the results of the test suite to ValidMind
+        """Logs the results of the test suite to ValidMind.
 
         This method will be called after the test suite has been run and all results have been
         collected. This method will log the results to ValidMind.
@@ -127,7 +127,7 @@ class TestSuiteRunner:
         summary.display()
 
     def run(self, send: bool = True, fail_fast: bool = False):
-        """Runs the test suite, renders the summary and sends the results to ValidMind
+        """Runs the test suite, renders the summary and sends the results to ValidMind.
 
         Args:
             send (bool, optional): Whether to send the results to ValidMind.

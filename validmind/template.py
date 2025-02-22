@@ -147,10 +147,10 @@ def _create_section_widget(tree: List[Dict[str, Any]]) -> Accordion:
 
 
 def preview_template(template: str) -> None:
-    """Preview a template in Jupyter Notebook
+    """Preview a template in Jupyter Notebook.
 
     Args:
-        template (dict): The template to preview
+        template (dict): The template to preview.
     """
     if not is_notebook():
         logger.warning("preview_template() only works in Jupyter Notebook")
@@ -188,13 +188,13 @@ def _get_section_tests(section: Dict[str, Any]) -> List[str]:
 
 def _create_test_suite_section(section: Dict[str, Any]) -> Dict[str, Any]:
     """Create a section object for a test suite that contains the tests in a section
-    in the template
+    in the template.
 
     Args:
-        section: a section of a template (in tree form)
+        section: A section of a template (in tree form).
 
     Returns:
-        A TestSuite section dict
+        A TestSuite section dict.
     """
     if section_tests := _get_section_tests(section):
         return {
@@ -212,11 +212,11 @@ def _create_template_test_suite(
     Create and run a test suite from a template.
 
     Args:
-        template: A valid flat template
-        section: The section of the template to run (if not provided, run all sections)
+        template: A valid flat template.
+        section: The section of the template to run. Runs all sections if not provided.
 
     Returns:
-        A dynamically-create TestSuite Class
+        A dynamically-created TestSuite Class.
     """
     section_tree = _convert_sections_to_section_tree(
         sections=template["sections"],
@@ -243,16 +243,16 @@ def get_template_test_suite(
     template: str,
     section: Optional[str] = None
 ) -> TestSuite:
-    """Get a TestSuite instance containing all tests in a template
+    """Get a TestSuite instance containing all tests in a template.
 
     This function will collect all tests used in a template into a dynamically-created
-    TestSuite object
+    TestSuite object.
 
     Args:
         template: A valid flat template
         section: The section of the template to run (if not provided, run all sections)
 
     Returns:
-        The TestSuite instance
+        The TestSuite instance.
     """
     return _create_template_test_suite(template, section)()

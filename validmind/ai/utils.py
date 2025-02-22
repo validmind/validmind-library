@@ -24,7 +24,7 @@ class DescriptionFuture:
     the tests can continue to be run in parallel while the description is
     retrieved asynchronously.
 
-    The value will be retrieved later and if its not ready yet, it should
+    The value will be retrieved later and, if it is not ready yet, it should
     block until it is.
     """
 
@@ -42,7 +42,7 @@ class DescriptionFuture:
 
 
 def get_client_and_model():
-    """Get model and client to use for generating interpretations
+    """Get model and client to use for generating interpretations.
 
     On first call, it will look in the environment for the API key endpoint, model etc.
     and store them in a global variable to avoid loading them up again.

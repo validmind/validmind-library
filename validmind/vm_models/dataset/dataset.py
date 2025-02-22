@@ -25,9 +25,9 @@ logger = get_logger(__name__)
 
 
 class VMDataset(VMInput):
-    """Base class for VM datasets
+    """Base class for VM datasets.
 
-    Child classes should be used to support new dataset types (tensor, polars etc)
+    Child classes should be used to support new dataset types (tensor, polars etc.)
     by converting the user's dataset into a numpy array collecting metadata like
     column names and then call this (parent) class `__init__` method.
 
