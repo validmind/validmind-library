@@ -10,6 +10,16 @@ toc-expand: 4
 
 Models entrypoint
 
+## R_MODEL_TYPES
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw"></span><span class="name">R_MODEL_TYPES</span>():
+
+:::
+
 <!-- class.qmd.jinja2 -->
 
 ## [class]{.muted} Figure

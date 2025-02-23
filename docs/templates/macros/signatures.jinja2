@@ -1,7 +1,7 @@
 {%- from 'macros/types.jinja2' import format_type -%}
 {%- from 'macros/decorators.jinja2' import render_decorators -%}
 
-{%- macro render_signature(member) -%}
+{%- macro render_signature(member, full_data=None, module=None) -%}
 <!-- signatures.jinja2 -->
 ::: {.signature}
 
@@ -11,12 +11,20 @@
 <span class="kw">
   {%- if member.kind == "class" or member.kind == "alias" -%}class
   {%- elif member.kind == "function" or member.kind == "method" -%}def
-  {%- else -%}{{ member.kind }}
   {%- endif -%}
 </span>
 {%- endif -%}
 <span class="name">{{ member.parent.name if (member.name == "__init__" and member.parent is defined) else member.name }}</span>
-{%- if member.kind == "class" -%}
+{%- if member.kind == "attribute" and member.value and full_data and member.name in get_all_members(full_data['validmind'].get('members', {})) -%}
+  {%- if is_public(member, module, full_data) -%}
+  <span class="o">=</span>
+  <span class="default_value">[
+  {%- for element in member.value.elements -%}
+    {{ element }}{% if not loop.last %}, {% endif %}
+  {%- endfor -%}
+  ]</span>
+  {%- endif -%}
+{%- elif member.kind == "class" -%}
 {%- elif member.parameters -%}({{- '' -}}
   {%- set params = [] -%}
   {# Add self parameter for methods that aren't __init__ #}
