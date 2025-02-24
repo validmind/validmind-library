@@ -1,3 +1,20 @@
+#quarto-sidebar.sidebar {
+  background-color: #FFFFFF !important; 
+}
+
+.sidebar-header .sidebar-title a {
+text-decoration: none;
+}
+
+.sidebar.sidebar-navigation:not(.rollup) {
+border-right: none !important;
+}
+
+nav#TOC {
+  border: none;
+  background-color: #fff;
+}
+
 .muted {
   opacity: 0.6;
 }
