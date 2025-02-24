@@ -24,6 +24,13 @@
   {%- endfor -%}
   ]</span>
   {%- endif -%}
+{%- elif member.kind == "attribute" and member.value and module and module.name == "vm_models" -%}
+  <span class="o">=</span>
+  <span class="default_value">[
+  {%- for element in member.value.elements -%}
+    {{ element }}{% if not loop.last %}, {% endif %}
+  {%- endfor -%}
+  ]</span>
 {%- elif member.kind == "class" -%}
 {%- elif member.parameters -%}({{- '' -}}
   {%- set params = [] -%}

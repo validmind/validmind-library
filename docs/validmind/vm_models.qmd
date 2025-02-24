@@ -16,7 +16,7 @@ Models entrypoint
 
 ::: {.signature}
 
-<span class="kw"></span><span class="name">R_MODEL_TYPES</span>():
+<span class="kw"></span><span class="name">R_MODEL_TYPES</span><span class="o">=</span> <span class="default_value">['LogisticRegression', 'LinearRegression', 'XGBClassifier', 'XGBRegressor']</span>:
 
 :::
 
