@@ -43,7 +43,7 @@ logger = get_logger(__name__)
 
 
 def init_dataset(
-    dataset: Union[pd.DataFrame, pl.DataFrame, "np.ndarray", "torch.utils.data.Dataset"],
+    dataset: Union[pd.DataFrame, pl.DataFrame, "np.ndarray", "torch.utils.data.TensorDataset"],
     model: Optional[VMModel] = None,
     index: Optional[Any] = None,
     index_name: Optional[str] = None,
