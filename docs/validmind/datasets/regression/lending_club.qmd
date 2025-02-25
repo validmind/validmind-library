@@ -36,10 +36,10 @@ Split a time series DataFrame into train, validation, and test sets.
 
 **Arguments**
 
-- `df` (pandas.DataFrame): The time series DataFrame to be split.
-- `split_option` (str): The split option to choose from: 'train_test_val' (default) or 'train_test'.
-- `train_size` (float): The proportion of the dataset to include in the training set. Default is 0.6.
-- `test_size` (float): The proportion of the dataset to include in the test set. Default is 0.2.
+- `df (pandas.DataFrame)`: The time series DataFrame to be split.
+- `split_option (str)`: The split option to choose from: 'train_test_val' (default) or 'train_test'.
+- `train_size (float)`: The proportion of the dataset to include in the training set. Default is 0.6.
+- `test_size (float)`: The proportion of the dataset to include in the test set. Default is 0.2.
 
 **Returns**
 

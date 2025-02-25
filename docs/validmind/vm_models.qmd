@@ -192,10 +192,6 @@ Test result.
 
 **Inherited members**
 
-**Properties**
-
-- **test_name**: Get the test name, using custom title if available.
-
 ### [TestResult[()]{.muted}](#__init__)
 
 <!-- signatures.jinja2 -->
@@ -249,8 +245,8 @@ Add a new table to the result.
 
 **Arguments**
 
-- `table` (Union\[ResultTable, pd.DataFrame, List\[Dict[str, Any]\]\]): The table to add.
-- `title` (Optional[str]): The title of the table (can optionally be provided for pd.DataFrame and List\[Dict[str, Any]\] tables).
+- `table (Union[ResultTable, pd.DataFrame, List[Dict[str, Any]]])`: The table to add.
+- `title (Optional[str])`: The title of the table (can optionally be provided for pd.DataFrame and List\[Dict[str, Any]\] tables).
 
 ### [check_result_id_exist[()]{.muted}](#check_result_id_exist)
 
@@ -282,9 +278,9 @@ Log the result to ValidMind.
 
 **Arguments**
 
-- `section_id` (str): The section ID within the model document to insert the test result.
-- `position` (int): The position (index) within the section to insert the test result.
-- `unsafe` (bool): If True, log the result even if it contains sensitive data i.e. raw data from input datasets.
+- `section_id (str)`: The section ID within the model document to insert the test result.
+- `position (int)`: The position (index) within the section to insert the test result.
+- `unsafe (bool)`: If True, log the result even if it contains sensitive data i.e. raw data from input datasets.
 
 ### [log_async[()]{.muted}](#log_async)
 
@@ -312,7 +308,7 @@ Remove a figure from the result by index.
 
 **Arguments**
 
-- `index` (int): The index of the figure to remove (default is 0).
+- `index (int)`: The index of the figure to remove (default is 0).
 
 ### [remove_table[()]{.muted}](#remove_table)
 
@@ -330,7 +326,7 @@ Remove a table from the result by index.
 
 **Arguments**
 
-- `index` (int): The index of the table to remove (default is 0).
+- `index (int)`: The index of the table to remove (default is 0).
 
 ### [serialize[()]{.muted}](#serialize)
 
@@ -355,6 +351,20 @@ Serialize the result for the API.
 <span class="kw">def</span><span class="name">to_widget</span>(<span class="param"><span class="bp">self</span></span>):
 
 :::
+
+### [test_name]{.property}
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw"></span><span class="name">test_name</span>():
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Get the test name, using custom title if available.
 
 <!-- class.qmd.jinja2 -->
 
@@ -492,8 +502,8 @@ Runs the test suite, renders the summary and sends the results to ValidMind.
 
 **Arguments**
 
-- `send` (bool, optional): Whether to send the results to ValidMind. Defaults to True.
-- `fail_fast` (bool, optional): Whether to stop running tests after the first failure. Defaults to False.
+- `send (bool, optional)`: Whether to send the results to ValidMind. Defaults to True.
+- `fail_fast (bool, optional)`: Whether to stop running tests after the first failure. Defaults to False.
 
 ### [summarize[()]{.muted}](#summarize)
 
@@ -527,26 +537,20 @@ This way we can support multiple dataset types but under the hood we only need t
 
 **Arguments**
 
-- `raw_dataset` (np.ndarray): The raw dataset as a NumPy array.
-- `input_id` (str): Identifier for the dataset.
-- `index` (np.ndarray): The raw dataset index as a NumPy array.
-- `columns` (Set[str]): The column names of the dataset.
-- `target_column` (str): The target column name of the dataset.
-- `feature_columns` (List[str]): The feature column names of the dataset.
-- `feature_columns_numeric` (List[str]): The numeric feature column names of the dataset.
-- `feature_columns_categorical` (List[str]): The categorical feature column names of the dataset.
-- `text_column` (str): The text column name of the dataset for NLP tasks.
-- `target_class_labels` (Dict): The class labels for the target columns.
-- `df` (pd.DataFrame): The dataset as a pandas DataFrame.
-- `extra_columns` (Dict): Extra columns to include in the dataset.
+- `raw_dataset (np.ndarray)`: The raw dataset as a NumPy array.
+- `input_id (str)`: Identifier for the dataset.
+- `index (np.ndarray)`: The raw dataset index as a NumPy array.
+- `columns (Set[str])`: The column names of the dataset.
+- `target_column (str)`: The target column name of the dataset.
+- `feature_columns (List[str])`: The feature column names of the dataset.
+- `feature_columns_numeric (List[str])`: The numeric feature column names of the dataset.
+- `feature_columns_categorical (List[str])`: The categorical feature column names of the dataset.
+- `text_column (str)`: The text column name of the dataset for NLP tasks.
+- `target_class_labels (Dict)`: The class labels for the target columns.
+- `df (pd.DataFrame)`: The dataset as a pandas DataFrame.
+- `extra_columns (Dict)`: Extra columns to include in the dataset.
 
 **Inherited members**
-
-**Properties**
-
-- **df**: Returns the dataset as a pandas DataFrame. **Returns** - The dataset as a pandas DataFrame.
-- **x**: Returns the input features (X) of the dataset. **Returns** - The input features.
-- **y**: Returns the target variables (y) of the dataset. **Returns** - The target variables.
 
 ### [VMDataset[()]{.muted}](#__init__)
 
@@ -564,17 +568,17 @@ Initializes a VMDataset instance.
 
 **Arguments**
 
-- `raw_dataset` (np.ndarray): The raw dataset as a NumPy array.
-- `input_id` (str): Identifier for the dataset.
-- `model` (VMModel): Model associated with the dataset.
-- `index` (np.ndarray): The raw dataset index as a NumPy array.
-- `index_name` (str): The raw dataset index name as a NumPy array.
-- `date_time_index` (bool): Whether the index is a datetime index.
-- `columns` (List[str], optional): The column names of the dataset. Defaults to None.
-- `target_column` (str, optional): The target column name of the dataset. Defaults to None.
-- `feature_columns` (str, optional): The feature column names of the dataset. Defaults to None.
-- `text_column` (str, optional): The text column name of the dataset for nlp tasks. Defaults to None.
-- `target_class_labels` (Dict, optional): The class labels for the target columns. Defaults to None.
+- `raw_dataset (np.ndarray)`: The raw dataset as a NumPy array.
+- `input_id (str)`: Identifier for the dataset.
+- `model (VMModel)`: Model associated with the dataset.
+- `index (np.ndarray)`: The raw dataset index as a NumPy array.
+- `index_name (str)`: The raw dataset index name as a NumPy array.
+- `date_time_index (bool)`: Whether the index is a datetime index.
+- `columns (List[str], optional)`: The column names of the dataset. Defaults to None.
+- `target_column (str, optional)`: The target column name of the dataset. Defaults to None.
+- `feature_columns (str, optional)`: The feature column names of the dataset. Defaults to None.
+- `text_column (str, optional)`: The text column name of the dataset for nlp tasks. Defaults to None.
+- `target_class_labels (Dict, optional)`: The class labels for the target columns. Defaults to None.
 
 ### [add_extra_column[()]{.muted}](#add_extra_column)
 
@@ -592,8 +596,8 @@ Adds an extra column to the dataset without modifying the dataset `features` and
 
 **Arguments**
 
-- `column_name` (str): The name of the extra column.
-- `column_values` (np.ndarray): The values of the extra column.
+- `column_name (str)`: The name of the extra column.
+- `column_values (np.ndarray)`: The values of the extra column.
 
 ### [assign_predictions[()]{.muted}](#assign_predictions)
 
@@ -611,12 +615,12 @@ Assign predictions and probabilities to the dataset.
 
 **Arguments**
 
-- `model` (VMModel): The model used to generate the predictions.
-- `prediction_column` (Optional[str]): The name of the column containing the predictions.
-- `prediction_values` (Optional\[List[Any]\]): The values of the predictions.
-- `probability_column` (Optional[str]): The name of the column containing the probabilities.
-- `probability_values` (Optional\[List[float]\]): The values of the probabilities.
-- `prediction_probabilities` (Optional\[List[float]\]): DEPRECATED: The values of the probabilities.
+- `model (VMModel)`: The model used to generate the predictions.
+- `prediction_column (Optional[str])`: The name of the column containing the predictions.
+- `prediction_values (Optional[List[Any]])`: The values of the predictions.
+- `probability_column (Optional[str])`: The name of the column containing the probabilities.
+- `probability_values (Optional[List[float]])`: The values of the probabilities.
+- `prediction_probabilities (Optional[List[float]])`: DEPRECATED: The values of the probabilities.
 - `**kwargs`: Additional keyword arguments that will get passed through to the model's `predict` method.
 
 ### [prediction_column[()]{.muted}](#prediction_column)
@@ -730,7 +734,7 @@ Attempts to stack complex prediction types (e.g., embeddings) into a single, mul
 
 **Arguments**
 
-- `model` (VMModel): The model whose predictions are sought.
+- `model (VMModel)`: The model whose predictions are sought.
 
 **Returns**
 
@@ -766,7 +770,7 @@ Returns the probabilities for a given model.
 
 **Arguments**
 
-- `model` (str): The ID of the model whose predictions are sought.
+- `model (str)`: The ID of the model whose predictions are sought.
 
 **Returns**
 
@@ -785,6 +789,60 @@ Returns the probabilities for a given model.
 <!-- docstring.jinja2 -->
 
 Returns a dataframe containing the probabilities for a given model
+
+### [df]{.property}
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw"></span><span class="name">df</span>():
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Returns the dataset as a pandas DataFrame.
+
+**Returns**
+
+- The dataset as a pandas DataFrame.
+
+### [x]{.property}
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw"></span><span class="name">x</span>():
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Returns the input features (X) of the dataset.
+
+**Returns**
+
+- The input features.
+
+### [y]{.property}
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw"></span><span class="name">y</span>():
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Returns the target variables (y) of the dataset.
+
+**Returns**
+
+- The target variables.
 
 <!-- class.qmd.jinja2 -->
 
@@ -846,10 +904,10 @@ An base class that wraps a trained model instance and its associated data.
 
 **Arguments**
 
-- `model` (object, optional): The trained model instance. Defaults to None.
-- `input_id` (str, optional): The input ID for the model. Defaults to None.
-- `attributes` (ModelAttributes, optional): The attributes of the model. Defaults to None.
-- `name` (str, optional): The name of the model. Defaults to the class name.
+- `model (object, optional)`: The trained model instance. Defaults to None.
+- `input_id (str, optional)`: The input ID for the model. Defaults to None.
+- `attributes (ModelAttributes, optional)`: The attributes of the model. Defaults to None.
+- `name (str, optional)`: The name of the model. Defaults to the class name.
 
 **Inherited members**
 

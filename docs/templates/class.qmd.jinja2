@@ -30,26 +30,7 @@
 {% endif %}
 
 {% if resolved.members %}
-{# First list properties with meaningful docstrings #}
-{% set meaningful_properties = [] %}
-{% for member in resolved.members.values() | sort(attribute='name') %}
-    {% if (member.kind == 'property' or (member.kind == 'attribute' and member.labels is defined and 'property' in member.labels)) and not member.name.startswith('_') %}
-        {% if member.docstring and member.docstring.value and member.docstring.value|trim %}
-            {% set _ = meaningful_properties.append(member) %}
-        {% endif %}
-    {% endif %}
-{% endfor %}
-
-{% if meaningful_properties %}
-**Properties**
-
-{% for member in meaningful_properties %}
-- **{{ member.name }}**: {% if member.docstring %}{{ doc.format_docstring(member.docstring) | striptags | truncate(100) }}{% endif %}
-
-{% endfor %}
-{% endif %}
-
-{# Then list methods #}
+{# First list methods #}
 {% for member in resolved.members.values() | sort(attribute='name') %}
 {% if member.kind in ['method', 'function'] and (not member.name.startswith('_') or member.name == '__init__') %}
 ### [{{ member.name if member.name != '__init__' else resolved.name }}[()]{.muted}](#{{ member.name }})
@@ -67,5 +48,28 @@
 {% endif %}
 
 {% endif %}
+{% endfor %}
+
+{# Then list properties with meaningful docstrings or important properties #}
+{% set meaningful_properties = [] %}
+{% set important_properties = ['df', 'x', 'y'] %}
+{% for member in resolved.members.values() | sort(attribute='name') %}
+    {% if (member.kind == 'property' or (member.kind == 'attribute' and member.labels is defined and 'property' in member.labels)) and not member.name.startswith('_') %}
+        {% if member.docstring and member.docstring.value and member.docstring.value|trim or member.name in important_properties %}
+            {% set _ = meaningful_properties.append(member) %}
+        {% endif %}
+    {% endif %}
+{% endfor %}
+
+{# List properties with proper headings and signatures #}
+{% for member in meaningful_properties %}
+### [{{ member.name }}]{.property}
+
+{{ signatures.render_signature(member) }}
+
+{% if member.docstring %}
+{{ doc.format_docstring(member.docstring) }}
+{% endif %}
+
 {% endfor %}
 {% endif %}

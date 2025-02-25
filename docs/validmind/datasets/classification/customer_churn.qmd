@@ -22,8 +22,8 @@ Preprocess boolean columns.
 
 **Arguments**
 
-- `df` (pandas.DataFrame): Dataframe to preprocess.
-- `columns` (list): List of columns to preprocess.
+- `df (pandas.DataFrame)`: Dataframe to preprocess.
+- `columns (list)`: List of columns to preprocess.
 
 **Returns**
 
@@ -45,8 +45,8 @@ Preprocess categorical columns.
 
 **Arguments**
 
-- `df` (pandas.DataFrame): Dataframe to preprocess.
-- `columns` (list): List of columns to preprocess.
+- `df (pandas.DataFrame)`: Dataframe to preprocess.
+- `columns (list)`: List of columns to preprocess.
 
 **Returns**
 
@@ -68,8 +68,8 @@ Preprocess numerical columns.
 
 **Arguments**
 
-- `df` (pandas.DataFrame): Dataframe to preprocess.
-- `columns` (list): List of columns to preprocess.
+- `df (pandas.DataFrame)`: Dataframe to preprocess.
+- `columns (list)`: List of columns to preprocess.
 
 **Returns**
 

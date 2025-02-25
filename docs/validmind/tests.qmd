@@ -102,8 +102,8 @@ Test IDs are in the format `namespace.path_to_module.TestClassOrFuncName[:tag]`.
 
 **Arguments**
 
-- `test_id` (str): The test ID in the format `namespace.path_to_module.TestName[:tag]`
-- `test_func` (callable, optional): The test function to load. If not provided, the test will be loaded from the test provider. Defaults to None.
+- `test_id (str)`: The test ID in the format `namespace.path_to_module.TestName[:tag]`
+- `test_func (callable, optional)`: The test function to load. If not provided, the test will be loaded from the test provider. Defaults to None.
 
 ## run_test<span class='muted'>()</span>
 
@@ -123,21 +123,21 @@ This function is the main entry point for running tests. It can run simple unit 
 
 **Arguments**
 
-- `test_id` (TestID): Test ID to run. Not required if `name` and `unit_metrics` provided.
-- `params` (dict): Parameters to customize test behavior. See test details for available parameters.
-- `param_grid` (Union\[Dict\[str, List[Any]\], List\[Dict[str, Any]\]\]): For comparison tests, either:
+- `test_id (TestID)`: Test ID to run. Not required if `name` and `unit_metrics` provided.
+- `params (dict)`: Parameters to customize test behavior. See test details for available parameters.
+- `param_grid (Union[Dict[str, List[Any]], List[Dict[str, Any]]])`: For comparison tests, either:
 - Dict mapping parameter names to lists of values (creates Cartesian product)
 - List of parameter dictionaries to test
-- `inputs` (Dict[str, Any]): Test inputs (models/datasets initialized with vm.init_model/dataset)
-- `input_grid` (Union\[Dict\[str, List[Any]\], List\[Dict[str, Any]\]\]): For comparison tests, either:
+- `inputs (Dict[str, Any])`: Test inputs (models/datasets initialized with vm.init_model/dataset)
+- `input_grid (Union[Dict[str, List[Any]], List[Dict[str, Any]]])`: For comparison tests, either:
 - Dict mapping input names to lists of values (creates Cartesian product)
 - List of input dictionaries to test
-- `name` (str): Test name (required for composite metrics)
-- `unit_metrics` (list): Unit metric IDs to run as composite metric
-- `show` (bool, optional): Whether to display results. Defaults to True.
-- `generate_description` (bool, optional): Whether to generate a description. Defaults to True.
-- `title` (str): Custom title for the test result
-- `post_process_fn` (Callable\[[TestResult], None\]): Function to post-process the test result
+- `name (str)`: Test name (required for composite metrics)
+- `unit_metrics (list)`: Unit metric IDs to run as composite metric
+- `show (bool, optional)`: Whether to display results. Defaults to True.
+- `generate_description (bool, optional)`: Whether to generate a description. Defaults to True.
+- `title (str)`: Custom title for the test result
+- `post_process_fn (Callable[[TestResult], None])`: Function to post-process the test result
 
 **Returns**
 
@@ -216,7 +216,7 @@ The function may also include a docstring. This docstring will be used and logge
 
 **Arguments**
 
-- `func_or_id` (Union\[Callable[..., Any], str, None\]): Either the function to decorate or the test ID. If None, the function name is used.
+- `func_or_id (Union[Callable[..., Any], str, None])`: Either the function to decorate or the test ID. If None, the function name is used.
 
 **Returns**
 
@@ -240,8 +240,8 @@ Register an external test provider
 
 **Arguments**
 
-- `namespace` (str): The namespace of the test provider
-- `test_provider` (TestProvider): The test provider
+- `namespace (str)`: The namespace of the test provider
+- `test_provider (TestProvider)`: The test provider
 
 <!-- class.qmd.jinja2 -->
 
@@ -313,7 +313,7 @@ test = test_provider.load_test("my_namespace.my_test_class")
 
 **Arguments**
 
-- `root_folder` (str): The root directory for local tests.
+- `root_folder (str)`: The root directory for local tests.
 
 ### [LocalTestProvider[()]{.muted}](#__init__)
 
@@ -331,7 +331,7 @@ Initialize the LocalTestProvider with the given root_folder (see class docstring
 
 **Arguments**
 
-- `root_folder` (str): The root directory for local tests.
+- `root_folder (str)`: The root directory for local tests.
 
 ### [list_tests[()]{.muted}](#list_tests)
 
@@ -367,7 +367,7 @@ Load the test function identified by the given test_id
 
 **Arguments**
 
-- `test_id` (str): The test ID (does not contain the namespace under which the test is registered)
+- `test_id (str)`: The test ID (does not contain the namespace under which the test is registered)
 
 **Returns**
 
@@ -429,7 +429,7 @@ Load the test function identified by the given test_id
 
 **Arguments**
 
-- `test_id` (str): The test ID (does not contain the namespace under which the test is registered)
+- `test_id (str)`: The test ID (does not contain the namespace under which the test is registered)
 
 **Returns**
 
