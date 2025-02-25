@@ -354,7 +354,7 @@ This function provides a high level interface for running a test suite. A test s
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">tags</span>(<span class="param"><span class="n">\*tags</span><span class="p">:</span><span class="nb">str</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">Callable</span><span class="p">\[</span><span class="p">\[</span><a href="/validmind/validmind/vm_models.html#class-f">validmind.vm_models.F</a><span class="p">\]</span><span class="p">, </span><a href="/validmind/validmind/vm_models.html#class-f">validmind.vm_models.F</a><span class="p">\]</span></span>:
+<span class="kw">def</span><span class="name">tags</span>(<span class="param"><span class="n">\*tags</span><span class="p">:</span><span class="nb">str</span></span>):
 
 :::
 
@@ -372,7 +372,7 @@ Decorator for specifying tags for a test.
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">tasks</span>(<span class="param"><span class="n">\*tasks</span><span class="p">:</span><span class="nb">str</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">Callable</span><span class="p">\[</span><span class="p">\[</span><a href="/validmind/validmind/vm_models.html#class-f">validmind.vm_models.F</a><span class="p">\]</span><span class="p">, </span><a href="/validmind/validmind/vm_models.html#class-f">validmind.vm_models.F</a><span class="p">\]</span></span>:
+<span class="kw">def</span><span class="name">tasks</span>(<span class="param"><span class="n">\*tasks</span><span class="p">:</span><span class="nb">str</span></span>):
 
 :::
 
@@ -390,7 +390,7 @@ Decorator for specifying the task types that a test is designed for.
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">test</span>(<span class="param"><span class="n">func_or_id</span><span class="p">:</span><span class="n">Union</span><span class="p">\[</span><span class="n">Callable</span><span class="p">\[</span><span class="n">...</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span><span class="p">, </span><span class="nb">str</span><span class="p">, </span><span class="n">None</span><span class="p">\]</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">Callable</span><span class="p">\[</span><span class="p">\[</span><a href="/validmind/validmind/vm_models.html#class-f">validmind.vm_models.F</a><span class="p">\]</span><span class="p">, </span><a href="/validmind/validmind/vm_models.html#class-f">validmind.vm_models.F</a><span class="p">\]</span></span>:
+<span class="kw">def</span><span class="name">test</span>(<span class="param"><span class="n">func_or_id</span><span class="p">:</span><span class="n">Union</span><span class="p">\[</span><span class="n">Callable</span><span class="p">\[</span><span class="n">...</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span><span class="p">, </span><span class="nb">str</span><span class="p">, </span><span class="n">None</span><span class="p">\]</span></span>):
 
 :::
 

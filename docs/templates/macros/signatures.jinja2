@@ -82,7 +82,7 @@
   {%- endfor -%})
   {%- else -%}()
 {%- endif -%}
-{%- if member.returns and member.returns != "None" -%}
+{%- if member.returns and member.returns != "None" and member.name not in ["tags", "tasks", "test"] -%}
   <span class="p"> → </span><span class="return-annotation">
     {{- format_type(member.returns, add_links=true) if member.returns else 'Any' -}}
   </span>
