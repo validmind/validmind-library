@@ -136,6 +136,224 @@ Creates a ModelAttributes instance from a dictionary.
 
 <!-- class.qmd.jinja2 -->
 
+## [class]{.muted} ResultTable
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="decorators"><span class="decorator">@<span class="n">dataclass</span></span></span>
+
+<span class="kw">class</span><span class="name">ResultTable</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+A dataclass that holds the table summary of result.
+
+### [ResultTable[()]{.muted}](#__init__)
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="name">ResultTable</span>(<span class="params"><span class="n">data</span><span class="p">:</span><span class="n">Union</span><span class="p">\[</span><span class="n">List</span><span class="p">\[</span><span class="n">Any</span><span class="p">\]</span><span class="p">, </span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">\]</span><span class="muted">,</span></span><span class="params"><span class="n">title</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span></span>)
+
+:::
+
+### [serialize[()]{.muted}](#serialize)
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">serialize</span>(<span class="param"><span class="bp">self</span></span>):
+
+:::
+
+<!-- class.qmd.jinja2 -->
+
+## [class]{.muted} TestResult
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="decorators"><span class="decorator">@<span class="n">dataclass</span></span></span>
+
+<span class="kw">class</span><span class="name">TestResult</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Test result.
+
+**Inherited members**
+
+### [TestResult[()]{.muted}](#__init__)
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="name">TestResult</span>(<span class="params"><span class="n">result_id</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">name</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s1">'Test Result'</span><span class="muted">,</span></span><span class="params"><span class="n">ref_id</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">title</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">doc</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">description</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">Union</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">DescriptionFuture</span><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">metric</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">Union</span><span class="p">\[</span><span class="nb">int</span><span class="p">, </span><span class="nb">float</span><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">tables</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">List</span><span class="p">\[</span><span class="n">ResultTable</span><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">raw_data</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">RawData</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">figures</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">List</span><span class="p">\[</span><span class="n">Figure</span><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">passed</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">bool</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">params</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">inputs</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Union</span><span class="p">\[</span><span class="n">List</span><span class="p">\[</span><span class="n">VMInput</span><span class="p">\]</span><span class="p">, </span><span class="n">VMInput</span><span class="p">\]</span><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">metadata</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">\_was_description_generated</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">\_unsafe</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">\_client_config_cache</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">Any</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span></span>)
+
+:::
+
+### [add_figure[()]{.muted}](#add_figure)
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">add_figure</span>(<span class="params"><span class="bp">self</span><span class="muted">,</span></span><span class="params"><span class="n">figure</span><span class="p">:</span><span class="n">Union</span><span class="p">\[</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">Figure</span><span class="p">, </span><span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">, </span><span class="n">go</span><span class="o">.</span><span class="n">FigureWidget</span><span class="p">, </span><span class="nb">bytes</span><span class="p">, </span><span class="n">Figure</span><span class="p">\]</span></span>):
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Add a new figure to the result.
+
+**Arguments**
+
+- `figure`: The figure to add. Can be one of:
+- matplotlib.figure.Figure: A matplotlib figure
+- plotly.graph_objs.Figure: A plotly figure
+- plotly.graph_objs.FigureWidget: A plotly figure widget
+- bytes: A PNG image as raw bytes
+- validmind.vm_models.figure.Figure: A ValidMind figure object.
+
+**Returns**
+
+- None.
+
+### [add_table[()]{.muted}](#add_table)
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">add_table</span>(<span class="params"><span class="bp">self</span><span class="muted">,</span></span><span class="params"><span class="n">table</span><span class="p">:</span><span class="n">Union</span><span class="p">\[</span><span class="n">ResultTable</span><span class="p">, </span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">, </span><span class="n">List</span><span class="p">\[</span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span><span class="p">\]</span><span class="muted">,</span></span><span class="params"><span class="n">title</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span></span>):
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Add a new table to the result.
+
+**Arguments**
+
+- `table` (Union\[ResultTable, pd.DataFrame, List\[Dict[str, Any]\]\]): The table to add.
+- `title` (Optional[str]): The title of the table (can optionally be provided for pd.DataFrame and List\[Dict[str, Any]\] tables).
+
+### [check_result_id_exist[()]{.muted}](#check_result_id_exist)
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">check_result_id_exist</span>(<span class="param"><span class="bp">self</span></span>):
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Check if the result_id exists in any test block across all sections.
+
+### [log[()]{.muted}](#log)
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">log</span>(<span class="params"><span class="bp">self</span><span class="muted">,</span></span><span class="params"><span class="n">section_id</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">position</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">unsafe</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span></span>):
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Log the result to ValidMind.
+
+**Arguments**
+
+- `section_id` (str): The section ID within the model document to insert the test result.
+- `position` (int): The position (index) within the section to insert the test result.
+- `unsafe` (bool): If True, log the result even if it contains sensitive data i.e. raw data from input datasets.
+
+### [log_async[()]{.muted}](#log_async)
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">log_async</span>(<span class="params"><span class="bp">self</span><span class="muted">,</span></span><span class="params"><span class="n">section_id</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">position</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">unsafe</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span></span>):
+
+:::
+
+### [remove_figure[()]{.muted}](#remove_figure)
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">remove_figure</span>(<span class="params"><span class="bp">self</span><span class="muted">,</span></span><span class="params"><span class="n">index</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="kc">0</span></span>):
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Remove a figure from the result by index.
+
+**Arguments**
+
+- `index` (int): The index of the figure to remove (default is 0).
+
+### [remove_table[()]{.muted}](#remove_table)
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">remove_table</span>(<span class="params"><span class="bp">self</span><span class="muted">,</span></span><span class="params"><span class="n">index</span><span class="p">:</span><span class="nb">int</span></span>):
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Remove a table from the result by index.
+
+**Arguments**
+
+- `index` (int): The index of the table to remove (default is 0).
+
+### [serialize[()]{.muted}](#serialize)
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">serialize</span>(<span class="param"><span class="bp">self</span></span>):
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Serialize the result for the API.
+
+### [to_widget[()]{.muted}](#to_widget)
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">to_widget</span>(<span class="param"><span class="bp">self</span></span>):
+
+:::
+
+<!-- class.qmd.jinja2 -->
+
 ## [class]{.muted} TestSuite
 
 <!-- signatures.jinja2 -->

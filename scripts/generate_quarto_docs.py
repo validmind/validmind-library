@@ -2,7 +2,7 @@
 import json
 import os
 from pathlib import Path
-from typing import Any, Dict, Set, List
+from typing import Any, Dict, Set, List, Optional
 from jinja2 import Environment, FileSystemLoader
 import mdformat
 from docstring_parser import parse, Style
@@ -207,6 +207,29 @@ def collect_documented_items(module: Dict[str, Any], path: List[str], full_data:
 # Add at module level
 written_qmd_files = {}
 
+def find_class_in_all_modules(class_name: str, data: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    """Recursively search for a class in all modules of the data structure."""
+    if not isinstance(data, dict):
+        return None
+        
+    # Check if this is the class we're looking for
+    if data.get('kind') == 'class' and data.get('name') == class_name:
+        return data
+        
+    # Check members if this is a module
+    if 'members' in data:
+        for member_name, member in data['members'].items():
+            # Direct match in members
+            if member_name == class_name and member.get('kind') == 'class':
+                return member
+                
+            # Recursive search in this member
+            result = find_class_in_all_modules(class_name, member)
+            if result:
+                return result
+                
+    return None
+
 def process_module(module: Dict[str, Any], path: List[str], env: Environment, full_data: Dict[str, Any]):
     """Process a module and its submodules."""
     # Parse docstrings first
@@ -214,7 +237,90 @@ def process_module(module: Dict[str, Any], path: List[str], env: Environment, fu
     
     module_dir = os.path.join('docs', *path[:-1])
     ensure_dir(module_dir)
+    
+    # Enhanced debugging for vm_models
+    if path and path[-1] == 'vm_models':
+        print("\n==== VM_MODELS DEBUG ====")
+        print(f"Module path: {path}")
         
+        # Check if ResultTable and TestResult are already in the members
+        if 'ResultTable' in module.get('members', {}):
+            print("ResultTable is already in module members")
+        else:
+            print("ResultTable is NOT in module members")
+            
+        if 'TestResult' in module.get('members', {}):
+            print("TestResult is already in module members")
+        else:
+            print("TestResult is NOT in module members")
+        
+        # Check __all__ list
+        if '__all__' in module.get('members', {}):
+            all_list = get_all_members(module['members'])
+            print(f"__all__ list: {all_list}")
+            
+            # Check if ResultTable and TestResult are in __all__
+            if 'ResultTable' in all_list:
+                print("ResultTable is in __all__")
+            else:
+                print("ResultTable is NOT in __all__")
+                
+            if 'TestResult' in all_list:
+                print("TestResult is in __all__")
+            else:
+                print("TestResult is NOT in __all__")
+        else:
+            print("No __all__ found in module")
+        
+        # Look for result module
+        result_module = None
+        for name, member in module.get('members', {}).items():
+            if name == 'result' and member.get('kind') == 'module':
+                result_module = member
+                print(f"Found result module with {len(member.get('members', {}))} members")
+                
+                # Check if ResultTable and TestResult are in result module
+                if 'ResultTable' in member.get('members', {}):
+                    print("ResultTable is in result module")
+                    # Directly copy it to vm_models
+                    module['members']['ResultTable'] = member['members']['ResultTable']
+                    print("Copied ResultTable to vm_models members")
+                else:
+                    print("ResultTable is NOT in result module")
+                    
+                if 'TestResult' in member.get('members', {}):
+                    print("TestResult is in result module")
+                    # Directly copy it to vm_models
+                    module['members']['TestResult'] = member['members']['TestResult']
+                    print("Copied TestResult to vm_models members")
+                else:
+                    print("TestResult is NOT in result module")
+                break
+        
+        if not result_module:
+            print("Could not find result module")
+            
+            # Try to find the classes directly in the full data structure
+            print("Searching for classes in full data structure...")
+            
+            # Search for ResultTable
+            result_table = find_class_in_all_modules('ResultTable', full_data)
+            if result_table:
+                print(f"Found ResultTable in full data structure at {result_table.get('path', 'unknown path')}")
+                module['members']['ResultTable'] = result_table
+                print("Added ResultTable to vm_models members")
+            else:
+                print("Could not find ResultTable in full data structure")
+                
+            # Search for TestResult
+            test_result = find_class_in_all_modules('TestResult', full_data)
+            if test_result:
+                print(f"Found TestResult in full data structure at {test_result.get('path', 'unknown path')}")
+                module['members']['TestResult'] = test_result
+                print("Added TestResult to vm_models members")
+            else:
+                print("Could not find TestResult in full data structure")
+    
     # Get module template
     module_template = env.get_template('module.qmd.jinja2')
     
