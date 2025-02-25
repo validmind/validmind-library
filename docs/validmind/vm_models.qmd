@@ -192,6 +192,10 @@ Test result.
 
 **Inherited members**
 
+**Properties**
+
+- **test_name**: Get the test name, using custom title if available.
+
 ### [TestResult[()]{.muted}](#__init__)
 
 <!-- signatures.jinja2 -->
@@ -537,6 +541,12 @@ This way we can support multiple dataset types but under the hood we only need t
 - `extra_columns` (Dict): Extra columns to include in the dataset.
 
 **Inherited members**
+
+**Properties**
+
+- **df**: Returns the dataset as a pandas DataFrame. **Returns** - The dataset as a pandas DataFrame.
+- **x**: Returns the input features (X) of the dataset. **Returns** - The input features.
+- **y**: Returns the target variables (y) of the dataset. **Returns** - The target variables.
 
 ### [VMDataset[()]{.muted}](#__init__)
 
