@@ -35,7 +35,7 @@
                         {%- if type_info.endswith(')') and not type_info.startswith('(') -%}
                             {%- set type_info = '(' ~ type_info -%}
                         {%- endif -%}
-                        {%- set _ = sections.append("- `" ~ param.arg_name ~ "` " ~ type_info ~ ": " ~ desc) -%}
+                        {%- set _ = sections.append("- `" ~ param.arg_name ~ " " ~ type_info ~ "`: " ~ desc) -%}
                     {%- else -%}
                         {%- set _ = sections.append("- `" ~ param.arg_name ~ "`: " ~ desc) -%}
                     {%- endif -%}
