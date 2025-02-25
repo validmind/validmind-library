@@ -34,7 +34,7 @@ Describe a test's functionality and parameters
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">list_tags</span>()<span class="p"> → </span><span class="return-annotation"><a href="/validmind/validmind/vm_models.html#class-set">validmind.vm_models.Set</a><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span></span>:
+<span class="kw">def</span><span class="name">list_tags</span>()<span class="p"> → </span><span class="return-annotation"><span class="nb">Set</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span></span>:
 
 :::
 
@@ -48,7 +48,7 @@ List all available tags
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">list_tasks</span>()<span class="p"> → </span><span class="return-annotation"><a href="/validmind/validmind/vm_models.html#class-set">validmind.vm_models.Set</a><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span></span>:
+<span class="kw">def</span><span class="name">list_tasks</span>()<span class="p"> → </span><span class="return-annotation"><span class="nb">Set</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span></span>:
 
 :::
 
