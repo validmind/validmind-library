@@ -98,6 +98,7 @@ def init_sentry(server_config: Dict[str, Any]) -> None:
 F = TypeVar('F', bound=Callable[..., Any])
 AF = TypeVar('AF', bound=Callable[..., Awaitable[Any]])
 
+
 def log_performance(
     name: Optional[str] = None,
     logger: Optional[logging.Logger] = None,

@@ -61,6 +61,7 @@ logger = get_logger(__name__)
 
 T = TypeVar('T')
 
+
 def parse_version(version: str) -> tuple[int, ...]:
     """
     Parse a semver version string into a tuple of major, minor, patch integers.
