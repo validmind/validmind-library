@@ -4,7 +4,7 @@
 
 import warnings
 from warnings import filters as _warnings_filters
-from typing import Dict, List, Optional, Union, Any
+from typing import Dict, List, Optional, Union
 
 import matplotlib.pyplot as plt
 import numpy as np

@@ -10,13 +10,12 @@ from pprint import pformat
 from typing import Any, Callable, Dict, List, Optional, Set, Tuple, Union
 from uuid import uuid4
 
-import pandas as pd
 from ipywidgets import HTML, Accordion
 
 from ..errors import LoadTestError, MissingDependencyError
 from ..html_templates.content_blocks import test_content_block_html
 from ..logging import get_logger
-from ..utils import display, format_dataframe, fuzzy_match, md_to_html, test_id_to_name
+from ..utils import display, fuzzy_match, md_to_html, test_id_to_name
 from ..vm_models import VMDataset, VMModel
 from .__types__ import TestID
 from ._store import test_provider_store, test_store

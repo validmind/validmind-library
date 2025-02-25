@@ -7,7 +7,7 @@
 import logging
 import os
 import time
-from typing import Any, Callable, Dict, Optional, TypeVar, Union, Awaitable
+from typing import Any, Callable, Dict, Optional, TypeVar, Awaitable
 
 import sentry_sdk
 from sentry_sdk.utils import event_from_exception, exc_info_from_error

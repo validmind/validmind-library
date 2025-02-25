@@ -8,6 +8,8 @@ Client interface for all data and model validation functions
 
 import pandas as pd
 import polars as pl
+import numpy as np
+import torch
 from typing import Any, Callable, Dict, List, Optional, Union
 
 from .api_client import log_input as log_input

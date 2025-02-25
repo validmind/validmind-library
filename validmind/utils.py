@@ -12,7 +12,7 @@ import sys
 import warnings
 from datetime import date, datetime, time
 from platform import python_version
-from typing import Any, Dict, List, Optional, TypeVar, Union, Callable, Awaitable
+from typing import Any, Dict, List, Optional, TypeVar, Callable, Awaitable
 
 import matplotlib.pylab as pylab
 import mistune
@@ -359,7 +359,7 @@ def format_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def run_async(
-    func: Callable[..., Awaitable[T]], 
+    func: Callable[..., Awaitable[T]],
     *args: Any,
     name: Optional[str] = None,
     **kwargs: Any
@@ -396,7 +396,7 @@ def run_async(
 
 
 def run_async_check(
-    func: Callable[..., Awaitable[T]], 
+    func: Callable[..., Awaitable[T]],
     *args: Any,
     **kwargs: Any
 ) -> Optional[asyncio.Task[T]]:
