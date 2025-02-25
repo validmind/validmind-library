@@ -93,24 +93,3 @@ The testing mechanism utilizes two in-built functions of pandas dataframes: `des
 <span class="kw">def</span><span class="name">get_summary_statistics_numerical</span>(<span class="params"><span class="n">df</span><span class="muted">,</span></span><span class="params"><span class="n">numerical_fields</span></span>):
 
 :::
-
-<!-- class.qmd.jinja2 -->
-
-## [class]{.muted} SkipTestError
-
-<!-- signatures.jinja2 -->
-
-::: {.signature}
-
-<span class="kw">class</span><span class="name">SkipTestError</span>:
-
-:::
-
-<!-- docstring.jinja2 -->
-
-Useful error to throw when a test cannot be executed.
-
-**Inherited members**
-
-- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
-- **From builtins.BaseException**: with_traceback, add_note

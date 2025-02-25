@@ -89,9 +89,17 @@ def sort_members(members, is_errors_module=False):
 def is_public(member: Dict[str, Any], module: Dict[str, Any], full_data: Dict[str, Any], is_root: bool = False) -> bool:
     """Check if a member should be included in public documentation."""
     name = member.get('name', '')
+    path = member.get('path', '')
     
     # Skip private members except __init__ and __post_init__
     if name.startswith('_') and name not in {'__init__', '__post_init__'}:
+        return False
+    
+    # Specifically exclude SkipTestError and logger/get_logger from test modules
+    if name in {'SkipTestError', 'logger'} and 'tests' in path:
+        return False
+    
+    if name == 'get_logger' and path.startswith('validmind.tests'):
         return False
     
     # At root level, only show items from __all__

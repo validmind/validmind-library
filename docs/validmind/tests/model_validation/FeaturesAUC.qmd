@@ -6,20 +6,6 @@ toc-expand: 4
 # module.qmd.jinja2
 ---
 
-## get_logger<span class='muted'>()</span>
-
-<!-- signatures.jinja2 -->
-
-::: {.signature}
-
-<span class="kw">def</span><span class="name">get_logger</span>(<span class="params"><span class="n">name</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s1">'validmind'</span><span class="muted">,</span></span><span class="params"><span class="n">log_level</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">int</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/validmind/validmind/vm_models.html#class-logging">validmind.vm_models.logging</a><span class="o">.</span><a href="/validmind/validmind/vm_models.html#class-logger">validmind.vm_models.Logger</a></span>:
-
-:::
-
-<!-- docstring.jinja2 -->
-
-Get a logger for the given module name.
-
 <!-- function.qmd.jinja2 -->
 
 ## FeaturesAUC[()]{.muted}
@@ -61,24 +47,3 @@ For each feature, the metric treats the feature values as raw scores to compute 
 - Does not reflect the combined effects of features or any interaction between them, which can be critical in certain models.
 - The AUC values are calculated without considering the model's use of the features, which could lead to different interpretations of feature importance when considering the model holistically.
 - This metric is applicable only to binary classification tasks and cannot be directly extended to multiclass classification or regression without modifications.
-
-<!-- class.qmd.jinja2 -->
-
-## [class]{.muted} SkipTestError
-
-<!-- signatures.jinja2 -->
-
-::: {.signature}
-
-<span class="kw">class</span><span class="name">SkipTestError</span>:
-
-:::
-
-<!-- docstring.jinja2 -->
-
-Useful error to throw when a test cannot be executed.
-
-**Inherited members**
-
-- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
-- **From builtins.BaseException**: with_traceback, add_note

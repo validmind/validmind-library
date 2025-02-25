@@ -6,20 +6,6 @@ toc-expand: 4
 # module.qmd.jinja2
 ---
 
-## get_logger<span class='muted'>()</span>
-
-<!-- signatures.jinja2 -->
-
-::: {.signature}
-
-<span class="kw">def</span><span class="name">get_logger</span>(<span class="params"><span class="n">name</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s1">'validmind'</span><span class="muted">,</span></span><span class="params"><span class="n">log_level</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">int</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/validmind/validmind/vm_models.html#class-logging">validmind.vm_models.logging</a><span class="o">.</span><a href="/validmind/validmind/vm_models.html#class-logger">validmind.vm_models.Logger</a></span>:
-
-:::
-
-<!-- docstring.jinja2 -->
-
-Get a logger for the given module name.
-
 <!-- function.qmd.jinja2 -->
 
 ## PermutationFeatureImportance[()]{.muted}
@@ -62,24 +48,3 @@ PFI is calculated via the `permutation_importance` method from the `sklearn.insp
 - Does not imply causality; it only presents the amount of information that a feature provides for the prediction task.
 - Does not account for interactions between features. If features are correlated, the permutation importance may allocate importance to one and not the other.
 - Cannot interact with certain libraries like statsmodels, pytorch, catboost, etc., thus limiting its applicability.
-
-<!-- class.qmd.jinja2 -->
-
-## [class]{.muted} SkipTestError
-
-<!-- signatures.jinja2 -->
-
-::: {.signature}
-
-<span class="kw">class</span><span class="name">SkipTestError</span>:
-
-:::
-
-<!-- docstring.jinja2 -->
-
-Useful error to throw when a test cannot be executed.
-
-**Inherited members**
-
-- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
-- **From builtins.BaseException**: with_traceback, add_note
