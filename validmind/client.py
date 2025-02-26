@@ -360,7 +360,7 @@ def run_test_suite(
     config: Optional[Dict[str, Any]] = None,
     inputs: Optional[Dict[str, Any]] = None,
     **kwargs: Any,
-) -> Dict[str, Any]:
+) -> TestSuite:
     """High Level function for running a test suite.
 
     This function provides a high level interface for running a test suite. A test suite is
