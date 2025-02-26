@@ -1,7 +1,0 @@
-project:
-  type: website
-
-format:
-  html:
-    css: docs/templates/styles.css
-    theme: default 
