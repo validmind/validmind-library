@@ -47,6 +47,13 @@ def get_all_members(members: Dict[str, Any]) -> Set[str]:
         return {elem.strip("'") for elem in all_elements}
     return set()
 
+def get_all_list(members: Dict[str, Any]) -> List[str]:
+    """Extract the __all__ list from a module's members if present, preserving order."""
+    if '__all__' in members:
+        all_elements = members['__all__'].get('value', {}).get('elements', [])
+        return [elem.strip("'") for elem in all_elements]
+    return []
+
 def sort_members(members, is_errors_module=False):
     """Sort members by kind and name."""
     if isinstance(members, dict):
@@ -246,6 +253,10 @@ def process_module(module: Dict[str, Any], path: List[str], env: Environment, fu
     module_dir = os.path.join('docs', *path[:-1])
     ensure_dir(module_dir)
     
+    # Extract __all__ list if present (preserving order)
+    if module.get('members') and '__all__' in module.get('members', {}):
+        module['all_list'] = get_all_list(module['members'])
+    
     # Enhanced debugging for vm_models
     if path and path[-1] == 'vm_models':
         print("\n==== VM_MODELS DEBUG ====")
@@ -264,7 +275,7 @@ def process_module(module: Dict[str, Any], path: List[str], env: Environment, fu
         
         # Check __all__ list
         if '__all__' in module.get('members', {}):
-            all_list = get_all_members(module['members'])
+            all_list = get_all_list(module['members'])
             print(f"__all__ list: {all_list}")
             
             # Check if ResultTable and TestResult are in __all__
@@ -565,6 +576,7 @@ def generate_docs(json_path: str, template_dir: str, output_dir: str):
     env.globals['is_public'] = is_public
     env.globals['resolve_alias'] = resolve_alias
     env.globals['get_all_members'] = get_all_members
+    env.globals['get_all_list'] = get_all_list
     env.globals['get_inherited_members'] = get_inherited_members
     
     # Start processing from root module

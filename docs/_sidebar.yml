@@ -12,8 +12,6 @@ website:
         # Root level items from validmind.qmd
         - text: "&#95;&#95;version__"
           file: validmind/validmind.qmd#&#95;&#95;version__
-        - text: "get_test_suite<span class='muted'>()</span>"
-          file: validmind/validmind.qmd#get_test_suite
         - text: "init<span class='muted'>()</span>"
           file: validmind/validmind.qmd#init
         - text: "init_dataset<span class='muted'>()</span>"
@@ -22,6 +20,8 @@ website:
           file: validmind/validmind.qmd#init_model
         - text: "init_r_model<span class='muted'>()</span>"
           file: validmind/validmind.qmd#init_r_model
+        - text: "get_test_suite<span class='muted'>()</span>"
+          file: validmind/validmind.qmd#get_test_suite
         - text: "log_metric<span class='muted'>()</span>"
           file: validmind/validmind.qmd#log_metric
         - text: "preview_template<span class='muted'>()</span>"

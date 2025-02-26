@@ -49,33 +49,6 @@ After you have pasted the code snippet into your development source code and exe
 
 :::
 
-## get_test_suite<span class='muted'>()</span>
-
-<!-- signatures.jinja2 -->
-
-::: {.signature}
-
-<span class="kw">def</span><span class="name">get_test_suite</span>(<span class="params"><span class="n">test_suite_id</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">section</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">\*args</span><span class="p">:</span><span class="n">Any</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span><span class="p">:</span><span class="n">Any</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/validmind/validmind/vm_models.html#class-testsuite">validmind.vm_models.TestSuite</a></span>:
-
-:::
-
-<!-- docstring.jinja2 -->
-
-Gets a TestSuite object for the current project or a specific test suite.
-
-This function provides an interface to retrieve the TestSuite instance for the current project or a specific TestSuite instance identified by test_suite_id. The project Test Suite will contain sections for every section in the project's documentation template and these Test Suite Sections will contain all the tests associated with that template section.
-
-**Arguments**
-
-- `test_suite_id (str, optional)`: The test suite name. If not passed, then the project's test suite will be returned. Defaults to None.
-- `section (str, optional)`: The section of the documentation template from which to retrieve the test suite. This only applies if test_suite_id is None. Defaults to None.
-- `args`: Additional arguments to pass to the TestSuite.
-- `kwargs`: Additional keyword arguments to pass to the TestSuite.
-
-**Returns**
-
-- The TestSuite instance.
-
 ## init<span class='muted'>()</span>
 
 <!-- signatures.jinja2 -->
@@ -206,6 +179,33 @@ LogisticRegression and LinearRegression models are converted to sklearn models b
 **Returns**
 
 - A VM Model instance.
+
+## get_test_suite<span class='muted'>()</span>
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">get_test_suite</span>(<span class="params"><span class="n">test_suite_id</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">section</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">\*args</span><span class="p">:</span><span class="n">Any</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span><span class="p">:</span><span class="n">Any</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/validmind/validmind/vm_models.html#class-testsuite">validmind.vm_models.TestSuite</a></span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Gets a TestSuite object for the current project or a specific test suite.
+
+This function provides an interface to retrieve the TestSuite instance for the current project or a specific TestSuite instance identified by test_suite_id. The project Test Suite will contain sections for every section in the project's documentation template and these Test Suite Sections will contain all the tests associated with that template section.
+
+**Arguments**
+
+- `test_suite_id (str, optional)`: The test suite name. If not passed, then the project's test suite will be returned. Defaults to None.
+- `section (str, optional)`: The section of the documentation template from which to retrieve the test suite. This only applies if test_suite_id is None. Defaults to None.
+- `args`: Additional arguments to pass to the TestSuite.
+- `kwargs`: Additional keyword arguments to pass to the TestSuite.
+
+**Returns**
+
+- The TestSuite instance.
 
 ## log_metric<span class='muted'>()</span>
 

@@ -8,22 +8,6 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## describe_metric[()]{.muted}
-
-<!-- signatures.jinja2 -->
-
-::: {.signature}
-
-<span class="kw">def</span><span class="name">describe_metric</span>(<span class="params"><span class="n">metric_id</span><span class="p">:</span><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>):
-
-:::
-
-<!-- docstring.jinja2 -->
-
-Describe a metric
-
-<!-- function.qmd.jinja2 -->
-
 ## list_metrics[()]{.muted}
 
 <!-- signatures.jinja2 -->
@@ -37,6 +21,22 @@ Describe a metric
 <!-- docstring.jinja2 -->
 
 List all metrics
+
+<!-- function.qmd.jinja2 -->
+
+## describe_metric[()]{.muted}
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">describe_metric</span>(<span class="params"><span class="n">metric_id</span><span class="p">:</span><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>):
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Describe a metric
 
 <!-- function.qmd.jinja2 -->
 
