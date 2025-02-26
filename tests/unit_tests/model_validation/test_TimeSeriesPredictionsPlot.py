@@ -76,8 +76,14 @@ class TestTimeSeriesPredictionsPlot(unittest.TestCase):
 
         # Check if x values are datetime objects
         self.assertTrue(
-            all(isinstance(x, (pd.Timestamp, datetime)) for x in fig.data[0].x)
+            all(
+                isinstance(x, (pd.Timestamp, np.datetime64, datetime))
+                for x in fig.data[0].x
+            )
         )
         self.assertTrue(
-            all(isinstance(x, (pd.Timestamp, datetime)) for x in fig.data[1].x)
+            all(
+                isinstance(x, (pd.Timestamp, np.datetime64, datetime))
+                for x in fig.data[1].x
+            )
         )
