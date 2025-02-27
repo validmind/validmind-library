@@ -340,16 +340,29 @@ def process_module(module: Dict[str, Any], path: List[str], env: Environment, fu
             else:
                 print("Could not find TestResult in full data structure")
     
-    # Get module template
-    module_template = env.get_template('module.qmd.jinja2')
-    
-    # Generate module documentation
-    output = module_template.render(
-        module=module,
-        full_data=full_data,
-        is_root=(len(path) <= 1),
-        resolve_alias=resolve_alias
-    )
+    # Get appropriate template based on module name
+    if path[-1] == 'errors':
+        # Use the specialized errors template for the errors module
+        template = env.get_template('errors.qmd.jinja2')
+        
+        # Render with the errors template
+        output = template.render(
+            module=module,
+            members=module.get('members', {}),  # Pass members directly
+            full_data=full_data,
+            is_errors_module=True
+        )
+    else:
+        # Use the standard module template for all other modules
+        template = env.get_template('module.qmd.jinja2')
+        
+        # Generate module documentation
+        output = template.render(
+            module=module,
+            full_data=full_data,
+            is_root=(len(path) <= 1),
+            resolve_alias=resolve_alias
+        )
     
     # Write output
     filename = f"{path[-1]}.qmd"
