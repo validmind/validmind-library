@@ -340,6 +340,9 @@ def process_module(module: Dict[str, Any], path: List[str], env: Environment, fu
             else:
                 print("Could not find TestResult in full data structure")
     
+    # Check if this is a test module
+    is_test_module = 'tests' in path
+    
     # Get appropriate template based on module name
     if path[-1] == 'errors':
         # Use the specialized errors template for the errors module
@@ -361,7 +364,8 @@ def process_module(module: Dict[str, Any], path: List[str], env: Environment, fu
             module=module,
             full_data=full_data,
             is_root=(len(path) <= 1),
-            resolve_alias=resolve_alias
+            resolve_alias=resolve_alias,
+            is_test_module=is_test_module  # Pass this flag to template
         )
     
     # Write output

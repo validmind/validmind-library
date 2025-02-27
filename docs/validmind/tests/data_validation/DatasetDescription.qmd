@@ -115,24 +115,3 @@ Returns a collection of histograms for a numerical column, each one with a diffe
 <span class="kw">def</span><span class="name">infer_datatypes</span>(<span class="param"><span class="n">df</span></span>):
 
 :::
-
-<!-- class.qmd.jinja2 -->
-
-## [class]{.muted} UnsupportedColumnTypeError
-
-<!-- signatures.jinja2 -->
-
-::: {.signature}
-
-<span class="kw">class</span><span class="name">UnsupportedColumnTypeError</span>(<span class="base">BaseError</span>):
-
-:::
-
-<!-- docstring.jinja2 -->
-
-When an unsupported column type is found on a dataset.
-
-**Inherited members**
-
-- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [description[()]{.muted}](#description)
-- **From builtins.BaseException**: with_traceback, add_note

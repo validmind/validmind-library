@@ -10,7 +10,7 @@
 {{ doc.format_docstring(resolved.docstring) }}
 {% endif %}
 
-{% if resolved.bases %}
+{% if resolved.bases and not __is_test_module|default(false) %}
 **Inherited members**
 
 {% set base_members = get_inherited_members(resolved.bases[0], full_data) %}
