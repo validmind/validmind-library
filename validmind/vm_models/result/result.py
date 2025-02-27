@@ -62,13 +62,13 @@ class RawData:
         return f"RawData({', '.join(self.__dict__.keys())})"
 
     def inspect(self, show: bool = True) -> Optional[Dict[str, Any]]:
-        """Inspect the raw data
+        """Inspect the raw data.
 
         Args:
             show (bool): If True, print the raw data. If False, return it.
 
         Returns:
-            Optional[Dict[str, Any]]: The raw data if show is False, None otherwise
+            Optional[Dict[str, Any]]: The raw data if show is False, None otherwise.
         """
         raw_data = {
             key: getattr(self, key)
