@@ -68,7 +68,8 @@ class RawData:
             show (bool): If True, print the raw data. If False, return it.
 
         Returns:
-            Optional[Dict[str, Any]]: The raw data if show is False, None otherwise.
+            Optional[Dict[str, Any]]: If True, print the raw data and return None. If
+                False, return the raw data dictionary.
         """
         raw_data = {
             key: getattr(self, key)
