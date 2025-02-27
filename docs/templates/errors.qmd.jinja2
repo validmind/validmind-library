@@ -1,7 +1,9 @@
 {% import "macros/docstring.jinja2" as doc %}
 {% import "macros/types.jinja2" as types %}
+{% import "macros/signatures.jinja2" as signatures %}
 ---
-title: errors
+title: "[validmind](/validmind/validmind.html).errors"
+sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
 # errors.qmd.jinja2
@@ -11,18 +13,33 @@ toc-expand: 4
 {{ doc.format_docstring(module.docstring) }}
 {% endif %}
 
-## Base Errors
-
-{% for member in members | sort_members(is_errors_module=true) %}
-{% if member.kind == 'class' and member.name in ['BaseError', 'APIRequestError'] %}
+{# Create a macro for rendering error classes to avoid duplication #}
+{% macro render_error_class(member) %}
 ### [class]{.muted} {{ member.name }}
 
-```python
-class {{ member.name }}({% for base in member.bases %}{{ base.name }}{% if not loop.last %}, {% endif %}{% endfor %}):
-```
+{{ signatures.render_signature(member) }}
 
 {% if member.docstring %}
 {{ doc.format_docstring(member.docstring) }}
+{% endif %}
+
+<!-- Add inherited members section -->
+{% if member.bases %}
+**Inherited members**
+
+{% set base_members = get_inherited_members(member, full_data) %}
+{% if base_members %}
+{% set grouped = {} %}
+{% for base_member in base_members %}
+    {% if base_member.base not in grouped %}
+        {% set _ = grouped.update({base_member.base: []}) %}
+    {% endif %}
+    {% set _ = grouped[base_member.base].append(base_member) %}
+{% endfor %}
+{% for base, base_members in grouped.items() %}
+- **From {{ base }}**: {% for base_member in base_members %}{% if base_member.kind == 'builtin' %}{{ base_member.name }}{% else %}[{% if base_member.kind == 'class' %}class {% endif %}{{ base_member.name }}[()]{.muted}](#{% if base_member.kind == 'class' %}class-{% endif %}{{ base_member.name | lower }}){% endif %}{% if not loop.last %}, {% endif %}{% endfor %}
+{% endfor %}
+{% endif %}
 {% endif %}
 
 {% if member.members %}
@@ -30,13 +47,21 @@ class {{ member.name }}({% for base in member.bases %}{{ base.name }}{% if not l
 {% if method.kind == 'method' and not method.name.startswith('_') %}
 #### [{{ method.name }}[()]{.muted}](#{{ method.name }})
 
-<!-- errors.qmd.jinja2 - error method signature -->
-```python
-{{ method.name }}({{ method.parameters | map(attribute='name') | join(', ') }})
-```
+{{ signatures.render_signature(method) }}
+
+{% if method.docstring %}
+{{ doc.format_docstring(method.docstring) }}
+{% endif %}
 {% endif %}
 {% endfor %}
 {% endif %}
+{% endmacro %}
+
+## Base Errors
+
+{% for member in members | sort_members(is_errors_module=true) %}
+{% if member.kind == 'class' and member.name in ['BaseError', 'APIRequestError'] %}
+{{ render_error_class(member) }}
 {% endif %}
 {% endfor %}
 
@@ -44,29 +69,7 @@ class {{ member.name }}({% for base in member.bases %}{{ base.name }}{% if not l
 
 {% for member in members | sort_members(is_errors_module=true) %}
 {% if member.kind == 'class' and (member.name.startswith('API') or member.name.endswith('APIError')) and member.name != 'APIRequestError' %}
-### [class]{.muted} {{ member.name }}
-
-<!-- errors.qmd.jinja2 - api error class definition -->
-```python
-class {{ member.name }}({% for base in member.bases %}{{ base.name }}{% if not loop.last %}, {% endif %}{% endfor %}):
-```
-
-{% if member.docstring %}
-{{ doc.format_docstring(member.docstring) }}
-{% endif %}
-
-{% if member.members %}
-{% for method in member.members.values() | sort(attribute='name') %}
-{% if method.kind == 'method' and not method.name.startswith('_') %}
-#### [{{ method.name }}[()]{.muted}](#{{ method.name }})
-
-<!-- errors.qmd.jinja2 - api error method signature -->
-```python
-{{ method.name }}({{ method.parameters | map(attribute='name') | join(', ') }})
-```
-{% endif %}
-{% endfor %}
-{% endif %}
+{{ render_error_class(member) }}
 {% endif %}
 {% endfor %}
 
@@ -74,29 +77,7 @@ class {{ member.name }}({% for base in member.bases %}{{ base.name }}{% if not l
 
 {% for member in members | sort_members(is_errors_module=true) %}
 {% if member.kind == 'class' and 'Model' in member.name %}
-### [class]{.muted} {{ member.name }}
-
-<!-- errors.qmd.jinja2 - model error class definition -->
-```python
-class {{ member.name }}({% for base in member.bases %}{{ base.name }}{% if not loop.last %}, {% endif %}{% endfor %}):
-```
-
-{% if member.docstring %}
-{{ doc.format_docstring(member.docstring) }}
-{% endif %}
-
-{% if member.members %}
-{% for method in member.members.values() | sort(attribute='name') %}
-{% if method.kind == 'method' and not method.name.startswith('_') %}
-#### [{{ method.name }}[()]{.muted}](#{{ method.name }})
-
-<!-- errors.qmd.jinja2 - model error method signature -->
-```python
-{{ method.name }}({{ method.parameters | map(attribute='name') | join(', ') }})
-```
-{% endif %}
-{% endfor %}
-{% endif %}
+{{ render_error_class(member) }}
 {% endif %}
 {% endfor %}
 
@@ -104,29 +85,7 @@ class {{ member.name }}({% for base in member.bases %}{{ base.name }}{% if not l
 
 {% for member in members | sort_members(is_errors_module=true) %}
 {% if member.kind == 'class' and 'Test' in member.name %}
-### [class]{.muted} {{ member.name }}
-
-<!-- errors.qmd.jinja2 - test error class definition -->
-```python
-class {{ member.name }}({% for base in member.bases %}{{ base.name }}{% if not loop.last %}, {% endif %}{% endfor %}):
-```
-
-{% if member.docstring %}
-{{ doc.format_docstring(member.docstring) }}
-{% endif %}
-
-{% if member.members %}
-{% for method in member.members.values() | sort(attribute='name') %}
-{% if method.kind == 'method' and not method.name.startswith('_') %}
-#### [{{ method.name }}[()]{.muted}](#{{ method.name }})
-
-<!-- errors.qmd.jinja2 - test error method signature -->
-```python
-{{ method.name }}({{ method.parameters | map(attribute='name') | join(', ') }})
-```
-{% endif %}
-{% endfor %}
-{% endif %}
+{{ render_error_class(member) }}
 {% endif %}
 {% endfor %}
 
@@ -134,29 +93,7 @@ class {{ member.name }}({% for base in member.bases %}{{ base.name }}{% if not l
 
 {% for member in members | sort_members(is_errors_module=true) %}
 {% if member.kind == 'class' and (member.name.startswith('Invalid') or member.name.startswith('Missing')) %}
-### [class]{.muted} {{ member.name }}
-
-<!-- errors.qmd.jinja2 - validation error class definition -->
-```python
-class {{ member.name }}({% for base in member.bases %}{{ base.name }}{% if not loop.last %}, {% endif %}{% endfor %}):
-```
-
-{% if member.docstring %}
-{{ doc.format_docstring(member.docstring) }}
-{% endif %}
-
-{% if member.members %}
-{% for method in member.members.values() | sort(attribute='name') %}
-{% if method.kind == 'method' and not method.name.startswith('_') %}
-#### [{{ method.name }}[()]{.muted}](#{{ method.name }})
-
-<!-- errors.qmd.jinja2 - validation error method signature -->
-```python
-{{ method.name }}({{ method.parameters | map(attribute='name') | join(', ') }})
-```
-{% endif %}
-{% endfor %}
-{% endif %}
+{{ render_error_class(member) }}
 {% endif %}
 {% endfor %}
 
@@ -164,28 +101,6 @@ class {{ member.name }}({% for base in member.bases %}{{ base.name }}{% if not l
 
 {% for member in members | sort_members(is_errors_module=true) %}
 {% if member.kind == 'class' and member.name.startswith('Unsupported') %}
-### [class]{.muted} {{ member.name }}
-
-<!-- errors.qmd.jinja2 - unsupported feature error class definition -->
-```python
-class {{ member.name }}({% for base in member.bases %}{{ base.name }}{% if not loop.last %}, {% endif %}{% endfor %}):
-```
-
-{% if member.docstring %}
-{{ doc.format_docstring(member.docstring) }}
-{% endif %}
-
-{% if member.members %}
-{% for method in member.members.values() | sort(attribute='name') %}
-{% if method.kind == 'method' and not method.name.startswith('_') %}
-#### [{{ method.name }}[()]{.muted}](#{{ method.name }})
-
-<!-- errors.qmd.jinja2 - unsupported feature error method signature -->
-```python
-{{ method.name }}({{ method.parameters | map(attribute='name') | join(', ') }})
-```
-{% endif %}
-{% endfor %}
-{% endif %}
+{{ render_error_class(member) }}
 {% endif %}
 {% endfor %} 
