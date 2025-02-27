@@ -145,7 +145,7 @@ When a required dependency is missing.
 
 **Inherited members**
 
-- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [__str__[()]{.muted}](#__str__), [description[()]{.muted}](#description)
+- **From BaseError**: [class BaseError[()]{.muted}](#class-baseerror), [__init__[()]{.muted}](#__init__), [description[()]{.muted}](#description)
 - **From builtins.BaseException**: with_traceback, add_note
 
 ### [MissingDependencyError[()]{.muted}](#__init__)

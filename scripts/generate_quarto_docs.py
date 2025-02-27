@@ -461,8 +461,17 @@ def parse_docstrings(data: Dict[str, Any]):
 
 def get_inherited_members(base: Dict[str, Any], full_data: Dict[str, Any]) -> List[Dict[str, Any]]:
     """Get all inherited members from a base class."""
+    # Handle case where a class object is passed instead of a base name
+    if isinstance(base, dict) and 'bases' in base:
+        all_members = []
+        for base_item in base['bases']:
+            if isinstance(base_item, dict) and 'name' in base_item:
+                base_members = get_inherited_members(base_item['name'], full_data)
+                all_members.extend(base_members)
+        return all_members
+    
     # Get the base class name
-    base_name = base.get('name', '')
+    base_name = base if isinstance(base, str) else base.get('name', '')
     if not base_name:
         return []
     
@@ -485,8 +494,8 @@ def get_inherited_members(base: Dict[str, Any], full_data: Dict[str, Any]) -> Li
     
     # Add all public methods
     for name, member in base_class.get('members', {}).items():
-        # Include __init__ and __str__, skip other private methods
-        if name.startswith('_') and name not in {'__init__', '__str__'}:
+        # Include __init__ but NOT __str__, skip other private methods
+        if name.startswith('_') and name != '__init__':
             continue
         
         if member['kind'] in ('function', 'method', 'property'):

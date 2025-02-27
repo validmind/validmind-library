@@ -22,29 +22,38 @@ sidebar: validmind-reference
 {% endif %}
 
 <!-- errors.qmd.jinja2 - inherited members -->
-{% if member.bases %}
+{% if member.bases and not (member.path and 'tests' in member.path) %}
 **Inherited members**
 
 {% set base_members = get_inherited_members(member, full_data) %}
 {% if base_members %}
 {% set grouped = {} %}
+{% set builtin_members = [] %}
 {% set has_description_method = false %}
+
 {% for base_member in base_members %}
-    {% if base_member.base not in grouped and base_member.base != member.name %}
-        {% set _ = grouped.update({base_member.base: []}) %}
-    {% endif %}
-    {% if base_member.base != member.name %}
+    {% if base_member.base == 'builtins.BaseException' and base_member.kind == 'builtin' %}
+        {% set _ = builtin_members.append(base_member) %}
+    {% elif base_member.base != member.name %}
+        {% if base_member.base not in grouped %}
+            {% set _ = grouped.update({base_member.base: []}) %}
+        {% endif %}
         {% set _ = grouped[base_member.base].append(base_member) %}
         {% if base_member.kind == 'method' and base_member.name == 'description' %}
             {% set has_description_method = true %}
         {% endif %}
     {% endif %}
 {% endfor %}
+
 {% for base, base_members in grouped.items() %}
 - **From {{ base }}**: {% for base_member in base_members %}{% if base_member.kind == 'builtin' %}{{ base_member.name }}{% else %}[{% if base_member.kind == 'class' %}class {% endif %}{{ base_member.name }}[()]{.muted}](#{% if base_member.kind == 'class' %}class-{% endif %}{{ base_member.name | lower }}){% endif %}{% if not loop.last %}, {% endif %}{% endfor %}{% if not loop.last %}
 
 {% endif %}
 {% endfor %}
+
+{% if builtin_members %}
+- **From builtins.BaseException**: {% for builtin in builtin_members %}{{ builtin.name }}{% if not loop.last %}, {% endif %}{% endfor %}
+{% endif %}
 {% endif %}
 {% endif %}
 
@@ -82,8 +91,8 @@ sidebar: validmind-reference
 {% endif %}
 {% endfor %}
 
-{# Show inherited description method if class doesn't have its own #}
-{% if not has_direct_description and base_members is defined and has_description_method %}
+{# Show inherited description method if class doesn't have its own and it's not a test class #}
+{% if not has_direct_description and base_members is defined and has_description_method and not (member.path and 'tests' in member.path) %}
 {% set displayed_description = false %}
 {% for base_member in base_members %}
 {% if not displayed_description and base_member.kind == 'method' and base_member.name == 'description' and base_member.base != member.name %}
