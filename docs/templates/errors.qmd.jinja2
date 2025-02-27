@@ -15,16 +15,7 @@ sidebar: validmind-reference
 {% macro render_error_class(member) %}
 ### [class]{.muted} {{ member.name }}
 
-{% if member.name == 'BaseError' %}
-<!-- signatures.jinja2 - with base class for BaseError -->
-::: {.signature}
-
-<span class="kw">class</span> <span class="name">BaseError</span>(<span class="base">builtins.Exception</span>):
-
-:::
-{% else %}
 {{ signatures.render_signature(member) }}
-{% endif %}
 
 {% if member.docstring %}
 {{ doc.format_docstring(member.docstring) }}
@@ -37,11 +28,17 @@ sidebar: validmind-reference
 {% set base_members = get_inherited_members(member, full_data) %}
 {% if base_members %}
 {% set grouped = {} %}
+{% set has_description_method = false %}
 {% for base_member in base_members %}
-    {% if base_member.base not in grouped %}
+    {% if base_member.base not in grouped and base_member.base != member.name %}
         {% set _ = grouped.update({base_member.base: []}) %}
     {% endif %}
-    {% set _ = grouped[base_member.base].append(base_member) %}
+    {% if base_member.base != member.name %}
+        {% set _ = grouped[base_member.base].append(base_member) %}
+        {% if base_member.kind == 'method' and base_member.name == 'description' %}
+            {% set has_description_method = true %}
+        {% endif %}
+    {% endif %}
 {% endfor %}
 {% for base, base_members in grouped.items() %}
 - **From {{ base }}**: {% for base_member in base_members %}{% if base_member.kind == 'builtin' %}{{ base_member.name }}{% else %}[{% if base_member.kind == 'class' %}class {% endif %}{{ base_member.name }}[()]{.muted}](#{% if base_member.kind == 'class' %}class-{% endif %}{{ base_member.name | lower }}){% endif %}{% if not loop.last %}, {% endif %}{% endfor %}{% if not loop.last %}
@@ -53,7 +50,7 @@ sidebar: validmind-reference
 
 {% if member.members %}
 {% for method in member.members.values() | sort(attribute='name') %}
-{% if method.kind == 'method' and (not method.name.startswith('_') or method.name == '__init__' or method.name == 'description') %}
+{% if method.kind == 'method' and (not method.name.startswith('_') or method.name == '__init__') and method.name != '__str__' and method.name != 'description' %}
 ### [{{ member.name if method.name == '__init__' else method.name }}[()]{.muted}](#{{ method.name }})
 
 {% if method.name == '__init__' %}
@@ -69,6 +66,39 @@ sidebar: validmind-reference
 {% endif %}
 {% endif %}
 {% endfor %}
+
+{# Add the description method separately to ensure it's properly included #}
+{% set has_direct_description = false %}
+{% for method in member.members.values() %}
+{% if method.kind == 'method' and method.name == 'description' %}
+{% set has_direct_description = true %}
+### [{{ method.name }}[()]{.muted}](#{{ method.name }})
+
+{{ signatures.render_signature(method) }}
+
+{% if method.docstring %}
+{{ doc.format_docstring(method.docstring) }}
+{% endif %}
+{% endif %}
+{% endfor %}
+
+{# Show inherited description method if class doesn't have its own #}
+{% if not has_direct_description and base_members is defined and has_description_method %}
+{% set displayed_description = false %}
+{% for base_member in base_members %}
+{% if not displayed_description and base_member.kind == 'method' and base_member.name == 'description' and base_member.base != member.name %}
+### [description[()]{.muted}](#description) [inherited from {{ base_member.base }}]
+
+{% set base_method = base_member.copy() %}
+{{ signatures.render_signature(base_method) }}
+
+{% if base_member.docstring %}
+{{ doc.format_docstring(base_member.docstring) }}
+{% endif %}
+{% set displayed_description = true %}
+{% endif %}
+{% endfor %}
+{% endif %}
 {% endif %}
 {% endmacro %}
 
