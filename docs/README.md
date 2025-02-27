@@ -4,6 +4,50 @@ This directory contains the framework for generating ValidMind Library API docum
 
 ## How it works
 
+
+```mermaid
+flowchart TD
+    make[make quarto-docs] --> clean[Clean old files]
+    clean --> mkdir[Create docs/validmind dir]
+    mkdir --> Griffe[Generate API JSON with Griffe]
+    Griffe --> script[Run generate_quarto_docs.py]
+    
+    script --> loadJSON[Load validmind.json]
+    loadJSON --> setupJinja[Set up Jinja environment]
+    setupJinja --> processMod[Process modules]
+    
+    templates[Jinja2 Templates] --> setupJinja
+    
+    processMod --> gen_mod[Generate module.qmd files]
+    processMod --> gen_sidebar[Generate _sidebar.yml]
+    
+    subgraph "Templates"
+        mod_t[module.qmd.jinja2]
+        class_t[class.qmd.jinja2]
+        func_t[function.qmd.jinja2]
+        sidebar_t[sidebar.qmd.jinja2]
+        version_t[version.qmd.jinja2]
+        errors_t[errors.qmd.jinja2]
+        macros[macros/*.jinja2]
+    end
+    
+    templates --> mod_t
+    templates --> class_t
+    templates --> func_t
+    templates --> sidebar_t
+    templates --> version_t
+    templates --> errors_t
+    templates --> macros
+    
+    gen_mod --> output[Quarto .qmd files]
+    gen_sidebar --> nav[_sidebar.yml]
+    
+    output --> quarto[Quarto build process]
+    nav --> quarto
+    
+    quarto --> website[Documentation website]
+```
+
 The `make quarto-docs` command orchestrates the workflow:
 
 1. **Dump JSON for the Python API**
@@ -48,49 +92,6 @@ The `templates/` directory contains Jinja2 templates used to generate documentat
   - Creates a structured sidebar
   - Outputs files in the `docs/` and `docsvalidmind/` folders
   - Handles some special cases like aliases, inherited members, and private/public member filtering
-
-```mermaid
-flowchart TD
-    make[make quarto-docs] --> clean[Clean old files]
-    clean --> mkdir[Create docs/validmind dir]
-    mkdir --> Griffe[Generate API JSON with Griffe]
-    Griffe --> script[Run generate_quarto_docs.py]
-    
-    script --> loadJSON[Load validmind.json]
-    loadJSON --> setupJinja[Set up Jinja environment]
-    setupJinja --> processMod[Process modules]
-    
-    templates[Jinja2 Templates] --> setupJinja
-    
-    processMod --> gen_mod[Generate module.qmd files]
-    processMod --> gen_sidebar[Generate _sidebar.yml]
-    
-    subgraph "Templates"
-        mod_t[module.qmd.jinja2]
-        class_t[class.qmd.jinja2]
-        func_t[function.qmd.jinja2]
-        sidebar_t[sidebar.qmd.jinja2]
-        version_t[version.qmd.jinja2]
-        errors_t[errors.qmd.jinja2]
-        macros[macros/*.jinja2]
-    end
-    
-    templates --> mod_t
-    templates --> class_t
-    templates --> func_t
-    templates --> sidebar_t
-    templates --> version_t
-    templates --> errors_t
-    templates --> macros
-    
-    gen_mod --> output[Quarto .qmd files]
-    gen_sidebar --> nav[_sidebar.yml]
-    
-    output --> quarto[Quarto build process]
-    nav --> quarto
-    
-    quarto --> website[Documentation website]
-```
 
 ## Extending or modifying Quarto Markdown generation
 
