@@ -35,7 +35,9 @@ sidebar: validmind-reference
     {% set _ = grouped[base_member.base].append(base_member) %}
 {% endfor %}
 {% for base, base_members in grouped.items() %}
-- **From {{ base }}**: {% for base_member in base_members %}{% if base_member.kind == 'builtin' %}{{ base_member.name }}{% else %}[{% if base_member.kind == 'class' %}class {% endif %}{{ base_member.name }}[()]{.muted}](#{% if base_member.kind == 'class' %}class-{% endif %}{{ base_member.name | lower }}){% endif %}{% if not loop.last %}, {% endif %}{% endfor %}
+- **From {{ base }}**: {% for base_member in base_members %}{% if base_member.kind == 'builtin' %}{{ base_member.name }}{% else %}[{% if base_member.kind == 'class' %}class {% endif %}{{ base_member.name }}[()]{.muted}](#{% if base_member.kind == 'class' %}class-{% endif %}{{ base_member.name | lower }}){% endif %}{% if not loop.last %}, {% endif %}{% endfor %}{% if not loop.last %}
+
+{% endif %}
 {% endfor %}
 {% endif %}
 {% endif %}
@@ -74,7 +76,7 @@ sidebar: validmind-reference
 ## Model errors
 
 {% for member in members | sort_members(is_errors_module=true) %}
-{% if member.kind == 'class' and 'Model' in member.name %}
+{% if member.kind == 'class' and ('Model' in member.name or member.name in ['UnsupportedModelError', 'UnsupportedModelForSHAPError', 'UnsupportedRModelError']) %}
 {{ render_error_class(member) }}
 {% endif %}
 {% endfor %}
@@ -82,7 +84,7 @@ sidebar: validmind-reference
 ## Test errors
 
 {% for member in members | sort_members(is_errors_module=true) %}
-{% if member.kind == 'class' and 'Test' in member.name %}
+{% if member.kind == 'class' and ('Test' in member.name or member.name in ['GetTestSuiteError', 'InitializeTestSuiteError', 'InvalidTestParametersError', 'InvalidTestResultsError', 'LoadTestError', 'MissingRequiredTestInputError', 'SkipTestError']) %}
 {{ render_error_class(member) }}
 {% endif %}
 {% endfor %}
@@ -90,7 +92,7 @@ sidebar: validmind-reference
 ## Input validation errors
 
 {% for member in members | sort_members(is_errors_module=true) %}
-{% if member.kind == 'class' and (member.name.startswith('Invalid') or member.name.startswith('Missing')) and 'API' not in member.name %}
+{% if member.kind == 'class' and (member.name.startswith('Invalid') or member.name.startswith('Missing')) %}
 {{ render_error_class(member) }}
 {% endif %}
 {% endfor %}
