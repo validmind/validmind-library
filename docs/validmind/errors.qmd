@@ -25,7 +25,11 @@ The following base errors are defined for others:
 
 :::
 
-<!-- Add inherited members section -->
+<!-- docstring.jinja2 -->
+
+Common base class for all non-exit exceptions.
+
+<!-- errors.qmd.jinja2 - inherited members -->
 
 **Inherited members**
 
@@ -46,7 +50,7 @@ The following base errors are defined for others:
 
 Generic error for API request errors that are not known.
 
-<!-- Add inherited members section -->
+<!-- errors.qmd.jinja2 - inherited members -->
 
 **Inherited members**
 
@@ -65,7 +69,7 @@ Generic error for API request errors that are not known.
 
 :::
 
-<!-- Add inherited members section -->
+<!-- errors.qmd.jinja2 - inherited members -->
 
 **Inherited members**
 
@@ -82,7 +86,7 @@ Generic error for API request errors that are not known.
 
 :::
 
-<!-- Add inherited members section -->
+<!-- errors.qmd.jinja2 - inherited members -->
 
 **Inherited members**
 
@@ -105,7 +109,7 @@ Generic error for API request errors that are not known.
 
 When an invalid XGBoost trained model is used when calling init_r_model.
 
-<!-- Add inherited members section -->
+<!-- errors.qmd.jinja2 - inherited members -->
 
 **Inherited members**
 
@@ -122,7 +126,7 @@ When an invalid XGBoost trained model is used when calling init_r_model.
 
 :::
 
-<!-- Add inherited members section -->
+<!-- errors.qmd.jinja2 - inherited members -->
 
 **Inherited members**
 
@@ -143,7 +147,7 @@ When an invalid XGBoost trained model is used when calling init_r_model.
 
 When the PyTorch model is missing a predict function or its predict method does not have the expected arguments.
 
-<!-- Add inherited members section -->
+<!-- errors.qmd.jinja2 - inherited members -->
 
 **Inherited members**
 
@@ -164,7 +168,7 @@ When the PyTorch model is missing a predict function or its predict method does 
 
 When an unsupported model is used.
 
-<!-- Add inherited members section -->
+<!-- errors.qmd.jinja2 - inherited members -->
 
 **Inherited members**
 
@@ -185,7 +189,7 @@ When an unsupported model is used.
 
 When an unsupported model is used for SHAP importance.
 
-<!-- Add inherited members section -->
+<!-- errors.qmd.jinja2 - inherited members -->
 
 **Inherited members**
 
@@ -206,7 +210,7 @@ When an unsupported model is used for SHAP importance.
 
 When an unsupported R model is used.
 
-<!-- Add inherited members section -->
+<!-- errors.qmd.jinja2 - inherited members -->
 
 **Inherited members**
 
@@ -229,7 +233,7 @@ When an unsupported R model is used.
 
 When the test suite could not be found.
 
-<!-- Add inherited members section -->
+<!-- errors.qmd.jinja2 - inherited members -->
 
 **Inherited members**
 
@@ -250,7 +254,7 @@ When the test suite could not be found.
 
 When the test suite was found but could not be initialized.
 
-<!-- Add inherited members section -->
+<!-- errors.qmd.jinja2 - inherited members -->
 
 **Inherited members**
 
@@ -271,7 +275,7 @@ When the test suite was found but could not be initialized.
 
 When invalid parameters are provided for the test.
 
-<!-- Add inherited members section -->
+<!-- errors.qmd.jinja2 - inherited members -->
 
 **Inherited members**
 
@@ -292,7 +296,7 @@ When invalid parameters are provided for the test.
 
 When an invalid test results object is sent to the API.
 
-<!-- Add inherited members section -->
+<!-- errors.qmd.jinja2 - inherited members -->
 
 **Inherited members**
 
@@ -313,7 +317,7 @@ When an invalid test results object is sent to the API.
 
 Exception raised when an error occurs while loading a test.
 
-<!-- Add inherited members section -->
+<!-- errors.qmd.jinja2 - inherited members -->
 
 **Inherited members**
 
@@ -334,7 +338,7 @@ Exception raised when an error occurs while loading a test.
 
 When a required test context variable is missing.
 
-<!-- Add inherited members section -->
+<!-- errors.qmd.jinja2 - inherited members -->
 
 **Inherited members**
 
@@ -355,7 +359,7 @@ When a required test context variable is missing.
 
 Useful error to throw when a test cannot be executed.
 
-<!-- Add inherited members section -->
+<!-- errors.qmd.jinja2 - inherited members -->
 
 **Inherited members**
 
@@ -376,7 +380,7 @@ Useful error to throw when a test cannot be executed.
 
 When an invalid dataset is used in a test context.
 
-<!-- Add inherited members section -->
+<!-- errors.qmd.jinja2 - inherited members -->
 
 **Inherited members**
 
@@ -399,7 +403,7 @@ When an invalid dataset is used in a test context.
 
 When an invalid XGBoost trained model is used when calling init_r_model.
 
-<!-- Add inherited members section -->
+<!-- errors.qmd.jinja2 - inherited members -->
 
 **Inherited members**
 
@@ -416,7 +420,7 @@ When an invalid XGBoost trained model is used when calling init_r_model.
 
 :::
 
-<!-- Add inherited members section -->
+<!-- errors.qmd.jinja2 - inherited members -->
 
 **Inherited members**
 
@@ -437,7 +441,7 @@ When an invalid XGBoost trained model is used when calling init_r_model.
 
 When the PyTorch model is missing a predict function or its predict method does not have the expected arguments.
 
-<!-- Add inherited members section -->
+<!-- errors.qmd.jinja2 - inherited members -->
 
 **Inherited members**
 
@@ -458,7 +462,7 @@ When the PyTorch model is missing a predict function or its predict method does 
 
 When invalid parameters are provided for the test.
 
-<!-- Add inherited members section -->
+<!-- errors.qmd.jinja2 - inherited members -->
 
 **Inherited members**
 
@@ -479,7 +483,7 @@ When invalid parameters are provided for the test.
 
 When an invalid test results object is sent to the API.
 
-<!-- Add inherited members section -->
+<!-- errors.qmd.jinja2 - inherited members -->
 
 **Inherited members**
 
@@ -500,7 +504,7 @@ When an invalid test results object is sent to the API.
 
 When a required test context variable is missing.
 
-<!-- Add inherited members section -->
+<!-- errors.qmd.jinja2 - inherited members -->
 
 **Inherited members**
 
@@ -517,7 +521,7 @@ When a required test context variable is missing.
 
 :::
 
-<!-- Add inherited members section -->
+<!-- errors.qmd.jinja2 - inherited members -->
 
 **Inherited members**
 
@@ -538,7 +542,7 @@ When a required test context variable is missing.
 
 When an invalid text content_id is sent to the API.
 
-<!-- Add inherited members section -->
+<!-- errors.qmd.jinja2 - inherited members -->
 
 **Inherited members**
 
@@ -559,7 +563,7 @@ When an invalid text content_id is sent to the API.
 
 When an invalid input object is provided.
 
-<!-- Add inherited members section -->
+<!-- errors.qmd.jinja2 - inherited members -->
 
 **Inherited members**
 
@@ -580,7 +584,7 @@ When an invalid input object is provided.
 
 When an invalid metric results object is sent to the API.
 
-<!-- Add inherited members section -->
+<!-- errors.qmd.jinja2 - inherited members -->
 
 **Inherited members**
 
@@ -597,7 +601,7 @@ When an invalid metric results object is sent to the API.
 
 :::
 
-<!-- Add inherited members section -->
+<!-- errors.qmd.jinja2 - inherited members -->
 
 **Inherited members**
 
@@ -618,7 +622,7 @@ When an invalid metric results object is sent to the API.
 
 When a POST/PUT request is made with an invalid request body.
 
-<!-- Add inherited members section -->
+<!-- errors.qmd.jinja2 - inherited members -->
 
 **Inherited members**
 
@@ -639,7 +643,7 @@ When a POST/PUT request is made with an invalid request body.
 
 When an invalid Metadata (Text) object is sent to the API.
 
-<!-- Add inherited members section -->
+<!-- errors.qmd.jinja2 - inherited members -->
 
 **Inherited members**
 
@@ -660,7 +664,7 @@ When an invalid Metadata (Text) object is sent to the API.
 
 When an invalid value formatter is provided when serializing results.
 
-<!-- Add inherited members section -->
+<!-- errors.qmd.jinja2 - inherited members -->
 
 **Inherited members**
 
@@ -677,7 +681,7 @@ When an invalid value formatter is provided when serializing results.
 
 :::
 
-<!-- Add inherited members section -->
+<!-- errors.qmd.jinja2 - inherited members -->
 
 **Inherited members**
 
@@ -698,7 +702,7 @@ When an invalid value formatter is provided when serializing results.
 
 When the cache_results function is missing arguments.
 
-<!-- Add inherited members section -->
+<!-- errors.qmd.jinja2 - inherited members -->
 
 **Inherited members**
 
@@ -719,7 +723,7 @@ When the cache_results function is missing arguments.
 
 When the one or more class labels are missing from provided dataset targets.
 
-<!-- Add inherited members section -->
+<!-- errors.qmd.jinja2 - inherited members -->
 
 **Inherited members**
 
@@ -740,7 +744,7 @@ When the one or more class labels are missing from provided dataset targets.
 
 When a required dependency is missing.
 
-<!-- Add inherited members section -->
+<!-- errors.qmd.jinja2 - inherited members -->
 
 **Inherited members**
 
@@ -761,7 +765,7 @@ When a required dependency is missing.
 
 When the client config is missing the documentation template.
 
-<!-- Add inherited members section -->
+<!-- errors.qmd.jinja2 - inherited members -->
 
 **Inherited members**
 
@@ -782,7 +786,7 @@ When the client config is missing the documentation template.
 
 When the R extras have not been installed.
 
-<!-- Add inherited members section -->
+<!-- errors.qmd.jinja2 - inherited members -->
 
 **Inherited members**
 
@@ -803,7 +807,7 @@ When the R extras have not been installed.
 
 When a Text object is sent to the API without a content_id.
 
-<!-- Add inherited members section -->
+<!-- errors.qmd.jinja2 - inherited members -->
 
 **Inherited members**
 
@@ -824,7 +828,7 @@ When a Text object is sent to the API without a content_id.
 
 When a Text object is sent to the API without a "text" attribute.
 
-<!-- Add inherited members section -->
+<!-- errors.qmd.jinja2 - inherited members -->
 
 **Inherited members**
 
@@ -847,7 +851,7 @@ When a Text object is sent to the API without a "text" attribute.
 
 When an unsupported model is used.
 
-<!-- Add inherited members section -->
+<!-- errors.qmd.jinja2 - inherited members -->
 
 **Inherited members**
 
@@ -868,7 +872,7 @@ When an unsupported model is used.
 
 When an unsupported model is used for SHAP importance.
 
-<!-- Add inherited members section -->
+<!-- errors.qmd.jinja2 - inherited members -->
 
 **Inherited members**
 
@@ -889,7 +893,7 @@ When an unsupported model is used for SHAP importance.
 
 When an unsupported R model is used.
 
-<!-- Add inherited members section -->
+<!-- errors.qmd.jinja2 - inherited members -->
 
 **Inherited members**
 
@@ -910,7 +914,7 @@ When an unsupported R model is used.
 
 When an unsupported column type is found on a dataset.
 
-<!-- Add inherited members section -->
+<!-- errors.qmd.jinja2 - inherited members -->
 
 **Inherited members**
 
@@ -931,7 +935,7 @@ When an unsupported column type is found on a dataset.
 
 When an unsupported dataset is used.
 
-<!-- Add inherited members section -->
+<!-- errors.qmd.jinja2 - inherited members -->
 
 **Inherited members**
 
@@ -952,7 +956,7 @@ When an unsupported dataset is used.
 
 When an unsupported figure object is constructed.
 
-<!-- Add inherited members section -->
+<!-- errors.qmd.jinja2 - inherited members -->
 
 **Inherited members**
 

@@ -15,6 +15,8 @@ from typing import Optional
 
 
 class BaseError(Exception):
+    """Common base class for all non-exit exceptions."""
+    
     def __init__(self, message=""):
         self.message = message
         super().__init__(self.message)

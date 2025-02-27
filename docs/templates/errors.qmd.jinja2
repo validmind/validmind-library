@@ -21,7 +21,7 @@ sidebar: validmind-reference
 {{ doc.format_docstring(member.docstring) }}
 {% endif %}
 
-<!-- Add inherited members section -->
+<!-- errors.qmd.jinja2 - inherited members -->
 {% if member.bases %}
 **Inherited members**
 
@@ -44,10 +44,16 @@ sidebar: validmind-reference
 
 {% if member.members %}
 {% for method in member.members.values() | sort(attribute='name') %}
-{% if method.kind == 'method' and not method.name.startswith('_') %}
-#### [{{ method.name }}[()]{.muted}](#{{ method.name }})
+{% if method.kind == 'method' and (not method.name.startswith('_') or method.name == '__init__' or method.name == 'description') %}
+### [{{ member.name if method.name == '__init__' else method.name }}[()]{.muted}](#{{ method.name }})
 
+{% if method.name == '__init__' %}
+{% set method_with_parent = method.copy() %}
+{% set _ = method_with_parent.update({'parent': {'name': member.name}}) %}
+{{ signatures.render_signature(method_with_parent) }}
+{% else %}
 {{ signatures.render_signature(method) }}
+{% endif %}
 
 {% if method.docstring %}
 {{ doc.format_docstring(method.docstring) }}
