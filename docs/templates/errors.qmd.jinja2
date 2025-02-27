@@ -46,13 +46,13 @@ sidebar: validmind-reference
 {% endfor %}
 
 {% for base, base_members in grouped.items() %}
-- **From {{ base }}**: {% for base_member in base_members %}{% if base_member.kind == 'builtin' %}{{ base_member.name }}{% else %}[{% if base_member.kind == 'class' %}class {% endif %}{{ base_member.name }}[()]{.muted}](#{% if base_member.kind == 'class' %}class-{% endif %}{{ base_member.name | lower }}){% endif %}{% if not loop.last %}, {% endif %}{% endfor %}{% if not loop.last %}
+- **{{ base }}**: {% for base_member in base_members %}{% if base_member.kind == 'builtin' %}{{ base_member.name }}{% else %}[{% if base_member.kind == 'class' %}{% endif %}{{ base_member.name }}[()]{.muted}](#{% if base_member.kind == 'class' %}class-{% endif %}{{ base_member.name | lower }}){% endif %}{% if not loop.last %}, {% endif %}{% endfor %}{% if not loop.last %}
 
 {% endif %}
 {% endfor %}
 
 {% if builtin_members %}
-- **From builtins.BaseException**: {% for builtin in builtin_members %}{{ builtin.name }}{% if not loop.last %}, {% endif %}{% endfor %}
+- **builtins.BaseException**: {% for builtin in builtin_members %}{{ builtin.name }}{% if not loop.last %}, {% endif %}{% endfor %}
 {% endif %}
 {% endif %}
 {% endif %}

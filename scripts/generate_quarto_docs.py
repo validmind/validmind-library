@@ -498,8 +498,8 @@ def get_inherited_members(base: Dict[str, Any], full_data: Dict[str, Any]) -> Li
     
     # Add all public methods
     for name, member in base_class.get('members', {}).items():
-        # Include __init__ but NOT __str__, skip other private methods
-        if name.startswith('_') and name != '__init__':
+        # Skip all private methods (including __init__ now)
+        if name.startswith('_'):
             continue
         
         if member['kind'] in ('function', 'method', 'property'):
