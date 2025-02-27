@@ -117,7 +117,7 @@ The exam begins with the selection of a suitable explainer which aligns with the
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">UnsupportedModelForSHAPError</span>:
+<span class="kw">class</span><span class="name">UnsupportedModelForSHAPError</span>(<span class="base">BaseError</span>):
 
 :::
 

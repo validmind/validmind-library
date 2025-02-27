@@ -18,7 +18,7 @@ Time Series Test Suites from statsmodels
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">RegressionModelDescription</span>:
+<span class="kw">class</span><span class="name">RegressionModelDescription</span>(<span class="base">TestSuite</span>):
 
 :::
 
@@ -36,7 +36,7 @@ Test suite for performance metric of regression model of statsmodels library
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">RegressionModelsEvaluation</span>:
+<span class="kw">class</span><span class="name">RegressionModelsEvaluation</span>(<span class="base">TestSuite</span>):
 
 :::
 

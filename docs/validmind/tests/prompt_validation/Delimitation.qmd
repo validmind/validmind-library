@@ -104,7 +104,7 @@ The test employs an LLM to examine prompts for appropriate use of delimiters suc
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">MissingRequiredTestInputError</span>:
+<span class="kw">class</span><span class="name">MissingRequiredTestInputError</span>(<span class="base">BaseError</span>):
 
 :::
 

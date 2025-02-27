@@ -105,7 +105,7 @@ Using an LLM, this test conducts a conciseness analysis on input prompts. The an
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">MissingRequiredTestInputError</span>:
+<span class="kw">class</span><span class="name">MissingRequiredTestInputError</span>(<span class="base">BaseError</span>):
 
 :::
 

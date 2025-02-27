@@ -62,7 +62,7 @@ This test introduces Gaussian noise to the numeric input features of the dataset
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">MissingOrInvalidModelPredictFnError</span>:
+<span class="kw">class</span><span class="name">MissingOrInvalidModelPredictFnError</span>(<span class="base">BaseError</span>):
 
 :::
 

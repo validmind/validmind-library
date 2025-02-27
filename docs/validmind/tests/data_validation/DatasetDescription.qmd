@@ -124,7 +124,7 @@ Returns a collection of histograms for a numerical column, each one with a diffe
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">UnsupportedColumnTypeError</span>:
+<span class="kw">class</span><span class="name">UnsupportedColumnTypeError</span>(<span class="base">BaseError</span>):
 
 :::
 

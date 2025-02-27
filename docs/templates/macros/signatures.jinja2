@@ -32,6 +32,9 @@
   {%- endfor -%}
   ]</span>
 {%- elif member.kind == "class" -%}
+{%- if member.bases and member.bases | length > 0 -%}
+({% for base in member.bases %}{% if base.name %}{% if loop.first %}<span class="base">{{ base.name }}</span>{% else %}, <span class="base">{{ base.name }}</span>{% endif %}{% endif %}{% endfor %})
+{%- endif -%}
 {%- elif member.parameters -%}({{- '' -}}
   {%- set params = [] -%}
   {# Add self parameter for methods that aren't __init__ #}

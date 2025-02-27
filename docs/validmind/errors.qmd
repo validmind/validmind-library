@@ -17,11 +17,11 @@ The following base errors are defined for others:
 
 ### [class]{.muted} BaseError
 
-<!-- signatures.jinja2 -->
+<!-- signatures.jinja2 - with base class for BaseError -->
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">BaseError</span>:
+<span class="kw">class</span> <span class="name">BaseError</span>(<span class="base">builtins.Exception</span>):
 
 :::
 
@@ -42,7 +42,7 @@ Common base class for all non-exit exceptions.
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">APIRequestError</span>:
+<span class="kw">class</span><span class="name">APIRequestError</span>(<span class="base">BaseError</span>):
 
 :::
 
@@ -65,7 +65,7 @@ Generic error for API request errors that are not known.
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">InvalidAPICredentialsError</span>:
+<span class="kw">class</span><span class="name">InvalidAPICredentialsError</span>(<span class="base">APIRequestError</span>):
 
 :::
 
@@ -82,7 +82,7 @@ Generic error for API request errors that are not known.
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">MissingAPICredentialsError</span>:
+<span class="kw">class</span><span class="name">MissingAPICredentialsError</span>(<span class="base">BaseError</span>):
 
 :::
 
@@ -101,7 +101,7 @@ Generic error for API request errors that are not known.
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">InvalidXGBoostTrainedModelError</span>:
+<span class="kw">class</span><span class="name">InvalidXGBoostTrainedModelError</span>(<span class="base">BaseError</span>):
 
 :::
 
@@ -122,7 +122,7 @@ When an invalid XGBoost trained model is used when calling init_r_model.
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">MissingModelIdError</span>:
+<span class="kw">class</span><span class="name">MissingModelIdError</span>(<span class="base">BaseError</span>):
 
 :::
 
@@ -139,7 +139,7 @@ When an invalid XGBoost trained model is used when calling init_r_model.
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">MissingOrInvalidModelPredictFnError</span>:
+<span class="kw">class</span><span class="name">MissingOrInvalidModelPredictFnError</span>(<span class="base">BaseError</span>):
 
 :::
 
@@ -160,7 +160,7 @@ When the PyTorch model is missing a predict function or its predict method does 
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">UnsupportedModelError</span>:
+<span class="kw">class</span><span class="name">UnsupportedModelError</span>(<span class="base">BaseError</span>):
 
 :::
 
@@ -181,7 +181,7 @@ When an unsupported model is used.
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">UnsupportedModelForSHAPError</span>:
+<span class="kw">class</span><span class="name">UnsupportedModelForSHAPError</span>(<span class="base">BaseError</span>):
 
 :::
 
@@ -202,7 +202,7 @@ When an unsupported model is used for SHAP importance.
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">UnsupportedRModelError</span>:
+<span class="kw">class</span><span class="name">UnsupportedRModelError</span>(<span class="base">BaseError</span>):
 
 :::
 
@@ -225,7 +225,7 @@ When an unsupported R model is used.
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">GetTestSuiteError</span>:
+<span class="kw">class</span><span class="name">GetTestSuiteError</span>(<span class="base">BaseError</span>):
 
 :::
 
@@ -246,7 +246,7 @@ When the test suite could not be found.
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">InitializeTestSuiteError</span>:
+<span class="kw">class</span><span class="name">InitializeTestSuiteError</span>(<span class="base">BaseError</span>):
 
 :::
 
@@ -267,7 +267,7 @@ When the test suite was found but could not be initialized.
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">InvalidTestParametersError</span>:
+<span class="kw">class</span><span class="name">InvalidTestParametersError</span>(<span class="base">BaseError</span>):
 
 :::
 
@@ -288,7 +288,7 @@ When invalid parameters are provided for the test.
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">InvalidTestResultsError</span>:
+<span class="kw">class</span><span class="name">InvalidTestResultsError</span>(<span class="base">APIRequestError</span>):
 
 :::
 
@@ -309,7 +309,7 @@ When an invalid test results object is sent to the API.
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">LoadTestError</span>:
+<span class="kw">class</span><span class="name">LoadTestError</span>(<span class="base">BaseError</span>):
 
 :::
 
@@ -330,7 +330,7 @@ Exception raised when an error occurs while loading a test.
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">MissingRequiredTestInputError</span>:
+<span class="kw">class</span><span class="name">MissingRequiredTestInputError</span>(<span class="base">BaseError</span>):
 
 :::
 
@@ -351,7 +351,7 @@ When a required test context variable is missing.
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">SkipTestError</span>:
+<span class="kw">class</span><span class="name">SkipTestError</span>(<span class="base">BaseError</span>):
 
 :::
 
@@ -372,7 +372,7 @@ Useful error to throw when a test cannot be executed.
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">TestInputInvalidDatasetError</span>:
+<span class="kw">class</span><span class="name">TestInputInvalidDatasetError</span>(<span class="base">BaseError</span>):
 
 :::
 
@@ -395,7 +395,7 @@ When an invalid dataset is used in a test context.
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">InvalidXGBoostTrainedModelError</span>:
+<span class="kw">class</span><span class="name">InvalidXGBoostTrainedModelError</span>(<span class="base">BaseError</span>):
 
 :::
 
@@ -416,7 +416,7 @@ When an invalid XGBoost trained model is used when calling init_r_model.
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">MissingModelIdError</span>:
+<span class="kw">class</span><span class="name">MissingModelIdError</span>(<span class="base">BaseError</span>):
 
 :::
 
@@ -433,7 +433,7 @@ When an invalid XGBoost trained model is used when calling init_r_model.
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">MissingOrInvalidModelPredictFnError</span>:
+<span class="kw">class</span><span class="name">MissingOrInvalidModelPredictFnError</span>(<span class="base">BaseError</span>):
 
 :::
 
@@ -454,7 +454,7 @@ When the PyTorch model is missing a predict function or its predict method does 
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">InvalidTestParametersError</span>:
+<span class="kw">class</span><span class="name">InvalidTestParametersError</span>(<span class="base">BaseError</span>):
 
 :::
 
@@ -475,7 +475,7 @@ When invalid parameters are provided for the test.
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">InvalidTestResultsError</span>:
+<span class="kw">class</span><span class="name">InvalidTestResultsError</span>(<span class="base">APIRequestError</span>):
 
 :::
 
@@ -496,7 +496,7 @@ When an invalid test results object is sent to the API.
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">MissingRequiredTestInputError</span>:
+<span class="kw">class</span><span class="name">MissingRequiredTestInputError</span>(<span class="base">BaseError</span>):
 
 :::
 
@@ -517,7 +517,7 @@ When a required test context variable is missing.
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">InvalidAPICredentialsError</span>:
+<span class="kw">class</span><span class="name">InvalidAPICredentialsError</span>(<span class="base">APIRequestError</span>):
 
 :::
 
@@ -534,7 +534,7 @@ When a required test context variable is missing.
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">InvalidContentIdPrefixError</span>:
+<span class="kw">class</span><span class="name">InvalidContentIdPrefixError</span>(<span class="base">APIRequestError</span>):
 
 :::
 
@@ -555,7 +555,7 @@ When an invalid text content_id is sent to the API.
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">InvalidInputError</span>:
+<span class="kw">class</span><span class="name">InvalidInputError</span>(<span class="base">BaseError</span>):
 
 :::
 
@@ -576,7 +576,7 @@ When an invalid input object is provided.
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">InvalidMetricResultsError</span>:
+<span class="kw">class</span><span class="name">InvalidMetricResultsError</span>(<span class="base">APIRequestError</span>):
 
 :::
 
@@ -597,7 +597,7 @@ When an invalid metric results object is sent to the API.
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">InvalidProjectError</span>:
+<span class="kw">class</span><span class="name">InvalidProjectError</span>(<span class="base">APIRequestError</span>):
 
 :::
 
@@ -614,7 +614,7 @@ When an invalid metric results object is sent to the API.
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">InvalidRequestBodyError</span>:
+<span class="kw">class</span><span class="name">InvalidRequestBodyError</span>(<span class="base">APIRequestError</span>):
 
 :::
 
@@ -635,7 +635,7 @@ When a POST/PUT request is made with an invalid request body.
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">InvalidTextObjectError</span>:
+<span class="kw">class</span><span class="name">InvalidTextObjectError</span>(<span class="base">APIRequestError</span>):
 
 :::
 
@@ -656,7 +656,7 @@ When an invalid Metadata (Text) object is sent to the API.
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">InvalidValueFormatterError</span>:
+<span class="kw">class</span><span class="name">InvalidValueFormatterError</span>(<span class="base">BaseError</span>):
 
 :::
 
@@ -677,7 +677,7 @@ When an invalid value formatter is provided when serializing results.
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">MissingAPICredentialsError</span>:
+<span class="kw">class</span><span class="name">MissingAPICredentialsError</span>(<span class="base">BaseError</span>):
 
 :::
 
@@ -694,7 +694,7 @@ When an invalid value formatter is provided when serializing results.
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">MissingCacheResultsArgumentsError</span>:
+<span class="kw">class</span><span class="name">MissingCacheResultsArgumentsError</span>(<span class="base">BaseError</span>):
 
 :::
 
@@ -715,7 +715,7 @@ When the cache_results function is missing arguments.
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">MissingClassLabelError</span>:
+<span class="kw">class</span><span class="name">MissingClassLabelError</span>(<span class="base">BaseError</span>):
 
 :::
 
@@ -736,7 +736,7 @@ When the one or more class labels are missing from provided dataset targets.
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">MissingDependencyError</span>:
+<span class="kw">class</span><span class="name">MissingDependencyError</span>(<span class="base">BaseError</span>):
 
 :::
 
@@ -757,7 +757,7 @@ When a required dependency is missing.
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">MissingDocumentationTemplate</span>:
+<span class="kw">class</span><span class="name">MissingDocumentationTemplate</span>(<span class="base">BaseError</span>):
 
 :::
 
@@ -778,7 +778,7 @@ When the client config is missing the documentation template.
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">MissingRExtrasError</span>:
+<span class="kw">class</span><span class="name">MissingRExtrasError</span>(<span class="base">BaseError</span>):
 
 :::
 
@@ -799,7 +799,7 @@ When the R extras have not been installed.
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">MissingTextContentIdError</span>:
+<span class="kw">class</span><span class="name">MissingTextContentIdError</span>(<span class="base">APIRequestError</span>):
 
 :::
 
@@ -820,7 +820,7 @@ When a Text object is sent to the API without a content_id.
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">MissingTextContentsError</span>:
+<span class="kw">class</span><span class="name">MissingTextContentsError</span>(<span class="base">APIRequestError</span>):
 
 :::
 
@@ -843,7 +843,7 @@ When a Text object is sent to the API without a "text" attribute.
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">UnsupportedModelError</span>:
+<span class="kw">class</span><span class="name">UnsupportedModelError</span>(<span class="base">BaseError</span>):
 
 :::
 
@@ -864,7 +864,7 @@ When an unsupported model is used.
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">UnsupportedModelForSHAPError</span>:
+<span class="kw">class</span><span class="name">UnsupportedModelForSHAPError</span>(<span class="base">BaseError</span>):
 
 :::
 
@@ -885,7 +885,7 @@ When an unsupported model is used for SHAP importance.
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">UnsupportedRModelError</span>:
+<span class="kw">class</span><span class="name">UnsupportedRModelError</span>(<span class="base">BaseError</span>):
 
 :::
 
@@ -906,7 +906,7 @@ When an unsupported R model is used.
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">UnsupportedColumnTypeError</span>:
+<span class="kw">class</span><span class="name">UnsupportedColumnTypeError</span>(<span class="base">BaseError</span>):
 
 :::
 
@@ -927,7 +927,7 @@ When an unsupported column type is found on a dataset.
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">UnsupportedDatasetError</span>:
+<span class="kw">class</span><span class="name">UnsupportedDatasetError</span>(<span class="base">BaseError</span>):
 
 :::
 
@@ -948,7 +948,7 @@ When an unsupported dataset is used.
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">UnsupportedFigureError</span>:
+<span class="kw">class</span><span class="name">UnsupportedFigureError</span>(<span class="base">BaseError</span>):
 
 :::
 

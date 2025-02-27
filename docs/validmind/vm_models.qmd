@@ -28,7 +28,7 @@ Models entrypoint
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">VMInput</span>:
+<span class="kw">class</span><span class="name">VMInput</span>(<span class="base">ABC</span>):
 
 :::
 
@@ -70,7 +70,7 @@ To allow options, just override this method in the subclass (see VMDataset) and 
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">VMDataset</span>:
+<span class="kw">class</span><span class="name">VMDataset</span>(<span class="base">VMInput</span>):
 
 :::
 
@@ -399,7 +399,7 @@ Returns the target variables (y) of the dataset.
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">VMModel</span>:
+<span class="kw">class</span><span class="name">VMModel</span>(<span class="base">VMInput</span>):
 
 :::
 
@@ -632,7 +632,7 @@ A dataclass that holds the table summary of result.
 
 <span class="decorators"><span class="decorator">@<span class="n">dataclass</span></span></span>
 
-<span class="kw">class</span><span class="name">TestResult</span>:
+<span class="kw">class</span><span class="name">TestResult</span>(<span class="base">Result</span>):
 
 :::
 

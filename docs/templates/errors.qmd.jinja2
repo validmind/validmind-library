@@ -15,7 +15,16 @@ sidebar: validmind-reference
 {% macro render_error_class(member) %}
 ### [class]{.muted} {{ member.name }}
 
+{% if member.name == 'BaseError' %}
+<!-- signatures.jinja2 - with base class for BaseError -->
+::: {.signature}
+
+<span class="kw">class</span> <span class="name">BaseError</span>(<span class="base">builtins.Exception</span>):
+
+:::
+{% else %}
 {{ signatures.render_signature(member) }}
+{% endif %}
 
 {% if member.docstring %}
 {{ doc.format_docstring(member.docstring) }}

@@ -57,7 +57,7 @@ This test calculates the KS statistic and corresponding p-value for each feature
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">InvalidTestParametersError</span>:
+<span class="kw">class</span><span class="name">InvalidTestParametersError</span>(<span class="base">BaseError</span>):
 
 :::
 

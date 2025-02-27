@@ -62,7 +62,7 @@ The test performs the following steps:
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">MissingDependencyError</span>:
+<span class="kw">class</span><span class="name">MissingDependencyError</span>(<span class="base">BaseError</span>):
 
 :::
 

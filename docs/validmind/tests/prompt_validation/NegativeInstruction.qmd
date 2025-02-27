@@ -104,7 +104,7 @@ An LLM is employed to evaluate each prompt. The prompt is graded based on its us
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">MissingRequiredTestInputError</span>:
+<span class="kw">class</span><span class="name">MissingRequiredTestInputError</span>(<span class="base">BaseError</span>):
 
 :::
 

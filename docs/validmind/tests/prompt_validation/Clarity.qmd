@@ -103,7 +103,7 @@ The evaluation uses an LLM to scrutinize the clarity of prompts, factoring in co
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">MissingRequiredTestInputError</span>:
+<span class="kw">class</span><span class="name">MissingRequiredTestInputError</span>(<span class="base">BaseError</span>):
 
 :::
 

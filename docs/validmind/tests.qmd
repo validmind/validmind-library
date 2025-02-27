@@ -251,7 +251,7 @@ Register an external test provider
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">LoadTestError</span>:
+<span class="kw">class</span><span class="name">LoadTestError</span>(<span class="base">BaseError</span>):
 
 :::
 
@@ -385,7 +385,7 @@ Load the test function identified by the given test_id
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">TestProvider</span>:
+<span class="kw">class</span><span class="name">TestProvider</span>(<span class="base">Protocol</span>):
 
 :::
 

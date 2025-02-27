@@ -108,7 +108,7 @@ For each test case, the LLM grades the input prompt on a scale of 1 to 10. It ev
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">MissingRequiredTestInputError</span>:
+<span class="kw">class</span><span class="name">MissingRequiredTestInputError</span>(<span class="base">BaseError</span>):
 
 :::
 

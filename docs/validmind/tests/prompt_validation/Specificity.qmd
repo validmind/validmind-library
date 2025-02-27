@@ -104,7 +104,7 @@ The Specificity Test employs an LLM to grade each prompt based on clarity, detai
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">MissingRequiredTestInputError</span>:
+<span class="kw">class</span><span class="name">MissingRequiredTestInputError</span>(<span class="base">BaseError</span>):
 
 :::
 

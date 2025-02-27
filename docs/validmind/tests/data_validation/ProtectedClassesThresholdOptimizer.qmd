@@ -135,7 +135,7 @@ The test uses Fairlearn's ThresholdOptimizer to:
 
 ::: {.signature}
 
-<span class="kw">class</span><span class="name">MissingDependencyError</span>:
+<span class="kw">class</span><span class="name">MissingDependencyError</span>(<span class="base">BaseError</span>):
 
 :::
 
