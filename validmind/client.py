@@ -432,7 +432,7 @@ def run_documentation_tests(
     inputs: Optional[Dict[str, Any]] = None,
     config: Optional[Dict[str, Any]] = None,
     **kwargs: Any,
-) -> Dict[str, Any]:
+) -> Union[TestSuite, Dict[str, TestSuite]]:
     """Collect and run all the tests associated with a template.
 
     This function will analyze the current project's documentation template and collect
@@ -493,7 +493,7 @@ def _run_documentation_section(
     config: Optional[Dict[str, Any]] = None,
     inputs: Optional[Dict[str, Any]] = None,
     **kwargs: Any,
-) -> Dict[str, Any]:
+) -> TestSuite:
     """Run all tests in a template section.
 
     This function will collect all tests used in a template section into a TestSuite and then

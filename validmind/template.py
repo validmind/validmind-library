@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 from ipywidgets import HTML, Accordion, VBox
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Union, Type
 from ipywidgets import Widget
 
 from .html_templates.content_blocks import (
@@ -207,7 +207,7 @@ def _create_test_suite_section(section: Dict[str, Any]) -> Dict[str, Any]:
 def _create_template_test_suite(
     template: str,
     section: Optional[str] = None
-) -> Dict[str, Any]:
+) -> Type[TestSuite]:
     """
     Create and run a test suite from a template.
 
