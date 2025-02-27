@@ -1,8 +1,6 @@
 ---
 title: "[validmind](/validmind/validmind.html).errors"
 sidebar: validmind-reference
-toc-depth: 4
-toc-expand: 4
 # errors.qmd.jinja2
 ---
 
@@ -15,7 +13,7 @@ The following base errors are defined for others:
 - BaseError
 - APIRequestError
 
-## Base Errors
+## Base errors
 
 ### [class]{.muted} BaseError
 
@@ -53,9 +51,41 @@ Generic error for API request errors that are not known.
 
 - **From APIRequestError**: [class APIRequestError[()]{.muted}](#class-apirequesterror)- **From builtins.BaseException**: with_traceback, add_note
 
-## API Errors
+## API errors
 
-## Model Errors
+### [class]{.muted} InvalidAPICredentialsError
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">InvalidAPICredentialsError</span>:
+
+:::
+
+<!-- Add inherited members section -->
+
+**Inherited members**
+
+- **From InvalidAPICredentialsError**: [class InvalidAPICredentialsError[()]{.muted}](#class-invalidapicredentialserror), [description[()]{.muted}](#description)- **From builtins.BaseException**: with_traceback, add_note
+
+### [class]{.muted} MissingAPICredentialsError
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">MissingAPICredentialsError</span>:
+
+:::
+
+<!-- Add inherited members section -->
+
+**Inherited members**
+
+- **From MissingAPICredentialsError**: [class MissingAPICredentialsError[()]{.muted}](#class-missingapicredentialserror), [description[()]{.muted}](#description)- **From builtins.BaseException**: with_traceback, add_note
+
+## Model errors
 
 ### [class]{.muted} InvalidXGBoostTrainedModelError
 
@@ -173,7 +203,7 @@ When an unsupported R model is used.
 
 - **From UnsupportedRModelError**: [class UnsupportedRModelError[()]{.muted}](#class-unsupportedrmodelerror)- **From builtins.BaseException**: with_traceback, add_note
 
-## Test Errors
+## Test errors
 
 ### [class]{.muted} GetTestSuiteError
 
@@ -335,7 +365,7 @@ When an invalid dataset is used in a test context.
 
 - **From TestInputInvalidDatasetError**: [class TestInputInvalidDatasetError[()]{.muted}](#class-testinputinvaliddataseterror)- **From builtins.BaseException**: with_traceback, add_note
 
-## Input Validation Errors
+## Input validation errors
 
 ### [class]{.muted} InvalidXGBoostTrainedModelError
 
@@ -452,22 +482,6 @@ When a required test context variable is missing.
 **Inherited members**
 
 - **From MissingRequiredTestInputError**: [class MissingRequiredTestInputError[()]{.muted}](#class-missingrequiredtestinputerror)- **From builtins.BaseException**: with_traceback, add_note
-
-### [class]{.muted} InvalidAPICredentialsError
-
-<!-- signatures.jinja2 -->
-
-::: {.signature}
-
-<span class="kw">class</span><span class="name">InvalidAPICredentialsError</span>:
-
-:::
-
-<!-- Add inherited members section -->
-
-**Inherited members**
-
-- **From InvalidAPICredentialsError**: [class InvalidAPICredentialsError[()]{.muted}](#class-invalidapicredentialserror), [description[()]{.muted}](#description)- **From builtins.BaseException**: with_traceback, add_note
 
 ### [class]{.muted} InvalidContentIdPrefixError
 
@@ -604,22 +618,6 @@ When an invalid value formatter is provided when serializing results.
 **Inherited members**
 
 - **From InvalidValueFormatterError**: [class InvalidValueFormatterError[()]{.muted}](#class-invalidvalueformattererror)- **From builtins.BaseException**: with_traceback, add_note
-
-### [class]{.muted} MissingAPICredentialsError
-
-<!-- signatures.jinja2 -->
-
-::: {.signature}
-
-<span class="kw">class</span><span class="name">MissingAPICredentialsError</span>:
-
-:::
-
-<!-- Add inherited members section -->
-
-**Inherited members**
-
-- **From MissingAPICredentialsError**: [class MissingAPICredentialsError[()]{.muted}](#class-missingapicredentialserror), [description[()]{.muted}](#description)- **From builtins.BaseException**: with_traceback, add_note
 
 ### [class]{.muted} MissingCacheResultsArgumentsError
 
@@ -761,7 +759,7 @@ When a Text object is sent to the API without a "text" attribute.
 
 - **From MissingTextContentsError**: [class MissingTextContentsError[()]{.muted}](#class-missingtextcontentserror)- **From builtins.BaseException**: with_traceback, add_note
 
-## Unsupported Feature Errors
+## Unsupported feature errors
 
 ### [class]{.muted} UnsupportedModelError
 

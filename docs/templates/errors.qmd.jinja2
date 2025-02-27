@@ -4,8 +4,6 @@
 ---
 title: "[validmind](/validmind/validmind.html).errors"
 sidebar: validmind-reference
-toc-depth: 4
-toc-expand: 4
 # errors.qmd.jinja2
 ---
 
@@ -57,7 +55,7 @@ toc-expand: 4
 {% endif %}
 {% endmacro %}
 
-## Base Errors
+## Base errors
 
 {% for member in members | sort_members(is_errors_module=true) %}
 {% if member.kind == 'class' and member.name in ['BaseError', 'APIRequestError'] %}
@@ -65,15 +63,15 @@ toc-expand: 4
 {% endif %}
 {% endfor %}
 
-## API Errors
+## API errors
 
 {% for member in members | sort_members(is_errors_module=true) %}
-{% if member.kind == 'class' and (member.name.startswith('API') or member.name.endswith('APIError')) and member.name != 'APIRequestError' %}
+{% if member.kind == 'class' and ('API' in member.name) and member.name != 'APIRequestError' %}
 {{ render_error_class(member) }}
 {% endif %}
 {% endfor %}
 
-## Model Errors
+## Model errors
 
 {% for member in members | sort_members(is_errors_module=true) %}
 {% if member.kind == 'class' and 'Model' in member.name %}
@@ -81,7 +79,7 @@ toc-expand: 4
 {% endif %}
 {% endfor %}
 
-## Test Errors
+## Test errors
 
 {% for member in members | sort_members(is_errors_module=true) %}
 {% if member.kind == 'class' and 'Test' in member.name %}
@@ -89,15 +87,15 @@ toc-expand: 4
 {% endif %}
 {% endfor %}
 
-## Input Validation Errors
+## Input validation errors
 
 {% for member in members | sort_members(is_errors_module=true) %}
-{% if member.kind == 'class' and (member.name.startswith('Invalid') or member.name.startswith('Missing')) %}
+{% if member.kind == 'class' and (member.name.startswith('Invalid') or member.name.startswith('Missing')) and 'API' not in member.name %}
 {{ render_error_class(member) }}
 {% endif %}
 {% endfor %}
 
-## Unsupported Feature Errors
+## Unsupported feature errors
 
 {% for member in members | sort_members(is_errors_module=true) %}
 {% if member.kind == 'class' and member.name.startswith('Unsupported') %}
