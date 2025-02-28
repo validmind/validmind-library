@@ -29,7 +29,17 @@ The following base errors are defined for others:
 
 Common base class for all non-exit exceptions.
 
-### [description[()]{.muted}](#description)
+#### [BaseError[()]{.muted}](#__init__)
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="name">BaseError</span>(<span class="params"><span class="n">message</span><span class="o">=</span><span class="s1">''</span></span>)
+
+:::
+
+#### [description[()]{.muted}](#description)
 
 <!-- signatures.jinja2 -->
 
@@ -43,7 +53,7 @@ Common base class for all non-exit exceptions.
 
 **Inherited members**
 
-- **builtins.BaseException**: with_traceback, add_note
+- **builtins.BaseException** with_traceback, add_note
 
 ### [class]{.muted} APIRequestError
 
@@ -63,8 +73,8 @@ Generic error for API request errors that are not known.
 
 **Inherited members**
 
-- **BaseError**: [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
-- **builtins.BaseException**: with_traceback, add_note
+- **BaseError** [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
+- **builtins.BaseException** with_traceback, add_note
 
 ## API errors
 
@@ -82,8 +92,8 @@ Generic error for API request errors that are not known.
 
 **Inherited members**
 
-- **APIRequestError**: [APIRequestError[()]{.muted}](#class-apirequesterror)
-- **builtins.BaseException**: with_traceback, add_note
+- **APIRequestError** [APIRequestError[()]{.muted}](#class-apirequesterror)
+- **builtins.BaseException** with_traceback, add_note
 
 ### [class]{.muted} MissingAPICredentialsError
 
@@ -99,8 +109,8 @@ Generic error for API request errors that are not known.
 
 **Inherited members**
 
-- **BaseError**: [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
-- **builtins.BaseException**: with_traceback, add_note
+- **BaseError** [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
+- **builtins.BaseException** with_traceback, add_note
 
 ## Model errors
 
@@ -122,8 +132,8 @@ When an invalid XGBoost trained model is used when calling init_r_model.
 
 **Inherited members**
 
-- **BaseError**: [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
-- **builtins.BaseException**: with_traceback, add_note
+- **BaseError** [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
+- **builtins.BaseException** with_traceback, add_note
 
 ### [class]{.muted} MissingModelIdError
 
@@ -139,8 +149,8 @@ When an invalid XGBoost trained model is used when calling init_r_model.
 
 **Inherited members**
 
-- **BaseError**: [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
-- **builtins.BaseException**: with_traceback, add_note
+- **BaseError** [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
+- **builtins.BaseException** with_traceback, add_note
 
 ### [class]{.muted} MissingOrInvalidModelPredictFnError
 
@@ -160,8 +170,8 @@ When the PyTorch model is missing a predict function or its predict method does 
 
 **Inherited members**
 
-- **BaseError**: [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
-- **builtins.BaseException**: with_traceback, add_note
+- **BaseError** [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
+- **builtins.BaseException** with_traceback, add_note
 
 ### [class]{.muted} UnsupportedModelError
 
@@ -181,8 +191,8 @@ When an unsupported model is used.
 
 **Inherited members**
 
-- **BaseError**: [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
-- **builtins.BaseException**: with_traceback, add_note
+- **BaseError** [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
+- **builtins.BaseException** with_traceback, add_note
 
 ### [class]{.muted} UnsupportedModelForSHAPError
 
@@ -202,8 +212,8 @@ When an unsupported model is used for SHAP importance.
 
 **Inherited members**
 
-- **BaseError**: [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
-- **builtins.BaseException**: with_traceback, add_note
+- **BaseError** [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
+- **builtins.BaseException** with_traceback, add_note
 
 ### [class]{.muted} UnsupportedRModelError
 
@@ -223,8 +233,8 @@ When an unsupported R model is used.
 
 **Inherited members**
 
-- **BaseError**: [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
-- **builtins.BaseException**: with_traceback, add_note
+- **BaseError** [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
+- **builtins.BaseException** with_traceback, add_note
 
 ## Test errors
 
@@ -246,8 +256,8 @@ When the test suite could not be found.
 
 **Inherited members**
 
-- **BaseError**: [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
-- **builtins.BaseException**: with_traceback, add_note
+- **BaseError** [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
+- **builtins.BaseException** with_traceback, add_note
 
 ### [class]{.muted} InitializeTestSuiteError
 
@@ -267,8 +277,8 @@ When the test suite was found but could not be initialized.
 
 **Inherited members**
 
-- **BaseError**: [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
-- **builtins.BaseException**: with_traceback, add_note
+- **BaseError** [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
+- **builtins.BaseException** with_traceback, add_note
 
 ### [class]{.muted} InvalidTestParametersError
 
@@ -288,8 +298,8 @@ When invalid parameters are provided for the test.
 
 **Inherited members**
 
-- **BaseError**: [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
-- **builtins.BaseException**: with_traceback, add_note
+- **BaseError** [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
+- **builtins.BaseException** with_traceback, add_note
 
 ### [class]{.muted} InvalidTestResultsError
 
@@ -309,8 +319,8 @@ When an invalid test results object is sent to the API.
 
 **Inherited members**
 
-- **APIRequestError**: [APIRequestError[()]{.muted}](#class-apirequesterror)
-- **builtins.BaseException**: with_traceback, add_note
+- **APIRequestError** [APIRequestError[()]{.muted}](#class-apirequesterror)
+- **builtins.BaseException** with_traceback, add_note
 
 ### [class]{.muted} LoadTestError
 
@@ -330,8 +340,8 @@ Exception raised when an error occurs while loading a test.
 
 **Inherited members**
 
-- **BaseError**: [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
-- **builtins.BaseException**: with_traceback, add_note
+- **BaseError** [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
+- **builtins.BaseException** with_traceback, add_note
 
 ### [class]{.muted} MissingRequiredTestInputError
 
@@ -351,8 +361,8 @@ When a required test context variable is missing.
 
 **Inherited members**
 
-- **BaseError**: [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
-- **builtins.BaseException**: with_traceback, add_note
+- **BaseError** [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
+- **builtins.BaseException** with_traceback, add_note
 
 ### [class]{.muted} SkipTestError
 
@@ -372,8 +382,8 @@ Useful error to throw when a test cannot be executed.
 
 **Inherited members**
 
-- **BaseError**: [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
-- **builtins.BaseException**: with_traceback, add_note
+- **BaseError** [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
+- **builtins.BaseException** with_traceback, add_note
 
 ### [class]{.muted} TestInputInvalidDatasetError
 
@@ -393,8 +403,8 @@ When an invalid dataset is used in a test context.
 
 **Inherited members**
 
-- **BaseError**: [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
-- **builtins.BaseException**: with_traceback, add_note
+- **BaseError** [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
+- **builtins.BaseException** with_traceback, add_note
 
 ## Input validation errors
 
@@ -416,8 +426,8 @@ When an invalid XGBoost trained model is used when calling init_r_model.
 
 **Inherited members**
 
-- **BaseError**: [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
-- **builtins.BaseException**: with_traceback, add_note
+- **BaseError** [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
+- **builtins.BaseException** with_traceback, add_note
 
 ### [class]{.muted} MissingModelIdError
 
@@ -433,8 +443,8 @@ When an invalid XGBoost trained model is used when calling init_r_model.
 
 **Inherited members**
 
-- **BaseError**: [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
-- **builtins.BaseException**: with_traceback, add_note
+- **BaseError** [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
+- **builtins.BaseException** with_traceback, add_note
 
 ### [class]{.muted} MissingOrInvalidModelPredictFnError
 
@@ -454,8 +464,8 @@ When the PyTorch model is missing a predict function or its predict method does 
 
 **Inherited members**
 
-- **BaseError**: [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
-- **builtins.BaseException**: with_traceback, add_note
+- **BaseError** [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
+- **builtins.BaseException** with_traceback, add_note
 
 ### [class]{.muted} InvalidTestParametersError
 
@@ -475,8 +485,8 @@ When invalid parameters are provided for the test.
 
 **Inherited members**
 
-- **BaseError**: [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
-- **builtins.BaseException**: with_traceback, add_note
+- **BaseError** [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
+- **builtins.BaseException** with_traceback, add_note
 
 ### [class]{.muted} InvalidTestResultsError
 
@@ -496,8 +506,8 @@ When an invalid test results object is sent to the API.
 
 **Inherited members**
 
-- **APIRequestError**: [APIRequestError[()]{.muted}](#class-apirequesterror)
-- **builtins.BaseException**: with_traceback, add_note
+- **APIRequestError** [APIRequestError[()]{.muted}](#class-apirequesterror)
+- **builtins.BaseException** with_traceback, add_note
 
 ### [class]{.muted} MissingRequiredTestInputError
 
@@ -517,8 +527,8 @@ When a required test context variable is missing.
 
 **Inherited members**
 
-- **BaseError**: [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
-- **builtins.BaseException**: with_traceback, add_note
+- **BaseError** [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
+- **builtins.BaseException** with_traceback, add_note
 
 ### [class]{.muted} InvalidAPICredentialsError
 
@@ -534,8 +544,8 @@ When a required test context variable is missing.
 
 **Inherited members**
 
-- **APIRequestError**: [APIRequestError[()]{.muted}](#class-apirequesterror)
-- **builtins.BaseException**: with_traceback, add_note
+- **APIRequestError** [APIRequestError[()]{.muted}](#class-apirequesterror)
+- **builtins.BaseException** with_traceback, add_note
 
 ### [class]{.muted} InvalidContentIdPrefixError
 
@@ -555,8 +565,8 @@ When an invalid text content_id is sent to the API.
 
 **Inherited members**
 
-- **APIRequestError**: [APIRequestError[()]{.muted}](#class-apirequesterror)
-- **builtins.BaseException**: with_traceback, add_note
+- **APIRequestError** [APIRequestError[()]{.muted}](#class-apirequesterror)
+- **builtins.BaseException** with_traceback, add_note
 
 ### [class]{.muted} InvalidInputError
 
@@ -576,8 +586,8 @@ When an invalid input object is provided.
 
 **Inherited members**
 
-- **BaseError**: [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
-- **builtins.BaseException**: with_traceback, add_note
+- **BaseError** [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
+- **builtins.BaseException** with_traceback, add_note
 
 ### [class]{.muted} InvalidMetricResultsError
 
@@ -597,8 +607,8 @@ When an invalid metric results object is sent to the API.
 
 **Inherited members**
 
-- **APIRequestError**: [APIRequestError[()]{.muted}](#class-apirequesterror)
-- **builtins.BaseException**: with_traceback, add_note
+- **APIRequestError** [APIRequestError[()]{.muted}](#class-apirequesterror)
+- **builtins.BaseException** with_traceback, add_note
 
 ### [class]{.muted} InvalidProjectError
 
@@ -614,8 +624,8 @@ When an invalid metric results object is sent to the API.
 
 **Inherited members**
 
-- **APIRequestError**: [APIRequestError[()]{.muted}](#class-apirequesterror)
-- **builtins.BaseException**: with_traceback, add_note
+- **APIRequestError** [APIRequestError[()]{.muted}](#class-apirequesterror)
+- **builtins.BaseException** with_traceback, add_note
 
 ### [class]{.muted} InvalidRequestBodyError
 
@@ -635,8 +645,8 @@ When a POST/PUT request is made with an invalid request body.
 
 **Inherited members**
 
-- **APIRequestError**: [APIRequestError[()]{.muted}](#class-apirequesterror)
-- **builtins.BaseException**: with_traceback, add_note
+- **APIRequestError** [APIRequestError[()]{.muted}](#class-apirequesterror)
+- **builtins.BaseException** with_traceback, add_note
 
 ### [class]{.muted} InvalidTextObjectError
 
@@ -656,8 +666,8 @@ When an invalid Metadata (Text) object is sent to the API.
 
 **Inherited members**
 
-- **APIRequestError**: [APIRequestError[()]{.muted}](#class-apirequesterror)
-- **builtins.BaseException**: with_traceback, add_note
+- **APIRequestError** [APIRequestError[()]{.muted}](#class-apirequesterror)
+- **builtins.BaseException** with_traceback, add_note
 
 ### [class]{.muted} InvalidValueFormatterError
 
@@ -677,8 +687,8 @@ When an invalid value formatter is provided when serializing results.
 
 **Inherited members**
 
-- **BaseError**: [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
-- **builtins.BaseException**: with_traceback, add_note
+- **BaseError** [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
+- **builtins.BaseException** with_traceback, add_note
 
 ### [class]{.muted} MissingAPICredentialsError
 
@@ -694,8 +704,8 @@ When an invalid value formatter is provided when serializing results.
 
 **Inherited members**
 
-- **BaseError**: [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
-- **builtins.BaseException**: with_traceback, add_note
+- **BaseError** [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
+- **builtins.BaseException** with_traceback, add_note
 
 ### [class]{.muted} MissingCacheResultsArgumentsError
 
@@ -715,8 +725,8 @@ When the cache_results function is missing arguments.
 
 **Inherited members**
 
-- **BaseError**: [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
-- **builtins.BaseException**: with_traceback, add_note
+- **BaseError** [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
+- **builtins.BaseException** with_traceback, add_note
 
 ### [class]{.muted} MissingClassLabelError
 
@@ -736,8 +746,8 @@ When the one or more class labels are missing from provided dataset targets.
 
 **Inherited members**
 
-- **BaseError**: [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
-- **builtins.BaseException**: with_traceback, add_note
+- **BaseError** [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
+- **builtins.BaseException** with_traceback, add_note
 
 ### [class]{.muted} MissingDependencyError
 
@@ -757,8 +767,8 @@ When a required dependency is missing.
 
 **Inherited members**
 
-- **BaseError**: [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
-- **builtins.BaseException**: with_traceback, add_note
+- **BaseError** [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
+- **builtins.BaseException** with_traceback, add_note
 
 ### [class]{.muted} MissingDocumentationTemplate
 
@@ -778,8 +788,8 @@ When the client config is missing the documentation template.
 
 **Inherited members**
 
-- **BaseError**: [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
-- **builtins.BaseException**: with_traceback, add_note
+- **BaseError** [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
+- **builtins.BaseException** with_traceback, add_note
 
 ### [class]{.muted} MissingRExtrasError
 
@@ -799,8 +809,8 @@ When the R extras have not been installed.
 
 **Inherited members**
 
-- **BaseError**: [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
-- **builtins.BaseException**: with_traceback, add_note
+- **BaseError** [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
+- **builtins.BaseException** with_traceback, add_note
 
 ### [class]{.muted} MissingTextContentIdError
 
@@ -820,8 +830,8 @@ When a Text object is sent to the API without a content_id.
 
 **Inherited members**
 
-- **APIRequestError**: [APIRequestError[()]{.muted}](#class-apirequesterror)
-- **builtins.BaseException**: with_traceback, add_note
+- **APIRequestError** [APIRequestError[()]{.muted}](#class-apirequesterror)
+- **builtins.BaseException** with_traceback, add_note
 
 ### [class]{.muted} MissingTextContentsError
 
@@ -841,8 +851,8 @@ When a Text object is sent to the API without a "text" attribute.
 
 **Inherited members**
 
-- **APIRequestError**: [APIRequestError[()]{.muted}](#class-apirequesterror)
-- **builtins.BaseException**: with_traceback, add_note
+- **APIRequestError** [APIRequestError[()]{.muted}](#class-apirequesterror)
+- **builtins.BaseException** with_traceback, add_note
 
 ## Unsupported feature errors
 
@@ -864,8 +874,8 @@ When an unsupported model is used.
 
 **Inherited members**
 
-- **BaseError**: [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
-- **builtins.BaseException**: with_traceback, add_note
+- **BaseError** [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
+- **builtins.BaseException** with_traceback, add_note
 
 ### [class]{.muted} UnsupportedModelForSHAPError
 
@@ -885,8 +895,8 @@ When an unsupported model is used for SHAP importance.
 
 **Inherited members**
 
-- **BaseError**: [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
-- **builtins.BaseException**: with_traceback, add_note
+- **BaseError** [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
+- **builtins.BaseException** with_traceback, add_note
 
 ### [class]{.muted} UnsupportedRModelError
 
@@ -906,8 +916,8 @@ When an unsupported R model is used.
 
 **Inherited members**
 
-- **BaseError**: [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
-- **builtins.BaseException**: with_traceback, add_note
+- **BaseError** [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
+- **builtins.BaseException** with_traceback, add_note
 
 ### [class]{.muted} UnsupportedColumnTypeError
 
@@ -927,8 +937,8 @@ When an unsupported column type is found on a dataset.
 
 **Inherited members**
 
-- **BaseError**: [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
-- **builtins.BaseException**: with_traceback, add_note
+- **BaseError** [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
+- **builtins.BaseException** with_traceback, add_note
 
 ### [class]{.muted} UnsupportedDatasetError
 
@@ -948,8 +958,8 @@ When an unsupported dataset is used.
 
 **Inherited members**
 
-- **BaseError**: [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
-- **builtins.BaseException**: with_traceback, add_note
+- **BaseError** [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
+- **builtins.BaseException** with_traceback, add_note
 
 ### [class]{.muted} UnsupportedFigureError
 
@@ -969,5 +979,5 @@ When an unsupported figure object is constructed.
 
 **Inherited members**
 
-- **BaseError**: [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
-- **builtins.BaseException**: with_traceback, add_note
+- **BaseError** [BaseError[()]{.muted}](#class-baseerror), [description[()]{.muted}](#description)
+- **builtins.BaseException** with_traceback, add_note

@@ -22,13 +22,29 @@ sidebar: validmind-reference
 {% endif %}
 
 {% if member.name == 'BaseError' %}
-### [description[()]{.muted}](#description)
+
+{# Ensure BaseError's __init__ is displayed with the class name and parameters #}
+{% if '__init__' in member.members %}
+#### [{{ member.name }}[()]{.muted}](#__init__)
+
+{% set constructor = member.members['__init__'].copy() %}
+{% set _ = constructor.update({'parent': {'name': member.name}}) %}
+{{ signatures.render_signature(constructor) }}
+
+{% if member.members['__init__'].docstring %}
+{{ doc.format_docstring(member.members['__init__'].docstring) }}
+{% endif %}
+{% endif %}
+
+#### [description[()]{.muted}](#description)
 
 {% if 'description' in member.members %}
 {{ signatures.render_signature(member.members['description']) }}
 {% else %}
 ::: {.signature}
+
 <span class="kw">def</span><span class="name">description</span>(<span class="param"><span class="bp">self</span></span><span class="param"><span class="muted">,</span> <span class="o">*</span><span class="n">args</span></span><span class="param"><span class="muted">,</span> <span class="o">**</span><span class="n">kwargs</span></span>):
+
 :::
 {% endif %}
 
@@ -63,13 +79,13 @@ sidebar: validmind-reference
 {% endfor %}
 
 {% for base, base_members in grouped.items() %}
-- **{{ base }}**: {% for base_member in base_members %}{% if base_member.kind == 'builtin' %}{{ base_member.name }}{% else %}[{% if base_member.kind == 'class' %}{% endif %}{{ base_member.name }}[()]{.muted}](#{% if base_member.kind == 'class' %}class-{% endif %}{{ base_member.name | lower }}){% endif %}{% if not loop.last %}, {% endif %}{% endfor %}{% if not loop.last %}
+- **{{ base }}** {% for base_member in base_members %}{% if base_member.kind == 'builtin' %}{{ base_member.name }}{% else %}[{% if base_member.kind == 'class' %}{% endif %}{{ base_member.name }}[()]{.muted}](#{% if base_member.kind == 'class' %}class-{% endif %}{{ base_member.name | lower }}){% endif %}{% if not loop.last %}, {% endif %}{% endfor %}{% if not loop.last %}
 
 {% endif %}
 {% endfor %}
 
 {% if builtin_members %}
-- **builtins.BaseException**: {% for builtin in builtin_members %}{{ builtin.name }}{% if not loop.last %}, {% endif %}{% endfor %}
+- **builtins.BaseException** {% for builtin in builtin_members %}{{ builtin.name }}{% if not loop.last %}, {% endif %}{% endfor %}
 {% endif %}
 {% endif %}
 {% endif %}
@@ -77,7 +93,7 @@ sidebar: validmind-reference
 {% if member.members %}
 {% for method in member.members.values() | sort(attribute='name') %}
 {% if method.kind == 'method' and (not method.name.startswith('_') or method.name == '__init__') and method.name != '__str__' and method.name != 'description' %}
-### [{{ member.name if method.name == '__init__' else method.name }}[()]{.muted}](#{{ method.name }})
+#### [{{ member.name if method.name == '__init__' else method.name }}[()]{.muted}](#{{ method.name }})
 
 {% if method.name == '__init__' %}
 {% set method_with_parent = method.copy() %}
@@ -98,7 +114,7 @@ sidebar: validmind-reference
 {% for method in member.members.values() %}
 {% if method.kind == 'method' and method.name == 'description' and member.name != 'BaseError' %}
 {% set has_direct_description = true %}
-### [{{ method.name }}[()]{.muted}](#{{ method.name }})
+#### [{{ method.name }}[()]{.muted}](#{{ method.name }})
 
 {{ signatures.render_signature(method) }}
 
@@ -113,7 +129,7 @@ sidebar: validmind-reference
 {% set displayed_description = false %}
 {% for base_member in base_members %}
 {% if not displayed_description and base_member.kind == 'method' and base_member.name == 'description' and base_member.base != member.name %}
-### [description[()]{.muted}](#description) [inherited from {{ base_member.base }}]
+#### [description[()]{.muted}](#description) [inherited from {{ base_member.base }}]
 
 ::: {.signature}
 <span class="kw">def</span><span class="name">description</span>(<span class="param"><span class="bp">self</span></span><span class="param"><span class="muted">,</span> <span class="o">*</span><span class="n">args</span></span><span class="param"><span class="muted">,</span> <span class="o">**</span><span class="n">kwargs</span></span>):
