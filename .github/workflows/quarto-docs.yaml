@@ -1,6 +1,7 @@
 # This workflow will install Python dependencies and generate
-# Quarto documentation using Griffe for API extraction
-name: Quarto Documentation
+# Quarto documentation using Griffe for API extraction and 
+# Jinja2 templates for the docs and navigation.
+name: Python Library API docs for Quarto
 
 on:
   push:
@@ -8,7 +9,7 @@ on:
       - main
       - release-v1
     paths-ignore:
-      - 'docs/_build/**'
+      - 'docs/**'
   workflow_dispatch:
     inputs:
       note:
