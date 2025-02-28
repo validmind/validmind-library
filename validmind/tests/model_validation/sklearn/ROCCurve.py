@@ -103,5 +103,7 @@ def ROCCurve(model: VMModel, dataset: VMDataset):
                 height=500,
             ),
         ),
-        RawData(fpr=fpr, tpr=tpr, auc=auc),
+        RawData(
+            fpr=fpr, tpr=tpr, auc=auc, model=model.input_id, dataset=dataset.input_id
+        ),
     )

@@ -46,15 +46,20 @@ class TestTimeSeriesR2SquareBySegments(unittest.TestCase):
 
     def test_return_types(self):
         """Test if function returns expected types."""
-        fig, results_df = TimeSeriesR2SquareBySegments(self.vm_dataset, self.vm_model)
+        fig, results_df, raw_data = TimeSeriesR2SquareBySegments(
+            self.vm_dataset, self.vm_model
+        )
 
         # Check return types
         self.assertIsInstance(fig, go.Figure)
         self.assertIsInstance(results_df, pd.DataFrame)
+        self.assertIsInstance(raw_data, vm.RawData)
 
     def test_results_dataframe(self):
         """Test if results DataFrame has expected structure."""
-        _, results_df = TimeSeriesR2SquareBySegments(self.vm_dataset, self.vm_model)
+        _, results_df, raw_data = TimeSeriesR2SquareBySegments(
+            self.vm_dataset, self.vm_model
+        )
 
         # Check columns
         expected_columns = ["Segments", "Start Date", "End Date", "R-Squared"]
@@ -78,7 +83,7 @@ class TestTimeSeriesR2SquareBySegments(unittest.TestCase):
             "end_date": [dates[32], dates[65], dates[-1]],
         }
 
-        _, results_df = TimeSeriesR2SquareBySegments(
+        _, results_df, raw_data = TimeSeriesR2SquareBySegments(
             self.vm_dataset, self.vm_model, segments=custom_segments
         )
 

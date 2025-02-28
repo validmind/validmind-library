@@ -7,7 +7,7 @@ import sys
 
 import pandas as pd
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.errors import MissingDependencyError
 from validmind.logging import get_logger
 
@@ -119,7 +119,7 @@ def ProtectedClassesDisparity(
         mask_significance=True,
     )
 
-    figures = []
+    returns = []  # Renamed to 'returns' for clarity
     for protected_class in protected_classes:
         plot = ap.disparity(
             bdf, metrics, protected_class, fairness_threshold=disparity_tolerance
@@ -129,12 +129,16 @@ def ProtectedClassesDisparity(
         plot.save(
             buf, format="png"
         )  # as long as the above library is installed, this will work
-        figures.append(buf.getvalue())
+        returns.append(buf.getvalue())
 
     string = "_disparity"
     metrics_adj = [x + string for x in metrics]
 
     table = bdf[["attribute_name", "attribute_value"] + b.list_disparities(bdf)]
-    figures.append(aqp.plot_disparity_all(bdf, metrics=metrics_adj))
+    returns.append(aqp.plot_disparity_all(bdf, metrics=metrics_adj))
 
-    return (table, *figures)
+    return (
+        table,
+        *returns,
+        RawData(model=model.input_id, dataset=dataset.input_id, disparity_data=bdf),
+    )

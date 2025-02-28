@@ -113,5 +113,9 @@ def CosineSimilarityComparison(dataset, models):
     return (
         *figures,
         stats_df,
-        RawData(similarity_matrices=pd.DataFrame(similarity_matrices)),
+        RawData(
+            similarity_matrices=pd.DataFrame(similarity_matrices),
+            dataset=dataset.input_id,
+            models=[model.input_id for model in models],
+        ),
     )

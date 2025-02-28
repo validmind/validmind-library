@@ -124,4 +124,9 @@ def KMeansClustersOptimization(
 
     fig.update_layout(showlegend=False)
 
-    return fig, RawData(distortions=distortions, silhouette_avg=silhouette_avg)
+    return fig, RawData(
+        distortions=distortions,
+        silhouette_avg=silhouette_avg,
+        model=model.input_id,
+        dataset=dataset.input_id,
+    )

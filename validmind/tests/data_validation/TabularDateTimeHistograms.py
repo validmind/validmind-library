@@ -72,4 +72,4 @@ def TabularDateTimeHistograms(dataset: VMDataset):
         font=dict(size=18),
     )
 
-    return fig, RawData(date_differences=date_diffs)
+    return fig, RawData(date_differences=date_diffs, dataset=dataset.input_id)

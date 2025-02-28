@@ -152,5 +152,7 @@ def TimeSeriesPredictionWithCI(dataset, model, confidence=0.95):
             z_score=z_score,
             lower_confidence=lower_conf,
             upper_confidence=upper_conf,
+            model=model.input_id,
+            dataset=dataset.input_id,
         ),
     )

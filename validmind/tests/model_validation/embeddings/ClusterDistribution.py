@@ -62,4 +62,4 @@ def ClusterDistribution(model: VMModel, dataset: VMDataset, num_clusters: int = 
         title="Embeddings Cluster Distribution",
     )
 
-    return fig, RawData(labels=labels)
+    return fig, RawData(labels=labels, model=model.input_id, dataset=dataset.input_id)

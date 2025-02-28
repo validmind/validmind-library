@@ -5,7 +5,7 @@
 import pandas as pd
 import plotly.graph_objects as go
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 
 
 @tags("visualization")
@@ -140,4 +140,15 @@ def PredictionCorrelation(datasets, model, drift_pct_threshold=20):
     # Calculate overall pass/fail
     pass_fail_bool = (corr_final["Pass/Fail"] == "Pass").all()
 
-    return ({"Correlation Pair Table": corr_final}, fig, pass_fail_bool)
+    return (
+        {"Correlation Pair Table": corr_final},
+        fig,
+        pass_fail_bool,
+        RawData(
+            reference_correlations=corr_ref.to_dict(),
+            monitoring_correlations=corr_mon.to_dict(),
+            model=model.input_id,
+            dataset_reference=datasets[0].input_id,
+            dataset_monitoring=datasets[1].input_id,
+        ),
+    )
