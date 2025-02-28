@@ -1,0 +1,14 @@
+---
+title: "[validmind](/validmind/validmind.html).credit_risk"
+sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
+# module.qmd.jinja2
+---
+
+<!-- docstring.jinja2 -->
+
+Entrypoint for credit risk datasets.
+
+- [lending_club](credit_risk/lending_club.qmd)
+- [lending_club_bias](credit_risk/lending_club_bias.qmd)

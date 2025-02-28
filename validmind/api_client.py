@@ -38,7 +38,7 @@ __api_session: Optional[aiohttp.ClientSession] = None
 
 @atexit.register
 def _close_session():
-    """Closes the async client session at exit"""
+    """Closes the async client session at exit."""
     global __api_session
 
     if __api_session and not __api_session.closed:
@@ -78,7 +78,7 @@ def _get_api_headers() -> Dict[str, str]:
 
 
 def _get_session() -> aiohttp.ClientSession:
-    """Initializes the async client session"""
+    """Initializes the async client session."""
     global __api_session
 
     if not __api_session or __api_session.closed:
@@ -156,7 +156,7 @@ async def _post(
 
 
 def _ping() -> Dict[str, Any]:
-    """Validates that we can connect to the ValidMind API (does not use the async session)"""
+    """Validates that we can connect to the ValidMind API (does not use the async session)."""
     r = requests.get(
         url=_get_url("ping"),
         headers=_get_api_headers(),
@@ -243,7 +243,7 @@ def init(
 
 
 def reload():
-    """Reconnect to the ValidMind API and reload the project configuration"""
+    """Reconnect to the ValidMind API and reload the project configuration."""
 
     try:
         _ping()
@@ -258,13 +258,13 @@ async def aget_metadata(content_id: str) -> Dict[str, Any]:
     """Gets a metadata object from ValidMind API.
 
     Args:
-        content_id (str): Unique content identifier for the metadata
+        content_id (str): Unique content identifier for the metadata.
 
     Raises:
-        Exception: If the API call fails
+        Exception: If the API call fails.
 
     Returns:
-        dict: Metadata object
+        dict: Metadata object.
     """
     return await _get(f"get_metadata/{content_id}")
 
@@ -277,15 +277,15 @@ async def alog_metadata(
     """Logs free-form metadata to ValidMind API.
 
     Args:
-        content_id (str): Unique content identifier for the metadata
+        content_id (str): Unique content identifier for the metadata.
         text (str, optional): Free-form text to assign to the metadata. Defaults to None.
         _json (dict, optional): Free-form key-value pairs to assign to the metadata. Defaults to None.
 
     Raises:
-        Exception: If the API call fails
+        Exception: If the API call fails.
 
     Returns:
-        dict: The response from the API
+        dict: The response from the API.
     """
     metadata_dict = {"content_id": content_id}
     if text is not None:
@@ -304,16 +304,16 @@ async def alog_metadata(
 
 
 async def alog_figure(figure: Figure) -> Dict[str, Any]:
-    """Logs a figure
+    """Logs a figure.
 
     Args:
-        figure (Figure): The Figure object wrapper
+        figure (Figure): The Figure object wrapper.
 
     Raises:
-        Exception: If the API call fails
+        Exception: If the API call fails.
 
     Returns:
-        dict: The response from the API
+        dict: The response from the API.
     """
     try:
         return await _post(
@@ -331,21 +331,21 @@ async def alog_test_result(
     section_id: str = None,
     position: int = None,
 ) -> Dict[str, Any]:
-    """Logs test results information
+    """Logs test results information.
 
     This method will be called automatically from any function running tests but
     can also be called directly if the user wants to run tests on their own.
 
     Args:
-        result (dict): A dictionary representing the test result
-        section_id (str, optional): The section ID add a test driven block to the documentation
-        position (int): The position in the section to add the test driven block
+        result (dict): A dictionary representing the test result.
+        section_id (str, optional): The section ID add a test driven block to the documentation.
+        position (int): The position in the section to add the test driven block.
 
     Raises:
-        Exception: If the API call fails
+        Exception: If the API call fails.
 
     Returns:
-        dict: The response from the API
+        dict: The response from the API.
     """
     request_params = {}
     if section_id:
@@ -413,7 +413,7 @@ async def alog_metric(
     recorded_at: Optional[str] = None,
     thresholds: Optional[Dict[str, Any]] = None,
 ):
-    """See log_metric for details"""
+    """See log_metric for details."""
     if not key or not isinstance(key, str):
         raise ValueError("`key` must be a non-empty string")
 
@@ -458,7 +458,7 @@ def log_metric(
     recorded_at: Optional[str] = None,
     thresholds: Optional[Dict[str, Any]] = None,
 ):
-    """Logs a unit metric
+    """Logs a unit metric.
 
     Unit metrics are key-value pairs where the key is the metric name and the value is
     a scalar (int or float). These key-value pairs are associated with the currently
@@ -479,7 +479,7 @@ def log_metric(
 
 
 def get_ai_key() -> Dict[str, Any]:
-    """Calls the api to get an api key for our LLM proxy"""
+    """Calls the API to get an API key for our LLM proxy."""
     r = requests.get(
         url=_get_url("ai/key"),
         headers=_get_api_headers(),

@@ -1,0 +1,14 @@
+---
+title: "[validmind](/validmind/validmind.html).regression"
+sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
+# module.qmd.jinja2
+---
+
+<!-- docstring.jinja2 -->
+
+Entrypoint for regression datasets
+
+- [fred](regression/fred.qmd)
+- [lending_club](regression/lending_club.qmd)

@@ -8,6 +8,9 @@ Client interface for all data and model validation functions
 
 import pandas as pd
 import polars as pl
+import numpy as np
+import torch
+from typing import Any, Callable, Dict, List, Optional, Union
 
 from .api_client import log_input as log_input
 from .client_config import client_config
@@ -42,20 +45,20 @@ logger = get_logger(__name__)
 
 
 def init_dataset(
-    dataset,
-    model=None,
-    index=None,
-    index_name: str = None,
+    dataset: Union[pd.DataFrame, pl.DataFrame, "np.ndarray", "torch.utils.data.TensorDataset"],
+    model: Optional[VMModel] = None,
+    index: Optional[Any] = None,
+    index_name: Optional[str] = None,
     date_time_index: bool = False,
-    columns: list = None,
-    text_column: str = None,
-    target_column: str = None,
-    feature_columns: list = None,
-    extra_columns: dict = None,
-    class_labels: dict = None,
-    type: str = None,
-    input_id: str = None,
-    __log=True,
+    columns: Optional[List[str]] = None,
+    text_column: Optional[str] = None,
+    target_column: Optional[str] = None,
+    feature_columns: Optional[List[str]] = None,
+    extra_columns: Optional[Dict[str, Any]] = None,
+    class_labels: Optional[Dict[str, Any]] = None,
+    type: Optional[str] = None,
+    input_id: Optional[str] = None,
+    __log: bool = True,
 ) -> VMDataset:
     """
     Initializes a VM Dataset, which can then be passed to other functions
@@ -69,25 +72,30 @@ def init_dataset(
     - Torch TensorDataset
 
     Args:
-        dataset : dataset from various python libraries
-        model (VMModel): ValidMind model object
-        targets (vm.vm.DatasetTargets): A list of target variables
-        target_column (str): The name of the target column in the dataset
-        feature_columns (list): A list of names of feature columns in the dataset
-        extra_columns (dictionary):  A dictionary containing the names of the
-        prediction_column and group_by_columns in the dataset
-        class_labels (dict): A list of class labels for classification problems
-        type (str): The type of dataset (one of DATASET_TYPES)
-        input_id (str): The input ID for the dataset (e.g. "my_dataset"). By default,
+        dataset: Dataset from various Python libraries.
+        model (VMModel): ValidMind model object.
+        index (Any, optional): Index for the dataset.
+        index_name (str, optional): Name of the index column.
+        date_time_index (bool): Whether the index is a datetime index.
+        columns (List[str], optional): List of column names.
+        text_column (str, optional): Name of the text column.
+        target_column (str, optional): The name of the target column in the dataset.
+        feature_columns (List[str], optional): A list of names of feature columns in the dataset.
+        extra_columns (Dict[str, Any], optional): A dictionary containing the names of the
+            prediction_column and group_by_columns in the dataset.
+        class_labels (Dict[str, Any], optional): A list of class labels for classification problems.
+        type (str, optional): The type of dataset (one of DATASET_TYPES) - DEPRECATED.
+        input_id (str, optional): The input ID for the dataset (e.g. "my_dataset"). By default,
             this will be set to `dataset` but if you are passing this dataset as a
             test input using some other key than `dataset`, then you should set
             this to the same key.
+        __log (bool): Whether to log the input. Defaults to True.
 
     Raises:
-        ValueError: If the dataset type is not supported
+        ValueError: If the dataset type is not supported.
 
     Returns:
-        vm.vm.Dataset: A VM Dataset instance
+        vm.vm.Dataset: A VM Dataset instance.
     """
     # Show deprecation notice if type is passed
     if type is not None:
@@ -171,12 +179,12 @@ def init_dataset(
 
 
 def init_model(
-    model: object = None,
+    model: Optional[object] = None,
     input_id: str = "model",
-    attributes: dict = None,
-    predict_fn: callable = None,
-    __log=True,
-    **kwargs,
+    attributes: Optional[Dict[str, Any]] = None,
+    predict_fn: Optional[Callable] = None,
+    __log: bool = True,
+    **kwargs: Any,
 ) -> VMModel:
     """
     Initializes a VM Model, which can then be passed to other functions
@@ -184,35 +192,21 @@ def init_model(
     also ensures we are creating a model supported libraries.
 
     Args:
-        model: A trained model or VMModel instance
+        model: A trained model or VMModel instance.
         input_id (str): The input ID for the model (e.g. "my_model"). By default,
             this will be set to `model` but if you are passing this model as a
             test input using some other key than `model`, then you should set
             this to the same key.
-        attributes (dict): A dictionary of model attributes
-        predict_fn (callable): A function that takes an input and returns a prediction
-        **kwargs: Additional arguments to pass to the model
+        attributes (dict): A dictionary of model attributes.
+        predict_fn (callable): A function that takes an input and returns a prediction.
+        **kwargs: Additional arguments to pass to the model.
 
     Raises:
-        ValueError: If the model type is not supported
+        ValueError: If the model type is not supported.
 
     Returns:
-        vm.VMModel: A VM Model instance
+        vm.VMModel: A VM Model instance.
     """
-    # vm_model = model if isinstance(model, VMModel) else None
-    # metadata = None
-
-    # if not vm_model:
-    #     class_obj = get_model_class(model=model, predict_fn=predict_fn)
-    #     if not class_obj:
-    #         if not attributes:
-    #             raise UnsupportedModelError(
-    #                 f"Model class {str(model.__class__)} is not supported at the moment."
-    #             )
-    #         elif not is_model_metadata(attributes):
-    #             raise UnsupportedModelError(
-    #                 f"Model attributes {str(attributes)} are missing required keys 'architecture' and 'language'."
-    #             )
     vm_model = model if isinstance(model, VMModel) else None
     class_obj = get_model_class(model=model, predict_fn=predict_fn)
 
@@ -276,26 +270,18 @@ def init_r_model(
     input_id: str = "model",
 ) -> VMModel:
     """
-    Initializes a VM Model for an R model
-
-    R models must be saved to disk and the filetype depends on the model type...
-    Currently we support the following model types:
-
-    - LogisticRegression `glm` model in R: saved as an RDS file with `saveRDS`
-    - LinearRegression `lm` model in R: saved as an RDS file with `saveRDS`
-    - XGBClassifier: saved as a .json or .bin file with `xgb.save`
-    - XGBRegressor: saved as a .json or .bin file with `xgb.save`
+    Initialize a VM Model from an R model.
 
     LogisticRegression and LinearRegression models are converted to sklearn models by extracting
     the coefficients and intercept from the R model. XGB models are loaded using the xgboost
-    since xgb models saved in .json or .bin format can be loaded directly with either Python or R
+    since xgb models saved in .json or .bin format can be loaded directly with either Python or R.
 
     Args:
-        model_path (str): The path to the R model saved as an RDS or XGB file
-        model_type (str): The type of the model (one of R_MODEL_TYPES)
+        model_path (str): The path to the R model saved as an RDS or XGB file.
+        input_id (str): The input ID for the model. Defaults to "model".
 
     Returns:
-        vm.vm.Model: A VM Model instance
+        VMModel: A VM Model instance.
     """
 
     # TODO: proper check for supported models
@@ -329,12 +315,12 @@ def init_r_model(
 
 
 def get_test_suite(
-    test_suite_id: str = None,
-    section: str = None,
-    *args,
-    **kwargs,
+    test_suite_id: Optional[str] = None,
+    section: Optional[str] = None,
+    *args: Any,
+    **kwargs: Any,
 ) -> TestSuite:
-    """Gets a TestSuite object for the current project or a specific test suite
+    """Gets a TestSuite object for the current project or a specific test suite.
 
     This function provides an interface to retrieve the TestSuite instance for the
     current project or a specific TestSuite instance identified by test_suite_id.
@@ -348,8 +334,11 @@ def get_test_suite(
         section (str, optional): The section of the documentation template from which
             to retrieve the test suite. This only applies if test_suite_id is None.
             Defaults to None.
-        args: Additional arguments to pass to the TestSuite
-        kwargs: Additional keyword arguments to pass to the TestSuite
+        args: Additional arguments to pass to the TestSuite.
+        kwargs: Additional keyword arguments to pass to the TestSuite.
+
+    Returns:
+        TestSuite: The TestSuite instance.
     """
     if test_suite_id is None:
         if client_config.documentation_template is None:
@@ -365,31 +354,36 @@ def get_test_suite(
 
 
 def run_test_suite(
-    test_suite_id, send=True, fail_fast=False, config=None, inputs=None, **kwargs
-):
-    """High Level function for running a test suite
+    test_suite_id: str,
+    send: bool = True,
+    fail_fast: bool = False,
+    config: Optional[Dict[str, Any]] = None,
+    inputs: Optional[Dict[str, Any]] = None,
+    **kwargs: Any,
+) -> TestSuite:
+    """High Level function for running a test suite.
 
     This function provides a high level interface for running a test suite. A test suite is
     a collection of tests. This function will automatically find the correct test suite
     class based on the test_suite_id, initialize each of the tests, and run them.
 
     Args:
-        test_suite_id (str): The test suite name (e.g. 'classifier_full_suite')
+        test_suite_id (str): The test suite name. For example, 'classifier_full_suite'.
         config (dict, optional): A dictionary of parameters to pass to the tests in the
             test suite. Defaults to None.
         send (bool, optional): Whether to post the test results to the API. send=False
             is useful for testing. Defaults to True.
         fail_fast (bool, optional): Whether to stop running tests after the first failure. Defaults to False.
-        inputs (dict, optional): A dictionary of test inputs to pass to the TestSuite e.g. `model`, `dataset`
-            `models` etc. These inputs will be accessible by any test in the test suite. See the test
-            documentation or `vm.describe_test()` for more details on the inputs required for each.
-        **kwargs: backwards compatibility for passing in test inputs using keyword arguments
+        inputs (dict, optional): A dictionary of test inputs to pass to the TestSuite, such as `model`, `dataset`
+            `models`, etc. These inputs will be accessible by any test in the test suite. See the test
+            documentation or `vm.describe_test()` for more details on the inputs required for each. Defaults to None.
+        **kwargs: backwards compatibility for passing in test inputs using keyword arguments.
 
     Raises:
-        ValueError: If the test suite name is not found or if there is an error initializing the test suite
+        ValueError: If the test suite name is not found or if there is an error initializing the test suite.
 
     Returns:
-        TestSuite: the TestSuite instance
+        TestSuite: The TestSuite instance.
     """
     try:
         Suite: TestSuite = get_test_suite_by_id(test_suite_id)
@@ -414,14 +408,14 @@ def run_test_suite(
     return suite
 
 
-def preview_template():
-    """Preview the documentation template for the current project
+def preview_template() -> None:
+    """Preview the documentation template for the current project.
 
     This function will display the documentation template for the current project. If
     the project has not been initialized, then an error will be raised.
 
     Raises:
-        ValueError: If the project has not been initialized
+        ValueError: If the project has not been initialized.
     """
     if client_config.documentation_template is None:
         raise MissingDocumentationTemplate(
@@ -432,9 +426,14 @@ def preview_template():
 
 
 def run_documentation_tests(
-    section=None, send=True, fail_fast=False, inputs=None, config=None, **kwargs
-):
-    """Collect and run all the tests associated with a template
+    section: Optional[str] = None,
+    send: bool = True,
+    fail_fast: bool = False,
+    inputs: Optional[Dict[str, Any]] = None,
+    config: Optional[Dict[str, Any]] = None,
+    **kwargs: Any,
+) -> Union[TestSuite, Dict[str, TestSuite]]:
+    """Collect and run all the tests associated with a template.
 
     This function will analyze the current project's documentation template and collect
     all the tests associated with it into a test suite. It will then run the test
@@ -444,15 +443,15 @@ def run_documentation_tests(
         section (str or list, optional): The section(s) to preview. Defaults to None.
         send (bool, optional): Whether to send the results to the ValidMind API. Defaults to True.
         fail_fast (bool, optional): Whether to stop running tests after the first failure. Defaults to False.
-        inputs (dict, optional): A dictionary of test inputs to pass to the TestSuite
-        config: A dictionary of test parameters to override the defaults
-        **kwargs: backwards compatibility for passing in test inputs using keyword arguments
+        inputs (dict, optional): A dictionary of test inputs to pass to the TestSuite.
+        config: A dictionary of test parameters to override the defaults.
+        **kwargs: backwards compatibility for passing in test inputs using keyword arguments.
 
     Returns:
         TestSuite or dict: The completed TestSuite instance or a dictionary of TestSuites if section is a list.
 
     Raises:
-        ValueError: If the project has not been initialized
+        ValueError: If the project has not been initialized.
     """
     if client_config.documentation_template is None:
         raise MissingDocumentationTemplate(
@@ -487,24 +486,30 @@ def run_documentation_tests(
 
 
 def _run_documentation_section(
-    template, section, send=True, fail_fast=False, config=None, inputs=None, **kwargs
-):
-    """Run all tests in a template section
+    template: str,
+    section: str,
+    send: bool = True,
+    fail_fast: bool = False,
+    config: Optional[Dict[str, Any]] = None,
+    inputs: Optional[Dict[str, Any]] = None,
+    **kwargs: Any,
+) -> TestSuite:
+    """Run all tests in a template section.
 
     This function will collect all tests used in a template section into a TestSuite and then
     run the TestSuite as usual.
 
     Args:
-        template: A valid flat template
-        section: The section of the template to run (if not provided, run all sections)
-        send: Whether to send the results to the ValidMind API
+        template: A valid flat template.
+        section: The section of the template to run (if not provided, run all sections).
+        send: Whether to send the results to the ValidMind API.
         fail_fast (bool, optional): Whether to stop running tests after the first failure. Defaults to False.
-        config: A dictionary of test parameters to override the defaults
-        inputs: A dictionary of test inputs to pass to the TestSuite
-        **kwargs: backwards compatibility for passing in test inputs using keyword arguments
+        config: A dictionary of test parameters to override the defaults.
+        inputs: A dictionary of test inputs to pass to the TestSuite.
+        **kwargs: backwards compatibility for passing in test inputs using keyword arguments.
 
     Returns:
-        The completed TestSuite instance
+        The completed TestSuite instance.
     """
     test_suite = get_template_test_suite(template, section)
 
