@@ -6,16 +6,6 @@ toc-expand: 4
 # module.qmd.jinja2
 ---
 
-## multiclass_roc_auc_score<span class='muted'>()</span>
-
-<!-- signatures.jinja2 -->
-
-::: {.signature}
-
-<span class="kw">def</span><span class="name">multiclass_roc_auc_score</span>(<span class="params"><span class="n">y_test</span><span class="muted">,</span></span><span class="params"><span class="n">y_pred</span><span class="muted">,</span></span><span class="params"><span class="n">average</span><span class="o">=</span><span class="s1">'macro'</span></span>):
-
-:::
-
 <!-- function.qmd.jinja2 -->
 
 ## ModelsPerformanceComparison[()]{.muted}

@@ -6,30 +6,6 @@ toc-expand: 4
 # module.qmd.jinja2
 ---
 
-## validate_prediction<span class='muted'>()</span>
-
-<!-- signatures.jinja2 -->
-
-::: {.signature}
-
-<span class="kw">def</span><span class="name">validate_prediction</span>(<span class="params"><span class="n">y_true</span><span class="p">:</span><span class="n">Union</span><span class="p">\[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">, </span><span class="nb">list</span><span class="p">\]</span><span class="muted">,</span></span><span class="params"><span class="n">y_pred</span><span class="p">:</span><span class="n">Union</span><span class="p">\[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">, </span><span class="nb">list</span><span class="p">\]</span><span class="muted">,</span></span><span class="params"><span class="n">dataset_id</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">Tuple</span><span class="p">\[</span><a href="/validmind/validmind/vm_models.html#class-np">validmind.vm_models.np</a><span class="o">.</span><a href="/validmind/validmind/vm_models.html#class-ndarray">validmind.vm_models.ndarray</a><span class="p">, </span><a href="/validmind/validmind/vm_models.html#class-np">validmind.vm_models.np</a><span class="o">.</span><a href="/validmind/validmind/vm_models.html#class-ndarray">validmind.vm_models.ndarray</a><span class="p">\]</span></span>:
-
-:::
-
-<!-- docstring.jinja2 -->
-
-Comprehensive validation of true and predicted value pairs. Handles NaN/None values and length mismatches.
-
-**Arguments**
-
-- `y_true`: List or array of true values
-- `y_pred`: List or array of predicted values
-- `dataset_id`: Optional identifier for the dataset (for logging)
-
-**Returns**
-
-- (cleaned_y_true, cleaned_y_pred) with matching lengths and no NaN values
-
 <!-- function.qmd.jinja2 -->
 
 ## RegardScore[()]{.muted}

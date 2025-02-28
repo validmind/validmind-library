@@ -6,26 +6,6 @@ toc-expand: 4
 # module.qmd.jinja2
 ---
 
-## format_records<span class='muted'>()</span>
-
-<!-- signatures.jinja2 -->
-
-::: {.signature}
-
-<span class="kw">def</span><span class="name">format_records</span>(<span class="param"><span class="n">df</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">List</span><span class="p">\[</span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span></span>:
-
-:::
-
-<!-- docstring.jinja2 -->
-
-Round the values on each dataframe's column to a given number of decimal places. The returned value is converted to a dict in "records" with Pandas's to_dict() function.
-
-We do this for display purposes before sending data to ValidMind. Rules:
-
-- Check if we are rendering "big" numbers greater than 10 or just numbers between 0 and 1
-- If the column's smallest number has more decimals 6, use that number's precision so we can avoid rendering a 0 instead
-- If the column's smallest number has less decimals than 6, use 6 decimal places
-
 <!-- function.qmd.jinja2 -->
 
 ## DescriptiveStatistics[()]{.muted}

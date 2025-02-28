@@ -6,20 +6,6 @@ toc-expand: 4
 # module.qmd.jinja2
 ---
 
-## get_model_info<span class='muted'>()</span>
-
-<!-- signatures.jinja2 -->
-
-::: {.signature}
-
-<span class="kw">def</span><span class="name">get_model_info</span>(<span class="param"><span class="n">model</span></span>):
-
-:::
-
-<!-- docstring.jinja2 -->
-
-Attempts to extract all model info from a model object instance.
-
 <!-- function.qmd.jinja2 -->
 
 ## ModelMetadata[()]{.muted}

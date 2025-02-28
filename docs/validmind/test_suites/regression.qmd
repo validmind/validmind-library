@@ -59,39 +59,3 @@ Test suite for performance metrics of regression metrics
 Test suite for regression model performance
 
 **Inherited members**
-
-<!-- class.qmd.jinja2 -->
-
-## [class]{.muted} TabularDataQuality
-
-<!-- signatures.jinja2 -->
-
-::: {.signature}
-
-<span class="kw">class</span><span class="name">TabularDataQuality</span>(<span class="base">TestSuite</span>):
-
-:::
-
-<!-- docstring.jinja2 -->
-
-Test suite for data quality on tabular datasets
-
-**Inherited members**
-
-<!-- class.qmd.jinja2 -->
-
-## [class]{.muted} TabularDatasetDescription
-
-<!-- signatures.jinja2 -->
-
-::: {.signature}
-
-<span class="kw">class</span><span class="name">TabularDatasetDescription</span>(<span class="base">TestSuite</span>):
-
-:::
-
-<!-- docstring.jinja2 -->
-
-Test suite to extract metadata and descriptive statistics from a tabular dataset
-
-**Inherited members**

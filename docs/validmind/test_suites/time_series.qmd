@@ -101,39 +101,3 @@ This test suite provides a preliminary understanding of the target variable(s) u
 The raw time series data provides a visual inspection of the target variable's behavior over time. This helps to identify any patterns or trends in the data, as well as any potential outliers or anomalies. The histogram of the target variable displays the distribution of values, providing insight into the range and frequency of values observed in the data.
 
 **Inherited members**
-
-<!-- class.qmd.jinja2 -->
-
-## [class]{.muted} RegressionModelDescription
-
-<!-- signatures.jinja2 -->
-
-::: {.signature}
-
-<span class="kw">class</span><span class="name">RegressionModelDescription</span>(<span class="base">TestSuite</span>):
-
-:::
-
-<!-- docstring.jinja2 -->
-
-Test suite for performance metric of regression model of statsmodels library
-
-**Inherited members**
-
-<!-- class.qmd.jinja2 -->
-
-## [class]{.muted} RegressionModelsEvaluation
-
-<!-- signatures.jinja2 -->
-
-::: {.signature}
-
-<span class="kw">class</span><span class="name">RegressionModelsEvaluation</span>(<span class="base">TestSuite</span>):
-
-:::
-
-<!-- docstring.jinja2 -->
-
-Test suite for metrics comparison of regression model of statsmodels library
-
-**Inherited members**

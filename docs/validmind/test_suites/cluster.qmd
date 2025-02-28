@@ -65,21 +65,3 @@ Test suite for sklearn clustering metrics
 Test suite for sklearn cluster performance
 
 **Inherited members**
-
-<!-- class.qmd.jinja2 -->
-
-## [class]{.muted} KmeansParametersOptimization
-
-<!-- signatures.jinja2 -->
-
-::: {.signature}
-
-<span class="kw">class</span><span class="name">KmeansParametersOptimization</span>(<span class="base">TestSuite</span>):
-
-:::
-
-<!-- docstring.jinja2 -->
-
-Test suite for sklearn hyperparameters optimization
-
-**Inherited members**

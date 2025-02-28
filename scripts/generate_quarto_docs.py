@@ -128,6 +128,17 @@ def is_public(member: Dict[str, Any], module: Dict[str, Any], full_data: Dict[st
     if name == 'get_logger' and path.startswith('validmind.tests'):
         return False
     
+    # Check if the member is an alias that's imported from another module
+    if member.get('kind') == 'alias' and member.get('target_path'):
+        # If the module has __all__, only include aliases listed there
+        if module and '__all__' in module.get('members', {}):
+            module_all = get_all_members(module.get('members', {}))
+            return name in module_all
+        
+        # Otherwise, skip aliases (imported functions) unless at root level
+        if not is_root:
+            return False
+    
     # At root level, only show items from __all__
     if is_root:
         root_all = get_all_members(full_data['validmind'].get('members', {}))
