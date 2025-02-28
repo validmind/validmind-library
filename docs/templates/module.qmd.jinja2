@@ -9,8 +9,12 @@ aliases:
   - index.html
 {% endif %}
 sidebar: validmind-reference
+{% if module.name == "validmind" %}
+toc: false
+{% else %}
 toc-depth: 4
 toc-expand: 4
+{% endif %}
 # module.qmd.jinja2
 ---
 

@@ -10,8 +10,8 @@ website:
         - text: "---"
         - text: "Python API"
         # Root level items from validmind.qmd
-        - text: "&#95;&#95;version__"
-          file: validmind/validmind.qmd#&#95;&#95;version__
+        - text: "`2.8.11`"
+          file: validmind/validmind.qmd#version__
         - text: "init<span class='muted'>()</span>"
           file: validmind/validmind.qmd#init
         - text: "init_dataset<span class='muted'>()</span>"

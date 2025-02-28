@@ -12,8 +12,13 @@ website:
         # Root level items from validmind.qmd
         {% if documented_items.get('root') %}
         {% for item in documented_items['root'] %}
+        {% if "&#95;&#95;version__" in item.text %}
+        - text: "`{{ module.members.__version__.members.__version__.value | replace("'", "") if module.members.__version__.members.__version__.value else module.members.__version__.value | replace("'", "") }}`"
+          file: {{ item.file | replace("&#95;&#95;version__", "version__") }}
+        {% else %}
         - text: "{{ item.text }}"
           file: {{ item.file }}
+        {% endif %}
           {% if item.contents %}
           contents:
             {% for method in item.contents %}

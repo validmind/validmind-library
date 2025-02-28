@@ -3,8 +3,7 @@ title: "ValidMind Library"
 aliases:
   - index.html
 sidebar: validmind-reference
-toc-depth: 4
-toc-expand: 4
+toc: false
 # module.qmd.jinja2
 ---
 
