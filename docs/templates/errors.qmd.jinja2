@@ -21,6 +21,16 @@ sidebar: validmind-reference
 {{ doc.format_docstring(member.docstring) }}
 {% endif %}
 
+{% if member.name == 'BaseError' %}
+### [description[()]{.muted}](#description)
+
+::: {.signature}
+<span class="kw">def</span><span class="name">description</span>(<span class="param"><span class="bp">self</span></span><span class="param"><span class="muted">,</span> <span class="o">*</span><span class="n">args</span></span><span class="param"><span class="muted">,</span> <span class="o">**</span><span class="n">kwargs</span></span>):
+:::
+
+Returns the error message.
+{% endif %}
+
 <!-- errors.qmd.jinja2 - inherited members -->
 {% if member.bases and not (member.path and 'tests' in member.path) %}
 **Inherited members**
@@ -79,7 +89,7 @@ sidebar: validmind-reference
 {# Add the description method separately to ensure it's properly included #}
 {% set has_direct_description = false %}
 {% for method in member.members.values() %}
-{% if method.kind == 'method' and method.name == 'description' %}
+{% if method.kind == 'method' and method.name == 'description' and member.name != 'BaseError' %}
 {% set has_direct_description = true %}
 ### [{{ method.name }}[()]{.muted}](#{{ method.name }})
 
@@ -98,8 +108,9 @@ sidebar: validmind-reference
 {% if not displayed_description and base_member.kind == 'method' and base_member.name == 'description' and base_member.base != member.name %}
 ### [description[()]{.muted}](#description) [inherited from {{ base_member.base }}]
 
-{% set base_method = base_member.copy() %}
-{{ signatures.render_signature(base_method) }}
+::: {.signature}
+<span class="kw">def</span><span class="name">description</span>(<span class="param"><span class="bp">self</span></span><span class="param"><span class="muted">,</span> <span class="o">*</span><span class="n">args</span></span><span class="param"><span class="muted">,</span> <span class="o">**</span><span class="n">kwargs</span></span>):
+:::
 
 {% if base_member.docstring %}
 {{ doc.format_docstring(base_member.docstring) }}
