@@ -730,7 +730,7 @@ Log the result to ValidMind.
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">log_async</span>(<span class="params"><span class="bp">self</span><span class="muted">,</span></span><span class="params"><span class="n">section_id</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">position</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">unsafe</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span></span>):
+<span class="kw">async def</span><span class="name">log_async</span>(<span class="params"><span class="bp">self</span><span class="muted">,</span></span><span class="params"><span class="n">section_id</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">position</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">unsafe</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span></span>):
 
 :::
 
@@ -918,7 +918,7 @@ Runs a test suite.
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">log_results</span>(<span class="param"><span class="bp">self</span></span>):
+<span class="kw">async def</span><span class="name">log_results</span>(<span class="param"><span class="bp">self</span></span>):
 
 :::
 

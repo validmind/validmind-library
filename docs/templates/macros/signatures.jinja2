@@ -19,7 +19,10 @@
 {%- if not (member.name == "__init__" and member.kind in ["method", "function"]) -%}
 <span class="kw">
   {%- if member.kind == "class" or member.kind == "alias" -%}class
-  {%- elif member.kind == "function" or member.kind == "method" -%}def
+  {%- elif member.kind == "function" or member.kind == "method" -%}
+    {%- if member.labels is defined and "async" in member.labels -%}async def
+    {%- else -%}def
+    {%- endif -%}
   {%- endif -%}
 </span>
 {%- endif -%}
