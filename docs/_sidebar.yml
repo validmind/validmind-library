@@ -4,7 +4,7 @@ website:
     - id: validmind-reference
       title: "ValidMind Library"
       collapsed: false
-      collapse-level: 1
+      collapse-level: 2
       contents:
         - validmind/validmind.qmd
         - text: "---"
@@ -42,6 +42,13 @@ website:
           file: validmind/validmind.qmd#test
         - text: "<span class='muted'>class</span> RawData"
           file: validmind/validmind.qmd#class-rawdata
+          contents:
+            - text: "RawData<span class='muted'>()</span>"
+              file: validmind/validmind.qmd#rawdata
+            - text: "inspect<span class='muted'>()</span>"
+              file: validmind/validmind.qmd#inspect
+            - text: "serialize<span class='muted'>()</span>"
+              file: validmind/validmind.qmd#serialize
         # All module documentation pages
         - text: "---"
         - text: "Submodules"
