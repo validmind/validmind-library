@@ -25,5 +25,3 @@ Test suites for llm summarization models
 <!-- docstring.jinja2 -->
 
 Test suite for Summarization metrics
-
-**Inherited members**

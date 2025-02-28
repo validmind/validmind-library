@@ -28,8 +28,6 @@ Ideal setup is to have the API client to read a custom test suite from the proje
 
 Full test suite for embeddings models.
 
-**Inherited members**
-
 <!-- class.qmd.jinja2 -->
 
 ## [class]{.muted} EmbeddingsMetrics
@@ -46,8 +44,6 @@ Full test suite for embeddings models.
 
 Test suite for embeddings metrics
 
-**Inherited members**
-
 <!-- class.qmd.jinja2 -->
 
 ## [class]{.muted} EmbeddingsPerformance
@@ -63,5 +59,3 @@ Test suite for embeddings metrics
 <!-- docstring.jinja2 -->
 
 Test suite for embeddings model performance
-
-**Inherited members**

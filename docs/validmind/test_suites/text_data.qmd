@@ -25,5 +25,3 @@ Test suites for text datasets
 <!-- docstring.jinja2 -->
 
 Test suite for data quality on text data
-
-**Inherited members**

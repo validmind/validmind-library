@@ -26,8 +26,6 @@ Time Series Test Suites from statsmodels
 
 Test suite for performance metric of regression model of statsmodels library
 
-**Inherited members**
-
 <!-- class.qmd.jinja2 -->
 
 ## [class]{.muted} RegressionModelsEvaluation
@@ -43,5 +41,3 @@ Test suite for performance metric of regression model of statsmodels library
 <!-- docstring.jinja2 -->
 
 Test suite for metrics comparison of regression model of statsmodels library
-
-**Inherited members**

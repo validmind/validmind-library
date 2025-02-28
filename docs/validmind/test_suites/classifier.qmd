@@ -28,8 +28,6 @@ Ideal setup is to have the API client to read a custom test suite from the proje
 
 Test suite for sklearn classifier model diagnosis tests
 
-**Inherited members**
-
 <!-- class.qmd.jinja2 -->
 
 ## [class]{.muted} ClassifierFullSuite
@@ -45,8 +43,6 @@ Test suite for sklearn classifier model diagnosis tests
 <!-- docstring.jinja2 -->
 
 Full test suite for binary classification models.
-
-**Inherited members**
 
 <!-- class.qmd.jinja2 -->
 
@@ -64,8 +60,6 @@ Full test suite for binary classification models.
 
 Test suite for sklearn classifier metrics
 
-**Inherited members**
-
 <!-- class.qmd.jinja2 -->
 
 ## [class]{.muted} ClassifierModelValidation
@@ -82,8 +76,6 @@ Test suite for sklearn classifier metrics
 
 Test suite for binary classification models.
 
-**Inherited members**
-
 <!-- class.qmd.jinja2 -->
 
 ## [class]{.muted} ClassifierPerformance
@@ -99,5 +91,3 @@ Test suite for binary classification models.
 <!-- docstring.jinja2 -->
 
 Test suite for sklearn classifier models
-
-**Inherited members**

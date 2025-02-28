@@ -393,8 +393,6 @@ Load the test function identified by the given test_id
 
 Protocol for user-defined test providers
 
-**Inherited members**
-
 ### [list_tests[()]{.muted}](#list_tests)
 
 <!-- signatures.jinja2 -->

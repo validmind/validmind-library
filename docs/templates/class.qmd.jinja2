@@ -12,11 +12,11 @@
 {% endif %}
 
 {% if resolved.bases and not __is_test_module|default(false) %}
-**Inherited members**
-
 {% if resolved.bases %}
 {% set base_members = get_inherited_members(resolved.bases[0], full_data) %}
 {% if base_members %}
+
+**Inherited members**
 {% set grouped = {} %}
 {% for member in base_members %}
     {% if member.base not in grouped %}

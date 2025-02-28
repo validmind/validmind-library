@@ -26,8 +26,6 @@ Test suites for tabular datasets
 
 Test suite for data quality on tabular datasets
 
-**Inherited members**
-
 <!-- class.qmd.jinja2 -->
 
 ## [class]{.muted} TabularDataset
@@ -44,8 +42,6 @@ Test suite for data quality on tabular datasets
 
 Test suite for tabular datasets.
 
-**Inherited members**
-
 <!-- class.qmd.jinja2 -->
 
 ## [class]{.muted} TabularDatasetDescription
@@ -61,5 +57,3 @@ Test suite for tabular datasets.
 <!-- docstring.jinja2 -->
 
 Test suite to extract metadata and descriptive statistics from a tabular dataset
-
-**Inherited members**

@@ -22,8 +22,6 @@ toc-expand: 4
 
 Full test suite for regression models.
 
-**Inherited members**
-
 <!-- class.qmd.jinja2 -->
 
 ## [class]{.muted} RegressionMetrics
@@ -40,8 +38,6 @@ Full test suite for regression models.
 
 Test suite for performance metrics of regression metrics
 
-**Inherited members**
-
 <!-- class.qmd.jinja2 -->
 
 ## [class]{.muted} RegressionPerformance
@@ -57,5 +53,3 @@ Test suite for performance metrics of regression metrics
 <!-- docstring.jinja2 -->
 
 Test suite for regression model performance
-
-**Inherited members**

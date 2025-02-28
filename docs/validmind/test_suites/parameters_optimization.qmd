@@ -27,5 +27,3 @@ Ideal setup is to have the API client to read a custom test suite from the proje
 <!-- docstring.jinja2 -->
 
 Test suite for sklearn hyperparameters optimization
-
-**Inherited members**

@@ -36,8 +36,6 @@ Models entrypoint
 
 Base class for ValidMind Input types.
 
-**Inherited members**
-
 ### [with_options[()]{.muted}](#with_options)
 
 <!-- signatures.jinja2 -->
@@ -96,8 +94,6 @@ This way we can support multiple dataset types but under the hood we only need t
 - `target_class_labels (Dict)`: The class labels for the target columns.
 - `df (pd.DataFrame)`: The dataset as a pandas DataFrame.
 - `extra_columns (Dict)`: Extra columns to include in the dataset.
-
-**Inherited members**
 
 ### [VMDataset[()]{.muted}](#__init__)
 
@@ -414,8 +410,6 @@ An base class that wraps a trained model instance and its associated data.
 - `attributes (ModelAttributes, optional)`: The attributes of the model. Defaults to None.
 - `name (str, optional)`: The name of the model. Defaults to the class name.
 
-**Inherited members**
-
 ### [VMModel[()]{.muted}](#__init__)
 
 <!-- signatures.jinja2 -->
@@ -639,8 +633,6 @@ A dataclass that holds the table summary of result.
 <!-- docstring.jinja2 -->
 
 Test result.
-
-**Inherited members**
 
 ### [TestResult[()]{.muted}](#__init__)
 

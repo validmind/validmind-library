@@ -25,5 +25,3 @@ Test suites for NLP models
 <!-- docstring.jinja2 -->
 
 Full test suite for NLP classification models.
-
-**Inherited members**

@@ -26,8 +26,6 @@ Test suites for LLMs
 
 Full test suite for LLM classification models.
 
-**Inherited members**
-
 <!-- class.qmd.jinja2 -->
 
 ## [class]{.muted} PromptValidation
@@ -43,5 +41,3 @@ Full test suite for LLM classification models.
 <!-- docstring.jinja2 -->
 
 Test suite for prompt validation
-
-**Inherited members**

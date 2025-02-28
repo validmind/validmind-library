@@ -28,8 +28,6 @@ Ideal setup is to have the API client to read a custom test suite from the proje
 
 Full test suite for clustering models.
 
-**Inherited members**
-
 <!-- class.qmd.jinja2 -->
 
 ## [class]{.muted} ClusterMetrics
@@ -46,8 +44,6 @@ Full test suite for clustering models.
 
 Test suite for sklearn clustering metrics
 
-**Inherited members**
-
 <!-- class.qmd.jinja2 -->
 
 ## [class]{.muted} ClusterPerformance
@@ -63,5 +59,3 @@ Test suite for sklearn clustering metrics
 <!-- docstring.jinja2 -->
 
 Test suite for sklearn cluster performance
-
-**Inherited members**
