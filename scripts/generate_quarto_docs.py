@@ -27,12 +27,30 @@ def resolve_alias(member: Dict[str, Any], data: Dict[str, Any]) -> Dict[str, Any
         # Skip resolution if it's not in our codebase
         if path_parts[0] != 'validmind':
             return member
+        
+        # Skip known modules that aren't in the documentation
+        if len(path_parts) > 1 and path_parts[1] in ['ai', 'internal']:
+            # Silently return the member without warning for expected missing paths
+            return member
                         
         current = data[path_parts[0]]  # Start at validmind
         for part in path_parts[1:]:
             if part in current.get('members', {}):
                 current = current['members'][part]
             else:
+                # If we can't find the direct path, try alternative approaches
+                # For test suites, specially handle class aliases
+                if 'test_suites' in path_parts and current.get('name') == 'test_suites':
+                    # If we're looking for a class in test_suites but can't find it directly,
+                    # check if it exists anywhere else in the codebase
+                    class_name = path_parts[-1]
+                    found_class = find_class_in_all_modules(class_name, data)
+                    if found_class:
+                        # Cache the result if found
+                        _alias_cache[target_path] = found_class
+                        return found_class
+                
+                print(f"Warning: Could not resolve alias path {target_path}, part '{part}' not found")
                 return member
                 
 
@@ -232,6 +250,14 @@ def find_class_in_all_modules(class_name: str, data: Dict[str, Any]) -> Optional
     if data.get('kind') == 'class' and data.get('name') == class_name:
         return data
         
+    # Special handling for common test suite classes
+    if class_name.endswith(('Suite', 'Performance', 'Metrics', 'Diagnosis', 'Validation', 'Description')):
+        # These are likely test suite classes, check specifically in test_suites module if available
+        if 'validmind' in data and 'test_suites' in data['validmind'].get('members', {}):
+            test_suites = data['validmind']['members']['test_suites']
+            if class_name in test_suites.get('members', {}):
+                return test_suites['members'][class_name]
+    
     # Check members if this is a module
     if 'members' in data:
         for member_name, member in data['members'].items():
@@ -257,6 +283,16 @@ def process_module(module: Dict[str, Any], path: List[str], env: Environment, fu
     # Extract __all__ list if present (preserving order)
     if module.get('members') and '__all__' in module.get('members', {}):
         module['all_list'] = get_all_list(module['members'])
+    
+    # Special handling for test_suites module
+    is_test_suites = path and path[-1] == "test_suites"
+    if is_test_suites:
+        print(f"Processing test_suites module: {module.get('name')}")
+        # Ensure all class aliases are properly resolved
+        for member_name, member in module.get('members', {}).items():
+            if member.get('kind') == 'alias' and member.get('target_path'):
+                # Try to resolve and cache the target now
+                resolve_alias(member, full_data)
     
     # Enhanced debugging for vm_models
     if path and path[-1] == 'vm_models':

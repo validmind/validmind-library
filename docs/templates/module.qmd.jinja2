@@ -151,8 +151,9 @@ toc-expand: 4
 {% set __module_path = module.path|default('') %}
 {% set __is_test_module = __module_path.startswith('validmind.tests.') %}
 {% set __is_error_class = resolved.name.endswith('Error') %}
+{% set __is_test_suite = module.name == "test_suites" or __module_path == "validmind.test_suites" %}
 {% if not (__is_test_module and __is_error_class) %}
-{% include "class.qmd.jinja2" %}
+{% include "class.qmd.jinja2" with context %}
 {% endif %}
 {% elif resolved.kind == "function" and member.kind != "alias" %}
 {% include "function.qmd.jinja2" %}
@@ -179,8 +180,9 @@ toc-expand: 4
 {% set __module_path = module.path|default('') %}
 {% set __is_test_module = __module_path.startswith('validmind.tests.') %}
 {% set __is_error_class = resolved.name.endswith('Error') %}
+{% set __is_test_suite = module.name == "test_suites" or __module_path == "validmind.test_suites" %}
 {% if not (__is_test_module and __is_error_class) %}
-{% include "class.qmd.jinja2" %}
+{% include "class.qmd.jinja2" with context %}
 {% endif %}
 {% elif resolved.kind == "function" and member.kind != "alias" %}
 {% include "function.qmd.jinja2" %}

@@ -4,6 +4,7 @@
 <!-- class.qmd.jinja2 -->
 ## [class]{.muted} {{ resolved.name }}
 
+{% set is_test_suite = __is_test_suite|default(false) or (module and module.name == "test_suites") %}
 {{ signatures.render_signature(resolved) }}
 
 {% if resolved.docstring %}
@@ -13,6 +14,7 @@
 {% if resolved.bases and not __is_test_module|default(false) %}
 **Inherited members**
 
+{% if resolved.bases %}
 {% set base_members = get_inherited_members(resolved.bases[0], full_data) %}
 {% if base_members %}
 {% set grouped = {} %}
@@ -26,6 +28,7 @@
 - **From {{ base }}**: {% for member in members %}{% if member.kind == 'builtin' %}{{ member.name }}{% else %}[{% if member.kind == 'class' %}class {% endif %}{{ member.name }}[()]{.muted}](#{% if member.kind == 'class' %}class-{% endif %}{{ member.name | lower }}){% endif %}{% if not loop.last %}, {% endif %}{% endfor %}
 
 {% endfor %}
+{% endif %}
 {% endif %}
 {% endif %}
 
