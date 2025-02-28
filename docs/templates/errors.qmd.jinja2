@@ -41,11 +41,20 @@ sidebar: validmind-reference
 {% if 'description' in member.members %}
 {{ signatures.render_signature(member.members['description']) }}
 {% else %}
-::: {.signature}
+{# Find the description method from the full data structure #}
+{% set base_error = None %}
+{% if full_data and 'validmind' in full_data and 'members' in full_data['validmind'] and 'errors' in full_data['validmind']['members'] %}
+{% set base_error = full_data['validmind']['members']['errors']['members'].get('BaseError', {}) %}
+{% endif %}
 
-<span class="kw">def</span><span class="name">description</span>(<span class="param"><span class="bp">self</span></span><span class="param"><span class="muted">,</span> <span class="o">*</span><span class="n">args</span></span><span class="param"><span class="muted">,</span> <span class="o">**</span><span class="n">kwargs</span></span>):
+{% set desc_method = None %}
+{% if base_error and 'members' in base_error %}
+{% set desc_method = base_error['members'].get('description', None) %}
+{% endif %}
 
-:::
+{% if desc_method %}
+{{ signatures.render_signature(desc_method) }}
+{% endif %}
 {% endif %}
 
 {% if member.members['description'].docstring %}
@@ -129,11 +138,24 @@ sidebar: validmind-reference
 {% set displayed_description = false %}
 {% for base_member in base_members %}
 {% if not displayed_description and base_member.kind == 'method' and base_member.name == 'description' and base_member.base != member.name %}
-#### [description[()]{.muted}](#description) [inherited from {{ base_member.base }}]
+#### [{{ base_member.name }}[()]{.muted}](#{{ base_member.name }}) [inherited from {{ base_member.base }}]
 
-::: {.signature}
-<span class="kw">def</span><span class="name">description</span>(<span class="param"><span class="bp">self</span></span><span class="param"><span class="muted">,</span> <span class="o">*</span><span class="n">args</span></span><span class="param"><span class="muted">,</span> <span class="o">**</span><span class="n">kwargs</span></span>):
-:::
+{# Find the description method from the parent class in the full data structure #}
+{% set base_class = None %}
+{% if full_data and 'validmind' in full_data and 'members' in full_data['validmind'] and 'errors' in full_data['validmind']['members'] %}
+{% set base_class = full_data['validmind']['members']['errors']['members'].get(base_member.base, {}) %}
+{% endif %}
+
+{% set method_data = None %}
+{% if base_class and 'members' in base_class %}
+{% set method_data = base_class['members'].get('description', None) %}
+{% endif %}
+
+{% if method_data %}
+{{ signatures.render_signature(method_data) }}
+{% else %}
+{{ signatures.render_signature(base_member) }}
+{% endif %}
 
 {% if base_member.docstring %}
 {{ doc.format_docstring(base_member.docstring) }}
