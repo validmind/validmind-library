@@ -35,7 +35,7 @@ Common base class for all non-exit exceptions.
 
 ::: {.signature}
 
-<span class="name">BaseError</span>(<span class="params"><span class="n">message</span><span class="o">=</span><span class="s1">''</span></span>)
+<span class="name">BaseError</span>(<span class="param"><span class="n">message</span><span class="o">=</span><span class="s1">''</span></span>)
 
 :::
 

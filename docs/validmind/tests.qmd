@@ -321,7 +321,7 @@ test = test_provider.load_test("my_namespace.my_test_class")
 
 ::: {.signature}
 
-<span class="name">LocalTestProvider</span>(<span class="params"><span class="n">root_folder</span><span class="p">:</span><span class="nb">str</span></span>)
+<span class="name">LocalTestProvider</span>(<span class="param"><span class="n">root_folder</span><span class="p">:</span><span class="nb">str</span></span>)
 
 :::
 
@@ -357,7 +357,7 @@ List all tests in the given namespace
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">load_test</span>(<span class="params"><span class="bp">self</span><span class="muted">,</span></span><span class="params"><span class="n">test_id</span><span class="p">:</span><span class="nb">str</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">Callable</span><span class="p">\[</span><span class="n">...</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span></span>:
+<span class="kw">def</span><span class="name">load_test</span>(<span class="param"><span class="bp">self</span><span class="muted">,</span></span><span class="param"><span class="n">test_id</span><span class="p">:</span><span class="nb">str</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">Callable</span><span class="p">\[</span><span class="n">...</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span></span>:
 
 :::
 
@@ -419,7 +419,7 @@ List all tests in the given namespace
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">load_test</span>(<span class="params"><span class="bp">self</span><span class="muted">,</span></span><span class="params"><span class="n">test_id</span><span class="p">:</span><span class="nb">str</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="nb">callable</span></span>:
+<span class="kw">def</span><span class="name">load_test</span>(<span class="param"><span class="bp">self</span><span class="muted">,</span></span><span class="param"><span class="n">test_id</span><span class="p">:</span><span class="nb">str</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="nb">callable</span></span>:
 
 :::
 

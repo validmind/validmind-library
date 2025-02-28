@@ -66,10 +66,17 @@
       {%- set _ = params.append(param) -%}
     {%- endif -%}
   {%- endfor -%}
+
+  {# Count the number of non-self parameters to determine class #}
+  {%- set non_self_params = [] -%}
   {%- for param in params -%}
-    <span class="{{ 'param' if (member.kind == 'class' and not member.name == '__init__') or 
-                              (member.parent is defined and not member.name == '__init__') or 
-                              (member.parameters | length <= 1) 
+    {%- if param.name != "self" -%}
+      {%- set _ = non_self_params.append(param) -%}
+    {%- endif -%}
+  {%- endfor -%}
+
+  {%- for param in params -%}
+    <span class="{{ 'param' if non_self_params | length <= 1 
                    else 'params' }}">
     {%- if param.name == "self" -%}
       <span class="bp">self</span>
