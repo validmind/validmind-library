@@ -101,7 +101,7 @@ This way we can support multiple dataset types but under the hood we only need t
 
 ::: {.signature}
 
-<span class="name">VMDataset</span>(<span class="params"><span class="n">raw_dataset</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="muted">,</span></span><span class="params"><span class="n">input_id</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="p">:</span><span class="n">VMModel</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">index</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">index_name</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">date_time_index</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">columns</span><span class="p">:</span><span class="nb">list</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">target_column</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">feature_columns</span><span class="p">:</span><span class="nb">list</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">text_column</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">extra_columns</span><span class="p">:</span><span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">target_class_labels</span><span class="p">:</span><span class="nb">dict</span><span class="o">=</span><span class="kc">None</span></span>)
+<span class="name">VMDataset</span>(<span class="params"><span class="n">raw_dataset</span><span class="p">:</span><span class="n">np</span>.<span class="n">ndarray</span><span class="muted">,</span></span><span class="params"><span class="n">input_id</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="p">:</span><span class="n">VMModel</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">index</span><span class="p">:</span><span class="n">np</span>.<span class="n">ndarray</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">index_name</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">date_time_index</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">columns</span><span class="p">:</span><span class="nb">list</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">target_column</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">feature_columns</span><span class="p">:</span><span class="nb">list</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">text_column</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">extra_columns</span><span class="p">:</span><span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">target_class_labels</span><span class="p">:</span><span class="nb">dict</span><span class="o">=</span><span class="kc">None</span></span>)
 
 :::
 
@@ -251,7 +251,7 @@ Returns a dataframe containing only the feature columns
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">y_df</span>(<span class="param"><span class="bp">self</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/validmind/validmind/vm_models.html#class-pd">validmind.vm_models.pd</a><span class="o">.</span><a href="/validmind/validmind/vm_models.html#class-dataframe">validmind.vm_models.DataFrame</a></span>:
+<span class="kw">def</span><span class="name">y_df</span>(<span class="param"><span class="bp">self</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">pandas</span>.<span class="n">DataFrame</span></span>:
 
 :::
 
@@ -265,7 +265,7 @@ Returns a dataframe containing the target column
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">y_pred</span>(<span class="param"><span class="bp">self</span><span class="muted">,</span></span><span class="param"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/validmind/validmind/vm_models.html#class-np">validmind.vm_models.np</a><span class="o">.</span><a href="/validmind/validmind/vm_models.html#class-ndarray">validmind.vm_models.ndarray</a></span>:
+<span class="kw">def</span><span class="name">y_pred</span>(<span class="param"><span class="bp">self</span><span class="muted">,</span></span><span class="param"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/validmind/validmind/vm_models.html#class-np">validmind.vm_models.np</a>.<a href="/validmind/validmind/vm_models.html#class-ndarray">validmind.vm_models.ndarray</a></span>:
 
 :::
 
@@ -289,7 +289,7 @@ Attempts to stack complex prediction types (e.g., embeddings) into a single, mul
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">y_pred_df</span>(<span class="param"><span class="bp">self</span><span class="muted">,</span></span><span class="param"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/validmind/validmind/vm_models.html#class-pd">validmind.vm_models.pd</a><span class="o">.</span><a href="/validmind/validmind/vm_models.html#class-dataframe">validmind.vm_models.DataFrame</a></span>:
+<span class="kw">def</span><span class="name">y_pred_df</span>(<span class="param"><span class="bp">self</span><span class="muted">,</span></span><span class="param"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">pandas</span>.<span class="n">DataFrame</span></span>:
 
 :::
 
@@ -303,7 +303,7 @@ Returns a dataframe containing the predictions for a given model
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">y_prob</span>(<span class="param"><span class="bp">self</span><span class="muted">,</span></span><span class="param"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/validmind/validmind/vm_models.html#class-np">validmind.vm_models.np</a><span class="o">.</span><a href="/validmind/validmind/vm_models.html#class-ndarray">validmind.vm_models.ndarray</a></span>:
+<span class="kw">def</span><span class="name">y_prob</span>(<span class="param"><span class="bp">self</span><span class="muted">,</span></span><span class="param"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/validmind/validmind/vm_models.html#class-np">validmind.vm_models.np</a>.<a href="/validmind/validmind/vm_models.html#class-ndarray">validmind.vm_models.ndarray</a></span>:
 
 :::
 
@@ -325,7 +325,7 @@ Returns the probabilities for a given model.
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">y_prob_df</span>(<span class="param"><span class="bp">self</span><span class="muted">,</span></span><span class="param"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/validmind/validmind/vm_models.html#class-pd">validmind.vm_models.pd</a><span class="o">.</span><a href="/validmind/validmind/vm_models.html#class-dataframe">validmind.vm_models.DataFrame</a></span>:
+<span class="kw">def</span><span class="name">y_prob_df</span>(<span class="param"><span class="bp">self</span><span class="muted">,</span></span><span class="param"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">pandas</span>.<span class="n">DataFrame</span></span>:
 
 :::
 
@@ -488,7 +488,7 @@ Figure objects track the schema supported by the ValidMind API.
 
 ::: {.signature}
 
-<span class="name">Figure</span>(<span class="params"><span class="n">key</span><span class="p">:</span><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">figure</span><span class="p">:</span><span class="n">Union</span><span class="p">\[</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">Figure</span><span class="p">, </span><span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">, </span><span class="n">go</span><span class="o">.</span><span class="n">FigureWidget</span><span class="p">, </span><span class="nb">bytes</span><span class="p">\]</span><span class="muted">,</span></span><span class="params"><span class="n">ref_id</span><span class="p">:</span><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">\_type</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s1">'plot'</span></span>)
+<span class="name">Figure</span>(<span class="params"><span class="n">key</span><span class="p">:</span><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">figure</span><span class="p">:</span><span class="n">Union</span><span class="p">\[</span><span class="n">matplotlib</span>.<span class="n">figure</span>.<span class="n">Figure</span><span class="p">, </span><span class="n">go</span>.<span class="n">Figure</span><span class="p">, </span><span class="n">go</span>.<span class="n">FigureWidget</span><span class="p">, </span><span class="nb">bytes</span><span class="p">\]</span><span class="muted">,</span></span><span class="params"><span class="n">ref_id</span><span class="p">:</span><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">\_type</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s1">'plot'</span></span>)
 
 :::
 
@@ -602,7 +602,7 @@ A dataclass that holds the table summary of result.
 
 ::: {.signature}
 
-<span class="name">ResultTable</span>(<span class="params"><span class="n">data</span><span class="p">:</span><span class="n">Union</span><span class="p">\[</span><span class="n">List</span><span class="p">\[</span><span class="n">Any</span><span class="p">\]</span><span class="p">, </span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">\]</span><span class="muted">,</span></span><span class="params"><span class="n">title</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span></span>)
+<span class="name">ResultTable</span>(<span class="params"><span class="n">data</span><span class="p">:</span><span class="n">Union</span><span class="p">\[</span><span class="n">List</span><span class="p">\[</span><span class="n">Any</span><span class="p">\]</span><span class="p">, </span><span class="n">pandas</span>.<span class="n">DataFrame</span><span class="p">\]</span><span class="muted">,</span></span><span class="params"><span class="n">title</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span></span>)
 
 :::
 
@@ -650,7 +650,7 @@ Test result.
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">add_figure</span>(<span class="param"><span class="bp">self</span><span class="muted">,</span></span><span class="param"><span class="n">figure</span><span class="p">:</span><span class="n">Union</span><span class="p">\[</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">Figure</span><span class="p">, </span><span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">, </span><span class="n">go</span><span class="o">.</span><span class="n">FigureWidget</span><span class="p">, </span><span class="nb">bytes</span><span class="p">, </span><span class="n">Figure</span><span class="p">\]</span></span>):
+<span class="kw">def</span><span class="name">add_figure</span>(<span class="param"><span class="bp">self</span><span class="muted">,</span></span><span class="param"><span class="n">figure</span><span class="p">:</span><span class="n">Union</span><span class="p">\[</span><span class="n">matplotlib</span>.<span class="n">figure</span>.<span class="n">Figure</span><span class="p">, </span><span class="n">go</span>.<span class="n">Figure</span><span class="p">, </span><span class="n">go</span>.<span class="n">FigureWidget</span><span class="p">, </span><span class="nb">bytes</span><span class="p">, </span><span class="n">Figure</span><span class="p">\]</span></span>):
 
 :::
 
@@ -677,7 +677,7 @@ Add a new figure to the result.
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">add_table</span>(<span class="params"><span class="bp">self</span><span class="muted">,</span></span><span class="params"><span class="n">table</span><span class="p">:</span><span class="n">Union</span><span class="p">\[</span><span class="n">ResultTable</span><span class="p">, </span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">, </span><span class="n">List</span><span class="p">\[</span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span><span class="p">\]</span><span class="muted">,</span></span><span class="params"><span class="n">title</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span></span>):
+<span class="kw">def</span><span class="name">add_table</span>(<span class="params"><span class="bp">self</span><span class="muted">,</span></span><span class="params"><span class="n">table</span><span class="p">:</span><span class="n">Union</span><span class="p">\[</span><span class="n">ResultTable</span><span class="p">, </span><span class="n">pandas</span>.<span class="n">DataFrame</span><span class="p">, </span><span class="n">List</span><span class="p">\[</span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span><span class="p">\]</span><span class="muted">,</span></span><span class="params"><span class="n">title</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span></span>):
 
 :::
 

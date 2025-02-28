@@ -1,5 +1,6 @@
 {%- set builtin_types = ['str', 'dict', 'list', 'bool', 'int', 'float', 'object', 'callable', 'tuple', 'type', 'None', 'bytes', 'complex', 'bytearray', 'memoryview', 'set', 'frozenset', 'range', 'slice', 'property'] -%}
 {%- set type_keywords = ['Any', 'Union', 'Dict', 'List', 'Optional', 'Callable', 'Tuple'] -%}
+{%- set external_types = {'pd': 'pandas', 'DataFrame': 'DataFrame'} -%}
 
 {%- macro format_expr_name(name, module=None, add_links=false) -%}
   {%- if module and name in module.members and module.members[name].kind == "alias" -%}
@@ -8,6 +9,8 @@
     <span class="n">{{ name }}</span>
   {%- elif name|lower in builtin_types -%}
     <span class="nb">{{ name }}</span>
+  {%- elif name in external_types -%}
+    <span class="n">{{ external_types[name] }}</span>
   {%- elif add_links and name not in type_keywords -%}
     <a href="/validmind/validmind/vm_models.html#class-{{ name|lower }}">validmind.vm_models.{{ name }}</a>
   {%- else -%}
@@ -52,10 +55,16 @@
       {%- if type.get('values') is sequence -%}
         {%- for value in type.get('values') -%}
           {{ format_type(value, module, add_links) }}
-          {%- if not loop.last -%}<span class="o">.</span>{%- endif -%}
+          {%- if not loop.last -%}.{%- endif -%}
         {%- endfor -%}
       {%- elif type.value is defined and type.attr is defined -%}
-        {{ format_type(type.value, module, add_links) }}<span class="o">.</span>{{ format_type(type.attr, module, add_links) }}
+        {%- if type.value.cls == "ExprName" and type.value.name == "pd" and type.attr.name == "DataFrame" -%}
+          <span class="n">pandas.DataFrame</span>
+        {%- elif type.value.cls == "ExprName" and type.value.name in external_types and type.attr.name in external_types -%}
+          <span class="n">{{ external_types[type.value.name] }}.{{ external_types[type.attr.name] }}</span>
+        {%- else -%}
+          {{ format_type(type.value, module, add_links) }}.{{ format_type(type.attr, module, add_links) }}
+        {%- endif -%}
       {%- else -%}
         <span class="n">{{ type|string }}</span>
       {%- endif -%}

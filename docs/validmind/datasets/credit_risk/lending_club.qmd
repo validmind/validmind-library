@@ -14,7 +14,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">compute_scores</span>(<span class="param"><span class="n">probabilities</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/validmind/validmind/vm_models.html#class-np">validmind.vm_models.np</a><span class="o">.</span><a href="/validmind/validmind/vm_models.html#class-ndarray">validmind.vm_models.ndarray</a></span>:
+<span class="kw">def</span><span class="name">compute_scores</span>(<span class="param"><span class="n">probabilities</span><span class="p">:</span><span class="n">np</span>.<span class="n">ndarray</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/validmind/validmind/vm_models.html#class-np">validmind.vm_models.np</a>.<a href="/validmind/validmind/vm_models.html#class-ndarray">validmind.vm_models.ndarray</a></span>:
 
 :::
 
@@ -26,7 +26,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">feature_engineering</span>(<span class="params"><span class="n">df</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="muted">,</span></span><span class="params"><span class="n">verbose</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/validmind/validmind/vm_models.html#class-pd">validmind.vm_models.pd</a><span class="o">.</span><a href="/validmind/validmind/vm_models.html#class-dataframe">validmind.vm_models.DataFrame</a></span>:
+<span class="kw">def</span><span class="name">feature_engineering</span>(<span class="params"><span class="n">df</span><span class="p">:</span><span class="n">pandas</span>.<span class="n">DataFrame</span><span class="muted">,</span></span><span class="params"><span class="n">verbose</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">pandas</span>.<span class="n">DataFrame</span></span>:
 
 :::
 
@@ -38,7 +38,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">get_demo_test_config</span>(<span class="params"><span class="n">x_test</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">y_test</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span></span>:
+<span class="kw">def</span><span class="name">get_demo_test_config</span>(<span class="params"><span class="n">x_test</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">np</span>.<span class="n">ndarray</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">y_test</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">np</span>.<span class="n">ndarray</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span></span>:
 
 :::
 
@@ -75,7 +75,7 @@ Get demo test configuration.
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">load_data</span>(<span class="params"><span class="n">source</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s1">'online'</span><span class="muted">,</span></span><span class="params"><span class="n">verbose</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/validmind/validmind/vm_models.html#class-pd">validmind.vm_models.pd</a><span class="o">.</span><a href="/validmind/validmind/vm_models.html#class-dataframe">validmind.vm_models.DataFrame</a></span>:
+<span class="kw">def</span><span class="name">load_data</span>(<span class="params"><span class="n">source</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s1">'online'</span><span class="muted">,</span></span><span class="params"><span class="n">verbose</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">pandas</span>.<span class="n">DataFrame</span></span>:
 
 :::
 
@@ -123,7 +123,7 @@ Load data from either an online source or offline files, automatically dropping 
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">preprocess</span>(<span class="params"><span class="n">df</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="muted">,</span></span><span class="params"><span class="n">verbose</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/validmind/validmind/vm_models.html#class-pd">validmind.vm_models.pd</a><span class="o">.</span><a href="/validmind/validmind/vm_models.html#class-dataframe">validmind.vm_models.DataFrame</a></span>:
+<span class="kw">def</span><span class="name">preprocess</span>(<span class="params"><span class="n">df</span><span class="p">:</span><span class="n">pandas</span>.<span class="n">DataFrame</span><span class="muted">,</span></span><span class="params"><span class="n">verbose</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">pandas</span>.<span class="n">DataFrame</span></span>:
 
 :::
 
@@ -135,7 +135,7 @@ Load data from either an online source or offline files, automatically dropping 
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">split</span>(<span class="params"><span class="n">df</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="muted">,</span></span><span class="params"><span class="n">validation_split</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">float</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">test_size</span><span class="p">:</span><span class="nb">float</span><span class="o">=</span><span class="kc">0.2</span><span class="muted">,</span></span><span class="params"><span class="n">add_constant</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">verbose</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">Tuple</span><span class="p">\[</span><a href="/validmind/validmind/vm_models.html#class-np">validmind.vm_models.np</a><span class="o">.</span><a href="/validmind/validmind/vm_models.html#class-ndarray">validmind.vm_models.ndarray</a><span class="p">, </span><a href="/validmind/validmind/vm_models.html#class-np">validmind.vm_models.np</a><span class="o">.</span><a href="/validmind/validmind/vm_models.html#class-ndarray">validmind.vm_models.ndarray</a><span class="p">, </span><a href="/validmind/validmind/vm_models.html#class-np">validmind.vm_models.np</a><span class="o">.</span><a href="/validmind/validmind/vm_models.html#class-ndarray">validmind.vm_models.ndarray</a><span class="p">, </span><a href="/validmind/validmind/vm_models.html#class-np">validmind.vm_models.np</a><span class="o">.</span><a href="/validmind/validmind/vm_models.html#class-ndarray">validmind.vm_models.ndarray</a><span class="p">\]</span></span>:
+<span class="kw">def</span><span class="name">split</span>(<span class="params"><span class="n">df</span><span class="p">:</span><span class="n">pandas</span>.<span class="n">DataFrame</span><span class="muted">,</span></span><span class="params"><span class="n">validation_split</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">float</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">test_size</span><span class="p">:</span><span class="nb">float</span><span class="o">=</span><span class="kc">0.2</span><span class="muted">,</span></span><span class="params"><span class="n">add_constant</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">verbose</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">Tuple</span><span class="p">\[</span><a href="/validmind/validmind/vm_models.html#class-np">validmind.vm_models.np</a>.<a href="/validmind/validmind/vm_models.html#class-ndarray">validmind.vm_models.ndarray</a><span class="p">, </span><a href="/validmind/validmind/vm_models.html#class-np">validmind.vm_models.np</a>.<a href="/validmind/validmind/vm_models.html#class-ndarray">validmind.vm_models.ndarray</a><span class="p">, </span><a href="/validmind/validmind/vm_models.html#class-np">validmind.vm_models.np</a>.<a href="/validmind/validmind/vm_models.html#class-ndarray">validmind.vm_models.ndarray</a><span class="p">, </span><a href="/validmind/validmind/vm_models.html#class-np">validmind.vm_models.np</a>.<a href="/validmind/validmind/vm_models.html#class-ndarray">validmind.vm_models.ndarray</a><span class="p">\]</span></span>:
 
 :::
 
@@ -162,6 +162,6 @@ Split dataset into train, validation (optional), and test sets.
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">woe_encoding</span>(<span class="params"><span class="n">df</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="muted">,</span></span><span class="params"><span class="n">verbose</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/validmind/validmind/vm_models.html#class-pd">validmind.vm_models.pd</a><span class="o">.</span><a href="/validmind/validmind/vm_models.html#class-dataframe">validmind.vm_models.DataFrame</a></span>:
+<span class="kw">def</span><span class="name">woe_encoding</span>(<span class="params"><span class="n">df</span><span class="p">:</span><span class="n">pandas</span>.<span class="n">DataFrame</span><span class="muted">,</span></span><span class="params"><span class="n">verbose</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">pandas</span>.<span class="n">DataFrame</span></span>:
 
 :::
