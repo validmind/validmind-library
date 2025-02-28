@@ -31,13 +31,13 @@ Common base class for all non-exit exceptions.
 
 ### [description[()]{.muted}](#description)
 
+<!-- signatures.jinja2 -->
+
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">description</span>(<span class="param"><span class="bp">self</span></span><span class="param"><span class="muted">,</span> <span class="o">\*</span><span class="n">args</span></span><span class="param"><span class="muted">,</span> <span class="o">\*\*</span><span class="n">kwargs</span></span>):
+<span class="kw">def</span><span class="name">description</span>(<span class="params"><span class="bp">self</span><span class="muted">,</span></span><span class="params"><span class="n">\*args</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>):
 
 :::
-
-Returns the error message.
 
 <!-- errors.qmd.jinja2 - inherited members -->
 

@@ -24,13 +24,18 @@ sidebar: validmind-reference
 {% if member.name == 'BaseError' %}
 ### [description[()]{.muted}](#description)
 
+{% if 'description' in member.members %}
+{{ signatures.render_signature(member.members['description']) }}
+{% else %}
 ::: {.signature}
-
 <span class="kw">def</span><span class="name">description</span>(<span class="param"><span class="bp">self</span></span><span class="param"><span class="muted">,</span> <span class="o">*</span><span class="n">args</span></span><span class="param"><span class="muted">,</span> <span class="o">**</span><span class="n">kwargs</span></span>):
-
 :::
+{% endif %}
 
-Returns the error message.
+{% if member.members['description'].docstring %}
+{{ doc.format_docstring(member.members['description'].docstring) }}
+
+{% endif %}
 {% endif %}
 
 <!-- errors.qmd.jinja2 - inherited members -->
