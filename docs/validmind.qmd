@@ -41,7 +41,7 @@ After you have pasted the code snippet into your development source code and exe
 
 ## \_\_version\_\_
 
-<!-- module.qmd.jinja2 - version number -->
+<!-- signatures.jinja2 - version signature -->
 
 ::: {.signature}
 

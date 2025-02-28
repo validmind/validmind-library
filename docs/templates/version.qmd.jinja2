@@ -4,8 +4,5 @@ sidebar: validmind-reference
 ---
 
 <!-- version.qmd.jinja2 -->
-::: {.signature}
-
-<span class="name">{{ module.members.__version__.value | replace("'", "") if module.members.__version__.value else module.members.__version__.members.__version__.value | replace("'", "") }}</span>
-
-:::
+{% from "macros/signatures.jinja2" import render_version_signature %}
+{{ render_version_signature(module.members.__version__) }}

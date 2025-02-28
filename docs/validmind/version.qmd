@@ -5,6 +5,8 @@ sidebar: validmind-reference
 
 <!-- version.qmd.jinja2 -->
 
+<!-- signatures.jinja2 - version signature -->
+
 ::: {.signature}
 
 <span class="name">2.8.11</span>

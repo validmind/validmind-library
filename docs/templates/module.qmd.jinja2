@@ -24,7 +24,8 @@ toc-expand: 4
 {% if module.members.__version__ %}
 ## &#95;&#95;version__
 
-<!-- module.qmd.jinja2 - version number -->
+{{ signatures.render_version_signature(module.members.__version__) }}
+{% else %}
 ::: {.signature}
 
 <span class="name">{{ module.members.__version__.value | replace("'", "") if module.members.__version__.value else module.members.__version__.members.__version__.value | replace("'", "") }}</span>
