@@ -123,6 +123,7 @@ class NumpyEncoder(json.JSONEncoder):
             self.is_numpy_ndarray: lambda obj: obj.tolist(),
             self.is_numpy_bool: lambda obj: bool(obj),
             self.is_pandas_timestamp: lambda obj: str(obj),
+            self.is_numpy_datetime64: lambda obj: str(obj),
             self.is_set: lambda obj: list(obj),
             self.is_quantlib_date: lambda obj: obj.ISO(),
             self.is_generic_object: self.handle_generic_object,
@@ -154,6 +155,9 @@ class NumpyEncoder(json.JSONEncoder):
 
     def is_pandas_timestamp(self, obj):
         return isinstance(obj, pd.Timestamp)
+
+    def is_numpy_datetime64(self, obj):
+        return isinstance(obj, np.datetime64)
 
     def is_set(self, obj):
         return isinstance(obj, set)
