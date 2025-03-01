@@ -298,7 +298,6 @@ def process_module(module: Dict[str, Any], path: List[str], env: Environment, fu
     # Special handling for test_suites module
     is_test_suites = path and path[-1] == "test_suites"
     if is_test_suites:
-        print(f"Processing test_suites module: {module.get('name')}")
         # Ensure all class aliases are properly resolved
         for member_name, member in module.get('members', {}).items():
             if member.get('kind') == 'alias' and member.get('target_path'):
