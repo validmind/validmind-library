@@ -95,6 +95,20 @@ toc-expand: 4
 
 {# Process module-level aliases #}
 {% if not is_root %}
+
+{# Process module-level alias attributes (like describe_test_suite) #}
+{% for member_name, member in module.members.items() %}
+{% if member.kind == "attribute" and member.labels is defined and "module-attribute" in member.labels and member.value is defined and member.value.cls == "ExprName" and member.value.name in module.members %}
+{# This is a module-level alias pointing to another function in the same module #}
+{% set target_name = member.value.name %}
+{% set target = module.members[target_name] %}
+
+## {{ member_name }}{% if target.kind == "function" %}<span class='muted'>()</span>{% endif %}
+
+*This function is an alias for [{{ target_name }}<span class='muted'>()</span>](#{{ target_name }}).*
+{% endif %}
+{% endfor %}
+
 {% if module.all_list %}
 {# Use __all__ list ordering when available #}
 {% for member_name in module.all_list %}

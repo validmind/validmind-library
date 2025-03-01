@@ -23,6 +23,10 @@ Entrypoint for test suites.
 - [text_data](test_suites/text_data.qmd)
 - [time_series](test_suites/time_series.qmd)
 
+## describe_test_suite<span class='muted'>()</span>
+
+*This function is an alias for [describe_suite<span class='muted'>()</span>](#describe_suite).*
+
 <!-- function.qmd.jinja2 -->
 
 ## describe_suite[()]{.muted}
