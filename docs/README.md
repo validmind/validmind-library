@@ -30,26 +30,9 @@ flowchart TD
     Griffe --> script[Run generate_quarto_docs.py]
     
     script --> loadJSON[Load validmind.json]
-    loadJSON --> setupJinja[Set up Jinja environment]
-    setupJinja --> processMod[Process modules]
+    loadJSON --> processJSON[Process validmind.json]
     
-    templates[Jinja2 Templates] --> setupJinja
-    
-    subgraph "Processing"
-        processMod --> filterPrivate[Filter private/public members]
-        filterPrivate --> rootModule[Special processing for root module]
-        rootModule --> resolveAliases[Resolve imported symbol aliases]
-        resolveAliases --> normalizeDoc[Normalize docstrings]
-        normalizeDoc --> processInherited[Process inherited members]
-        processInherited --> handleErrors[Sort and structure error classes]
-        handleErrors --> discoverClasses[Discover classes across modules]
-        discoverClasses --> handleTestSuites[Document test suites]
-        handleTestSuites --> handleVMModels[Process core model classes]
-        handleVMModels --> applyExclusions[Apply exclusions for internal utilities]
-    end
-    
-    applyExclusions --> gen_mod[Generate module.qmd files]
-    applyExclusions --> gen_sidebar[Generate sidebar navigation]
+    templates[Jinja2 Templates] --> processJSON
     
     subgraph "Templates"
         mod_t[module.qmd.jinja2]
@@ -69,16 +52,14 @@ flowchart TD
     templates --> errors_t
     templates --> macros
     
-    gen_mod --> output[Quarto .qmd files]
-    gen_sidebar --> nav[_sidebar.yml]
+    processJSON --> output[Quarto .qmd files]
+    processJSON --> nav[_sidebar.yml]
     
     output --> quarto[Quarto build process]
     nav --> quarto
     
-    quarto --> website[Documentation website]
-    
     subgraph "CI/CD"
-        website --> test[Integration tests]
+        quarto --> test[Integration tests]
         test --> commit[Commit generated docs]
     end
 ```
