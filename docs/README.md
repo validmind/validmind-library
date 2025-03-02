@@ -87,7 +87,7 @@ Located in `scripts/generate_quarto_docs.py`, handles the Quarto Markdown genera
 
 - Extracts API data using Griffe.
 - Processes data with Jinja2 templates.
-- Writes Quarto Markdown output to `docs/`.
+- Lints and writes output to `docs/`
 
 #### Features
 
