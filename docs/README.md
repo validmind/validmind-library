@@ -1,9 +1,26 @@
 # Generating Quarto Markdown for the Python API
 
-This directory contains the framework for generating ValidMind Library API documentation for inclusion in our Quarto docs site. The documentation is generated from a JSON dump of the Python API using a combination of Jinja2 templates, a custom Python script, and the `make quarto-docs` Makefile action.
+This directory includes templates, macros, CSS, and Quarto Markdown output for generating the ValidMind Library (Python API) reference documentation for our docs site.
+
+- `templates/` — Jinja2 templates and macros for generating Quarto Markdown
+- `validmind.css` — CSS for Python API reference styling
+- `_metadata.yml` — Quarto configuration file
+- `_sidebar.yml` — Generated sidebar navigation fragment for Quarto
+- `validmind.qmd`, `validmind/` — Generated API documentation matching the codebase and pdoc structure
 
 ## How it works
 
+1. Griffe extracts API information from the API codebase and dumps it to a JSON file 
+2. A Python script extracts API information from the JSON, processes it, and passes it to Jinja2 templates
+3. Jinja2 templates and shared macros transform this information into Quarto Markdown files
+4. A sidebar navigation fragment is generated based on the output file structure
+5. CI/CD integration tests the Quarto docs generation and commits the output
+
+## Testing locally
+
+To test Quarto Markdown generation locally, use `make quarto-docs`.
+
+## In more detail
 
 ```mermaid
 flowchart TD
@@ -18,8 +35,21 @@ flowchart TD
     
     templates[Jinja2 Templates] --> setupJinja
     
-    processMod --> gen_mod[Generate module.qmd files]
-    processMod --> gen_sidebar[Generate _sidebar.yml]
+    subgraph "Processing"
+        processMod --> filterPrivate[Filter private/public members]
+        filterPrivate --> rootModule[Special processing for root module]
+        rootModule --> resolveAliases[Resolve imported symbol aliases]
+        resolveAliases --> normalizeDoc[Normalize docstrings]
+        normalizeDoc --> processInherited[Process inherited members]
+        processInherited --> handleErrors[Sort and structure error classes]
+        handleErrors --> discoverClasses[Discover classes across modules]
+        discoverClasses --> handleTestSuites[Document test suites]
+        handleTestSuites --> handleVMModels[Process core model classes]
+        handleVMModels --> applyExclusions[Apply exclusions for internal utilities]
+    end
+    
+    applyExclusions --> gen_mod[Generate module.qmd files]
+    applyExclusions --> gen_sidebar[Generate sidebar navigation]
     
     subgraph "Templates"
         mod_t[module.qmd.jinja2]
@@ -46,59 +76,58 @@ flowchart TD
     nav --> quarto
     
     quarto --> website[Documentation website]
+    
+    subgraph "CI/CD"
+        website --> test[Integration tests]
+        test --> commit[Commit generated docs]
+    end
 ```
 
-The `make quarto-docs` command orchestrates the workflow:
+### Makefile actions
 
-1. **Dump JSON for the Python API**
-   - Cleans old documentation files
-   - Creates the output directory structure at `docs/validmind/`
-   - Uses Griffe to extract API information from the Python codebase
-   - Generates a structured `docs/validmind.json` file
+- `make quarto-docs` — Generates Quarto Markdown from the Python API
+- `make python-docs` (`documentation` repo) — Clones this repo, copies the generated Quarto Markdown files over into the docs site source
 
-2. **Generate documentation**
-   - Runs the `generate_quarto_docs.py` script:
-   - The script processes the JSON data with Jinja2 templates 
-   - Recursively handles modules, classes, and functions
-   - Creates Quarto markdown files (.qmd) for all API components
-   - Generates a sidebar navigation file (_sidebar.yml)
+### GitHub actions
 
-The QMD files are organized to match the Python package structure (which also matches the pdoc HTML file structure) and are ready to be included in the docs site via `make python-docs` from the documentation repo.
+- `.github/integration.yaml` and `.github/python.yaml` — Tests Quarto Markdown generation
+- `.github/quarto-docs.yaml` — New workflow to generate and commit Quarto docs
+- The workflow runs on `main` and `release-v1` branches while ignoring changes within `docs/`
 
-## Components
+### Jinja2 Templates
 
-### QMD templates
+Located in `templates/`, these define how Quarto Markdown is output:
 
-The `templates/` directory contains Jinja2 templates used to generate documentation:
+- `module.qmd.jinja2` — Documents Python modules, including functions and classes
+- `version.qmd.jinja2` — Displays library version information
+- `class.qmd.jinja2` — Details class documentation with inheritance and methods
+- `function.qmd.jinja2` — Formats functions, parameters, and return values
+- `errors.qmd.jinja2` — Documents error classes with sorting
+- `sidebar.qmd.jinja2` — Generates navigation structure
+- `macros/docstring.jinja2` — Parses and structures Google-style docstrings
+- `macros/signatures.jinja2` — Formats function signatures and parameters
+- `macros/types.jinja2` — Handles complex type annotations
+- `macros/decorators.jinja2` — Documents function and class decorators
+- `macros/navigation.jinja2` — Generates page linking
 
-- **module.qmd.jinja2** — Main template for module documentation. Processes Python modules and outputs Quarto markdown with proper formatting for module documentation.
-- **class.qmd.jinja2** — Template for class documentation. Includes inheritance, methods, properties, and examples.
-- **function.qmd.jinja2** — Template for function documentation. Formats function signatures, parameters, return values, and examples.
-- **sidebar.qmd.jinja2** — Generates the navigation sidebar for the documentation website.
-- **version.qmd.jinja2** — Creates a version information page.
-- **errors.qmd.jinja2** — Specialized template for documenting error classes with proper categorization.
-- **macros/** — Directory containing reusable Jinja2 macros for common documentation elements.
+## `scripts/generate_quarto_docs.py`
 
-### Quarto supporting files
+Automates Quarto Markdown generation:
 
-- **_metadata.yml** — Configuration file for Quarto
-- **validmind.css** — Custom stylesheet for the API reference
+- Extracts API data using Griffe.
+- Processes data with Jinja2 templates.
+- Writes Quarto Markdown output to `docs/`.
 
-### A magic Python script
+#### Features
 
-- **generate_quarto_docs.py** — A Python script that:
-  - Parses the API JSON data generated by Griffe
-  - Applies the Jinja2 templates and macros to generate Quarto markdown
-  - Creates a structured sidebar
-  - Outputs files in the `docs/` and `docsvalidmind/` folders
-  - Handles some special cases like aliases, inherited members, and private/public member filtering
-
-## Extending or modifying Quarto Markdown generation
-
-To modify the documentation generation:
-
-1. **Templates** — Edit the Jinja2 templates and macros in `docs/templates/` to change the output
-2. **Script** — Modify `generate_quarto_docs.py` to change the processing logic
-3. **Style** — Edit `validmind.css` for visual changes
-
-After making changes, run `make quarto-docs` to regenerate the documentation.
+- **Private/public filtering** — Controls which members are included
+- **Root module handling** — Special processing for the `validmind` module
+- **Alias resolution** — Maps imported symbols to original definitions
+- **Docstring normalization** — Cleans up formatting inconsistencies
+- **Inherited members** — Documents inherited methods, especially for error classes
+- **Errors module handling** — Sorts and structures error class documentation
+- **Class discovery** — Finds and documents classes across modules
+- **Test suite handling** — Documents test suites and their aliases
+- **VM models handling** — Ensures proper documentation of core model classes
+- **Exclusions** — Omits internal utilities and logging helpers
+- **Sidebar generation** — Builds hierarchical navigation from module structure
