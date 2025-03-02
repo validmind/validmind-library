@@ -10,17 +10,13 @@ text-decoration: none;
 border-right: none !important;
 }
 
+.sidebar-item {
+  line-height: 1;
+}
+
 nav#TOC {
   border: none;
   background-color: #fff;
-}
-
-.muted {
-  opacity: 0.6;
-}
-
-p code:not(.sourceCode), li code:not(.sourceCode), td code:not(.sourceCode) {
-  font-size: 0.9em;
 }
 
 .version {
@@ -29,6 +25,20 @@ p code:not(.sourceCode), li code:not(.sourceCode), td code:not(.sourceCode) {
   border-radius: 3px;
   padding: 2px 6px;
   display: inline-block;
+}
+
+.muted {
+  opacity: 0.6;
+}
+
+p code:not(.sourceCode), li code:not(.sourceCode), td code:not(.sourceCode) {
+  font-size: 0.9em;
+  background-color: #083E4420;
+}
+
+div.sourceCode {
+  background-color: #083E4420;
+  border-radius: 3px;
 }
 
 .signature {
