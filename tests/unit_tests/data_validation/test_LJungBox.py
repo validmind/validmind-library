@@ -22,10 +22,13 @@ class TestLJungBox(unittest.TestCase):
         )
 
         # Run the function
-        result = LJungBox(vm_dataset)
+        result, raw_data = LJungBox(vm_dataset)
 
         # Check if result is a DataFrame
         self.assertIsInstance(result, pd.DataFrame)
+
+        # Check if raw_data is a RawData object
+        self.assertIsInstance(raw_data, vm.RawData)
 
         # Check if the DataFrame has the expected columns
         expected_columns = ["column", "stat", "pvalue"]

@@ -19,7 +19,11 @@ from validmind.vm_models import VMDataset, VMModel
     "visualization",
 )
 @tasks("classification", "text_classification")
-def ConfusionMatrix(dataset: VMDataset, model: VMModel):
+def ConfusionMatrix(
+    dataset: VMDataset,
+    model: VMModel,
+    threshold: float = 0.5,
+):
     """
     Evaluates and visually represents the classification ML model's predictive performance using a Confusion Matrix
     heatmap.
@@ -66,7 +70,17 @@ def ConfusionMatrix(dataset: VMDataset, model: VMModel):
     - Risks of misinterpretation exist because the matrix doesn't directly provide precision, recall, or F1-score data.
     These metrics have to be computed separately.
     """
-    y_pred = dataset.y_pred(model)
+    # Get predictions using threshold for binary classification if possible
+    if hasattr(model.model, "predict_proba"):
+        y_prob = dataset.y_prob(model)
+        # Handle both 1D and 2D probability arrays
+        if y_prob.ndim == 2:
+            y_pred = (y_prob[:, 1] > threshold).astype(int)
+        else:
+            y_pred = (y_prob > threshold).astype(int)
+    else:
+        y_pred = dataset.y_pred(model)
+
     y_true = dataset.y.astype(y_pred.dtype)
 
     labels = np.unique(y_true)
@@ -119,4 +133,9 @@ def ConfusionMatrix(dataset: VMDataset, model: VMModel):
         font=dict(size=14),
     )
 
-    return fig, RawData(confusion_matrix=cm)
+    return fig, RawData(
+        confusion_matrix=cm,
+        threshold=threshold,
+        dataset=dataset.input_id,
+        model=model.input_id,
+    )

@@ -5,7 +5,7 @@
 import pandas as pd
 import plotly.graph_objects as go
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 
 
@@ -128,4 +128,12 @@ def ScoreProbabilityAlignment(
         height=600,
     )
 
-    return results_df, fig
+    # Include raw data for post-processing
+    raw_data = RawData(
+        score_bins=df[["score_bin", score_column]],
+        predicted_probabilities=df["probability"],
+        model=model.input_id,
+        dataset=dataset.input_id,
+    )
+
+    return results_df, fig, raw_data

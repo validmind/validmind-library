@@ -5,7 +5,7 @@
 import numpy as np
 import pandas as pd
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 
 
@@ -137,4 +137,6 @@ def ScoreBandDefaultRates(
         }
     )
 
-    return pd.DataFrame(results)
+    return pd.DataFrame(results), RawData(
+        results=results, model=model.input_id, dataset=dataset.input_id
+    )

@@ -105,4 +105,13 @@ def RegressionResidualsPlot(model: VMModel, dataset: VMDataset, bin_size: float 
         )
     )
 
-    return (*figures, RawData(residuals=residuals, y_true=y_true, y_pred=y_pred))
+    return (
+        *figures,
+        RawData(
+            residuals=residuals,
+            y_true=y_true,
+            y_pred=y_pred,
+            model=model.input_id,
+            dataset=dataset.input_id,
+        ),
+    )

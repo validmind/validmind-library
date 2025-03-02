@@ -56,17 +56,20 @@ class TestGINITable(unittest.TestCase):
 
     def test_returns_dataframe_and_rawdata(self):
         # Run the function
-        result = GINITable(self.vm_dataset, self.vm_model)
+        results, raw_data = GINITable(self.vm_dataset, self.vm_model)
 
-        # Check if result is a DataFrame
-        self.assertIsInstance(result, pd.DataFrame)
+        # Check if results is a DataFrame
+        self.assertIsInstance(results, pd.DataFrame)
+
+        # Check if raw_data is a RawData object
+        self.assertIsInstance(raw_data, RawData)
 
         # Check if DataFrame has expected columns
         expected_columns = ["AUC", "GINI", "KS"]
-        self.assertTrue(all(col in result.columns for col in expected_columns))
+        self.assertTrue(all(col in results.columns for col in expected_columns))
 
         # Check if DataFrame has exactly one row
-        self.assertEqual(len(result), 1)
+        self.assertEqual(len(results), 1)
 
     def test_perfect_separation(self):
         # Create a dataset with perfect class separation
@@ -100,15 +103,15 @@ class TestGINITable(unittest.TestCase):
         vm_perfect_dataset.assign_predictions(vm_perfect_model)
 
         # Calculate metrics
-        result = GINITable(vm_perfect_dataset, vm_perfect_model)
+        results, raw_data = GINITable(vm_perfect_dataset, vm_perfect_model)
 
         # For perfect separation:
         # - AUC should be 1.0
         # - GINI should be 1.0 (2*AUC - 1)
         # - KS should be 1.0
-        self.assertAlmostEqual(result["AUC"].iloc[0], 1.0, places=5)
-        self.assertAlmostEqual(result["GINI"].iloc[0], 1.0, places=5)
-        self.assertAlmostEqual(result["KS"].iloc[0], 1.0, places=5)
+        self.assertAlmostEqual(results["AUC"].iloc[0], 1.0, places=5)
+        self.assertAlmostEqual(results["GINI"].iloc[0], 1.0, places=5)
+        self.assertAlmostEqual(results["KS"].iloc[0], 1.0, places=5)
 
     def test_random_prediction(self):
         # Create a dataset with random predictions
@@ -144,36 +147,36 @@ class TestGINITable(unittest.TestCase):
         vm_random_dataset.assign_predictions(vm_random_model)
 
         # Calculate metrics
-        result = GINITable(vm_random_dataset, vm_random_model)
+        results, raw_data = GINITable(vm_random_dataset, vm_random_model)
 
         # For random predictions:
         # - AUC should be close to 0.5
         # - GINI should be close to 0.0 (2*0.5 - 1)
         # - KS should be close to 0.0
-        self.assertGreater(result["AUC"].iloc[0], 0.4)
-        self.assertLess(result["AUC"].iloc[0], 0.6)
-        self.assertGreater(result["GINI"].iloc[0], -0.2)
-        self.assertLess(result["GINI"].iloc[0], 0.2)
-        self.assertLess(result["KS"].iloc[0], 0.2)
+        self.assertGreater(results["AUC"].iloc[0], 0.4)
+        self.assertLess(results["AUC"].iloc[0], 0.6)
+        self.assertGreater(results["GINI"].iloc[0], -0.2)
+        self.assertLess(results["GINI"].iloc[0], 0.2)
+        self.assertLess(results["KS"].iloc[0], 0.2)
 
     def test_metric_ranges(self):
         # Test regular case
-        result = GINITable(self.vm_dataset, self.vm_model)
+        results, raw_data = GINITable(self.vm_dataset, self.vm_model)
 
         # Check metric ranges
         # AUC should be between 0 and 1
-        self.assertGreaterEqual(result["AUC"].iloc[0], 0.0)
-        self.assertLessEqual(result["AUC"].iloc[0], 1.0)
+        self.assertGreaterEqual(results["AUC"].iloc[0], 0.0)
+        self.assertLessEqual(results["AUC"].iloc[0], 1.0)
 
         # GINI should be between -1 and 1
-        self.assertGreaterEqual(result["GINI"].iloc[0], -1.0)
-        self.assertLessEqual(result["GINI"].iloc[0], 1.0)
+        self.assertGreaterEqual(results["GINI"].iloc[0], -1.0)
+        self.assertLessEqual(results["GINI"].iloc[0], 1.0)
 
         # KS should be between 0 and 1
-        self.assertGreaterEqual(result["KS"].iloc[0], 0.0)
-        self.assertLessEqual(result["KS"].iloc[0], 1.0)
+        self.assertGreaterEqual(results["KS"].iloc[0], 0.0)
+        self.assertLessEqual(results["KS"].iloc[0], 1.0)
 
         # GINI should be 2*AUC - 1
         self.assertAlmostEqual(
-            result["GINI"].iloc[0], 2 * result["AUC"].iloc[0] - 1, places=5
+            results["GINI"].iloc[0], 2 * results["AUC"].iloc[0] - 1, places=5
         )

@@ -84,4 +84,8 @@ def ClusterCosineSimilarity(model: VMModel, dataset: VMDataset):
     if not table:
         raise SkipTestError("No clusters found")
 
-    return table, RawData(cluster_centroids=cluster_centroids)
+    return table, RawData(
+        cluster_centroids=cluster_centroids,
+        model=model.input_id,
+        dataset=dataset.input_id,
+    )

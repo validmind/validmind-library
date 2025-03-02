@@ -80,5 +80,9 @@ def BivariateScatterPlots(dataset):
         figures.append(fig)
 
     return tuple(figures) + (
-        RawData(selected_numerical_df=df, feature_pairs=features_pairs),
+        RawData(
+            selected_numerical_df=df,
+            feature_pairs=features_pairs,
+            dataset=dataset.input_id,
+        ),
     )

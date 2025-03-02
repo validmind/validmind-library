@@ -235,8 +235,13 @@ def SHAPGlobalImportance(
     # restore warnings
     _warnings_filters.pop(0)
 
-    return {
-        "mean_importance_plot": generate_shap_plot("mean", shap_values, shap_sample),
-        "summary_plot": generate_shap_plot("summary", shap_values, shap_sample),
-        "shap_values": RawData(shap_values=shap_values, shap_sample=shap_sample),
-    }
+    return (
+        generate_shap_plot("mean", shap_values, shap_sample),
+        generate_shap_plot("summary", shap_values, shap_sample),
+        RawData(
+            shap_values=shap_values,
+            shap_sample=shap_sample,
+            model=model.input_id,
+            dataset=dataset.input_id,
+        ),
+    )

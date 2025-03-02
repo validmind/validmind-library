@@ -118,7 +118,7 @@ Evaluates changes in feature distribution over time to identify potential model 
 
 **Purpose**:
 
-The Feature Drift test aims to evaluate how much the distribution of features has shifted over time between two datasets, typically training and monitoring datasets. It uses the Population Stability Index (PSI) to quantify this change, providing insights into the model’s robustness and the necessity for retraining or feature engineering.
+The Feature Drift test aims to evaluate how much the distribution of features has shifted over time between two datasets, typically training and monitoring datasets. It uses the Population Stability Index (PSI) to quantify this change, providing insights into the model's robustness and the necessity for retraining or feature engineering.
 
 **Test Mechanism**:
 
@@ -181,6 +181,11 @@ The raw data is a new feature that allows tests to return intermediate data that
 Its a class that can be initialized with any number of any type of objects using a key-value like interface where the key in the constructor is the name of the object and the value is the object itself.
 It should only be used to store data that is not already returned as part of the test result (i.e. in a table) but could be useful to re-generate any of the test result objects (tables, figures).
 
+When adding raw data, you should always include:
+- If the test has access to a model parameter (VMModel), include its input_id as model=model.input_id
+- If the test has access to a dataset parameter (VMDataset), include its input_id as dataset=dataset.input_id
+Only include these if they are available in the test function parameters - don't force both if only one is accessible.
+
 You will be provided with the source code for a "test" that is run against an ML model or dataset.
 You will analyze the code to determine the details and implementation of the test.
 Then you will use the below example to implement changes to the test to make it use the new raw data mechanism offered by the ValidMind SDK.
@@ -228,7 +233,7 @@ def ExampleConfusionMatrix(model: VMModel, dataset: VMDataset):
     fig = ff.create_annotated_heatmap()
     ..
 
-    return fig, RawData(confusion_matrix=cm)
+    return fig, RawData(confusion_matrix=cm, model=model.input_id, dataset=dataset.input_id)
 ```
 
 Notice that the test now returns a tuple of the figure and the raw data.
