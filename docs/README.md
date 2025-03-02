@@ -23,7 +23,7 @@ make quarto-docs
 3. Jinja2 templates and shared macros transform this information into Quarto Markdown files
 4. A sidebar navigation fragment is generated based on the output file structure
 5. CI/CD integration tests the Quarto docs generation and commits the output
-6. Documentation repo: Integrates the Quarto source files with the docs site source
+6. Documentation repo: Integrates the Quarto files with the docs site source
 
 ```mermaid
 flowchart LR
@@ -58,13 +58,12 @@ flowchart LR
 ### `Makefile`
 
 - `make quarto-docs` — Generates Quarto Markdown from the Python API
-- Documentation repo: `make python-docs` — Clones this repo, copies the generated Quarto Markdown files over into the docs site source
+- `make python-docs` — In the documentation repo: Clones this repo, copies the generated Quarto Markdown files over into the docs site source
 
 ### GitHub actions
 
 - `.github/integration.yaml` and `.github/python.yaml` — Tests Quarto Markdown generation
 - `.github/quarto-docs.yaml` — New workflow to generate and commit Quarto docs
-- The workflow runs on `main` and `release-v1` branches while ignoring changes within `docs/`
 
 ### Jinja2 Templates
 
@@ -82,9 +81,9 @@ Located in `templates/`, these define how Quarto Markdown is output:
 - `macros/decorators.jinja2` — Documents function and class decorators
 - `macros/navigation.jinja2` — Generates page linking
 
-## `scripts/generate_quarto_docs.py`
+### Python script
 
-Automates Quarto Markdown generation:
+Located in `scripts/generate_quarto_docs.py`, handles the Quarto Markdown generation:
 
 - Extracts API data using Griffe.
 - Processes data with Jinja2 templates.
