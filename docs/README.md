@@ -27,9 +27,9 @@ flowchart TD
     make[make quarto-docs] --> clean[Clean old files]
     clean --> mkdir[Create folder structure]
     mkdir --> Griffe[Generate API JSON with Griffe]
+    Griffe --> processJSON[Process API JSON]
     
     subgraph "Generate Quarto Markdown"
-        Griffe --> processJSON[Process API JSON]
         
         templates[Jinja2 Templates] --> processJSON
         
