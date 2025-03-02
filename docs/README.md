@@ -8,6 +8,14 @@ This directory includes templates, macros, CSS, and Quarto Markdown output for g
 - `_sidebar.yml` — Generated sidebar navigation fragment for Quarto
 - `validmind.qmd`, `validmind/` — Generated API documentation matching the codebase and pdoc structure
 
+## Testing locally
+
+To generate Quarto Markdown locally:
+
+```sh
+make quarto-docs
+```
+
 ## How it works
 
 1. Griffe extracts API information from the API codebase and dumps it to a JSON file 
@@ -15,12 +23,7 @@ This directory includes templates, macros, CSS, and Quarto Markdown output for g
 3. Jinja2 templates and shared macros transform this information into Quarto Markdown files
 4. A sidebar navigation fragment is generated based on the output file structure
 5. CI/CD integration tests the Quarto docs generation and commits the output
-
-## Testing locally
-
-To test Quarto Markdown generation locally, use `make quarto-docs`.
-
-## In more detail
+6. Documentation repo: Integrates the Quarto source files with the docs site source
 
 ```mermaid
 flowchart LR
@@ -52,10 +55,10 @@ flowchart LR
     end
 ```
 
-### Makefile actions
+### `Makefile`
 
 - `make quarto-docs` — Generates Quarto Markdown from the Python API
-- `make python-docs` (`documentation` repo) — Clones this repo, copies the generated Quarto Markdown files over into the docs site source
+- Documentation repo: `make python-docs` — Clones this repo, copies the generated Quarto Markdown files over into the docs site source
 
 ### GitHub actions
 
