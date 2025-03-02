@@ -29,9 +29,7 @@ flowchart TD
     mkdir --> Griffe[Generate API JSON with Griffe]
     
     subgraph "Generate Quarto Markdown"
-        Griffe --> script[Run generate_quarto_docs.py]
-        script --> loadJSON[Load validmind.json]
-        loadJSON --> processJSON[Process API JSON]
+        Griffe --> processJSON[Process API JSON]
         
         templates[Jinja2 Templates] --> processJSON
         
