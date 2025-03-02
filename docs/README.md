@@ -25,41 +25,41 @@ To test Quarto Markdown generation locally, use `make quarto-docs`.
 ```mermaid
 flowchart TD
     make[make quarto-docs] --> clean[Clean old files]
-    clean --> mkdir[Create docs/validmind dir]
+    clean --> mkdir[Create folder structure]
     mkdir --> Griffe[Generate API JSON with Griffe]
-    Griffe --> script[Run generate_quarto_docs.py]
     
-    script --> loadJSON[Load validmind.json]
-    loadJSON --> processJSON[Process validmind.json]
-    
-    templates[Jinja2 Templates] --> processJSON
-    
-    subgraph "Templates"
-        mod_t[module.qmd.jinja2]
-        class_t[class.qmd.jinja2]
-        func_t[function.qmd.jinja2]
-        sidebar_t[sidebar.qmd.jinja2]
-        version_t[version.qmd.jinja2]
-        errors_t[errors.qmd.jinja2]
-        macros[macros/*.jinja2]
+    subgraph "Generate Quarto Markdown"
+        Griffe --> script[Run generate_quarto_docs.py]
+        script --> loadJSON[Load validmind.json]
+        loadJSON --> processJSON[Process API JSON]
+        
+        templates[Jinja2 Templates] --> processJSON
+        
+        subgraph "Templates"
+            mod_t[module.qmd.jinja2]
+            class_t[class.qmd.jinja2]
+            func_t[function.qmd.jinja2]
+            sidebar_t[sidebar.qmd.jinja2]
+            version_t[version.qmd.jinja2]
+            errors_t[errors.qmd.jinja2]
+            macros[macros/*.jinja2]
+        end
+        
+        templates --> mod_t
+        templates --> class_t
+        templates --> func_t
+        templates --> sidebar_t
+        templates --> version_t
+        templates --> errors_t
+        templates --> macros
+        
+        processJSON --> output[Quarto .qmd files]
+        processJSON --> nav[_sidebar.yml]
     end
     
-    templates --> mod_t
-    templates --> class_t
-    templates --> func_t
-    templates --> sidebar_t
-    templates --> version_t
-    templates --> errors_t
-    templates --> macros
-    
-    processJSON --> output[Quarto .qmd files]
-    processJSON --> nav[_sidebar.yml]
-    
-    output --> quarto[Quarto build process]
-    nav --> quarto
-    
     subgraph "CI/CD"
-        quarto --> test[Integration tests]
+        output --> test[Integration tests]
+        nav --> test
         test --> commit[Commit generated docs]
     end
 ```
