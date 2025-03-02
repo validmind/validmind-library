@@ -23,43 +23,31 @@ To test Quarto Markdown generation locally, use `make quarto-docs`.
 ## In more detail
 
 ```mermaid
-flowchart TD
+flowchart LR
     make[make quarto-docs] --> clean[Clean old files]
     clean --> mkdir[Create folder structure]
-    mkdir --> Griffe[Generate API JSON with Griffe]
+    mkdir --> Griffe[Dump API JSON]
+    Griffe --> processJSON[Process API JSON]
     
-    subgraph "Generate Quarto Markdown"
-        processJSON[Process API JSON]
-        
-        templates[Jinja2 Templates] --> processJSON
-        
-        subgraph "Templates"
-            mod_t[module.qmd.jinja2]
-            class_t[class.qmd.jinja2]
-            func_t[function.qmd.jinja2]
-            sidebar_t[sidebar.qmd.jinja2]
-            version_t[version.qmd.jinja2]
-            errors_t[errors.qmd.jinja2]
-            macros[macros/*.jinja2]
-        end
-        
-        templates --> mod_t
-        templates --> class_t
-        templates --> func_t
-        templates --> sidebar_t
-        templates --> version_t
-        templates --> errors_t
-        templates --> macros
-        
-        processJSON --> output[Quarto .qmd files]
-        processJSON --> nav[_sidebar.yml]
+    processJSON --> output[Generate QMD files]
+    processJSON --> nav[Generate _sidebar.yml]
+    
+    subgraph "Templates"
+        templates[Jinja2 Templates] --> mod_t[module.qmd.jinja2]
+        templates --> class_t[class.qmd.jinja2]
+        templates --> func_t[function.qmd.jinja2]
+        templates --> sidebar_t[sidebar.qmd.jinja2]
+        templates --> version_t[version.qmd.jinja2]
+        templates --> errors_t[errors.qmd.jinja2]
+        templates --> macros[macros/*.jinja2]
     end
     
-    Griffe --> processJSON
+    templates --> processJSON
+    
+    output --> test[Integration tests]
+    nav --> test
     
     subgraph "CI/CD"
-        output --> test[Integration tests]
-        nav --> test
         test --> commit[Commit generated docs]
     end
 ```
