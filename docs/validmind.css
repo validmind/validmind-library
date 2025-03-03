@@ -17,14 +17,14 @@ nav#TOC {
 
 p code:not(.sourceCode), li code:not(.sourceCode), td code:not(.sourceCode) {
   color: #003B4F;
-  background-color: #FAFBFB;
+  background-color: #F0F1F1;
   font-size: 0.9em;
   border: none;
 }
 
 div.sourceCode, div.sourceCode pre.sourceCode {
   color: #003B4F;
-  background-color: #FAFBFB;
+  background-color: #F0F1F1;
   border: none;
 }
 
@@ -43,7 +43,7 @@ div.sourceCode, div.sourceCode pre.sourceCode {
 .signature {
   font-family: 'JetBrains Mono', 'Fira Code', Menlo, Monaco, 'Courier New', monospace;
   color: #003B4F;
-  background-color: #FAFBFB;
+  background-color: #F0F1F1;
   padding: 0 25px;
   border-radius: 5px;
   margin: 1em 0;
