@@ -63,7 +63,7 @@ flowchart LR
 ### GitHub actions
 
 - `.github/integration.yaml` and `.github/python.yaml` — Tests Quarto Markdown generation
-- `.github/quarto-docs.yaml` — New workflow to generate and commit Quarto docs
+- `.github/quarto-docs.yaml` — Generates and commits Quarto Markdown docs
 
 ### Jinja2 Templates
 
