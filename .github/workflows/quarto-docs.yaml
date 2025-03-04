@@ -45,7 +45,7 @@ jobs:
           poetry install -E huggingface -E llm
           poetry run pip install torch==2.0.1 --extra-index-url https://download.pytorch.org/whl/cpu
           poetry run pip install aequitas fairlearn vl-convert-python
-          poetry run pip install griffe==0.25.5
+          poetry run pip install griffe
 
       - name: Generate Quarto Docs
         run: make quarto-docs
