@@ -30,7 +30,7 @@ Primary function to format and display a DataFrame.
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">load_data</span>(<span class="params"><span class="n">source</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s1">'online'</span><span class="muted">,</span></span><span class="params"><span class="n">dataset_size</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">Tuple</span><span class="p">\[</span><span class="n">pandas</span>.<span class="n">DataFrame</span><span class="p">, </span><span class="n">pandas</span>.<span class="n">DataFrame</span><span class="p">\]</span></span>:
+<span class="kw">def</span><span class="name">load_data</span>(<span class="params"><span class="n">source</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s1">'online'</span><span class="muted">,</span></span><span class="params"><span class="n">dataset_size</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">Tuple</span><span class="p">\[</span><span class="n">pd</span>.<span class="n">DataFrame</span><span class="p">, </span><span class="n">pd</span>.<span class="n">DataFrame</span><span class="p">\]</span></span>:
 
 :::
 

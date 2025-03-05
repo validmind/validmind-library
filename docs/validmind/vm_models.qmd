@@ -251,7 +251,7 @@ Returns a dataframe containing only the feature columns
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">y_df</span>(<span class="param"><span class="bp">self</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">pandas</span>.<span class="n">DataFrame</span></span>:
+<span class="kw">def</span><span class="name">y_df</span>(<span class="param"><span class="bp">self</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">pd</span>.<span class="n">DataFrame</span></span>:
 
 :::
 
@@ -265,7 +265,7 @@ Returns a dataframe containing the target column
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">y_pred</span>(<span class="param"><span class="bp">self</span><span class="muted">,</span></span><span class="param"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/validmind/validmind/vm_models.html#np">validmind.vm_models.np</a>.<a href="/validmind/validmind/vm_models.html#ndarray">validmind.vm_models.ndarray</a></span>:
+<span class="kw">def</span><span class="name">y_pred</span>(<span class="param"><span class="bp">self</span><span class="muted">,</span></span><span class="param"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">np</span>.<span class="n">ndarray</span></span>:
 
 :::
 
@@ -289,7 +289,7 @@ Attempts to stack complex prediction types (e.g., embeddings) into a single, mul
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">y_pred_df</span>(<span class="param"><span class="bp">self</span><span class="muted">,</span></span><span class="param"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">pandas</span>.<span class="n">DataFrame</span></span>:
+<span class="kw">def</span><span class="name">y_pred_df</span>(<span class="param"><span class="bp">self</span><span class="muted">,</span></span><span class="param"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">pd</span>.<span class="n">DataFrame</span></span>:
 
 :::
 
@@ -303,7 +303,7 @@ Returns a dataframe containing the predictions for a given model
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">y_prob</span>(<span class="param"><span class="bp">self</span><span class="muted">,</span></span><span class="param"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/validmind/validmind/vm_models.html#np">validmind.vm_models.np</a>.<a href="/validmind/validmind/vm_models.html#ndarray">validmind.vm_models.ndarray</a></span>:
+<span class="kw">def</span><span class="name">y_prob</span>(<span class="param"><span class="bp">self</span><span class="muted">,</span></span><span class="param"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">np</span>.<span class="n">ndarray</span></span>:
 
 :::
 
@@ -325,7 +325,7 @@ Returns the probabilities for a given model.
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">y_prob_df</span>(<span class="param"><span class="bp">self</span><span class="muted">,</span></span><span class="param"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">pandas</span>.<span class="n">DataFrame</span></span>:
+<span class="kw">def</span><span class="name">y_prob_df</span>(<span class="param"><span class="bp">self</span><span class="muted">,</span></span><span class="param"><span class="n">model</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">pd</span>.<span class="n">DataFrame</span></span>:
 
 :::
 
@@ -602,7 +602,7 @@ A dataclass that holds the table summary of result.
 
 ::: {.signature}
 
-<span class="name">ResultTable</span>(<span class="params"><span class="n">data</span><span class="p">:</span><span class="n">Union</span><span class="p">\[</span><span class="n">List</span><span class="p">\[</span><span class="n">Any</span><span class="p">\]</span><span class="p">, </span><span class="n">pandas</span>.<span class="n">DataFrame</span><span class="p">\]</span><span class="muted">,</span></span><span class="params"><span class="n">title</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span></span>)
+<span class="name">ResultTable</span>(<span class="params"><span class="n">data</span><span class="p">:</span><span class="n">Union</span><span class="p">\[</span><span class="n">List</span><span class="p">\[</span><span class="n">Any</span><span class="p">\]</span><span class="p">, </span><span class="n">pd</span>.<span class="n">DataFrame</span><span class="p">\]</span><span class="muted">,</span></span><span class="params"><span class="n">title</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span></span>)
 
 :::
 
@@ -677,7 +677,7 @@ Add a new figure to the result.
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">add_table</span>(<span class="params"><span class="bp">self</span><span class="muted">,</span></span><span class="params"><span class="n">table</span><span class="p">:</span><span class="n">Union</span><span class="p">\[</span><span class="n">ResultTable</span><span class="p">, </span><span class="n">pandas</span>.<span class="n">DataFrame</span><span class="p">, </span><span class="n">List</span><span class="p">\[</span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span><span class="p">\]</span><span class="muted">,</span></span><span class="params"><span class="n">title</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span></span>):
+<span class="kw">def</span><span class="name">add_table</span>(<span class="params"><span class="bp">self</span><span class="muted">,</span></span><span class="params"><span class="n">table</span><span class="p">:</span><span class="n">Union</span><span class="p">\[</span><span class="n">ResultTable</span><span class="p">, </span><span class="n">pd</span>.<span class="n">DataFrame</span><span class="p">, </span><span class="n">List</span><span class="p">\[</span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span><span class="p">\]</span><span class="muted">,</span></span><span class="params"><span class="n">title</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span></span>):
 
 :::
 
