@@ -2,6 +2,12 @@
 {%- set type_keywords = ['Any', 'Union', 'Dict', 'List', 'Optional', 'Callable', 'Tuple'] -%}
 {%- set external_types = {'pd': 'pd', 'DataFrame': 'DataFrame', 'np': 'np', 'ndarray': 'ndarray', 'go': 'go', 'plt': 'plt', 'matplotlib': 'matplotlib', 'figurewidget': 'figurewidget', 'pl': 'pl', 'utils': 'utils', 'torch': 'torch', 'data': 'data', 'tensordataset': 'tensordataset', 'TensorDataset': 'tensordataset', 'Figure': 'Figure', 'HTML': 'HTML'} -%}
 
+{# 
+  Define test categories as a variable so they can be extended or replaced in the future
+  This allows for programmatic modification or extension of the list without changing the template 
+#}
+{%- set vm_test_categories = ['data_validation', 'model_validation', 'prompt_validation'] -%}
+
 {%- macro format_expr_name(name, module=None, add_links=false) -%}
   {%- if module and name in module.members and module.members[name].kind == "alias" -%}
     {{ module.members[name].target_path }}
@@ -11,8 +17,14 @@
     <span class="nb">{{ name }}</span>
   {%- elif name in external_types -%}
     <span class="n">{{ external_types[name] }}</span>
+  {%- elif name == "TestID" and add_links -%}
+    <span class="n">TestID</span><span class="p"> (Union of </span>
+    {%- for category in vm_test_categories -%}
+      <a href="/validmind/validmind/tests/{{ category }}.qmd">validmind.{{ category }}.\*</a>{% if not loop.last %}<span class="p">, </span>{% endif %}
+    {%- endfor -%}
+    <span class="p"> and </span><span class="nb">str</span><span class="p">)</span>
   {%- elif add_links and name not in type_keywords -%}
-    <a href="/validmind/validmind/vm_models.html#{{ name|lower }}">validmind.vm_models.{{ name }}</a>
+    <a href="/validmind/validmind/vm_models.qmd#{{ name|lower }}">validmind.vm_models.{{ name }}</a>
   {%- else -%}
     <span class="n">{{ name }}</span>
   {%- endif -%}
