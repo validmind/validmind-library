@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## ConfusionMatrix[()]{.muted}
+## ConfusionMatrix{.suffix}
 
 <!-- signatures.jinja2 -->
 

@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## compute_scores[()]{.muted}
+## compute_scores{.suffix}
 
 <!-- signatures.jinja2 -->
 
@@ -20,7 +20,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## feature_engineering[()]{.muted}
+## feature_engineering{.suffix}
 
 <!-- signatures.jinja2 -->
 
@@ -32,7 +32,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## get_demo_test_config[()]{.muted}
+## get_demo_test_config{.suffix}
 
 <!-- signatures.jinja2 -->
 
@@ -57,7 +57,7 @@ Get demo test configuration.
 
 <!-- function.qmd.jinja2 -->
 
-## init_vm_objects[()]{.muted}
+## init_vm_objects{.suffix}
 
 <!-- signatures.jinja2 -->
 
@@ -69,7 +69,7 @@ Get demo test configuration.
 
 <!-- function.qmd.jinja2 -->
 
-## load_data[()]{.muted}
+## load_data{.suffix}
 
 <!-- signatures.jinja2 -->
 
@@ -93,7 +93,7 @@ Load data from either an online source or offline files, automatically dropping 
 
 <!-- function.qmd.jinja2 -->
 
-## load_scorecard[()]{.muted}
+## load_scorecard{.suffix}
 
 <!-- signatures.jinja2 -->
 
@@ -105,7 +105,7 @@ Load data from either an online source or offline files, automatically dropping 
 
 <!-- function.qmd.jinja2 -->
 
-## load_test_config[()]{.muted}
+## load_test_config{.suffix}
 
 <!-- signatures.jinja2 -->
 
@@ -117,7 +117,7 @@ Load data from either an online source or offline files, automatically dropping 
 
 <!-- function.qmd.jinja2 -->
 
-## preprocess[()]{.muted}
+## preprocess{.suffix}
 
 <!-- signatures.jinja2 -->
 
@@ -129,7 +129,7 @@ Load data from either an online source or offline files, automatically dropping 
 
 <!-- function.qmd.jinja2 -->
 
-## split[()]{.muted}
+## split{.suffix}
 
 <!-- signatures.jinja2 -->
 
@@ -156,7 +156,7 @@ Split dataset into train, validation (optional), and test sets.
 
 <!-- function.qmd.jinja2 -->
 
-## woe_encoding[()]{.muted}
+## woe_encoding{.suffix}
 
 <!-- signatures.jinja2 -->
 

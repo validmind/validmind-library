@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## TabularDateTimeHistograms[()]{.muted}
+## TabularDateTimeHistograms{.suffix}
 
 <!-- signatures.jinja2 -->
 

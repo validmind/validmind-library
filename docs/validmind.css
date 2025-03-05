@@ -28,6 +28,18 @@ div.sourceCode, div.sourceCode pre.sourceCode {
   border: none;
 }
 
+.prefix::before {
+  content: "Class";
+  opacity: 0.6;
+  font-size: 0.9em;
+}
+
+.suffix::after {
+  content: "()";
+  opacity: 0.6;
+  font-size: 0.9em;
+}
+
 .muted {
   opacity: 0.6;
 }

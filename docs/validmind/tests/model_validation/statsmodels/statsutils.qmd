@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## adj_r2_score[()]{.muted}
+## adj_r2_score{.suffix}
 
 <!-- signatures.jinja2 -->
 

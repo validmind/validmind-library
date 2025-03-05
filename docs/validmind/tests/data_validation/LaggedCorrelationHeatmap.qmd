@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## LaggedCorrelationHeatmap[()]{.muted}
+## LaggedCorrelationHeatmap{.suffix}
 
 <!-- signatures.jinja2 -->
 

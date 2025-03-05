@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## plot_rolling_statistics[()]{.muted}
+## plot_rolling_statistics{.suffix}
 
 <!-- signatures.jinja2 -->
 
@@ -20,7 +20,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## RollingStatsPlot[()]{.muted}
+## RollingStatsPlot{.suffix}
 
 <!-- signatures.jinja2 -->
 

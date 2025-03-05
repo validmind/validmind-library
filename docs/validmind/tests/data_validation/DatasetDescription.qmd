@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## DatasetDescription[()]{.muted}
+## DatasetDescription{.suffix}
 
 <!-- signatures.jinja2 -->
 
@@ -56,7 +56,7 @@ The DatasetDescription class accomplishes the purpose as follows: firstly, the t
 
 <!-- function.qmd.jinja2 -->
 
-## describe_column[()]{.muted}
+## describe_column{.suffix}
 
 <!-- signatures.jinja2 -->
 
@@ -72,7 +72,7 @@ Gets descriptive statistics for a single column in a Pandas DataFrame.
 
 <!-- function.qmd.jinja2 -->
 
-## get_column_histograms[()]{.muted}
+## get_column_histograms{.suffix}
 
 <!-- signatures.jinja2 -->
 
@@ -90,7 +90,7 @@ Will be used in favor of \_get_histogram in the future
 
 <!-- function.qmd.jinja2 -->
 
-## get_numerical_histograms[()]{.muted}
+## get_numerical_histograms{.suffix}
 
 <!-- signatures.jinja2 -->
 
@@ -106,7 +106,7 @@ Returns a collection of histograms for a numerical column, each one with a diffe
 
 <!-- function.qmd.jinja2 -->
 
-## infer_datatypes[()]{.muted}
+## infer_datatypes{.suffix}
 
 <!-- signatures.jinja2 -->
 

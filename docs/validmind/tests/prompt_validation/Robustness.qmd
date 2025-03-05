@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## Robustness[()]{.muted}
+## Robustness{.suffix}
 
 <!-- signatures.jinja2 -->
 

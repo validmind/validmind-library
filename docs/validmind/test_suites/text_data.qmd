@@ -12,7 +12,7 @@ Test suites for text datasets
 
 <!-- class.qmd.jinja2 -->
 
-## [class]{.muted} TextDataQuality
+## {.prefix} TextDataQuality
 
 <!-- signatures.jinja2 -->
 

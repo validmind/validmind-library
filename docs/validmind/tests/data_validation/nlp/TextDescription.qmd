@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## create_metrics_df[()]{.muted}
+## create_metrics_df{.suffix}
 
 <!-- signatures.jinja2 -->
 
@@ -20,7 +20,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## TextDescription[()]{.muted}
+## TextDescription{.suffix}
 
 <!-- signatures.jinja2 -->
 

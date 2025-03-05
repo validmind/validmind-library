@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## PearsonCorrelationMatrix[()]{.muted}
+## PearsonCorrelationMatrix{.suffix}
 
 <!-- signatures.jinja2 -->
 

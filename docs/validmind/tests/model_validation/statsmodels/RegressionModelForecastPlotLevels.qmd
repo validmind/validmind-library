@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## integrate_diff[()]{.muted}
+## integrate_diff{.suffix}
 
 <!-- signatures.jinja2 -->
 
@@ -20,7 +20,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## RegressionModelForecastPlotLevels[()]{.muted}
+## RegressionModelForecastPlotLevels{.suffix}
 
 <!-- signatures.jinja2 -->
 

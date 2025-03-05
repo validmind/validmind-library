@@ -12,7 +12,7 @@ Threshold based tests
 
 <!-- function.qmd.jinja2 -->
 
-## ClassImbalance[()]{.muted}
+## ClassImbalance{.suffix}
 
 <!-- signatures.jinja2 -->
 

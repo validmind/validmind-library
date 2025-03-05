@@ -12,7 +12,7 @@ Test suites for LLMs
 
 <!-- class.qmd.jinja2 -->
 
-## [class]{.muted} LLMClassifierFullSuite
+## {.prefix} LLMClassifierFullSuite
 
 <!-- signatures.jinja2 -->
 
@@ -28,7 +28,7 @@ Full test suite for LLM classification models.
 
 <!-- class.qmd.jinja2 -->
 
-## [class]{.muted} PromptValidation
+## {.prefix} PromptValidation
 
 <!-- signatures.jinja2 -->
 

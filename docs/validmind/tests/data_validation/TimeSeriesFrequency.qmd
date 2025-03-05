@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## TimeSeriesFrequency[()]{.muted}
+## TimeSeriesFrequency{.suffix}
 
 <!-- signatures.jinja2 -->
 

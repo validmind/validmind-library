@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## load_all_data[()]{.muted}
+## load_all_data{.suffix}
 
 <!-- signatures.jinja2 -->
 
@@ -20,7 +20,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## load_data[()]{.muted}
+## load_data{.suffix}
 
 <!-- signatures.jinja2 -->
 
@@ -32,7 +32,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## load_model[()]{.muted}
+## load_model{.suffix}
 
 <!-- signatures.jinja2 -->
 
@@ -44,7 +44,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## load_processed_data[()]{.muted}
+## load_processed_data{.suffix}
 
 <!-- signatures.jinja2 -->
 
@@ -56,7 +56,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## load_test_dataset[()]{.muted}
+## load_test_dataset{.suffix}
 
 <!-- signatures.jinja2 -->
 
@@ -68,7 +68,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## load_train_dataset[()]{.muted}
+## load_train_dataset{.suffix}
 
 <!-- signatures.jinja2 -->
 
@@ -80,7 +80,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## preprocess[()]{.muted}
+## preprocess{.suffix}
 
 <!-- signatures.jinja2 -->
 
@@ -107,7 +107,7 @@ Split a time series DataFrame into train, validation, and test sets.
 
 <!-- function.qmd.jinja2 -->
 
-## transform[()]{.muted}
+## transform{.suffix}
 
 <!-- signatures.jinja2 -->
 

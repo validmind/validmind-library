@@ -12,7 +12,7 @@ Test suites for NLP models
 
 <!-- class.qmd.jinja2 -->
 
-## [class]{.muted} NLPClassifierFullSuite
+## {.prefix} NLPClassifierFullSuite
 
 <!-- signatures.jinja2 -->
 

@@ -14,7 +14,7 @@ Ideal setup is to have the API client to read a custom test suite from the proje
 
 <!-- class.qmd.jinja2 -->
 
-## [class]{.muted} KmeansParametersOptimization
+## {.prefix} KmeansParametersOptimization
 
 <!-- signatures.jinja2 -->
 

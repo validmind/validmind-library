@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## RegardScore[()]{.muted}
+## RegardScore{.suffix}
 
 <!-- signatures.jinja2 -->
 

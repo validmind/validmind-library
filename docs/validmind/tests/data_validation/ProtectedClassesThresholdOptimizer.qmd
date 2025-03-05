@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## calculate_fairness_metrics[()]{.muted}
+## calculate_fairness_metrics{.suffix}
 
 <!-- signatures.jinja2 -->
 
@@ -20,7 +20,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## calculate_group_metrics[()]{.muted}
+## calculate_group_metrics{.suffix}
 
 <!-- signatures.jinja2 -->
 
@@ -32,7 +32,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## get_thresholds_by_group[()]{.muted}
+## get_thresholds_by_group{.suffix}
 
 <!-- signatures.jinja2 -->
 
@@ -44,7 +44,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## initialize_and_fit_optimizer[()]{.muted}
+## initialize_and_fit_optimizer{.suffix}
 
 <!-- signatures.jinja2 -->
 
@@ -56,7 +56,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## make_predictions[()]{.muted}
+## make_predictions{.suffix}
 
 <!-- signatures.jinja2 -->
 
@@ -68,7 +68,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## plot_thresholds[()]{.muted}
+## plot_thresholds{.suffix}
 
 <!-- signatures.jinja2 -->
 
@@ -80,7 +80,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## ProtectedClassesThresholdOptimizer[()]{.muted}
+## ProtectedClassesThresholdOptimizer{.suffix}
 
 <!-- signatures.jinja2 -->
 

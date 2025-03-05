@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## load_data[()]{.muted}
+## load_data{.suffix}
 
 <!-- signatures.jinja2 -->
 
@@ -20,7 +20,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## preprocess[()]{.muted}
+## preprocess{.suffix}
 
 <!-- signatures.jinja2 -->
 

@@ -22,7 +22,7 @@ Models entrypoint
 
 <!-- class.qmd.jinja2 -->
 
-## [class]{.muted} VMInput
+## {.prefix} VMInput
 
 <!-- signatures.jinja2 -->
 
@@ -36,7 +36,7 @@ Models entrypoint
 
 Base class for ValidMind Input types.
 
-### [with_options[()]{.muted}](#with_options)
+### [with_options{.suffix}](#with_options)
 
 <!-- signatures.jinja2 -->
 
@@ -62,7 +62,7 @@ To allow options, just override this method in the subclass (see VMDataset) and 
 
 <!-- class.qmd.jinja2 -->
 
-## [class]{.muted} VMDataset
+## {.prefix} VMDataset
 
 <!-- signatures.jinja2 -->
 
@@ -95,7 +95,7 @@ This way we can support multiple dataset types but under the hood we only need t
 - `df (pd.DataFrame)`: The dataset as a pandas DataFrame.
 - `extra_columns (Dict)`: Extra columns to include in the dataset.
 
-### [VMDataset[()]{.muted}](#__init__)
+### [VMDataset{.suffix}](#__init__)
 
 <!-- signatures.jinja2 -->
 
@@ -123,7 +123,7 @@ Initializes a VMDataset instance.
 - `text_column (str, optional)`: The text column name of the dataset for nlp tasks. Defaults to None.
 - `target_class_labels (Dict, optional)`: The class labels for the target columns. Defaults to None.
 
-### [add_extra_column[()]{.muted}](#add_extra_column)
+### [add_extra_column{.suffix}](#add_extra_column)
 
 <!-- signatures.jinja2 -->
 
@@ -142,7 +142,7 @@ Adds an extra column to the dataset without modifying the dataset `features` and
 - `column_name (str)`: The name of the extra column.
 - `column_values (np.ndarray)`: The values of the extra column.
 
-### [assign_predictions[()]{.muted}](#assign_predictions)
+### [assign_predictions{.suffix}](#assign_predictions)
 
 <!-- signatures.jinja2 -->
 
@@ -166,7 +166,7 @@ Assign predictions and probabilities to the dataset.
 - `prediction_probabilities (Optional[List[float]])`: DEPRECATED: The values of the probabilities.
 - `**kwargs`: Additional keyword arguments that will get passed through to the model's `predict` method.
 
-### [prediction_column[()]{.muted}](#prediction_column)
+### [prediction_column{.suffix}](#prediction_column)
 
 <!-- signatures.jinja2 -->
 
@@ -180,7 +180,7 @@ Assign predictions and probabilities to the dataset.
 
 Get or set the prediction column for a model.
 
-### [probability_column[()]{.muted}](#probability_column)
+### [probability_column{.suffix}](#probability_column)
 
 <!-- signatures.jinja2 -->
 
@@ -194,7 +194,7 @@ Get or set the prediction column for a model.
 
 Get or set the probability column for a model.
 
-### [target_classes[()]{.muted}](#target_classes)
+### [target_classes{.suffix}](#target_classes)
 
 <!-- signatures.jinja2 -->
 
@@ -208,7 +208,7 @@ Get or set the probability column for a model.
 
 Returns the target class labels or unique values of the target column.
 
-### [with_options[()]{.muted}](#with_options)
+### [with_options{.suffix}](#with_options)
 
 <!-- signatures.jinja2 -->
 
@@ -231,7 +231,7 @@ Support options provided when passing an input to run_test or run_test_suite
 
 - A new instance of the dataset with only the specified columns
 
-### [x_df[()]{.muted}](#x_df)
+### [x_df{.suffix}](#x_df)
 
 <!-- signatures.jinja2 -->
 
@@ -245,7 +245,7 @@ Support options provided when passing an input to run_test or run_test_suite
 
 Returns a dataframe containing only the feature columns
 
-### [y_df[()]{.muted}](#y_df)
+### [y_df{.suffix}](#y_df)
 
 <!-- signatures.jinja2 -->
 
@@ -259,7 +259,7 @@ Returns a dataframe containing only the feature columns
 
 Returns a dataframe containing the target column
 
-### [y_pred[()]{.muted}](#y_pred)
+### [y_pred{.suffix}](#y_pred)
 
 <!-- signatures.jinja2 -->
 
@@ -283,7 +283,7 @@ Attempts to stack complex prediction types (e.g., embeddings) into a single, mul
 
 - The predictions for the model
 
-### [y_pred_df[()]{.muted}](#y_pred_df)
+### [y_pred_df{.suffix}](#y_pred_df)
 
 <!-- signatures.jinja2 -->
 
@@ -297,7 +297,7 @@ Attempts to stack complex prediction types (e.g., embeddings) into a single, mul
 
 Returns a dataframe containing the predictions for a given model
 
-### [y_prob[()]{.muted}](#y_prob)
+### [y_prob{.suffix}](#y_prob)
 
 <!-- signatures.jinja2 -->
 
@@ -319,7 +319,7 @@ Returns the probabilities for a given model.
 
 - The probability variables.
 
-### [y_prob_df[()]{.muted}](#y_prob_df)
+### [y_prob_df{.suffix}](#y_prob_df)
 
 <!-- signatures.jinja2 -->
 
@@ -389,7 +389,7 @@ Returns the target variables (y) of the dataset.
 
 <!-- class.qmd.jinja2 -->
 
-## [class]{.muted} VMModel
+## {.prefix} VMModel
 
 <!-- signatures.jinja2 -->
 
@@ -410,7 +410,7 @@ An base class that wraps a trained model instance and its associated data.
 - `attributes (ModelAttributes, optional)`: The attributes of the model. Defaults to None.
 - `name (str, optional)`: The name of the model. Defaults to the class name.
 
-### [VMModel[()]{.muted}](#__init__)
+### [VMModel{.suffix}](#__init__)
 
 <!-- signatures.jinja2 -->
 
@@ -420,7 +420,7 @@ An base class that wraps a trained model instance and its associated data.
 
 :::
 
-### [predict[()]{.muted}](#predict)
+### [predict{.suffix}](#predict)
 
 <!-- signatures.jinja2 -->
 
@@ -436,7 +436,7 @@ An base class that wraps a trained model instance and its associated data.
 
 Predict method for the model. This is a wrapper around the model's
 
-### [predict_proba[()]{.muted}](#predict_proba)
+### [predict_proba{.suffix}](#predict_proba)
 
 <!-- signatures.jinja2 -->
 
@@ -450,7 +450,7 @@ Predict method for the model. This is a wrapper around the model's
 
 Predict probabilties - must be implemented by subclass if needed
 
-### [serialize[()]{.muted}](#serialize)
+### [serialize{.suffix}](#serialize)
 
 <!-- signatures.jinja2 -->
 
@@ -466,7 +466,7 @@ Serializes the model to a dictionary so it can be sent to the API
 
 <!-- class.qmd.jinja2 -->
 
-## [class]{.muted} Figure
+## {.prefix} Figure
 
 <!-- signatures.jinja2 -->
 
@@ -482,7 +482,7 @@ Serializes the model to a dictionary so it can be sent to the API
 
 Figure objects track the schema supported by the ValidMind API.
 
-### [Figure[()]{.muted}](#__init__)
+### [Figure{.suffix}](#__init__)
 
 <!-- signatures.jinja2 -->
 
@@ -492,7 +492,7 @@ Figure objects track the schema supported by the ValidMind API.
 
 :::
 
-### [serialize[()]{.muted}](#serialize)
+### [serialize{.suffix}](#serialize)
 
 <!-- signatures.jinja2 -->
 
@@ -506,7 +506,7 @@ Figure objects track the schema supported by the ValidMind API.
 
 Serializes the Figure to a dictionary so it can be sent to the API.
 
-### [serialize_files[()]{.muted}](#serialize_files)
+### [serialize_files{.suffix}](#serialize_files)
 
 <!-- signatures.jinja2 -->
 
@@ -520,7 +520,7 @@ Serializes the Figure to a dictionary so it can be sent to the API.
 
 Creates a `requests`-compatible files object to be sent to the API.
 
-### [to_widget[()]{.muted}](#to_widget)
+### [to_widget{.suffix}](#to_widget)
 
 <!-- signatures.jinja2 -->
 
@@ -536,7 +536,7 @@ Returns the ipywidget compatible representation of the figure. Ideally we would 
 
 <!-- class.qmd.jinja2 -->
 
-## [class]{.muted} ModelAttributes
+## {.prefix} ModelAttributes
 
 <!-- signatures.jinja2 -->
 
@@ -552,7 +552,7 @@ Returns the ipywidget compatible representation of the figure. Ideally we would 
 
 Model attributes definition.
 
-### [ModelAttributes[()]{.muted}](#__init__)
+### [ModelAttributes{.suffix}](#__init__)
 
 <!-- signatures.jinja2 -->
 
@@ -562,7 +562,7 @@ Model attributes definition.
 
 :::
 
-### [from_dict[()]{.muted}](#from_dict)
+### [from_dict{.suffix}](#from_dict)
 
 <!-- signatures.jinja2 -->
 
@@ -580,7 +580,7 @@ Creates a ModelAttributes instance from a dictionary.
 
 <!-- class.qmd.jinja2 -->
 
-## [class]{.muted} ResultTable
+## {.prefix} ResultTable
 
 <!-- signatures.jinja2 -->
 
@@ -596,7 +596,7 @@ Creates a ModelAttributes instance from a dictionary.
 
 A dataclass that holds the table summary of result.
 
-### [ResultTable[()]{.muted}](#__init__)
+### [ResultTable{.suffix}](#__init__)
 
 <!-- signatures.jinja2 -->
 
@@ -606,7 +606,7 @@ A dataclass that holds the table summary of result.
 
 :::
 
-### [serialize[()]{.muted}](#serialize)
+### [serialize{.suffix}](#serialize)
 
 <!-- signatures.jinja2 -->
 
@@ -618,7 +618,7 @@ A dataclass that holds the table summary of result.
 
 <!-- class.qmd.jinja2 -->
 
-## [class]{.muted} TestResult
+## {.prefix} TestResult
 
 <!-- signatures.jinja2 -->
 
@@ -634,7 +634,7 @@ A dataclass that holds the table summary of result.
 
 Test result.
 
-### [TestResult[()]{.muted}](#__init__)
+### [TestResult{.suffix}](#__init__)
 
 <!-- signatures.jinja2 -->
 
@@ -644,7 +644,7 @@ Test result.
 
 :::
 
-### [add_figure[()]{.muted}](#add_figure)
+### [add_figure{.suffix}](#add_figure)
 
 <!-- signatures.jinja2 -->
 
@@ -671,7 +671,7 @@ Add a new figure to the result.
 
 - None.
 
-### [add_table[()]{.muted}](#add_table)
+### [add_table{.suffix}](#add_table)
 
 <!-- signatures.jinja2 -->
 
@@ -690,7 +690,7 @@ Add a new table to the result.
 - `table (Union[ResultTable, pd.DataFrame, List[Dict[str, Any]]])`: The table to add.
 - `title (Optional[str])`: The title of the table (can optionally be provided for pd.DataFrame and List\[Dict[str, Any]\] tables).
 
-### [check_result_id_exist[()]{.muted}](#check_result_id_exist)
+### [check_result_id_exist{.suffix}](#check_result_id_exist)
 
 <!-- signatures.jinja2 -->
 
@@ -704,7 +704,7 @@ Add a new table to the result.
 
 Check if the result_id exists in any test block across all sections.
 
-### [log[()]{.muted}](#log)
+### [log{.suffix}](#log)
 
 <!-- signatures.jinja2 -->
 
@@ -724,7 +724,7 @@ Log the result to ValidMind.
 - `position (int)`: The position (index) within the section to insert the test result.
 - `unsafe (bool)`: If True, log the result even if it contains sensitive data i.e. raw data from input datasets.
 
-### [log_async[()]{.muted}](#log_async)
+### [log_async{.suffix}](#log_async)
 
 <!-- signatures.jinja2 -->
 
@@ -734,7 +734,7 @@ Log the result to ValidMind.
 
 :::
 
-### [remove_figure[()]{.muted}](#remove_figure)
+### [remove_figure{.suffix}](#remove_figure)
 
 <!-- signatures.jinja2 -->
 
@@ -752,7 +752,7 @@ Remove a figure from the result by index.
 
 - `index (int)`: The index of the figure to remove (default is 0).
 
-### [remove_table[()]{.muted}](#remove_table)
+### [remove_table{.suffix}](#remove_table)
 
 <!-- signatures.jinja2 -->
 
@@ -770,7 +770,7 @@ Remove a table from the result by index.
 
 - `index (int)`: The index of the table to remove (default is 0).
 
-### [serialize[()]{.muted}](#serialize)
+### [serialize{.suffix}](#serialize)
 
 <!-- signatures.jinja2 -->
 
@@ -784,7 +784,7 @@ Remove a table from the result by index.
 
 Serialize the result for the API.
 
-### [to_widget[()]{.muted}](#to_widget)
+### [to_widget{.suffix}](#to_widget)
 
 <!-- signatures.jinja2 -->
 
@@ -810,7 +810,7 @@ Get the test name, using custom title if available.
 
 <!-- class.qmd.jinja2 -->
 
-## [class]{.muted} TestSuite
+## {.prefix} TestSuite
 
 <!-- signatures.jinja2 -->
 
@@ -828,7 +828,7 @@ Base class for test suites. Test suites are used to define a grouping of tests t
 
 Tests can be a flat list of strings or may be nested into sections by using a dict.
 
-### [TestSuite[()]{.muted}](#__init__)
+### [TestSuite{.suffix}](#__init__)
 
 <!-- signatures.jinja2 -->
 
@@ -838,7 +838,7 @@ Tests can be a flat list of strings or may be nested into sections by using a di
 
 :::
 
-### [get_default_config[()]{.muted}](#get_default_config)
+### [get_default_config{.suffix}](#get_default_config)
 
 <!-- signatures.jinja2 -->
 
@@ -858,7 +858,7 @@ Each test in a test suite can accept parameters and those parameters can have de
 
 - A dictionary of test names and their default parameters.
 
-### [get_tests[()]{.muted}](#get_tests)
+### [get_tests{.suffix}](#get_tests)
 
 <!-- signatures.jinja2 -->
 
@@ -872,7 +872,7 @@ Each test in a test suite can accept parameters and those parameters can have de
 
 Get all test suite test objects from all sections.
 
-### [num_tests[()]{.muted}](#num_tests)
+### [num_tests{.suffix}](#num_tests)
 
 <!-- signatures.jinja2 -->
 
@@ -888,7 +888,7 @@ Returns the total number of tests in the test suite.
 
 <!-- class.qmd.jinja2 -->
 
-## [class]{.muted} TestSuiteRunner
+## {.prefix} TestSuiteRunner
 
 <!-- signatures.jinja2 -->
 
@@ -902,7 +902,7 @@ Returns the total number of tests in the test suite.
 
 Runs a test suite.
 
-### [TestSuiteRunner[()]{.muted}](#__init__)
+### [TestSuiteRunner{.suffix}](#__init__)
 
 <!-- signatures.jinja2 -->
 
@@ -912,7 +912,7 @@ Runs a test suite.
 
 :::
 
-### [log_results[()]{.muted}](#log_results)
+### [log_results{.suffix}](#log_results)
 
 <!-- signatures.jinja2 -->
 
@@ -928,7 +928,7 @@ Logs the results of the test suite to ValidMind.
 
 This method will be called after the test suite has been run and all results have been collected. This method will log the results to ValidMind.
 
-### [run[()]{.muted}](#run)
+### [run{.suffix}](#run)
 
 <!-- signatures.jinja2 -->
 
@@ -947,7 +947,7 @@ Runs the test suite, renders the summary and sends the results to ValidMind.
 - `send (bool, optional)`: Whether to send the results to ValidMind. Defaults to True.
 - `fail_fast (bool, optional)`: Whether to stop running tests after the first failure. Defaults to False.
 
-### [summarize[()]{.muted}](#summarize)
+### [summarize{.suffix}](#summarize)
 
 <!-- signatures.jinja2 -->
 

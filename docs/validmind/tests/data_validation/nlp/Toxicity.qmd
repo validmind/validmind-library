@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## Toxicity[()]{.muted}
+## Toxicity{.suffix}
 
 <!-- signatures.jinja2 -->
 

@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## ClassifierThresholdOptimization[()]{.muted}
+## ClassifierThresholdOptimization{.suffix}
 
 <!-- signatures.jinja2 -->
 
@@ -86,7 +86,7 @@ The test implements multiple threshold optimization methods:
 
 <!-- function.qmd.jinja2 -->
 
-## find_optimal_threshold[()]{.muted}
+## find_optimal_threshold{.suffix}
 
 <!-- signatures.jinja2 -->
 

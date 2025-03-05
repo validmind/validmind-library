@@ -46,7 +46,7 @@ toc-expand: 4
 {% if is_public(member, module, full_data, is_root) and member.kind == "alias" %}
 {% set target = resolve_alias(member, full_data) %}
 {% if target and target.docstring %}
-## {{ member.name }}<span class='muted'>()</span>
+## {{ member.name }}{.suffix}
 
 {% if target.kind == "function" %}
 {{ signatures.render_signature(target) }}
@@ -63,7 +63,7 @@ toc-expand: 4
 {% if is_public(member, module, full_data, is_root) and member.kind == "alias" %}
 {% set target = resolve_alias(member, full_data) %}
 {% if target and target.docstring %}
-## {{ member.name }}<span class='muted'>()</span>
+## {{ member.name }}{.suffix}
 
 {% if target.kind == "function" %}
 {{ signatures.render_signature(target) }}
@@ -103,9 +103,9 @@ toc-expand: 4
 {% set target_name = member.value.name %}
 {% set target = module.members[target_name] %}
 
-## {{ member_name }}{% if target.kind == "function" %}<span class='muted'>()</span>{% endif %}
+## {{ member_name }}{% if target.kind == "function" %}{.suffix}{% endif %}
 
-*This function is an alias for [{{ target_name }}<span class='muted'>()</span>](#{{ target_name }}).*
+*This function is an alias for [{{ target_name }}{.suffix}](#{{ target_name }}).*
 {% endif %}
 {% endfor %}
 
@@ -117,7 +117,7 @@ toc-expand: 4
 {% if is_public(member, module, full_data, is_root) and member.kind == "alias" %}
 {% set resolved = resolve_alias(member, full_data) %}
 {% if resolved.kind == "function" or (resolved.kind == "attribute" and not module.path.startswith('validmind.tests')) %}
-## {{ member.name }}{% if resolved.kind == "function" %}<span class='muted'>()</span>{% endif %}
+## {{ member.name }}{% if resolved.kind == "function" %}{.suffix}{% endif %}
 
 {{ signatures.render_signature(resolved, full_data=full_data, module=module) }}
 
@@ -134,7 +134,7 @@ toc-expand: 4
 {% if is_public(member, module, full_data, is_root) and member.kind == "alias" %}
 {% set resolved = resolve_alias(member, full_data) %}
 {% if resolved.kind == "function" or (resolved.kind == "attribute" and not module.path.startswith('validmind.tests')) %}
-## {{ member.name }}{% if resolved.kind == "function" %}<span class='muted'>()</span>{% endif %}
+## {{ member.name }}{% if resolved.kind == "function" %}{.suffix}{% endif %}
 
 {{ signatures.render_signature(resolved, full_data=full_data, module=module) }}
 
@@ -156,7 +156,7 @@ toc-expand: 4
 {% if is_public(member, module, full_data, is_root) %}
 {% set resolved = resolve_alias(member, full_data) %}
 {% if resolved.kind == "attribute" and member.kind != "alias" and module.name == "validmind" and member.name in get_all_members(full_data['validmind'].get('members', {})) and resolved.value %}
-## {{ member.name }}
+## {.prefix} {{ member.name }}
 
 {{ signatures.render_signature(resolved, full_data=full_data, module=module) }}
 
@@ -189,7 +189,7 @@ toc-expand: 4
 {% if is_public(member, module, full_data, is_root) %}
 {% set resolved = resolve_alias(member, full_data) %}
 {% if resolved.kind == "attribute" and member.kind != "alias" and module.name == "validmind" and member.name in get_all_members(full_data['validmind'].get('members', {})) and resolved.value %}
-## {{ member.name }}
+## {.prefix} {{ member.name }}
 
 {{ signatures.render_signature(resolved, full_data=full_data, module=module) }}
 
@@ -246,7 +246,7 @@ toc-expand: 4
 {% if method.kind == "function" and (not method_name.startswith('_') or method_name in ['__init__']) %}
 
 <!-- module.qmd.jinja2 -->
-### {{ member.name if method_name == '__init__' else method_name }}<span class='muted'>()</span>
+### {{ member.name if method_name == '__init__' else method_name }}{.suffix}
 
 {% set method_with_parent = method %}
 {% set _ = method_with_parent.update({"parent": {"name": member.name}}) %}
@@ -290,7 +290,7 @@ toc-expand: 4
 {% if method.kind == "function" and (not method_name.startswith('_') or method_name in ['__init__']) %}
 
 <!-- module.qmd.jinja2 -->
-### {{ member.name if method_name == '__init__' else method_name }}<span class='muted'>()</span>
+### {{ member.name if method_name == '__init__' else method_name }}{.suffix}
 
 {% set method_with_parent = method %}
 {% set _ = method_with_parent.update({"parent": {"name": member.name}}) %}

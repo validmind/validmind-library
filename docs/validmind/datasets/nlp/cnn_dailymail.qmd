@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## display_nice[()]{.muted}
+## display_nice{.suffix}
 
 <!-- signatures.jinja2 -->
 
@@ -24,7 +24,7 @@ Primary function to format and display a DataFrame.
 
 <!-- function.qmd.jinja2 -->
 
-## load_data[()]{.muted}
+## load_data{.suffix}
 
 <!-- signatures.jinja2 -->
 

@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## compute_outliers[()]{.muted}
+## compute_outliers{.suffix}
 
 <!-- signatures.jinja2 -->
 
@@ -20,7 +20,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## IQROutliersTable[()]{.muted}
+## IQROutliersTable{.suffix}
 
 <!-- signatures.jinja2 -->
 

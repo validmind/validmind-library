@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## call_model[()]{.muted}
+## call_model{.suffix}
 
 <!-- signatures.jinja2 -->
 
@@ -24,7 +24,7 @@ Call LLM with the given prompts and return the response
 
 <!-- function.qmd.jinja2 -->
 
-## get_explanation[()]{.muted}
+## get_explanation{.suffix}
 
 <!-- signatures.jinja2 -->
 
@@ -42,7 +42,7 @@ e.g. "Score: 8 Explanation: <some-explanation>" -> "<some-explanation>"
 
 <!-- function.qmd.jinja2 -->
 
-## get_score[()]{.muted}
+## get_score{.suffix}
 
 <!-- signatures.jinja2 -->
 

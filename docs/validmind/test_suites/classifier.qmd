@@ -14,7 +14,7 @@ Ideal setup is to have the API client to read a custom test suite from the proje
 
 <!-- class.qmd.jinja2 -->
 
-## [class]{.muted} ClassifierDiagnosis
+## {.prefix} ClassifierDiagnosis
 
 <!-- signatures.jinja2 -->
 
@@ -30,7 +30,7 @@ Test suite for sklearn classifier model diagnosis tests
 
 <!-- class.qmd.jinja2 -->
 
-## [class]{.muted} ClassifierFullSuite
+## {.prefix} ClassifierFullSuite
 
 <!-- signatures.jinja2 -->
 
@@ -46,7 +46,7 @@ Full test suite for binary classification models.
 
 <!-- class.qmd.jinja2 -->
 
-## [class]{.muted} ClassifierMetrics
+## {.prefix} ClassifierMetrics
 
 <!-- signatures.jinja2 -->
 
@@ -62,7 +62,7 @@ Test suite for sklearn classifier metrics
 
 <!-- class.qmd.jinja2 -->
 
-## [class]{.muted} ClassifierModelValidation
+## {.prefix} ClassifierModelValidation
 
 <!-- signatures.jinja2 -->
 
@@ -78,7 +78,7 @@ Test suite for binary classification models.
 
 <!-- class.qmd.jinja2 -->
 
-## [class]{.muted} ClassifierPerformance
+## {.prefix} ClassifierPerformance
 
 <!-- signatures.jinja2 -->
 

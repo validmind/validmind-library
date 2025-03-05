@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## OverfitDiagnosis[()]{.muted}
+## OverfitDiagnosis{.suffix}
 
 <!-- signatures.jinja2 -->
 

@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## DickeyFullerGLS[()]{.muted}
+## DickeyFullerGLS{.suffix}
 
 <!-- signatures.jinja2 -->
 

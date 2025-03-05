@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## PrecisionRecallCurve[()]{.muted}
+## PrecisionRecallCurve{.suffix}
 
 <!-- signatures.jinja2 -->
 

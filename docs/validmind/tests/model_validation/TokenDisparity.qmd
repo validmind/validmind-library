@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## TokenDisparity[()]{.muted}
+## TokenDisparity{.suffix}
 
 <!-- signatures.jinja2 -->
 

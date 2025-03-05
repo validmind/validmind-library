@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## ADF[()]{.muted}
+## ADF{.suffix}
 
 <!-- signatures.jinja2 -->
 

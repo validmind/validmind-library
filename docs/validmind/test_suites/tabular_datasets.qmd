@@ -12,7 +12,7 @@ Test suites for tabular datasets
 
 <!-- class.qmd.jinja2 -->
 
-## [class]{.muted} TabularDataQuality
+## {.prefix} TabularDataQuality
 
 <!-- signatures.jinja2 -->
 
@@ -28,7 +28,7 @@ Test suite for data quality on tabular datasets
 
 <!-- class.qmd.jinja2 -->
 
-## [class]{.muted} TabularDataset
+## {.prefix} TabularDataset
 
 <!-- signatures.jinja2 -->
 
@@ -44,7 +44,7 @@ Test suite for tabular datasets.
 
 <!-- class.qmd.jinja2 -->
 
-## [class]{.muted} TabularDatasetDescription
+## {.prefix} TabularDatasetDescription
 
 <!-- signatures.jinja2 -->
 

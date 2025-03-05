@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## DescriptiveStatistics[()]{.muted}
+## DescriptiveStatistics{.suffix}
 
 <!-- signatures.jinja2 -->
 
@@ -52,7 +52,7 @@ The testing mechanism utilizes two in-built functions of pandas dataframes: `des
 
 <!-- function.qmd.jinja2 -->
 
-## get_summary_statistics_categorical[()]{.muted}
+## get_summary_statistics_categorical{.suffix}
 
 <!-- signatures.jinja2 -->
 
@@ -64,7 +64,7 @@ The testing mechanism utilizes two in-built functions of pandas dataframes: `des
 
 <!-- function.qmd.jinja2 -->
 
-## get_summary_statistics_numerical[()]{.muted}
+## get_summary_statistics_numerical{.suffix}
 
 <!-- signatures.jinja2 -->
 

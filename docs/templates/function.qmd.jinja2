@@ -3,7 +3,7 @@
 
 {% if member.kind == "function" %}
 
-## {{ member_name | default(member.name) }}[()]{.muted}
+## {{ member_name | default(member.name) }}{.suffix}
 
 {{ render_signature(member) }}
 

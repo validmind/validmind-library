@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## ClassifierPerformance[()]{.muted}
+## ClassifierPerformance{.suffix}
 
 <!-- signatures.jinja2 -->
 
@@ -52,7 +52,7 @@ The test produces a report that includes precision, recall, F1-Score, and accura
 
 <!-- function.qmd.jinja2 -->
 
-## multiclass_roc_auc_score[()]{.muted}
+## multiclass_roc_auc_score{.suffix}
 
 <!-- signatures.jinja2 -->
 

@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## custom_recall[()]{.muted}
+## custom_recall{.suffix}
 
 <!-- signatures.jinja2 -->
 
@@ -22,7 +22,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## HyperParametersTuning[()]{.muted}
+## HyperParametersTuning{.suffix}
 
 <!-- signatures.jinja2 -->
 

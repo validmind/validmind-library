@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## calculate_psi[()]{.muted}
+## calculate_psi{.suffix}
 
 <!-- signatures.jinja2 -->
 
@@ -24,7 +24,7 @@ Taken from: https://towardsdatascience.com/checking-model-stability-and-populati
 
 <!-- function.qmd.jinja2 -->
 
-## PopulationStabilityIndex[()]{.muted}
+## PopulationStabilityIndex{.suffix}
 
 <!-- signatures.jinja2 -->
 
