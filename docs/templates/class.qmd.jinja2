@@ -36,7 +36,7 @@
 {# First list methods #}
 {% for member in resolved.members.values() | sort(attribute='name') %}
 {% if member.kind in ['method', 'function'] and (not member.name.startswith('_') or member.name == '__init__') %}
-### [{{ member.name if member.name != '__init__' else resolved.name }}<span class="suffix"></span>](#{{ member.name }})
+### {{ member.name if member.name != '__init__' else resolved.name }}<span class="suffix"></span>
 
 {% if member.name == '__init__' %}
 {% set member_with_parent = member.copy() %}
@@ -66,7 +66,7 @@
 
 {# List properties with proper headings and signatures #}
 {% for member in meaningful_properties %}
-### [{{ member.name }}]{.property}
+### {{ member.name }}{.property}
 
 {{ signatures.render_signature(member) }}
 

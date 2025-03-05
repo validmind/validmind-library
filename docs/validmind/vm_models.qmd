@@ -36,7 +36,7 @@ Models entrypoint
 
 Base class for ValidMind Input types.
 
-### [with_options<span class="suffix"></span>](#with_options)
+### with_options<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -95,7 +95,7 @@ This way we can support multiple dataset types but under the hood we only need t
 - `df (pd.DataFrame)`: The dataset as a pandas DataFrame.
 - `extra_columns (Dict)`: Extra columns to include in the dataset.
 
-### [VMDataset<span class="suffix"></span>](#__init__)
+### VMDataset<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -123,7 +123,7 @@ Initializes a VMDataset instance.
 - `text_column (str, optional)`: The text column name of the dataset for nlp tasks. Defaults to None.
 - `target_class_labels (Dict, optional)`: The class labels for the target columns. Defaults to None.
 
-### [add_extra_column<span class="suffix"></span>](#add_extra_column)
+### add_extra_column<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -142,7 +142,7 @@ Adds an extra column to the dataset without modifying the dataset `features` and
 - `column_name (str)`: The name of the extra column.
 - `column_values (np.ndarray)`: The values of the extra column.
 
-### [assign_predictions<span class="suffix"></span>](#assign_predictions)
+### assign_predictions<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -166,7 +166,7 @@ Assign predictions and probabilities to the dataset.
 - `prediction_probabilities (Optional[List[float]])`: DEPRECATED: The values of the probabilities.
 - `**kwargs`: Additional keyword arguments that will get passed through to the model's `predict` method.
 
-### [prediction_column<span class="suffix"></span>](#prediction_column)
+### prediction_column<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -180,7 +180,7 @@ Assign predictions and probabilities to the dataset.
 
 Get or set the prediction column for a model.
 
-### [probability_column<span class="suffix"></span>](#probability_column)
+### probability_column<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -194,7 +194,7 @@ Get or set the prediction column for a model.
 
 Get or set the probability column for a model.
 
-### [target_classes<span class="suffix"></span>](#target_classes)
+### target_classes<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -208,7 +208,7 @@ Get or set the probability column for a model.
 
 Returns the target class labels or unique values of the target column.
 
-### [with_options<span class="suffix"></span>](#with_options)
+### with_options<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -231,7 +231,7 @@ Support options provided when passing an input to run_test or run_test_suite
 
 - A new instance of the dataset with only the specified columns
 
-### [x_df<span class="suffix"></span>](#x_df)
+### x_df<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -245,7 +245,7 @@ Support options provided when passing an input to run_test or run_test_suite
 
 Returns a dataframe containing only the feature columns
 
-### [y_df<span class="suffix"></span>](#y_df)
+### y_df<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -259,7 +259,7 @@ Returns a dataframe containing only the feature columns
 
 Returns a dataframe containing the target column
 
-### [y_pred<span class="suffix"></span>](#y_pred)
+### y_pred<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -283,7 +283,7 @@ Attempts to stack complex prediction types (e.g., embeddings) into a single, mul
 
 - The predictions for the model
 
-### [y_pred_df<span class="suffix"></span>](#y_pred_df)
+### y_pred_df<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -297,7 +297,7 @@ Attempts to stack complex prediction types (e.g., embeddings) into a single, mul
 
 Returns a dataframe containing the predictions for a given model
 
-### [y_prob<span class="suffix"></span>](#y_prob)
+### y_prob<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -319,7 +319,7 @@ Returns the probabilities for a given model.
 
 - The probability variables.
 
-### [y_prob_df<span class="suffix"></span>](#y_prob_df)
+### y_prob_df<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -333,7 +333,7 @@ Returns the probabilities for a given model.
 
 Returns a dataframe containing the probabilities for a given model
 
-### [df]{.property}
+### df{.property}
 
 <!-- signatures.jinja2 -->
 
@@ -351,7 +351,7 @@ Returns the dataset as a pandas DataFrame.
 
 - The dataset as a pandas DataFrame.
 
-### [x]{.property}
+### x{.property}
 
 <!-- signatures.jinja2 -->
 
@@ -369,7 +369,7 @@ Returns the input features (X) of the dataset.
 
 - The input features.
 
-### [y]{.property}
+### y{.property}
 
 <!-- signatures.jinja2 -->
 
@@ -410,7 +410,7 @@ An base class that wraps a trained model instance and its associated data.
 - `attributes (ModelAttributes, optional)`: The attributes of the model. Defaults to None.
 - `name (str, optional)`: The name of the model. Defaults to the class name.
 
-### [VMModel<span class="suffix"></span>](#__init__)
+### VMModel<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -420,7 +420,7 @@ An base class that wraps a trained model instance and its associated data.
 
 :::
 
-### [predict<span class="suffix"></span>](#predict)
+### predict<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -436,7 +436,7 @@ An base class that wraps a trained model instance and its associated data.
 
 Predict method for the model. This is a wrapper around the model's
 
-### [predict_proba<span class="suffix"></span>](#predict_proba)
+### predict_proba<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -450,7 +450,7 @@ Predict method for the model. This is a wrapper around the model's
 
 Predict probabilties - must be implemented by subclass if needed
 
-### [serialize<span class="suffix"></span>](#serialize)
+### serialize<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -482,7 +482,7 @@ Serializes the model to a dictionary so it can be sent to the API
 
 Figure objects track the schema supported by the ValidMind API.
 
-### [Figure<span class="suffix"></span>](#__init__)
+### Figure<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -492,7 +492,7 @@ Figure objects track the schema supported by the ValidMind API.
 
 :::
 
-### [serialize<span class="suffix"></span>](#serialize)
+### serialize<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -506,7 +506,7 @@ Figure objects track the schema supported by the ValidMind API.
 
 Serializes the Figure to a dictionary so it can be sent to the API.
 
-### [serialize_files<span class="suffix"></span>](#serialize_files)
+### serialize_files<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -520,7 +520,7 @@ Serializes the Figure to a dictionary so it can be sent to the API.
 
 Creates a `requests`-compatible files object to be sent to the API.
 
-### [to_widget<span class="suffix"></span>](#to_widget)
+### to_widget<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -552,7 +552,7 @@ Returns the ipywidget compatible representation of the figure. Ideally we would 
 
 Model attributes definition.
 
-### [ModelAttributes<span class="suffix"></span>](#__init__)
+### ModelAttributes<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -562,7 +562,7 @@ Model attributes definition.
 
 :::
 
-### [from_dict<span class="suffix"></span>](#from_dict)
+### from_dict<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -596,7 +596,7 @@ Creates a ModelAttributes instance from a dictionary.
 
 A dataclass that holds the table summary of result.
 
-### [ResultTable<span class="suffix"></span>](#__init__)
+### ResultTable<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -606,7 +606,7 @@ A dataclass that holds the table summary of result.
 
 :::
 
-### [serialize<span class="suffix"></span>](#serialize)
+### serialize<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -634,7 +634,7 @@ A dataclass that holds the table summary of result.
 
 Test result.
 
-### [TestResult<span class="suffix"></span>](#__init__)
+### TestResult<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -644,7 +644,7 @@ Test result.
 
 :::
 
-### [add_figure<span class="suffix"></span>](#add_figure)
+### add_figure<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -671,7 +671,7 @@ Add a new figure to the result.
 
 - None.
 
-### [add_table<span class="suffix"></span>](#add_table)
+### add_table<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -690,7 +690,7 @@ Add a new table to the result.
 - `table (Union[ResultTable, pd.DataFrame, List[Dict[str, Any]]])`: The table to add.
 - `title (Optional[str])`: The title of the table (can optionally be provided for pd.DataFrame and List\[Dict[str, Any]\] tables).
 
-### [check_result_id_exist<span class="suffix"></span>](#check_result_id_exist)
+### check_result_id_exist<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -704,7 +704,7 @@ Add a new table to the result.
 
 Check if the result_id exists in any test block across all sections.
 
-### [log<span class="suffix"></span>](#log)
+### log<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -724,7 +724,7 @@ Log the result to ValidMind.
 - `position (int)`: The position (index) within the section to insert the test result.
 - `unsafe (bool)`: If True, log the result even if it contains sensitive data i.e. raw data from input datasets.
 
-### [log_async<span class="suffix"></span>](#log_async)
+### log_async<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -734,7 +734,7 @@ Log the result to ValidMind.
 
 :::
 
-### [remove_figure<span class="suffix"></span>](#remove_figure)
+### remove_figure<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -752,7 +752,7 @@ Remove a figure from the result by index.
 
 - `index (int)`: The index of the figure to remove (default is 0).
 
-### [remove_table<span class="suffix"></span>](#remove_table)
+### remove_table<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -770,7 +770,7 @@ Remove a table from the result by index.
 
 - `index (int)`: The index of the table to remove (default is 0).
 
-### [serialize<span class="suffix"></span>](#serialize)
+### serialize<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -784,7 +784,7 @@ Remove a table from the result by index.
 
 Serialize the result for the API.
 
-### [to_widget<span class="suffix"></span>](#to_widget)
+### to_widget<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -794,7 +794,7 @@ Serialize the result for the API.
 
 :::
 
-### [test_name]{.property}
+### test_name{.property}
 
 <!-- signatures.jinja2 -->
 
@@ -828,7 +828,7 @@ Base class for test suites. Test suites are used to define a grouping of tests t
 
 Tests can be a flat list of strings or may be nested into sections by using a dict.
 
-### [TestSuite<span class="suffix"></span>](#__init__)
+### TestSuite<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -838,7 +838,7 @@ Tests can be a flat list of strings or may be nested into sections by using a di
 
 :::
 
-### [get_default_config<span class="suffix"></span>](#get_default_config)
+### get_default_config<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -858,7 +858,7 @@ Each test in a test suite can accept parameters and those parameters can have de
 
 - A dictionary of test names and their default parameters.
 
-### [get_tests<span class="suffix"></span>](#get_tests)
+### get_tests<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -872,7 +872,7 @@ Each test in a test suite can accept parameters and those parameters can have de
 
 Get all test suite test objects from all sections.
 
-### [num_tests<span class="suffix"></span>](#num_tests)
+### num_tests<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -902,7 +902,7 @@ Returns the total number of tests in the test suite.
 
 Runs a test suite.
 
-### [TestSuiteRunner<span class="suffix"></span>](#__init__)
+### TestSuiteRunner<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -912,7 +912,7 @@ Runs a test suite.
 
 :::
 
-### [log_results<span class="suffix"></span>](#log_results)
+### log_results<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -928,7 +928,7 @@ Logs the results of the test suite to ValidMind.
 
 This method will be called after the test suite has been run and all results have been collected. This method will log the results to ValidMind.
 
-### [run<span class="suffix"></span>](#run)
+### run<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -947,7 +947,7 @@ Runs the test suite, renders the summary and sends the results to ValidMind.
 - `send (bool, optional)`: Whether to send the results to ValidMind. Defaults to True.
 - `fail_fast (bool, optional)`: Whether to stop running tests after the first failure. Defaults to False.
 
-### [summarize<span class="suffix"></span>](#summarize)
+### summarize<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 

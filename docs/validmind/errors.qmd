@@ -29,7 +29,7 @@ The following base errors are defined for others:
 
 Common base class for all non-exit exceptions.
 
-#### [BaseError<span class="suffix"></span>](#__init__)
+#### BaseError<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -39,7 +39,7 @@ Common base class for all non-exit exceptions.
 
 :::
 
-#### [description<span class="suffix"></span>](#description)
+#### description<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 

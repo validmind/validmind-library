@@ -264,7 +264,7 @@ Exception raised when an error occurs while loading a test.
 - **From BaseError**: [class BaseError<span class="suffix"></span>](#class-baseerror), [description<span class="suffix"></span>](#description)
 - **From builtins.BaseException**: with_traceback, add_note
 
-### [LoadTestError<span class="suffix"></span>](#__init__)
+### LoadTestError<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -315,7 +315,7 @@ test = test_provider.load_test("my_namespace.my_test_class")
 
 - `root_folder (str)`: The root directory for local tests.
 
-### [LocalTestProvider<span class="suffix"></span>](#__init__)
+### LocalTestProvider<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -333,7 +333,7 @@ Initialize the LocalTestProvider with the given root_folder (see class docstring
 
 - `root_folder (str)`: The root directory for local tests.
 
-### [list_tests<span class="suffix"></span>](#list_tests)
+### list_tests<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -351,7 +351,7 @@ List all tests in the given namespace
 
 - A list of test IDs
 
-### [load_test<span class="suffix"></span>](#load_test)
+### load_test<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -393,7 +393,7 @@ Load the test function identified by the given test_id
 
 Protocol for user-defined test providers
 
-### [list_tests<span class="suffix"></span>](#list_tests)
+### list_tests<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -411,7 +411,7 @@ List all tests in the given namespace
 
 - A list of test IDs
 
-### [load_test<span class="suffix"></span>](#load_test)
+### load_test<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
