@@ -30,7 +30,7 @@ div.sourceCode, div.sourceCode pre.sourceCode {
 
 .prefix {
   position: relative;
-  margin-right: 5px;
+  margin-right: 0px;
 }
 
 .prefix::before {
@@ -41,7 +41,7 @@ div.sourceCode, div.sourceCode pre.sourceCode {
 
 .suffix {
   position: relative;
-  margin-left: 0;
+  margin-left: 1px;
 }
 
 .suffix::after {

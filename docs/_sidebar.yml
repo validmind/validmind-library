@@ -10,38 +10,38 @@ website:
         - text: "---"
         - text: "Python API"
         # Root level items from validmind.qmd
-        - text: '<span class="version">`2.8.12`</span>'
+        - text: "<span class='version'>`2.8.12`</span>"
           file: validmind/validmind.qmd#version__
-        - text: "init<span class="suffix"></span>"
-          file: validmind/validmind.qmd#init<span class="suffix"></span>
-        - text: "init_dataset<span class="suffix"></span>"
-          file: validmind/validmind.qmd#init_dataset<span class="suffix"></span>
-        - text: "init_model<span class="suffix"></span>"
-          file: validmind/validmind.qmd#init_model<span class="suffix"></span>
-        - text: "init_r_model<span class="suffix"></span>"
-          file: validmind/validmind.qmd#init_r_model<span class="suffix"></span>
-        - text: "get_test_suite<span class="suffix"></span>"
-          file: validmind/validmind.qmd#get_test_suite<span class="suffix"></span>
-        - text: "log_metric<span class="suffix"></span>"
-          file: validmind/validmind.qmd#log_metric<span class="suffix"></span>
-        - text: "preview_template<span class="suffix"></span>"
-          file: validmind/validmind.qmd#preview_template<span class="suffix"></span>
-        - text: "print_env<span class="suffix"></span>"
-          file: validmind/validmind.qmd#print_env<span class="suffix"></span>
-        - text: "reload<span class="suffix"></span>"
-          file: validmind/validmind.qmd#reload<span class="suffix"></span>
-        - text: "run_documentation_tests<span class="suffix"></span>"
-          file: validmind/validmind.qmd#run_documentation_tests<span class="suffix"></span>
-        - text: "run_test_suite<span class="suffix"></span>"
-          file: validmind/validmind.qmd#run_test_suite<span class="suffix"></span>
-        - text: "tags<span class="suffix"></span>"
-          file: validmind/validmind.qmd#tags<span class="suffix"></span>
-        - text: "tasks<span class="suffix"></span>"
-          file: validmind/validmind.qmd#tasks<span class="suffix"></span>
-        - text: "test<span class="suffix"></span>"
-          file: validmind/validmind.qmd#test<span class="suffix"></span>
-        - text: "<span class="prefix"></span> RawData"
-          file: validmind/validmind.qmd#<span class="prefix"></span> rawdata
+        - text: "init<span class='suffix'></span>"
+          file: validmind/validmind.qmd#init
+        - text: "init_dataset<span class='suffix'></span>"
+          file: validmind/validmind.qmd#init_dataset
+        - text: "init_model<span class='suffix'></span>"
+          file: validmind/validmind.qmd#init_model
+        - text: "init_r_model<span class='suffix'></span>"
+          file: validmind/validmind.qmd#init_r_model
+        - text: "get_test_suite<span class='suffix'></span>"
+          file: validmind/validmind.qmd#get_test_suite
+        - text: "log_metric<span class='suffix'></span>"
+          file: validmind/validmind.qmd#log_metric
+        - text: "preview_template<span class='suffix'></span>"
+          file: validmind/validmind.qmd#preview_template
+        - text: "print_env<span class='suffix'></span>"
+          file: validmind/validmind.qmd#print_env
+        - text: "reload<span class='suffix'></span>"
+          file: validmind/validmind.qmd#reload
+        - text: "run_documentation_tests<span class='suffix'></span>"
+          file: validmind/validmind.qmd#run_documentation_tests
+        - text: "run_test_suite<span class='suffix'></span>"
+          file: validmind/validmind.qmd#run_test_suite
+        - text: "tags<span class='suffix'></span>"
+          file: validmind/validmind.qmd#tags
+        - text: "tasks<span class='suffix'></span>"
+          file: validmind/validmind.qmd#tasks
+        - text: "test<span class='suffix'></span>"
+          file: validmind/validmind.qmd#test
+        - text: "<span class='prefix'></span> RawData"
+          file: validmind/validmind.qmd#rawdata
         # All module documentation pages
         - text: "---"
         - text: "Submodules"

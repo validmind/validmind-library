@@ -13,19 +13,21 @@ website:
         {% if documented_items.get('root') %}
         {% for item in documented_items['root'] %}
         {% if "&#95;&#95;version__" in item.text %}
-        - text: '<span class="version">`{{ module.members.__version__.members.__version__.value | replace("'", "") if module.members.__version__.members.__version__.value else module.members.__version__.value | replace("'", "") }}`</span>'
+        - text: "<span class='version'>`{{ module.members.__version__.members.__version__.value | replace("'", "") if module.members.__version__.members.__version__.value else module.members.__version__.value | replace("'", "") }}`</span>"
           file: {{ item.file | replace("&#95;&#95;version__", "version__") }}
         {% else %}
-        - text: "{{ item.text }}"
-          file: {{ item.file }}
-        {% endif %}
+        {% set cleaned_path = item.file | replace('<span class="prefix"></span> ', '') | replace('<span class="suffix"></span>', '') %}
+        - text: "{{ item.text | replace('<span class=\"', '<span class=\'') | replace('\"></span>', '\'></span>') }}"
+          file: {{ cleaned_path }}
           {% if item.contents %}
           contents:
             {% for method in item.contents %}
-            - text: "{{ method.text }}"
-              file: {{ method.file }}
+            {% set cleaned_method_path = method.file | replace('<span class="prefix"></span> ', '') | replace('<span class="suffix"></span>', '') %}
+            - text: "{{ method.text | replace('<span class=\"', '<span class=\'') | replace('\"></span>', '\'></span>') }}"
+              file: {{ cleaned_method_path }}
             {% endfor %}
           {% endif %}
+        {% endif %}
         {% endfor %}
         {% endif %}
         # All module documentation pages
@@ -45,16 +47,19 @@ website:
           contents:
             {% for item in qmd_files | get_child_files(module_name) %}
             {% if item.contents is defined %}
-            - text: "{{ item.text }}"
-              file: {{ item.file }}
+            {% set cleaned_item_path = item.file | replace('<span class="prefix"></span> ', '') | replace('<span class="suffix"></span>', '') %}
+            - text: "{{ item.text | replace('<span class=\"', '<span class=\'') | replace('\"></span>', '\'></span>') }}"
+              file: {{ cleaned_item_path }}
               contents:
                 {% for child in item.contents %}
-                - text: "{{ child.text }}"
-                  file: {{ child.file }}
+                {% set cleaned_child_path = child.file | replace('<span class="prefix"></span> ', '') | replace('<span class="suffix"></span>', '') %}
+                - text: "{{ child.text | replace('<span class=\"', '<span class=\'') | replace('\"></span>', '\'></span>') }}"
+                  file: {{ cleaned_child_path }}
                 {% endfor %}
             {% else %}
-            - text: "{{ item.text }}"
-              file: {{ item.file }}
+            {% set cleaned_item_path = item.file | replace('<span class="prefix"></span> ', '') | replace('<span class="suffix"></span>', '') %}
+            - text: "{{ item.text | replace('<span class=\"', '<span class=\'') | replace('\"></span>', '\'></span>') }}"
+              file: {{ cleaned_item_path }}
             {% endif %}
             {% endfor %}
         {% else %}
