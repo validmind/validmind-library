@@ -28,10 +28,20 @@ div.sourceCode, div.sourceCode pre.sourceCode {
   border: none;
 }
 
+.prefix {
+  position: relative;
+  margin-right: 5px;
+}
+
 .prefix::before {
   content: "Class";
   opacity: 0.6;
   font-size: 0.9em;
+}
+
+.suffix {
+  position: relative;
+  margin-left: 0;
 }
 
 .suffix::after {

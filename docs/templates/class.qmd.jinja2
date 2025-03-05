@@ -2,7 +2,7 @@
 {% import "macros/signatures.jinja2" as signatures %}
 
 <!-- class.qmd.jinja2 -->
-## {.prefix} {{ resolved.name }}
+## <span class="prefix"></span> {{ resolved.name }}
 
 {% set is_test_suite = __is_test_suite|default(false) or (module and module.name == "test_suites") %}
 {{ signatures.render_signature(resolved) }}
@@ -25,7 +25,7 @@
     {% set _ = grouped[member.base].append(member) %}
 {% endfor %}
 {% for base, members in grouped.items() %}
-- **From {{ base }}**: {% for member in members %}{% if member.kind == 'builtin' %}{{ member.name }}{% else %}[{% if member.kind == 'class' %}class {% endif %}{{ member.name }}{.suffix}](#{% if member.kind == 'class' %}class-{% endif %}{{ member.name | lower }}){% endif %}{% if not loop.last %}, {% endif %}{% endfor %}
+- **From {{ base }}**: {% for member in members %}{% if member.kind == 'builtin' %}{{ member.name }}{% else %}[{% if member.kind == 'class' %}class {% endif %}{{ member.name }}<span class="suffix"></span>](#{% if member.kind == 'class' %}class-{% endif %}{{ member.name | lower }}){% endif %}{% if not loop.last %}, {% endif %}{% endfor %}
 
 {% endfor %}
 {% endif %}
@@ -36,7 +36,7 @@
 {# First list methods #}
 {% for member in resolved.members.values() | sort(attribute='name') %}
 {% if member.kind in ['method', 'function'] and (not member.name.startswith('_') or member.name == '__init__') %}
-### [{{ member.name if member.name != '__init__' else resolved.name }}{.suffix}](#{{ member.name }})
+### [{{ member.name if member.name != '__init__' else resolved.name }}<span class="suffix"></span>](#{{ member.name }})
 
 {% if member.name == '__init__' %}
 {% set member_with_parent = member.copy() %}

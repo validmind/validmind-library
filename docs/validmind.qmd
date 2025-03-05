@@ -48,7 +48,7 @@ After you have pasted the code snippet into your development source code and exe
 
 :::
 
-## init{.suffix}
+## init<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -78,7 +78,7 @@ If the API key and secret are not provided, the client will attempt to retrieve 
 
 - `ValueError`: If the API key and secret are not provided
 
-## init_dataset{.suffix}
+## init_dataset<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -124,7 +124,7 @@ The following dataset types are supported:
 
 - `ValueError`: If the dataset type is not supported.
 
-## init_model{.suffix}
+## init_model<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -154,7 +154,7 @@ Initializes a VM Model, which can then be passed to other functions that can per
 
 - `ValueError`: If the model type is not supported.
 
-## init_r_model{.suffix}
+## init_r_model<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -179,7 +179,7 @@ LogisticRegression and LinearRegression models are converted to sklearn models b
 
 - A VM Model instance.
 
-## get_test_suite{.suffix}
+## get_test_suite<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -206,7 +206,7 @@ This function provides an interface to retrieve the TestSuite instance for the c
 
 - The TestSuite instance.
 
-## log_metric{.suffix}
+## log_metric<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -231,7 +231,7 @@ Unit metrics are key-value pairs where the key is the metric name and the value 
 - `recorded_at (str)`: The timestamp of the metric. Server will use current time if not provided.
 - `thresholds (dict)`: Dictionary of thresholds for the metric.
 
-## preview_template{.suffix}
+## preview_template<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -251,7 +251,7 @@ This function will display the documentation template for the current project. I
 
 - `ValueError`: If the project has not been initialized.
 
-## print_env{.suffix}
+## print_env<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -267,7 +267,7 @@ Prints a log of the running environment for debugging.
 
 Output includes: ValidMind Library version, operating system details, installed dependencies, and the ISO 8601 timestamp at log creation.
 
-## reload{.suffix}
+## reload<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -281,7 +281,7 @@ Output includes: ValidMind Library version, operating system details, installed 
 
 Reconnect to the ValidMind API and reload the project configuration.
 
-## run_documentation_tests{.suffix}
+## run_documentation_tests<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -314,7 +314,7 @@ This function will analyze the current project's documentation template and coll
 
 - `ValueError`: If the project has not been initialized.
 
-## run_test_suite{.suffix}
+## run_test_suite<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -347,7 +347,7 @@ This function provides a high level interface for running a test suite. A test s
 
 - `ValueError`: If the test suite name is not found or if there is an error initializing the test suite.
 
-## tags{.suffix}
+## tags<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -365,7 +365,7 @@ Decorator for specifying tags for a test.
 
 - `*tags`: The tags to apply to the test.
 
-## tasks{.suffix}
+## tasks<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -383,7 +383,7 @@ Decorator for specifying the task types that a test is designed for.
 
 - `*tasks`: The task types that the test is designed for.
 
-## test{.suffix}
+## test<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -423,7 +423,7 @@ The function may also include a docstring. This docstring will be used and logge
 
 <!-- module.qmd.jinja2 -->
 
-## <span class='muted'>class</span> RawData
+## <span class="prefix"></span> RawData
 
 <!-- signatures.jinja2 -->
 
@@ -439,7 +439,7 @@ Holds raw data for a test result.
 
 <!-- module.qmd.jinja2 -->
 
-### RawData{.suffix}
+### RawData<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -460,7 +460,7 @@ Create a new RawData object.
 
 <!-- module.qmd.jinja2 -->
 
-### inspect{.suffix}
+### inspect<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -484,7 +484,7 @@ Inspect the raw data.
 
 <!-- module.qmd.jinja2 -->
 
-### serialize{.suffix}
+### serialize<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 

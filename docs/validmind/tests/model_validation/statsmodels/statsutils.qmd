@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## adj_r2_score{.suffix}
+## adj_r2_score<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 

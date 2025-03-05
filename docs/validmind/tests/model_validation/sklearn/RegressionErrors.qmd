@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## RegressionErrors{.suffix}
+## RegressionErrors<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 

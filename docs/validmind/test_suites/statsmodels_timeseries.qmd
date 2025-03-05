@@ -12,7 +12,7 @@ Time Series Test Suites from statsmodels
 
 <!-- class.qmd.jinja2 -->
 
-## {.prefix} RegressionModelDescription
+## <span class="prefix"></span> RegressionModelDescription
 
 <!-- signatures.jinja2 -->
 
@@ -28,7 +28,7 @@ Test suite for performance metric of regression model of statsmodels library
 
 <!-- class.qmd.jinja2 -->
 
-## {.prefix} RegressionModelsEvaluation
+## <span class="prefix"></span> RegressionModelsEvaluation
 
 <!-- signatures.jinja2 -->
 

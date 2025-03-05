@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## RegressionR2Square{.suffix}
+## RegressionR2Square<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 

@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## get_demo_test_config{.suffix}
+## get_demo_test_config<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -39,7 +39,7 @@ We assign the following inputs depending on the input config expected by each te
 
 <!-- function.qmd.jinja2 -->
 
-## load_data{.suffix}
+## load_data<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -51,7 +51,7 @@ We assign the following inputs depending on the input config expected by each te
 
 <!-- function.qmd.jinja2 -->
 
-## preprocess{.suffix}
+## preprocess<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 

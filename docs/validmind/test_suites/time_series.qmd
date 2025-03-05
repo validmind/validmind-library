@@ -12,7 +12,7 @@ Time Series Test Suites
 
 <!-- class.qmd.jinja2 -->
 
-## {.prefix} TimeSeriesDataQuality
+## <span class="prefix"></span> TimeSeriesDataQuality
 
 <!-- signatures.jinja2 -->
 
@@ -28,7 +28,7 @@ Test suite for data quality on time series datasets
 
 <!-- class.qmd.jinja2 -->
 
-## {.prefix} TimeSeriesDataset
+## <span class="prefix"></span> TimeSeriesDataset
 
 <!-- signatures.jinja2 -->
 
@@ -44,7 +44,7 @@ Test suite for time series datasets.
 
 <!-- class.qmd.jinja2 -->
 
-## {.prefix} TimeSeriesModelValidation
+## <span class="prefix"></span> TimeSeriesModelValidation
 
 <!-- signatures.jinja2 -->
 
@@ -60,7 +60,7 @@ Test suite for time series model validation.
 
 <!-- class.qmd.jinja2 -->
 
-## {.prefix} TimeSeriesMultivariate
+## <span class="prefix"></span> TimeSeriesMultivariate
 
 <!-- signatures.jinja2 -->
 
@@ -76,7 +76,7 @@ This test suite provides a preliminary understanding of the features and relatio
 
 <!-- class.qmd.jinja2 -->
 
-## {.prefix} TimeSeriesUnivariate
+## <span class="prefix"></span> TimeSeriesUnivariate
 
 <!-- signatures.jinja2 -->
 

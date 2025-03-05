@@ -12,7 +12,7 @@ Threshold based tests
 
 <!-- function.qmd.jinja2 -->
 
-## StopWords{.suffix}
+## StopWords<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 

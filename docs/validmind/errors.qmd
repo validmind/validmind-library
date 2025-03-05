@@ -15,7 +15,7 @@ The following base errors are defined for others:
 
 ## Base errors
 
-### {.prefix} BaseError
+### <span class="prefix"></span> BaseError
 
 <!-- signatures.jinja2 -->
 
@@ -29,7 +29,7 @@ The following base errors are defined for others:
 
 Common base class for all non-exit exceptions.
 
-#### [BaseError{.suffix}](#__init__)
+#### [BaseError<span class="suffix"></span>](#__init__)
 
 <!-- signatures.jinja2 -->
 
@@ -39,7 +39,7 @@ Common base class for all non-exit exceptions.
 
 :::
 
-#### [description{.suffix}](#description)
+#### [description<span class="suffix"></span>](#description)
 
 <!-- signatures.jinja2 -->
 
@@ -55,7 +55,7 @@ Common base class for all non-exit exceptions.
 
 - builtins.BaseException with_traceback, add_note
 
-### {.prefix} APIRequestError
+### <span class="prefix"></span> APIRequestError
 
 <!-- signatures.jinja2 -->
 
@@ -73,12 +73,12 @@ Generic error for API request errors that are not known.
 
 **Inherited members**
 
-- [BaseError{.suffix}](#class-baseerror), [description{.suffix}](#description)
+- [BaseError<span class="suffix"></span>](#class-baseerror), [description<span class="suffix"></span>](#description)
 - builtins.BaseException with_traceback, add_note
 
 ## API errors
 
-### {.prefix} InvalidAPICredentialsError
+### <span class="prefix"></span> InvalidAPICredentialsError
 
 <!-- signatures.jinja2 -->
 
@@ -92,10 +92,10 @@ Generic error for API request errors that are not known.
 
 **Inherited members**
 
-- [APIRequestError{.suffix}](#class-apirequesterror)
+- [APIRequestError<span class="suffix"></span>](#class-apirequesterror)
 - builtins.BaseException with_traceback, add_note
 
-### {.prefix} MissingAPICredentialsError
+### <span class="prefix"></span> MissingAPICredentialsError
 
 <!-- signatures.jinja2 -->
 
@@ -109,12 +109,12 @@ Generic error for API request errors that are not known.
 
 **Inherited members**
 
-- [BaseError{.suffix}](#class-baseerror), [description{.suffix}](#description)
+- [BaseError<span class="suffix"></span>](#class-baseerror), [description<span class="suffix"></span>](#description)
 - builtins.BaseException with_traceback, add_note
 
 ## Model errors
 
-### {.prefix} InvalidXGBoostTrainedModelError
+### <span class="prefix"></span> InvalidXGBoostTrainedModelError
 
 <!-- signatures.jinja2 -->
 
@@ -132,10 +132,10 @@ When an invalid XGBoost trained model is used when calling init_r_model.
 
 **Inherited members**
 
-- [BaseError{.suffix}](#class-baseerror), [description{.suffix}](#description)
+- [BaseError<span class="suffix"></span>](#class-baseerror), [description<span class="suffix"></span>](#description)
 - builtins.BaseException with_traceback, add_note
 
-### {.prefix} MissingModelIdError
+### <span class="prefix"></span> MissingModelIdError
 
 <!-- signatures.jinja2 -->
 
@@ -149,10 +149,10 @@ When an invalid XGBoost trained model is used when calling init_r_model.
 
 **Inherited members**
 
-- [BaseError{.suffix}](#class-baseerror), [description{.suffix}](#description)
+- [BaseError<span class="suffix"></span>](#class-baseerror), [description<span class="suffix"></span>](#description)
 - builtins.BaseException with_traceback, add_note
 
-### {.prefix} MissingOrInvalidModelPredictFnError
+### <span class="prefix"></span> MissingOrInvalidModelPredictFnError
 
 <!-- signatures.jinja2 -->
 
@@ -170,10 +170,10 @@ When the PyTorch model is missing a predict function or its predict method does 
 
 **Inherited members**
 
-- [BaseError{.suffix}](#class-baseerror), [description{.suffix}](#description)
+- [BaseError<span class="suffix"></span>](#class-baseerror), [description<span class="suffix"></span>](#description)
 - builtins.BaseException with_traceback, add_note
 
-### {.prefix} UnsupportedModelError
+### <span class="prefix"></span> UnsupportedModelError
 
 <!-- signatures.jinja2 -->
 
@@ -191,10 +191,10 @@ When an unsupported model is used.
 
 **Inherited members**
 
-- [BaseError{.suffix}](#class-baseerror), [description{.suffix}](#description)
+- [BaseError<span class="suffix"></span>](#class-baseerror), [description<span class="suffix"></span>](#description)
 - builtins.BaseException with_traceback, add_note
 
-### {.prefix} UnsupportedModelForSHAPError
+### <span class="prefix"></span> UnsupportedModelForSHAPError
 
 <!-- signatures.jinja2 -->
 
@@ -212,10 +212,10 @@ When an unsupported model is used for SHAP importance.
 
 **Inherited members**
 
-- [BaseError{.suffix}](#class-baseerror), [description{.suffix}](#description)
+- [BaseError<span class="suffix"></span>](#class-baseerror), [description<span class="suffix"></span>](#description)
 - builtins.BaseException with_traceback, add_note
 
-### {.prefix} UnsupportedRModelError
+### <span class="prefix"></span> UnsupportedRModelError
 
 <!-- signatures.jinja2 -->
 
@@ -233,12 +233,12 @@ When an unsupported R model is used.
 
 **Inherited members**
 
-- [BaseError{.suffix}](#class-baseerror), [description{.suffix}](#description)
+- [BaseError<span class="suffix"></span>](#class-baseerror), [description<span class="suffix"></span>](#description)
 - builtins.BaseException with_traceback, add_note
 
 ## Test errors
 
-### {.prefix} GetTestSuiteError
+### <span class="prefix"></span> GetTestSuiteError
 
 <!-- signatures.jinja2 -->
 
@@ -256,10 +256,10 @@ When the test suite could not be found.
 
 **Inherited members**
 
-- [BaseError{.suffix}](#class-baseerror), [description{.suffix}](#description)
+- [BaseError<span class="suffix"></span>](#class-baseerror), [description<span class="suffix"></span>](#description)
 - builtins.BaseException with_traceback, add_note
 
-### {.prefix} InitializeTestSuiteError
+### <span class="prefix"></span> InitializeTestSuiteError
 
 <!-- signatures.jinja2 -->
 
@@ -277,10 +277,10 @@ When the test suite was found but could not be initialized.
 
 **Inherited members**
 
-- [BaseError{.suffix}](#class-baseerror), [description{.suffix}](#description)
+- [BaseError<span class="suffix"></span>](#class-baseerror), [description<span class="suffix"></span>](#description)
 - builtins.BaseException with_traceback, add_note
 
-### {.prefix} InvalidTestParametersError
+### <span class="prefix"></span> InvalidTestParametersError
 
 <!-- signatures.jinja2 -->
 
@@ -298,10 +298,10 @@ When invalid parameters are provided for the test.
 
 **Inherited members**
 
-- [BaseError{.suffix}](#class-baseerror), [description{.suffix}](#description)
+- [BaseError<span class="suffix"></span>](#class-baseerror), [description<span class="suffix"></span>](#description)
 - builtins.BaseException with_traceback, add_note
 
-### {.prefix} InvalidTestResultsError
+### <span class="prefix"></span> InvalidTestResultsError
 
 <!-- signatures.jinja2 -->
 
@@ -319,10 +319,10 @@ When an invalid test results object is sent to the API.
 
 **Inherited members**
 
-- [APIRequestError{.suffix}](#class-apirequesterror)
+- [APIRequestError<span class="suffix"></span>](#class-apirequesterror)
 - builtins.BaseException with_traceback, add_note
 
-### {.prefix} LoadTestError
+### <span class="prefix"></span> LoadTestError
 
 <!-- signatures.jinja2 -->
 
@@ -340,10 +340,10 @@ Exception raised when an error occurs while loading a test.
 
 **Inherited members**
 
-- [BaseError{.suffix}](#class-baseerror), [description{.suffix}](#description)
+- [BaseError<span class="suffix"></span>](#class-baseerror), [description<span class="suffix"></span>](#description)
 - builtins.BaseException with_traceback, add_note
 
-### {.prefix} MissingRequiredTestInputError
+### <span class="prefix"></span> MissingRequiredTestInputError
 
 <!-- signatures.jinja2 -->
 
@@ -361,10 +361,10 @@ When a required test context variable is missing.
 
 **Inherited members**
 
-- [BaseError{.suffix}](#class-baseerror), [description{.suffix}](#description)
+- [BaseError<span class="suffix"></span>](#class-baseerror), [description<span class="suffix"></span>](#description)
 - builtins.BaseException with_traceback, add_note
 
-### {.prefix} SkipTestError
+### <span class="prefix"></span> SkipTestError
 
 <!-- signatures.jinja2 -->
 
@@ -382,10 +382,10 @@ Useful error to throw when a test cannot be executed.
 
 **Inherited members**
 
-- [BaseError{.suffix}](#class-baseerror), [description{.suffix}](#description)
+- [BaseError<span class="suffix"></span>](#class-baseerror), [description<span class="suffix"></span>](#description)
 - builtins.BaseException with_traceback, add_note
 
-### {.prefix} TestInputInvalidDatasetError
+### <span class="prefix"></span> TestInputInvalidDatasetError
 
 <!-- signatures.jinja2 -->
 
@@ -403,12 +403,12 @@ When an invalid dataset is used in a test context.
 
 **Inherited members**
 
-- [BaseError{.suffix}](#class-baseerror), [description{.suffix}](#description)
+- [BaseError<span class="suffix"></span>](#class-baseerror), [description<span class="suffix"></span>](#description)
 - builtins.BaseException with_traceback, add_note
 
 ## Input validation errors
 
-### {.prefix} InvalidXGBoostTrainedModelError
+### <span class="prefix"></span> InvalidXGBoostTrainedModelError
 
 <!-- signatures.jinja2 -->
 
@@ -426,10 +426,10 @@ When an invalid XGBoost trained model is used when calling init_r_model.
 
 **Inherited members**
 
-- [BaseError{.suffix}](#class-baseerror), [description{.suffix}](#description)
+- [BaseError<span class="suffix"></span>](#class-baseerror), [description<span class="suffix"></span>](#description)
 - builtins.BaseException with_traceback, add_note
 
-### {.prefix} MissingModelIdError
+### <span class="prefix"></span> MissingModelIdError
 
 <!-- signatures.jinja2 -->
 
@@ -443,10 +443,10 @@ When an invalid XGBoost trained model is used when calling init_r_model.
 
 **Inherited members**
 
-- [BaseError{.suffix}](#class-baseerror), [description{.suffix}](#description)
+- [BaseError<span class="suffix"></span>](#class-baseerror), [description<span class="suffix"></span>](#description)
 - builtins.BaseException with_traceback, add_note
 
-### {.prefix} MissingOrInvalidModelPredictFnError
+### <span class="prefix"></span> MissingOrInvalidModelPredictFnError
 
 <!-- signatures.jinja2 -->
 
@@ -464,10 +464,10 @@ When the PyTorch model is missing a predict function or its predict method does 
 
 **Inherited members**
 
-- [BaseError{.suffix}](#class-baseerror), [description{.suffix}](#description)
+- [BaseError<span class="suffix"></span>](#class-baseerror), [description<span class="suffix"></span>](#description)
 - builtins.BaseException with_traceback, add_note
 
-### {.prefix} InvalidTestParametersError
+### <span class="prefix"></span> InvalidTestParametersError
 
 <!-- signatures.jinja2 -->
 
@@ -485,10 +485,10 @@ When invalid parameters are provided for the test.
 
 **Inherited members**
 
-- [BaseError{.suffix}](#class-baseerror), [description{.suffix}](#description)
+- [BaseError<span class="suffix"></span>](#class-baseerror), [description<span class="suffix"></span>](#description)
 - builtins.BaseException with_traceback, add_note
 
-### {.prefix} InvalidTestResultsError
+### <span class="prefix"></span> InvalidTestResultsError
 
 <!-- signatures.jinja2 -->
 
@@ -506,10 +506,10 @@ When an invalid test results object is sent to the API.
 
 **Inherited members**
 
-- [APIRequestError{.suffix}](#class-apirequesterror)
+- [APIRequestError<span class="suffix"></span>](#class-apirequesterror)
 - builtins.BaseException with_traceback, add_note
 
-### {.prefix} MissingRequiredTestInputError
+### <span class="prefix"></span> MissingRequiredTestInputError
 
 <!-- signatures.jinja2 -->
 
@@ -527,10 +527,10 @@ When a required test context variable is missing.
 
 **Inherited members**
 
-- [BaseError{.suffix}](#class-baseerror), [description{.suffix}](#description)
+- [BaseError<span class="suffix"></span>](#class-baseerror), [description<span class="suffix"></span>](#description)
 - builtins.BaseException with_traceback, add_note
 
-### {.prefix} InvalidAPICredentialsError
+### <span class="prefix"></span> InvalidAPICredentialsError
 
 <!-- signatures.jinja2 -->
 
@@ -544,10 +544,10 @@ When a required test context variable is missing.
 
 **Inherited members**
 
-- [APIRequestError{.suffix}](#class-apirequesterror)
+- [APIRequestError<span class="suffix"></span>](#class-apirequesterror)
 - builtins.BaseException with_traceback, add_note
 
-### {.prefix} InvalidContentIdPrefixError
+### <span class="prefix"></span> InvalidContentIdPrefixError
 
 <!-- signatures.jinja2 -->
 
@@ -565,10 +565,10 @@ When an invalid text content_id is sent to the API.
 
 **Inherited members**
 
-- [APIRequestError{.suffix}](#class-apirequesterror)
+- [APIRequestError<span class="suffix"></span>](#class-apirequesterror)
 - builtins.BaseException with_traceback, add_note
 
-### {.prefix} InvalidInputError
+### <span class="prefix"></span> InvalidInputError
 
 <!-- signatures.jinja2 -->
 
@@ -586,10 +586,10 @@ When an invalid input object is provided.
 
 **Inherited members**
 
-- [BaseError{.suffix}](#class-baseerror), [description{.suffix}](#description)
+- [BaseError<span class="suffix"></span>](#class-baseerror), [description<span class="suffix"></span>](#description)
 - builtins.BaseException with_traceback, add_note
 
-### {.prefix} InvalidMetricResultsError
+### <span class="prefix"></span> InvalidMetricResultsError
 
 <!-- signatures.jinja2 -->
 
@@ -607,10 +607,10 @@ When an invalid metric results object is sent to the API.
 
 **Inherited members**
 
-- [APIRequestError{.suffix}](#class-apirequesterror)
+- [APIRequestError<span class="suffix"></span>](#class-apirequesterror)
 - builtins.BaseException with_traceback, add_note
 
-### {.prefix} InvalidProjectError
+### <span class="prefix"></span> InvalidProjectError
 
 <!-- signatures.jinja2 -->
 
@@ -624,10 +624,10 @@ When an invalid metric results object is sent to the API.
 
 **Inherited members**
 
-- [APIRequestError{.suffix}](#class-apirequesterror)
+- [APIRequestError<span class="suffix"></span>](#class-apirequesterror)
 - builtins.BaseException with_traceback, add_note
 
-### {.prefix} InvalidRequestBodyError
+### <span class="prefix"></span> InvalidRequestBodyError
 
 <!-- signatures.jinja2 -->
 
@@ -645,10 +645,10 @@ When a POST/PUT request is made with an invalid request body.
 
 **Inherited members**
 
-- [APIRequestError{.suffix}](#class-apirequesterror)
+- [APIRequestError<span class="suffix"></span>](#class-apirequesterror)
 - builtins.BaseException with_traceback, add_note
 
-### {.prefix} InvalidTextObjectError
+### <span class="prefix"></span> InvalidTextObjectError
 
 <!-- signatures.jinja2 -->
 
@@ -666,10 +666,10 @@ When an invalid Metadata (Text) object is sent to the API.
 
 **Inherited members**
 
-- [APIRequestError{.suffix}](#class-apirequesterror)
+- [APIRequestError<span class="suffix"></span>](#class-apirequesterror)
 - builtins.BaseException with_traceback, add_note
 
-### {.prefix} InvalidValueFormatterError
+### <span class="prefix"></span> InvalidValueFormatterError
 
 <!-- signatures.jinja2 -->
 
@@ -687,10 +687,10 @@ When an invalid value formatter is provided when serializing results.
 
 **Inherited members**
 
-- [BaseError{.suffix}](#class-baseerror), [description{.suffix}](#description)
+- [BaseError<span class="suffix"></span>](#class-baseerror), [description<span class="suffix"></span>](#description)
 - builtins.BaseException with_traceback, add_note
 
-### {.prefix} MissingAPICredentialsError
+### <span class="prefix"></span> MissingAPICredentialsError
 
 <!-- signatures.jinja2 -->
 
@@ -704,10 +704,10 @@ When an invalid value formatter is provided when serializing results.
 
 **Inherited members**
 
-- [BaseError{.suffix}](#class-baseerror), [description{.suffix}](#description)
+- [BaseError<span class="suffix"></span>](#class-baseerror), [description<span class="suffix"></span>](#description)
 - builtins.BaseException with_traceback, add_note
 
-### {.prefix} MissingCacheResultsArgumentsError
+### <span class="prefix"></span> MissingCacheResultsArgumentsError
 
 <!-- signatures.jinja2 -->
 
@@ -725,10 +725,10 @@ When the cache_results function is missing arguments.
 
 **Inherited members**
 
-- [BaseError{.suffix}](#class-baseerror), [description{.suffix}](#description)
+- [BaseError<span class="suffix"></span>](#class-baseerror), [description<span class="suffix"></span>](#description)
 - builtins.BaseException with_traceback, add_note
 
-### {.prefix} MissingClassLabelError
+### <span class="prefix"></span> MissingClassLabelError
 
 <!-- signatures.jinja2 -->
 
@@ -746,10 +746,10 @@ When the one or more class labels are missing from provided dataset targets.
 
 **Inherited members**
 
-- [BaseError{.suffix}](#class-baseerror), [description{.suffix}](#description)
+- [BaseError<span class="suffix"></span>](#class-baseerror), [description<span class="suffix"></span>](#description)
 - builtins.BaseException with_traceback, add_note
 
-### {.prefix} MissingDependencyError
+### <span class="prefix"></span> MissingDependencyError
 
 <!-- signatures.jinja2 -->
 
@@ -767,10 +767,10 @@ When a required dependency is missing.
 
 **Inherited members**
 
-- [BaseError{.suffix}](#class-baseerror), [description{.suffix}](#description)
+- [BaseError<span class="suffix"></span>](#class-baseerror), [description<span class="suffix"></span>](#description)
 - builtins.BaseException with_traceback, add_note
 
-### {.prefix} MissingDocumentationTemplate
+### <span class="prefix"></span> MissingDocumentationTemplate
 
 <!-- signatures.jinja2 -->
 
@@ -788,10 +788,10 @@ When the client config is missing the documentation template.
 
 **Inherited members**
 
-- [BaseError{.suffix}](#class-baseerror), [description{.suffix}](#description)
+- [BaseError<span class="suffix"></span>](#class-baseerror), [description<span class="suffix"></span>](#description)
 - builtins.BaseException with_traceback, add_note
 
-### {.prefix} MissingRExtrasError
+### <span class="prefix"></span> MissingRExtrasError
 
 <!-- signatures.jinja2 -->
 
@@ -809,10 +809,10 @@ When the R extras have not been installed.
 
 **Inherited members**
 
-- [BaseError{.suffix}](#class-baseerror), [description{.suffix}](#description)
+- [BaseError<span class="suffix"></span>](#class-baseerror), [description<span class="suffix"></span>](#description)
 - builtins.BaseException with_traceback, add_note
 
-### {.prefix} MissingTextContentIdError
+### <span class="prefix"></span> MissingTextContentIdError
 
 <!-- signatures.jinja2 -->
 
@@ -830,10 +830,10 @@ When a Text object is sent to the API without a content_id.
 
 **Inherited members**
 
-- [APIRequestError{.suffix}](#class-apirequesterror)
+- [APIRequestError<span class="suffix"></span>](#class-apirequesterror)
 - builtins.BaseException with_traceback, add_note
 
-### {.prefix} MissingTextContentsError
+### <span class="prefix"></span> MissingTextContentsError
 
 <!-- signatures.jinja2 -->
 
@@ -851,12 +851,12 @@ When a Text object is sent to the API without a "text" attribute.
 
 **Inherited members**
 
-- [APIRequestError{.suffix}](#class-apirequesterror)
+- [APIRequestError<span class="suffix"></span>](#class-apirequesterror)
 - builtins.BaseException with_traceback, add_note
 
 ## Unsupported feature errors
 
-### {.prefix} UnsupportedModelError
+### <span class="prefix"></span> UnsupportedModelError
 
 <!-- signatures.jinja2 -->
 
@@ -874,10 +874,10 @@ When an unsupported model is used.
 
 **Inherited members**
 
-- [BaseError{.suffix}](#class-baseerror), [description{.suffix}](#description)
+- [BaseError<span class="suffix"></span>](#class-baseerror), [description<span class="suffix"></span>](#description)
 - builtins.BaseException with_traceback, add_note
 
-### {.prefix} UnsupportedModelForSHAPError
+### <span class="prefix"></span> UnsupportedModelForSHAPError
 
 <!-- signatures.jinja2 -->
 
@@ -895,10 +895,10 @@ When an unsupported model is used for SHAP importance.
 
 **Inherited members**
 
-- [BaseError{.suffix}](#class-baseerror), [description{.suffix}](#description)
+- [BaseError<span class="suffix"></span>](#class-baseerror), [description<span class="suffix"></span>](#description)
 - builtins.BaseException with_traceback, add_note
 
-### {.prefix} UnsupportedRModelError
+### <span class="prefix"></span> UnsupportedRModelError
 
 <!-- signatures.jinja2 -->
 
@@ -916,10 +916,10 @@ When an unsupported R model is used.
 
 **Inherited members**
 
-- [BaseError{.suffix}](#class-baseerror), [description{.suffix}](#description)
+- [BaseError<span class="suffix"></span>](#class-baseerror), [description<span class="suffix"></span>](#description)
 - builtins.BaseException with_traceback, add_note
 
-### {.prefix} UnsupportedColumnTypeError
+### <span class="prefix"></span> UnsupportedColumnTypeError
 
 <!-- signatures.jinja2 -->
 
@@ -937,10 +937,10 @@ When an unsupported column type is found on a dataset.
 
 **Inherited members**
 
-- [BaseError{.suffix}](#class-baseerror), [description{.suffix}](#description)
+- [BaseError<span class="suffix"></span>](#class-baseerror), [description<span class="suffix"></span>](#description)
 - builtins.BaseException with_traceback, add_note
 
-### {.prefix} UnsupportedDatasetError
+### <span class="prefix"></span> UnsupportedDatasetError
 
 <!-- signatures.jinja2 -->
 
@@ -958,10 +958,10 @@ When an unsupported dataset is used.
 
 **Inherited members**
 
-- [BaseError{.suffix}](#class-baseerror), [description{.suffix}](#description)
+- [BaseError<span class="suffix"></span>](#class-baseerror), [description<span class="suffix"></span>](#description)
 - builtins.BaseException with_traceback, add_note
 
-### {.prefix} UnsupportedFigureError
+### <span class="prefix"></span> UnsupportedFigureError
 
 <!-- signatures.jinja2 -->
 
@@ -979,5 +979,5 @@ When an unsupported figure object is constructed.
 
 **Inherited members**
 
-- [BaseError{.suffix}](#class-baseerror), [description{.suffix}](#description)
+- [BaseError<span class="suffix"></span>](#class-baseerror), [description<span class="suffix"></span>](#description)
 - builtins.BaseException with_traceback, add_note

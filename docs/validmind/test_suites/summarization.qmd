@@ -12,7 +12,7 @@ Test suites for llm summarization models
 
 <!-- class.qmd.jinja2 -->
 
-## {.prefix} SummarizationMetrics
+## <span class="prefix"></span> SummarizationMetrics
 
 <!-- signatures.jinja2 -->
 

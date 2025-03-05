@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## CompletenessScore{.suffix}
+## CompletenessScore<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 

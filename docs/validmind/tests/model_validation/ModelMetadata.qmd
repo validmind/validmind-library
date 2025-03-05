@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## ModelMetadata{.suffix}
+## ModelMetadata<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 

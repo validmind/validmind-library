@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- class.qmd.jinja2 -->
 
-## {.prefix} RegressionFullSuite
+## <span class="prefix"></span> RegressionFullSuite
 
 <!-- signatures.jinja2 -->
 
@@ -24,7 +24,7 @@ Full test suite for regression models.
 
 <!-- class.qmd.jinja2 -->
 
-## {.prefix} RegressionMetrics
+## <span class="prefix"></span> RegressionMetrics
 
 <!-- signatures.jinja2 -->
 
@@ -40,7 +40,7 @@ Test suite for performance metrics of regression metrics
 
 <!-- class.qmd.jinja2 -->
 
-## {.prefix} RegressionPerformance
+## <span class="prefix"></span> RegressionPerformance
 
 <!-- signatures.jinja2 -->
 

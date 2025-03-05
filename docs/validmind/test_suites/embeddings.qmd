@@ -14,7 +14,7 @@ Ideal setup is to have the API client to read a custom test suite from the proje
 
 <!-- class.qmd.jinja2 -->
 
-## {.prefix} EmbeddingsFullSuite
+## <span class="prefix"></span> EmbeddingsFullSuite
 
 <!-- signatures.jinja2 -->
 
@@ -30,7 +30,7 @@ Full test suite for embeddings models.
 
 <!-- class.qmd.jinja2 -->
 
-## {.prefix} EmbeddingsMetrics
+## <span class="prefix"></span> EmbeddingsMetrics
 
 <!-- signatures.jinja2 -->
 
@@ -46,7 +46,7 @@ Test suite for embeddings metrics
 
 <!-- class.qmd.jinja2 -->
 
-## {.prefix} EmbeddingsPerformance
+## <span class="prefix"></span> EmbeddingsPerformance
 
 <!-- signatures.jinja2 -->
 

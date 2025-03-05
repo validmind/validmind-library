@@ -13,7 +13,7 @@ sidebar: validmind-reference
 
 {# Create a macro for rendering error classes to avoid duplication #}
 {% macro render_error_class(member) %}
-### {.prefix} {{ member.name }}
+### <span class="prefix"></span> {{ member.name }}
 
 {{ signatures.render_signature(member) }}
 
@@ -25,7 +25,7 @@ sidebar: validmind-reference
 
 {# Ensure BaseError's __init__ is displayed with the class name and parameters #}
 {% if '__init__' in member.members %}
-#### [{{ member.name }}{.suffix}](#__init__)
+#### [{{ member.name }}<span class="suffix"></span>](#__init__)
 
 {% set constructor = member.members['__init__'].copy() %}
 {% set _ = constructor.update({'parent': {'name': member.name}}) %}
@@ -36,7 +36,7 @@ sidebar: validmind-reference
 {% endif %}
 {% endif %}
 
-#### [description{.suffix}](#description)
+#### [description<span class="suffix"></span>](#description)
 
 {% if 'description' in member.members %}
 {{ signatures.render_signature(member.members['description']) }}
@@ -88,7 +88,7 @@ sidebar: validmind-reference
 {% endfor %}
 
 {% for base, base_members in grouped.items() %}
-- {% for base_member in base_members %}{% if base_member.kind == 'builtin' %}{{ base_member.name }}{% else %}[{% if base_member.kind == 'class' %}{% endif %}{{ base_member.name }}{.suffix}](#{% if base_member.kind == 'class' %}class-{% endif %}{{ base_member.name | lower }}){% endif %}{% if not loop.last %}, {% endif %}{% endfor %}{% if not loop.last %}
+- {% for base_member in base_members %}{% if base_member.kind == 'builtin' %}{{ base_member.name }}{% else %}[{% if base_member.kind == 'class' %}{% endif %}{{ base_member.name }}<span class="suffix"></span>](#{% if base_member.kind == 'class' %}class-{% endif %}{{ base_member.name | lower }}){% endif %}{% if not loop.last %}, {% endif %}{% endfor %}{% if not loop.last %}
 
 {% endif %}
 {% endfor %}
@@ -102,7 +102,7 @@ sidebar: validmind-reference
 {% if member.members %}
 {% for method in member.members.values() | sort(attribute='name') %}
 {% if method.kind == 'method' and (not method.name.startswith('_') or method.name == '__init__') and method.name != '__str__' and method.name != 'description' %}
-#### [{{ member.name if method.name == '__init__' else method.name }}{.suffix}](#{{ method.name }})
+#### [{{ member.name if method.name == '__init__' else method.name }}<span class="suffix"></span>](#{{ method.name }})
 
 {% if method.name == '__init__' %}
 {% set method_with_parent = method.copy() %}
@@ -123,7 +123,7 @@ sidebar: validmind-reference
 {% for method in member.members.values() %}
 {% if method.kind == 'method' and method.name == 'description' and member.name != 'BaseError' %}
 {% set has_direct_description = true %}
-#### [{{ method.name }}{.suffix}](#{{ method.name }})
+#### [{{ method.name }}<span class="suffix"></span>](#{{ method.name }})
 
 {{ signatures.render_signature(method) }}
 
@@ -138,7 +138,7 @@ sidebar: validmind-reference
 {% set displayed_description = false %}
 {% for base_member in base_members %}
 {% if not displayed_description and base_member.kind == 'method' and base_member.name == 'description' and base_member.base != member.name %}
-#### [{{ base_member.name }}{.suffix}](#{{ base_member.name }}) [inherited from {{ base_member.base }}]
+#### [{{ base_member.name }}<span class="suffix"></span>](#{{ base_member.name }}) [inherited from {{ base_member.base }}]
 
 {# Find the description method from the parent class in the full data structure #}
 {% set base_class = None %}

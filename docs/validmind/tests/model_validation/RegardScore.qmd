@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## RegardScore{.suffix}
+## RegardScore<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 

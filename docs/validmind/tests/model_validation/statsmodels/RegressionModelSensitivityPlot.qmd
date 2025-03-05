@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## integrate_diff{.suffix}
+## integrate_diff<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -20,7 +20,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## RegressionModelSensitivityPlot{.suffix}
+## RegressionModelSensitivityPlot<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 

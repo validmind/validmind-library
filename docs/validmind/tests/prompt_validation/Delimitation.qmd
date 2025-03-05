@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## Delimitation{.suffix}
+## Delimitation<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 

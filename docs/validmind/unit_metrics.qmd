@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## list_metrics{.suffix}
+## list_metrics<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -24,7 +24,7 @@ List all metrics
 
 <!-- function.qmd.jinja2 -->
 
-## describe_metric{.suffix}
+## describe_metric<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -40,7 +40,7 @@ Describe a metric
 
 <!-- function.qmd.jinja2 -->
 
-## run_metric{.suffix}
+## run_metric<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 

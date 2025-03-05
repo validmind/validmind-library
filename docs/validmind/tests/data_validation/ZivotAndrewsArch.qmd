@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## ZivotAndrewsArch{.suffix}
+## ZivotAndrewsArch<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 

@@ -23,13 +23,13 @@ Entrypoint for test suites.
 - [text_data](test_suites/text_data.qmd)
 - [time_series](test_suites/time_series.qmd)
 
-## describe_test_suite{.suffix}
+## describe_test_suite<span class="suffix"></span>
 
-*This function is an alias for [describe_suite{.suffix}](#describe_suite).*
+*This function is an alias for [describe_suite<span class="suffix"></span>](#describe_suite).*
 
 <!-- function.qmd.jinja2 -->
 
-## describe_suite{.suffix}
+## describe_suite<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -54,7 +54,7 @@ Describes a Test Suite by ID
 
 <!-- function.qmd.jinja2 -->
 
-## get_by_id{.suffix}
+## get_by_id<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -70,7 +70,7 @@ Returns the test suite by ID
 
 <!-- function.qmd.jinja2 -->
 
-## list_suites{.suffix}
+## list_suites<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -86,7 +86,7 @@ Returns a list of all available test suites
 
 <!-- function.qmd.jinja2 -->
 
-## register_test_suite{.suffix}
+## register_test_suite<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 

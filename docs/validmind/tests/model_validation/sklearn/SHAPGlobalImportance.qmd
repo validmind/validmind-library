@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## generate_shap_plot{.suffix}
+## generate_shap_plot<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -34,7 +34,7 @@ Plots two types of SHAP global importance (SHAP).
 
 <!-- function.qmd.jinja2 -->
 
-## select_shap_values{.suffix}
+## select_shap_values<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -65,7 +65,7 @@ For regression models, returns the SHAP values directly as there are no classes.
 
 <!-- function.qmd.jinja2 -->
 
-## SHAPGlobalImportance{.suffix}
+## SHAPGlobalImportance<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 

@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## plot_rolling_statistics{.suffix}
+## plot_rolling_statistics<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -20,7 +20,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## RollingStatsPlot{.suffix}
+## RollingStatsPlot<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 

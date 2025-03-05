@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## ScoreBandDefaultRates{.suffix}
+## ScoreBandDefaultRates<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 

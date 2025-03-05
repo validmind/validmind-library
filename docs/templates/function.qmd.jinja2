@@ -3,7 +3,7 @@
 
 {% if member.kind == "function" %}
 
-## {{ member_name | default(member.name) }}{.suffix}
+## {{ member_name | default(member.name) }}<span class="suffix"></span>
 
 {{ render_signature(member) }}
 

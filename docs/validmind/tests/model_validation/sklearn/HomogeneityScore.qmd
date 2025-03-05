@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## HomogeneityScore{.suffix}
+## HomogeneityScore<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 

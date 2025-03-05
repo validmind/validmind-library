@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## compute_scores{.suffix}
+## compute_scores<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -20,7 +20,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## load_data{.suffix}
+## load_data<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -38,7 +38,7 @@ Load data from the specified CSV file.
 
 <!-- function.qmd.jinja2 -->
 
-## preprocess{.suffix}
+## preprocess<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -50,7 +50,7 @@ Load data from the specified CSV file.
 
 <!-- function.qmd.jinja2 -->
 
-## split{.suffix}
+## split<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 

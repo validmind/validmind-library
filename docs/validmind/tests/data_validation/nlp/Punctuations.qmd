@@ -12,7 +12,7 @@ Metrics functions for any Pandas-compatible datasets
 
 <!-- function.qmd.jinja2 -->
 
-## Punctuations{.suffix}
+## Punctuations<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 

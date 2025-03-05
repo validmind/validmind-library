@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## ClusterCosineSimilarity{.suffix}
+## ClusterCosineSimilarity<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 

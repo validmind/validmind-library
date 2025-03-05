@@ -12,43 +12,36 @@ website:
         # Root level items from validmind.qmd
         - text: '<span class="version">`2.8.12`</span>'
           file: validmind/validmind.qmd#version__
-        - text: "init{.suffix}"
-          file: validmind/validmind.qmd#init{.suffix}
-        - text: "init_dataset{.suffix}"
-          file: validmind/validmind.qmd#init_dataset{.suffix}
-        - text: "init_model{.suffix}"
-          file: validmind/validmind.qmd#init_model{.suffix}
-        - text: "init_r_model{.suffix}"
-          file: validmind/validmind.qmd#init_r_model{.suffix}
-        - text: "get_test_suite{.suffix}"
-          file: validmind/validmind.qmd#get_test_suite{.suffix}
-        - text: "log_metric{.suffix}"
-          file: validmind/validmind.qmd#log_metric{.suffix}
-        - text: "preview_template{.suffix}"
-          file: validmind/validmind.qmd#preview_template{.suffix}
-        - text: "print_env{.suffix}"
-          file: validmind/validmind.qmd#print_env{.suffix}
-        - text: "reload{.suffix}"
-          file: validmind/validmind.qmd#reload{.suffix}
-        - text: "run_documentation_tests{.suffix}"
-          file: validmind/validmind.qmd#run_documentation_tests{.suffix}
-        - text: "run_test_suite{.suffix}"
-          file: validmind/validmind.qmd#run_test_suite{.suffix}
-        - text: "tags{.suffix}"
-          file: validmind/validmind.qmd#tags{.suffix}
-        - text: "tasks{.suffix}"
-          file: validmind/validmind.qmd#tasks{.suffix}
-        - text: "test{.suffix}"
-          file: validmind/validmind.qmd#test{.suffix}
-        - text: "<span class='muted'>class</span> RawData"
-          file: validmind/validmind.qmd#class-rawdata
-          contents:
-            - text: "RawData{.suffix}"
-              file: validmind/validmind.qmd#rawdata{.suffix}
-            - text: "inspect{.suffix}"
-              file: validmind/validmind.qmd#inspect{.suffix}
-            - text: "serialize{.suffix}"
-              file: validmind/validmind.qmd#serialize{.suffix}
+        - text: "init<span class="suffix"></span>"
+          file: validmind/validmind.qmd#init<span class="suffix"></span>
+        - text: "init_dataset<span class="suffix"></span>"
+          file: validmind/validmind.qmd#init_dataset<span class="suffix"></span>
+        - text: "init_model<span class="suffix"></span>"
+          file: validmind/validmind.qmd#init_model<span class="suffix"></span>
+        - text: "init_r_model<span class="suffix"></span>"
+          file: validmind/validmind.qmd#init_r_model<span class="suffix"></span>
+        - text: "get_test_suite<span class="suffix"></span>"
+          file: validmind/validmind.qmd#get_test_suite<span class="suffix"></span>
+        - text: "log_metric<span class="suffix"></span>"
+          file: validmind/validmind.qmd#log_metric<span class="suffix"></span>
+        - text: "preview_template<span class="suffix"></span>"
+          file: validmind/validmind.qmd#preview_template<span class="suffix"></span>
+        - text: "print_env<span class="suffix"></span>"
+          file: validmind/validmind.qmd#print_env<span class="suffix"></span>
+        - text: "reload<span class="suffix"></span>"
+          file: validmind/validmind.qmd#reload<span class="suffix"></span>
+        - text: "run_documentation_tests<span class="suffix"></span>"
+          file: validmind/validmind.qmd#run_documentation_tests<span class="suffix"></span>
+        - text: "run_test_suite<span class="suffix"></span>"
+          file: validmind/validmind.qmd#run_test_suite<span class="suffix"></span>
+        - text: "tags<span class="suffix"></span>"
+          file: validmind/validmind.qmd#tags<span class="suffix"></span>
+        - text: "tasks<span class="suffix"></span>"
+          file: validmind/validmind.qmd#tasks<span class="suffix"></span>
+        - text: "test<span class="suffix"></span>"
+          file: validmind/validmind.qmd#test<span class="suffix"></span>
+        - text: "<span class="prefix"></span> RawData"
+          file: validmind/validmind.qmd#<span class="prefix"></span> rawdata
         # All module documentation pages
         - text: "---"
         - text: "Submodules"

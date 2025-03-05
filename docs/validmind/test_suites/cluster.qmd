@@ -14,7 +14,7 @@ Ideal setup is to have the API client to read a custom test suite from the proje
 
 <!-- class.qmd.jinja2 -->
 
-## {.prefix} ClusterFullSuite
+## <span class="prefix"></span> ClusterFullSuite
 
 <!-- signatures.jinja2 -->
 
@@ -30,7 +30,7 @@ Full test suite for clustering models.
 
 <!-- class.qmd.jinja2 -->
 
-## {.prefix} ClusterMetrics
+## <span class="prefix"></span> ClusterMetrics
 
 <!-- signatures.jinja2 -->
 
@@ -46,7 +46,7 @@ Test suite for sklearn clustering metrics
 
 <!-- class.qmd.jinja2 -->
 
-## {.prefix} ClusterPerformance
+## <span class="prefix"></span> ClusterPerformance
 
 <!-- signatures.jinja2 -->
 

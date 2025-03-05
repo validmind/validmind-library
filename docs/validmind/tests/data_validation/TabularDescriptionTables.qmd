@@ -8,7 +8,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## get_categorical_columns{.suffix}
+## get_categorical_columns<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -20,7 +20,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## get_datetime_columns{.suffix}
+## get_datetime_columns<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -32,7 +32,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## get_numerical_columns{.suffix}
+## get_numerical_columns<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -44,7 +44,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## get_summary_statistics_categorical{.suffix}
+## get_summary_statistics_categorical<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -56,7 +56,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## get_summary_statistics_datetime{.suffix}
+## get_summary_statistics_datetime<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -68,7 +68,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## get_summary_statistics_numerical{.suffix}
+## get_summary_statistics_numerical<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
@@ -80,7 +80,7 @@ toc-expand: 4
 
 <!-- function.qmd.jinja2 -->
 
-## TabularDescriptionTables{.suffix}
+## TabularDescriptionTables<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
