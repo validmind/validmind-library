@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).RegressionModelSensitivityPlot"
+title: "[validmind](/validmind/validmind.qmd).RegressionModelSensitivityPlot"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

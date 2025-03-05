@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).Specificity"
+title: "[validmind](/validmind/validmind.qmd).Specificity"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).TabularCategoricalBarPlots"
+title: "[validmind](/validmind/validmind.qmd).TabularCategoricalBarPlots"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

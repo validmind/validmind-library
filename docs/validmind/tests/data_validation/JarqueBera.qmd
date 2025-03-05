@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).JarqueBera"
+title: "[validmind](/validmind/validmind.qmd).JarqueBera"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

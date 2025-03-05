@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).PopulationStabilityIndex"
+title: "[validmind](/validmind/validmind.qmd).PopulationStabilityIndex"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

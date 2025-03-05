@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).datasets"
+title: "[validmind](/validmind/validmind.qmd).datasets"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

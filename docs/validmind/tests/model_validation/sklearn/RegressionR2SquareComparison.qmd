@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).RegressionR2SquareComparison"
+title: "[validmind](/validmind/validmind.qmd).RegressionR2SquareComparison"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

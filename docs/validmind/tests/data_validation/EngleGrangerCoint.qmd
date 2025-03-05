@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).EngleGrangerCoint"
+title: "[validmind](/validmind/validmind.qmd).EngleGrangerCoint"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

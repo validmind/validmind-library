@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).Delimitation"
+title: "[validmind](/validmind/validmind.qmd).Delimitation"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).ProtectedClassesDescription"
+title: "[validmind](/validmind/validmind.qmd).ProtectedClassesDescription"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

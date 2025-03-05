@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).KPSS"
+title: "[validmind](/validmind/validmind.qmd).KPSS"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

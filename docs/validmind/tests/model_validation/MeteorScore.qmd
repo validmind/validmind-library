@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).MeteorScore"
+title: "[validmind](/validmind/validmind.qmd).MeteorScore"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

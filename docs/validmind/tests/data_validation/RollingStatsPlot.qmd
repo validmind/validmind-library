@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).RollingStatsPlot"
+title: "[validmind](/validmind/validmind.qmd).RollingStatsPlot"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

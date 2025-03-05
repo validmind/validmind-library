@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).RegressionModelForecastPlot"
+title: "[validmind](/validmind/validmind.qmd).RegressionModelForecastPlot"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

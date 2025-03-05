@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).AdjustedRandIndex"
+title: "[validmind](/validmind/validmind.qmd).AdjustedRandIndex"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

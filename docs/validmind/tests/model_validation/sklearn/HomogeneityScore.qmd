@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).HomogeneityScore"
+title: "[validmind](/validmind/validmind.qmd).HomogeneityScore"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

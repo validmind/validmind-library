@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).ModelMetadata"
+title: "[validmind](/validmind/validmind.qmd).ModelMetadata"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

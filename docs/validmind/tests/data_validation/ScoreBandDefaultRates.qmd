@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).ScoreBandDefaultRates"
+title: "[validmind](/validmind/validmind.qmd).ScoreBandDefaultRates"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

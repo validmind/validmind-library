@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).RegressionPerformance"
+title: "[validmind](/validmind/validmind.qmd).RegressionPerformance"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).DurbinWatsonTest"
+title: "[validmind](/validmind/validmind.qmd).DurbinWatsonTest"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

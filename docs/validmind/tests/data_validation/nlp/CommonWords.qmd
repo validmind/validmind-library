@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).CommonWords"
+title: "[validmind](/validmind/validmind.qmd).CommonWords"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

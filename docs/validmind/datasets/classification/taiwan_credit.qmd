@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).taiwan_credit"
+title: "[validmind](/validmind/validmind.qmd).taiwan_credit"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

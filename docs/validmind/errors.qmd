@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).errors"
+title: "[validmind](/validmind/validmind.qmd).errors"
 sidebar: validmind-reference
 # errors.qmd.jinja2
 ---

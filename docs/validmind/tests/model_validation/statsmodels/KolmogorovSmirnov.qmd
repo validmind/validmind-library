@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).KolmogorovSmirnov"
+title: "[validmind](/validmind/validmind.qmd).KolmogorovSmirnov"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

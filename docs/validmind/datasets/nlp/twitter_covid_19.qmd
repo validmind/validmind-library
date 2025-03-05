@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).twitter_covid_19"
+title: "[validmind](/validmind/validmind.qmd).twitter_covid_19"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

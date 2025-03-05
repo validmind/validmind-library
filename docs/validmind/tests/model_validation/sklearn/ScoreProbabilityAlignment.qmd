@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).ScoreProbabilityAlignment"
+title: "[validmind](/validmind/validmind.qmd).ScoreProbabilityAlignment"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

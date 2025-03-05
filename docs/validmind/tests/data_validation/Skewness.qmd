@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).Skewness"
+title: "[validmind](/validmind/validmind.qmd).Skewness"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).VMeasure"
+title: "[validmind](/validmind/validmind.qmd).VMeasure"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).IQROutliersTable"
+title: "[validmind](/validmind/validmind.qmd).IQROutliersTable"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

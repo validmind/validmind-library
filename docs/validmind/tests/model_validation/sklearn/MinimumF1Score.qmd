@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).MinimumF1Score"
+title: "[validmind](/validmind/validmind.qmd).MinimumF1Score"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

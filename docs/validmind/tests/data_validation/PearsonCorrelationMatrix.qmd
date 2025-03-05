@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).PearsonCorrelationMatrix"
+title: "[validmind](/validmind/validmind.qmd).PearsonCorrelationMatrix"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

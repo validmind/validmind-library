@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).NegativeInstruction"
+title: "[validmind](/validmind/validmind.qmd).NegativeInstruction"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

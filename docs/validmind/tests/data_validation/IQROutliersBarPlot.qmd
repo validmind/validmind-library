@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).IQROutliersBarPlot"
+title: "[validmind](/validmind/validmind.qmd).IQROutliersBarPlot"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

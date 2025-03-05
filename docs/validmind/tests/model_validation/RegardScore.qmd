@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).RegardScore"
+title: "[validmind](/validmind/validmind.qmd).RegardScore"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

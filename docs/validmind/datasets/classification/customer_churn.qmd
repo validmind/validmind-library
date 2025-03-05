@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).customer_churn"
+title: "[validmind](/validmind/validmind.qmd).customer_churn"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

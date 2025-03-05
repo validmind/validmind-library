@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).PhillipsPerronArch"
+title: "[validmind](/validmind/validmind.qmd).PhillipsPerronArch"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

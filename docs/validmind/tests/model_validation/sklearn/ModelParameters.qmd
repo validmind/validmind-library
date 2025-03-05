@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).ModelParameters"
+title: "[validmind](/validmind/validmind.qmd).ModelParameters"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

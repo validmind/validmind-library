@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).PrecisionRecallCurve"
+title: "[validmind](/validmind/validmind.qmd).PrecisionRecallCurve"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

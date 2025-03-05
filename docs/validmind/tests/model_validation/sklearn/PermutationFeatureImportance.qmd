@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).PermutationFeatureImportance"
+title: "[validmind](/validmind/validmind.qmd).PermutationFeatureImportance"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).Hashtags"
+title: "[validmind](/validmind/validmind.qmd).Hashtags"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

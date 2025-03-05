@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).TimeSeriesR2SquareBySegments"
+title: "[validmind](/validmind/validmind.qmd).TimeSeriesR2SquareBySegments"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

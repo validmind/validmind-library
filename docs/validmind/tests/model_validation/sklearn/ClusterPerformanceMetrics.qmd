@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).ClusterPerformanceMetrics"
+title: "[validmind](/validmind/validmind.qmd).ClusterPerformanceMetrics"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

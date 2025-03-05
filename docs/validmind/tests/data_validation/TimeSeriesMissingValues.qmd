@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).TimeSeriesMissingValues"
+title: "[validmind](/validmind/validmind.qmd).TimeSeriesMissingValues"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

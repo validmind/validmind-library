@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).Duplicates"
+title: "[validmind](/validmind/validmind.qmd).Duplicates"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

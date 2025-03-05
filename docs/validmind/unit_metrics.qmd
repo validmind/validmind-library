@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).unit_metrics"
+title: "[validmind](/validmind/validmind.qmd).unit_metrics"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

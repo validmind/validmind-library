@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).TimeSeriesDescriptiveStatistics"
+title: "[validmind](/validmind/validmind.qmd).TimeSeriesDescriptiveStatistics"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

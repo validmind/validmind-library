@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).classifier"
+title: "[validmind](/validmind/validmind.qmd).classifier"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

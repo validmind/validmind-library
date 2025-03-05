@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).TabularDateTimeHistograms"
+title: "[validmind](/validmind/validmind.qmd).TabularDateTimeHistograms"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

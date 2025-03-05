@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).SilhouettePlot"
+title: "[validmind](/validmind/validmind.qmd).SilhouettePlot"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

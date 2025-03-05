@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).ADF"
+title: "[validmind](/validmind/validmind.qmd).ADF"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4

@@ -1,5 +1,5 @@
 ---
-title: "[validmind](/validmind/validmind.html).cnn_dailymail"
+title: "[validmind](/validmind/validmind.qmd).cnn_dailymail"
 sidebar: validmind-reference
 toc-depth: 4
 toc-expand: 4
