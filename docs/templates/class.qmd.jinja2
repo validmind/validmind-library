@@ -25,7 +25,7 @@
     {% set _ = grouped[member.base].append(member) %}
 {% endfor %}
 {% for base, members in grouped.items() %}
-- **From {{ base }}**: {% for member in members %}{% if member.kind == 'builtin' %}{{ member.name }}{% else %}[{% if member.kind == 'class' %}class {% endif %}{{ member.name }}<span class="suffix"></span>](#{% if member.kind == 'class' %}class-{% endif %}{{ member.name | lower }}){% endif %}{% if not loop.last %}, {% endif %}{% endfor %}
+- **From {{ base }}**: {% for member in members %}{% if member.kind == 'builtin' %}{{ member.name }}{% else %}[{% if member.kind == 'class' %}class {% endif %}{{ member.name }}<span class="suffix"></span>](#{{ member.name | lower }}){% endif %}{% if not loop.last %}, {% endif %}{% endfor %}
 
 {% endfor %}
 {% endif %}

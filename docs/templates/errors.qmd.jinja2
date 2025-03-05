@@ -88,7 +88,7 @@ sidebar: validmind-reference
 {% endfor %}
 
 {% for base, base_members in grouped.items() %}
-- {% for base_member in base_members %}{% if base_member.kind == 'builtin' %}{{ base_member.name }}{% else %}[{% if base_member.kind == 'class' %}{% endif %}{{ base_member.name }}<span class="suffix"></span>](#{% if base_member.kind == 'class' %}class-{% endif %}{{ base_member.name | lower }}){% endif %}{% if not loop.last %}, {% endif %}{% endfor %}{% if not loop.last %}
+- {% for base_member in base_members %}{% if base_member.kind == 'builtin' %}{{ base_member.name }}{% else %}[{% if base_member.kind == 'class' %}{% endif %}{{ base_member.name }}<span class="suffix"></span>](#{{ base_member.name | lower }}){% endif %}{% if not loop.last %}, {% endif %}{% endfor %}{% if not loop.last %}
 
 {% endif %}
 {% endfor %}
