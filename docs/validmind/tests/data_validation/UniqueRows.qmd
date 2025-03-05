@@ -16,7 +16,7 @@ toc-expand: 4
 
 <span class="decorators"><span class="decorator">@<span class="n">tags(<span class="s">'tabular_data'</span>)</span></span><span class="decorator">@<span class="n">tasks(<span class="s">'regression'</span>, <span class="s">'classification'</span>)</span></span></span>
 
-<span class="kw">def</span><span class="name">UniqueRows</span>(<span class="params"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span><span class="muted">,</span></span><span class="params"><span class="n">min_percent_threshold</span><span class="p">:</span><span class="nb">float</span><span class="o">=</span><span class="kc">1</span></span>):
+<span class="kw">def</span><span class="name">UniqueRows</span>(<span class="params"><span class="n">dataset</span><span class="p">:</span><a href="/validmind/validmind/vm_models.html#vmdataset">validmind.vm_models.VMDataset</a><span class="muted">,</span></span><span class="params"><span class="n">min_percent_threshold</span><span class="p">:</span><span class="nb">float</span><span class="o">=</span><span class="kc">1</span></span>):
 
 :::
 

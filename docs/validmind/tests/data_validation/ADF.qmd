@@ -16,7 +16,7 @@ toc-expand: 4
 
 <span class="decorators"><span class="decorator">@<span class="n">tags(<span class="s">'time_series_data'</span>, <span class="s">'statsmodels'</span>, <span class="s">'forecasting'</span>, <span class="s">'statistical_test'</span>, <span class="s">'stationarity'</span>)</span></span><span class="decorator">@<span class="n">tasks(<span class="s">'regression'</span>)</span></span></span>
 
-<span class="kw">def</span><span class="name">ADF</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span><span class="n">VMDataset</span></span>):
+<span class="kw">def</span><span class="name">ADF</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span><a href="/validmind/validmind/vm_models.html#vmdataset">validmind.vm_models.VMDataset</a></span>):
 
 :::
 
