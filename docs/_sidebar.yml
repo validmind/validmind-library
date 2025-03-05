@@ -42,6 +42,13 @@ website:
           file: validmind/validmind.qmd#test
         - text: "<span class='prefix'></span> RawData"
           file: validmind/validmind.qmd#rawdata
+          contents:
+            - text: "RawData<span class='suffix'></span>"
+              file: validmind/validmind.qmd#rawdata
+            - text: "inspect<span class='suffix'></span>"
+              file: validmind/validmind.qmd#inspect
+            - text: "serialize<span class='suffix'></span>"
+              file: validmind/validmind.qmd#serialize
         # All module documentation pages
         - text: "---"
         - text: "Submodules"

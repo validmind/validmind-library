@@ -211,7 +211,12 @@ def collect_documented_items(module: Dict[str, Any], path: List[str], full_data:
                         'text': heading,
                         'file': f"validmind/validmind.qmd#{anchor}"
                     }
-                    if '<span class="muted">class</span>' in heading or '<span class=\'muted\'>class</span>' in heading:
+                    
+                    # Detect class by presence of class span or prefix span
+                    is_class = '<span class="muted">class</span>' in heading or '<span class=\'muted\'>class</span>' in heading
+                    prefix_class = '<span class="prefix"></span>' in heading
+                    
+                    if is_class or prefix_class:
                         item['contents'] = []
                         current_class = item
                     module_items.append(item)

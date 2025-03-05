@@ -19,7 +19,7 @@ website:
         {% set cleaned_path = item.file | replace('<span class="prefix"></span> ', '') | replace('<span class="suffix"></span>', '') %}
         - text: "{{ item.text | replace('<span class=\"', '<span class=\'') | replace('\"></span>', '\'></span>') }}"
           file: {{ cleaned_path }}
-          {% if item.contents %}
+          {% if item.contents is defined and item.contents %}
           contents:
             {% for method in item.contents %}
             {% set cleaned_method_path = method.file | replace('<span class="prefix"></span> ', '') | replace('<span class="suffix"></span>', '') %}
