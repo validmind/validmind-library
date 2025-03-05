@@ -8,7 +8,7 @@
 #}
 {%- set vm_test_categories = ['data_validation', 'model_validation', 'prompt_validation'] -%}
 
-{%- macro format_expr_name(name, module=None, add_links=false) -%}
+{%- macro format_expr_name(name, module=None, add_links=false, param_name=None) -%}
   {%- if module and name in module.members and module.members[name].kind == "alias" -%}
     {{ module.members[name].target_path }}
   {%- elif name in type_keywords -%}
@@ -18,11 +18,21 @@
   {%- elif name in external_types -%}
     <span class="n">{{ external_types[name] }}</span>
   {%- elif name == "TestID" and add_links -%}
-    <span class="n">TestID</span><span class="p"> (Union of </span>
-    {%- for category in vm_test_categories -%}
-      <a href="/validmind/validmind/tests/{{ category }}.qmd">validmind.{{ category }}.\*</a>{% if not loop.last %}<span class="p">, </span>{% endif %}
-    {%- endfor -%}
-    <span class="p"> and </span><span class="nb">str</span><span class="p">)</span>
+    {%- if param_name == "unit_metrics" -%}
+      <span class="n">TestID</span><span class="p"> (Unit metrics from </span><a href="/validmind/validmind/unit_metrics.qmd">validmind.unit_metrics.\*</a><span class="p">)</span>
+    {%- elif param_name == "test_id" -%}
+      <span class="n">TestID</span><span class="p"> (Union of </span>
+      {%- for category in vm_test_categories -%}
+        <a href="/validmind/validmind/tests/{{ category }}.qmd">validmind.{{ category }}.\*</a>{% if not loop.last %}<span class="p">, </span>{% endif %}
+      {%- endfor -%}
+      <span class="p"> and </span><span class="nb">str</span><span class="p">)</span>
+    {%- else -%}
+      <span class="n">TestID</span><span class="p"> (Union of </span>
+      {%- for category in vm_test_categories -%}
+        <a href="/validmind/validmind/tests/{{ category }}.qmd">validmind.{{ category }}.\*</a>{% if not loop.last %}<span class="p">, </span>{% endif %}
+      {%- endfor -%}
+      <span class="p">, </span><a href="/validmind/validmind/unit_metrics.qmd">validmind.unit_metrics.\*</a><span class="p"> and </span><span class="nb">str</span><span class="p">)</span>
+    {%- endif -%}
   {%- elif add_links and name not in type_keywords -%}
     <a href="/validmind/validmind/vm_models.qmd#{{ name|lower }}">validmind.vm_models.{{ name }}</a>
   {%- else -%}
@@ -30,35 +40,35 @@
   {%- endif -%}
 {%- endmacro -%}
 
-{%- macro format_expr_subscript(expr, module=None, add_links=false) -%}
-  {{ format_type(expr.left, module, add_links) }}<span class="p">[</span>
+{%- macro format_expr_subscript(expr, module=None, add_links=false, param_name=None) -%}
+  {{ format_type(expr.left, module, add_links, param_name) }}<span class="p">[</span>
   {%- if expr.slice.cls == "ExprTuple" -%}
     {%- for elem in expr.slice.elements -%}
-      {{ format_type(elem, module, add_links) }}
+      {{ format_type(elem, module, add_links, param_name) }}
       {%- if not loop.last -%}<span class="p">, </span>{%- endif -%}
     {%- endfor -%}
   {%- else -%}
-    {{ format_type(expr.slice, module, add_links) }}
+    {{ format_type(expr.slice, module, add_links, param_name) }}
   {%- endif -%}
   <span class="p">]</span>
 {%- endmacro -%}
 
-{%- macro format_type(type, module=None, add_links=false) -%}
+{%- macro format_type(type, module=None, add_links=false, param_name=None) -%}
 {%- if type is mapping -%}
   {%- if type.cls is defined -%}
     {%- if type.cls == "ExprCall" -%}
       {%- if type.function and type.function.name in ["tags", "tasks"] -%}
         <span class="n">@{{ type.function.name }}(
         {%- for arg in type.arguments -%}
-          {{ format_type(arg, module, add_links) }}
+          {{ format_type(arg, module, add_links, param_name) }}
           {%- if not loop.last -%}, {% endif -%}
         {%- endfor -%}
         )</span>
       {%- else -%}
         {# General ExprCall handling #}
-        {{ format_type(type.function, module, add_links) }}(
+        {{ format_type(type.function, module, add_links, param_name) }}(
         {%- for arg in type.arguments -%}
-          {{ format_type(arg, module, add_links) }}
+          {{ format_type(arg, module, add_links, param_name) }}
           {%- if not loop.last -%}, {% endif -%}
         {%- endfor -%}
         )
@@ -66,7 +76,7 @@
     {%- elif type.cls == "ExprAttribute" -%}
       {%- if type.get('values') is sequence -%}
         {%- for value in type.get('values') -%}
-          {{ format_type(value, module, add_links) }}
+          {{ format_type(value, module, add_links, param_name) }}
           {%- if not loop.last -%}.{%- endif -%}
         {%- endfor -%}
       {%- elif type.value is defined and type.attr is defined -%}
@@ -75,22 +85,22 @@
         {%- elif type.value.cls == "ExprName" and type.value.name in external_types and type.attr.name in external_types -%}
           <span class="n">{{ external_types[type.value.name] }}.{{ external_types[type.attr.name] }}</span>
         {%- else -%}
-          {{ format_type(type.value, module, add_links) }}.{{ format_type(type.attr, module, add_links) }}
+          {{ format_type(type.value, module, add_links, param_name) }}.{{ format_type(type.attr, module, add_links, param_name) }}
         {%- endif -%}
       {%- else -%}
         <span class="n">{{ type|string }}</span>
       {%- endif -%}
     {%- elif type.cls == "ExprName" -%}
-      {{ format_expr_name(type.name, module, add_links) }}
+      {{ format_expr_name(type.name, module, add_links, param_name) }}
     {%- elif type.cls == "ExprList" or type.cls == "ExprSet" -%}
       <span class="p">{{ '[' if type.cls == "ExprList" else '{' }}</span>
       {%- for elem in type.elements -%}
-        {{ format_type(elem, module, add_links) }}
+        {{ format_type(elem, module, add_links, param_name) }}
         {%- if not loop.last -%}<span class="p">, </span>{%- endif -%}
       {%- endfor -%}
       <span class="p">{{ ']' if type.cls == "ExprList" else '}' }}</span>
     {%- elif type.cls == "ExprSubscript" -%}
-      {{ format_expr_subscript(type, module, add_links) }}
+      {{ format_expr_subscript(type, module, add_links, param_name) }}
     {%- elif type.cls == "ExprConstant" -%}
       {%- if type.value is string -%}
         <span class="s">{{ type.value }}</span>
@@ -102,21 +112,21 @@
     {%- elif type.cls == "ExprDict" -%}
       <span class="p">{</span>
       {%- for key, value in type.items -%}
-        {{ format_type(key, module, add_links) }}: {{ format_type(value, module, add_links) }}
+        {{ format_type(key, module, add_links, param_name) }}: {{ format_type(value, module, add_links, param_name) }}
         {%- if not loop.last -%}, {% endif -%}
       {%- endfor -%}
       <span class="p">}</span>
     {%- elif type.cls == "ExprTuple" -%}
       <span class="p">(</span>
       {%- for elem in type.elements -%}
-        {{ format_type(elem, module, add_links) }}
+        {{ format_type(elem, module, add_links, param_name) }}
         {%- if not loop.last -%}, {% endif -%}
       {%- endfor -%}
       <span class="p">)</span>
     {%- elif type.cls == "ExprUnary" -%}
-      <span class="o">{{ type.op }}</span>{{ format_type(type.operand, module, add_links) }}
+      <span class="o">{{ type.op }}</span>{{ format_type(type.operand, module, add_links, param_name) }}
     {%- elif type.cls == "ExprBinary" -%}
-      {{ format_type(type.left, module, add_links) }} <span class="o">{{ type.op }}</span> {{ format_type(type.right, module, add_links) }}
+      {{ format_type(type.left, module, add_links, param_name) }} <span class="o">{{ type.op }}</span> {{ format_type(type.right, module, add_links, param_name) }}
     {%- else -%}
       <span class="n">{{ type|string }}</span>
     {%- endif -%}
@@ -124,14 +134,14 @@
     {%- if type.kind == "union" -%}
       <span class="n">Union</span><span class="p">[</span>
       {%- for t in type.types -%}
-        {{ format_type(t, module, add_links) }}
+        {{ format_type(t, module, add_links, param_name) }}
         {%- if not loop.last -%}<span class="p">, </span>{%- endif -%}
       {%- endfor -%}
       <span class="p">]</span>
     {%- elif type.kind == "generic" -%}
       <span class="n">{{ type.base }}</span><span class="p">[</span>
       {%- for arg in type.args -%}
-        {{ format_type(arg, module, add_links) }}
+        {{ format_type(arg, module, add_links, param_name) }}
         {%- if not loop.last -%}<span class="p">, </span>{%- endif -%}
       {%- endfor -%}
       <span class="p">]</span>

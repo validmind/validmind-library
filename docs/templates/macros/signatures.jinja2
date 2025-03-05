@@ -87,14 +87,14 @@
       <span class="n">{{ "**" if param.name == "kwargs" else "*" if param.kind == "variadic positional" else "" }}{{ param.name }}</span>
     {%- endif -%}
     {%- if param.annotation -%}
-      <span class="p">:</span>{{ format_type(param.annotation, add_links=true) }}
+      <span class="p">:</span>{{ format_type(param.annotation, module, add_links=true, param_name=param.name) }}
     {%- endif -%}
     {%- if param.default is not none and param.name != "kwargs" and param.kind != "variadic positional" -%}
       <span class="o">=</span>
       {%- if param.default is string and param.default.startswith("'") and param.default.endswith("'") -%}
         <span class="s1">{{ param.default }}</span>
       {%- elif param.default is mapping and param.default.cls is defined -%}
-        {{ format_type(param.default, module, add_links) }}
+        {{ format_type(param.default, module, add_links=false, param_name=param.name) }}
       {%- else -%}
         <span class="kc">{{ param.default }}</span>
       {%- endif -%}
@@ -106,7 +106,7 @@
 {%- endif -%}
 {%- if member.returns and member.returns != "None" and member.name not in ["tags", "tasks", "test"] -%}
   <span class="p"> → </span><span class="return-annotation">
-    {{- format_type(member.returns, add_links=true) if member.returns else 'Any' -}}
+    {{- format_type(member.returns, module, add_links=true) if member.returns else 'Any' -}}
   </span>
 {%- endif -%}
 {%- if not (member.name == "__init__") -%}:{%- endif +%}
