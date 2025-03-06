@@ -1,5 +1,8 @@
 format:
   html:
+    grid:
+      sidebar-width: 450px
+      margin-width: 450px
     page-layout: full
     css:
       - validmind.css
