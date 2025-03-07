@@ -42,6 +42,14 @@ class GetTestSuiteError(BaseError):
     pass
 
 
+class UnauthorizedError(APIRequestError):
+    """
+    When the user is not authorized to perform the API action.
+    """
+
+    pass
+
+
 class MissingCacheResultsArgumentsError(BaseError):
     """
     When the cache_results function is missing arguments.
@@ -81,19 +89,11 @@ class InvalidContentIdPrefixError(APIRequestError):
     """
 
 
-class InvalidMetricResultsError(APIRequestError):
-    """
-    When an invalid metric results object is sent to the API.
-    """
-
-    pass
-
-
-class InvalidProjectError(APIRequestError):
+class InvalidModelIdError(APIRequestError):
     def description(self, *args, **kwargs):
         return (
             self.message
-            or "Invalid project ID. Please ensure that you have provided a project ID that belongs to your organization."
+            or "Invalid model ID. Please ensure that you have provided a model ID that belongs to your organization."
         )
 
 
@@ -327,21 +327,23 @@ def raise_api_error(error_string):
     """
     try:
         json_response = json.loads(error_string)
-        api_code = json_response.get("code")
-        api_description = json_response.get("description", json_response.get("message"))
+        error = json_response.get("error", {})
+        error_details = error.get("details", {})
+        error_reason = error_details.get("reason")
+        api_code = error.get("code")
+        api_description = error_reason or error.get("message")
     except json.decoder.JSONDecodeError:
         api_code = "unknown"
         api_description = error_string
 
     error_map = {
-        "invalid_credentials": InvalidAPICredentialsError,
-        "invalid_project": InvalidProjectError,
-        "invalid_json": InvalidRequestBodyError,
-        "missing_content_id": MissingTextContentIdError,
+        "INVALID_CREDENTIALS": InvalidAPICredentialsError,
+        "INVALID_MODEL": InvalidModelIdError,
+        "UNAUTHORIZED": UnauthorizedError,
+        "VALIDATION_ERROR": InvalidRequestBodyError,
         "missing_text": MissingTextContentsError,
         "invalid_text_object": InvalidTextObjectError,
         "invalid_content_id_prefix": InvalidContentIdPrefixError,
-        "invalid_metric_results": InvalidMetricResultsError,
         "invalid_test_results": InvalidTestResultsError,
     }
 
