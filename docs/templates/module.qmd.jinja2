@@ -1,0 +1,312 @@
+{% import "macros/docstring.jinja2" as doc %}
+{% import "macros/types.jinja2" as types %}
+{% import "macros/navigation.jinja2" as nav %}
+{% import "macros/signatures.jinja2" as signatures %}
+---
+title: "{% if module.name == "validmind" %}ValidMind Library{% else %}[validmind](/validmind/validmind.qmd).{{ module.name }}{% endif +%}"
+{% if module.name == "validmind" %}
+aliases:
+  - index.html
+{% endif %}
+sidebar: validmind-reference
+{% if module.name == "validmind" %}
+toc: false
+{% else %}
+toc-depth: 4
+toc-expand: 4
+{% endif %}
+# module.qmd.jinja2
+---
+
+{% if module.docstring %}
+{{ doc.format_docstring(module.docstring) }}
+{% endif %}
+
+{% if module.members and module.name == "validmind" %}
+<!-- # Python API -->
+
+{% if module.members.__version__ %}
+## &#95;&#95;version__
+
+{{ signatures.render_version_signature(module.members.__version__) }}
+{% else %}
+::: {.signature}
+
+<span class="name">{{ module.members.__version__.value | replace("'", "") if module.members.__version__.value else module.members.__version__.members.__version__.value | replace("'", "") }}</span>
+
+:::
+{% endif %}
+
+{# Process root-level aliases #}
+{% if module.all_list %}
+{# Use __all__ list ordering when available #}
+{% for member_name in module.all_list %}
+{% if member_name in module.members %}
+{% set member = module.members[member_name] %}
+{% if is_public(member, module, full_data, is_root) and member.kind == "alias" %}
+{% set target = resolve_alias(member, full_data) %}
+{% if target and target.docstring %}
+## {{ member.name }}<span class="suffix"></span>
+
+{% if target.kind == "function" %}
+{{ signatures.render_signature(target) }}
+{% endif %}
+
+{{ doc.format_docstring(target.docstring) }}
+{% endif %}
+{% endif %}
+{% endif %}
+{% endfor %}
+{% else %}
+{# Fallback to original sorting method #}
+{% for member in module.members | sort_members %}
+{% if is_public(member, module, full_data, is_root) and member.kind == "alias" %}
+{% set target = resolve_alias(member, full_data) %}
+{% if target and target.docstring %}
+## {{ member.name }}<span class="suffix"></span>
+
+{% if target.kind == "function" %}
+{{ signatures.render_signature(target) }}
+{% endif %}
+
+{{ doc.format_docstring(target.docstring) }}
+{% endif %}
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endif %}
+
+{% if module.members %}
+{# List modules #}
+{% set has_modules = namespace(value=false) %}
+{% for member in module.members | sort_members %}
+{% if is_public(member, module, full_data, is_root) and member.kind == "module" %}
+{% set has_modules.value = true %}
+{% endif %}
+{% endfor %}
+
+{% if not is_root %}
+{% for member in module.members | sort_members %}
+{% if is_public(member, module, full_data, is_root) and member.kind == "module" %}
+- [{{ member.name }}]({{ module.name }}/{{ member.name }}.qmd)
+{% endif %}
+{% endfor %}
+{% endif %}
+
+{# Process module-level aliases #}
+{% if not is_root %}
+
+{# Process module-level alias attributes (like describe_test_suite) #}
+{% for member_name, member in module.members.items() %}
+{% if member.kind == "attribute" and member.labels is defined and "module-attribute" in member.labels and member.value is defined and member.value.cls == "ExprName" and member.value.name in module.members %}
+{# This is a module-level alias pointing to another function in the same module #}
+{% set target_name = member.value.name %}
+{% set target = module.members[target_name] %}
+
+## {{ member_name }}{% if target.kind == "function" %}<span class="suffix"></span>{% endif %}
+
+*This function is an alias for [{{ target_name }}<span class="suffix"></span>](#{{ target_name }}).*
+{% endif %}
+{% endfor %}
+
+{% if module.all_list %}
+{# Use __all__ list ordering when available #}
+{% for member_name in module.all_list %}
+{% if member_name in module.members %}
+{% set member = module.members[member_name] %}
+{% if is_public(member, module, full_data, is_root) and member.kind == "alias" %}
+{% set resolved = resolve_alias(member, full_data) %}
+{% if resolved.kind == "function" or (resolved.kind == "attribute" and not module.path.startswith('validmind.tests')) %}
+## {{ member.name }}{% if resolved.kind == "function" %}<span class="suffix"></span>{% endif %}
+
+{{ signatures.render_signature(resolved, full_data=full_data, module=module) }}
+
+{% if resolved.docstring %}
+{{ doc.format_docstring(resolved.docstring) }}
+{% endif %}
+{% endif %}
+{% endif %}
+{% endif %}
+{% endfor %}
+{% else %}
+{# Fallback to original sorting method #}
+{% for member in module.members | sort_members %}
+{% if is_public(member, module, full_data, is_root) and member.kind == "alias" %}
+{% set resolved = resolve_alias(member, full_data) %}
+{% if resolved.kind == "function" or (resolved.kind == "attribute" and not module.path.startswith('validmind.tests')) %}
+## {{ member.name }}{% if resolved.kind == "function" %}<span class="suffix"></span>{% endif %}
+
+{{ signatures.render_signature(resolved, full_data=full_data, module=module) }}
+
+{% if resolved.docstring %}
+{{ doc.format_docstring(resolved.docstring) }}
+{% endif %}
+{% endif %}
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endif %}
+
+{# List classes and functions #}
+{% if module.all_list %}
+{# Use __all__ list ordering when available #}
+{% for member_name in module.all_list %}
+{% if member_name in module.members %}
+{% set member = module.members[member_name] %}
+{% if is_public(member, module, full_data, is_root) %}
+{% set resolved = resolve_alias(member, full_data) %}
+{% if resolved.kind == "attribute" and member.kind != "alias" and module.name == "validmind" and member.name in get_all_members(full_data['validmind'].get('members', {})) and resolved.value %}
+## <span class="prefix"></span> {{ member.name }}
+
+{{ signatures.render_signature(resolved, full_data=full_data, module=module) }}
+
+{% if resolved.docstring %}
+{{ doc.format_docstring(resolved.docstring) }}
+{% endif %}
+
+{% elif resolved.kind == "class" %}
+
+{% set __module_path = module.path|default('') %}
+{% set __is_test_module = __module_path.startswith('validmind.tests.') %}
+{% set __is_error_class = resolved.name.endswith('Error') %}
+{% set __is_test_suite = module.name == "test_suites" or __module_path == "validmind.test_suites" %}
+
+{# Skip rendering test suite classes in the main test_suites.qmd file #}
+{% if __is_test_suite and module.path == "validmind.test_suites" %}
+    {# Skip the class in the main test_suites module, individual test suite modules will show them #}
+{% elif not (__is_test_module and __is_error_class) %}
+    {% include "class.qmd.jinja2" with context %}
+{% endif %}
+{% elif resolved.kind == "function" and member.kind != "alias" %}
+{% include "function.qmd.jinja2" %}
+{% endif %}
+{% endif %}
+{% endif %}
+{% endfor %}
+{% else %}
+{# Fallback to original sorting method #}
+{% for member in module.members | sort_members %}
+{% if is_public(member, module, full_data, is_root) %}
+{% set resolved = resolve_alias(member, full_data) %}
+{% if resolved.kind == "attribute" and member.kind != "alias" and module.name == "validmind" and member.name in get_all_members(full_data['validmind'].get('members', {})) and resolved.value %}
+## <span class="prefix"></span> {{ member.name }}
+
+{{ signatures.render_signature(resolved, full_data=full_data, module=module) }}
+
+{% if resolved.docstring %}
+{{ doc.format_docstring(resolved.docstring) }}
+{% endif %}
+
+{% elif resolved.kind == "class" %}
+
+{% set __module_path = module.path|default('') %}
+{% set __is_test_module = __module_path.startswith('validmind.tests.') %}
+{% set __is_error_class = resolved.name.endswith('Error') %}
+{% set __is_test_suite = module.name == "test_suites" or __module_path == "validmind.test_suites" %}
+
+{# Skip rendering test suite classes in the main test_suites.qmd file #}
+{% if __is_test_suite and module.path == "validmind.test_suites" %}
+    {# Skip the class in the main test_suites module, individual test suite modules will show them #}
+{% elif not (__is_test_module and __is_error_class) %}
+    {% include "class.qmd.jinja2" with context %}
+{% endif %}
+{% elif resolved.kind == "function" and member.kind != "alias" %}
+{% include "function.qmd.jinja2" %}
+{% endif %}
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endif %}
+
+{% if module.name == "validmind" %}
+{% if module.all_list %}
+{# Use __all__ list ordering when available #}
+{% for member_name in module.all_list %}
+{% if member_name in module.members %}
+{% set member = module.members[member_name] %}
+{% if is_public(member, module, full_data, is_root) %}
+{% set resolved = resolve_alias(member, full_data) %}
+{% if member.kind == "class" or (member.kind == "alias" and member.target_path and member.target_path.split(".")[-1][0].isupper()) %}
+{% set target = resolve_alias(resolved, full_data) %}
+
+{# Skip rendering TestSuite classes to avoid duplication #}
+{% set is_test_suite_class = member.target_path and 'test_suites' in member.target_path %}
+{% if not is_test_suite_class %}
+<!-- module.qmd.jinja2 -->
+## <span class="prefix"></span> {{ member.name }}
+
+{{ signatures.render_signature(target) }}
+
+{% if target.docstring %}
+{{ doc.format_docstring(target.docstring) }}
+{% endif %}
+
+{% if target.members %}
+{% for method_name, method in target.members.items() %}
+{% if method.kind == "function" and (not method_name.startswith('_') or method_name in ['__init__']) %}
+
+<!-- module.qmd.jinja2 -->
+### {{ member.name if method_name == '__init__' else method_name }}<span class="suffix"></span>
+
+{% set method_with_parent = method %}
+{% set _ = method_with_parent.update({"parent": {"name": member.name}}) %}
+{{ signatures.render_signature(method_with_parent) }}
+
+{% if method.docstring %}
+{{ doc.format_docstring(method.docstring) }}
+{% endif %}
+
+{% endif %}
+{% endfor %}
+{% endif %}
+
+{% endif %}
+{% endif %}
+{% endif %}
+{% endif %}
+{% endfor %}
+{% else %}
+{# Fallback to original sorting method #}
+{% for member in module.members | sort_members %}
+{% if is_public(member, module, full_data, is_root) %}
+{% set resolved = resolve_alias(member, full_data) %}
+{% if member.kind == "class" or (member.kind == "alias" and member.target_path and member.target_path.split(".")[-1][0].isupper()) %}
+{% set target = resolve_alias(resolved, full_data) %}
+
+{# Skip rendering TestSuite classes to avoid duplication #}
+{% set is_test_suite_class = member.target_path and 'test_suites' in member.target_path %}
+{% if not is_test_suite_class %}
+<!-- module.qmd.jinja2 -->
+## <span class="prefix"></span> {{ member.name }}
+
+{{ signatures.render_signature(target) }}
+
+{% if target.docstring %}
+{{ doc.format_docstring(target.docstring) }}
+{% endif %}
+
+{% if target.members %}
+{% for method_name, method in target.members.items() %}
+{% if method.kind == "function" and (not method_name.startswith('_') or method_name in ['__init__']) %}
+
+<!-- module.qmd.jinja2 -->
+### {{ member.name if method_name == '__init__' else method_name }}<span class="suffix"></span>
+
+{% set method_with_parent = method %}
+{% set _ = method_with_parent.update({"parent": {"name": member.name}}) %}
+{{ signatures.render_signature(method_with_parent) }}
+
+{% if method.docstring %}
+{{ doc.format_docstring(method.docstring) }}
+{% endif %}
+
+{% endif %}
+{% endfor %}
+{% endif %}
+
+{% endif %}
+{% endif %}
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endif %}
