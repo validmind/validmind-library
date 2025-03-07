@@ -256,7 +256,7 @@ def _run_comparison_test(
     combined_outputs, combined_inputs, combined_params = combine_results(results)
 
     return build_test_result(
-        outputs=tuple(combined_outputs),
+        outputs=combined_outputs,
         test_id=test_id,
         test_doc=test_doc,
         inputs=combined_inputs,
@@ -400,5 +400,9 @@ def run_test(  # noqa: C901
 
 
 def print_env():
+    """Prints a log of the running environment for debugging.
+
+    Output includes: ValidMind Library version, operating system details, installed dependencies, and the ISO 8601 timestamp at log creation.
+    """
     e = _get_run_metadata()
     pprint.pp(e)

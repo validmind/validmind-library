@@ -140,4 +140,4 @@ def WOEBinPlots(
 
         figures.append(fig)
 
-    return (*figures, RawData(woe_iv_data=woe_iv_df))
+    return (*figures, RawData(woe_iv_data=woe_iv_df, dataset=dataset.input_id))

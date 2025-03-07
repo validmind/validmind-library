@@ -5,7 +5,7 @@
 import numpy as np
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.logging import get_logger
 from validmind.vm_models import VMDataset, VMModel
 
@@ -74,10 +74,15 @@ def RegressionPerformance(model: VMModel, dataset: VMDataset):
     # MBD calculation
     metrics["Mean Bias Deviation (MBD)"] = np.mean(y_pred - y_true)
 
-    return [
-        {
-            "Metric": metric,
-            "Value": value,
-        }
-        for metric, value in metrics.items()
-    ]
+    return (
+        [
+            {
+                "Metric": metric,
+                "Value": value,
+            }
+            for metric, value in metrics.items()
+        ],
+        RawData(
+            y_true=y_true, y_pred=y_pred, model=model.input_id, dataset=dataset.input_id
+        ),
+    )

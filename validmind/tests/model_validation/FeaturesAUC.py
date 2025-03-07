@@ -95,4 +95,4 @@ def FeaturesAUC(dataset: VMDataset, fontsize: int = 12, figure_height: int = 500
         height=figure_height,
     )
 
-    return fig, RawData(feature_aucs=aucs)
+    return fig, RawData(feature_aucs=aucs, dataset=dataset.input_id)

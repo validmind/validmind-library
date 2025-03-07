@@ -151,4 +151,8 @@ def StabilityAnalysisRandomNoise(
         mean_similarity_threshold,
     )
 
-    return result, RawData(original_perturbed_similarity=raw_data)
+    return *result, RawData(
+        original_perturbed_similarity=raw_data,
+        model=model.input_id,
+        dataset=dataset.input_id,
+    )

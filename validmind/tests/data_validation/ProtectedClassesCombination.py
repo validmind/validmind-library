@@ -206,5 +206,7 @@ def ProtectedClassesCombination(dataset, model, protected_classes=None):
             metrics_frame=mf,
             demographic_parity_ratios=m_dpr,
             equalized_odds_ratios=m_eqo,
+            model=model.input_id,
+            dataset=dataset.input_id,
         ),
     )

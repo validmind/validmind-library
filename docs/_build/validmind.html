@@ -30,10 +30,10 @@
                     <a class="variable" href="#__version__">__version__</a>
             </li>
             <li>
-                    <a class="function" href="#get_test_suite">get_test_suite</a>
+                    <a class="function" href="#init">init</a>
             </li>
             <li>
-                    <a class="function" href="#init">init</a>
+                    <a class="function" href="#reload">reload</a>
             </li>
             <li>
                     <a class="function" href="#init_dataset">init_dataset</a>
@@ -48,7 +48,28 @@
                     <a class="function" href="#preview_template">preview_template</a>
             </li>
             <li>
+                    <a class="function" href="#run_documentation_tests">run_documentation_tests</a>
+            </li>
+            <li>
+                    <a class="function" href="#log_metric">log_metric</a>
+            </li>
+            <li>
+                    <a class="function" href="#get_test_suite">get_test_suite</a>
+            </li>
+            <li>
+                    <a class="function" href="#run_test_suite">run_test_suite</a>
+            </li>
+            <li>
                     <a class="function" href="#print_env">print_env</a>
+            </li>
+            <li>
+                    <a class="function" href="#tags">tags</a>
+            </li>
+            <li>
+                    <a class="function" href="#tasks">tasks</a>
+            </li>
+            <li>
+                    <a class="function" href="#test">test</a>
             </li>
             <li>
                     <a class="class" href="#RawData">RawData</a>
@@ -65,27 +86,6 @@
                 </ul>
 
             </li>
-            <li>
-                    <a class="function" href="#reload">reload</a>
-            </li>
-            <li>
-                    <a class="function" href="#run_documentation_tests">run_documentation_tests</a>
-            </li>
-            <li>
-                    <a class="function" href="#run_test_suite">run_test_suite</a>
-            </li>
-            <li>
-                    <a class="function" href="#tags">tags</a>
-            </li>
-            <li>
-                    <a class="function" href="#tasks">tasks</a>
-            </li>
-            <li>
-                    <a class="function" href="#test">test</a>
-            </li>
-            <li>
-                    <a class="function" href="#log_metric">log_metric</a>
-            </li>
     </ul>
 
 
@@ -94,10 +94,10 @@
                     <li><a href="validmind/__version__.html">__version__</a></li>
                     <li><a href="validmind/datasets.html">datasets</a></li>
                     <li><a href="validmind/errors.html">errors</a></li>
-                    <li><a href="validmind/tests.html">tests</a></li>
-                    <li><a href="validmind/test_suites.html">test_suites</a></li>
                     <li><a href="validmind/vm_models.html">vm_models</a></li>
+                    <li><a href="validmind/tests.html">tests</a></li>
                     <li><a href="validmind/unit_metrics.html">unit_metrics</a></li>
+                    <li><a href="validmind/test_suites.html">test_suites</a></li>
             </ul>
 
 
@@ -151,7 +151,7 @@
                 <section id="__version__">
                     <div class="attr variable">
             <span class="name">__version__</span>        =
-<span class="default_value">&#39;2.7.7&#39;</span>
+<span class="default_value">&#39;2.8.12&#39;</span>
 
         
     </div>
@@ -160,44 +160,11 @@
     
 
                 </section>
-                <section id="get_test_suite">
-                    <div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">get_test_suite</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">test_suite_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">section</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="o">*</span><span class="n">args</span>,</span><span class="param">	<span class="o">**</span><span class="n">kwargs</span></span><span class="return-annotation">) -> <span class="n"><a href="validmind/vm_models.html#TestSuite">validmind.vm_models.TestSuite</a></span>:</span></span>
-
-        
-    </div>
-    <a class="headerlink" href="#get_test_suite"></a>
-    
-            <div class="docstring"><p>Gets a TestSuite object for the current project or a specific test suite</p>
-
-<p>This function provides an interface to retrieve the TestSuite instance for the
-current project or a specific TestSuite instance identified by test_suite_id.
-The project Test Suite will contain sections for every section in the project's
-documentation template and these Test Suite Sections will contain all the tests
-associated with that template section.</p>
-
-<h6 id="arguments">Arguments:</h6>
-
-<ul>
-<li><strong>test_suite_id (str, optional):</strong>  The test suite name. If not passed, then the
-project's test suite will be returned. Defaults to None.</li>
-<li><strong>section (str, optional):</strong>  The section of the documentation template from which
-to retrieve the test suite. This only applies if test_suite_id is None.
-Defaults to None.</li>
-<li><strong>args:</strong>  Additional arguments to pass to the TestSuite</li>
-<li><strong>kwargs:</strong>  Additional keyword arguments to pass to the TestSuite</li>
-</ul>
-</div>
-
-
-                </section>
                 <section id="init">
                     <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">init</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">project</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">api_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">api_secret</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">api_host</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">model</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">monitoring</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span></span><span class="return-annotation">):</span></span>
+        <span class="name">init</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">project</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">api_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">api_secret</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">api_host</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">model</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">monitoring</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>,</span><span class="param">	<span class="n">generate_descriptions</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></span><span class="return-annotation">):</span></span>
 
         
     </div>
@@ -218,6 +185,7 @@ retrieve them from the environment variables <code>VM_API_KEY</code> and <code>V
 <li><strong>api_secret (str, optional):</strong>  The API secret. Defaults to None.</li>
 <li><strong>api_host (str, optional):</strong>  The API host. Defaults to None.</li>
 <li><strong>monitoring (bool):</strong>  The ongoing monitoring flag. Defaults to False.</li>
+<li><strong>generate_descriptions (bool):</strong>  Whether to use GenAI to generate test result descriptions. Defaults to True.</li>
 </ul>
 
 <h6 id="raises">Raises:</h6>
@@ -225,6 +193,21 @@ retrieve them from the environment variables <code>VM_API_KEY</code> and <code>V
 <ul>
 <li><strong>ValueError:</strong>  If the API key and secret are not provided</li>
 </ul>
+</div>
+
+
+                </section>
+                <section id="reload">
+                    <div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">reload</span><span class="signature pdoc-code condensed">(<span class="return-annotation">):</span></span>
+
+        
+    </div>
+    <a class="headerlink" href="#reload"></a>
+    
+            <div class="docstring"><p>Reconnect to the ValidMind API and reload the project configuration</p>
 </div>
 
 
@@ -393,99 +376,6 @@ the project has not been initialized, then an error will be raised.</p>
 
 
                 </section>
-                <section id="print_env">
-                    <div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">print_env</span><span class="signature pdoc-code condensed">(<span class="return-annotation">):</span></span>
-
-        
-    </div>
-    <a class="headerlink" href="#print_env"></a>
-    
-    
-
-                </section>
-                <section id="RawData">
-                    <div class="attr class">
-            
-    <span class="def">class</span>
-    <span class="name">RawData</span>:
-
-        
-    </div>
-    <a class="headerlink" href="#RawData"></a>
-    
-            <div class="docstring"><p>Holds raw data for a test result</p>
-</div>
-
-
-                            <div id="RawData.__init__" class="classattr">
-                                <div class="attr function">
-            
-        <span class="name">RawData</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">log</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>, </span><span class="param"><span class="o">**</span><span class="n">kwargs</span></span>)</span>
-
-        
-    </div>
-    <a class="headerlink" href="#RawData.__init__"></a>
-    
-            <div class="docstring"><p>Create a new RawData object</p>
-
-<h6 id="arguments">Arguments:</h6>
-
-<ul>
-<li><strong>log (bool):</strong>  If True, log the raw data to ValidMind</li>
-<li><strong>**kwargs:</strong>  Keyword arguments to set as attributes e.g.
-<code>RawData(log=True, dataset_duplicates=df_duplicates)</code></li>
-</ul>
-</div>
-
-
-                            </div>
-                            <div id="RawData.inspect" class="classattr">
-                                <div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">inspect</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">show</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span></span><span class="return-annotation">):</span></span>
-
-        
-    </div>
-    <a class="headerlink" href="#RawData.inspect"></a>
-    
-            <div class="docstring"><p>Inspect the raw data</p>
-</div>
-
-
-                            </div>
-                            <div id="RawData.serialize" class="classattr">
-                                <div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">serialize</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">):</span></span>
-
-        
-    </div>
-    <a class="headerlink" href="#RawData.serialize"></a>
-    
-    
-
-                            </div>
-                </section>
-                <section id="reload">
-                    <div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">reload</span><span class="signature pdoc-code condensed">(<span class="return-annotation">):</span></span>
-
-        
-    </div>
-    <a class="headerlink" href="#reload"></a>
-    
-            <div class="docstring"><p>Reconnect to the ValidMind API and reload the project configuration</p>
-</div>
-
-
-                </section>
                 <section id="run_documentation_tests">
                     <div class="attr function">
             
@@ -523,6 +413,72 @@ suite, log the results to the ValidMind API, and display them to the user.</p>
 
 <ul>
 <li><strong>ValueError:</strong>  If the project has not been initialized</li>
+</ul>
+</div>
+
+
+                </section>
+                <section id="log_metric">
+                    <div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">log_metric</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">key</span><span class="p">:</span> <span class="nb">str</span>,</span><span class="param">	<span class="n">value</span><span class="p">:</span> <span class="nb">float</span>,</span><span class="param">	<span class="n">inputs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">recorded_at</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">thresholds</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span></span><span class="return-annotation">):</span></span>
+
+        
+    </div>
+    <a class="headerlink" href="#log_metric"></a>
+    
+            <div class="docstring"><p>Logs a unit metric</p>
+
+<p>Unit metrics are key-value pairs where the key is the metric name and the value is
+a scalar (int or float). These key-value pairs are associated with the currently
+selected model (inventory model in the ValidMind Platform) and keys can be logged
+to over time to create a history of the metric. On the ValidMind Platform, these metrics
+will be used to create plots/visualizations for documentation and dashboards etc.</p>
+
+<h6 id="arguments">Arguments:</h6>
+
+<ul>
+<li><strong>key (str):</strong>  The metric key</li>
+<li><strong>value (float):</strong>  The metric value</li>
+<li><strong>inputs (list, optional):</strong>  A list of input IDs that were used to compute the metric.</li>
+<li><strong>params (dict, optional):</strong>  Dictionary of parameters used to compute the metric.</li>
+<li><strong>recorded_at (str, optional):</strong>  The timestamp of the metric. Server will use
+current time if not provided.</li>
+<li><strong>thresholds (dict, optional):</strong>  Dictionary of thresholds for the metric.</li>
+</ul>
+</div>
+
+
+                </section>
+                <section id="get_test_suite">
+                    <div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">get_test_suite</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">test_suite_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">section</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="o">*</span><span class="n">args</span>,</span><span class="param">	<span class="o">**</span><span class="n">kwargs</span></span><span class="return-annotation">) -> <span class="n"><a href="validmind/vm_models.html#TestSuite">validmind.vm_models.TestSuite</a></span>:</span></span>
+
+        
+    </div>
+    <a class="headerlink" href="#get_test_suite"></a>
+    
+            <div class="docstring"><p>Gets a TestSuite object for the current project or a specific test suite</p>
+
+<p>This function provides an interface to retrieve the TestSuite instance for the
+current project or a specific TestSuite instance identified by test_suite_id.
+The project Test Suite will contain sections for every section in the project's
+documentation template and these Test Suite Sections will contain all the tests
+associated with that template section.</p>
+
+<h6 id="arguments">Arguments:</h6>
+
+<ul>
+<li><strong>test_suite_id (str, optional):</strong>  The test suite name. If not passed, then the
+project's test suite will be returned. Defaults to None.</li>
+<li><strong>section (str, optional):</strong>  The section of the documentation template from which
+to retrieve the test suite. This only applies if test_suite_id is None.
+Defaults to None.</li>
+<li><strong>args:</strong>  Additional arguments to pass to the TestSuite</li>
+<li><strong>kwargs:</strong>  Additional keyword arguments to pass to the TestSuite</li>
 </ul>
 </div>
 
@@ -570,6 +526,23 @@ documentation or <code>vm.describe_test()</code> for more details on the inputs 
 <blockquote>
   <p>TestSuite: the TestSuite instance</p>
 </blockquote>
+</div>
+
+
+                </section>
+                <section id="print_env">
+                    <div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">print_env</span><span class="signature pdoc-code condensed">(<span class="return-annotation">):</span></span>
+
+        
+    </div>
+    <a class="headerlink" href="#print_env"></a>
+    
+            <div class="docstring"><p>Prints a log of the running environment for debugging.</p>
+
+<p>Output includes: ValidMind Library version, operating system details, installed dependencies, and the ISO 8601 timestamp at log creation.</p>
 </div>
 
 
@@ -669,38 +642,70 @@ as the metric's description.</p>
 
 
                 </section>
-                <section id="log_metric">
-                    <div class="attr function">
+                <section id="RawData">
+                    <div class="attr class">
             
-        <span class="def">def</span>
-        <span class="name">log_metric</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">key</span><span class="p">:</span> <span class="nb">str</span>,</span><span class="param">	<span class="n">value</span><span class="p">:</span> <span class="nb">float</span>,</span><span class="param">	<span class="n">inputs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">recorded_at</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">thresholds</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span></span><span class="return-annotation">):</span></span>
+    <span class="def">class</span>
+    <span class="name">RawData</span>:
 
         
     </div>
-    <a class="headerlink" href="#log_metric"></a>
+    <a class="headerlink" href="#RawData"></a>
     
-            <div class="docstring"><p>Logs a unit metric</p>
+            <div class="docstring"><p>Holds raw data for a test result</p>
+</div>
 
-<p>Unit metrics are key-value pairs where the key is the metric name and the value is
-a scalar (int or float). These key-value pairs are associated with the currently
-selected model (inventory model in the ValidMind Platform) and keys can be logged
-to over time to create a history of the metric. On the ValidMind Platform, these metrics
-will be used to create plots/visualizations for documentation and dashboards etc.</p>
+
+                            <div id="RawData.__init__" class="classattr">
+                                <div class="attr function">
+            
+        <span class="name">RawData</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">log</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>, </span><span class="param"><span class="o">**</span><span class="n">kwargs</span></span>)</span>
+
+        
+    </div>
+    <a class="headerlink" href="#RawData.__init__"></a>
+    
+            <div class="docstring"><p>Create a new RawData object</p>
 
 <h6 id="arguments">Arguments:</h6>
 
 <ul>
-<li><strong>key (str):</strong>  The metric key</li>
-<li><strong>value (float):</strong>  The metric value</li>
-<li><strong>inputs (list, optional):</strong>  A list of input IDs that were used to compute the metric.</li>
-<li><strong>params (dict, optional):</strong>  Dictionary of parameters used to compute the metric.</li>
-<li><strong>recorded_at (str, optional):</strong>  The timestamp of the metric. Server will use
-current time if not provided.</li>
-<li><strong>thresholds (dict, optional):</strong>  Dictionary of thresholds for the metric.</li>
+<li><strong>log (bool):</strong>  If True, log the raw data to ValidMind</li>
+<li><strong>**kwargs:</strong>  Keyword arguments to set as attributes e.g.
+<code>RawData(log=True, dataset_duplicates=df_duplicates)</code></li>
 </ul>
 </div>
 
 
+                            </div>
+                            <div id="RawData.inspect" class="classattr">
+                                <div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">inspect</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">show</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span></span><span class="return-annotation">):</span></span>
+
+        
+    </div>
+    <a class="headerlink" href="#RawData.inspect"></a>
+    
+            <div class="docstring"><p>Inspect the raw data</p>
+</div>
+
+
+                            </div>
+                            <div id="RawData.serialize" class="classattr">
+                                <div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">serialize</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">):</span></span>
+
+        
+    </div>
+    <a class="headerlink" href="#RawData.serialize"></a>
+    
+    
+
+                            </div>
                 </section>
     </main>
 <script>

@@ -141,10 +141,12 @@ def ToxicityScore(dataset, model):
 
     return (
         result_df,
-        *tuple(figures),
+        *figures,
         RawData(
             input_toxicity_df=input_df,
             true_toxicity_df=true_df,
             pred_toxicity_df=pred_df,
+            model=model.input_id,
+            dataset=dataset.input_id,
         ),
     )

@@ -60,6 +60,19 @@ pylab.rcParams.update(params)
 logger = get_logger(__name__)
 
 
+def parse_version(version: str) -> tuple[int, ...]:
+    """
+    Parse a semver version string into a tuple of major, minor, patch integers
+
+    Args:
+        version (str): The semantic version string to parse
+
+    Returns:
+        tuple[int, ...]: A tuple of major, minor, patch integers
+    """
+    return tuple(int(x) for x in version.split(".")[:3])
+
+
 def is_notebook() -> bool:
     """
     Checks if the code is running in a Jupyter notebook or IPython shell

@@ -72,7 +72,10 @@ def CalibrationCurve(model: VMModel, dataset: VMDataset, n_bins: int = 10):
 
     # Create DataFrame for raw data
     raw_data = RawData(
-        mean_predicted_probability=prob_pred, observed_frequency=prob_true
+        mean_predicted_probability=prob_pred,
+        observed_frequency=prob_true,
+        model=model.input_id,
+        dataset=dataset.input_id,
     )
 
     # Create Plotly figure
@@ -114,4 +117,4 @@ def CalibrationCurve(model: VMModel, dataset: VMDataset, n_bins: int = 10):
         template="plotly_white",
     )
 
-    return raw_data, fig
+    return fig, raw_data

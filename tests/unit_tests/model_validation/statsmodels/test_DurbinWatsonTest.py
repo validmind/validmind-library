@@ -63,10 +63,13 @@ class TestDurbinWatsonTest(unittest.TestCase):
 
     def test_returns_dataframe_and_rawdata(self):
         # Run the function
-        results = DurbinWatsonTest(self.vm_dataset, self.vm_model)
+        results, raw_data = DurbinWatsonTest(self.vm_dataset, self.vm_model)
 
         # Check if results is a DataFrame
         self.assertIsInstance(results, pd.DataFrame)
+
+        # Check if raw_data is a RawData object
+        self.assertIsInstance(raw_data, vm.RawData)
 
         # Check if DataFrame has expected columns
         expected_columns = ["dw_statistic", "threshold", "autocorrelation"]
@@ -107,10 +110,13 @@ class TestDurbinWatsonTest(unittest.TestCase):
         vm_no_auto_dataset.assign_predictions(vm_no_auto_model)
 
         # Run the function
-        results = DurbinWatsonTest(vm_no_auto_dataset, vm_no_auto_model)
+        results, raw_data = DurbinWatsonTest(vm_no_auto_dataset, vm_no_auto_model)
 
         # Check if results is a DataFrame
         self.assertIsInstance(results, pd.DataFrame)
+
+        # Check if raw_data is a RawData object
+        self.assertIsInstance(raw_data, vm.RawData)
 
         # Check if DataFrame has expected columns
         expected_columns = ["dw_statistic", "threshold", "autocorrelation"]

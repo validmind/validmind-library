@@ -59,7 +59,8 @@ pip install validmind
 - **Install with R support (requires R to be installed)**
 
     ```bash
-    pip install validmind[r-support]
+    pip install validmind
+    pip install rpy2
     ```
 
 ## How to contribute
@@ -102,7 +103,8 @@ brew install r
 Once you have R installed, install the `r-support` extra to install the necessary dependencies for R by running:
 
 ```bash
-poetry install --extras r-support
+poetry install
+pip install rpy2
 ```
 
 ### Versioning

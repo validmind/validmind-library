@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 
 
 def calculate_psi_score(actual, expected):
@@ -183,4 +183,11 @@ def FeatureDrift(
     # Calculate overall pass/fail
     pass_fail_bool = (psi_df["Pass/Fail"] == "Pass").all()
 
-    return ({"PSI Scores": psi_df}, *figures, pass_fail_bool)
+    # Prepare raw data
+    raw_data = RawData(
+        distributions=distributions,
+        dataset_reference=datasets[0].input_id,
+        dataset_monitoring=datasets[1].input_id,
+    )
+
+    return ({"PSI Scores": psi_df}, *figures, pass_fail_bool, raw_data)

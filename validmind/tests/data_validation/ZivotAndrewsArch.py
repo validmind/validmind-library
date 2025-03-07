@@ -6,7 +6,7 @@ import pandas as pd
 from arch.unitroot import ZivotAndrews
 from numpy.linalg import LinAlgError
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.errors import SkipTestError
 from validmind.logging import get_logger
 from validmind.vm_models import VMDataset
@@ -83,4 +83,7 @@ def ZivotAndrewsArch(dataset: VMDataset):
             }
         )
 
-    return {"Zivot-Andrews Test Results": za_values}
+    return (
+        {"Zivot-Andrews Test Results": za_values},
+        RawData(zivot_andrews=za_values, dataset=dataset.input_id),
+    )
