@@ -6,7 +6,6 @@ on:
   push:
     branches:
       - prod
-      - release-2.7
 
 permissions:
   contents: read
