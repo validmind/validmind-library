@@ -17,6 +17,6 @@ The template generation script/notebook draws from the following mini-templates,
 - [`next-steps.ipynb`](next-steps.ipynb): Directions to review the generated documentation within the ValidMind Platform & additional learning resources.
 - [`upgrade-validmind.ipynb`](upgrade-validmind.ipynb): Instructions for comparing & upgrading versions of the ValidMind Library.
 
-## Adding table of contents
+## Add table of contents
 
 For lengthy notebooks, we recommend that you add a table of contents with the [**Simplified table of contents for Jupyter Notebooks extension**](https://github.com/validbeck/jupyter-notebook-toc/tree/main/installation).
