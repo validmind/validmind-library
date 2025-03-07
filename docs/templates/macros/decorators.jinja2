@@ -11,6 +11,9 @@
 {%- if not decorator.startswith('@') -%}@{%- endif -%}{{ decorator | replace('@', '') }}
 {%- endif -%}
 </span>
+{% if not loop.last %}
+{{ '\n' }}
+{% endif %}
 {%- endfor -%}
 </span>
 {%+ endif +%}

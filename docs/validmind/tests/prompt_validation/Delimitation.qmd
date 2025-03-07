@@ -14,7 +14,9 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="decorators"><span class="decorator">@<span class="n">tags(<span class="s">'llm'</span>, <span class="s">'zero_shot'</span>, <span class="s">'few_shot'</span>)</span></span><span class="decorator">@<span class="n">tasks(<span class="s">'text_classification'</span>, <span class="s">'text_summarization'</span>)</span></span></span>
+<span class="decorators"><span class="decorator">@<span class="n">tags(<span class="s">'llm'</span>, <span class="s">'zero_shot'</span>, <span class="s">'few_shot'</span>)</span></span>
+
+<span class="decorator">@<span class="n">tasks(<span class="s">'text_classification'</span>, <span class="s">'text_summarization'</span>)</span></span> </span>
 
 <span class="kw">def</span><span class="name">Delimitation</span>(<span class="params"><span class="n">model</span><span class="muted">,</span></span><span class="params"><span class="n">min_threshold</span><span class="o">=</span><span class="kc">7</span></span>):
 

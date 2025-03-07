@@ -30,7 +30,9 @@ Taken from: https://towardsdatascience.com/checking-model-stability-and-populati
 
 ::: {.signature}
 
-<span class="decorators"><span class="decorator">@<span class="n">tags(<span class="s">'sklearn'</span>, <span class="s">'binary_classification'</span>, <span class="s">'multiclass_classification'</span>, <span class="s">'model_performance'</span>)</span></span><span class="decorator">@<span class="n">tasks(<span class="s">'classification'</span>, <span class="s">'text_classification'</span>)</span></span></span>
+<span class="decorators"><span class="decorator">@<span class="n">tags(<span class="s">'sklearn'</span>, <span class="s">'binary_classification'</span>, <span class="s">'multiclass_classification'</span>, <span class="s">'model_performance'</span>)</span></span>
+
+<span class="decorator">@<span class="n">tasks(<span class="s">'classification'</span>, <span class="s">'text_classification'</span>)</span></span> </span>
 
 <span class="kw">def</span><span class="name">PopulationStabilityIndex</span>(<span class="params"><span class="n">datasets</span><span class="p">:</span><span class="n">List</span><span class="p">\[</span><a href="/validmind/validmind/vm_models.qmd#vmdataset">validmind.vm_models.VMDataset</a><span class="p">\]</span><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="p">:</span><a href="/validmind/validmind/vm_models.qmd#vmmodel">validmind.vm_models.VMModel</a><span class="muted">,</span></span><span class="params"><span class="n">num_bins</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="kc">10</span><span class="muted">,</span></span><span class="params"><span class="n">mode</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s1">'fixed'</span></span>):
 

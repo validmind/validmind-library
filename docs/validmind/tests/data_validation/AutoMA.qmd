@@ -14,7 +14,9 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="decorators"><span class="decorator">@<span class="n">tags(<span class="s">'time_series_data'</span>, <span class="s">'statsmodels'</span>, <span class="s">'forecasting'</span>, <span class="s">'statistical_test'</span>)</span></span><span class="decorator">@<span class="n">tasks(<span class="s">'regression'</span>)</span></span></span>
+<span class="decorators"><span class="decorator">@<span class="n">tags(<span class="s">'time_series_data'</span>, <span class="s">'statsmodels'</span>, <span class="s">'forecasting'</span>, <span class="s">'statistical_test'</span>)</span></span>
+
+<span class="decorator">@<span class="n">tasks(<span class="s">'regression'</span>)</span></span> </span>
 
 <span class="kw">def</span><span class="name">AutoMA</span>(<span class="params"><span class="n">dataset</span><span class="p">:</span><a href="/validmind/validmind/vm_models.qmd#vmdataset">validmind.vm_models.VMDataset</a><span class="muted">,</span></span><span class="params"><span class="n">max_ma_order</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="kc">3</span></span>):
 

@@ -14,7 +14,9 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="decorators"><span class="decorator">@<span class="n">tags(<span class="s">'nlp'</span>, <span class="s">'text_data'</span>, <span class="s">'visualization'</span>)</span></span><span class="decorator">@<span class="n">tasks(<span class="s">'text_classification'</span>, <span class="s">'text_summarization'</span>)</span></span></span>
+<span class="decorators"><span class="decorator">@<span class="n">tags(<span class="s">'nlp'</span>, <span class="s">'text_data'</span>, <span class="s">'visualization'</span>)</span></span>
+
+<span class="decorator">@<span class="n">tasks(<span class="s">'text_classification'</span>, <span class="s">'text_summarization'</span>)</span></span> </span>
 
 <span class="kw">def</span><span class="name">LanguageDetection</span>(<span class="param"><span class="n">dataset</span></span>):
 

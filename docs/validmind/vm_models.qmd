@@ -426,7 +426,7 @@ An base class that wraps a trained model instance and its associated data.
 
 ::: {.signature}
 
-<span class="decorators"><span class="decorator">@<span class="n">abstractmethod</span></span></span>
+<span class="decorators"><span class="decorator">@<span class="n">abstractmethod</span></span> </span>
 
 <span class="kw">def</span><span class="name">predict</span>(<span class="params"><span class="bp">self</span><span class="muted">,</span></span><span class="params"><span class="n">\*args</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>):
 
@@ -472,7 +472,7 @@ Serializes the model to a dictionary so it can be sent to the API
 
 ::: {.signature}
 
-<span class="decorators"><span class="decorator">@<span class="n">dataclass</span></span></span>
+<span class="decorators"><span class="decorator">@<span class="n">dataclass</span></span> </span>
 
 <span class="kw">class</span><span class="name">Figure</span>:
 
@@ -542,7 +542,7 @@ Returns the ipywidget compatible representation of the figure. Ideally we would 
 
 ::: {.signature}
 
-<span class="decorators"><span class="decorator">@<span class="n">dataclass</span></span></span>
+<span class="decorators"><span class="decorator">@<span class="n">dataclass</span></span> </span>
 
 <span class="kw">class</span><span class="name">ModelAttributes</span>:
 
@@ -568,7 +568,7 @@ Model attributes definition.
 
 ::: {.signature}
 
-<span class="decorators"><span class="decorator">@<span class="n">classmethod</span></span></span>
+<span class="decorators"><span class="decorator">@<span class="n">classmethod</span></span> </span>
 
 <span class="kw">def</span><span class="name">from_dict</span>(<span class="params"><span class="n">cls</span><span class="muted">,</span></span><span class="params"><span class="n">data</span></span>):
 
@@ -586,7 +586,7 @@ Creates a ModelAttributes instance from a dictionary.
 
 ::: {.signature}
 
-<span class="decorators"><span class="decorator">@<span class="n">dataclass</span></span></span>
+<span class="decorators"><span class="decorator">@<span class="n">dataclass</span></span> </span>
 
 <span class="kw">class</span><span class="name">ResultTable</span>:
 
@@ -624,7 +624,7 @@ A dataclass that holds the table summary of result.
 
 ::: {.signature}
 
-<span class="decorators"><span class="decorator">@<span class="n">dataclass</span></span></span>
+<span class="decorators"><span class="decorator">@<span class="n">dataclass</span></span> </span>
 
 <span class="kw">class</span><span class="name">TestResult</span>(<span class="base">Result</span>):
 
@@ -816,7 +816,7 @@ Get the test name, using custom title if available.
 
 ::: {.signature}
 
-<span class="decorators"><span class="decorator">@<span class="n">dataclass</span></span></span>
+<span class="decorators"><span class="decorator">@<span class="n">dataclass</span></span> </span>
 
 <span class="kw">class</span><span class="name">TestSuite</span>:
 

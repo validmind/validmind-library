@@ -14,7 +14,9 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="decorators"><span class="decorator">@<span class="n">tags(<span class="s">'statistical_test'</span>, <span class="s">'model_interpretation'</span>, <span class="s">'visualization'</span>, <span class="s">'feature_importance'</span>)</span></span><span class="decorator">@<span class="n">tasks(<span class="s">'regression'</span>)</span></span></span>
+<span class="decorators"><span class="decorator">@<span class="n">tags(<span class="s">'statistical_test'</span>, <span class="s">'model_interpretation'</span>, <span class="s">'visualization'</span>, <span class="s">'feature_importance'</span>)</span></span>
+
+<span class="decorator">@<span class="n">tasks(<span class="s">'regression'</span>)</span></span> </span>
 
 <span class="kw">def</span><span class="name">RegressionFeatureSignificance</span>(<span class="params"><span class="n">model</span><span class="p">:</span><a href="/validmind/validmind/vm_models.qmd#vmmodel">validmind.vm_models.VMModel</a><span class="muted">,</span></span><span class="params"><span class="n">fontsize</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="kc">10</span><span class="muted">,</span></span><span class="params"><span class="n">p_threshold</span><span class="p">:</span><span class="nb">float</span><span class="o">=</span><span class="kc">0.05</span></span>):
 

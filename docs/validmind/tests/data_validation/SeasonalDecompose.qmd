@@ -14,7 +14,9 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="decorators"><span class="decorator">@<span class="n">tags(<span class="s">'time_series_data'</span>, <span class="s">'seasonality'</span>, <span class="s">'statsmodels'</span>)</span></span><span class="decorator">@<span class="n">tasks(<span class="s">'regression'</span>)</span></span></span>
+<span class="decorators"><span class="decorator">@<span class="n">tags(<span class="s">'time_series_data'</span>, <span class="s">'seasonality'</span>, <span class="s">'statsmodels'</span>)</span></span>
+
+<span class="decorator">@<span class="n">tasks(<span class="s">'regression'</span>)</span></span> </span>
 
 <span class="kw">def</span><span class="name">SeasonalDecompose</span>(<span class="params"><span class="n">dataset</span><span class="p">:</span><a href="/validmind/validmind/vm_models.qmd#vmdataset">validmind.vm_models.VMDataset</a><span class="muted">,</span></span><span class="params"><span class="n">seasonal_model</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s1">'additive'</span></span>):
 

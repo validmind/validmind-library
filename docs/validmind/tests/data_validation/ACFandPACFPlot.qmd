@@ -14,7 +14,9 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="decorators"><span class="decorator">@<span class="n">tags(<span class="s">'time_series_data'</span>, <span class="s">'forecasting'</span>, <span class="s">'statistical_test'</span>, <span class="s">'visualization'</span>)</span></span><span class="decorator">@<span class="n">tasks(<span class="s">'regression'</span>)</span></span></span>
+<span class="decorators"><span class="decorator">@<span class="n">tags(<span class="s">'time_series_data'</span>, <span class="s">'forecasting'</span>, <span class="s">'statistical_test'</span>, <span class="s">'visualization'</span>)</span></span>
+
+<span class="decorator">@<span class="n">tasks(<span class="s">'regression'</span>)</span></span> </span>
 
 <span class="kw">def</span><span class="name">ACFandPACFPlot</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span><a href="/validmind/validmind/vm_models.qmd#vmdataset">validmind.vm_models.VMDataset</a></span>):
 

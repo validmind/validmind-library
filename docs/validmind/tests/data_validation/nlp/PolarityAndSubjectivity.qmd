@@ -14,7 +14,9 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="decorators"><span class="decorator">@<span class="n">tags(<span class="s">'nlp'</span>, <span class="s">'text_data'</span>, <span class="s">'data_validation'</span>)</span></span><span class="decorator">@<span class="n">tasks(<span class="s">'nlp'</span>)</span></span></span>
+<span class="decorators"><span class="decorator">@<span class="n">tags(<span class="s">'nlp'</span>, <span class="s">'text_data'</span>, <span class="s">'data_validation'</span>)</span></span>
+
+<span class="decorator">@<span class="n">tasks(<span class="s">'nlp'</span>)</span></span> </span>
 
 <span class="kw">def</span><span class="name">PolarityAndSubjectivity</span>(<span class="params"><span class="n">dataset</span><span class="muted">,</span></span><span class="params"><span class="n">threshold_subjectivity</span><span class="o">=</span><span class="kc">0.5</span><span class="muted">,</span></span><span class="params"><span class="n">threshold_polarity</span><span class="o">=</span><span class="kc">0</span></span>):
 
