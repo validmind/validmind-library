@@ -92,4 +92,4 @@ def TabularCategoricalBarPlots(dataset: VMDataset):
         )
         figures.append(fig)
 
-    return (*figures, RawData(category_counts=counts_dict))
+    return (*figures, RawData(category_counts=counts_dict, dataset=dataset.input_id))

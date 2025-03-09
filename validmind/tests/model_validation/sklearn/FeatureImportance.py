@@ -5,7 +5,7 @@
 import pandas as pd
 from sklearn.inspection import permutation_importance
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 
 
@@ -78,4 +78,8 @@ def FeatureImportance(dataset: VMDataset, model: VMModel, num_features: int = 3)
         else:
             result[f"Feature {i + 1}"] = None
 
-    return pd.DataFrame([result])
+    return pd.DataFrame([result]), RawData(
+        permutation_importance=pfi_values,
+        model=model.input_id,
+        dataset=dataset.input_id,
+    )

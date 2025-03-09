@@ -9,7 +9,7 @@ import pandas as pd
 import plotly.graph_objects as go
 from sklearn.calibration import calibration_curve
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.errors import SkipTestError
 from validmind.vm_models import VMDataset, VMModel
 
@@ -217,4 +217,14 @@ def CalibrationCurveDrift(
         fig,
         {"Mean Predicted Probabilities": pred_df, "Fraction of Positives": true_df},
         pass_fail_bool,
+        RawData(
+            prob_true_ref=prob_true_ref,
+            prob_pred_ref=prob_pred_ref,
+            prob_true_mon=prob_true_mon,
+            prob_pred_mon=prob_pred_mon,
+            bin_labels=bin_labels,
+            model=model.input_id,
+            dataset_ref=datasets[0].input_id,
+            dataset_mon=datasets[1].input_id,
+        ),
     )

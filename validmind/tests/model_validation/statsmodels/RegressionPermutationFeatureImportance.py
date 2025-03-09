@@ -97,4 +97,6 @@ def RegressionPermutationFeatureImportance(
         height=figure_height,
     )
 
-    return fig, RawData(importances=importances)
+    return fig, RawData(
+        importances=importances, model=model.input_id, dataset=dataset.input_id
+    )

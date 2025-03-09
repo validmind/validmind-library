@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 from sklearn import metrics
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 
 
 @tags("sklearn", "model_performance")
@@ -62,7 +62,11 @@ def RegressionErrors(model, dataset):
     y_pred = dataset.y_pred(model)
     y_true = y_true.astype(y_pred.dtype)
 
-    return _regression_errors(y_true, y_pred)
+    results_df = _regression_errors(y_true, y_pred)
+
+    return results_df, RawData(
+        y_true=y_true, y_pred=y_pred, model=model.input_id, dataset=dataset.input_id
+    )
 
 
 def _regression_errors(y_true, y_pred):

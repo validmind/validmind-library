@@ -114,4 +114,6 @@ def RegressionModelSensitivityPlot(
     return fig, RawData(
         transformed_target=transformed_target,
         transformed_predictions=transformed_predictions,
+        model=model.input_id,
+        dataset=dataset.input_id,
     )

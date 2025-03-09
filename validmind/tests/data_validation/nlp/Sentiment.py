@@ -77,4 +77,6 @@ def Sentiment(dataset):
 
     plt.close("all")
 
-    return fig, RawData(sentiment_scores=vader_sentiment.tolist())
+    return fig, RawData(
+        sentiment_scores=vader_sentiment.tolist(), dataset=dataset.input_id
+    )

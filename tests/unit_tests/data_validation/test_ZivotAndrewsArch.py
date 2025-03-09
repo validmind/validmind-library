@@ -39,10 +39,13 @@ class TestZivotAndrewsArch(unittest.TestCase):
         )
 
     def test_zivot_andrews(self):
-        result = ZivotAndrewsArch(self.vm_dataset)
+        result, raw_data = ZivotAndrewsArch(self.vm_dataset)
 
-        # Check return type and structure
+        # Check return types
         self.assertIsInstance(result, dict)
+        self.assertIsInstance(raw_data, vm.RawData)
+
+        # Check results structure
         self.assertIn("Zivot-Andrews Test Results", result)
 
         # Check results structure

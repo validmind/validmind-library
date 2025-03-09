@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import classification_report
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 
 
@@ -145,4 +145,12 @@ def ClassificationAccuracyDrift(
     # Calculate overall pass/fail
     pass_fail_bool = (df["Pass/Fail"] == "Pass").all()
 
-    return ({"Classification Accuracy Metrics": df}, pass_fail_bool)
+    raw_data = RawData(
+        report_reference=report_ref,
+        report_monitoring=report_mon,
+        model=model.input_id,
+        dataset_reference=datasets[0].input_id,
+        dataset_monitoring=datasets[1].input_id,
+    )
+
+    return ({"Classification Accuracy Metrics": df}, pass_fail_bool, raw_data)

@@ -5,7 +5,7 @@
 import pandas as pd
 from statsmodels.stats.stattools import durbin_watson
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 
 
 @tasks("regression")
@@ -81,4 +81,9 @@ def DurbinWatsonTest(dataset, model, threshold=[1.5, 2.5]):
             "threshold": [str(threshold)],
             "autocorrelation": [get_autocorrelation(dw_statistic, threshold)],
         }
+    ), RawData(
+        residuals=residuals,
+        dw_statistic=dw_statistic,
+        model=model.input_id,
+        dataset=dataset.input_id,
     )
