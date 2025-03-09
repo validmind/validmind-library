@@ -601,3 +601,24 @@ def serialize(obj):
     elif isinstance(obj, (pd.DataFrame, pd.Series)):
         return ""  # Simple empty string for non-serializable objects
     return obj
+
+
+def infer_datatypes(df):
+    column_type_mappings = {}
+    # Use pandas to infer data types
+    for column in df.columns:
+        dtype = df[column].dtype
+        if pd.api.types.is_numeric_dtype(dtype):
+            column_type_mappings[column] = {"id": column, "type": "Numeric"}
+        elif pd.api.types.is_categorical_dtype(dtype) or pd.api.types.is_object_dtype(
+            dtype
+        ):
+            column_type_mappings[column] = {"id": column, "type": "Categorical"}
+        elif pd.api.types.is_bool_dtype(dtype):
+            column_type_mappings[column] = {"id": column, "type": "Boolean"}
+        elif pd.api.types.is_datetime64_any_dtype(dtype):
+            column_type_mappings[column] = {"id": column, "type": "Datetime"}
+        else:
+            column_type_mappings[column] = {"id": column, "type": "Unsupported"}
+
+    return list(column_type_mappings.values())
