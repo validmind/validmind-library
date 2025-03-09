@@ -7,7 +7,7 @@ from typing import List
 import numpy as np
 import pandas as pd
 
-from validmind import tags, tasks
+from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 
 
@@ -209,4 +209,13 @@ def ScoreBandsDrift(
         tables[table_name] = pd.DataFrame(rows)
         all_passed &= metric_passed
 
-    return tables, all_passed
+    # Collect raw data
+    raw_data = RawData(
+        ref_results=ref_results,
+        mon_results=mon_results,
+        model=model.input_id,
+        dataset_reference=datasets[0].input_id,
+        dataset_monitoring=datasets[1].input_id,
+    )
+
+    return tables, all_passed, raw_data

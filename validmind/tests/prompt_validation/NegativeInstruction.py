@@ -117,5 +117,5 @@ def NegativeInstruction(model, min_threshold=7):
             }
         ],
         passed,
-        RawData(model_response=response),
+        RawData(model_response=response, model=model.input_id),
     )

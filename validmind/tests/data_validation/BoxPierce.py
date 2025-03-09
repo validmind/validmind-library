@@ -68,4 +68,6 @@ def BoxPierce(dataset):
     box_pierce_df.reset_index(inplace=True)
     box_pierce_df.columns = ["column", "stat", "pvalue"]
 
-    return box_pierce_df, RawData(box_pierce_values=box_pierce_values)
+    return box_pierce_df, RawData(
+        box_pierce_values=box_pierce_values, dataset=dataset.input_id
+    )

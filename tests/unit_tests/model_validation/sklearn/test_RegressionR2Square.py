@@ -50,17 +50,20 @@ class TestRegressionR2Square(unittest.TestCase):
 
     def test_returns_dataframe(self):
         # Run the function
-        result = RegressionR2Square(self.vm_dataset, self.vm_model)
+        results, raw_data = RegressionR2Square(self.vm_dataset, self.vm_model)
 
-        # Check if result is a DataFrame
-        self.assertIsInstance(result, pd.DataFrame)
+        # Check if results is a DataFrame
+        self.assertIsInstance(results, pd.DataFrame)
+
+        # Check if raw_data is a RawData object
+        self.assertIsInstance(raw_data, vm.RawData)
 
         # Check if DataFrame has expected columns
         expected_columns = ["R-squared (R2) Score", "Adjusted R-squared (R2) Score"]
-        self.assertTrue(all(col in result.columns for col in expected_columns))
+        self.assertTrue(all(col in results.columns for col in expected_columns))
 
         # Check if DataFrame has exactly one row
-        self.assertEqual(len(result), 1)
+        self.assertEqual(len(results), 1)
 
     def test_perfect_prediction(self):
         # Create a perfect prediction scenario
@@ -93,21 +96,21 @@ class TestRegressionR2Square(unittest.TestCase):
         # Assign predictions to the dataset
         vm_perfect_dataset.assign_predictions(vm_perfect_model)
 
-        # Calculate R2 scores
-        result = RegressionR2Square(vm_perfect_dataset, vm_perfect_model)
+        # Calculate metrics
+        results, raw_data = RegressionR2Square(vm_perfect_dataset, vm_perfect_model)
 
-        # Both R2 and Adjusted R2 should be very close to 1 for perfect predictions
-        self.assertAlmostEqual(result["R-squared (R2) Score"].iloc[0], 1.0, places=5)
+        # For perfect separation:
+        self.assertAlmostEqual(results["R-squared (R2) Score"].iloc[0], 1.0, places=5)
         self.assertAlmostEqual(
-            result["Adjusted R-squared (R2) Score"].iloc[0], 1.0, places=5
+            results["Adjusted R-squared (R2) Score"].iloc[0], 1.0, places=5
         )
 
     def test_r2_score_range(self):
-        result = RegressionR2Square(self.vm_dataset, self.vm_model)
+        results, raw_data = RegressionR2Square(self.vm_dataset, self.vm_model)
 
         # R2 score should be between 0 and 1 for a reasonable model
-        r2_score = result["R-squared (R2) Score"].iloc[0]
-        adj_r2_score = result["Adjusted R-squared (R2) Score"].iloc[0]
+        r2_score = results["R-squared (R2) Score"].iloc[0]
+        adj_r2_score = results["Adjusted R-squared (R2) Score"].iloc[0]
 
         self.assertGreaterEqual(r2_score, 0)
         self.assertLessEqual(r2_score, 1)
@@ -146,8 +149,8 @@ class TestRegressionR2Square(unittest.TestCase):
         vm_poor_dataset.assign_predictions(vm_poor_model)
 
         # Calculate R2 scores
-        result = RegressionR2Square(vm_poor_dataset, vm_poor_model)
+        results, raw_data = RegressionR2Square(vm_poor_dataset, vm_poor_model)
 
         # R2 score should be close to 0 for poor predictions
-        self.assertLess(result["R-squared (R2) Score"].iloc[0], 0.1)
-        self.assertLess(result["Adjusted R-squared (R2) Score"].iloc[0], 0.1)
+        self.assertLess(results["R-squared (R2) Score"].iloc[0], 0.1)
+        self.assertLess(results["Adjusted R-squared (R2) Score"].iloc[0], 0.1)
