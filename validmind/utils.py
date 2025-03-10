@@ -664,6 +664,52 @@ def is_text_column(series, threshold=0.05):
     return any(text_indicators)
 
 
+def _get_numeric_type_detail(column, dtype, series):
+    """Helper function to determine numeric type details."""
+    if pd.api.types.is_integer_dtype(dtype):
+        return {"type": "Numeric", "subtype": "Integer"}
+    elif pd.api.types.is_float_dtype(dtype):
+        return {"type": "Numeric", "subtype": "Float"}
+    else:
+        return {"type": "Numeric", "subtype": "Other"}
+
+
+def _get_text_type_detail(series):
+    """Helper function to determine text/categorical type details."""
+    string_series = series.dropna().astype(str)
+
+    if len(string_series) == 0:
+        return {"type": "Categorical"}
+
+    # Check for common patterns
+    url_pattern = r"https?://\S+|www\.\S+"
+    email_pattern = r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b"
+    filepath_pattern = r'([a-zA-Z]:|[\\/])([\\/][^\\/:*?"<>|]+)+'
+
+    url_ratio = string_series.str.contains(url_pattern, regex=True, na=False).mean()
+    email_ratio = string_series.str.contains(email_pattern, regex=True, na=False).mean()
+    filepath_ratio = string_series.str.contains(
+        filepath_pattern, regex=True, na=False
+    ).mean()
+
+    # Check if general text using enhanced function
+    if url_ratio > 0.7:
+        return {"type": "Text", "subtype": "URL"}
+    elif email_ratio > 0.7:
+        return {"type": "Text", "subtype": "Email"}
+    elif filepath_ratio > 0.7:
+        return {"type": "Text", "subtype": "Path"}
+    elif is_text_column(series):
+        return {"type": "Text", "subtype": "FreeText"}
+
+    # Must be categorical
+    n_unique = series.nunique()
+    if n_unique == 2:
+        return {"type": "Categorical", "subtype": "Binary"}
+    else:
+        return {"type": "Categorical", "subtype": "Nominal"}
+
+
 def get_column_type_detail(df, column):
     """
     Get detailed column type information beyond basic type detection.
@@ -679,75 +725,26 @@ def get_column_type_detail(df, column):
     series = df[column]
     dtype = series.dtype
 
-    # Initialize result with basic type
+    # Initialize result with id and basic type
     result = {"id": column, "type": "Unknown"}
 
-    # Numeric types
+    # Determine type details based on dtype
+    type_detail = None
+
     if pd.api.types.is_numeric_dtype(dtype):
-        if pd.api.types.is_integer_dtype(dtype):
-            result["type"] = "Numeric"
-            result["subtype"] = "Integer"
-        elif pd.api.types.is_float_dtype(dtype):
-            result["type"] = "Numeric"
-            result["subtype"] = "Float"
-        else:
-            result["type"] = "Numeric"
-            result["subtype"] = "Other"
-
-    # Boolean type
+        type_detail = _get_numeric_type_detail(column, dtype, series)
     elif pd.api.types.is_bool_dtype(dtype):
-        result["type"] = "Boolean"
-
-    # Datetime types
+        type_detail = {"type": "Boolean"}
     elif pd.api.types.is_datetime64_any_dtype(dtype):
-        result["type"] = "Datetime"
-
-    # String/object/categorical types need more analysis
+        type_detail = {"type": "Datetime"}
     elif pd.api.types.is_categorical_dtype(dtype) or pd.api.types.is_object_dtype(
         dtype
     ):
-        # Convert to strings for analysis
-        string_series = series.dropna().astype(str)
+        type_detail = _get_text_type_detail(series)
 
-        if len(string_series) == 0:
-            result["type"] = "Categorical"
-            return result
-
-        # Check for common patterns
-        url_pattern = r"https?://\S+|www\.\S+"
-        email_pattern = r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b"
-        filepath_pattern = r'([a-zA-Z]:|[\\/])([\\/][^\\/:*?"<>|]+)+'
-
-        url_ratio = string_series.str.contains(url_pattern, regex=True, na=False).mean()
-        email_ratio = string_series.str.contains(
-            email_pattern, regex=True, na=False
-        ).mean()
-        filepath_ratio = string_series.str.contains(
-            filepath_pattern, regex=True, na=False
-        ).mean()
-
-        # Check if general text using enhanced function
-        if url_ratio > 0.7:
-            result["type"] = "Text"
-            result["subtype"] = "URL"
-        elif email_ratio > 0.7:
-            result["type"] = "Text"
-            result["subtype"] = "Email"
-        elif filepath_ratio > 0.7:
-            result["type"] = "Text"
-            result["subtype"] = "Path"
-        elif is_text_column(series):
-            result["type"] = "Text"
-            result["subtype"] = "FreeText"
-        else:
-            result["type"] = "Categorical"
-
-            # Further analyze categorical data
-            n_unique = series.nunique()
-            if n_unique == 2:
-                result["subtype"] = "Binary"
-            else:
-                result["subtype"] = "Nominal"
+    # Update result with type details
+    if type_detail:
+        result.update(type_detail)
 
     return result
 
