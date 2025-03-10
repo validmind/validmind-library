@@ -22,13 +22,13 @@ class TestDatasetDescription(unittest.TestCase):
                     [True, False, True, True, False, True, False], dtype=bool
                 ),  # Explicitly boolean
                 "text": [
-                    "hello",
-                    "world",
+                    "hello@gmail.com",
+                    "this is a longer text",
                     "hello world",
-                    "test",
-                    "hello",
-                    "test",
-                    "world",
+                    "this is a longer text",
+                    "this is a longer text",
+                    "another example of text",
+                    "this is a longer text",
                 ],  # Text
                 "all_null": [
                     None,
@@ -104,6 +104,8 @@ class TestDatasetDescription(unittest.TestCase):
 
     def test_column_types_and_stats(self):
         result = DatasetDescription(self.vm_dataset)
+        print(self.vm_dataset.df.head())
+        print(self.vm_dataset.df.dtypes)
         description, _ = result
         column_info = {
             item["Name"]: item for item in description["Dataset Description"]
@@ -128,8 +130,9 @@ class TestDatasetDescription(unittest.TestCase):
         self.assertEqual(column_info["boolean"]["Count"], 7)  # All present
 
         # Check text column
+        print(column_info)
         self.assertEqual(column_info["text"]["Type"], "Text")
-        self.assertEqual(column_info["text"]["Distinct"], 4)  # 4 unique strings
+        self.assertEqual(column_info["text"]["Distinct"],4)  # 4 unique strings
         self.assertEqual(column_info["text"]["Missing"], 0)  # No missing values
         self.assertEqual(column_info["text"]["Count"], 7)  # All present
 
