@@ -191,6 +191,7 @@ lending_club_loan_data_*.csv
 
 # Pickle files
 *.pkl
+!notebooks/tutorials/model_validation/xgb_model_champion.pkl
 
 notebooks/llm/datasets/*.jsonl
 
