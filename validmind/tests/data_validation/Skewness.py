@@ -2,10 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from ydata_profiling.config import Settings
-from ydata_profiling.model.typeset import ProfilingTypeSet
-
 from validmind import tags, tasks
+from validmind.utils import infer_datatypes
 
 
 @tags("data_quality", "tabular_data")
@@ -49,8 +47,11 @@ def Skewness(dataset, max_threshold=1):
     - Subjective threshold for risk grading, requiring expert input and recurrent iterations for refinement.
     """
 
-    typeset = ProfilingTypeSet(Settings())
-    dataset_types = typeset.infer_type(dataset.df)
+    # Use the imported infer_datatypes function
+    dataset_types = infer_datatypes(dataset.df)
+
+    # Convert the list of dictionaries to a dictionary for easy access
+    dataset_types_dict = {item["id"]: item["type"] for item in dataset_types}
 
     skewness = dataset.df.skew(numeric_only=True)
 
@@ -58,7 +59,7 @@ def Skewness(dataset, max_threshold=1):
     passed = True
 
     for col in skewness.index:
-        if str(dataset_types[col]) != "Numeric":
+        if dataset_types_dict.get(col) != "Numeric":
             continue
 
         col_skewness = skewness[col]
