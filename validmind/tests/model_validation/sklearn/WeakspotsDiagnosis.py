@@ -291,7 +291,9 @@ def WeakspotsDiagnosis(
                 pd.DataFrame(results_1).assign(Dataset=datasets[0].input_id),
                 pd.DataFrame(results_2).assign(Dataset=datasets[1].input_id),
             ]
-        ).sort_values(["Feature", "Dataset"]),
+        )
+        .reset_index(drop=True)
+        .sort_values(["Feature", "Dataset"]),
         *figures,
         passed,
     )
