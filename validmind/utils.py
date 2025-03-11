@@ -631,7 +631,7 @@ def is_text_column(series, threshold=0.05):
     patterns = {
         "url": r"https?://\S+|www\.\S+",
         "email": r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b",
-        "filepath": r'([a-zA-Z]:|[\\/])([\\/][^\\/:*?"<>|]+)+',
+        "filepath": r'(?:[a-zA-Z]:|[\\/])(?:[\\/][^\\/:*?"<>|]+)+',
     }
 
     # Check if any special patterns exceed threshold
@@ -684,7 +684,7 @@ def _get_text_type_detail(series):
     # Check for common patterns
     url_pattern = r"https?://\S+|www\.\S+"
     email_pattern = r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b"
-    filepath_pattern = r'([a-zA-Z]:|[\\/])([\\/][^\\/:*?"<>|]+)+'
+    filepath_pattern = r'(?:[a-zA-Z]:|[\\/])(?:[\\/][^\\/:*?"<>|]+)+'
 
     url_ratio = string_series.str.contains(url_pattern, regex=True, na=False).mean()
     email_ratio = string_series.str.contains(email_pattern, regex=True, na=False).mean()
