@@ -6,37 +6,16 @@ import re
 from collections import Counter
 
 import numpy as np
-from ydata_profiling.config import Settings
-from ydata_profiling.model.typeset import ProfilingTypeSet
 
 from validmind import RawData, tags, tasks
-from validmind.errors import UnsupportedColumnTypeError
 from validmind.logging import get_logger
+from validmind.utils import infer_datatypes
 from validmind.vm_models import VMDataset
 
 DEFAULT_HISTOGRAM_BINS = 10
 DEFAULT_HISTOGRAM_BIN_SIZES = [5, 10, 20, 50]
 
 logger = get_logger(__name__)
-
-
-def infer_datatypes(df):
-    column_type_mappings = {}
-    typeset = ProfilingTypeSet(Settings())
-    variable_types = typeset.infer_type(df)
-
-    for column, type in variable_types.items():
-        if str(type) == "Unsupported":
-            if df[column].isnull().all():
-                column_type_mappings[column] = {"id": column, "type": "Null"}
-            else:
-                raise UnsupportedColumnTypeError(
-                    f"Unsupported type for column {column}. Please review all values in this dataset column."
-                )
-        else:
-            column_type_mappings[column] = {"id": column, "type": str(type)}
-
-    return list(column_type_mappings.values())
 
 
 def get_numerical_histograms(df, column):
@@ -50,7 +29,7 @@ def get_numerical_histograms(df, column):
     # bins='sturges'. Cannot use 'auto' until we review and fix its performance
     #  on datasets with too many unique values
     #
-    # 'sturges': R’s default method, only accounts for data size. Only optimal
+    # 'sturges': R's default method, only accounts for data size. Only optimal
     # for gaussian data and underestimates number of bins for large non-gaussian datasets.
     default_hist = np.histogram(values_cleaned, bins="sturges")
 
