@@ -202,7 +202,7 @@ def list_tasks_and_tags(as_json: bool = False) -> Union[str, Dict[str, List[str]
             "Task": tasks,
             "Tags": [", ".join(tags) for _ in range(len(tasks))]
         })
-        return df.style
+        return df  # Return DataFrame instead of df.style
     except (ImportError, AttributeError):
         # Fallback if pandas is not available or styling doesn't work
         return {
@@ -323,7 +323,7 @@ def list_tests(  # noqa: C901
                 df = pd.DataFrame(data)
                 if truncate:
                     df["Description"] = df["Description"].apply(lambda x: x.split("\n")[0] if x else "")
-                return df.style
+                return df  # Return DataFrame instead of df.style
 
             # Return None if there are no tests
             return None
