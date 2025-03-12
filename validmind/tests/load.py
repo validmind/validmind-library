@@ -7,7 +7,7 @@
 import inspect
 import json
 from pprint import pformat
-from typing import Any, Callable, Dict, List, Optional, Set, Tuple, Union
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 from uuid import uuid4
 
 from ipywidgets import HTML, Accordion
@@ -15,7 +15,7 @@ from ipywidgets import HTML, Accordion
 from ..errors import LoadTestError, MissingDependencyError
 from ..html_templates.content_blocks import test_content_block_html
 from ..logging import get_logger
-from ..utils import display, fuzzy_match, md_to_html, test_id_to_name
+from ..utils import display, md_to_html, test_id_to_name
 from ..vm_models import VMDataset, VMModel
 from .__types__ import TestID
 from ._store import test_provider_store, test_store
@@ -71,6 +71,8 @@ def load_test(
         test_id (str): The test ID in the format `namespace.path_to_module.TestName[:tag]`
         test_func (callable, optional): The test function to load. If not provided, the
             test will be loaded from the test provider. Defaults to None.
+        reload (bool, optional): If True, reload the test even if it's already loaded.
+            Defaults to False.
     """
     # Special case for unit tests - if the test is already in the store, return it
     if test_id in test_store.tests and not reload:
@@ -82,7 +84,7 @@ def load_test(
             # Create a mock test function with required attributes
             def mock_test(*args, **kwargs):
                 return {"test_id": test_id, "args": args, "kwargs": kwargs}
-            
+
             # Add required attributes
             mock_test.test_id = test_id
             mock_test.__doc__ = f"Mock test for {test_id}"
@@ -93,7 +95,7 @@ def load_test(
             
             # Register the mock test
             test_store.register_test(test_id, mock_test)
-            
+
         return test_store.get_test(test_id)
     
     # remove tag if present
@@ -195,8 +197,7 @@ def list_tasks_and_tags(as_json: bool = False) -> Union[str, Dict[str, List[str]
     try:
         # Import this here to avoid circular import
         import pandas as pd
-        from pandas.io.formats.style import Styler
-        
+
         df = pd.DataFrame({
             "Task": tasks,
             "Tags": [", ".join(tags) for _ in range(len(tasks))]
@@ -241,7 +242,7 @@ def list_tests(
             line. Defaults to True. (only used if pretty=True)
     """
     test_ids = _list_test_ids()
-    
+
     # Handle special cases for unit tests
     if filter and not test_ids:
         # For unit tests, if no tests are loaded but a filter is specified,
@@ -274,7 +275,7 @@ def list_tests(
                 task_test_ids.append(test_id)
             elif hasattr(test_func, "__tasks__") and task in test_func.__tasks__:
                 task_test_ids.append(test_id)
-        
+
         # Create a new tests dictionary with only the filtered tests
         tests = {test_id: tests[test_id] for test_id in task_test_ids}
 
@@ -287,7 +288,7 @@ def list_tests(
                 tag_test_ids.append(test_id)
             elif hasattr(test_func, "__tags__") and all(tag in test_func.__tags__ for tag in tags):
                 tag_test_ids.append(test_id)
-        
+
         # Create a new tests dictionary with only the filtered tests
         tests = {test_id: tests[test_id] for test_id in tag_test_ids}
 
@@ -295,7 +296,7 @@ def list_tests(
         try:
             # Import pandas here to avoid importing it at the top
             import pandas as pd
-            
+
             # Create a DataFrame with test info
             data = []
             for test_id, test_func in tests.items():
@@ -317,16 +318,16 @@ def list_tests(
                         "Required Inputs": list(test_func.inputs.keys()) if hasattr(test_func, "inputs") else [],
                         "Params": test_func.params if hasattr(test_func, "params") else {}
                     })
-            
+
             if data:
                 df = pd.DataFrame(data)
                 if truncate:
                     df["Description"] = df["Description"].apply(lambda x: x.split("\n")[0] if x else "")
                 return df.style
-            
+
             # Return None if there are no tests
             return None
-            
+
         except Exception as e:
             # Just log if pretty printing fails
             logger.warning(f"Could not pretty print tests: {str(e)}")
