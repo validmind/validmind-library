@@ -620,3 +620,192 @@ def serialize(obj):
     elif isinstance(obj, (pd.DataFrame, pd.Series)):
         return ""  # Simple empty string for non-serializable objects
     return obj
+
+
+def is_text_column(series, threshold=0.05):
+    """
+    Determines if a series is likely to contain text data using heuristics.
+
+    Args:
+        series (pd.Series): The pandas Series to analyze
+        threshold (float): The minimum threshold to classify a pattern match as significant
+
+    Returns:
+        bool: True if the series likely contains text data, False otherwise
+    """
+    # Filter to non-null string values and sample if needed
+    string_series = series.dropna().astype(str)
+    if len(string_series) == 0:
+        return False
+    if len(string_series) > 1000:
+        string_series = string_series.sample(1000, random_state=42)
+
+    # Calculate basic metrics
+    total_values = len(string_series)
+    unique_ratio = len(string_series.unique()) / total_values if total_values > 0 else 0
+    avg_length = string_series.str.len().mean()
+    avg_words = string_series.str.split(r"\s+").str.len().mean()
+
+    # Check for special text patterns
+    patterns = {
+        "url": r"https?://\S+|www\.\S+",
+        "email": r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b",
+        "filepath": r'(?:[a-zA-Z]:|[\\/])(?:[\\/][^\\/:*?"<>|]+)+',
+    }
+
+    # Check if any special patterns exceed threshold
+    for pattern in patterns.values():
+        if string_series.str.contains(pattern, regex=True, na=False).mean() > threshold:
+            return True
+
+    # Calculate proportion of alphabetic characters
+    total_chars = string_series.str.len().sum()
+    if total_chars > 0:
+        alpha_ratio = string_series.str.count(r"[a-zA-Z]").sum() / total_chars
+    else:
+        alpha_ratio = 0
+
+    # Check for free-form text indicators
+    text_indicators = [
+        unique_ratio > 0.8 and avg_length > 20,  # High uniqueness and long strings
+        unique_ratio > 0.4
+        and avg_length > 15
+        and string_series.str.contains(r"[.,;:!?]", regex=True, na=False).mean()
+        > 0.3,  # Moderate uniqueness with punctuation
+        string_series.str.contains(
+            r"\b\w+\b\s+\b\w+\b\s+\b\w+\b\s+\b\w+\b", regex=True, na=False
+        ).mean()
+        > 0.3,  # Contains long phrases
+        avg_words > 5 and alpha_ratio > 0.6,  # Many words with mostly letters
+        unique_ratio > 0.95 and avg_length > 10,  # Very high uniqueness
+    ]
+
+    return any(text_indicators)
+
+
+def _get_numeric_type_detail(column, dtype, series):
+    """Helper function to determine numeric type details."""
+    if pd.api.types.is_integer_dtype(dtype):
+        return {"type": "Numeric", "subtype": "Integer"}
+    elif pd.api.types.is_float_dtype(dtype):
+        return {"type": "Numeric", "subtype": "Float"}
+    else:
+        return {"type": "Numeric", "subtype": "Other"}
+
+
+def _get_text_type_detail(series):
+    """Helper function to determine text/categorical type details."""
+    string_series = series.dropna().astype(str)
+
+    if len(string_series) == 0:
+        return {"type": "Categorical"}
+
+    # Check for common patterns
+    url_pattern = r"https?://\S+|www\.\S+"
+    email_pattern = r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b"
+    filepath_pattern = r'(?:[a-zA-Z]:|[\\/])(?:[\\/][^\\/:*?"<>|]+)+'
+
+    url_ratio = string_series.str.contains(url_pattern, regex=True, na=False).mean()
+    email_ratio = string_series.str.contains(email_pattern, regex=True, na=False).mean()
+    filepath_ratio = string_series.str.contains(
+        filepath_pattern, regex=True, na=False
+    ).mean()
+
+    # Check if general text using enhanced function
+    if url_ratio > 0.7:
+        return {"type": "Text", "subtype": "URL"}
+    elif email_ratio > 0.7:
+        return {"type": "Text", "subtype": "Email"}
+    elif filepath_ratio > 0.7:
+        return {"type": "Text", "subtype": "Path"}
+    elif is_text_column(series):
+        return {"type": "Text", "subtype": "FreeText"}
+
+    # Must be categorical
+    n_unique = series.nunique()
+    if n_unique == 2:
+        return {"type": "Categorical", "subtype": "Binary"}
+    else:
+        return {"type": "Categorical", "subtype": "Nominal"}
+
+
+def get_column_type_detail(df, column):
+    """
+    Get detailed column type information beyond basic type detection.
+    Similar to ydata-profiling's type system.
+
+    Args:
+        df (pd.DataFrame): DataFrame containing the column
+        column (str): Column name to analyze
+
+    Returns:
+        dict: Detailed type information including primary type and subtype
+    """
+    series = df[column]
+    dtype = series.dtype
+
+    # Initialize result with id and basic type
+    result = {"id": column, "type": "Unknown"}
+
+    # Determine type details based on dtype
+    type_detail = None
+
+    if pd.api.types.is_numeric_dtype(dtype):
+        type_detail = _get_numeric_type_detail(column, dtype, series)
+    elif pd.api.types.is_bool_dtype(dtype):
+        type_detail = {"type": "Boolean"}
+    elif pd.api.types.is_datetime64_any_dtype(dtype):
+        type_detail = {"type": "Datetime"}
+    elif pd.api.types.is_categorical_dtype(dtype) or pd.api.types.is_object_dtype(
+        dtype
+    ):
+        type_detail = _get_text_type_detail(series)
+
+    # Update result with type details
+    if type_detail:
+        result.update(type_detail)
+
+    return result
+
+
+def infer_datatypes(df, detailed=False):
+    """
+    Infer data types for columns in a DataFrame.
+
+    Args:
+        df (pd.DataFrame): DataFrame to analyze
+        detailed (bool): Whether to return detailed type information including subtypes
+
+    Returns:
+        list: Column type mappings
+    """
+    if detailed:
+        return [get_column_type_detail(df, column) for column in df.columns]
+
+    column_type_mappings = {}
+    # Use pandas to infer data types
+    for column in df.columns:
+        # Check if all values are None
+        if df[column].isna().all():
+            column_type_mappings[column] = {"id": column, "type": "Null"}
+            continue
+
+        dtype = df[column].dtype
+        if pd.api.types.is_numeric_dtype(dtype):
+            column_type_mappings[column] = {"id": column, "type": "Numeric"}
+        elif pd.api.types.is_bool_dtype(dtype):
+            column_type_mappings[column] = {"id": column, "type": "Boolean"}
+        elif pd.api.types.is_datetime64_any_dtype(dtype):
+            column_type_mappings[column] = {"id": column, "type": "Datetime"}
+        elif pd.api.types.is_categorical_dtype(dtype) or pd.api.types.is_object_dtype(
+            dtype
+        ):
+            # Check if this is more likely to be text than categorical
+            if is_text_column(df[column]):
+                column_type_mappings[column] = {"id": column, "type": "Text"}
+            else:
+                column_type_mappings[column] = {"id": column, "type": "Categorical"}
+        else:
+            column_type_mappings[column] = {"id": column, "type": "Unsupported"}
+
+    return list(column_type_mappings.values())

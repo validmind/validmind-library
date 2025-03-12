@@ -44,31 +44,12 @@ async def update_metadata(content_id: str, text: str, _json: Union[Dict, List] =
     content_id = parts[0]
     revision_name = parts[1] if len(parts) > 1 else None
 
-    # we always want composite metric definitions to be updated
-    should_update = content_id.startswith("composite_metric_def:")
+    if revision_name:
+        content_id = f"{content_id}::{revision_name}"
 
-    # if we are updating a metric or test description, we check if the text
-    # has changed from the last time it was logged, and only update if it has
-    if content_id.split(":", 1)[0] in ["metric_description", "test_description"]:
-        try:
-            md = await api_client.aget_metadata(content_id)
-            # if there is an existing description, only update it if the new one
-            # is different and is an AI-generated description
-            should_update = (
-                md["text"] != text if revision_name == AI_REVISION_NAME else False
-            )
-            logger.debug(f"Check if description has changed: {should_update}")
-        except Exception:
-            # if exception, assume its not created yet TODO: don't catch all
-            should_update = True
+    logger.debug(f"Updating metadata for `{content_id}`")
 
-    if should_update:
-        if revision_name:
-            content_id = f"{content_id}::{revision_name}"
-
-        logger.debug(f"Updating metadata for `{content_id}`")
-
-        await api_client.alog_metadata(content_id, text, _json)
+    await api_client.alog_metadata(content_id, text, _json)
 
 
 def check_for_sensitive_data(data: pd.DataFrame, inputs: List[VMInput]):
