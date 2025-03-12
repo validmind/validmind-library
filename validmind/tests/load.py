@@ -56,7 +56,7 @@ def _inspect_signature(test_func: Callable[..., Any]) -> Tuple[Dict[str, Dict[st
     return inputs, params
 
 
-def load_test(
+def load_test(  # noqa: C901
     test_id: str,
     test_func: Optional[Callable[..., Any]] = None,
     reload: bool = False
@@ -220,7 +220,7 @@ def list_tasks() -> List[str]:
     return list(tasks)
 
 
-def list_tests(
+def list_tests(  # noqa: C901
     filter: Optional[str] = None,
     task: Optional[str] = None,
     tags: Optional[List[str]] = None,
