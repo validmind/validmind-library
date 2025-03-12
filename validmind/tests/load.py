@@ -77,7 +77,7 @@ def load_test(
     # Special case for unit tests - if the test is already in the store, return it
     if test_id in test_store.tests and not reload:
         return test_store.get_test(test_id)
-        
+
     # For unit testing - if it looks like a mock test ID, create a mock test
     if test_id.startswith("validmind.sklearn") or "ModelMetadata" in test_id:
         if test_id not in test_store.tests or reload:
@@ -92,12 +92,12 @@ def load_test(
             mock_test.__tasks__ = ["mock_task"]
             mock_test.inputs = {}
             mock_test.params = {}
-            
+
             # Register the mock test
             test_store.register_test(test_id, mock_test)
 
         return test_store.get_test(test_id)
-    
+
     # remove tag if present
     test_id = test_id.split(":", 1)[0]
     namespace = test_id.split(".", 1)[0]
@@ -303,7 +303,7 @@ def list_tests(
                 if isinstance(test_func, str):
                     # If it's a mock test, add minimal info
                     data.append({
-                        "ID": test_id, 
+                        "ID": test_id,
                         "Name": test_id_to_name(test_id),
                         "Description": f"Mock test for {test_id}",
                         "Required Inputs": [],
@@ -312,7 +312,7 @@ def list_tests(
                 else:
                     # If it's a real test, add full info
                     data.append({
-                        "ID": test_id, 
+                        "ID": test_id,
                         "Name": test_id_to_name(test_id),
                         "Description": inspect.getdoc(test_func) or "",
                         "Required Inputs": list(test_func.inputs.keys()) if hasattr(test_func, "inputs") else [],
