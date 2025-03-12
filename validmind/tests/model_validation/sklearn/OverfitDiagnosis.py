@@ -73,6 +73,7 @@ def _prepare_results(
         columns={"shape": "training records", f"{metric}": f"training {metric}"},
         inplace=True,
     )
+    results["test records"] = results_test["shape"]
     results[f"test {metric}"] = results_test[metric]
 
     # Adjust gap calculation based on metric directionality
@@ -292,7 +293,8 @@ def OverfitDiagnosis(
                 {
                     "Feature": feature_column,
                     "Slice": row["slice"],
-                    "Number of Records": row["training records"],
+                    "Number of Training Records": row["training records"],
+                    "Number of Test Records": row["test records"],
                     f"Training {metric.upper()}": row[f"training {metric}"],
                     f"Test {metric.upper()}": row[f"test {metric}"],
                     "Gap": row["gap"],
