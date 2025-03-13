@@ -622,7 +622,7 @@ def serialize(obj):
     return obj
 
 
-def is_text_column(series, threshold=0.05):
+def is_text_column(series, threshold=0.05) -> bool:
     """
     Determines if a series is likely to contain text data using heuristics.
 
@@ -729,7 +729,7 @@ def _get_text_type_detail(series):
         return {"type": "Categorical", "subtype": "Nominal"}
 
 
-def get_column_type_detail(df, column):
+def get_column_type_detail(df, column) -> dict:
     """
     Get detailed column type information beyond basic type detection.
     Similar to ydata-profiling's type system.
@@ -768,7 +768,7 @@ def get_column_type_detail(df, column):
     return result
 
 
-def infer_datatypes(df, detailed=False):
+def infer_datatypes(df, detailed=False) -> list:
     """
     Infer data types for columns in a DataFrame.
 
