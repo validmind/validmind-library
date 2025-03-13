@@ -37,11 +37,11 @@ class TestTestsModule(TestCase):
 
     def test_list_tasks_and_tags(self):
         tasks_and_tags = list_tasks_and_tags()
-        self.assertIsInstance(tasks_and_tags, pd.io.formats.style.Styler)
-        df = tasks_and_tags.data
-        self.assertTrue(len(df) > 0)
-        self.assertTrue(all(isinstance(task, str) for task in df["Task"]))
-        self.assertTrue(all(isinstance(tag, str) for tag in df["Tags"]))
+        # The function returns a DataFrame directly, not a Styler
+        self.assertIsInstance(tasks_and_tags, pd.DataFrame)
+        self.assertTrue(len(tasks_and_tags) > 0)
+        self.assertTrue(all(isinstance(task, str) for task in tasks_and_tags["Task"]))
+        self.assertTrue(all(isinstance(tag, str) for tag in tasks_and_tags["Tags"]))
 
     def test_list_tests(self):
         tests = list_tests(pretty=False)
