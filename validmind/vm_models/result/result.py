@@ -19,6 +19,7 @@ from ipywidgets import HTML, VBox
 
 from ... import api_client
 from ...ai.utils import DescriptionFuture
+from ...errors import InvalidParameterError
 from ...logging import get_logger
 from ...utils import (
     HumanReadableEncoder,
@@ -423,9 +424,16 @@ class TestResult(Result):
         }
 
     async def log_async(
-        self, section_id: str = None, position: int = None, unsafe: bool = False
+        self,
+        section_id: str = None,
+        position: int = None,
+        unsafe: bool = False,
+        config: Dict[str, bool] = None,
     ):
         tasks = []  # collect tasks to run in parallel (async)
+
+        # Default empty dict if None
+        config = config or {}
 
         if self.metric is not None:
             # metrics are logged as separate entities
@@ -439,11 +447,22 @@ class TestResult(Result):
             )
 
         if self.tables or self.figures:
+            # # Include config in the serialized result instead of as a separate parameter
+            # result_data = self.serialize()
+            # if config:
+            #     # Add config to metadata if it exists, or create metadata
+            #     if "metadata" not in result_data or result_data["metadata"] is None:
+            #         result_data["metadata"] = {}
+            #     result_data["metadata"]["display_config"] = config
+
             tasks.append(
                 api_client.alog_test_result(
+                    # result=result_data,
                     result=self.serialize(),
                     section_id=section_id,
                     position=position,
+                    unsafe=unsafe,
+                    config=config,
                 )
             )
 
@@ -467,7 +486,13 @@ class TestResult(Result):
 
         return await asyncio.gather(*tasks)
 
-    def log(self, section_id: str = None, position: int = None, unsafe: bool = False):
+    def log(
+        self,
+        section_id: str = None,
+        position: int = None,
+        unsafe: bool = False,
+        config: Dict[str, bool] = None,
+    ):
         """Log the result to ValidMind
 
         Args:
@@ -477,7 +502,16 @@ class TestResult(Result):
                 result
             unsafe (bool): If True, log the result even if it contains sensitive data
                 i.e. raw data from input datasets
+            config (Dict[str, bool]): Configuration options for displaying the test result.
+                Available config options:
+                - hideTitle: Hide the title in the document view
+                - hideText: Hide the description text in the document view
+                - hideParams: Hide the parameters in the document view
+                - hideTables: Hide tables in the document view
+                - hideFigures: Hide figures in the document view
         """
+        if config:
+            self.validate_log_config(config)
 
         self.check_result_id_exist()
 
@@ -488,4 +522,42 @@ class TestResult(Result):
         if section_id:
             self._validate_section_id_for_block(section_id, position)
 
-        run_async(self.log_async, section_id=section_id, position=position)
+        run_async(
+            self.log_async,
+            section_id=section_id,
+            position=position,
+            unsafe=unsafe,
+            config=config,
+        )
+
+    def validate_log_config(self, config: Dict[str, bool]):
+        """Validate the configuration options for logging a test result
+
+        Args:
+            config (Dict[str, bool]): Configuration options to validate
+
+        Raises:
+            InvalidParameterError: If config contains invalid keys or non-boolean values
+        """
+        valid_keys = {
+            "hideTitle",
+            "hideText",
+            "hideParams",
+            "hideTables",
+            "hideFigures",
+        }
+        invalid_keys = set(config.keys()) - valid_keys
+        if invalid_keys:
+            raise InvalidParameterError(
+                f"Invalid config keys: {', '.join(invalid_keys)}. "
+                f"Valid keys are: {', '.join(valid_keys)}"
+            )
+
+        # Ensure all values are boolean
+        non_bool_keys = [
+            key for key, value in config.items() if not isinstance(value, bool)
+        ]
+        if non_bool_keys:
+            raise InvalidParameterError(
+                f"Values for config keys must be boolean. Non-boolean values found for keys: {', '.join(non_bool_keys)}"
+            )

@@ -330,6 +330,8 @@ async def alog_test_result(
     result: Dict[str, Any],
     section_id: str = None,
     position: int = None,
+    unsafe: bool = False,
+    config: Dict[str, bool] = None,
 ) -> Dict[str, Any]:
     """Logs test results information
 
@@ -357,7 +359,7 @@ async def alog_test_result(
             "log_test_results",
             params=request_params,
             data=json.dumps(
-                result,
+                {**result, "config": config},
                 cls=NumpyEncoder,
                 allow_nan=False,
             ),
