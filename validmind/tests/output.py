@@ -77,11 +77,11 @@ class FigureOutputHandler(OutputHandler):
 
 class TableOutputHandler(OutputHandler):
     def can_handle(self, item: Any) -> bool:
-        return isinstance(item, (list, pd.DataFrame, dict, ResultTable))
+        return isinstance(item, (list, pd.DataFrame, dict, ResultTable, str, tuple))
 
     def process(
         self,
-        item: Union[List[Dict[str, Any]], pd.DataFrame, Dict[str, Any], ResultTable],
+        item: Union[List[Dict[str, Any]], pd.DataFrame, Dict[str, Any], ResultTable, str, tuple],
         result: TestResult,
     ) -> None:
         tables = item if isinstance(item, dict) else {"": item}
@@ -93,12 +93,41 @@ class TableOutputHandler(OutputHandler):
                 continue
 
             if not isinstance(table_data, (list, pd.DataFrame)):
-                raise ValueError(
-                    "Invalid table format: must be a list of dictionaries or a DataFrame"
-                )
+                # Try to convert to a valid format if possible
+                if isinstance(table_data, dict):
+                    # Convert dict to a single-row DataFrame
+                    table_data = pd.DataFrame([table_data])
+                elif isinstance(table_data, str):
+                    # Convert string to a single-cell DataFrame
+                    table_data = pd.DataFrame({'Value': [table_data]})
+                elif isinstance(table_data, tuple):
+                    # Convert tuple to a list, which will be converted to a DataFrame later
+                    table_data = list(table_data)
+                elif table_data is None:
+                    # Skip None values
+                    continue
+                else:
+                    # If conversion isn't possible, raise a more detailed error
+                    raise ValueError(
+                        f"Invalid table format: must be a list of dictionaries or a DataFrame, got {type(table_data)}"
+                    )
 
             if isinstance(table_data, list):
-                table_data = pd.DataFrame(table_data)
+                if len(table_data) > 0:
+                    # Try to convert to DataFrame, handling potential conversion errors
+                    try:
+                        table_data = pd.DataFrame(table_data)
+                    except Exception as e:
+                        # If conversion fails, try to handle common cases
+                        if all(isinstance(item, (int, float, str, bool, type(None))) for item in table_data):
+                            # For simple types, create a single column DataFrame
+                            table_data = pd.DataFrame({'Values': table_data})
+                        else:
+                            # If we can't handle it, raise a more informative error
+                            raise ValueError(f"Could not convert list to DataFrame: {e}")
+                else:
+                    # Handle empty list case
+                    table_data = pd.DataFrame()
 
             result.add_table(ResultTable(data=table_data, title=table_name or None))
 
