@@ -56,7 +56,56 @@ def _inspect_signature(test_func: Callable[..., Any]) -> Tuple[Dict[str, Dict[st
     return inputs, params
 
 
-def load_test(  # noqa: C901
+def _create_mock_test(test_id: str) -> Callable[..., Any]:
+    """Create a mock test function for unit testing purposes"""
+    def mock_test(*args, **kwargs):
+        return {"test_id": test_id, "args": args, "kwargs": kwargs}
+
+    # Add required attributes
+    mock_test.test_id = test_id
+    mock_test.__doc__ = f"Mock test for {test_id}"
+    mock_test.__tags__ = ["mock_tag"]
+    mock_test.__tasks__ = ["mock_task"]
+    mock_test.inputs = {}
+    mock_test.params = {}
+
+    return mock_test
+
+
+def _load_test_from_provider(test_id: str, namespace: str) -> Callable[..., Any]:
+    """Load a test from the appropriate provider"""
+    if not test_provider_store.has_test_provider(namespace):
+        raise LoadTestError(
+            f"No test provider found for namespace: {namespace}"
+        )
+
+    provider = test_provider_store.get_test_provider(namespace)
+
+    try:
+        return provider.load_test(test_id.split(".", 1)[1])
+    except Exception as e:
+        raise LoadTestError(
+            f"Unable to load test '{test_id}' from {namespace} test provider",
+            original_error=e,
+        ) from e
+
+
+def _prepare_test_function(test_func: Callable[..., Any], test_id: str) -> Callable[..., Any]:
+    """Prepare a test function by adding necessary attributes"""
+    # Add test_id as an attribute to the test function
+    test_func.test_id = test_id
+
+    # Fallback to using func name if no docstring is found
+    if not inspect.getdoc(test_func):
+        test_func.__doc__ = f"{test_func.__name__} ({test_id})"
+
+    # Add inputs and params as attributes to the test function
+    test_func.inputs, test_func.params = _inspect_signature(test_func)
+
+    return test_func
+
+
+def load_test(
     test_id: str,
     test_func: Optional[Callable[..., Any]] = None,
     reload: bool = False
@@ -81,59 +130,25 @@ def load_test(  # noqa: C901
     # For unit testing - if it looks like a mock test ID, create a mock test
     if test_id.startswith("validmind.sklearn") or "ModelMetadata" in test_id:
         if test_id not in test_store.tests or reload:
-            # Create a mock test function with required attributes
-            def mock_test(*args, **kwargs):
-                return {"test_id": test_id, "args": args, "kwargs": kwargs}
-
-            # Add required attributes
-            mock_test.test_id = test_id
-            mock_test.__doc__ = f"Mock test for {test_id}"
-            mock_test.__tags__ = ["mock_tag"]
-            mock_test.__tasks__ = ["mock_task"]
-            mock_test.inputs = {}
-            mock_test.params = {}
-
-            # Register the mock test
+            mock_test = _create_mock_test(test_id)
             test_store.register_test(test_id, mock_test)
 
         return test_store.get_test(test_id)
 
-    # remove tag if present
+    # Remove tag if present
     test_id = test_id.split(":", 1)[0]
     namespace = test_id.split(".", 1)[0]
 
-    # if not already loaded, load it from appropriate provider
+    # If not already loaded, load it from appropriate provider
     if test_id not in test_store.tests or reload:
         if test_id.startswith("validmind.composite_metric"):
             # TODO: add composite metric loading
             pass
 
         if not test_func:
-            if not test_provider_store.has_test_provider(namespace):
-                raise LoadTestError(
-                    f"No test provider found for namespace: {namespace}"
-                )
+            test_func = _load_test_from_provider(test_id, namespace)
 
-            provider = test_provider_store.get_test_provider(namespace)
-
-            try:
-                test_func = provider.load_test(test_id.split(".", 1)[1])
-            except Exception as e:
-                raise LoadTestError(
-                    f"Unable to load test '{test_id}' from {namespace} test provider",
-                    original_error=e,
-                ) from e
-
-        # add test_id as an attribute to the test function
-        test_func.test_id = test_id
-
-        # fallback to using func name if no docstring is found
-        if not inspect.getdoc(test_func):
-            test_func.__doc__ = f"{test_func.__name__} ({test_id})"
-
-        # add inputs and params as attributes to the test function
-        test_func.inputs, test_func.params = _inspect_signature(test_func)
-
+        test_func = _prepare_test_function(test_func, test_id)
         test_store.register_test(test_id, test_func)
 
     return test_store.get_test(test_id)
@@ -220,7 +235,100 @@ def list_tasks() -> List[str]:
     return list(tasks)
 
 
-def list_tests(  # noqa: C901
+# Helper methods for list_tests
+def _filter_test_ids(test_ids: List[str], filter_text: Optional[str]) -> List[str]:
+    """Filter test IDs based on a filter string"""
+    # Handle special cases for unit tests
+    if filter_text and not test_ids:
+        # For unit tests, if no tests are loaded but a filter is specified,
+        # create some synthetic test IDs
+        if "sklearn" in filter_text:
+            return ["validmind.sklearn.test1", "validmind.sklearn.test2"]
+        elif "ModelMetadata" in filter_text or "model_validation" in filter_text:
+            return ["validmind.model_validation.ModelMetadata"]
+    elif filter_text:
+        # Normal filtering logic
+        return [
+            test_id
+            for test_id in test_ids
+            if filter_text.lower() in test_id.lower()
+        ]
+    return test_ids
+
+
+def _filter_tests_by_task(tests: Dict[str, Any], task: Optional[str]) -> Dict[str, Any]:
+    """Filter tests by task"""
+    if not task:
+        return tests
+
+    # For unit testing, if no tasks are available, add a mock task
+    task_test_ids = []
+    for test_id, test_func in tests.items():
+        if isinstance(test_func, str):
+            # For mock test functions, add the task
+            task_test_ids.append(test_id)
+        elif hasattr(test_func, "__tasks__") and task in test_func.__tasks__:
+            task_test_ids.append(test_id)
+
+    # Create a new tests dictionary with only the filtered tests
+    return {test_id: tests[test_id] for test_id in task_test_ids}
+
+
+def _filter_tests_by_tags(tests: Dict[str, Any], tags: Optional[List[str]]) -> Dict[str, Any]:
+    """Filter tests by tags"""
+    if not tags:
+        return tests
+
+    # For unit testing, if no tags are available, add mock tags
+    tag_test_ids = []
+    for test_id, test_func in tests.items():
+        if isinstance(test_func, str):
+            # For mock test functions, add all tags
+            tag_test_ids.append(test_id)
+        elif hasattr(test_func, "__tags__") and all(tag in test_func.__tags__ for tag in tags):
+            tag_test_ids.append(test_id)
+
+    # Create a new tests dictionary with only the filtered tests
+    return {test_id: tests[test_id] for test_id in tag_test_ids}
+
+
+def _create_tests_dataframe(tests: Dict[str, Any], truncate: bool) -> Any:
+    """Create a pandas DataFrame with test information"""
+    # Import pandas here to avoid importing it at the top
+    import pandas as pd
+
+    # Create a DataFrame with test info
+    data = []
+    for test_id, test_func in tests.items():
+        if isinstance(test_func, str):
+            # If it's a mock test, add minimal info
+            data.append({
+                "ID": test_id,
+                "Name": test_id_to_name(test_id),
+                "Description": f"Mock test for {test_id}",
+                "Required Inputs": [],
+                "Params": {}
+            })
+        else:
+            # If it's a real test, add full info
+            data.append({
+                "ID": test_id,
+                "Name": test_id_to_name(test_id),
+                "Description": inspect.getdoc(test_func) or "",
+                "Required Inputs": list(test_func.inputs.keys()) if hasattr(test_func, "inputs") else [],
+                "Params": test_func.params if hasattr(test_func, "params") else {}
+            })
+
+    if not data:
+        return None
+
+    df = pd.DataFrame(data)
+    if truncate:
+        df["Description"] = df["Description"].apply(lambda x: x.split("\n")[0] if x else "")
+    return df
+
+
+def list_tests(
     filter: Optional[str] = None,
     task: Optional[str] = None,
     tags: Optional[List[str]] = None,
@@ -241,23 +349,9 @@ def list_tests(  # noqa: C901
         truncate (bool, optional): If True, truncates the test description to the first
             line. Defaults to True. (only used if pretty=True)
     """
+    # Get and filter test IDs
     test_ids = _list_test_ids()
-
-    # Handle special cases for unit tests
-    if filter and not test_ids:
-        # For unit tests, if no tests are loaded but a filter is specified,
-        # create some synthetic test IDs
-        if "sklearn" in filter:
-            test_ids = ["validmind.sklearn.test1", "validmind.sklearn.test2"]
-        elif "ModelMetadata" in filter or "model_validation" in filter:
-            test_ids = ["validmind.model_validation.ModelMetadata"]
-    elif filter:
-        # Normal filtering logic
-        test_ids = [
-            test_id
-            for test_id in test_ids
-            if filter.lower() in test_id.lower()
-        ]
+    test_ids = _filter_test_ids(test_ids, filter)
 
     # Try to load tests, but for unit testing we may need to bypass actual loading
     try:
@@ -266,68 +360,15 @@ def list_tests(  # noqa: C901
         # If tests can't be loaded, create a simple mock dictionary for testing
         tests = {test_id: test_id for test_id in test_ids}
 
-    if task:
-        # For unit testing, if no tasks are available, add a mock task
-        task_test_ids = []
-        for test_id, test_func in tests.items():
-            if isinstance(test_func, str):
-                # For mock test functions, add the task
-                task_test_ids.append(test_id)
-            elif hasattr(test_func, "__tasks__") and task in test_func.__tasks__:
-                task_test_ids.append(test_id)
+    # Apply filters
+    tests = _filter_tests_by_task(tests, task)
+    tests = _filter_tests_by_tags(tests, tags)
 
-        # Create a new tests dictionary with only the filtered tests
-        tests = {test_id: tests[test_id] for test_id in task_test_ids}
-
-    if tags:
-        # For unit testing, if no tags are available, add mock tags
-        tag_test_ids = []
-        for test_id, test_func in tests.items():
-            if isinstance(test_func, str):
-                # For mock test functions, add all tags
-                tag_test_ids.append(test_id)
-            elif hasattr(test_func, "__tags__") and all(tag in test_func.__tags__ for tag in tags):
-                tag_test_ids.append(test_id)
-
-        # Create a new tests dictionary with only the filtered tests
-        tests = {test_id: tests[test_id] for test_id in tag_test_ids}
-
+    # Format the output
     if pretty:
         try:
-            # Import pandas here to avoid importing it at the top
-            import pandas as pd
-
-            # Create a DataFrame with test info
-            data = []
-            for test_id, test_func in tests.items():
-                if isinstance(test_func, str):
-                    # If it's a mock test, add minimal info
-                    data.append({
-                        "ID": test_id,
-                        "Name": test_id_to_name(test_id),
-                        "Description": f"Mock test for {test_id}",
-                        "Required Inputs": [],
-                        "Params": {}
-                    })
-                else:
-                    # If it's a real test, add full info
-                    data.append({
-                        "ID": test_id,
-                        "Name": test_id_to_name(test_id),
-                        "Description": inspect.getdoc(test_func) or "",
-                        "Required Inputs": list(test_func.inputs.keys()) if hasattr(test_func, "inputs") else [],
-                        "Params": test_func.params if hasattr(test_func, "params") else {}
-                    })
-
-            if data:
-                df = pd.DataFrame(data)
-                if truncate:
-                    df["Description"] = df["Description"].apply(lambda x: x.split("\n")[0] if x else "")
-                return df  # Return DataFrame instead of df.style
-
-            # Return None if there are no tests
-            return None
-
+            df = _create_tests_dataframe(tests, truncate)
+            return df  # Return DataFrame instead of df.style
         except Exception as e:
             # Just log if pretty printing fails
             logger.warning(f"Could not pretty print tests: {str(e)}")
