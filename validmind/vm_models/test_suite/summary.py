@@ -16,6 +16,7 @@ logger = get_logger(__name__)
 
 
 def id_to_name(id: str) -> str:
+    """Convert an ID to a human-readable name."""
     # replace underscores, hyphens etc with spaces
     name = id.replace("_", " ").replace("-", " ").replace(".", " ")
     # capitalize each word
@@ -26,6 +27,8 @@ def id_to_name(id: str) -> str:
 
 @dataclass
 class TestSuiteSectionSummary:
+    """Represents a summary of a test suite section."""
+
     tests: List[TestSuiteTest]
     description: Optional[str] = None
 
@@ -35,6 +38,7 @@ class TestSuiteSectionSummary:
         self._build_summary()
 
     def _add_description(self):
+        """Add the section description to the summary."""
         if not self.description:
             return
 
@@ -45,6 +49,7 @@ class TestSuiteSectionSummary:
         )
 
     def _add_tests_summary(self):
+        """Add the test results summary."""
         children = []
         titles = []
 
@@ -59,6 +64,7 @@ class TestSuiteSectionSummary:
         self._widgets.append(widgets.Accordion(children=children, titles=titles))
 
     def _build_summary(self):
+        """Build the complete summary."""
         self._widgets = []
 
         if self.description:
@@ -69,11 +75,14 @@ class TestSuiteSectionSummary:
         self.summary = widgets.VBox(self._widgets)
 
     def display(self):
+        """Display the summary."""
         display(self.summary)
 
 
 @dataclass
 class TestSuiteSummary:
+    """Represents a summary of a complete test suite."""
+
     title: str
     description: str
     sections: List[TestSuiteSection]
@@ -82,9 +91,11 @@ class TestSuiteSummary:
     _widgets: List[widgets.Widget] = None
 
     def __post_init__(self):
+        """Initialize the summary after the dataclass is created."""
         self._build_summary()
 
     def _add_title(self):
+        """Add the title to the summary."""
         title = f"""
         <h2>Test Suite Results: <i style="color: #DE257E">{self.title}</i></h2><hr>
         """.strip()
@@ -92,6 +103,7 @@ class TestSuiteSummary:
         self._widgets.append(widgets.HTML(value=title))
 
     def _add_results_link(self):
+        """Add a link to documentation on ValidMind."""
         # avoid circular import
         from ...api_client import get_api_host, get_api_model
 
@@ -99,14 +111,15 @@ class TestSuiteSummary:
         link = f"{ui_host}model-inventory/{get_api_model()}"
         results_link = f"""
         <h3>
-            Check out the updated documentation in your
-            <a href="{link}" target="_blank">ValidMind project</a>.
+            Check out the updated documentation on
+            <a href="{link}" target="_blank">ValidMind</a>.
         </h3>
         """.strip()
 
         self._widgets.append(widgets.HTML(value=results_link))
 
     def _add_description(self):
+        """Add the test suite description to the summary."""
         self._widgets.append(
             widgets.HTML(
                 value=f'<div class="result">{md_to_html(self.description)}</div>'
@@ -114,6 +127,7 @@ class TestSuiteSummary:
         )
 
     def _add_sections_summary(self):
+        """Append the section summary."""
         children = []
         titles = []
 
@@ -132,11 +146,13 @@ class TestSuiteSummary:
         self._widgets.append(widgets.Accordion(children=children, titles=titles))
 
     def _add_top_level_section_summary(self):
+        """Add the top-level section summary."""
         self._widgets.append(
             TestSuiteSectionSummary(tests=self.sections[0].tests).summary
         )
 
     def _add_footer(self):
+        """Add the footer."""
         footer = """
         <style>
             .result {
@@ -152,6 +168,7 @@ class TestSuiteSummary:
         self._widgets.append(widgets.HTML(value=footer))
 
     def _build_summary(self):
+        """Build the complete summary."""
         self._widgets = []
 
         self._add_title()
@@ -166,4 +183,5 @@ class TestSuiteSummary:
         self.summary = widgets.VBox(self._widgets)
 
     def display(self):
+        """Display the summary."""
         display(self.summary)

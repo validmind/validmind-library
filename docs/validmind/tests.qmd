@@ -1,0 +1,438 @@
+---
+title: "[validmind](/validmind/validmind.qmd).tests"
+sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
+# module.qmd.jinja2
+---
+
+<!-- docstring.jinja2 -->
+
+ValidMind Tests Module
+
+- [data_validation](tests/data_validation.qmd)
+- [model_validation](tests/model_validation.qmd)
+- [prompt_validation](tests/prompt_validation.qmd)
+
+## list_tests<span class="suffix"></span>
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">list_tests</span>(<span class="params"><span class="n">filter</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">task</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">tags</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">List</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">pretty</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="muted">,</span></span><span class="params"><span class="n">truncate</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">Union</span><span class="p">\[</span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Callable</span><span class="p">\[</span><span class="n">...</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span><span class="p">, </span><span class="n">None</span><span class="p">\]</span></span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+List all available tests with optional filtering
+
+## load_test<span class="suffix"></span>
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">load_test</span>(<span class="params"><span class="n">test_id</span><span class="p">:</span><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">test_func</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">Callable</span><span class="p">\[</span><span class="n">...</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">reload</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">Callable</span><span class="p">\[</span><span class="n">...</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span></span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Load a test by test ID
+
+Test IDs are in the format `namespace.path_to_module.TestClassOrFuncName[:tag]`. The tag is optional and is used to distinguish between multiple results from the same test.
+
+**Arguments**
+
+- `test_id (str)`: The test ID in the format `namespace.path_to_module.TestName[:tag]`
+- `test_func (callable, optional)`: The test function to load. If not provided, the test will be loaded from the test provider. Defaults to None.
+
+## describe_test<span class="suffix"></span>
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">describe_test</span>(<span class="params"><span class="n">test_id</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">TestID</span><span class="p"> (Union of </span><a href="/validmind/validmind/tests/data_validation.qmd">validmind.data_validation.\*</a><span class="p">, </span><a href="/validmind/validmind/tests/model_validation.qmd">validmind.model_validation.\*</a><span class="p">, </span><a href="/validmind/validmind/tests/prompt_validation.qmd">validmind.prompt_validation.\*</a><span class="p"> and </span><span class="nb">str</span><span class="p">)</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">raw</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">show</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">Union</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">HTML</span><span class="p">, </span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span></span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Describe a test's functionality and parameters
+
+## run_test<span class="suffix"></span>
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">run_test</span>(<span class="params"><span class="n">test_id</span><span class="p">:</span><span class="n">Union</span><span class="p">\[</span><span class="n">TestID</span><span class="p"> (Union of </span><a href="/validmind/validmind/tests/data_validation.qmd">validmind.data_validation.\*</a><span class="p">, </span><a href="/validmind/validmind/tests/model_validation.qmd">validmind.model_validation.\*</a><span class="p">, </span><a href="/validmind/validmind/tests/prompt_validation.qmd">validmind.prompt_validation.\*</a><span class="p"> and </span><span class="nb">str</span><span class="p">)</span><span class="p">, </span><span class="n">None</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">name</span><span class="p">:</span><span class="n">Union</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">None</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">unit_metrics</span><span class="p">:</span><span class="n">Union</span><span class="p">\[</span><span class="n">List</span><span class="p">\[</span><span class="n">TestID</span><span class="p"> (Unit metrics from </span><a href="/validmind/validmind/unit_metrics.qmd">validmind.unit_metrics.\*</a><span class="p">)</span><span class="p">\]</span><span class="p">, </span><span class="n">None</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">inputs</span><span class="p">:</span><span class="n">Union</span><span class="p">\[</span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span><span class="p">, </span><span class="n">None</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">input_grid</span><span class="p">:</span><span class="n">Union</span><span class="p">\[</span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">List</span><span class="p">\[</span><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span><span class="p">, </span><span class="n">List</span><span class="p">\[</span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span><span class="p">, </span><span class="n">None</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">params</span><span class="p">:</span><span class="n">Union</span><span class="p">\[</span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span><span class="p">, </span><span class="n">None</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">param_grid</span><span class="p">:</span><span class="n">Union</span><span class="p">\[</span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">List</span><span class="p">\[</span><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span><span class="p">, </span><span class="n">List</span><span class="p">\[</span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span><span class="p">, </span><span class="n">None</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">show</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="muted">,</span></span><span class="params"><span class="n">generate_description</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="muted">,</span></span><span class="params"><span class="n">title</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">post_process_fn</span><span class="p">:</span><span class="n">Union</span><span class="p">\[</span><span class="n">Callable</span><span class="p">\[</span><span class="p">\[</span><a href="/validmind/validmind/vm_models.qmd#testresult">validmind.vm_models.TestResult</a><span class="p">\]</span><span class="p">, </span><span class="n">None</span><span class="p">\]</span><span class="p">, </span><span class="n">None</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/validmind/validmind/vm_models.qmd#testresult">validmind.vm_models.TestResult</a></span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Run a ValidMind or custom test
+
+This function is the main entry point for running tests. It can run simple unit metrics, ValidMind and custom tests, composite tests made up of multiple unit metrics and comparison tests made up of multiple tests.
+
+**Arguments**
+
+- `test_id (TestID)`: Test ID to run. Not required if `name` and `unit_metrics` provided.
+- `params (dict)`: Parameters to customize test behavior. See test details for available parameters.
+- `param_grid (Union[Dict[str, List[Any]], List[Dict[str, Any]]])`: For comparison tests, either:
+- Dict mapping parameter names to lists of values (creates Cartesian product)
+- List of parameter dictionaries to test
+- `inputs (Dict[str, Any])`: Test inputs (models/datasets initialized with vm.init_model/dataset)
+- `input_grid (Union[Dict[str, List[Any]], List[Dict[str, Any]]])`: For comparison tests, either:
+- Dict mapping input names to lists of values (creates Cartesian product)
+- List of input dictionaries to test
+- `name (str)`: Test name (required for composite metrics)
+- `unit_metrics (list)`: Unit metric IDs to run as composite metric
+- `show (bool, optional)`: Whether to display results. Defaults to True.
+- `generate_description (bool, optional)`: Whether to generate a description. Defaults to True.
+- `title (str)`: Custom title for the test result
+- `post_process_fn (Callable[[TestResult], None])`: Function to post-process the test result
+
+**Returns**
+
+- A TestResult object containing the test results
+
+**Raises**
+
+- `ValueError`: If the test inputs are invalid
+- `LoadTestError`: If the test class fails to load
+
+## list_tags<span class="suffix"></span>
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">list_tags</span>()<span class="p"> → </span><span class="return-annotation"><span class="nb">Set</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span></span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+List all available tags
+
+## list_tasks<span class="suffix"></span>
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">list_tasks</span>()<span class="p"> → </span><span class="return-annotation"><span class="nb">Set</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span></span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+List all available tasks
+
+## list_tasks_and_tags<span class="suffix"></span>
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">list_tasks_and_tags</span>(<span class="param"><span class="n">as_json</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">Union</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">List</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="p">\]</span><span class="p">\]</span></span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+List all available tasks and tags
+
+## test<span class="suffix"></span>
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">test</span>(<span class="param"><span class="n">func_or_id</span><span class="p">:</span><span class="n">Union</span><span class="p">\[</span><span class="n">Callable</span><span class="p">\[</span><span class="n">...</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span><span class="p">, </span><span class="nb">str</span><span class="p">, </span><span class="n">None</span><span class="p">\]</span></span>):
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Decorator for creating and registering custom tests
+
+This decorator registers the function it wraps as a test function within ValidMind under the provided ID. Once decorated, the function can be run using the `validmind.tests.run_test` function.
+
+The function can take two different types of arguments:
+
+- Inputs: ValidMind model or dataset (or list of models/datasets). These arguments must use the following names: `model`, `models`, `dataset`, `datasets`.
+- Parameters: Any additional keyword arguments of any type (must have a default value) that can have any name.
+
+The function should return one of the following types:
+
+- Table: Either a list of dictionaries or a pandas DataFrame
+- Plot: Either a matplotlib figure or a plotly figure
+- Scalar: A single number (int or float)
+- Boolean: A single boolean value indicating whether the test passed or failed
+
+The function may also include a docstring. This docstring will be used and logged as the metric's description.
+
+**Arguments**
+
+- `func_or_id (Union[Callable[..., Any], str, None])`: Either the function to decorate or the test ID. If None, the function name is used.
+
+**Returns**
+
+- The decorated function.
+
+## tags<span class="suffix"></span>
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">tags</span>(<span class="param"><span class="n">\*tags</span><span class="p">:</span><span class="nb">str</span></span>):
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Decorator for specifying tags for a test.
+
+**Arguments**
+
+- `*tags`: The tags to apply to the test.
+
+## tasks<span class="suffix"></span>
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">tasks</span>(<span class="param"><span class="n">\*tasks</span><span class="p">:</span><span class="nb">str</span></span>):
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Decorator for specifying the task types that a test is designed for.
+
+**Arguments**
+
+- `*tasks`: The task types that the test is designed for.
+
+<!-- function.qmd.jinja2 -->
+
+## register_test_provider<span class="suffix"></span>
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">register_test_provider</span>(<span class="params"><span class="n">namespace</span><span class="p">:</span><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">test_provider</span><span class="p">:</span><a href="/validmind/validmind/vm_models.qmd#testprovider">validmind.vm_models.TestProvider</a></span>):
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Register an external test provider
+
+**Arguments**
+
+- `namespace (str)`: The namespace of the test provider
+- `test_provider (TestProvider)`: The test provider
+
+<!-- class.qmd.jinja2 -->
+
+## <span class="prefix"></span> LoadTestError
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">LoadTestError</span>(<span class="base">BaseError</span>):
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Exception raised when an error occurs while loading a test.
+
+**Inherited members**
+
+- **From BaseError**: [class BaseError<span class="suffix"></span>](#baseerror), [description<span class="suffix"></span>](#description)
+- **From builtins.BaseException**: with_traceback, add_note
+
+### LoadTestError<span class="suffix"></span>
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="name">LoadTestError</span>(<span class="params"><span class="n">message</span><span class="p">:</span><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">original_error</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><a href="/validmind/validmind/vm_models.qmd#exception">validmind.vm_models.Exception</a><span class="p">\]</span><span class="o">=</span><span class="kc">None</span></span>)
+
+:::
+
+<!-- class.qmd.jinja2 -->
+
+## <span class="prefix"></span> LocalTestProvider
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">LocalTestProvider</span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Test providers in ValidMind are responsible for loading tests from different sources, such as local files, databases, or remote services. The LocalTestProvider specifically loads tests from the local file system.
+
+To use the LocalTestProvider, you need to provide the root_folder, which is the root directory for local tests. The test_id is a combination of the namespace (set when registering the test provider) and the path to the test class module, where slashes are replaced by dots and the .py extension is left out.
+
+Example usage:
+
+```
+# Create an instance of LocalTestProvider with the root folder
+test_provider = LocalTestProvider("/path/to/tests/folder")
+
+# Register the test provider with a namespace
+register_test_provider("my_namespace", test_provider)
+
+# List all tests in the namespace (returns a list of test IDs)
+test_provider.list_tests()
+# this is used by the validmind.tests.list_tests() function to aggregate all tests
+# from all test providers
+
+# Load a test using the test_id (namespace + path to test class module)
+test = test_provider.load_test("my_namespace.my_test_class")
+# full path to the test class module is /path/to/tests/folder/my_test_class.py
+```
+
+**Arguments**
+
+- `root_folder (str)`: The root directory for local tests.
+
+### LocalTestProvider<span class="suffix"></span>
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="name">LocalTestProvider</span>(<span class="param"><span class="n">root_folder</span><span class="p">:</span><span class="nb">str</span></span>)
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Initialize the LocalTestProvider with the given root_folder (see class docstring for details)
+
+**Arguments**
+
+- `root_folder (str)`: The root directory for local tests.
+
+### list_tests<span class="suffix"></span>
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">list_tests</span>(<span class="param"><span class="bp">self</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">List</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span></span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+List all tests in the given namespace
+
+**Returns**
+
+- A list of test IDs
+
+### load_test<span class="suffix"></span>
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">load_test</span>(<span class="param"><span class="bp">self</span><span class="muted">,</span></span><span class="param"><span class="n">test_id</span><span class="p">:</span><span class="nb">str</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">Callable</span><span class="p">\[</span><span class="n">...</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span></span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Load the test function identified by the given test_id
+
+**Arguments**
+
+- `test_id (str)`: The test ID (does not contain the namespace under which the test is registered)
+
+**Returns**
+
+- The test function
+
+**Raises**
+
+- `FileNotFoundError`: If the test is not found
+
+<!-- class.qmd.jinja2 -->
+
+## <span class="prefix"></span> TestProvider
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">TestProvider</span>(<span class="base">Protocol</span>):
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Protocol for user-defined test providers
+
+### list_tests<span class="suffix"></span>
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">list_tests</span>(<span class="param"><span class="bp">self</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">List</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span></span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+List all tests in the given namespace
+
+**Returns**
+
+- A list of test IDs
+
+### load_test<span class="suffix"></span>
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">load_test</span>(<span class="param"><span class="bp">self</span><span class="muted">,</span></span><span class="param"><span class="n">test_id</span><span class="p">:</span><span class="nb">str</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="nb">callable</span></span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Load the test function identified by the given test_id
+
+**Arguments**
+
+- `test_id (str)`: The test ID (does not contain the namespace under which the test is registered)
+
+**Returns**
+
+- The test function
+
+**Raises**
+
+- `FileNotFoundError`: If the test is not found

@@ -1,0 +1,20 @@
+{%- from 'macros/types.jinja2' import format_type -%}
+
+{%- macro render_decorators(member) -%}
+{%- if member.decorators -%}
+<span class="decorators">
+{%- for decorator in member.decorators -%}
+<span class="decorator">
+{%- if decorator is mapping -%}
+@{{ format_type(decorator.value) | replace('@', '') }}
+{%- else -%}
+{%- if not decorator.startswith('@') -%}@{%- endif -%}{{ decorator | replace('@', '') }}
+{%- endif -%}
+</span>
+{% if not loop.last %}
+{{ '\n' }}
+{% endif %}
+{%- endfor -%}
+</span>
+{%+ endif +%}
+{%+ endmacro +%} 

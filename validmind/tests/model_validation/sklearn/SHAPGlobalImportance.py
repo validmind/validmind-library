@@ -4,10 +4,12 @@
 
 import warnings
 from warnings import filters as _warnings_filters
+from typing import Dict, List, Optional, Union
 
 import matplotlib.pyplot as plt
 import numpy as np
 import shap
+import pandas as pd
 
 from validmind import RawData, tags, tasks
 from validmind.errors import UnsupportedModelForSHAPError
@@ -18,7 +20,10 @@ from validmind.vm_models import VMDataset, VMModel
 logger = get_logger(__name__)
 
 
-def select_shap_values(shap_values, class_of_interest):
+def select_shap_values(
+    shap_values: Union[np.ndarray, List[np.ndarray]],
+    class_of_interest: Optional[int] = None
+) -> np.ndarray:
     """Selects SHAP values for binary or multiclass classification.
 
     For regression models, returns the SHAP values directly as there are no classes.
@@ -66,7 +71,11 @@ def select_shap_values(shap_values, class_of_interest):
     return shap_values[class_of_interest]
 
 
-def generate_shap_plot(type_, shap_values, x_test):
+def generate_shap_plot(
+    type_: str,
+    shap_values: np.ndarray,
+    x_test: Union[np.ndarray, pd.DataFrame]
+) -> plt.Figure:
     """Plots two types of SHAP global importance (SHAP).
 
     Args:
@@ -117,8 +126,8 @@ def SHAPGlobalImportance(
     dataset: VMDataset,
     kernel_explainer_samples: int = 10,
     tree_or_linear_explainer_samples: int = 200,
-    class_of_interest: int = None,
-):
+    class_of_interest: Optional[int] = None
+) -> Dict[str, Union[plt.Figure, Dict[str, float]]]:
     """
     Evaluates and visualizes global feature importance using SHAP values for model explanation and risk identification.
 

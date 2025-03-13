@@ -29,7 +29,7 @@ class InputRegistry:
         if not input_obj:
             raise InvalidInputError(
                 f"There's no such input with given ID '{key}'. "
-                "Please pass valid input ID"
+                "Please pass valid input ID."
             )
         return input_obj
 
