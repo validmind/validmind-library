@@ -447,17 +447,8 @@ class TestResult(Result):
             )
 
         if self.tables or self.figures:
-            # # Include config in the serialized result instead of as a separate parameter
-            # result_data = self.serialize()
-            # if config:
-            #     # Add config to metadata if it exists, or create metadata
-            #     if "metadata" not in result_data or result_data["metadata"] is None:
-            #         result_data["metadata"] = {}
-            #     result_data["metadata"]["display_config"] = config
-
             tasks.append(
                 api_client.alog_test_result(
-                    # result=result_data,
                     result=self.serialize(),
                     section_id=section_id,
                     position=position,
