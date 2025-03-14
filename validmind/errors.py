@@ -129,6 +129,14 @@ class InvalidInputError(BaseError):
     pass
 
 
+class InvalidParameterError(BaseError):
+    """
+    When an invalid parameter is provided.
+    """
+
+    pass
+
+
 class InvalidTextObjectError(APIRequestError):
     """
     When an invalid Metadat (Text) object is sent to the API.
