@@ -427,7 +427,6 @@ class TestResult(Result):
         self,
         section_id: str = None,
         position: int = None,
-        unsafe: bool = False,
         config: Dict[str, bool] = None,
     ):
         tasks = []  # collect tasks to run in parallel (async)
@@ -453,7 +452,6 @@ class TestResult(Result):
                     result=self.serialize(),
                     section_id=section_id,
                     position=position,
-                    unsafe=unsafe,
                     config=config,
                 )
             )
@@ -518,7 +516,6 @@ class TestResult(Result):
             self.log_async,
             section_id=section_id,
             position=position,
-            unsafe=unsafe,
             config=config,
         )
 
