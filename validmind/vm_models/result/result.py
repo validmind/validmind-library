@@ -443,6 +443,7 @@ class TestResult(Result):
                     value=self.metric,
                     inputs=[input.input_id for input in self._get_flat_inputs()],
                     params=self.params,
+                    config=config,
                 )
             )
 
