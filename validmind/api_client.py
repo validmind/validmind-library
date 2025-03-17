@@ -412,7 +412,6 @@ async def alog_metric(
     value: Union[int, float],
     inputs: Optional[List[str]] = None,
     params: Optional[Dict[str, Any]] = None,
-    config: Optional[Dict[str, Any]] = None,
     recorded_at: Optional[str] = None,
     thresholds: Optional[Dict[str, Any]] = None,
 ):
@@ -441,7 +440,6 @@ async def alog_metric(
                     "value": value,
                     "inputs": inputs or [],
                     "params": params or {},
-                    "config": config or {},
                     "recorded_at": recorded_at,
                     "thresholds": thresholds or {},
                 },
@@ -459,7 +457,6 @@ def log_metric(
     value: float,
     inputs: Optional[List[str]] = None,
     params: Optional[Dict[str, Any]] = None,
-    config: Optional[Dict[str, Any]] = None,
     recorded_at: Optional[str] = None,
     thresholds: Optional[Dict[str, Any]] = None,
 ):
@@ -470,11 +467,8 @@ def log_metric(
         value (Union[int, float]): The metric value
         inputs (List[str], optional): List of input IDs
         params (Dict[str, Any], optional): Parameters used to generate the metric
-        config (Dict[str, bool], optional): Configuration options for displaying the metric
     """
-    return run_async(
-        alog_metric, key=key, value=value, inputs=inputs, params=params, config=config
-    )
+    return run_async(alog_metric, key=key, value=value, inputs=inputs, params=params)
 
 
 def get_ai_key() -> Dict[str, Any]:
