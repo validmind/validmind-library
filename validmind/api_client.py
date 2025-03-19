@@ -330,6 +330,8 @@ async def alog_test_result(
     result: Dict[str, Any],
     section_id: str = None,
     position: int = None,
+    unsafe: bool = False,
+    config: Dict[str, bool] = None,
 ) -> Dict[str, Any]:
     """Logs test results information
 
@@ -357,7 +359,7 @@ async def alog_test_result(
             "log_test_results",
             params=request_params,
             data=json.dumps(
-                result,
+                {**result, "config": config},
                 cls=NumpyEncoder,
                 allow_nan=False,
             ),
@@ -458,24 +460,15 @@ def log_metric(
     recorded_at: Optional[str] = None,
     thresholds: Optional[Dict[str, Any]] = None,
 ):
-    """Logs a unit metric
-
-    Unit metrics are key-value pairs where the key is the metric name and the value is
-    a scalar (int or float). These key-value pairs are associated with the currently
-    selected model (inventory model in the ValidMind Platform) and keys can be logged
-    to over time to create a history of the metric. On the ValidMind Platform, these metrics
-    will be used to create plots/visualizations for documentation and dashboards etc.
+    """Log a metric
 
     Args:
         key (str): The metric key
-        value (float): The metric value
-        inputs (list, optional): A list of input IDs that were used to compute the metric.
-        params (dict, optional): Dictionary of parameters used to compute the metric.
-        recorded_at (str, optional): The timestamp of the metric. Server will use
-            current time if not provided.
-        thresholds (dict, optional): Dictionary of thresholds for the metric.
+        value (Union[int, float]): The metric value
+        inputs (List[str], optional): List of input IDs
+        params (Dict[str, Any], optional): Parameters used to generate the metric
     """
-    run_async(alog_metric, key, value, inputs, params, recorded_at, thresholds)
+    return run_async(alog_metric, key=key, value=value, inputs=inputs, params=params)
 
 
 def get_ai_key() -> Dict[str, Any]:
