@@ -10,6 +10,11 @@ text-decoration: none;
 border-right: none !important;
 }
 
+.sidebar-item {
+  color: #747678;
+  line-height: 1.1;
+}
+
 nav#TOC {
   border: none;
   background-color: #fff;
