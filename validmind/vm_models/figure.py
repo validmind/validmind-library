@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 """
-Figure objects track the figure schema supported by the ValidMind API
+Figure objects track the figure schema supported by the ValidMind API.
 """
 
 import base64
@@ -38,7 +38,7 @@ def create_figure(
     key: str,
     ref_id: str,
 ) -> "Figure":
-    """Create a VM Figure object from a raw figure object"""
+    """Create a VM Figure object from a raw figure object."""
     if is_matplotlib_figure(figure) or is_plotly_figure(figure) or is_png_image(figure):
         return Figure(key=key, figure=figure, ref_id=ref_id)
 
@@ -48,7 +48,7 @@ def create_figure(
 @dataclass
 class Figure:
     """
-    Figure objects track the schema supported by the ValidMind API
+    Figure objects track the schema supported by the ValidMind API.
     """
 
     key: str
@@ -115,7 +115,7 @@ class Figure:
 
     def serialize(self):
         """
-        Serializes the Figure to a dictionary so it can be sent to the API
+        Serializes the Figure to a dictionary so it can be sent to the API.
         """
         return {
             "type": self._type,
@@ -125,7 +125,7 @@ class Figure:
 
     def _get_b64_url(self):
         """
-        Returns a base64 encoded URL for the figure
+        Returns a base64 encoded URL for the figure.
         """
         if is_matplotlib_figure(self.figure):
             buffer = BytesIO()
@@ -152,7 +152,7 @@ class Figure:
         )
 
     def serialize_files(self):
-        """Creates a `requests`-compatible files object to be sent to the API"""
+        """Creates a `requests`-compatible files object to be sent to the API."""
         if is_matplotlib_figure(self.figure):
             buffer = BytesIO()
             self.figure.savefig(buffer, bbox_inches="tight")

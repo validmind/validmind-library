@@ -26,9 +26,9 @@ class FoundationModel(FunctionModel):
 
     Attributes:
         predict_fn (callable): The predict function that should take a prompt as input
-          and return the result from the model
+                and return the result from the model
         prompt (Prompt): The prompt object that defines the prompt template and the
-          variables (if any)
+                variables (if any)
         name (str, optional): The name of the model. Defaults to name of the predict_fn
     """
 

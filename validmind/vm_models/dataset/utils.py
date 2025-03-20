@@ -45,11 +45,11 @@ class ExtraColumns:
         )
 
     def __contains__(self, key):
-        """Allow checking if a key is `in` the extra columns"""
+        """Allow checking if a key is `in` the extra columns."""
         return key in self.flatten()
 
     def flatten(self) -> List[str]:
-        """Get a list of all column names"""
+        """Get a list of all column names."""
         return [
             self.group_by_column,
             *self.extras,
@@ -78,13 +78,14 @@ class ExtraColumns:
 
 
 def as_df(series_or_frame: Union[pd.Series, pd.DataFrame]) -> pd.DataFrame:
+    """Convert a pandas Series or DataFrame to a DataFrame."""
     if isinstance(series_or_frame, pd.Series):
         return series_or_frame.to_frame()
     return series_or_frame
 
 
 def _is_probabilties(output):
-    """Check if the output from the predict method is probabilities."""
+    """Check if the output is a probability array."""
     if not isinstance(output, np.ndarray) or output.ndim > 1:
         return False
 
@@ -98,6 +99,7 @@ def _is_probabilties(output):
 
 
 def compute_predictions(model, X, **kwargs) -> tuple:
+    """Compute predictions and probabilities for a model."""
     probability_values = None
 
     try:

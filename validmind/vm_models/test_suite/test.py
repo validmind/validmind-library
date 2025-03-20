@@ -16,7 +16,7 @@ logger = get_logger(__name__)
 
 class TestSuiteTest:
     """
-    Wraps a 'Test' in a Test Suite and handles logic and state for that test
+    Wraps a 'Test' in a Test Suite and handles logic and state for that test.
     """
 
     test_id: str
@@ -28,10 +28,10 @@ class TestSuiteTest:
     _load_failed: bool = False
 
     def __init__(self, test_id_or_obj):
-        """Load the test class from the test id
+        """Load the test class from the test ID.
 
         Args:
-            test_id_or_obj (str): The test id or a dict with test id and other options
+            test_id_or_obj (str): The test ID or a dict with test ID and other options.
         """
         if isinstance(test_id_or_obj, str):
             self.test_id = test_id_or_obj
@@ -42,7 +42,7 @@ class TestSuiteTest:
         self.name = test_id_to_name(self.test_id)
 
     def get_default_config(self):
-        """Returns the default configuration for the test"""
+        """Returns the default configuration for the test."""
         try:
             test_func = load_test(self.test_id)
         except LoadTestError as e:
@@ -66,7 +66,7 @@ class TestSuiteTest:
         return config
 
     def run(self, fail_fast: bool = False, config: dict = None):
-        """Run the test"""
+        """Run the test."""
         if self._load_failed:
             return
 
@@ -110,7 +110,7 @@ class TestSuiteTest:
             )
 
     async def log_async(self):
-        """Log the result for this test to ValidMind"""
+        """Log the result for this test to ValidMind."""
         if not self.result:
             raise ValueError("Cannot log test result before running the test")
 

@@ -3,6 +3,8 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 from ipywidgets import HTML, Accordion, VBox
+from typing import Any, Dict, List, Optional, Union, Type
+from ipywidgets import Widget
 
 from .html_templates.content_blocks import (
     failed_content_block_html,
@@ -29,8 +31,10 @@ CONTENT_TYPE_MAP = {
 
 
 def _convert_sections_to_section_tree(
-    sections, parent_id="_root_", start_section_id=None
-):
+    sections: List[Dict[str, Any]],
+    parent_id: str = "_root_",
+    start_section_id: Optional[str] = None
+) -> List[Dict[str, Any]]:
     section_tree = []
 
     for section in sections:
@@ -53,7 +57,7 @@ def _convert_sections_to_section_tree(
     return sorted(section_tree, key=lambda x: x.get("order", 0))
 
 
-def _create_content_widget(content):
+def _create_content_widget(content: Dict[str, Any]) -> Widget:
     content_type = CONTENT_TYPE_MAP[content["content_type"]]
 
     if content["content_type"] not in ["metric", "test"]:
@@ -75,7 +79,10 @@ def _create_content_widget(content):
     )
 
 
-def _create_sub_section_widget(sub_sections, section_number):
+def _create_sub_section_widget(
+    sub_sections: List[Dict[str, Any]],
+    section_number: str
+) -> Union[HTML, Accordion]:
     if not sub_sections:
         return HTML("<p>Empty Section</p>")
 
@@ -111,7 +118,7 @@ def _create_sub_section_widget(sub_sections, section_number):
     return accordion
 
 
-def _create_section_widget(tree):
+def _create_section_widget(tree: List[Dict[str, Any]]) -> Accordion:
     widget = Accordion()
     for i, section in enumerate(tree):
         sub_widget = None
@@ -139,11 +146,11 @@ def _create_section_widget(tree):
     return widget
 
 
-def preview_template(template):
-    """Preview a template in Jupyter Notebook
+def preview_template(template: str) -> None:
+    """Preview a template in Jupyter Notebook.
 
     Args:
-        template (dict): The template to preview
+        template (dict): The template to preview.
     """
     if not is_notebook():
         logger.warning("preview_template() only works in Jupyter Notebook")
@@ -154,7 +161,7 @@ def preview_template(template):
     )
 
 
-def _get_section_tests(section):
+def _get_section_tests(section: Dict[str, Any]) -> List[str]:
     """
     Get all the tests in a section and its subsections.
 
@@ -179,15 +186,15 @@ def _get_section_tests(section):
     return tests
 
 
-def _create_test_suite_section(section):
+def _create_test_suite_section(section: Dict[str, Any]) -> Dict[str, Any]:
     """Create a section object for a test suite that contains the tests in a section
-    in the template
+    in the template.
 
     Args:
-        section: a section of a template (in tree form)
+        section: A section of a template (in tree form).
 
     Returns:
-        A TestSuite section dict
+        A TestSuite section dict.
     """
     if section_tests := _get_section_tests(section):
         return {
@@ -197,16 +204,19 @@ def _create_test_suite_section(section):
         }
 
 
-def _create_template_test_suite(template, section=None):
+def _create_template_test_suite(
+    template: str,
+    section: Optional[str] = None
+) -> Type[TestSuite]:
     """
     Create and run a test suite from a template.
 
     Args:
-        template: A valid flat template
-        section: The section of the template to run (if not provided, run all sections)
+        template: A valid flat template.
+        section: The section of the template to run. Runs all sections if not provided.
 
     Returns:
-        A dynamically-create TestSuite Class
+        A dynamically-created TestSuite Class.
     """
     section_tree = _convert_sections_to_section_tree(
         sections=template["sections"],
@@ -229,17 +239,20 @@ def _create_template_test_suite(template, section=None):
     )
 
 
-def get_template_test_suite(template, section=None):
-    """Get a TestSuite instance containing all tests in a template
+def get_template_test_suite(
+    template: str,
+    section: Optional[str] = None
+) -> TestSuite:
+    """Get a TestSuite instance containing all tests in a template.
 
     This function will collect all tests used in a template into a dynamically-created
-    TestSuite object
+    TestSuite object.
 
     Args:
         template: A valid flat template
         section: The section of the template to run (if not provided, run all sections)
 
     Returns:
-        The TestSuite instance
+        The TestSuite instance.
     """
     return _create_template_test_suite(template, section)()

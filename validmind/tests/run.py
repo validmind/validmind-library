@@ -76,7 +76,7 @@ def _get_run_metadata(**metadata: Dict[str, Any]) -> Dict[str, Any]:
 
 def _get_test_kwargs(
     test_func: callable, inputs: Dict[str, Any], params: Dict[str, Any]
-):
+) -> Tuple[Dict[str, Any], Dict[str, Any]]:
     """Insepect function signature to build kwargs to pass the inputs and params
     that the test function expects
 
@@ -93,7 +93,7 @@ def _get_test_kwargs(
         params (dict): Test parameters e.g. {"param1": 1, "param2": 2}
 
     Returns:
-        tuple: Tuple of input and param kwargs
+        Tuple[Dict[str, Any], Dict[str, Any]]: Tuple of input and param kwargs
     """
     input_kwargs = {}  # map function inputs (`dataset` etc) to actual objects
 

@@ -1,0 +1,160 @@
+#quarto-sidebar.sidebar {
+  background-color: #FFFFFF !important; 
+}
+
+.sidebar-header .sidebar-title a {
+text-decoration: none;
+}
+
+.sidebar.sidebar-navigation:not(.rollup) {
+border-right: none !important;
+}
+
+.sidebar-item {
+  color: #747678;
+  line-height: 1.1;
+}
+
+nav#TOC {
+  border: none;
+  background-color: #fff;
+}
+
+p code:not(.sourceCode), li code:not(.sourceCode), td code:not(.sourceCode) {
+  color: #003B4F;
+  background-color: #F0F1F1;
+  font-size: 0.9em;
+  border: none;
+}
+
+div.sourceCode, div.sourceCode pre.sourceCode {
+  color: #003B4F;
+  background-color: #F0F1F1;
+  border: none;
+}
+
+.prefix {
+  position: relative;
+  margin-right: 0px;
+}
+
+.prefix::before {
+  content: "Class";
+  opacity: 0.6;
+  font-size: 0.9em;
+}
+
+.suffix {
+  position: relative;
+  margin-left: 1px;
+}
+
+.suffix::after {
+  content: "()";
+  opacity: 0.6;
+  font-size: 0.9em;
+}
+
+.muted {
+  opacity: 0.6;
+}
+
+.version {
+  font-weight: bold;
+  border: 1px solid #196972;
+  border-radius: 3px;
+  padding: 2px 6px;
+  display: inline-block;
+}
+
+.signature {
+  font-family: 'JetBrains Mono', 'Fira Code', Menlo, Monaco, 'Courier New', monospace;
+  color: #003B4F;
+  background-color: #F0F1F1;
+  padding: 0 25px;
+  border-radius: 5px;
+  margin: 1em 0;
+  white-space: pre-wrap;
+  overflow-x: auto;
+  font-size: 0.9em;
+  line-height: 1.5;
+}
+
+.signature .param {
+  margin-bottom: 0px;
+}
+
+.signature .params {
+  display: block;
+  margin-left: 20px;
+  margin-bottom: 0px;
+}
+
+.signature .muted {
+  display: inline;
+  white-space: nowrap;
+}
+
+.signature p {
+  margin-bottom: 0;
+}
+
+.signature .kw {
+  color: #008080;
+  font-weight: bold;
+  padding-right: 4px;
+}
+
+.signature .name {
+  color: #de257e;
+  font-weight: bold;
+  padding-right: 2px;
+}
+
+.signature .n {
+  color: #003B4F;
+}
+
+.signature .o {
+  color: #5E5E5E;
+  padding-left: 2px;
+  padding-right: 4px;
+}
+
+.signature .p {
+  padding-right: 2px;
+}
+
+.signature .kc {
+  color: #008080;
+  font-weight: bold;
+}
+
+.signature .bp {
+  color: #008080;
+  font-weight: bold;
+}
+
+.signature .nb {
+  color: #008080;
+  font-weight: bold;
+}
+
+.signature .s1 {
+  color: #8225de;
+}
+
+.signature .ann {
+  color: #20794D;
+}
+
+.signature .decorators {
+  display: block; 
+  margin-bottom: -20px;
+}
+
+.signature .decorator {
+  display: inline-block;
+  color: #5E5E5E;
+  font-size: 0.9em;
+}

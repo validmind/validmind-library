@@ -13,7 +13,7 @@ from dataclasses import dataclass
 @dataclass
 class ClientConfig:
     """
-    Configuration class for the ValidMind API client. This is instantiated
+    Configuration class for the ValidMind API client. This class is instantiated
     when initializing the API client.
     """
 
@@ -25,7 +25,7 @@ class ClientConfig:
 
     def __post_init__(self):
         """
-        Set additional attributes when initializing the class
+        Set additional attributes when initializing the class.
         """
         # check if running on notebook and set running_on_colab
         try:
@@ -36,7 +36,7 @@ class ClientConfig:
             self.running_on_colab = False
 
     def can_generate_llm_test_descriptions(self):
-        """Returns True if the client can generate LLM based test descriptions"""
+        """Returns True if the client can generate LLM-based test descriptions."""
         return self.feature_flags.get("llm_test_descriptions", True)
 
 
