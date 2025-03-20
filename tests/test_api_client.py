@@ -201,6 +201,7 @@ class TestAPIClient(unittest.TestCase):
             "inputs": ["input1"],
             "passed": True,
             "summary": [{"key": "value"}],
+            "config": None,
         }
 
         mock_post.return_value = MockAsyncResponse(200, json={"cuid": "abc1234"})

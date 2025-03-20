@@ -330,6 +330,8 @@ async def alog_test_result(
     result: Dict[str, Any],
     section_id: str = None,
     position: int = None,
+    unsafe: bool = False,
+    config: Dict[str, bool] = None,
 ) -> Dict[str, Any]:
     """Logs test results information.
 
@@ -357,7 +359,7 @@ async def alog_test_result(
             "log_test_results",
             params=request_params,
             data=json.dumps(
-                result,
+                {**result, "config": config},
                 cls=NumpyEncoder,
                 allow_nan=False,
             ),
@@ -468,14 +470,13 @@ def log_metric(
 
     Args:
         key (str): The metric key
-        value (float): The metric value
-        inputs (list, optional): A list of input IDs that were used to compute the metric.
-        params (dict, optional): Dictionary of parameters used to compute the metric.
-        recorded_at (str, optional): The timestamp of the metric. Server will use
-            current time if not provided.
-        thresholds (dict, optional): Dictionary of thresholds for the metric.
+        value (Union[int, float]): The metric value
+        inputs (List[str], optional): List of input IDs
+        params (Dict[str, Any], optional): Parameters used to generate the metric
+        recorded_at (str, optional): Timestamp when the metric was recorded
+        thresholds (Dict[str, Any], optional): Thresholds for the metric
     """
-    run_async(alog_metric, key, value, inputs, params, recorded_at, thresholds)
+    return run_async(alog_metric, key=key, value=value, inputs=inputs, params=params, recorded_at=recorded_at, thresholds=thresholds)
 
 
 def get_ai_key() -> Dict[str, Any]:
