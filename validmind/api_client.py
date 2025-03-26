@@ -408,6 +408,23 @@ def log_input(input_id: str, type: str, metadata: Dict[str, Any]) -> Dict[str, A
 
 
 def log_text(content_id: str, text: str, _json: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    """Logs free-form text to ValidMind API.
+
+    Args:
+        content_id (str): Unique content identifier for the text.
+        text (str): The text to log.
+        _json (dict, optional): Free-form key-value pairs to assign to the text. Defaults to None.
+
+    Raises:
+        Exception: If the API call fails.
+
+    Returns:
+        dict: The response from the API.
+    """
+    if not content_id or not isinstance(content_id, str):
+        raise ValueError("`content_id` must be a non-empty string")
+    if not text or not isinstance(text, str):
+        raise ValueError("`text` must be a non-empty string")
     return run_async(alog_metadata, content_id, text, _json)
 
 
