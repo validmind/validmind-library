@@ -22,7 +22,7 @@ from aiohttp import FormData
 from .client_config import client_config
 from .errors import MissingAPICredentialsError, MissingModelIdError, raise_api_error
 from .logging import get_logger, init_sentry, send_single_error
-from .utils import NumpyEncoder, run_async
+from .utils import NumpyEncoder, md_to_html, run_async
 from .vm_models import Figure
 
 logger = get_logger(__name__)
@@ -407,7 +407,9 @@ def log_input(input_id: str, type: str, metadata: Dict[str, Any]) -> Dict[str, A
     return run_async(alog_input, input_id, type, metadata)
 
 
-def log_text(content_id: str, text: str, _json: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+def log_text(
+    content_id: str, text: str, _json: Optional[Dict[str, Any]] = None
+) -> Dict[str, Any]:
     """Logs free-form text to ValidMind API.
 
     Args:
@@ -425,7 +427,7 @@ def log_text(content_id: str, text: str, _json: Optional[Dict[str, Any]] = None)
         raise ValueError("`content_id` must be a non-empty string")
     if not text or not isinstance(text, str):
         raise ValueError("`text` must be a non-empty string")
-    return run_async(alog_metadata, content_id, text, _json)
+    return run_async(alog_metadata, content_id, md_to_html(text, mathml=True), _json)
 
 
 async def alog_metric(
@@ -497,7 +499,15 @@ def log_metric(
         recorded_at (str, optional): Timestamp when the metric was recorded
         thresholds (Dict[str, Any], optional): Thresholds for the metric
     """
-    return run_async(alog_metric, key=key, value=value, inputs=inputs, params=params, recorded_at=recorded_at, thresholds=thresholds)
+    return run_async(
+        alog_metric,
+        key=key,
+        value=value,
+        inputs=inputs,
+        params=params,
+        recorded_at=recorded_at,
+        thresholds=thresholds,
+    )
 
 
 def get_ai_key() -> Dict[str, Any]:
