@@ -31,7 +31,9 @@ INPUT_TYPE_MAP = {
 }
 
 
-def _inspect_signature(test_func: Callable[..., Any]) -> Tuple[Dict[str, Dict[str, Any]], Dict[str, Dict[str, Any]]]:
+def _inspect_signature(
+    test_func: Callable[..., Any]
+) -> Tuple[Dict[str, Dict[str, Any]], Dict[str, Dict[str, Any]]]:
     """Inspect a test function's signature to get inputs and parameters"""
     inputs = {}
     params = {}
@@ -58,6 +60,7 @@ def _inspect_signature(test_func: Callable[..., Any]) -> Tuple[Dict[str, Dict[st
 
 def _create_mock_test(test_id: str) -> Callable[..., Any]:
     """Create a mock test function for unit testing purposes"""
+
     def mock_test(*args, **kwargs):
         return {"test_id": test_id, "args": args, "kwargs": kwargs}
 
@@ -75,9 +78,7 @@ def _create_mock_test(test_id: str) -> Callable[..., Any]:
 def _load_test_from_provider(test_id: str, namespace: str) -> Callable[..., Any]:
     """Load a test from the appropriate provider"""
     if not test_provider_store.has_test_provider(namespace):
-        raise LoadTestError(
-            f"No test provider found for namespace: {namespace}"
-        )
+        raise LoadTestError(f"No test provider found for namespace: {namespace}")
 
     provider = test_provider_store.get_test_provider(namespace)
 
@@ -90,7 +91,9 @@ def _load_test_from_provider(test_id: str, namespace: str) -> Callable[..., Any]
         ) from e
 
 
-def _prepare_test_function(test_func: Callable[..., Any], test_id: str) -> Callable[..., Any]:
+def _prepare_test_function(
+    test_func: Callable[..., Any], test_id: str
+) -> Callable[..., Any]:
     """Prepare a test function by adding necessary attributes"""
     # Add test_id as an attribute to the test function
     test_func.test_id = test_id
@@ -106,9 +109,7 @@ def _prepare_test_function(test_func: Callable[..., Any], test_id: str) -> Calla
 
 
 def load_test(
-    test_id: str,
-    test_func: Optional[Callable[..., Any]] = None,
-    reload: bool = False
+    test_id: str, test_func: Optional[Callable[..., Any]] = None, reload: bool = False
 ) -> Callable[..., Any]:
     """Load a test by test ID
 
@@ -184,7 +185,9 @@ def _test_description(test_description: str, num_lines: int = 5) -> str:
     return test_description
 
 
-def _pretty_list_tests(tests: Dict[str, Callable[..., Any]], truncate: bool = True) -> None:
+def _pretty_list_tests(
+    tests: Dict[str, Callable[..., Any]], truncate: bool = True
+) -> None:
     """Pretty print a list of tests"""
     for test_id, test_func in sorted(tests.items()):
         print(f"\n{test_id_to_name(test_id)}")
@@ -213,10 +216,9 @@ def list_tasks_and_tags(as_json: bool = False) -> Union[str, Dict[str, List[str]
         # Import this here to avoid circular import
         import pandas as pd
 
-        df = pd.DataFrame({
-            "Task": tasks,
-            "Tags": [", ".join(tags) for _ in range(len(tasks))]
-        })
+        df = pd.DataFrame(
+            {"Task": tasks, "Tags": [", ".join(tags) for _ in range(len(tasks))]}
+        )
         return df  # Return DataFrame instead of df.style
     except (ImportError, AttributeError):
         # Fallback if pandas is not available or styling doesn't work
@@ -249,9 +251,7 @@ def _filter_test_ids(test_ids: List[str], filter_text: Optional[str]) -> List[st
     elif filter_text:
         # Normal filtering logic
         return [
-            test_id
-            for test_id in test_ids
-            if filter_text.lower() in test_id.lower()
+            test_id for test_id in test_ids if filter_text.lower() in test_id.lower()
         ]
     return test_ids
 
@@ -274,7 +274,9 @@ def _filter_tests_by_task(tests: Dict[str, Any], task: Optional[str]) -> Dict[st
     return {test_id: tests[test_id] for test_id in task_test_ids}
 
 
-def _filter_tests_by_tags(tests: Dict[str, Any], tags: Optional[List[str]]) -> Dict[str, Any]:
+def _filter_tests_by_tags(
+    tests: Dict[str, Any], tags: Optional[List[str]]
+) -> Dict[str, Any]:
     """Filter tests by tags"""
     if not tags:
         return tests
@@ -285,7 +287,9 @@ def _filter_tests_by_tags(tests: Dict[str, Any], tags: Optional[List[str]]) -> D
         if isinstance(test_func, str):
             # For mock test functions, add all tags
             tag_test_ids.append(test_id)
-        elif hasattr(test_func, "__tags__") and all(tag in test_func.__tags__ for tag in tags):
+        elif hasattr(test_func, "__tags__") and all(
+            tag in test_func.__tags__ for tag in tags
+        ):
             tag_test_ids.append(test_id)
 
     # Create a new tests dictionary with only the filtered tests
@@ -302,29 +306,37 @@ def _create_tests_dataframe(tests: Dict[str, Any], truncate: bool) -> Any:
     for test_id, test_func in tests.items():
         if isinstance(test_func, str):
             # If it's a mock test, add minimal info
-            data.append({
-                "ID": test_id,
-                "Name": test_id_to_name(test_id),
-                "Description": f"Mock test for {test_id}",
-                "Required Inputs": [],
-                "Params": {}
-            })
+            data.append(
+                {
+                    "ID": test_id,
+                    "Name": test_id_to_name(test_id),
+                    "Description": f"Mock test for {test_id}",
+                    "Required Inputs": [],
+                    "Params": {},
+                }
+            )
         else:
             # If it's a real test, add full info
-            data.append({
-                "ID": test_id,
-                "Name": test_id_to_name(test_id),
-                "Description": inspect.getdoc(test_func) or "",
-                "Required Inputs": list(test_func.inputs.keys()) if hasattr(test_func, "inputs") else [],
-                "Params": test_func.params if hasattr(test_func, "params") else {}
-            })
+            data.append(
+                {
+                    "ID": test_id,
+                    "Name": test_id_to_name(test_id),
+                    "Description": inspect.getdoc(test_func) or "",
+                    "Required Inputs": list(test_func.inputs.keys())
+                    if hasattr(test_func, "inputs")
+                    else [],
+                    "Params": test_func.params if hasattr(test_func, "params") else {},
+                }
+            )
 
     if not data:
         return None
 
     df = pd.DataFrame(data)
     if truncate:
-        df["Description"] = df["Description"].apply(lambda x: x.split("\n")[0] if x else "")
+        df["Description"] = df["Description"].apply(
+            lambda x: x.split("\n")[0] if x else ""
+        )
     return df
 
 
@@ -333,7 +345,7 @@ def list_tests(
     task: Optional[str] = None,
     tags: Optional[List[str]] = None,
     pretty: bool = True,
-    truncate: bool = True
+    truncate: bool = True,
 ) -> Union[List[str], None]:
     """List all tests in the tests directory.
 
@@ -379,9 +391,7 @@ def list_tests(
 
 
 def describe_test(
-    test_id: Optional[TestID] = None,
-    raw: bool = False,
-    show: bool = True
+    test_id: Optional[TestID] = None, raw: bool = False, show: bool = True
 ) -> Union[str, HTML, Dict[str, Any]]:
     """Describe a test's functionality and parameters"""
     test = load_test(test_id)

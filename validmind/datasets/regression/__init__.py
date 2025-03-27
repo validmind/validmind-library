@@ -5,8 +5,9 @@
 """
 Entrypoint for regression datasets
 """
-import pandas as pd
 from typing import List
+
+import pandas as pd
 
 __all__: List[str] = [
     "fred",
@@ -40,7 +41,9 @@ def identify_frequencies(df: pd.DataFrame) -> pd.DataFrame:
     return freq_df
 
 
-def resample_to_common_frequency(df: pd.DataFrame, common_frequency: str = "MS") -> pd.DataFrame:
+def resample_to_common_frequency(
+    df: pd.DataFrame, common_frequency: str = "MS"
+) -> pd.DataFrame:
     """
     Resample time series data to a common frequency.
 
