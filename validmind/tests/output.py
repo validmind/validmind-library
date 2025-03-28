@@ -84,7 +84,7 @@ class TableOutputHandler(OutputHandler):
         if isinstance(data, dict):
             return pd.DataFrame([data])
         elif isinstance(data, str):
-            return pd.DataFrame({'Value': [data]})
+            return pd.DataFrame({"Value": [data]})
         elif data is None:
             return pd.DataFrame()
         else:
@@ -99,8 +99,11 @@ class TableOutputHandler(OutputHandler):
             return pd.DataFrame(data_list)
         except Exception as e:
             # If conversion fails, try to handle common cases
-            if all(isinstance(item, (int, float, str, bool, type(None))) for item in data_list):
-                return pd.DataFrame({'Values': data_list})
+            if all(
+                isinstance(item, (int, float, str, bool, type(None)))
+                for item in data_list
+            ):
+                return pd.DataFrame({"Values": data_list})
             else:
                 raise ValueError(f"Could not convert list to DataFrame: {e}")
 
@@ -123,7 +126,9 @@ class TableOutputHandler(OutputHandler):
 
     def process(
         self,
-        item: Union[List[Dict[str, Any]], pd.DataFrame, Dict[str, Any], ResultTable, str, tuple],
+        item: Union[
+            List[Dict[str, Any]], pd.DataFrame, Dict[str, Any], ResultTable, str, tuple
+        ],
         result: TestResult,
     ) -> None:
         # Convert to a dictionary of tables if not already

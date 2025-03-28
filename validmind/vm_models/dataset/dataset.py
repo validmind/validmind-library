@@ -258,8 +258,10 @@ class VMDataset(VMInput):
         prediction_values: Optional[List[Any]] = None,
         probability_column: Optional[str] = None,
         probability_values: Optional[List[float]] = None,
-        prediction_probabilities: Optional[List[float]] = None,  # DEPRECATED: use probability_values
-        **kwargs: Dict[str, Any]
+        prediction_probabilities: Optional[
+            List[float]
+        ] = None,  # DEPRECATED: use probability_values
+        **kwargs: Dict[str, Any],
     ) -> None:
         """Assign predictions and probabilities to the dataset.
 

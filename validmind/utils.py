@@ -12,7 +12,7 @@ import sys
 import warnings
 from datetime import date, datetime, time
 from platform import python_version
-from typing import Any, Dict, List, Optional, TypeVar, Callable, Awaitable
+from typing import Any, Awaitable, Callable, Dict, List, Optional, TypeVar
 
 import matplotlib.pylab as pylab
 import mistune
@@ -59,7 +59,7 @@ pylab.rcParams.update(params)
 
 logger = get_logger(__name__)
 
-T = TypeVar('T')
+T = TypeVar("T")
 
 
 def parse_version(version: str) -> tuple[int, ...]:
@@ -363,7 +363,7 @@ def run_async(
     func: Callable[..., Awaitable[T]],
     *args: Any,
     name: Optional[str] = None,
-    **kwargs: Any
+    **kwargs: Any,
 ) -> T:
     """Helper function to run functions asynchronously.
 
@@ -397,9 +397,7 @@ def run_async(
 
 
 def run_async_check(
-    func: Callable[..., Awaitable[T]],
-    *args: Any,
-    **kwargs: Any
+    func: Callable[..., Awaitable[T]], *args: Any, **kwargs: Any
 ) -> Optional[asyncio.Task[T]]:
     """Helper function to run functions asynchronously if the task doesn't already exist.
 

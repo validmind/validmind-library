@@ -2,8 +2,9 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Any, Dict, List
+
 from validmind.vm_models.model import VMModel
-from typing import Dict, Any, List
 
 
 # semi-immutable dict

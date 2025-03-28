@@ -5,7 +5,7 @@
 import logging
 import os
 import warnings
-from typing import Dict, Optional, Tuple, Any
+from typing import Any, Dict, Optional, Tuple
 
 import numpy as np
 import pandas as pd
@@ -389,7 +389,7 @@ def split(
     validation_split: Optional[float] = None,
     test_size: float = 0.2,
     add_constant: bool = False,
-    verbose: bool = True
+    verbose: bool = True,
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """
     Split dataset into train, validation (optional), and test sets.
@@ -476,8 +476,7 @@ def compute_scores(probabilities: np.ndarray) -> np.ndarray:
 
 
 def get_demo_test_config(
-    x_test: Optional[np.ndarray] = None,
-    y_test: Optional[np.ndarray] = None
+    x_test: Optional[np.ndarray] = None, y_test: Optional[np.ndarray] = None
 ) -> Dict[str, Any]:
     """Get demo test configuration.
 

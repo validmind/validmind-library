@@ -7,7 +7,7 @@
 import inspect
 import os
 from functools import wraps
-from typing import Any, Callable, List, Optional, Union, TypeVar
+from typing import Any, Callable, List, Optional, TypeVar, Union
 
 from validmind.logging import get_logger
 
@@ -16,7 +16,7 @@ from .load import load_test
 
 logger = get_logger(__name__)
 
-F = TypeVar('F', bound=Callable[..., Any])
+F = TypeVar("F", bound=Callable[..., Any])
 
 
 def _get_save_func(func: Callable[..., Any], test_id: str) -> Callable[..., None]:

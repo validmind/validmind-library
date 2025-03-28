@@ -2,9 +2,9 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from ipywidgets import HTML, Accordion, VBox
-from typing import Any, Dict, List, Optional, Union, Type
-from ipywidgets import Widget
+from typing import Any, Dict, List, Optional, Type, Union
+
+from ipywidgets import HTML, Accordion, VBox, Widget
 
 from .html_templates.content_blocks import (
     failed_content_block_html,
@@ -33,7 +33,7 @@ CONTENT_TYPE_MAP = {
 def _convert_sections_to_section_tree(
     sections: List[Dict[str, Any]],
     parent_id: str = "_root_",
-    start_section_id: Optional[str] = None
+    start_section_id: Optional[str] = None,
 ) -> List[Dict[str, Any]]:
     section_tree = []
 
@@ -80,8 +80,7 @@ def _create_content_widget(content: Dict[str, Any]) -> Widget:
 
 
 def _create_sub_section_widget(
-    sub_sections: List[Dict[str, Any]],
-    section_number: str
+    sub_sections: List[Dict[str, Any]], section_number: str
 ) -> Union[HTML, Accordion]:
     if not sub_sections:
         return HTML("<p>Empty Section</p>")
@@ -205,8 +204,7 @@ def _create_test_suite_section(section: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def _create_template_test_suite(
-    template: str,
-    section: Optional[str] = None
+    template: str, section: Optional[str] = None
 ) -> Type[TestSuite]:
     """
     Create and run a test suite from a template.
@@ -239,10 +237,7 @@ def _create_template_test_suite(
     )
 
 
-def get_template_test_suite(
-    template: str,
-    section: Optional[str] = None
-) -> TestSuite:
+def get_template_test_suite(template: str, section: Optional[str] = None) -> TestSuite:
     """Get a TestSuite instance containing all tests in a template.
 
     This function will collect all tests used in a template into a dynamically-created

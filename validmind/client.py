@@ -6,11 +6,12 @@
 Client interface for all data and model validation functions
 """
 
+from typing import Any, Callable, Dict, List, Optional, Union
+
+import numpy as np
 import pandas as pd
 import polars as pl
-import numpy as np
 import torch
-from typing import Any, Callable, Dict, List, Optional, Union
 
 from .api_client import log_input as log_input
 from .client_config import client_config
@@ -45,7 +46,9 @@ logger = get_logger(__name__)
 
 
 def init_dataset(
-    dataset: Union[pd.DataFrame, pl.DataFrame, "np.ndarray", "torch.utils.data.TensorDataset"],
+    dataset: Union[
+        pd.DataFrame, pl.DataFrame, "np.ndarray", "torch.utils.data.TensorDataset"
+    ],
     model: Optional[VMModel] = None,
     index: Optional[Any] = None,
     index_name: Optional[str] = None,

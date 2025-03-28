@@ -7,7 +7,7 @@ import os
 import re
 import sys
 from pathlib import Path
-from typing import List, Protocol, Callable, Any
+from typing import Any, Callable, List, Protocol
 
 from validmind.logging import get_logger
 
