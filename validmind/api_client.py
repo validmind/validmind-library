@@ -18,6 +18,7 @@ from urllib.parse import urlencode, urljoin
 import aiohttp
 import requests
 from aiohttp import FormData
+from ipywidgets import HTML, Accordion
 
 from .client_config import client_config
 from .errors import MissingAPICredentialsError, MissingModelIdError, raise_api_error
@@ -414,20 +415,29 @@ def log_text(
 
     Args:
         content_id (str): Unique content identifier for the text.
-        text (str): The text to log.
-        _json (dict, optional): Free-form key-value pairs to assign to the text. Defaults to None.
+        text (str): The text to log. Will be converted to HTML with MathML support.
+        _json (dict, optional): Additional metadata to associate with the text. Defaults to None.
 
     Raises:
+        ValueError: If content_id or text are empty or not strings.
         Exception: If the API call fails.
 
     Returns:
-        dict: The response from the API.
+        ipywidgets.Accordion: An accordion widget containing the logged text as HTML.
     """
     if not content_id or not isinstance(content_id, str):
         raise ValueError("`content_id` must be a non-empty string")
     if not text or not isinstance(text, str):
         raise ValueError("`text` must be a non-empty string")
-    return run_async(alog_metadata, content_id, md_to_html(text, mathml=True), _json)
+
+    log_text = run_async(
+        alog_metadata, content_id, md_to_html(text, mathml=True), _json
+    )
+
+    return Accordion(
+        children=[HTML(log_text["text"])],
+        titles=[f"Text Block: '{log_text['content_id']}'"],
+    )
 
 
 async def alog_metric(
