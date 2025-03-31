@@ -610,6 +610,27 @@ When an invalid metric results object is sent to the API.
 - [APIRequestError<span class="suffix"></span>](#apirequesterror)
 - builtins.BaseException with_traceback, add_note
 
+### <span class="prefix"></span> InvalidParameterError
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">InvalidParameterError</span>(<span class="base">BaseError</span>):
+
+:::
+
+<!-- docstring.jinja2 -->
+
+When an invalid parameter is provided.
+
+<!-- errors.qmd.jinja2 - inherited members -->
+
+**Inherited members**
+
+- [BaseError<span class="suffix"></span>](#baseerror), [description<span class="suffix"></span>](#description)
+- builtins.BaseException with_traceback, add_note
+
 ### <span class="prefix"></span> InvalidProjectError
 
 <!-- signatures.jinja2 -->

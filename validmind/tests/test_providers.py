@@ -166,7 +166,12 @@ class ValidMindTestProvider:
 
     def list_tests(self) -> List[str]:
         """List all tests in the given namespace"""
-        return self.unit_metrics_provider.list_tests() + self.test_provider.list_tests()
+        metric_ids = [
+            f"unit_metrics.{test}" for test in self.unit_metrics_provider.list_tests()
+        ]
+        test_ids = self.test_provider.list_tests()
+
+        return metric_ids + test_ids
 
     def load_test(self, test_id: str) -> Callable[..., Any]:
         """Load the test function identified by the given test_id"""

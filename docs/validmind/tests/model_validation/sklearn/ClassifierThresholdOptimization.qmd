@@ -77,7 +77,7 @@ The test implements multiple threshold optimization methods:
 
 - `dataset`: VMDataset containing features and target
 - `model`: VMModel containing predictions
-- `methods`: List of methods to compare (default: ['youden', 'f1', 'precision_recall'])
+- `methods`: List of methods to compare (default: \['youden', 'f1', 'precision_recall'\])
 - `target_recall`: Target recall value if using 'target_recall' method
 
 **Returns**

@@ -49,7 +49,7 @@ The examination invokes a series of steps:
 1. For every numeric feature in the dataset, the 25th percentile (Q1) and 75th percentile (Q3) are calculated before deriving the Interquartile Range (IQR), the difference between Q1 and Q3.
 1. Subsequently, the metric calculates the lower and upper thresholds by subtracting Q1 from the `threshold` times IQR and adding Q3 to `threshold` times IQR, respectively. The default `threshold` is set at 1.5.
 1. Any value in the feature that falls below the lower threshold or exceeds the upper threshold is labeled as an outlier.
-1. The number of outliers are tallied for different percentiles, such as [0-25], [25-50], [50-75], and [75-100].
+1. The number of outliers are tallied for different percentiles, such as \[0-25\], \[25-50\], \[50-75\], and \[75-100\].
 1. These counts are employed to construct a bar plot for the feature, showcasing the distribution of outliers across different percentiles.
 
 ### Signs of High Risk

@@ -191,6 +191,8 @@ lending_club_loan_data_*.csv
 
 # Pickle files
 *.pkl
+# Sample application scorecard model for validation notebook — do not remove!
+!notebooks/code_samples/model_validation/xgb_model_champion.pkl
 
 notebooks/llm/datasets/*.jsonl
 
