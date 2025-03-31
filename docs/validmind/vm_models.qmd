@@ -16,7 +16,7 @@ Models entrypoint
 
 ::: {.signature}
 
-<span class="kw"></span><span class="name">R_MODEL_TYPES</span><span class="o">=</span> <span class="default_value">['LogisticRegression', 'LinearRegression', 'XGBClassifier', 'XGBRegressor']</span>:
+<span class="kw"></span><span class="name">R_MODEL_TYPES</span><span class="o">=</span> <span class="default_value">\['LogisticRegression', 'LinearRegression', 'XGBClassifier', 'XGBRegressor'\]</span>:
 
 :::
 
@@ -688,7 +688,7 @@ Add a new table to the result.
 **Arguments**
 
 - `table (Union[ResultTable, pd.DataFrame, List[Dict[str, Any]]])`: The table to add.
-- `title (Optional[str])`: The title of the table (can optionally be provided for pd.DataFrame and List\[Dict[str, Any]\] tables).
+- `title (Optional[str])`: The title of the table (can optionally be provided for pd.DataFrame and List\[Dict\[str, Any\]\] tables).
 
 ### check_result_id_exist<span class="suffix"></span>
 
@@ -710,7 +710,7 @@ Check if the result_id exists in any test block across all sections.
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">log</span>(<span class="params"><span class="bp">self</span><span class="muted">,</span></span><span class="params"><span class="n">section_id</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">position</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">unsafe</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span></span>):
+<span class="kw">def</span><span class="name">log</span>(<span class="params"><span class="bp">self</span><span class="muted">,</span></span><span class="params"><span class="n">section_id</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">position</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">unsafe</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">config</span><span class="p">:</span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="nb">bool</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span></span>):
 
 :::
 
@@ -723,6 +723,12 @@ Log the result to ValidMind.
 - `section_id (str)`: The section ID within the model document to insert the test result.
 - `position (int)`: The position (index) within the section to insert the test result.
 - `unsafe (bool)`: If True, log the result even if it contains sensitive data i.e. raw data from input datasets.
+- `config (Dict[str, bool])`: Configuration options for displaying the test result. Available config options:
+- hideTitle: Hide the title in the document view
+- hideText: Hide the description text in the document view
+- hideParams: Hide the parameters in the document view
+- hideTables: Hide tables in the document view
+- hideFigures: Hide figures in the document view
 
 ### log_async<span class="suffix"></span>
 
@@ -730,7 +736,7 @@ Log the result to ValidMind.
 
 ::: {.signature}
 
-<span class="kw">async def</span><span class="name">log_async</span>(<span class="params"><span class="bp">self</span><span class="muted">,</span></span><span class="params"><span class="n">section_id</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">position</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">unsafe</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span></span>):
+<span class="kw">async def</span><span class="name">log_async</span>(<span class="params"><span class="bp">self</span><span class="muted">,</span></span><span class="params"><span class="n">section_id</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">position</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">config</span><span class="p">:</span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="nb">bool</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span></span>):
 
 :::
 
@@ -793,6 +799,28 @@ Serialize the result for the API.
 <span class="kw">def</span><span class="name">to_widget</span>(<span class="param"><span class="bp">self</span></span>):
 
 :::
+
+### validate_log_config<span class="suffix"></span>
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">validate_log_config</span>(<span class="param"><span class="bp">self</span><span class="muted">,</span></span><span class="param"><span class="n">config</span><span class="p">:</span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="nb">bool</span><span class="p">\]</span></span>):
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Validate the configuration options for logging a test result
+
+**Arguments**
+
+- `config (Dict[str, bool])`: Configuration options to validate
+
+**Raises**
+
+- `InvalidParameterError`: If config contains invalid keys or non-boolean values
 
 ### test_name{.property}
 
