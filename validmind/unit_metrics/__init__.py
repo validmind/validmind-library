@@ -10,7 +10,7 @@ from validmind.tests.run import run_test
 def list_metrics(**kwargs):
     """List all metrics"""
     vm_provider = test_provider_store.get_test_provider("validmind")
-    vm_metrics_provider = vm_provider.metrics_provider
+    vm_metrics_provider = vm_provider.unit_metrics_provider
 
     prefix = "validmind.unit_metrics."
 

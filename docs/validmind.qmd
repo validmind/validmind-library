@@ -44,7 +44,7 @@ After you have pasted the code snippet into your development source code and exe
 
 ::: {.signature}
 
-<span class="name">2.8.12</span>
+<span class="name">2.8.14</span>
 
 :::
 
@@ -66,7 +66,7 @@ If the API key and secret are not provided, the client will attempt to retrieve 
 
 **Arguments**
 
-- `project (str, optional)`: The project CUID. Alias for model. Defaults to None. [DEPRECATED]
+- `project (str, optional)`: The project CUID. Alias for model. Defaults to None. \[DEPRECATED\]
 - `model (str, optional)`: The model CUID. Defaults to None.
 - `api_key (str, optional)`: The API key. Defaults to None.
 - `api_secret (str, optional)`: The API secret. Defaults to None.
@@ -225,11 +225,11 @@ Unit metrics are key-value pairs where the key is the metric name and the value 
 **Arguments**
 
 - `key (str)`: The metric key
-- `value (float)`: The metric value
-- `inputs (list)`: A list of input IDs that were used to compute the metric.
-- `params (dict)`: Dictionary of parameters used to compute the metric.
-- `recorded_at (str)`: The timestamp of the metric. Server will use current time if not provided.
-- `thresholds (dict)`: Dictionary of thresholds for the metric.
+- `value (Union[int, float])`: The metric value
+- `inputs (List[str])`: List of input IDs
+- `params (Dict[str, Any])`: Parameters used to generate the metric
+- `recorded_at (str)`: Timestamp when the metric was recorded
+- `thresholds (Dict[str, Any])`: Thresholds for the metric
 
 ## preview_template<span class="suffix"></span>
 
