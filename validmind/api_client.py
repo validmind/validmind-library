@@ -23,7 +23,7 @@ from ipywidgets import HTML, Accordion
 from .client_config import client_config
 from .errors import MissingAPICredentialsError, MissingModelIdError, raise_api_error
 from .logging import get_logger, init_sentry, send_single_error
-from .utils import NumpyEncoder, md_to_html, run_async
+from .utils import NumpyEncoder, is_html, md_to_html, run_async
 from .vm_models import Figure
 
 logger = get_logger(__name__)
@@ -429,14 +429,11 @@ def log_text(
         raise ValueError("`content_id` must be a non-empty string")
     if not text or not isinstance(text, str):
         raise ValueError("`text` must be a non-empty string")
+    if is_html(text):
+        raise ValueError("`text` must be a markdown or plain text string")
 
     log_text = run_async(
-        alog_metadata,
-        content_id,
-        text
-        if text.startswith("<") and text.endswith(">")
-        else md_to_html(text, mathml=True),
-        _json,
+        alog_metadata, content_id, md_to_html(text, mathml=True), _json
     )
 
     return Accordion(
