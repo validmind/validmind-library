@@ -431,7 +431,12 @@ def log_text(
         raise ValueError("`text` must be a non-empty string")
 
     log_text = run_async(
-        alog_metadata, content_id, md_to_html(text, mathml=True), _json
+        alog_metadata,
+        content_id,
+        text
+        if text.startswith("<") and text.endswith(">")
+        else md_to_html(text, mathml=True),
+        _json,
     )
 
     return Accordion(
