@@ -7,7 +7,7 @@
 import logging
 import os
 import time
-from typing import Any, Callable, Dict, Optional, TypeVar, Awaitable
+from typing import Any, Awaitable, Callable, Dict, Optional, TypeVar
 
 import sentry_sdk
 from sentry_sdk.utils import event_from_exception, exc_info_from_error
@@ -28,8 +28,7 @@ def _get_log_level() -> int:
 
 
 def get_logger(
-    name: str = "validmind",
-    log_level: Optional[int] = None
+    name: str = "validmind", log_level: Optional[int] = None
 ) -> logging.Logger:
     """Get a logger for the given module name."""
     formatter = logging.Formatter(
@@ -95,14 +94,14 @@ def init_sentry(server_config: Dict[str, Any]) -> None:
         logger.debug(f"Sentry error: {str(e)}")
 
 
-F = TypeVar('F', bound=Callable[..., Any])
-AF = TypeVar('AF', bound=Callable[..., Awaitable[Any]])
+F = TypeVar("F", bound=Callable[..., Any])
+AF = TypeVar("AF", bound=Callable[..., Awaitable[Any]])
 
 
 def log_performance(
     name: Optional[str] = None,
     logger: Optional[logging.Logger] = None,
-    force: bool = False
+    force: bool = False,
 ) -> Callable[[F], F]:
     """Decorator to log the time it takes to run a function.
 
@@ -114,6 +113,7 @@ def log_performance(
     Returns:
         Callable: The decorated function.
     """
+
     def decorator(func: F) -> F:
         # check if log level is set to debug
         if _get_log_level() != logging.DEBUG and not force:
@@ -137,6 +137,7 @@ def log_performance(
             return return_val
 
         return wrapped
+
     return decorator
 
 
@@ -144,7 +145,7 @@ async def log_performance_async(
     func: AF,
     name: Optional[str] = None,
     logger: Optional[logging.Logger] = None,
-    force: bool = False
+    force: bool = False,
 ) -> AF:
     """Async version of log_performance decorator"""
     # check if log level is set to debug

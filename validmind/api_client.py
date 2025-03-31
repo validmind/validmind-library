@@ -476,7 +476,15 @@ def log_metric(
         recorded_at (str, optional): Timestamp when the metric was recorded
         thresholds (Dict[str, Any], optional): Thresholds for the metric
     """
-    return run_async(alog_metric, key=key, value=value, inputs=inputs, params=params, recorded_at=recorded_at, thresholds=thresholds)
+    return run_async(
+        alog_metric,
+        key=key,
+        value=value,
+        inputs=inputs,
+        params=params,
+        recorded_at=recorded_at,
+        thresholds=thresholds,
+    )
 
 
 def get_ai_key() -> Dict[str, Any]:

@@ -5,7 +5,7 @@
 """Test Module Utils"""
 
 import inspect
-from typing import Any, Optional, Tuple, Union, Type
+from typing import Any, Optional, Tuple, Type, Union
 
 import numpy as np
 import pandas as pd
@@ -27,7 +27,7 @@ def test_description(test_class: Type[Any], truncate: bool = True) -> str:
 def remove_nan_pairs(
     y_true: Union[np.ndarray, list],
     y_pred: Union[np.ndarray, list],
-    dataset_id: Optional[str] = None
+    dataset_id: Optional[str] = None,
 ) -> Tuple[np.ndarray, np.ndarray]:
     """
     Remove pairs where either true or predicted values are NaN/None.
@@ -60,7 +60,7 @@ def remove_nan_pairs(
 def ensure_equal_lengths(
     y_true: Union[np.ndarray, list],
     y_pred: Union[np.ndarray, list],
-    dataset_id: Optional[str] = None
+    dataset_id: Optional[str] = None,
 ) -> Tuple[np.ndarray, np.ndarray]:
     """
     Check if true and predicted values have matching lengths, log warning if they don't,
@@ -94,7 +94,7 @@ def ensure_equal_lengths(
 def validate_prediction(
     y_true: Union[np.ndarray, list],
     y_pred: Union[np.ndarray, list],
-    dataset_id: Optional[str] = None
+    dataset_id: Optional[str] = None,
 ) -> Tuple[np.ndarray, np.ndarray]:
     """
     Comprehensive validation of true and predicted value pairs.

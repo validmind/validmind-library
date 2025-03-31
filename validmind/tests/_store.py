@@ -5,8 +5,9 @@
 """Module for storing loaded tests and test providers"""
 
 
-from .test_providers import TestProvider, ValidMindTestProvider
 from typing import Any, Callable, Optional
+
+from .test_providers import TestProvider, ValidMindTestProvider
 
 
 def singleton(cls):
@@ -77,7 +78,9 @@ class TestStore:
         """
         return self.tests.get(test_id)
 
-    def register_test(self, test_id: str, test: Optional[Callable[..., Any]] = None) -> None:
+    def register_test(
+        self, test_id: str, test: Optional[Callable[..., Any]] = None
+    ) -> None:
         """Register a test
 
         Args:
