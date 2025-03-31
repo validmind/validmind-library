@@ -46,29 +46,25 @@ def select_shap_values(
     """
     if not isinstance(shap_values, list):
         # For regression, return the SHAP values as they are
-        # TODO: shap_values is always an array of all predictions, how is the if above supposed to work?
-        # logger.info("Returning SHAP values as-is.")
-        return shap_values
+        selected_values = shap_values
+    else:
+        num_classes = len(shap_values)
+        # Default to class 1 for binary classification where no class is specified
+        if num_classes == 2 and class_of_interest is None:
+            selected_values = shap_values[1]
+        # Otherwise, use the specified class_of_interest
+        elif class_of_interest is not None and 0 <= class_of_interest < num_classes:
+            selected_values = shap_values[class_of_interest]
+        else:
+            raise ValueError(
+                f"Invalid class_of_interest: {class_of_interest}. Must be between 0 and {num_classes - 1}."
+            )
 
-    num_classes = len(shap_values)
+    # Add type conversion here to ensure proper float array
+    if hasattr(selected_values, "dtype"):
+        selected_values = np.array(selected_values, dtype=np.float64)
 
-    # Default to class 1 for binary classification where no class is specified
-    if num_classes == 2 and class_of_interest is None:
-        logger.debug("Using SHAP values for class 1 (positive class).")
-        return shap_values[1]
-
-    # Otherwise, use the specified class_of_interest
-    if (
-        class_of_interest is None
-        or class_of_interest < 0
-        or class_of_interest >= num_classes
-    ):
-        raise ValueError(
-            f"Invalid class_of_interest: {class_of_interest}. Must be between 0 and {num_classes - 1}."
-        )
-
-    logger.debug(f"Using SHAP values for class {class_of_interest}.")
-    return shap_values[class_of_interest]
+    return selected_values
 
 
 def generate_shap_plot(
