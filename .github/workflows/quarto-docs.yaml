@@ -53,6 +53,5 @@ jobs:
           default_author: github_actions
           message: "Generate quarto docs"
           add: "docs/"
-          remove: "docs/_build/"
           pathspec_error_handling: ignore
           push: true
