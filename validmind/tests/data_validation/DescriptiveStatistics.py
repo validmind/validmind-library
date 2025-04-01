@@ -44,7 +44,7 @@ def get_summary_statistics_categorical(df, categorical_fields):
     return summary_stats
 
 
-@tags("tabular_data", "time_series_data")
+@tags("tabular_data", "time_series_data", "data_quality")
 @tasks("classification", "regression")
 def DescriptiveStatistics(dataset: VMDataset):
     """
