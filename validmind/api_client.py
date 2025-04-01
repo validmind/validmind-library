@@ -429,12 +429,11 @@ def log_text(
         raise ValueError("`content_id` must be a non-empty string")
     if not text or not isinstance(text, str):
         raise ValueError("`text` must be a non-empty string")
-    if is_html(text):
-        raise ValueError("`text` must be a markdown or plain text string")
 
-    log_text = run_async(
-        alog_metadata, content_id, md_to_html(text, mathml=True), _json
-    )
+    if not is_html(text):
+        text = md_to_html(text, mathml=True)
+
+    log_text = run_async(alog_metadata, content_id, text, _json)
 
     return Accordion(
         children=[HTML(log_text["text"])],
