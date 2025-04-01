@@ -20,7 +20,7 @@ ValidMind Tests Module
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">list_tests</span>(<span class="params"><span class="n">filter</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">task</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">tags</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">pretty</span><span class="o">=</span><span class="kc">True</span><span class="muted">,</span></span><span class="params"><span class="n">truncate</span><span class="o">=</span><span class="kc">True</span></span>):
+<span class="kw">def</span><span class="name">list_tests</span>(<span class="params"><span class="n">filter</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">task</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">tags</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">List</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">pretty</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="muted">,</span></span><span class="params"><span class="n">truncate</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">Union</span><span class="p">\[</span><span class="n">List</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="p">, </span><span class="n">None</span><span class="p">\]</span></span>:
 
 :::
 
@@ -36,17 +36,13 @@ List all tests in the tests directory.
 - `pretty (bool, optional)`: If True, returns a pandas DataFrame with a formatted table. Defaults to True.
 - `truncate (bool, optional)`: If True, truncates the test description to the first line. Defaults to True. (only used if pretty=True)
 
-**Returns**
-
-- list or pandas.DataFrame: A list of all tests or a formatted table.
-
 ## load_test<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">load_test</span>(<span class="params"><span class="n">test_id</span><span class="p">:</span><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">test_func</span><span class="p">:</span><span class="nb">callable</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">reload</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span></span>):
+<span class="kw">def</span><span class="name">load_test</span>(<span class="params"><span class="n">test_id</span><span class="p">:</span><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">test_func</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">Callable</span><span class="p">\[</span><span class="n">...</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">reload</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">Callable</span><span class="p">\[</span><span class="n">...</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span></span>:
 
 :::
 
@@ -60,6 +56,7 @@ Test IDs are in the format `namespace.path_to_module.TestClassOrFuncName[:tag]`.
 
 - `test_id (str)`: The test ID in the format `namespace.path_to_module.TestName[:tag]`
 - `test_func (callable, optional)`: The test function to load. If not provided, the test will be loaded from the test provider. Defaults to None.
+- `reload (bool, optional)`: If True, reload the test even if it's already loaded. Defaults to False.
 
 ## describe_test<span class="suffix"></span>
 
@@ -67,7 +64,7 @@ Test IDs are in the format `namespace.path_to_module.TestClassOrFuncName[:tag]`.
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">describe_test</span>(<span class="params"><span class="n">test_id</span><span class="p">:</span><span class="n">TestID</span><span class="p"> (Union of </span><a href="/validmind/validmind/tests/data_validation.qmd">validmind.data_validation.\*</a><span class="p">, </span><a href="/validmind/validmind/tests/model_validation.qmd">validmind.model_validation.\*</a><span class="p">, </span><a href="/validmind/validmind/tests/prompt_validation.qmd">validmind.prompt_validation.\*</a><span class="p"> and </span><span class="nb">str</span><span class="p">)</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">raw</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">show</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span></span>):
+<span class="kw">def</span><span class="name">describe_test</span>(<span class="params"><span class="n">test_id</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">TestID</span><span class="p"> (Union of </span><a href="/validmind/validmind/tests/data_validation.qmd">validmind.data_validation.\*</a><span class="p">, </span><a href="/validmind/validmind/tests/model_validation.qmd">validmind.model_validation.\*</a><span class="p">, </span><a href="/validmind/validmind/tests/prompt_validation.qmd">validmind.prompt_validation.\*</a><span class="p"> and </span><span class="nb">str</span><span class="p">)</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">raw</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">show</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">Union</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">HTML</span><span class="p">, </span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span></span>:
 
 :::
 
@@ -131,13 +128,13 @@ This function is the main entry point for running tests. It can run simple unit 
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">list_tags</span>():
+<span class="kw">def</span><span class="name">list_tags</span>()<span class="p"> → </span><span class="return-annotation"><span class="n">List</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span></span>:
 
 :::
 
 <!-- docstring.jinja2 -->
 
-List unique tags from all test classes.
+List all unique available tags
 
 ## list_tasks<span class="suffix"></span>
 
@@ -145,13 +142,13 @@ List unique tags from all test classes.
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">list_tasks</span>():
+<span class="kw">def</span><span class="name">list_tasks</span>()<span class="p"> → </span><span class="return-annotation"><span class="n">List</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span></span>:
 
 :::
 
 <!-- docstring.jinja2 -->
 
-List unique tasks from all test classes.
+List all unique available tasks
 
 ## list_tasks_and_tags<span class="suffix"></span>
 
@@ -159,7 +156,7 @@ List unique tasks from all test classes.
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">list_tasks_and_tags</span>(<span class="param"><span class="n">as_json</span><span class="o">=</span><span class="kc">False</span></span>):
+<span class="kw">def</span><span class="name">list_tasks_and_tags</span>(<span class="param"><span class="n">as_json</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">Union</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">List</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="p">\]</span><span class="p">\]</span></span>:
 
 :::
 
