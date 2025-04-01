@@ -105,15 +105,3 @@ Will be used in favor of \_get_histogram in the future
 <!-- docstring.jinja2 -->
 
 Returns a collection of histograms for a numerical column, each one with a different bin size
-
-<!-- function.qmd.jinja2 -->
-
-## infer_datatypes<span class="suffix"></span>
-
-<!-- signatures.jinja2 -->
-
-::: {.signature}
-
-<span class="kw">def</span><span class="name">infer_datatypes</span>(<span class="param"><span class="n">df</span></span>):
-
-:::

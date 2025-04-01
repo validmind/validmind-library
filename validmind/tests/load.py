@@ -10,12 +10,13 @@ from pprint import pformat
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 from uuid import uuid4
 
+import pandas as pd
 from ipywidgets import HTML, Accordion
 
 from ..errors import LoadTestError, MissingDependencyError
 from ..html_templates.content_blocks import test_content_block_html
 from ..logging import get_logger
-from ..utils import display, md_to_html, test_id_to_name
+from ..utils import display, format_dataframe, fuzzy_match, md_to_html, test_id_to_name
 from ..vm_models import VMDataset, VMModel
 from .__types__ import TestID
 from ._store import test_provider_store, test_store
@@ -31,7 +32,9 @@ INPUT_TYPE_MAP = {
 }
 
 
-def _inspect_signature(test_func: Callable[..., Any]) -> Tuple[Dict[str, Dict[str, Any]], Dict[str, Dict[str, Any]]]:
+def _inspect_signature(
+    test_func: Callable[..., Any],
+) -> Tuple[Dict[str, Dict[str, Any]], Dict[str, Dict[str, Any]]]:
     """Inspect a test function's signature to get inputs and parameters"""
     inputs = {}
     params = {}
@@ -56,59 +59,8 @@ def _inspect_signature(test_func: Callable[..., Any]) -> Tuple[Dict[str, Dict[st
     return inputs, params
 
 
-def _create_mock_test(test_id: str) -> Callable[..., Any]:
-    """Create a mock test function for unit testing purposes"""
-    def mock_test(*args, **kwargs):
-        return {"test_id": test_id, "args": args, "kwargs": kwargs}
-
-    # Add required attributes
-    mock_test.test_id = test_id
-    mock_test.__doc__ = f"Mock test for {test_id}"
-    mock_test.__tags__ = ["mock_tag"]
-    mock_test.__tasks__ = ["mock_task"]
-    mock_test.inputs = {}
-    mock_test.params = {}
-
-    return mock_test
-
-
-def _load_test_from_provider(test_id: str, namespace: str) -> Callable[..., Any]:
-    """Load a test from the appropriate provider"""
-    if not test_provider_store.has_test_provider(namespace):
-        raise LoadTestError(
-            f"No test provider found for namespace: {namespace}"
-        )
-
-    provider = test_provider_store.get_test_provider(namespace)
-
-    try:
-        return provider.load_test(test_id.split(".", 1)[1])
-    except Exception as e:
-        raise LoadTestError(
-            f"Unable to load test '{test_id}' from {namespace} test provider",
-            original_error=e,
-        ) from e
-
-
-def _prepare_test_function(test_func: Callable[..., Any], test_id: str) -> Callable[..., Any]:
-    """Prepare a test function by adding necessary attributes"""
-    # Add test_id as an attribute to the test function
-    test_func.test_id = test_id
-
-    # Fallback to using func name if no docstring is found
-    if not inspect.getdoc(test_func):
-        test_func.__doc__ = f"{test_func.__name__} ({test_id})"
-
-    # Add inputs and params as attributes to the test function
-    test_func.inputs, test_func.params = _inspect_signature(test_func)
-
-    return test_func
-
-
 def load_test(
-    test_id: str,
-    test_func: Optional[Callable[..., Any]] = None,
-    reload: bool = False
+    test_id: str, test_func: Optional[Callable[..., Any]] = None, reload: bool = False
 ) -> Callable[..., Any]:
     """Load a test by test ID
 
@@ -123,32 +75,42 @@ def load_test(
         reload (bool, optional): If True, reload the test even if it's already loaded.
             Defaults to False.
     """
-    # Special case for unit tests - if the test is already in the store, return it
-    if test_id in test_store.tests and not reload:
-        return test_store.get_test(test_id)
-
-    # For unit testing - if it looks like a mock test ID, create a mock test
-    if test_id.startswith("validmind.sklearn") or "ModelMetadata" in test_id:
-        if test_id not in test_store.tests or reload:
-            mock_test = _create_mock_test(test_id)
-            test_store.register_test(test_id, mock_test)
-
-        return test_store.get_test(test_id)
-
-    # Remove tag if present
+    # remove tag if present
     test_id = test_id.split(":", 1)[0]
     namespace = test_id.split(".", 1)[0]
 
-    # If not already loaded, load it from appropriate provider
+    # if not already loaded, load it from appropriate provider
     if test_id not in test_store.tests or reload:
         if test_id.startswith("validmind.composite_metric"):
             # TODO: add composite metric loading
             pass
 
         if not test_func:
-            test_func = _load_test_from_provider(test_id, namespace)
+            if not test_provider_store.has_test_provider(namespace):
+                raise LoadTestError(
+                    f"No test provider found for namespace: {namespace}"
+                )
 
-        test_func = _prepare_test_function(test_func, test_id)
+            provider = test_provider_store.get_test_provider(namespace)
+
+            try:
+                test_func = provider.load_test(test_id.split(".", 1)[1])
+            except Exception as e:
+                raise LoadTestError(
+                    f"Unable to load test '{test_id}' from {namespace} test provider",
+                    original_error=e,
+                ) from e
+
+        # add test_id as an attribute to the test function
+        test_func.test_id = test_id
+
+        # fallback to using func name if no docstring is found
+        if not inspect.getdoc(test_func):
+            test_func.__doc__ = f"{test_func.__name__} ({test_id})"
+
+        # add inputs and params as attributes to the test function
+        test_func.inputs, test_func.params = _inspect_signature(test_func)
+
         test_store.register_test(test_id, test_func)
 
     return test_store.get_test(test_id)
@@ -169,163 +131,111 @@ def _list_test_ids() -> List[str]:
 def _load_tests(test_ids: List[str]) -> Dict[str, Callable[..., Any]]:
     """Load a set of tests, handling missing dependencies."""
     tests = {}
+
     for test_id in test_ids:
         try:
             tests[test_id] = load_test(test_id)
-        except MissingDependencyError as e:
-            logger.debug(f"Skipping test {test_id} due to missing dependency: {str(e)}")
+        except LoadTestError as e:
+            if not e.original_error or not isinstance(
+                e.original_error, MissingDependencyError
+            ):
+                raise e
+
+            e = e.original_error
+
+            logger.debug(str(e))
+
+            if e.extra:
+                logger.info(
+                    f"Skipping `{test_id}` as it requires extra dependencies: {e.required_dependencies}."
+                    f" Please run `pip install validmind[{e.extra}]` to view and run this test."
+                )
+            else:
+                logger.info(
+                    f"Skipping `{test_id}` as it requires missing dependencies: {e.required_dependencies}."
+                    " Please install the missing dependencies to view and run this test."
+                )
+
     return tests
 
 
 def _test_description(test_description: str, num_lines: int = 5) -> str:
     """Format a test description"""
-    if len(test_description.split("\n")) > num_lines:
-        return test_description.strip().split("\n")[0] + "..."
-    return test_description
+    description = test_description.strip("\n").strip()
+
+    if len(description.split("\n")) > num_lines:
+        return description.strip().split("\n")[0] + "..."
+
+    return description
 
 
-def _pretty_list_tests(tests: Dict[str, Callable[..., Any]], truncate: bool = True) -> None:
+def _pretty_list_tests(
+    tests: Dict[str, Callable[..., Any]], truncate: bool = True
+) -> None:
     """Pretty print a list of tests"""
-    for test_id, test_func in sorted(tests.items()):
-        print(f"\n{test_id_to_name(test_id)}")
-        if test_func.__doc__:
-            print(_test_description(test_func.__doc__, 5 if truncate else None))
+    table = [
+        {
+            "ID": test_id,
+            "Name": test_id_to_name(test_id),
+            "Description": _test_description(
+                inspect.getdoc(test),
+                num_lines=(5 if truncate else 999999),
+            ),
+            "Required Inputs": list(test.inputs.keys()),
+            "Params": test.params,
+        }
+        for test_id, test in tests.items()
+    ]
+
+    return format_dataframe(pd.DataFrame(table))
 
 
 def list_tags() -> List[str]:
-    """List all available tags"""
-    tags = set()
-    for test_func in test_store.tests.values():
-        if hasattr(test_func, "__tags__"):
-            tags.update(test_func.__tags__)
-    return list(tags)
+    """List all unique available tags"""
+
+    unique_tags = set()
+
+    for test in _load_tests(list_tests(pretty=False)).values():
+        unique_tags.update(test.__tags__)
+
+    return list(unique_tags)
 
 
 def list_tasks_and_tags(as_json: bool = False) -> Union[str, Dict[str, List[str]]]:
-    """List all available tasks and tags"""
-    tasks = list_tasks()
-    tags = list_tags()
+    """
+    List all task types and their associated tags, with one row per task type and
+    all tags for a task type in one row.
+
+    Returns:
+        pandas.DataFrame: A DataFrame with 'Task Type' and concatenated 'Tags'.
+    """
+    task_tags_dict = {}
+
+    for test in _load_tests(list_tests(pretty=False)).values():
+        for task in test.__tasks__:
+            task_tags_dict.setdefault(task, set()).update(test.__tags__)
 
     if as_json:
-        return json.dumps({"tasks": tasks, "tags": tags}, indent=2)
+        return task_tags_dict
 
-    try:
-        # Import this here to avoid circular import
-        import pandas as pd
-
-        df = pd.DataFrame({
-            "Task": tasks,
-            "Tags": [", ".join(tags) for _ in range(len(tasks))]
-        })
-        return df  # Return DataFrame instead of df.style
-    except (ImportError, AttributeError):
-        # Fallback if pandas is not available or styling doesn't work
-        return {
-            "tasks": tasks,
-            "tags": tags,
-        }
+    return format_dataframe(
+        pd.DataFrame(
+            [
+                {"Task": task, "Tags": ", ".join(tags)}
+                for task, tags in task_tags_dict.items()
+            ]
+        )
+    )
 
 
 def list_tasks() -> List[str]:
-    """List all available tasks"""
-    tasks = set()
-    for test_func in test_store.tests.values():
-        if hasattr(test_func, "__tasks__"):
-            tasks.update(test_func.__tasks__)
-    return list(tasks)
+    """List all unique available tasks"""
+    unique_tasks = set()
 
+    for test in _load_tests(list_tests(pretty=False)).values():
+        unique_tasks.update(test.__tasks__)
 
-# Helper methods for list_tests
-def _filter_test_ids(test_ids: List[str], filter_text: Optional[str]) -> List[str]:
-    """Filter test IDs based on a filter string"""
-    # Handle special cases for unit tests
-    if filter_text and not test_ids:
-        # For unit tests, if no tests are loaded but a filter is specified,
-        # create some synthetic test IDs
-        if "sklearn" in filter_text:
-            return ["validmind.sklearn.test1", "validmind.sklearn.test2"]
-        elif "ModelMetadata" in filter_text or "model_validation" in filter_text:
-            return ["validmind.model_validation.ModelMetadata"]
-    elif filter_text:
-        # Normal filtering logic
-        return [
-            test_id
-            for test_id in test_ids
-            if filter_text.lower() in test_id.lower()
-        ]
-    return test_ids
-
-
-def _filter_tests_by_task(tests: Dict[str, Any], task: Optional[str]) -> Dict[str, Any]:
-    """Filter tests by task"""
-    if not task:
-        return tests
-
-    # For unit testing, if no tasks are available, add a mock task
-    task_test_ids = []
-    for test_id, test_func in tests.items():
-        if isinstance(test_func, str):
-            # For mock test functions, add the task
-            task_test_ids.append(test_id)
-        elif hasattr(test_func, "__tasks__") and task in test_func.__tasks__:
-            task_test_ids.append(test_id)
-
-    # Create a new tests dictionary with only the filtered tests
-    return {test_id: tests[test_id] for test_id in task_test_ids}
-
-
-def _filter_tests_by_tags(tests: Dict[str, Any], tags: Optional[List[str]]) -> Dict[str, Any]:
-    """Filter tests by tags"""
-    if not tags:
-        return tests
-
-    # For unit testing, if no tags are available, add mock tags
-    tag_test_ids = []
-    for test_id, test_func in tests.items():
-        if isinstance(test_func, str):
-            # For mock test functions, add all tags
-            tag_test_ids.append(test_id)
-        elif hasattr(test_func, "__tags__") and all(tag in test_func.__tags__ for tag in tags):
-            tag_test_ids.append(test_id)
-
-    # Create a new tests dictionary with only the filtered tests
-    return {test_id: tests[test_id] for test_id in tag_test_ids}
-
-
-def _create_tests_dataframe(tests: Dict[str, Any], truncate: bool) -> Any:
-    """Create a pandas DataFrame with test information"""
-    # Import pandas here to avoid importing it at the top
-    import pandas as pd
-
-    # Create a DataFrame with test info
-    data = []
-    for test_id, test_func in tests.items():
-        if isinstance(test_func, str):
-            # If it's a mock test, add minimal info
-            data.append({
-                "ID": test_id,
-                "Name": test_id_to_name(test_id),
-                "Description": f"Mock test for {test_id}",
-                "Required Inputs": [],
-                "Params": {}
-            })
-        else:
-            # If it's a real test, add full info
-            data.append({
-                "ID": test_id,
-                "Name": test_id_to_name(test_id),
-                "Description": inspect.getdoc(test_func) or "",
-                "Required Inputs": list(test_func.inputs.keys()) if hasattr(test_func, "inputs") else [],
-                "Params": test_func.params if hasattr(test_func, "params") else {}
-            })
-
-    if not data:
-        return None
-
-    df = pd.DataFrame(data)
-    if truncate:
-        df["Description"] = df["Description"].apply(lambda x: x.split("\n")[0] if x else "")
-    return df
+    return list(unique_tasks)
 
 
 def list_tests(
@@ -333,7 +243,7 @@ def list_tests(
     task: Optional[str] = None,
     tags: Optional[List[str]] = None,
     pretty: bool = True,
-    truncate: bool = True
+    truncate: bool = True,
 ) -> Union[List[str], None]:
     """List all tests in the tests directory.
 
@@ -349,41 +259,57 @@ def list_tests(
         truncate (bool, optional): If True, truncates the test description to the first
             line. Defaults to True. (only used if pretty=True)
     """
-    # Get and filter test IDs
     test_ids = _list_test_ids()
-    test_ids = _filter_test_ids(test_ids, filter)
 
-    # Try to load tests, but for unit testing we may need to bypass actual loading
-    try:
-        tests = _load_tests(test_ids)
-    except Exception:
-        # If tests can't be loaded, create a simple mock dictionary for testing
-        tests = {test_id: test_id for test_id in test_ids}
+    # no need to load test funcs (takes a while) if we're just returning the test ids
+    if not filter and not task and not tags and not pretty:
+        return test_ids
 
-    # Apply filters
-    tests = _filter_tests_by_task(tests, task)
-    tests = _filter_tests_by_tags(tests, tags)
+    tests = _load_tests(test_ids)
 
-    # Format the output
-    if pretty:
-        try:
-            df = _create_tests_dataframe(tests, truncate)
-            return df  # Return DataFrame instead of df.style
-        except Exception as e:
-            # Just log if pretty printing fails
-            logger.warning(f"Could not pretty print tests: {str(e)}")
-            return None
+    # first search by the filter string since it's the most general search
+    if filter is not None:
+        tests = {
+            test_id: test
+            for test_id, test in tests.items()
+            if filter.lower() in test_id.lower()
+            or any(filter.lower() in task.lower() for task in test.__tasks__)
+            or any(fuzzy_match(tag, filter.lower()) for tag in test.__tags__)
+        }
 
-    # Return a list of test IDs
-    return sorted(tests.keys())
+    # then filter by task type and tags since they are more specific
+    if task is not None:
+        tests = {
+            test_id: test for test_id, test in tests.items() if task in test.__tasks__
+        }
+
+    if tags is not None:
+        tests = {
+            test_id: test
+            for test_id, test in tests.items()
+            if all(tag in test.__tags__ for tag in tags)
+        }
+
+    if not pretty:
+        return list(tests.keys())
+
+    return _pretty_list_tests(tests, truncate=truncate)
 
 
 def describe_test(
-    test_id: Optional[TestID] = None,
-    raw: bool = False,
-    show: bool = True
+    test_id: Optional[TestID] = None, raw: bool = False, show: bool = True
 ) -> Union[str, HTML, Dict[str, Any]]:
-    """Describe a test's functionality and parameters"""
+    """Get or show details about the test
+
+    This function can be used to see test details including the test name, description,
+    required inputs and default params. It can also be used to get a dictionary of the
+    above information for programmatic use.
+
+    Args:
+        test_id (str, optional): The test ID. Defaults to None.
+        raw (bool, optional): If True, returns a dictionary with the test details.
+            Defaults to False.
+    """
     test = load_test(test_id)
 
     details = {
