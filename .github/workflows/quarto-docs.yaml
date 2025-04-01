@@ -26,6 +26,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_TOKEN }}
 
       - name: Install poetry
         run: pipx install poetry
@@ -53,6 +55,5 @@ jobs:
           default_author: github_actions
           message: "Generate quarto docs"
           add: "docs/"
-          remove: "docs/_build/"
           pathspec_error_handling: ignore
           push: true
