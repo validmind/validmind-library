@@ -7,15 +7,15 @@ on:
   push:
     branches:
       - main
-      - release-v1
+      - cachafla/fix-docs-gh-action
     paths-ignore:
-      - 'docs/_build/**'
+      - "docs/_build/**"
   workflow_dispatch:
     inputs:
       note:
-        description: 'Provide a description of the changes'
+        description: "Provide a description of the changes"
         required: true
-        default: 'Update docs'
+        default: "Update docs"
 
 permissions:
   contents: write
@@ -27,8 +27,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GH_TOKEN }}
 
       - name: Install poetry
         run: pipx install poetry
@@ -36,8 +34,8 @@ jobs:
       - name: Set up Python 3.11
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
-          cache: 'poetry'
+          python-version: "3.11"
+          cache: "poetry"
 
       - name: Install Dependencies
         run: |
@@ -53,5 +51,5 @@ jobs:
         uses: EndBug/add-and-commit@v9
         with:
           default_author: github_actions
-          message: 'Generate docs'
-          add: 'docs/_build/'
+          message: "Generate docs"
+          add: "docs/_build/"
