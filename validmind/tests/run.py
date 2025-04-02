@@ -222,6 +222,7 @@ def _run_comparison_test(
     params: Union[Dict[str, Any], None],
     param_grid: Union[Dict[str, List[Any]], List[Dict[str, Any]], None],
     title: Optional[str] = None,
+    show_params: bool = True,
 ):
     """Run a comparison test i.e. a test that compares multiple outputs of a test across
     different input and/or param combinations"""
@@ -242,6 +243,7 @@ def _run_comparison_test(
             show=False,
             generate_description=False,
             title=title,
+            show_params=show_params,
         )
         for config in run_test_configs
     ]
@@ -253,7 +255,9 @@ def _run_comparison_test(
     else:
         test_doc = describe_test(test_id, raw=True)["Description"]
 
-    combined_outputs, combined_inputs, combined_params = combine_results(results)
+    combined_outputs, combined_inputs, combined_params = combine_results(
+        results, show_params
+    )
 
     return build_test_result(
         outputs=combined_outputs,
@@ -297,6 +301,7 @@ def run_test(  # noqa: C901
     generate_description: bool = True,
     title: Optional[str] = None,
     post_process_fn: Union[Callable[[TestResult], None], None] = None,
+    show_params: bool = True,
     **kwargs,
 ) -> TestResult:
     """Run a ValidMind or custom test
@@ -321,6 +326,7 @@ def run_test(  # noqa: C901
         generate_description (bool, optional): Whether to generate a description. Defaults to True.
         title (str, optional): Custom title for the test result
         post_process_fn (Callable[[TestResult], None], optional): Function to post-process the test result
+        show_params (bool, optional): Whether to include parameter values in figure titles for comparison tests. Defaults to True.
 
     Returns:
         TestResult: A TestResult object containing the test results
@@ -358,6 +364,7 @@ def run_test(  # noqa: C901
             input_grid=input_grid,
             params=params,
             param_grid=param_grid,
+            show_params=show_params,
         )
 
     elif unit_metrics:
