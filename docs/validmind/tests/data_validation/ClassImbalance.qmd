@@ -18,7 +18,7 @@ Threshold based tests
 
 ::: {.signature}
 
-<span class="decorators"><span class="decorator">@<span class="n">tags(<span class="s">'tabular_data'</span>, <span class="s">'binary_classification'</span>, <span class="s">'multiclass_classification'</span>)</span></span>
+<span class="decorators"><span class="decorator">@<span class="n">tags(<span class="s">'tabular_data'</span>, <span class="s">'binary_classification'</span>, <span class="s">'multiclass_classification'</span>, <span class="s">'data_quality'</span>)</span></span>
 
 <span class="decorator">@<span class="n">tasks(<span class="s">'classification'</span>)</span></span> </span>
 

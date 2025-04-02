@@ -44,7 +44,7 @@ After you have pasted the code snippet into your development source code and exe
 
 ::: {.signature}
 
-<span class="name">2.8.14</span>
+<span class="name">2.8.16</span>
 
 :::
 
@@ -420,6 +420,35 @@ The function may also include a docstring. This docstring will be used and logge
 **Returns**
 
 - The decorated function.
+
+## log_text<span class="suffix"></span>
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">log_text</span>(<span class="params"><span class="n">content_id</span><span class="p">:</span><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">text</span><span class="p">:</span><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">\_json</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span></span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Logs free-form text to ValidMind API.
+
+**Arguments**
+
+- `content_id (str)`: Unique content identifier for the text.
+- `text (str)`: The text to log. Will be converted to HTML with MathML support.
+- `_json (dict, optional)`: Additional metadata to associate with the text. Defaults to None.
+
+**Returns**
+
+- An accordion widget containing the logged text as HTML.
+
+**Raises**
+
+- `ValueError`: If content_id or text are empty or not strings.
+- `Exception`: If the API call fails.
 
 <!-- module.qmd.jinja2 -->
 

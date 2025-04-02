@@ -43,7 +43,7 @@ warnings.simplefilter("ignore", category=NumbaDeprecationWarning)
 warnings.simplefilter("ignore", category=NumbaPendingDeprecationWarning)
 
 from .__version__ import __version__  # noqa: E402
-from .api_client import init, log_metric, reload
+from .api_client import init, log_metric, log_text, reload
 from .client import (  # noqa: E402
     get_test_suite,
     init_dataset,
@@ -125,4 +125,5 @@ __all__ = [  # noqa
     "tests",
     "unit_metrics",
     "test_suites",
+    "log_text",
 ]
