@@ -133,8 +133,10 @@ def ResponseRelevancy(
 
     score_column = "answer_relevancy"
 
-    fig_histogram = px.histogram(x=result_df[score_column].to_list(), nbins=10)
-    fig_box = px.box(x=result_df[score_column].to_list())
+    fig_histogram = px.histogram(
+        x=result_df[score_column].to_list(), nbins=10, title="Response Relevancy"
+    )
+    fig_box = px.box(x=result_df[score_column].to_list(), title="Response Relevancy")
 
     return (
         {
