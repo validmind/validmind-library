@@ -118,8 +118,10 @@ def ContextEntityRecall(
 
     score_column = "context_entity_recall"
 
-    fig_histogram = px.histogram(x=result_df[score_column].to_list(), nbins=10)
-    fig_box = px.box(x=result_df[score_column].to_list())
+    fig_histogram = px.histogram(
+        x=result_df[score_column].to_list(), nbins=10, title="Context Entity Recall"
+    )
+    fig_box = px.box(x=result_df[score_column].to_list(), title="Context Entity Recall")
 
     return (
         {

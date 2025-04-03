@@ -123,8 +123,10 @@ def AnswerCorrectness(
 
     score_column = "answer_correctness"
 
-    fig_histogram = px.histogram(x=result_df[score_column].to_list(), nbins=10)
-    fig_box = px.box(x=result_df[score_column].to_list())
+    fig_histogram = px.histogram(
+        x=result_df[score_column].to_list(), nbins=10, title="Answer Correctness"
+    )
+    fig_box = px.box(x=result_df[score_column].to_list(), title="Answer Correctness")
 
     return (
         {

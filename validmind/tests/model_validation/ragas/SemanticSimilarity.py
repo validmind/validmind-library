@@ -112,8 +112,10 @@ def SemanticSimilarity(
 
     score_column = "semantic_similarity"
 
-    fig_histogram = px.histogram(x=result_df[score_column].to_list(), nbins=10)
-    fig_box = px.box(x=result_df[score_column].to_list())
+    fig_histogram = px.histogram(
+        x=result_df[score_column].to_list(), nbins=10, title="Semantic Similarity"
+    )
+    fig_box = px.box(x=result_df[score_column].to_list(), title="Semantic Similarity")
 
     return (
         {
