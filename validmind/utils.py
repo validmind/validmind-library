@@ -20,6 +20,7 @@ import nest_asyncio
 import numpy as np
 import pandas as pd
 import seaborn as sns
+from bs4 import BeautifulSoup
 from IPython.core import getipython
 from IPython.display import HTML
 from IPython.display import display as ipy_display
@@ -574,6 +575,63 @@ def md_to_html(md: str, mathml=False) -> str:
     )
 
     return html
+
+
+def is_html(text: str) -> bool:
+    """Check if a string is HTML.
+
+    Uses more robust heuristics to determine if a string contains HTML content.
+
+    Args:
+        text (str): The string to check
+
+    Returns:
+        bool: True if the string likely contains HTML, False otherwise
+    """
+    # Strip whitespace first
+    text = text.strip()
+
+    # Basic check: Must at least start with < and end with >
+    if not (text.startswith("<") and text.endswith(">")):
+        return False
+
+    # Look for common HTML tags
+    common_html_patterns = [
+        r"<html.*?>",  # HTML tag
+        r"<body.*?>",  # Body tag
+        r"<div.*?>",  # Div tag
+        r"<p>.*?</p>",  # Paragraph with content
+        r"<h[1-6]>.*?</h[1-6]>",  # Headers
+        r"<script.*?>",  # Script tags
+        r"<style.*?>",  # Style tags
+        r"<a href=.*?>",  # Links
+        r"<img.*?>",  # Images
+        r"<table.*?>",  # Tables
+        r"<!DOCTYPE html>",  # DOCTYPE declaration
+    ]
+
+    for pattern in common_html_patterns:
+        if re.search(pattern, text, re.IGNORECASE | re.DOTALL):
+            return True
+
+    # If we have at least 2 matching tags, it's likely HTML
+    # This helps detect custom elements or patterns not in our list
+    tags = re.findall(r"</?[a-zA-Z][a-zA-Z0-9]*.*?>", text)
+    if len(tags) >= 2:
+        return True
+
+    # Try parsing with BeautifulSoup as a last resort
+    try:
+        soup = BeautifulSoup(text, "html.parser")
+        # If we find any tags that weren't in the original text, BeautifulSoup
+        # likely tried to fix broken HTML, meaning it's not valid HTML
+        return len(soup.find_all()) > 0
+
+    except Exception as e:
+        logger.error(f"Error checking if text is HTML: {e}")
+        return False
+
+    return False
 
 
 def inspect_obj(obj):

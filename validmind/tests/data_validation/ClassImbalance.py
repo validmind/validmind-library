@@ -14,7 +14,9 @@ from validmind.errors import SkipTestError
 from validmind.vm_models import VMDataset
 
 
-@tags("tabular_data", "binary_classification", "multiclass_classification")
+@tags(
+    "tabular_data", "binary_classification", "multiclass_classification", "data_quality"
+)
 @tasks("classification")
 def ClassImbalance(
     dataset: VMDataset, min_percent_threshold: int = 10

@@ -146,12 +146,12 @@ def _load_tests(test_ids: List[str]) -> Dict[str, Callable[..., Any]]:
             logger.debug(str(e))
 
             if e.extra:
-                logger.info(
+                logger.debug(
                     f"Skipping `{test_id}` as it requires extra dependencies: {e.required_dependencies}."
                     f" Please run `pip install validmind[{e.extra}]` to view and run this test."
                 )
             else:
-                logger.info(
+                logger.debug(
                     f"Skipping `{test_id}` as it requires missing dependencies: {e.required_dependencies}."
                     " Please install the missing dependencies to view and run this test."
                 )
@@ -183,6 +183,8 @@ def _pretty_list_tests(
             ),
             "Required Inputs": list(test.inputs.keys()),
             "Params": test.params,
+            "Tags": test.__tags__,
+            "Tasks": test.__tasks__,
         }
         for test_id, test in tests.items()
     ]
