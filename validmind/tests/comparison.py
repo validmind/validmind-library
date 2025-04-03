@@ -146,7 +146,9 @@ def _combine_tables(results: List[TestResult]) -> List[pd.DataFrame]:
     return [_combine_single_table(results, i) for i in range(len(results[0].tables))]
 
 
-def _build_input_param_string(result: TestResult, results: List[TestResult]) -> str:
+def _build_input_param_string(
+    result: TestResult, results: List[TestResult], show_params: bool
+) -> str:
     """Build a string repr of unique inputs + params for a figure title"""
     parts = []
     unique_inputs = _get_unique_inputs(results)
@@ -162,19 +164,29 @@ def _build_input_param_string(result: TestResult, results: List[TestResult]) -> 
                 input_val = _get_input_key(input_obj)
                 parts.append(f"{input_name}={input_val}")
 
-    # TODO: revisit this when we can create a value/title to show for params
-    # unique_params = _get_unique_params(results)
-    # # if theres only one unique value for a param, don't show it
-    # # however, if there is only one unique value for all params then show it as
-    # # long as there is no existing inputs in the parts list
-    # if result.params:
-    #     should_show = (
-    #         all(len(unique_params[param_name]) == 1 for param_name in unique_params)
-    #         and not parts
-    #     )
-    #     for param_name, param_value in result.params.items():
-    #         if should_show or len(unique_params[param_name]) > 1:
-    #             parts.append(f"{param_name}={param_value}")
+    # Handle params if show_params is enabled
+    if show_params and result.params:
+        unique_params = _get_unique_params(results)
+        # If there's only one unique value for a param, don't show it
+        # unless there is only one unique value for all params and no inputs shown
+        should_show = (
+            all(len(unique_params[param_name]) == 1 for param_name in unique_params)
+            and not parts
+        )
+        for param_name, param_value in result.params.items():
+            if should_show or len(unique_params[param_name]) > 1:
+                # Convert the param_value to a string representation
+                if isinstance(param_value, list):
+                    # For lists, join elements with commas
+                    str_value = ",".join(str(v) for v in param_value)
+                elif hasattr(param_value, "__str__"):
+                    # Use string representation if available
+                    str_value = str(param_value)
+                else:
+                    # Default fallback
+                    str_value = repr(param_value)
+
+                parts.append(f"{param_name}={str_value}")
 
     return ", ".join(parts)
 
@@ -207,7 +219,7 @@ def _update_figure_title(figure: Any, input_param_str: str) -> None:
         raise ValueError(f"Unsupported figure type: {type(figure)}")
 
 
-def _combine_figures(results: List[TestResult]) -> List[Any]:
+def _combine_figures(results: List[TestResult], show_params: bool) -> List[Any]:
     """Combine figures from multiple test results (gets raw figure objects, not vm Figures)"""
     combined_figures = []
 
@@ -216,7 +228,7 @@ def _combine_figures(results: List[TestResult]) -> List[Any]:
             # update the figure object in-place with the new title
             _update_figure_title(
                 figure=figure.figure,
-                input_param_str=_build_input_param_string(result, results),
+                input_param_str=_build_input_param_string(result, results, show_params),
             )
             combined_figures.append(figure)
 
@@ -279,34 +291,52 @@ def get_comparison_test_configs(
         A list of test configurations.
     """
 
-    # Convert list of dicts to dict of lists if necessary
+    # Convert list of dicts to dict of lists if necessary for input_grid
     def list_to_dict(grid_list):
         return {k: [d[k] for d in grid_list] for k in grid_list[0].keys()}
 
+    # Handle input_grid the same way as before
     if isinstance(input_grid, list):
         input_grid = list_to_dict(input_grid)
 
-    if isinstance(param_grid, list):
-        param_grid = list_to_dict(param_grid)
-
     test_configs = []
 
-    if input_grid and param_grid:
-        input_combinations = _cartesian_product(input_grid)
-        param_combinations = _cartesian_product(param_grid)
-        test_configs = [
-            {"inputs": i, "params": p}
-            for i, p in product(input_combinations, param_combinations)
-        ]
+    # Check if param_grid is a list of dictionaries
+    is_param_grid_list = isinstance(param_grid, list)
+
+    # Special handling for list-based param_grid
+    if is_param_grid_list:
+        if input_grid:
+            # Generate all combinations of input_grid and each param dictionary
+            input_combinations = _cartesian_product(input_grid)
+            test_configs = [
+                {"inputs": i, "params": p}
+                for i in input_combinations
+                for p in param_grid
+            ]
+        else:
+            # Each dictionary in param_grid is a specific test configuration
+            test_configs = [{"inputs": inputs or {}, "params": p} for p in param_grid]
+
+    # Dictionary-based param_grid
+    elif param_grid:
+        if input_grid:
+            input_combinations = _cartesian_product(input_grid)
+            param_combinations = _cartesian_product(param_grid)
+            test_configs = [
+                {"inputs": i, "params": p}
+                for i, p in product(input_combinations, param_combinations)
+            ]
+        else:
+            param_combinations = _cartesian_product(param_grid)
+            test_configs = [
+                {"inputs": inputs or {}, "params": p} for p in param_combinations
+            ]
+    # Just input_grid, no param_grid
     elif input_grid:
         input_combinations = _cartesian_product(input_grid)
         test_configs = [
             {"inputs": i, "params": params or {}} for i in input_combinations
-        ]
-    elif param_grid:
-        param_combinations = _cartesian_product(param_grid)
-        test_configs = [
-            {"inputs": inputs or {}, "params": p} for p in param_combinations
         ]
 
     return test_configs
@@ -333,12 +363,14 @@ def _combine_raw_data(results: List[TestResult]) -> RawData:
 
 def combine_results(
     results: List[TestResult],
+    show_params: bool,
 ) -> Tuple[List[Any], Dict[str, List[Any]], Dict[str, List[Any]]]:
     """
     Combine multiple test results into a single set of outputs.
 
     Args:
         results: A list of TestResult objects to combine.
+        show_params: Whether to show parameter values in figure titles.
 
     Returns:
         A tuple containing:
@@ -353,7 +385,7 @@ def combine_results(
     # handle tables (if any)
     combined_outputs.extend(_combine_tables(results))
     # handle figures (if any)
-    combined_outputs.extend(_combine_figures(results))
+    combined_outputs.extend(_combine_figures(results, show_params))
     # handle threshold tests (i.e. tests that have pass/fail bool status)
     if results[0].passed is not None:
         combined_outputs.append(all(result.passed for result in results))
