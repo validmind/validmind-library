@@ -12,7 +12,7 @@ import sys
 import warnings
 from datetime import date, datetime, time
 from platform import python_version
-from typing import Any, Dict, List
+from typing import Any, Awaitable, Callable, Dict, List, Optional, TypeVar
 
 import matplotlib.pylab as pylab
 import mistune
@@ -20,6 +20,7 @@ import nest_asyncio
 import numpy as np
 import pandas as pd
 import seaborn as sns
+from bs4 import BeautifulSoup
 from IPython.core import getipython
 from IPython.display import HTML
 from IPython.display import display as ipy_display
@@ -59,23 +60,25 @@ pylab.rcParams.update(params)
 
 logger = get_logger(__name__)
 
+T = TypeVar("T")
+
 
 def parse_version(version: str) -> tuple[int, ...]:
     """
-    Parse a semver version string into a tuple of major, minor, patch integers
+    Parse a semver version string into a tuple of major, minor, patch integers.
 
     Args:
-        version (str): The semantic version string to parse
+        version (str): The semantic version string to parse.
 
     Returns:
-        tuple[int, ...]: A tuple of major, minor, patch integers
+        tuple[int, ...]: A tuple of major, minor, patch integers.
     """
     return tuple(int(x) for x in version.split(".")[:3])
 
 
 def is_notebook() -> bool:
     """
-    Checks if the code is running in a Jupyter notebook or IPython shell
+    Checks if the code is running in a Jupyter notebook or IPython shell.
 
     https://stackoverflow.com/questions/15411967/how-can-i-check-if-code-is-executed-in-the-ipython-notebook
     """
@@ -209,9 +212,7 @@ class HumanReadableEncoder(NumpyEncoder):
 
 
 def get_full_typename(o: Any) -> Any:
-    """We determine types based on type names so we don't have to import
-    (and therefore depend on) PyTorch, TensorFlow, etc.
-    """
+    """We determine types based on type names so we don't have to import."""
     instance_name = o.__class__.__module__ + "." + o.__class__.__name__
     if instance_name in ["builtins.module", "__builtin__.module"]:
         return o.__name__
@@ -313,9 +314,9 @@ def format_key_values(key_values: Dict[str, Any]) -> Dict[str, Any]:
 
 def summarize_data_quality_results(results):
     """
-    TODO: generalize this to work with metrics and test results
+    TODO: generalize this to work with metrics and test results.
 
-    Summarize the results of the data quality test suite
+    Summarize the results of the data quality test suite.
     """
     test_results = []
     for result in results:
@@ -354,25 +355,31 @@ def format_number(number):
 
 
 def format_dataframe(df: pd.DataFrame) -> pd.DataFrame:
-    """Format a pandas DataFrame for display purposes"""
+    """Format a pandas DataFrame for display purposes."""
     df = df.style.set_properties(**{"text-align": "left"}).hide(axis="index")
     return df.set_table_styles([dict(selector="th", props=[("text-align", "left")])])
 
 
-def run_async(func, *args, name=None, **kwargs):
-    """Helper function to run functions asynchronously
+def run_async(
+    func: Callable[..., Awaitable[T]],
+    *args: Any,
+    name: Optional[str] = None,
+    **kwargs: Any,
+) -> T:
+    """Helper function to run functions asynchronously.
 
     This takes care of the complexity of running the logging functions asynchronously. It will
-    detect the type of environment we are running in (ipython notebook or not) and run the
+    detect the type of environment we are running in (IPython notebook or not) and run the
     function accordingly.
 
     Args:
-        func (function): The function to run asynchronously
-        *args: The arguments to pass to the function
-        **kwargs: The keyword arguments to pass to the function
+        func: The function to run asynchronously.
+        *args: The arguments to pass to the function.
+        name: Optional name for the task.
+        **kwargs: The keyword arguments to pass to the function.
 
     Returns:
-        The result of the function
+        The result of the function.
     """
     try:
         if asyncio.get_event_loop().is_running() and is_notebook():
@@ -390,8 +397,19 @@ def run_async(func, *args, name=None, **kwargs):
     return asyncio.get_event_loop().run_until_complete(func(*args, **kwargs))
 
 
-def run_async_check(func, *args, **kwargs):
-    """Helper function to run functions asynchronously if the task doesn't already exist"""
+def run_async_check(
+    func: Callable[..., Awaitable[T]], *args: Any, **kwargs: Any
+) -> Optional[asyncio.Task[T]]:
+    """Helper function to run functions asynchronously if the task doesn't already exist.
+
+    Args:
+        func: The function to run asynchronously.
+        *args: The arguments to pass to the function.
+        **kwargs: The keyword arguments to pass to the function.
+
+    Returns:
+        Optional[asyncio.Task[T]]: The task if created or found, None otherwise.
+    """
     if __loop:
         return  # we don't need this if we are using our own loop
 
@@ -408,16 +426,16 @@ def run_async_check(func, *args, **kwargs):
         pass
 
 
-def fuzzy_match(string: str, search_string: str, threshold=0.7):
-    """Check if a string matches another string using fuzzy matching
+def fuzzy_match(string: str, search_string: str, threshold: float = 0.7) -> bool:
+    """Check if a string matches another string using fuzzy matching.
 
     Args:
-        string (str): The string to check
-        search_string (str): The string to search for
-        threshold (float): The similarity threshold to use (Default: 0.7)
+        string (str): The string to check.
+        search_string (str): The string to search for.
+        threshold (float): The similarity threshold to use (Default: 0.7).
 
     Returns:
-        True if the string matches the search string, False otherwise
+        bool: True if the string matches the search string, False otherwise.
     """
     score = difflib.SequenceMatcher(None, string, search_string).ratio()
 
@@ -448,7 +466,7 @@ def test_id_to_name(test_id: str) -> str:
 
 
 def get_model_info(model):
-    """Attempts to extract all model info from a model object instance"""
+    """Attempts to extract all model info from a model object instance."""
     architecture = model.name
     framework = model.library
     framework_version = model.library_version
@@ -472,7 +490,7 @@ def get_model_info(model):
 
 
 def get_dataset_info(dataset):
-    """Attempts to extract all dataset info from a dataset object instance"""
+    """Attempts to extract all dataset info from a dataset object instance."""
     num_rows, num_cols = dataset.df.shape
     schema = dataset.df.dtypes.apply(lambda x: x.name).to_dict()
     description = (
@@ -491,7 +509,7 @@ def preview_test_config(config):
     """Preview test configuration in a collapsible HTML section.
 
     Args:
-        config (dict): Test configuration dictionary
+        config (dict): Test configuration dictionary.
     """
 
     try:
@@ -515,7 +533,7 @@ def preview_test_config(config):
 
 
 def display(widget_or_html, syntax_highlighting=True, mathjax=True):
-    """Display widgets with extra goodies (syntax highlighting, MathJax, etc.)"""
+    """Display widgets with extra goodies (syntax highlighting, MathJax, etc.)."""
     if isinstance(widget_or_html, str):
         ipy_display(HTML(widget_or_html))
         # if html we can auto-detect if we actually need syntax highlighting or MathJax
@@ -532,7 +550,7 @@ def display(widget_or_html, syntax_highlighting=True, mathjax=True):
 
 
 def md_to_html(md: str, mathml=False) -> str:
-    """Converts Markdown to HTML using mistune with plugins"""
+    """Converts Markdown to HTML using mistune with plugins."""
     # use mistune with math plugin to convert to html
     html = mistune.create_markdown(
         plugins=["math", "table", "strikethrough", "footnotes"]
@@ -557,6 +575,63 @@ def md_to_html(md: str, mathml=False) -> str:
     )
 
     return html
+
+
+def is_html(text: str) -> bool:
+    """Check if a string is HTML.
+
+    Uses more robust heuristics to determine if a string contains HTML content.
+
+    Args:
+        text (str): The string to check
+
+    Returns:
+        bool: True if the string likely contains HTML, False otherwise
+    """
+    # Strip whitespace first
+    text = text.strip()
+
+    # Basic check: Must at least start with < and end with >
+    if not (text.startswith("<") and text.endswith(">")):
+        return False
+
+    # Look for common HTML tags
+    common_html_patterns = [
+        r"<html.*?>",  # HTML tag
+        r"<body.*?>",  # Body tag
+        r"<div.*?>",  # Div tag
+        r"<p>.*?</p>",  # Paragraph with content
+        r"<h[1-6]>.*?</h[1-6]>",  # Headers
+        r"<script.*?>",  # Script tags
+        r"<style.*?>",  # Style tags
+        r"<a href=.*?>",  # Links
+        r"<img.*?>",  # Images
+        r"<table.*?>",  # Tables
+        r"<!DOCTYPE html>",  # DOCTYPE declaration
+    ]
+
+    for pattern in common_html_patterns:
+        if re.search(pattern, text, re.IGNORECASE | re.DOTALL):
+            return True
+
+    # If we have at least 2 matching tags, it's likely HTML
+    # This helps detect custom elements or patterns not in our list
+    tags = re.findall(r"</?[a-zA-Z][a-zA-Z0-9]*.*?>", text)
+    if len(tags) >= 2:
+        return True
+
+    # Try parsing with BeautifulSoup as a last resort
+    try:
+        soup = BeautifulSoup(text, "html.parser")
+        # If we find any tags that weren't in the original text, BeautifulSoup
+        # likely tried to fix broken HTML, meaning it's not valid HTML
+        return len(soup.find_all()) > 0
+
+    except Exception as e:
+        logger.error(f"Error checking if text is HTML: {e}")
+        return False
+
+    return False
 
 
 def inspect_obj(obj):
@@ -601,3 +676,192 @@ def serialize(obj):
     elif isinstance(obj, (pd.DataFrame, pd.Series)):
         return ""  # Simple empty string for non-serializable objects
     return obj
+
+
+def is_text_column(series, threshold=0.05) -> bool:
+    """
+    Determines if a series is likely to contain text data using heuristics.
+
+    Args:
+        series (pd.Series): The pandas Series to analyze
+        threshold (float): The minimum threshold to classify a pattern match as significant
+
+    Returns:
+        bool: True if the series likely contains text data, False otherwise
+    """
+    # Filter to non-null string values and sample if needed
+    string_series = series.dropna().astype(str)
+    if len(string_series) == 0:
+        return False
+    if len(string_series) > 1000:
+        string_series = string_series.sample(1000, random_state=42)
+
+    # Calculate basic metrics
+    total_values = len(string_series)
+    unique_ratio = len(string_series.unique()) / total_values if total_values > 0 else 0
+    avg_length = string_series.str.len().mean()
+    avg_words = string_series.str.split(r"\s+").str.len().mean()
+
+    # Check for special text patterns
+    patterns = {
+        "url": r"https?://\S+|www\.\S+",
+        "email": r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b",
+        "filepath": r'(?:[a-zA-Z]:|[\\/])(?:[\\/][^\\/:*?"<>|]+)+',
+    }
+
+    # Check if any special patterns exceed threshold
+    for pattern in patterns.values():
+        if string_series.str.contains(pattern, regex=True, na=False).mean() > threshold:
+            return True
+
+    # Calculate proportion of alphabetic characters
+    total_chars = string_series.str.len().sum()
+    if total_chars > 0:
+        alpha_ratio = string_series.str.count(r"[a-zA-Z]").sum() / total_chars
+    else:
+        alpha_ratio = 0
+
+    # Check for free-form text indicators
+    text_indicators = [
+        unique_ratio > 0.8 and avg_length > 20,  # High uniqueness and long strings
+        unique_ratio > 0.4
+        and avg_length > 15
+        and string_series.str.contains(r"[.,;:!?]", regex=True, na=False).mean()
+        > 0.3,  # Moderate uniqueness with punctuation
+        string_series.str.contains(
+            r"\b\w+\b\s+\b\w+\b\s+\b\w+\b\s+\b\w+\b", regex=True, na=False
+        ).mean()
+        > 0.3,  # Contains long phrases
+        avg_words > 5 and alpha_ratio > 0.6,  # Many words with mostly letters
+        unique_ratio > 0.95 and avg_length > 10,  # Very high uniqueness
+    ]
+
+    return any(text_indicators)
+
+
+def _get_numeric_type_detail(column, dtype, series):
+    """Helper function to determine numeric type details."""
+    if pd.api.types.is_integer_dtype(dtype):
+        return {"type": "Numeric", "subtype": "Integer"}
+    elif pd.api.types.is_float_dtype(dtype):
+        return {"type": "Numeric", "subtype": "Float"}
+    else:
+        return {"type": "Numeric", "subtype": "Other"}
+
+
+def _get_text_type_detail(series):
+    """Helper function to determine text/categorical type details."""
+    string_series = series.dropna().astype(str)
+
+    if len(string_series) == 0:
+        return {"type": "Categorical"}
+
+    # Check for common patterns
+    url_pattern = r"https?://\S+|www\.\S+"
+    email_pattern = r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b"
+    filepath_pattern = r'(?:[a-zA-Z]:|[\\/])(?:[\\/][^\\/:*?"<>|]+)+'
+
+    url_ratio = string_series.str.contains(url_pattern, regex=True, na=False).mean()
+    email_ratio = string_series.str.contains(email_pattern, regex=True, na=False).mean()
+    filepath_ratio = string_series.str.contains(
+        filepath_pattern, regex=True, na=False
+    ).mean()
+
+    # Check if general text using enhanced function
+    if url_ratio > 0.7:
+        return {"type": "Text", "subtype": "URL"}
+    elif email_ratio > 0.7:
+        return {"type": "Text", "subtype": "Email"}
+    elif filepath_ratio > 0.7:
+        return {"type": "Text", "subtype": "Path"}
+    elif is_text_column(series):
+        return {"type": "Text", "subtype": "FreeText"}
+
+    # Must be categorical
+    n_unique = series.nunique()
+    if n_unique == 2:
+        return {"type": "Categorical", "subtype": "Binary"}
+    else:
+        return {"type": "Categorical", "subtype": "Nominal"}
+
+
+def get_column_type_detail(df, column) -> dict:
+    """
+    Get detailed column type information beyond basic type detection.
+    Similar to ydata-profiling's type system.
+
+    Args:
+        df (pd.DataFrame): DataFrame containing the column
+        column (str): Column name to analyze
+
+    Returns:
+        dict: Detailed type information including primary type and subtype
+    """
+    series = df[column]
+    dtype = series.dtype
+
+    # Initialize result with id and basic type
+    result = {"id": column, "type": "Unknown"}
+
+    # Determine type details based on dtype
+    type_detail = None
+
+    if pd.api.types.is_numeric_dtype(dtype):
+        type_detail = _get_numeric_type_detail(column, dtype, series)
+    elif pd.api.types.is_bool_dtype(dtype):
+        type_detail = {"type": "Boolean"}
+    elif pd.api.types.is_datetime64_any_dtype(dtype):
+        type_detail = {"type": "Datetime"}
+    elif pd.api.types.is_categorical_dtype(dtype) or pd.api.types.is_object_dtype(
+        dtype
+    ):
+        type_detail = _get_text_type_detail(series)
+
+    # Update result with type details
+    if type_detail:
+        result.update(type_detail)
+
+    return result
+
+
+def infer_datatypes(df, detailed=False) -> list:
+    """
+    Infer data types for columns in a DataFrame.
+
+    Args:
+        df (pd.DataFrame): DataFrame to analyze
+        detailed (bool): Whether to return detailed type information including subtypes
+
+    Returns:
+        list: Column type mappings
+    """
+    if detailed:
+        return [get_column_type_detail(df, column) for column in df.columns]
+
+    column_type_mappings = {}
+    # Use pandas to infer data types
+    for column in df.columns:
+        # Check if all values are None
+        if df[column].isna().all():
+            column_type_mappings[column] = {"id": column, "type": "Null"}
+            continue
+
+        dtype = df[column].dtype
+        if pd.api.types.is_numeric_dtype(dtype):
+            column_type_mappings[column] = {"id": column, "type": "Numeric"}
+        elif pd.api.types.is_bool_dtype(dtype):
+            column_type_mappings[column] = {"id": column, "type": "Boolean"}
+        elif pd.api.types.is_datetime64_any_dtype(dtype):
+            column_type_mappings[column] = {"id": column, "type": "Datetime"}
+        elif pd.api.types.is_categorical_dtype(dtype) or pd.api.types.is_object_dtype(
+            dtype
+        ):
+            # Check if this is more likely to be text than categorical
+            if is_text_column(df[column]):
+                column_type_mappings[column] = {"id": column, "type": "Text"}
+            else:
+                column_type_mappings[column] = {"id": column, "type": "Categorical"}
+        else:
+            column_type_mappings[column] = {"id": column, "type": "Unsupported"}
+
+    return list(column_type_mappings.values())

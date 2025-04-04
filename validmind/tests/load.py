@@ -7,7 +7,7 @@
 import inspect
 import json
 from pprint import pformat
-from typing import List
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 from uuid import uuid4
 
 import pandas as pd
@@ -32,7 +32,10 @@ INPUT_TYPE_MAP = {
 }
 
 
-def _inspect_signature(test_func: callable):
+def _inspect_signature(
+    test_func: Callable[..., Any],
+) -> Tuple[Dict[str, Dict[str, Any]], Dict[str, Dict[str, Any]]]:
+    """Inspect a test function's signature to get inputs and parameters"""
     inputs = {}
     params = {}
 
@@ -56,7 +59,9 @@ def _inspect_signature(test_func: callable):
     return inputs, params
 
 
-def load_test(test_id: str, test_func: callable = None, reload: bool = False):
+def load_test(
+    test_id: str, test_func: Optional[Callable[..., Any]] = None, reload: bool = False
+) -> Callable[..., Any]:
     """Load a test by test ID
 
     Test IDs are in the format `namespace.path_to_module.TestClassOrFuncName[:tag]`.
@@ -67,6 +72,8 @@ def load_test(test_id: str, test_func: callable = None, reload: bool = False):
         test_id (str): The test ID in the format `namespace.path_to_module.TestName[:tag]`
         test_func (callable, optional): The test function to load. If not provided, the
             test will be loaded from the test provider. Defaults to None.
+        reload (bool, optional): If True, reload the test even if it's already loaded.
+            Defaults to False.
     """
     # remove tag if present
     test_id = test_id.split(":", 1)[0]
@@ -109,7 +116,8 @@ def load_test(test_id: str, test_func: callable = None, reload: bool = False):
     return test_store.get_test(test_id)
 
 
-def _list_test_ids():
+def _list_test_ids() -> List[str]:
+    """List all available test IDs"""
     test_ids = []
 
     for namespace, test_provider in test_provider_store.test_providers.items():
@@ -120,7 +128,7 @@ def _list_test_ids():
     return test_ids
 
 
-def _load_tests(test_ids):
+def _load_tests(test_ids: List[str]) -> Dict[str, Callable[..., Any]]:
     """Load a set of tests, handling missing dependencies."""
     tests = {}
 
@@ -138,12 +146,12 @@ def _load_tests(test_ids):
             logger.debug(str(e))
 
             if e.extra:
-                logger.info(
+                logger.debug(
                     f"Skipping `{test_id}` as it requires extra dependencies: {e.required_dependencies}."
                     f" Please run `pip install validmind[{e.extra}]` to view and run this test."
                 )
             else:
-                logger.info(
+                logger.debug(
                     f"Skipping `{test_id}` as it requires missing dependencies: {e.required_dependencies}."
                     " Please install the missing dependencies to view and run this test."
                 )
@@ -151,7 +159,8 @@ def _load_tests(test_ids):
     return tests
 
 
-def _test_description(test_description: str, num_lines: int = 5):
+def _test_description(test_description: str, num_lines: int = 5) -> str:
+    """Format a test description"""
     description = test_description.strip("\n").strip()
 
     if len(description.split("\n")) > num_lines:
@@ -160,7 +169,10 @@ def _test_description(test_description: str, num_lines: int = 5):
     return description
 
 
-def _pretty_list_tests(tests, truncate=True):
+def _pretty_list_tests(
+    tests: Dict[str, Callable[..., Any]], truncate: bool = True
+) -> None:
+    """Pretty print a list of tests"""
     table = [
         {
             "ID": test_id,
@@ -171,6 +183,8 @@ def _pretty_list_tests(tests, truncate=True):
             ),
             "Required Inputs": list(test.inputs.keys()),
             "Params": test.params,
+            "Tags": test.__tags__,
+            "Tasks": test.__tasks__,
         }
         for test_id, test in tests.items()
     ]
@@ -178,10 +192,8 @@ def _pretty_list_tests(tests, truncate=True):
     return format_dataframe(pd.DataFrame(table))
 
 
-def list_tags():
-    """
-    List unique tags from all test classes.
-    """
+def list_tags() -> List[str]:
+    """List all unique available tags"""
 
     unique_tags = set()
 
@@ -191,7 +203,7 @@ def list_tags():
     return list(unique_tags)
 
 
-def list_tasks_and_tags(as_json=False):
+def list_tasks_and_tags(as_json: bool = False) -> Union[str, Dict[str, List[str]]]:
     """
     List all task types and their associated tags, with one row per task type and
     all tags for a task type in one row.
@@ -218,11 +230,8 @@ def list_tasks_and_tags(as_json=False):
     )
 
 
-def list_tasks():
-    """
-    List unique tasks from all test classes.
-    """
-
+def list_tasks() -> List[str]:
+    """List all unique available tasks"""
     unique_tasks = set()
 
     for test in _load_tests(list_tests(pretty=False)).values():
@@ -231,7 +240,13 @@ def list_tasks():
     return list(unique_tasks)
 
 
-def list_tests(filter=None, task=None, tags=None, pretty=True, truncate=True):
+def list_tests(
+    filter: Optional[str] = None,
+    task: Optional[str] = None,
+    tags: Optional[List[str]] = None,
+    pretty: bool = True,
+    truncate: bool = True,
+) -> Union[List[str], None]:
     """List all tests in the tests directory.
 
     Args:
@@ -245,9 +260,6 @@ def list_tests(filter=None, task=None, tags=None, pretty=True, truncate=True):
             formatted table. Defaults to True.
         truncate (bool, optional): If True, truncates the test description to the first
             line. Defaults to True. (only used if pretty=True)
-
-    Returns:
-        list or pandas.DataFrame: A list of all tests or a formatted table.
     """
     test_ids = _list_test_ids()
 
@@ -286,7 +298,9 @@ def list_tests(filter=None, task=None, tags=None, pretty=True, truncate=True):
     return _pretty_list_tests(tests, truncate=truncate)
 
 
-def describe_test(test_id: TestID = None, raw: bool = False, show: bool = True):
+def describe_test(
+    test_id: Optional[TestID] = None, raw: bool = False, show: bool = True
+) -> Union[str, HTML, Dict[str, Any]]:
     """Get or show details about the test
 
     This function can be used to see test details including the test name, description,

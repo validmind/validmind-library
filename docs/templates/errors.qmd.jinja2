@@ -1,0 +1,216 @@
+{% import "macros/docstring.jinja2" as doc %}
+{% import "macros/types.jinja2" as types %}
+{% import "macros/signatures.jinja2" as signatures %}
+---
+title: "[validmind](/validmind/validmind.qmd).errors"
+sidebar: validmind-reference
+# errors.qmd.jinja2
+---
+
+{% if module.docstring %}
+{{ doc.format_docstring(module.docstring) }}
+{% endif %}
+
+{# Create a macro for rendering error classes to avoid duplication #}
+{% macro render_error_class(member) %}
+### <span class="prefix"></span> {{ member.name }}
+
+{{ signatures.render_signature(member) }}
+
+{% if member.docstring %}
+{{ doc.format_docstring(member.docstring) }}
+{% endif %}
+
+{% if member.name == 'BaseError' %}
+
+{# Ensure BaseError's __init__ is displayed with the class name and parameters #}
+{% if '__init__' in member.members %}
+#### {{ member.name }}<span class="suffix"></span>
+
+{% set constructor = member.members['__init__'].copy() %}
+{% set _ = constructor.update({'parent': {'name': member.name}}) %}
+{{ signatures.render_signature(constructor) }}
+
+{% if member.members['__init__'].docstring %}
+{{ doc.format_docstring(member.members['__init__'].docstring) }}
+{% endif %}
+{% endif %}
+
+#### description<span class="suffix"></span>
+
+{% if 'description' in member.members %}
+{{ signatures.render_signature(member.members['description']) }}
+{% else %}
+{# Find the description method from the full data structure #}
+{% set base_error = None %}
+{% if full_data and 'validmind' in full_data and 'members' in full_data['validmind'] and 'errors' in full_data['validmind']['members'] %}
+{% set base_error = full_data['validmind']['members']['errors']['members'].get('BaseError', {}) %}
+{% endif %}
+
+{% set desc_method = None %}
+{% if base_error and 'members' in base_error %}
+{% set desc_method = base_error['members'].get('description', None) %}
+{% endif %}
+
+{% if desc_method %}
+{{ signatures.render_signature(desc_method) }}
+{% endif %}
+{% endif %}
+
+{% if member.members['description'].docstring %}
+{{ doc.format_docstring(member.members['description'].docstring) }}
+
+{% endif %}
+{% endif %}
+
+<!-- errors.qmd.jinja2 - inherited members -->
+{% if member.bases and not (member.path and 'tests' in member.path) %}
+**Inherited members**
+
+{% set base_members = get_inherited_members(member, full_data) %}
+{% if base_members %}
+{% set grouped = {} %}
+{% set builtin_members = [] %}
+{% set has_description_method = false %}
+
+{% for base_member in base_members %}
+    {% if base_member.base == 'builtins.BaseException' and base_member.kind == 'builtin' %}
+        {% set _ = builtin_members.append(base_member) %}
+    {% elif base_member.base != member.name %}
+        {% if base_member.base not in grouped %}
+            {% set _ = grouped.update({base_member.base: []}) %}
+        {% endif %}
+        {% set _ = grouped[base_member.base].append(base_member) %}
+        {% if base_member.kind == 'method' and base_member.name == 'description' %}
+            {% set has_description_method = true %}
+        {% endif %}
+    {% endif %}
+{% endfor %}
+
+{% for base, base_members in grouped.items() %}
+- {% for base_member in base_members %}{% if base_member.kind == 'builtin' %}{{ base_member.name }}{% else %}[{% if base_member.kind == 'class' %}{% endif %}{{ base_member.name }}<span class="suffix"></span>](#{{ base_member.name | lower }}){% endif %}{% if not loop.last %}, {% endif %}{% endfor %}{% if not loop.last %}
+
+{% endif %}
+{% endfor %}
+
+{% if builtin_members %}
+- builtins.BaseException {% for builtin in builtin_members %}{{ builtin.name }}{% if not loop.last %}, {% endif %}{% endfor %}
+{% endif %}
+{% endif %}
+{% endif %}
+
+{% if member.members %}
+{% for method in member.members.values() | sort(attribute='name') %}
+{% if method.kind == 'method' and (not method.name.startswith('_') or method.name == '__init__') and method.name != '__str__' and method.name != 'description' %}
+#### {{ member.name if method.name == '__init__' else method.name }}<span class="suffix"></span>
+
+{% if method.name == '__init__' %}
+{% set method_with_parent = method.copy() %}
+{% set _ = method_with_parent.update({'parent': {'name': member.name}}) %}
+{{ signatures.render_signature(method_with_parent) }}
+{% else %}
+{{ signatures.render_signature(method) }}
+{% endif %}
+
+{% if method.docstring %}
+{{ doc.format_docstring(method.docstring) }}
+{% endif %}
+{% endif %}
+{% endfor %}
+
+{# Add the description method separately to ensure it's properly included #}
+{% set has_direct_description = false %}
+{% for method in member.members.values() %}
+{% if method.kind == 'method' and method.name == 'description' and member.name != 'BaseError' %}
+{% set has_direct_description = true %}
+#### {{ method.name }}<span class="suffix"></span>
+
+{{ signatures.render_signature(method) }}
+
+{% if method.docstring %}
+{{ doc.format_docstring(method.docstring) }}
+{% endif %}
+{% endif %}
+{% endfor %}
+
+{# Show inherited description method if class doesn't have its own and it's not a test class #}
+{% if not has_direct_description and base_members is defined and has_description_method and not (member.path and 'tests' in member.path) %}
+{% set displayed_description = false %}
+{% for base_member in base_members %}
+{% if not displayed_description and base_member.kind == 'method' and base_member.name == 'description' and base_member.base != member.name %}
+#### {{ base_member.name }}<span class="suffix"></span> [inherited from {{ base_member.base }}]
+
+{# Find the description method from the parent class in the full data structure #}
+{% set base_class = None %}
+{% if full_data and 'validmind' in full_data and 'members' in full_data['validmind'] and 'errors' in full_data['validmind']['members'] %}
+{% set base_class = full_data['validmind']['members']['errors']['members'].get(base_member.base, {}) %}
+{% endif %}
+
+{% set method_data = None %}
+{% if base_class and 'members' in base_class %}
+{% set method_data = base_class['members'].get('description', None) %}
+{% endif %}
+
+{% if method_data %}
+{{ signatures.render_signature(method_data) }}
+{% else %}
+{{ signatures.render_signature(base_member) }}
+{% endif %}
+
+{% if base_member.docstring %}
+{{ doc.format_docstring(base_member.docstring) }}
+{% endif %}
+{% set displayed_description = true %}
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endif %}
+{% endmacro %}
+
+## Base errors
+
+{% for member in members | sort_members(is_errors_module=true) %}
+{% if member.kind == 'class' and member.name in ['BaseError', 'APIRequestError'] %}
+{{ render_error_class(member) }}
+{% endif %}
+{% endfor %}
+
+## API errors
+
+{% for member in members | sort_members(is_errors_module=true) %}
+{% if member.kind == 'class' and ('API' in member.name) and member.name != 'APIRequestError' %}
+{{ render_error_class(member) }}
+{% endif %}
+{% endfor %}
+
+## Model errors
+
+{% for member in members | sort_members(is_errors_module=true) %}
+{% if member.kind == 'class' and ('Model' in member.name or member.name in ['UnsupportedModelError', 'UnsupportedModelForSHAPError', 'UnsupportedRModelError']) %}
+{{ render_error_class(member) }}
+{% endif %}
+{% endfor %}
+
+## Test errors
+
+{% for member in members | sort_members(is_errors_module=true) %}
+{% if member.kind == 'class' and ('Test' in member.name or member.name in ['GetTestSuiteError', 'InitializeTestSuiteError', 'InvalidTestParametersError', 'InvalidTestResultsError', 'LoadTestError', 'MissingRequiredTestInputError', 'SkipTestError']) %}
+{{ render_error_class(member) }}
+{% endif %}
+{% endfor %}
+
+## Input validation errors
+
+{% for member in members | sort_members(is_errors_module=true) %}
+{% if member.kind == 'class' and (member.name.startswith('Invalid') or member.name.startswith('Missing')) %}
+{{ render_error_class(member) }}
+{% endif %}
+{% endfor %}
+
+## Unsupported feature errors
+
+{% for member in members | sort_members(is_errors_module=true) %}
+{% if member.kind == 'class' and member.name.startswith('Unsupported') %}
+{{ render_error_class(member) }}
+{% endif %}
+{% endfor %} 

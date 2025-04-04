@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Dict, List, Optional, Union
+
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
@@ -12,7 +14,12 @@ from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 
 
-def find_optimal_threshold(y_true, y_prob, method="youden", target_recall=None):
+def find_optimal_threshold(
+    y_true: np.ndarray,
+    y_prob: np.ndarray,
+    method: str = "youden",
+    target_recall: Optional[float] = None,
+) -> Dict[str, Union[str, float]]:
     """
     Find the optimal classification threshold using various methods.
 
@@ -80,8 +87,11 @@ def find_optimal_threshold(y_true, y_prob, method="youden", target_recall=None):
 @tags("model_validation", "threshold_optimization", "classification_metrics")
 @tasks("classification")
 def ClassifierThresholdOptimization(
-    dataset: VMDataset, model: VMModel, methods=None, target_recall=None
-):
+    dataset: VMDataset,
+    model: VMModel,
+    methods: Optional[List[str]] = None,
+    target_recall: Optional[float] = None,
+) -> Dict[str, Union[pd.DataFrame, go.Figure]]:
     """
     Analyzes and visualizes different threshold optimization methods for binary classification models.
 

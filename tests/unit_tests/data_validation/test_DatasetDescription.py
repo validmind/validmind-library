@@ -22,13 +22,13 @@ class TestDatasetDescription(unittest.TestCase):
                     [True, False, True, True, False, True, False], dtype=bool
                 ),  # Explicitly boolean
                 "text": [
-                    "hello",
-                    "world",
+                    "hello@gmail.com",
+                    "this is a longer text",
                     "hello world",
-                    "test",
-                    "hello",
-                    "test",
-                    "world",
+                    "this is a longer text",
+                    "this is a longer text",
+                    "another example of text",
+                    "this is a longer text",
                 ],  # Text
                 "all_null": [
                     None,
@@ -129,7 +129,7 @@ class TestDatasetDescription(unittest.TestCase):
 
         # Check text column
         self.assertEqual(column_info["text"]["Type"], "Text")
-        self.assertEqual(column_info["text"]["Distinct"], 4)  # 4 unique strings
+        self.assertEqual(column_info["text"]["Distinct"],4)  # 4 unique strings
         self.assertEqual(column_info["text"]["Missing"], 0)  # No missing values
         self.assertEqual(column_info["text"]["Count"], 7)  # All present
 

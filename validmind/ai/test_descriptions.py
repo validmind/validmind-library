@@ -70,7 +70,7 @@ def generate_description(
     figures: List[Figure] = None,
     title: Optional[str] = None,
 ):
-    """Generate the description for the test results"""
+    """Generate the description for the test results."""
     from validmind.api_client import generate_test_result_description
 
     if not tables and not figures and not metric:
@@ -156,7 +156,7 @@ def get_result_description(
     should_generate: bool = True,
     title: Optional[str] = None,
 ):
-    """Get Metadata Dictionary for a Test or Metric Result
+    """Get the metadata dictionary for a test or metric result.
 
     Generates an LLM interpretation of the test results or uses the default
     description and returns a metadata object that can be logged with the test results.
@@ -170,15 +170,15 @@ def get_result_description(
     Note: Either the tables or figures must be provided to generate the description.
 
     Args:
-        test_id (str): The test ID
-        test_description (str): The default description for the test
-        tables (Any): The test tables or results to interpret
-        figures (List[Figure]): The figures to attach to the test suite result
-        metric (Union[int, float]): Unit metrics attached to the test result
-        should_generate (bool): Whether to generate the description or not (Default: True)
+        test_id (str): The test ID.
+        test_description (str): The default description for the test.
+        tables (Any): The test tables or results to interpret.
+        figures (List[Figure]): The figures to attach to the test suite result.
+        metric (Union[int, float]): Unit metrics attached to the test result.
+        should_generate (bool): Whether to generate the description or not. Defaults to True.
 
     Returns:
-        str: The description to be logged with the test results
+        str: The description to be logged with the test results.
     """
     # Check the feature flag first, then the environment variable
     llm_descriptions_enabled = (

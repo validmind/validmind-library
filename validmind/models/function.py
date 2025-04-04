@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Any, Dict, List
+
 from validmind.vm_models.model import VMModel
 
 
@@ -18,7 +20,12 @@ class Input(dict):
     def __delitem__(self, _):
         raise TypeError("Cannot delete keys from Input")
 
-    def get_new(self):
+    def get_new(self) -> Dict[str, Any]:
+        """Get the newly added key-value pairs.
+
+        Returns:
+            Dict[str, Any]: Dictionary containing only the newly added key-value pairs.
+        """
         return {k: self[k] for k in self._new}
 
 
@@ -41,13 +48,13 @@ class FunctionModel(VMModel):
 
         self.name = self.name or self.predict_fn.__name__
 
-    def predict(self, X):
+    def predict(self, X) -> List[Any]:
         """Compute predictions for the input (X)
 
         Args:
             X (pandas.DataFrame): The input features to predict on
 
         Returns:
-            list: The predictions
+            List[Any]: The predictions
         """
         return [self.predict_fn(x) for x in X.to_dict(orient="records")]

@@ -40,7 +40,7 @@ R_MODEL_METHODS = [
 
 
 class ModelTask(Enum):
-    """Model task enums"""
+    """Model task enums."""
 
     # TODO: add more tasks
     CLASSIFICATION = "classification"
@@ -67,7 +67,7 @@ class ModelPipeline:
 @dataclass
 class ModelAttributes:
     """
-    Model attributes definition
+    Model attributes definition.
     """
 
     architecture: str = None
@@ -79,7 +79,7 @@ class ModelAttributes:
     @classmethod
     def from_dict(cls, data):
         """
-        Creates a ModelAttributes instance from a dictionary
+        Creates a ModelAttributes instance from a dictionary.
         """
         return cls(
             architecture=data.get("architecture"),
@@ -235,8 +235,8 @@ def is_model_metadata(model):
     Checks if the model is a dictionary containing metadata about a model.
     We want to check if the metadata dictionary contains at least the following keys:
 
-    - architecture
-    - language
+    - Architecture
+    - Language
     """
     if not isinstance(model, dict):
         return False

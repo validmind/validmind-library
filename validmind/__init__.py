@@ -43,7 +43,7 @@ warnings.simplefilter("ignore", category=NumbaDeprecationWarning)
 warnings.simplefilter("ignore", category=NumbaPendingDeprecationWarning)
 
 from .__version__ import __version__  # noqa: E402
-from .api_client import init, log_metric, reload
+from .api_client import init, log_metric, log_text, reload
 from .client import (  # noqa: E402
     get_test_suite,
     init_dataset,
@@ -99,19 +99,19 @@ __all__ = [  # noqa
     "__version__",
     # main library API
     "init",
-    "reload",
     "init_dataset",
     "init_model",
     "init_r_model",
+    "get_test_suite",
+    "log_metric",
     "preview_template",
+    "print_env",
+    "reload",
     "run_documentation_tests",
     # log metric function (for direct/bulk/retroactive logging of metrics)
-    "log_metric",
     # test suite functions (less common)
-    "get_test_suite",
     "run_test_suite",
     # helper functions (for troubleshooting)
-    "print_env",
     # decorators (for building tests
     "tags",
     "tasks",
@@ -125,4 +125,5 @@ __all__ = [  # noqa
     "tests",
     "unit_metrics",
     "test_suites",
+    "log_text",
 ]

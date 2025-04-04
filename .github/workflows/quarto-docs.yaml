@@ -1,0 +1,59 @@
+# This workflow will install Python dependencies and generate
+# Quarto documentation using Griffe for API extraction and
+# Jinja2 templates for the docs and navigation.
+name: Python Library API docs for Quarto
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "docs/**"
+  workflow_dispatch:
+    inputs:
+      note:
+        description: "Provide a description of the changes"
+        required: true
+        default: "Update quarto docs"
+
+permissions:
+  contents: write
+
+jobs:
+  quarto-docs:
+    runs-on:
+      group: ubuntu-vm-large
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+
+      - name: Install poetry
+        run: pipx install poetry
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "poetry"
+
+      - name: Install Dependencies
+        run: |
+          poetry env use python3.11
+          poetry install -E huggingface -E llm
+          poetry run pip install torch==2.0.1 --extra-index-url https://download.pytorch.org/whl/cpu
+          poetry run pip install aequitas fairlearn vl-convert-python
+          poetry run pip install griffe mdformat docstring_parser
+
+      - name: Generate Quarto Docs
+        run: make quarto-docs
+
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v9
+        with:
+          default_author: github_actions
+          message: "Generate quarto docs"
+          add: "docs/"
+          pathspec_error_handling: ignore
+          push: true

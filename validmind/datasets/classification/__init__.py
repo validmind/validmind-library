@@ -5,6 +5,8 @@
 """
 Entrypoint for classification datasets.
 """
+from typing import List
+
 import pandas as pd
 
 __all__ = [
@@ -13,7 +15,7 @@ __all__ = [
 ]
 
 
-def simple_preprocess_booleans(df, columns):
+def simple_preprocess_booleans(df: pd.DataFrame, columns: List[str]) -> pd.DataFrame:
     """
     Preprocess boolean columns.
 
@@ -36,7 +38,9 @@ def simple_preprocess_booleans(df, columns):
     return df
 
 
-def simple_preprocess_categoricals(df, columns):
+def simple_preprocess_categoricals(
+    df: pd.DataFrame, columns: List[str]
+) -> pd.DataFrame:
     """
     Preprocess categorical columns.
 
@@ -56,7 +60,7 @@ def simple_preprocess_categoricals(df, columns):
     return df
 
 
-def simple_preprocess_numericals(df, columns):
+def simple_preprocess_numericals(df: pd.DataFrame, columns: List[str]) -> pd.DataFrame:
     """
     Preprocess numerical columns.
 
