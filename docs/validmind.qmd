@@ -1,5 +1,5 @@
 ---
-title: "ValidMind Library"
+title: "ValidMind Library Python API"
 aliases:
   - index.html
 sidebar: validmind-reference
