@@ -2,7 +2,7 @@
 website:
   sidebar:
     - id: validmind-reference
-      title: "ValidMind Library"
+      title: "ValidMind Library API"
       collapsed: false
       collapse-level: 2
       contents:
