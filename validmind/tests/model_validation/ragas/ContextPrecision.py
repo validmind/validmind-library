@@ -114,8 +114,10 @@ def ContextPrecision(
 
     score_column = "llm_context_precision_with_reference"
 
-    fig_histogram = px.histogram(x=result_df[score_column].to_list(), nbins=10)
-    fig_box = px.box(x=result_df[score_column].to_list())
+    fig_histogram = px.histogram(
+        x=result_df[score_column].to_list(), nbins=10, title="Context Precision"
+    )
+    fig_box = px.box(x=result_df[score_column].to_list(), title="Context Precision")
 
     return (
         {
