@@ -464,7 +464,7 @@ class TestResult(Result):
                 )
             )
 
-        if self.tables or self.figures:
+        if self.tables or self.figures or self.description:
             tasks.append(
                 api_client.alog_test_result(
                     result=self.serialize(),
