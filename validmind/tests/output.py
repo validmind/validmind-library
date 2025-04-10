@@ -9,6 +9,7 @@ from uuid import uuid4
 import numpy as np
 import pandas as pd
 
+from validmind.utils import is_html, md_to_html
 from validmind.vm_models.figure import (
     Figure,
     is_matplotlib_figure,
@@ -77,14 +78,12 @@ class FigureOutputHandler(OutputHandler):
 
 class TableOutputHandler(OutputHandler):
     def can_handle(self, item: Any) -> bool:
-        return isinstance(item, (list, pd.DataFrame, dict, ResultTable, str, tuple))
+        return isinstance(item, (list, pd.DataFrame, dict, ResultTable, tuple))
 
     def _convert_simple_type(self, data: Any) -> pd.DataFrame:
         """Convert a simple data type to a DataFrame."""
         if isinstance(data, dict):
             return pd.DataFrame([data])
-        elif isinstance(data, str):
-            return pd.DataFrame({"Value": [data]})
         elif data is None:
             return pd.DataFrame()
         else:
@@ -155,6 +154,17 @@ class RawDataOutputHandler(OutputHandler):
         result.raw_data = item
 
 
+class StringOutputHandler(OutputHandler):
+    def can_handle(self, item: Any) -> bool:
+        return isinstance(item, str)
+
+    def process(self, item: Any, result: TestResult) -> None:
+        if not is_html(item):
+            item = md_to_html(item, mathml=True)
+
+        result.description = item
+
+
 def process_output(item: Any, result: TestResult) -> None:
     """Process a single test output item and update the TestResult."""
     handlers = [
@@ -163,6 +173,7 @@ def process_output(item: Any, result: TestResult) -> None:
         FigureOutputHandler(),
         TableOutputHandler(),
         RawDataOutputHandler(),
+        StringOutputHandler(),
     ]
 
     for handler in handlers:
