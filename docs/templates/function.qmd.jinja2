@@ -1,0 +1,13 @@
+<!-- function.qmd.jinja2 -->
+{% from "macros/signatures.jinja2" import render_signature %}
+
+{% if member.kind == "function" %}
+
+## {{ member_name | default(member.name) }}<span class="suffix"></span>
+
+{{ render_signature(member) }}
+
+{% if member.docstring %}
+{{ doc.format_docstring(member.docstring) }}
+{% endif %}
+{% endif %} 

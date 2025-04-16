@@ -2,11 +2,12 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-"""ValidMind logging module."""
+"""ValidMind logging module"""
 
 import logging
 import os
 import time
+from typing import Any, Awaitable, Callable, Dict, Optional, TypeVar
 
 import sentry_sdk
 from sentry_sdk.utils import event_from_exception, exc_info_from_error
@@ -16,8 +17,8 @@ from .__version__ import __version__
 __dsn = "https://48f446843657444aa1e2c0d716ef864b@o1241367.ingest.sentry.io/4505239625465856"
 
 
-def _get_log_level():
-    """Get the log level from the environment variable"""
+def _get_log_level() -> int:
+    """Get the log level from the environment variable."""
     log_level_str = os.getenv("LOG_LEVEL", "INFO").upper()
 
     if log_level_str not in ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]:
@@ -26,8 +27,10 @@ def _get_log_level():
     return logging.getLevelName(log_level_str)
 
 
-def get_logger(name="validmind", log_level=None):
-    """Get a logger for the given module name"""
+def get_logger(
+    name: str = "validmind", log_level: Optional[int] = None
+) -> logging.Logger:
+    """Get a logger for the given module name."""
     formatter = logging.Formatter(
         fmt="%(asctime)s - %(levelname)s(%(name)s): %(message)s"
     )
@@ -52,18 +55,21 @@ def get_logger(name="validmind", log_level=None):
     return logger
 
 
-def init_sentry(server_config):
-    """Initialize Sentry SDK for sending logs back to ValidMind
+def init_sentry(server_config: Dict[str, Any]) -> None:
+    """Initialize Sentry SDK for sending logs back to ValidMind.
 
-    This will usually only be called by the api_client module to initialize the
-    sentry connection after the user calls `validmind.init()`. This is because the DSN
+    This will usually only be called by the API client module to initialize the
+    Sentry connection after the user calls `validmind.init()`. This is because the DSN
     and other config options will be returned by the API.
 
     Args:
-        config (dict): The config dictionary returned by the API
-            - send_logs (bool): Whether to send logs to Sentry (gets removed)
-            - dsn (str): The Sentry DSN
-            ...: Other config options for Sentry
+        server_config (Dict[str, Any]): The config dictionary returned by the API.
+            - send_logs (bool): Whether to send logs to Sentry (gets removed).
+            - dsn (str): The Sentry DSN.
+            ...: Other config options for Sentry.
+
+    Returns:
+        None.
     """
     if os.getenv("VM_NO_TELEMETRY", False):
         return
@@ -88,19 +94,27 @@ def init_sentry(server_config):
         logger.debug(f"Sentry error: {str(e)}")
 
 
-def log_performance(name=None, logger=None, force=False):
-    """Decorator to log the time it takes to run a function
+F = TypeVar("F", bound=Callable[..., Any])
+AF = TypeVar("AF", bound=Callable[..., Awaitable[Any]])
+
+
+def log_performance(
+    name: Optional[str] = None,
+    logger: Optional[logging.Logger] = None,
+    force: bool = False,
+) -> Callable[[F], F]:
+    """Decorator to log the time it takes to run a function.
 
     Args:
         name (str, optional): The name of the function. Defaults to None.
         logger (logging.Logger, optional): The logger to use. Defaults to None.
-        force (bool, optional): Whether to force logging even if env var is off
+        force (bool, optional): Whether to force logging even if env var is off.
 
     Returns:
-        function: The decorated function
+        Callable: The decorated function.
     """
 
-    def decorator(func):
+    def decorator(func: F) -> F:
         # check if log level is set to debug
         if _get_log_level() != logging.DEBUG and not force:
             return func
@@ -113,7 +127,7 @@ def log_performance(name=None, logger=None, force=False):
         if name is None:
             name = func.__name__
 
-        def wrapped(*args, **kwargs):
+        def wrapped(*args: Any, **kwargs: Any) -> Any:
             time1 = time.perf_counter()
             return_val = func(*args, **kwargs)
             time2 = time.perf_counter()
@@ -127,18 +141,13 @@ def log_performance(name=None, logger=None, force=False):
     return decorator
 
 
-async def log_performance_async(func, name=None, logger=None, force=False):
-    """Decorator to log the time it takes to run an async function
-
-    Args:
-        func (function): The function to decorate
-        name (str, optional): The name of the function. Defaults to None.
-        logger (logging.Logger, optional): The logger to use. Defaults to None.
-        force (bool, optional): Whether to force logging even if env var is off
-
-    Returns:
-        function: The decorated function
-    """
+async def log_performance_async(
+    func: AF,
+    name: Optional[str] = None,
+    logger: Optional[logging.Logger] = None,
+    force: bool = False,
+) -> AF:
+    """Async version of log_performance decorator"""
     # check if log level is set to debug
     if _get_log_level() != logging.DEBUG and not force:
         return func
@@ -149,7 +158,7 @@ async def log_performance_async(func, name=None, logger=None, force=False):
     if name is None:
         name = func.__name__
 
-    async def wrap(*args, **kwargs):
+    async def wrap(*args: Any, **kwargs: Any) -> Any:
         time1 = time.perf_counter()
         return_val = await func(*args, **kwargs)
         time2 = time.perf_counter()
@@ -161,11 +170,11 @@ async def log_performance_async(func, name=None, logger=None, force=False):
     return wrap
 
 
-def send_single_error(error: Exception):
-    """Send a single error to Sentry
+def send_single_error(error: Exception) -> None:
+    """Send a single error to Sentry.
 
     Args:
-        error (Exception): The exception to send
+        error (Exception): The exception to send.
     """
     event, hint = event_from_exception(exc_info_from_error(error))
     client = sentry_sdk.Client(__dsn, release=f"validmind-python@{__version__}")

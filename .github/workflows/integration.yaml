@@ -10,7 +10,7 @@ on:
       - prod
       - release-v1
     paths-ignore:
-      - 'docs/_build/**'
+      - 'docs/**'
 
 permissions:
   contents: read

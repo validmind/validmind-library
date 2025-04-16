@@ -1,0 +1,29 @@
+{% macro breadcrumbs(module) %}
+<!-- navigation.jinja2 -->
+{# {% set parts = module.path.split('.') %}
+[API Reference](../index.qmd)
+{% for part in parts %}
+/ {% if loop.last %}{{ part }}{% else %}[{{ part }}]({{ '../' * (parts|length - loop.index) }}{{ part }}/index.qmd){% endif %}
+{% endfor %} #}
+{% endmacro %}
+
+{% macro module_tree(module) %}
+<!-- navigation.jinja2 -->
+{% if module.members %}
+```
+{{ print_tree(module) }}
+```
+{% endif %}
+{% endmacro %}
+
+{% macro print_tree(node, prefix='', is_last=True) %}
+<!-- navigation.jinja2 -->
+{{ prefix }}{{ '└── ' if is_last else '├── ' }}{{ node.name }}
+{% if node.members %}
+{% for member in node.members | sort_members %}
+{% if is_public(member) %}
+{{ print_tree(member, prefix + ('    ' if is_last else '│   '), loop.last) }}
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endmacro %} 

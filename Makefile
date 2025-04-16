@@ -51,6 +51,18 @@ else
 	poetry run pdoc validmind -d google -t docs/templates --no-show-source --logo https://vmai.s3.us-west-1.amazonaws.com/validmind-logo.svg --favicon https://vmai.s3.us-west-1.amazonaws.com/favicon.ico
 endif
 
+quarto-docs:
+	# Clean old files
+	rm -f docs/validmind.json
+	rm -rf docs/validmind
+	mkdir -p docs/validmind
+	
+	# Generate API JSON dump
+	poetry run python -m griffe dump validmind -f -o docs/validmind.json -d google -r -U
+	
+	# Generate Quarto docs from templates
+	poetry run python scripts/generate_quarto_docs.py
+
 version:
 	@:$(call check_defined, tag, new semver version tag to use on pyproject.toml)
 	@poetry version $(tag)
@@ -78,7 +90,7 @@ ensure-clean-notebooks:
 # Quick target to run all checks
 check: copyright format lint test verify-copyright verify-exposed-credentials ensure-clean-notebooks
 
-.PHONY: docs
+.PHONY: docs quarto-docs
 
 notebook:
 	@python notebooks/templates/e2e_template.py

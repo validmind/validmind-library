@@ -9,6 +9,7 @@ from uuid import uuid4
 import numpy as np
 import pandas as pd
 
+from validmind.utils import is_html, md_to_html
 from validmind.vm_models.figure import (
     Figure,
     is_matplotlib_figure,
@@ -77,30 +78,72 @@ class FigureOutputHandler(OutputHandler):
 
 class TableOutputHandler(OutputHandler):
     def can_handle(self, item: Any) -> bool:
-        return isinstance(item, (list, pd.DataFrame, dict, ResultTable))
+        return isinstance(item, (list, pd.DataFrame, dict, ResultTable, tuple))
+
+    def _convert_simple_type(self, data: Any) -> pd.DataFrame:
+        """Convert a simple data type to a DataFrame."""
+        if isinstance(data, dict):
+            return pd.DataFrame([data])
+        elif data is None:
+            return pd.DataFrame()
+        else:
+            raise ValueError(f"Cannot convert {type(data)} to DataFrame")
+
+    def _convert_list(self, data_list: List) -> pd.DataFrame:
+        """Convert a list to a DataFrame."""
+        if not data_list:
+            return pd.DataFrame()
+
+        try:
+            return pd.DataFrame(data_list)
+        except Exception as e:
+            # If conversion fails, try to handle common cases
+            if all(
+                isinstance(item, (int, float, str, bool, type(None)))
+                for item in data_list
+            ):
+                return pd.DataFrame({"Values": data_list})
+            else:
+                raise ValueError(f"Could not convert list to DataFrame: {e}")
+
+    def _convert_to_dataframe(self, table_data: Any) -> pd.DataFrame:
+        """Convert various data types to a pandas DataFrame."""
+        # Handle special cases by type
+        if isinstance(table_data, pd.DataFrame):
+            return table_data
+        elif isinstance(table_data, (dict, str, type(None))):
+            return self._convert_simple_type(table_data)
+        elif isinstance(table_data, tuple):
+            return self._convert_list(list(table_data))
+        elif isinstance(table_data, list):
+            return self._convert_list(table_data)
+        else:
+            # If we reach here, we don't know how to handle this type
+            raise ValueError(
+                f"Invalid table format: must be a list of dictionaries or a DataFrame, got {type(table_data)}"
+            )
 
     def process(
         self,
-        item: Union[List[Dict[str, Any]], pd.DataFrame, Dict[str, Any], ResultTable],
+        item: Union[
+            List[Dict[str, Any]], pd.DataFrame, Dict[str, Any], ResultTable, str, tuple
+        ],
         result: TestResult,
     ) -> None:
+        # Convert to a dictionary of tables if not already
         tables = item if isinstance(item, dict) else {"": item}
 
         for table_name, table_data in tables.items():
-            # if already a ResultTable, add it directly
+            # If already a ResultTable, add it directly
             if isinstance(table_data, ResultTable):
                 result.add_table(table_data)
                 continue
 
-            if not isinstance(table_data, (list, pd.DataFrame)):
-                raise ValueError(
-                    "Invalid table format: must be a list of dictionaries or a DataFrame"
-                )
+            # Convert the data to a DataFrame using our helper method
+            df = self._convert_to_dataframe(table_data)
 
-            if isinstance(table_data, list):
-                table_data = pd.DataFrame(table_data)
-
-            result.add_table(ResultTable(data=table_data, title=table_name or None))
+            # Add the resulting DataFrame as a table to the resul
+            result.add_table(ResultTable(data=df, title=table_name or None))
 
 
 class RawDataOutputHandler(OutputHandler):
@@ -111,6 +154,17 @@ class RawDataOutputHandler(OutputHandler):
         result.raw_data = item
 
 
+class StringOutputHandler(OutputHandler):
+    def can_handle(self, item: Any) -> bool:
+        return isinstance(item, str)
+
+    def process(self, item: Any, result: TestResult) -> None:
+        if not is_html(item):
+            item = md_to_html(item, mathml=True)
+
+        result.description = item
+
+
 def process_output(item: Any, result: TestResult) -> None:
     """Process a single test output item and update the TestResult."""
     handlers = [
@@ -119,6 +173,7 @@ def process_output(item: Any, result: TestResult) -> None:
         FigureOutputHandler(),
         TableOutputHandler(),
         RawDataOutputHandler(),
+        StringOutputHandler(),
     ]
 
     for handler in handlers:

@@ -1,0 +1,70 @@
+# sidebar.qmd.jinja2
+website:
+  sidebar:
+    - id: validmind-reference
+      title: "ValidMind Library Python API"
+      collapsed: false
+      collapse-level: 2
+      contents:
+        - validmind/validmind.qmd
+        - text: "---"
+        - text: "Python API"
+        # Root level items from validmind.qmd
+        {% if documented_items.get('root') %}
+        {% for item in documented_items['root'] %}
+        {% if "&#95;&#95;version__" in item.text %}
+        - text: "<span class='version'>`{{ module.members.__version__.members.__version__.value | replace("'", "") if module.members.__version__.members.__version__.value else module.members.__version__.value | replace("'", "") }}`</span>"
+          file: {{ item.file | replace("&#95;&#95;version__", "version__") }}
+        {% else %}
+        {% set cleaned_path = item.file | replace('<span class="prefix"></span> ', '') | replace('<span class="suffix"></span>', '') %}
+        - text: "{{ item.text | replace('<span class=\"', '<span class=\'') | replace('\"></span>', '\'></span>') }}"
+          file: {{ cleaned_path }}
+          {% if item.contents is defined and item.contents %}
+          contents:
+            {% for method in item.contents %}
+            {% set cleaned_method_path = method.file | replace('<span class="prefix"></span> ', '') | replace('<span class="suffix"></span>', '') %}
+            - text: "{{ method.text | replace('<span class=\"', '<span class=\'') | replace('\"></span>', '\'></span>') }}"
+              file: {{ cleaned_method_path }}
+            {% endfor %}
+          {% endif %}
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+        # All module documentation pages
+        - text: "---"
+        - text: "Submodules"
+        {% if module.members.__version__ %}
+        - text: "&#95;&#95;version__"
+          file: validmind/validmind/version.qmd
+        {% endif %}
+        {% for member in module.members | sort_members %}
+        {% if is_public(member, module, full_data, is_root) and member.kind == "module" %}
+        {% set module_name = member.name %}
+        {% set has_children = qmd_files | has_subfiles(module_name) %}
+        {% if has_children %}
+        - text: "{{ module_name }}"
+          file: validmind/validmind/{{ module_name }}.qmd
+          contents:
+            {% for item in qmd_files | get_child_files(module_name) %}
+            {% if item.contents is defined %}
+            {% set cleaned_item_path = item.file | replace('<span class="prefix"></span> ', '') | replace('<span class="suffix"></span>', '') %}
+            - text: "{{ item.text | replace('<span class=\"', '<span class=\'') | replace('\"></span>', '\'></span>') }}"
+              file: {{ cleaned_item_path }}
+              contents:
+                {% for child in item.contents %}
+                {% set cleaned_child_path = child.file | replace('<span class="prefix"></span> ', '') | replace('<span class="suffix"></span>', '') %}
+                - text: "{{ child.text | replace('<span class=\"', '<span class=\'') | replace('\"></span>', '\'></span>') }}"
+                  file: {{ cleaned_child_path }}
+                {% endfor %}
+            {% else %}
+            {% set cleaned_item_path = item.file | replace('<span class="prefix"></span> ', '') | replace('<span class="suffix"></span>', '') %}
+            - text: "{{ item.text | replace('<span class=\"', '<span class=\'') | replace('\"></span>', '\'></span>') }}"
+              file: {{ cleaned_item_path }}
+            {% endif %}
+            {% endfor %}
+        {% else %}
+        - text: "{{ module_name }}"
+          file: validmind/validmind/{{ module_name }}.qmd
+        {% endif %}
+        {% endif %}
+        {% endfor %} 

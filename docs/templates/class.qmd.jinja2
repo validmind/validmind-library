@@ -1,0 +1,78 @@
+{% import "macros/docstring.jinja2" as doc %}
+{% import "macros/signatures.jinja2" as signatures %}
+
+<!-- class.qmd.jinja2 -->
+## <span class="prefix"></span> {{ resolved.name }}
+
+{% set is_test_suite = __is_test_suite|default(false) or (module and module.name == "test_suites") %}
+{{ signatures.render_signature(resolved) }}
+
+{% if resolved.docstring %}
+{{ doc.format_docstring(resolved.docstring) }}
+{% endif %}
+
+{% if resolved.bases and not __is_test_module|default(false) %}
+{% if resolved.bases %}
+{% set base_members = get_inherited_members(resolved.bases[0], full_data) %}
+{% if base_members %}
+
+**Inherited members**
+{% set grouped = {} %}
+{% for member in base_members %}
+    {% if member.base not in grouped %}
+        {% set _ = grouped.update({member.base: []}) %}
+    {% endif %}
+    {% set _ = grouped[member.base].append(member) %}
+{% endfor %}
+{% for base, members in grouped.items() %}
+- **From {{ base }}**: {% for member in members %}{% if member.kind == 'builtin' %}{{ member.name }}{% else %}[{% if member.kind == 'class' %}class {% endif %}{{ member.name }}<span class="suffix"></span>](#{{ member.name | lower }}){% endif %}{% if not loop.last %}, {% endif %}{% endfor %}
+
+{% endfor %}
+{% endif %}
+{% endif %}
+{% endif %}
+
+{% if resolved.members %}
+{# First list methods #}
+{% for member in resolved.members.values() | sort(attribute='name') %}
+{% if member.kind in ['method', 'function'] and (not member.name.startswith('_') or member.name == '__init__') %}
+### {{ member.name if member.name != '__init__' else resolved.name }}<span class="suffix"></span>
+
+{% if member.name == '__init__' %}
+{% set member_with_parent = member.copy() %}
+{% set _ = member_with_parent.update({'parent': {'name': resolved.name}}) %}
+{{ signatures.render_signature(member_with_parent) }}
+{% else %}
+{{ signatures.render_signature(member) }}
+{% endif %}
+
+{% if member.docstring %}
+{{ doc.format_docstring(member.docstring) }}
+{% endif %}
+
+{% endif %}
+{% endfor %}
+
+{# Then list properties with meaningful docstrings or important properties #}
+{% set meaningful_properties = [] %}
+{% set important_properties = ['df', 'x', 'y'] %}
+{% for member in resolved.members.values() | sort(attribute='name') %}
+    {% if (member.kind == 'property' or (member.kind == 'attribute' and member.labels is defined and 'property' in member.labels)) and not member.name.startswith('_') %}
+        {% if member.docstring and member.docstring.value and member.docstring.value|trim or member.name in important_properties %}
+            {% set _ = meaningful_properties.append(member) %}
+        {% endif %}
+    {% endif %}
+{% endfor %}
+
+{# List properties with proper headings and signatures #}
+{% for member in meaningful_properties %}
+### {{ member.name }}{.property}
+
+{{ signatures.render_signature(member) }}
+
+{% if member.docstring %}
+{{ doc.format_docstring(member.docstring) }}
+{% endif %}
+
+{% endfor %}
+{% endif %}

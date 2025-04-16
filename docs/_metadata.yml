@@ -1,0 +1,10 @@
+format:
+  html:
+    grid:
+      sidebar-width: 450px
+      margin-width: 450px
+    page-layout: full
+    from: markdown-smart
+    css:
+      - validmind.css
+      - /developer/developer.css

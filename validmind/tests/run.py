@@ -76,7 +76,7 @@ def _get_run_metadata(**metadata: Dict[str, Any]) -> Dict[str, Any]:
 
 def _get_test_kwargs(
     test_func: callable, inputs: Dict[str, Any], params: Dict[str, Any]
-):
+) -> Tuple[Dict[str, Any], Dict[str, Any]]:
     """Insepect function signature to build kwargs to pass the inputs and params
     that the test function expects
 
@@ -93,7 +93,7 @@ def _get_test_kwargs(
         params (dict): Test parameters e.g. {"param1": 1, "param2": 2}
 
     Returns:
-        tuple: Tuple of input and param kwargs
+        Tuple[Dict[str, Any], Dict[str, Any]]: Tuple of input and param kwargs
     """
     input_kwargs = {}  # map function inputs (`dataset` etc) to actual objects
 
@@ -222,6 +222,7 @@ def _run_comparison_test(
     params: Union[Dict[str, Any], None],
     param_grid: Union[Dict[str, List[Any]], List[Dict[str, Any]], None],
     title: Optional[str] = None,
+    show_params: bool = True,
 ):
     """Run a comparison test i.e. a test that compares multiple outputs of a test across
     different input and/or param combinations"""
@@ -242,6 +243,7 @@ def _run_comparison_test(
             show=False,
             generate_description=False,
             title=title,
+            show_params=show_params,
         )
         for config in run_test_configs
     ]
@@ -253,7 +255,9 @@ def _run_comparison_test(
     else:
         test_doc = describe_test(test_id, raw=True)["Description"]
 
-    combined_outputs, combined_inputs, combined_params = combine_results(results)
+    combined_outputs, combined_inputs, combined_params = combine_results(
+        results, show_params
+    )
 
     return build_test_result(
         outputs=combined_outputs,
@@ -265,7 +269,12 @@ def _run_comparison_test(
     )
 
 
-def _run_test(test_id: TestID, inputs: Dict[str, Any], params: Dict[str, Any]):
+def _run_test(
+    test_id: TestID,
+    inputs: Dict[str, Any],
+    params: Dict[str, Any],
+    title: Optional[str] = None,
+):
     """Run a standard test and return a TestResult object"""
     test_func = load_test(test_id)
     input_kwargs, param_kwargs = _get_test_kwargs(
@@ -282,6 +291,7 @@ def _run_test(test_id: TestID, inputs: Dict[str, Any], params: Dict[str, Any]):
         test_doc=getdoc(test_func),
         inputs=input_kwargs,
         params=param_kwargs,
+        title=title,
     )
 
 
@@ -297,6 +307,7 @@ def run_test(  # noqa: C901
     generate_description: bool = True,
     title: Optional[str] = None,
     post_process_fn: Union[Callable[[TestResult], None], None] = None,
+    show_params: bool = True,
     **kwargs,
 ) -> TestResult:
     """Run a ValidMind or custom test
@@ -321,6 +332,7 @@ def run_test(  # noqa: C901
         generate_description (bool, optional): Whether to generate a description. Defaults to True.
         title (str, optional): Custom title for the test result
         post_process_fn (Callable[[TestResult], None], optional): Function to post-process the test result
+        show_params (bool, optional): Whether to include parameter values in figure titles for comparison tests. Defaults to True.
 
     Returns:
         TestResult: A TestResult object containing the test results
@@ -358,6 +370,7 @@ def run_test(  # noqa: C901
             input_grid=input_grid,
             params=params,
             param_grid=param_grid,
+            show_params=show_params,
         )
 
     elif unit_metrics:
@@ -375,7 +388,7 @@ def run_test(  # noqa: C901
         )
 
     else:
-        result = _run_test(test_id, inputs, params)
+        result = _run_test(test_id, inputs, params, title)
 
     end_time = time.perf_counter()
     result.metadata = _get_run_metadata(duration_seconds=end_time - start_time)
@@ -383,15 +396,16 @@ def run_test(  # noqa: C901
     if post_process_fn:
         result = post_process_fn(result)
 
-    result.description = get_result_description(
-        test_id=test_id,
-        test_description=result.doc,
-        tables=result.tables,
-        figures=result.figures,
-        metric=result.metric,
-        should_generate=generate_description,
-        title=title,
-    )
+    if not result.description:
+        result.description = get_result_description(
+            test_id=test_id,
+            test_description=result.doc,
+            tables=result.tables,
+            figures=result.figures,
+            metric=result.metric,
+            should_generate=generate_description,
+            title=title,
+        )
 
     if show:
         result.show()

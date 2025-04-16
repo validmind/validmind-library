@@ -141,7 +141,7 @@ def list_suites(pretty: bool = True):
     return format_dataframe(pd.DataFrame(table))
 
 
-def describe_suite(test_suite_id: str, verbose=False):
+def describe_suite(test_suite_id: str, verbose: bool = False) -> pd.DataFrame:
     """
     Describes a Test Suite by ID
 
@@ -150,7 +150,7 @@ def describe_suite(test_suite_id: str, verbose=False):
         verbose: If True, describe all plans and tests in the Test Suite
 
     Returns:
-        pandas.DataFrame: A formatted table with the Test Suite description
+        pd.DataFrame: A formatted table with the Test Suite description
     """
     test_suite = get_by_id(test_suite_id)
 
