@@ -524,7 +524,7 @@ class DataFrameDataset(VMDataset):
         date_time_index: bool = False,
     ):
         """
-        Initializes a DataFrameDataset instance.
+        Initializes a DataFrameDataset instance, preserving original pandas dtypes.
 
         Args:
             raw_dataset (pd.DataFrame): The raw dataset as a pandas DataFrame.
@@ -537,24 +537,34 @@ class DataFrameDataset(VMDataset):
             target_class_labels (dict, optional): The class labels for the target columns. Defaults to None.
             date_time_index (bool, optional): Whether to use date-time index. Defaults to False.
         """
+
+        VMInput.__init__(self)
+
+        self.input_id = input_id
+        self._raw_dataset = raw_dataset.values
+
         index = None
         if isinstance(raw_dataset.index, pd.Index):
             index = raw_dataset.index.values
+        self.index = index
 
-        super().__init__(
-            raw_dataset=raw_dataset.values,
-            input_id=input_id,
-            model=model,
-            index_name=raw_dataset.index.name,
-            index=index,
-            columns=raw_dataset.columns.to_list(),
-            target_column=target_column,
-            extra_columns=extra_columns,
-            feature_columns=feature_columns,
-            text_column=text_column,
-            target_class_labels=target_class_labels,
-            date_time_index=date_time_index,
-        )
+        # Store the DataFrame directly
+        self._df = raw_dataset.copy()
+
+        if date_time_index:
+            self._df = convert_index_to_datetime(self._df)
+
+        self.columns = raw_dataset.columns.tolist()
+        self.column_aliases = {}
+        self.target_column = target_column
+        self.text_column = text_column
+        self.target_class_labels = target_class_labels
+        self.extra_columns = ExtraColumns.from_dict(extra_columns)
+
+        self._set_feature_columns(feature_columns)
+
+        if model:
+            self.assign_predictions(model)
 
 
 class PolarsDataset(VMDataset):
