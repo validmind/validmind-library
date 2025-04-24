@@ -47,6 +47,7 @@ class VMDataset(VMInput):
         target_class_labels (Dict): The class labels for the target columns.
         df (pd.DataFrame): The dataset as a pandas DataFrame.
         extra_columns (Dict): Extra columns to include in the dataset.
+        copy_data (bool): Whether to copy the data. Defaults to True.
     """
 
     def __repr__(self):
@@ -66,6 +67,7 @@ class VMDataset(VMInput):
         text_column: str = None,
         extra_columns: dict = None,
         target_class_labels: dict = None,
+        copy_data: bool = True,
     ):
         """
         Initializes a VMDataset instance.
@@ -82,6 +84,7 @@ class VMDataset(VMInput):
             feature_columns (str, optional): The feature column names of the dataset. Defaults to None.
             text_column (str, optional): The text column name of the dataset for nlp tasks. Defaults to None.
             target_class_labels (Dict, optional): The class labels for the target columns. Defaults to None.
+            copy_data (bool, optional): Whether to copy the data. Defaults to True.
         """
         # initialize input_id
         self.input_id = input_id
@@ -112,6 +115,7 @@ class VMDataset(VMInput):
         self.target_class_labels = target_class_labels
         self.extra_columns = ExtraColumns.from_dict(extra_columns)
         self._set_feature_columns(feature_columns)
+        self._copy_data = copy_data
 
         if model:
             self.assign_predictions(model)
@@ -397,8 +401,18 @@ class VMDataset(VMInput):
             assert self.target_column not in columns
             columns.append(self.target_column)
 
-        # return a copy to prevent accidental modification
-        return as_df(self._df[columns]).copy()
+        # Check if all columns in self._df are requested
+        all_columns = set(columns) == set(self._df.columns)
+
+        # For copy_data=False and all columns: return exact same DataFrame object
+        if not self._copy_data and all_columns:
+            return self._df
+        # For copy_data=False and subset of columns: return view with shared data
+        elif not self._copy_data:
+            return as_df(self._df[columns])
+        # For copy_data=True: return independent copy with duplicated data
+        else:
+            return as_df(self._df[columns]).copy()
 
     @property
     def x(self) -> np.ndarray:
@@ -522,6 +536,7 @@ class DataFrameDataset(VMDataset):
         text_column: str = None,
         target_class_labels: dict = None,
         date_time_index: bool = False,
+        copy_data: bool = True,
     ):
         """
         Initializes a DataFrameDataset instance, preserving original pandas dtypes.
@@ -536,12 +551,12 @@ class DataFrameDataset(VMDataset):
             text_column (str, optional): The text column name of the dataset for NLP tasks. Defaults to None.
             target_class_labels (dict, optional): The class labels for the target columns. Defaults to None.
             date_time_index (bool, optional): Whether to use date-time index. Defaults to False.
+            copy_data (bool, optional): Whether to create a copy of the input data. Defaults to True.
         """
 
         VMInput.__init__(self)
 
         self.input_id = input_id
-        self._raw_dataset = raw_dataset.values
 
         index = None
         if isinstance(raw_dataset.index, pd.Index):
@@ -549,7 +564,7 @@ class DataFrameDataset(VMDataset):
         self.index = index
 
         # Store the DataFrame directly
-        self._df = raw_dataset.copy()
+        self._df = raw_dataset
 
         if date_time_index:
             self._df = convert_index_to_datetime(self._df)
@@ -560,6 +575,15 @@ class DataFrameDataset(VMDataset):
         self.text_column = text_column
         self.target_class_labels = target_class_labels
         self.extra_columns = ExtraColumns.from_dict(extra_columns)
+        self._copy_data = copy_data
+
+        # Add warning when copy_data is False
+        if not copy_data:
+            logger.warning(
+                "Dataset initialized with copy_data=False. Changes to the original DataFrame "
+                "may affect this dataset. Use this option only when memory efficiency is critical "
+                "and you won't modify the source data."
+            )
 
         self._set_feature_columns(feature_columns)
 
