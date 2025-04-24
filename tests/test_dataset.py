@@ -34,8 +34,6 @@ class TestTabularDataset(TestCase):
         """
         vm_dataset = DataFrameDataset(raw_dataset=self.df)
 
-        # Pandas dataframe gets converted to numpy internally and raw_dataset is a numpy array
-        np.testing.assert_array_equal(vm_dataset._raw_dataset, self.df.values)
         pd.testing.assert_frame_equal(vm_dataset.df, self.df)
 
     def test_init_dataset_pandas_target_column(self):
@@ -67,6 +65,27 @@ class TestTabularDataset(TestCase):
         self.assertEqual(vm_dataset.feature_columns_numeric, ["col1"])
         self.assertEqual(vm_dataset.feature_columns_categorical, [])
         self.assertEqual(vm_dataset.feature_columns, ["col1"])
+
+    def test_dtype_preserved(self):
+        """
+        Test that dtype is preserved in DataFrameDataset.
+        """
+
+        test_df = pd.DataFrame({"col1": pd.Categorical(["x", "y", "z"])})
+
+        # Verify original data is categorical
+        self.assertTrue(
+            pd.api.types.is_categorical_dtype(test_df["col1"]),
+            "Original DataFrame should have categorical dtype",
+        )
+
+        # Verify categorical dtype is preserved
+        dataset = DataFrameDataset(raw_dataset=test_df, input_id="test_dataset")
+
+        self.assertTrue(
+            pd.api.types.is_categorical_dtype(dataset.df["col1"]),
+            "DataFrameDataset should preserve categorical dtype",
+        )
 
     def test_assign_predictions_invalid_model(self):
         """
