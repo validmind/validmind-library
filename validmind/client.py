@@ -61,6 +61,7 @@ def init_dataset(
     class_labels: Optional[Dict[str, Any]] = None,
     type: Optional[str] = None,
     input_id: Optional[str] = None,
+    copy_data: bool = True,
     __log: bool = True,
 ) -> VMDataset:
     """
@@ -92,6 +93,7 @@ def init_dataset(
             this will be set to `dataset` but if you are passing this dataset as a
             test input using some other key than `dataset`, then you should set
             this to the same key.
+        copy_data (bool, optional): Whether to copy the data. Defaults to True.
         __log (bool): Whether to log the input. Defaults to True.
 
     Raises:
@@ -121,6 +123,7 @@ def init_dataset(
             extra_columns=extra_columns,
             target_class_labels=class_labels,
             date_time_index=date_time_index,
+            copy_data=copy_data,
         )
     elif isinstance(dataset, pl.DataFrame):
         vm_dataset = PolarsDataset(
