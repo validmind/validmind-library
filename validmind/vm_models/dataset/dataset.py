@@ -563,7 +563,6 @@ class DataFrameDataset(VMDataset):
 
         index = None
         if isinstance(raw_dataset.index, pd.Index):
-            print("Index is a pandas Index")
             index = raw_dataset.index.values
         self.index = index
 
@@ -589,7 +588,6 @@ class DataFrameDataset(VMDataset):
                 "and you won't modify the source data."
             )
 
-        print("Setting feature columns...")
         self._set_feature_columns(feature_columns)
 
         if model:
