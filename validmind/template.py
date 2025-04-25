@@ -53,8 +53,9 @@ def _convert_sections_to_section_tree(
 
     if start_section_id and not section_tree:
         raise ValueError(f"Section {start_section_id} not found in template")
-
-    return sorted(section_tree, key=lambda x: x.get("order", 0))
+    # sort the section tree by the order of the sections in the template (if provided)
+    # set the order to 9999 for the sections that do not have an order
+    return sorted(section_tree, key=lambda x: x.get("order", 9999))
 
 
 def _create_content_widget(content: Dict[str, Any]) -> Widget:
