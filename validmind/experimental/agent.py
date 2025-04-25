@@ -1,3 +1,11 @@
+# Copyright © 2023-2024 ValidMind Inc. All rights reserved.
+# See the LICENSE file in the root of this repository for details.
+# SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
+
+"""
+Agent interface for all text generation tasks
+"""
+
 import requests
 
 from validmind.api_client import _get_api_headers, _get_url, raise_api_error
