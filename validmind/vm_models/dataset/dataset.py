@@ -133,16 +133,19 @@ class VMDataset(VMInput):
             excluded = [self.target_column, *self.extra_columns.flatten()]
             self.feature_columns = [col for col in self.columns if col not in excluded]
 
-        self.feature_columns_numeric = (
-            self._df[self.feature_columns]
-            .select_dtypes(include=[np.number])
-            .columns.tolist()
-        )
-        self.feature_columns_categorical = (
-            self._df[self.feature_columns]
-            .select_dtypes(include=[object, pd.Categorical])
-            .columns.tolist()
-        )
+        # Get dtypes without loading data into memory
+        feature_dtypes = self._df[self.feature_columns].dtypes
+
+        self.feature_columns_numeric = feature_dtypes[
+            feature_dtypes.apply(lambda x: pd.api.types.is_numeric_dtype(x))
+        ].index.tolist()
+
+        self.feature_columns_categorical = feature_dtypes[
+            feature_dtypes.apply(
+                lambda x: pd.api.types.is_categorical_dtype(x)
+                or pd.api.types.is_object_dtype(x)
+            )
+        ].index.tolist()
 
     def _add_column(self, column_name, column_values):
         column_values = np.array(column_values)
@@ -560,6 +563,7 @@ class DataFrameDataset(VMDataset):
 
         index = None
         if isinstance(raw_dataset.index, pd.Index):
+            print("Index is a pandas Index")
             index = raw_dataset.index.values
         self.index = index
 
@@ -585,6 +589,7 @@ class DataFrameDataset(VMDataset):
                 "and you won't modify the source data."
             )
 
+        print("Setting feature columns...")
         self._set_feature_columns(feature_columns)
 
         if model:
