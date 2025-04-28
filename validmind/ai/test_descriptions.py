@@ -138,6 +138,10 @@ def background_generate_description(
                 logger.warning(
                     f"Test result {test_id} is too large to generate a description"
                 )
+            elif "Too many images" in str(e):
+                logger.warning(
+                    f"Test result {test_id} has too many figures to generate a description"
+                )
             else:
                 logger.warning(f"Failed to generate description for {test_id}: {e}")
             logger.warning(f"Using default description for {test_id}")
