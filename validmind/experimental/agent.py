@@ -9,10 +9,15 @@ Agent interface for all text generation tasks
 import requests
 
 from validmind.api_client import _get_api_headers, _get_url, raise_api_error
-from validmind.vm_models.result import TestResult
+from validmind.utils import is_html, md_to_html
+from validmind.vm_models.result import TextGenerationResult
 
 
-def run_task(generation_type: str, input: dict) -> TestResult:
+def run_task(
+    generation_type: str,
+    input: dict,
+    show: bool = True,
+) -> TextGenerationResult:
     """
     Run text generation for different purposes like code explanation.
 
@@ -37,12 +42,17 @@ def run_task(generation_type: str, input: dict) -> TestResult:
     else:
         raise ValueError(f"Unsupported generation type: {generation_type}")
 
+    if not is_html(generated_text):
+        generated_text = md_to_html(generated_text, mathml=True)
+
     # Create a test result with the generated text
-    result = TestResult(
-        result_id=f"{generation_type}",
+    result = TextGenerationResult(
+        result_type=f"{generation_type}",
         description=generated_text,
         title=f"Text Generation: {generation_type}",
         doc=f"Generated {generation_type}",
     )
+    if show:
+        result.show()
 
     return result
