@@ -586,8 +586,6 @@ class TextGenerationResult(Result):
     params: Optional[Dict[str, Any]] = None
     metadata: Optional[Dict[str, Any]] = None
     _was_description_generated: bool = False
-    _unsafe: bool = False
-    _client_config_cache: Optional[Any] = None
 
     def __post_init__(self):
         if self.ref_id is None:
@@ -655,15 +653,9 @@ class TextGenerationResult(Result):
 
     async def log_async(
         self,
-        section_id: str = None,
         content_id: str = None,
-        position: int = None,
-        config: Dict[str, bool] = None,
     ):
         tasks = []  # collect tasks to run in parallel (async)
-
-        # Default empty dict if None
-        config = config or {}
 
         if self.description:
             tasks.append(
@@ -677,11 +669,7 @@ class TextGenerationResult(Result):
 
     def log(
         self,
-        section_id: str = None,
         content_id: str = None,
-        position: int = None,
-        unsafe: bool = False,
-        config: Dict[str, bool] = None,
     ):
         """Log the result to ValidMind.
 
@@ -691,54 +679,8 @@ class TextGenerationResult(Result):
             content_id (str): The content ID to log the result to.
             position (int): The position (index) within the section to insert the test
                 result.
-            unsafe (bool): If True, log the result even if it contains sensitive data
-                i.e. raw data from input datasets.
-            config (Dict[str, bool]): Configuration options for displaying the test result.
-                Available config options:
-                - hideTitle: Hide the title in the document view
-                - hideText: Hide the description text in the document view
-                - hideParams: Hide the parameters in the document view
-                - hideTables: Hide tables in the document view
-                - hideFigures: Hide figures in the document view
         """
-        if config:
-            self.validate_log_config(config)
         run_async(
             self.log_async,
-            section_id=section_id,
             content_id=content_id,
-            position=position,
-            config=config,
         )
-
-    def validate_log_config(self, config: Dict[str, bool]):
-        """Validate the configuration options for logging a test result
-
-        Args:
-            config (Dict[str, bool]): Configuration options to validate
-
-        Raises:
-            InvalidParameterError: If config contains invalid keys or non-boolean values
-        """
-        valid_keys = {
-            "hideTitle",
-            "hideText",
-            "hideParams",
-            "hideTables",
-            "hideFigures",
-        }
-        invalid_keys = set(config.keys()) - valid_keys
-        if invalid_keys:
-            raise InvalidParameterError(
-                f"Invalid config keys: {', '.join(invalid_keys)}. "
-                f"Valid keys are: {', '.join(valid_keys)}"
-            )
-
-        # Ensure all values are boolean
-        non_bool_keys = [
-            key for key, value in config.items() if not isinstance(value, bool)
-        ]
-        if non_bool_keys:
-            raise InvalidParameterError(
-                f"Values for config keys must be boolean. Non-boolean values found for keys: {', '.join(non_bool_keys)}"
-            )

@@ -19,14 +19,21 @@ def run_task(
     show: bool = True,
 ) -> TextGenerationResult:
     """
-    Run text generation for different purposes like code explanation.
+    Run text generation tasks using AI models.
 
     Args:
-        generation_type (str): Type of text generation ('code_explainer' or 'qualitative_text')
-        input (dict): Dictionary containing source_code and parameters
+        generation_type (str): Type of text generation task to run. Currently supports:
+            - 'code_explainer': Generates natural language explanations of code
+        input (dict): Input parameters for the generation task:
+            - For code_explainer: Must contain 'source_code' and optional parameters
+        show (bool): Whether to display the generated result. Defaults to True.
 
     Returns:
-        TestResult: Test result object containing the generated text
+        TextGenerationResult: Result object containing the generated text and metadata
+
+    Raises:
+        ValueError: If an unsupported generation_type is provided
+        requests.exceptions.RequestException: If the API request fails
     """
     if generation_type == "code_explainer":
         r = requests.post(
