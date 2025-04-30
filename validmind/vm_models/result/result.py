@@ -655,17 +655,12 @@ class TextGenerationResult(Result):
         self,
         content_id: str = None,
     ):
-        tasks = []  # collect tasks to run in parallel (async)
-
-        if self.description:
-            tasks.append(
-                update_metadata(
-                    content_id=f"{content_id}",
-                    text=self.description,
-                )
+        return await asyncio.gather(
+            update_metadata(
+                content_id=f"{content_id}",
+                text=self.description,
             )
-
-        return await asyncio.gather(*tasks)
+        )
 
     def log(
         self,
