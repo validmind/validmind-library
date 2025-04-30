@@ -14,7 +14,7 @@ from validmind.vm_models.result import TextGenerationResult
 
 
 def run_task(
-    generation_type: str,
+    task: str,
     input: dict,
     show: bool = True,
 ) -> TextGenerationResult:
@@ -22,7 +22,7 @@ def run_task(
     Run text generation tasks using AI models.
 
     Args:
-        generation_type (str): Type of text generation task to run. Currently supports:
+        task (str): Type of text generation task to run. Currently supports:
             - 'code_explainer': Generates natural language explanations of code
         input (dict): Input parameters for the generation task:
             - For code_explainer: Must contain 'source_code' and optional parameters
@@ -32,10 +32,10 @@ def run_task(
         TextGenerationResult: Result object containing the generated text and metadata
 
     Raises:
-        ValueError: If an unsupported generation_type is provided
+        ValueError: If an unsupported task is provided
         requests.exceptions.RequestException: If the API request fails
     """
-    if generation_type == "code_explainer":
+    if task == "code_explainer":
         r = requests.post(
             url=_get_url("ai/generate/code_explainer"),
             headers=_get_api_headers(),
@@ -47,17 +47,17 @@ def run_task(
 
         generated_text = r.json()["content"]
     else:
-        raise ValueError(f"Unsupported generation type: {generation_type}")
+        raise ValueError(f"Unsupported task: {task}")
 
     if not is_html(generated_text):
         generated_text = md_to_html(generated_text, mathml=True)
 
     # Create a test result with the generated text
     result = TextGenerationResult(
-        result_type=f"{generation_type}",
+        result_type=f"{task}",
         description=generated_text,
-        title=f"Text Generation: {generation_type}",
-        doc=f"Generated {generation_type}",
+        title=f"Text Generation: {task}",
+        doc=f"Generated {task}",
     )
     if show:
         result.show()
