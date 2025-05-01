@@ -129,6 +129,7 @@ class Result:
 
     result_id: str = None
     name: str = None
+    result_type: str = None
 
     def __str__(self) -> str:
         """May be overridden by subclasses."""
@@ -445,6 +446,7 @@ class TestResult(Result):
     async def log_async(
         self,
         section_id: str = None,
+        content_id: str = None,
         position: int = None,
         config: Dict[str, bool] = None,
     ):
@@ -477,7 +479,6 @@ class TestResult(Result):
             tasks.extend(
                 [api_client.alog_figure(figure) for figure in (self.figures or [])]
             )
-
             if self.description:
                 revision_name = (
                     AI_REVISION_NAME
@@ -485,18 +486,19 @@ class TestResult(Result):
                     else DEFAULT_REVISION_NAME
                 )
 
-                tasks.append(
-                    update_metadata(
-                        content_id=f"test_description:{self.result_id}::{revision_name}",
-                        text=self.description,
-                    )
+            tasks.append(
+                update_metadata(
+                    content_id=f"{content_id}:{revision_name}",
+                    text=self.description,
                 )
+            )
 
         return await asyncio.gather(*tasks)
 
     def log(
         self,
         section_id: str = None,
+        content_id: str = None,
         position: int = None,
         unsafe: bool = False,
         config: Dict[str, bool] = None,
@@ -506,6 +508,7 @@ class TestResult(Result):
         Args:
             section_id (str): The section ID within the model document to insert the
                 test result.
+            content_id (str): The content ID to log the result to.
             position (int): The position (index) within the section to insert the test
                 result.
             unsafe (bool): If True, log the result even if it contains sensitive data
@@ -533,6 +536,7 @@ class TestResult(Result):
         run_async(
             self.log_async,
             section_id=section_id,
+            content_id=content_id,
             position=position,
             config=config,
         )
@@ -568,3 +572,110 @@ class TestResult(Result):
             raise InvalidParameterError(
                 f"Values for config keys must be boolean. Non-boolean values found for keys: {', '.join(non_bool_keys)}"
             )
+
+
+@dataclass
+class TextGenerationResult(Result):
+    """Test result."""
+
+    name: str = "Text Generation Result"
+    ref_id: str = None
+    title: Optional[str] = None
+    doc: Optional[str] = None
+    description: Optional[Union[str, DescriptionFuture]] = None
+    params: Optional[Dict[str, Any]] = None
+    metadata: Optional[Dict[str, Any]] = None
+    _was_description_generated: bool = False
+
+    def __post_init__(self):
+        if self.ref_id is None:
+            self.ref_id = str(uuid4())
+
+    def __repr__(self) -> str:
+        attrs = [
+            attr
+            for attr in [
+                "doc",
+                "description",
+                "params",
+            ]
+            if getattr(self, attr) is not None
+            and (
+                len(getattr(self, attr)) > 0
+                if isinstance(getattr(self, attr), list)
+                else True
+            )
+        ]
+
+        return f'TextGenerationResult("{self.result_id}", {", ".join(attrs)})'
+
+    def __getattribute__(self, name):
+        # lazy load description if its a DescriptionFuture (generated in background)
+        if name == "description":
+            description = super().__getattribute__("description")
+
+            if isinstance(description, DescriptionFuture):
+                self._was_description_generated = True
+                self.description = description.get_description()
+
+        return super().__getattribute__(name)
+
+    @property
+    def test_name(self) -> str:
+        """Get the test name, using custom title if available."""
+        return self.title or test_id_to_name(self.result_id)
+
+    def to_widget(self):
+        template_data = {
+            "test_name": self.test_name,
+            "description": self.description.replace("h3", "strong"),
+            "params": (
+                json.dumps(self.params, cls=NumpyEncoder, indent=2)
+                if self.params
+                else None
+            ),
+        }
+        rendered = get_result_template().render(**template_data)
+
+        widgets = [HTML(rendered)]
+
+        return VBox(widgets)
+
+    def serialize(self):
+        """Serialize the result for the API."""
+        return {
+            "test_name": self.result_id,
+            "title": self.title,
+            "ref_id": self.ref_id,
+            "params": self.params,
+            "metadata": self.metadata,
+        }
+
+    async def log_async(
+        self,
+        content_id: str = None,
+    ):
+        return await asyncio.gather(
+            update_metadata(
+                content_id=f"{content_id}",
+                text=self.description,
+            )
+        )
+
+    def log(
+        self,
+        content_id: str = None,
+    ):
+        """Log the result to ValidMind.
+
+        Args:
+            section_id (str): The section ID within the model document to insert the
+                test result.
+            content_id (str): The content ID to log the result to.
+            position (int): The position (index) within the section to insert the test
+                result.
+        """
+        run_async(
+            self.log_async,
+            content_id=content_id,
+        )
