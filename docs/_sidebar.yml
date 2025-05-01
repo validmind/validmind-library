@@ -42,6 +42,8 @@ website:
           file: validmind/validmind.qmd#test
         - text: "log_text<span class='suffix'></span>"
           file: validmind/validmind.qmd#log_text
+        - text: "experimental_agent<span class='suffix'></span>"
+          file: validmind/validmind.qmd#experimental_agent
         - text: "<span class='prefix'></span> RawData"
           file: validmind/validmind.qmd#rawdata
           contents:

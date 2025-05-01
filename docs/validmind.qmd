@@ -451,6 +451,12 @@ Logs free-form text to ValidMind API.
 - `ValueError`: If content_id or text are empty or not strings.
 - `Exception`: If the API call fails.
 
+## experimental_agent<span class="suffix"></span>
+
+<!-- docstring.jinja2 -->
+
+Agent interface for all text generation tasks
+
 <!-- module.qmd.jinja2 -->
 
 ## <span class="prefix"></span> RawData
