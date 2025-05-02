@@ -1,4 +1,13 @@
-## Internal Notes for Reviewers
+# Pull Request Description
+
+## What
+<!-- Describe what the change is doing, including behavior before and after the change -->
+
+## Why
+<!-- Explain why the change is being made and needed -->
+
+## How to Test
+<!-- Describe how the change has been tested, and how a reviewer can test the change locally -->
 
 <!--
 PR instructions for release notes:
@@ -9,7 +18,6 @@ PR instructions for release notes:
 - `highlight`
 - `enhancement`
 - `bug`
-- `chore`
 - `breaking-change`
 - `deprecation`
 - `documentation`
@@ -18,5 +26,32 @@ PR instructions for release notes:
 -->
 
 ## External Release Notes
-
 <!--- REPLACE THIS COMMENT WITH YOUR DESCRIPTION --->
+
+## Deployment Notes
+<!-- Any special deployment considerations? -->
+
+## Breaking Changes
+<!-- List any breaking changes -->
+
+## Screenshots/Videos (Frontend Only)
+<!-- Add screenshots or videos showing before/after -->
+
+## Checklist
+- [ ] PR body describes what, why, and how to test
+- [ ] Release notes written
+- [ ] Deployment notes written
+- [ ] Breaking changes identified
+- [ ] Labels applied
+- [ ] PR linked to Shortcut
+- [ ] PR title matches Shortcut ticket title
+- [ ] Screenshots/videos added (Frontend)
+- [ ] Unit tests added (Backend)
+- [ ] Tested locally
+- [ ] Documentation updated (if required)
+
+## Areas Needing Special Review
+<!-- Optional: Call out specific areas needing detailed review -->
+
+## Additional Notes
+<!-- Any other information that would be helpful to reviewers -->
