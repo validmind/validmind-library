@@ -25,6 +25,10 @@ PR instructions for release notes:
 2. In the next section, describe the changes so that an external user can understand them. Keep it simple and link to the docs with [Learn more ...](<relative-link>), if available.
 -->
 
+## Pull Request Dependencies
+
+<!-- A list of links to pull requests that are depend on or are dependencies of this PR -->
+
 ## External Release Notes
 <!--- REPLACE THIS COMMENT WITH YOUR DESCRIPTION --->
 
@@ -44,7 +48,6 @@ PR instructions for release notes:
 - [ ] Breaking changes identified
 - [ ] Labels applied
 - [ ] PR linked to Shortcut
-- [ ] PR title matches Shortcut ticket title
 - [ ] Screenshots/videos added (Frontend)
 - [ ] Unit tests added (Backend)
 - [ ] Tested locally
