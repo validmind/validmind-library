@@ -20,6 +20,7 @@ bert-score = ">=0.3.13"
 catboost = "*"
 datasets = "^2.10.0"
 evaluate = "*"
+h11 = ">=0.16.0"
 ipywidgets = "*"
 kaleido = ">=0.2.1,!=0.2.1.post1"
 langchain-openai = {version = ">=0.1.8", optional = true}
