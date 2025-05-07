@@ -35,9 +35,9 @@ def run_task(
         ValueError: If an unsupported task is provided
         requests.exceptions.RequestException: If the API request fails
     """
-    if task == "code_explainer":
+    if task == "code_explainer" or task == "qualitative_text_generation":
         r = requests.post(
-            url=_get_url("ai/generate/code_explainer"),
+            url=_get_url(f"ai/generate/{task}"),
             headers=_get_api_headers(),
             json=input,
         )
