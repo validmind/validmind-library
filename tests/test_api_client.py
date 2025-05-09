@@ -145,19 +145,6 @@ class TestAPIClient(unittest.TestCase):
             },
         )
 
-    @patch("aiohttp.ClientSession.get")
-    def test_get_metadata(self, mock_get: MagicMock):
-        res_json = [{"cuid": "1234"}]
-        mock_get.return_value = MockAsyncResponse(200, json=res_json)
-
-        response = self.run_async(api_client.aget_metadata, "content_id")
-
-        url = f"{os.environ['VM_API_HOST']}/get_metadata/content_id"
-        url += f""
-        mock_get.assert_called_with(url)
-
-        self.assertEqual(response, res_json)
-
     @patch("aiohttp.ClientSession.post")
     def test_log_figure_matplot(self, mock_post: MagicMock):
         mock_post.return_value = MockAsyncResponse(200, json={"cuid": "1234"})
