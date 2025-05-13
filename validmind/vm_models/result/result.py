@@ -488,7 +488,7 @@ class TestResult(Result):
 
             tasks.append(
                 update_metadata(
-                    content_id=f"{content_id}:{revision_name}",
+                    content_id=content_id if content_id else f"test_description:{self.result_id}::{revision_name}",
                     text=self.description,
                 )
             )
