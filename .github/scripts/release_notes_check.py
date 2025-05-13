@@ -20,8 +20,8 @@ def ci_check(pr_number, access_token):
     labels = [label.name for label in pr.labels]
     description = pr.body
 
-    # Check for the presence of 'internal' label
-    if 'internal' in labels:
+    # Check for the presence of 'internal' or 'dependencies' label
+    if 'internal' in labels or 'dependencies' in labels:
          return True
     
     required_labels = ['highlight', 'enhancement', 'bug', 'deprecation', 'documentation']
