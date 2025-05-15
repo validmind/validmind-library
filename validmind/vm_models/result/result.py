@@ -466,7 +466,7 @@ class TestResult(Result):
                 )
             )
 
-        if self.tables or self.figures or self.description:
+        if self.tables:
             tasks.append(
                 api_client.alog_test_result(
                     result=self.serialize(),
@@ -475,16 +475,16 @@ class TestResult(Result):
                     config=config,
                 )
             )
-
+        if self.figures:
             tasks.extend(
                 [api_client.alog_figure(figure) for figure in (self.figures or [])]
             )
-            if self.description:
-                revision_name = (
-                    AI_REVISION_NAME
-                    if self._was_description_generated
-                    else DEFAULT_REVISION_NAME
-                )
+        if self.description:
+            revision_name = (
+                AI_REVISION_NAME
+                if self._was_description_generated
+                else DEFAULT_REVISION_NAME
+            )
 
             tasks.append(
                 update_metadata(
