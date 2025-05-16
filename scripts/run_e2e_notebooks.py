@@ -6,7 +6,7 @@ Usage:
 Note: This script is meant to be run from the root of the repo
 
 Notebooks Tested:
- - notebooks/code_samples/quickstart_customer_churn_full_suite.ipynb
+ - notebooks/quickstart/quickstart_model_documentation.ipynb
  - notebooks/code_samples/time_series/quickstart_time_series_full_suite.ipynb
  - notebooks/code_samples/regression/quickstart_regression_full_suite.ipynb
  - notebooks/code_samples/custom_tests/external_test_providers.ipynb
@@ -39,7 +39,7 @@ DEFAULT_MODEL_CUID = os.getenv(
 )  # Demo Account Dev Customer Churn Model
 
 NOTEBOOKS_TO_RUN = [
-    "notebooks/code_samples/quickstart_customer_churn_full_suite.ipynb",
+    "notebooks/quickstart/quickstart_model_documentation.ipynb",
     "notebooks/code_samples/time_series/quickstart_time_series_high_code.ipynb",
     "notebooks/code_samples/regression/quickstart_regression_full_suite.ipynb",
     "notebooks/how_to/run_unit_metrics.ipynb",
@@ -71,7 +71,7 @@ DATA_TEMPLATE_NOTEBOOKS = [
     },
     {
         # [Demo] Customer Churn Model
-        "path": "notebooks/code_samples/quickstart_customer_churn_full_suite.ipynb",
+        "path": "notebooks/quickstart/quickstart_model_documentation.ipynb",
         "model": "cm4lr52lw00a60jpbhmzh8cah",
     },
     {
