@@ -196,9 +196,10 @@ def _pretty_list_tests(
     for test_id, test in tests.items():
         try:
             test_func = load_test(test_id)
-            return_annotation = inspect.signature(test_func).return_annotation
             print(f"\nTest ID: {test_id}")
-            print(f"Return Annotation: {return_annotation}")
+            print(
+                f"Return Annotation: {inspect.signature(test_func).return_annotation}"
+            )
             print(f"Input Annotation: {inspect.signature(test_func).parameters}")
             print("-" * 50)
         except Exception as e:

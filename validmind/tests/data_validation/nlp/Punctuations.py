@@ -8,15 +8,14 @@ Metrics functions for any Pandas-compatible datasets
 
 import string
 from collections import defaultdict
-
-import plotly.graph_objects as go
+from typing import Tuple
 
 from validmind import RawData, tags, tasks
 
 
 @tags("nlp", "text_data", "visualization", "frequency_analysis")
 @tasks("text_classification", "text_summarization", "nlp")
-def Punctuations(dataset, count_mode="token"):
+def Punctuations(dataset, count_mode="token") -> Tuple[go.Figure, RawData]:
     """
     Analyzes and visualizes the frequency distribution of punctuation usage in a given text dataset.
 

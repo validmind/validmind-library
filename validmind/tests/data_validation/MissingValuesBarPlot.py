@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Tuple
+
 import plotly.graph_objects as go
 
 from validmind import RawData, tags, tasks
@@ -12,7 +14,7 @@ from validmind.vm_models import VMDataset
 @tasks("classification", "regression")
 def MissingValuesBarPlot(
     dataset: VMDataset, threshold: int = 80, fig_height: int = 600
-):
+) -> Tuple[go.Figure, RawData]:
     """
     Assesses the percentage and distribution of missing values in the dataset via a bar plot, with emphasis on
     identifying high-risk columns based on a user-defined threshold.

@@ -2,6 +2,9 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+
+from typing import Tuple
+
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
@@ -19,7 +22,9 @@ logger = get_logger(__name__)
 
 @tags("time_series_data", "seasonality", "statsmodels")
 @tasks("regression")
-def SeasonalDecompose(dataset: VMDataset, seasonal_model: str = "additive"):
+def SeasonalDecompose(
+    dataset: VMDataset, seasonal_model: str = "additive"
+) -> Tuple[go.Figure, RawData]:
     """
     Assesses patterns and seasonality in a time series dataset by decomposing its features into foundational components.
 

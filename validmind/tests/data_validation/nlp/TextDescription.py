@@ -7,6 +7,7 @@ import string
 import nltk
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 from nltk.corpus import stopwords
 
 from validmind import RawData, tags, tasks
@@ -94,7 +95,7 @@ def TextDescription(
         "``",
     },
     lang: str = "english",
-):
+) -> Tuple[go.Figure, ...]:
     """
     Conducts comprehensive textual analysis on a dataset using NLTK to evaluate various parameters and generate
     visualizations.

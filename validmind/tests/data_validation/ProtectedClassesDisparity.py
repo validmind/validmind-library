@@ -4,6 +4,7 @@
 
 import io
 import sys
+from typing import Any, List, Tuple
 
 import pandas as pd
 
@@ -33,7 +34,7 @@ def ProtectedClassesDisparity(
     protected_classes=None,
     disparity_tolerance=1.25,
     metrics=["fnr", "fpr", "tpr"],
-):
+) -> Tuple[pd.DataFrame, List[bytes], Any, RawData]:
     """
     Investigates disparities in model performance across different protected class segments.
 

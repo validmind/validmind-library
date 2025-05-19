@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Any, Dict, List, Tuple
+
 from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset
 
@@ -13,7 +15,7 @@ def HighCardinality(
     num_threshold: int = 100,
     percent_threshold: float = 0.1,
     threshold_type: str = "percent",
-):
+) -> Tuple[List[Dict[str, Any]], bool, RawData]:
     """
     Assesses the number of unique values in categorical columns to detect high cardinality and potential overfitting.
 

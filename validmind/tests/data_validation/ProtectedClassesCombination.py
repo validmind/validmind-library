@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 import sys
+from typing import Dict, Tuple
 
 import pandas as pd
 import plotly.graph_objects as go
@@ -33,7 +34,9 @@ logger = get_logger(__name__)
 
 @tags("bias_and_fairness")
 @tasks("classification", "regression")
-def ProtectedClassesCombination(dataset, model, protected_classes=None):
+def ProtectedClassesCombination(
+    dataset, model, protected_classes=None
+) -> Tuple[Dict[str, pd.DataFrame], Dict[str, pd.DataFrame], go.Figure, RawData]:
     """
     Visualizes combinations of protected classes and their corresponding error metric differences.
 

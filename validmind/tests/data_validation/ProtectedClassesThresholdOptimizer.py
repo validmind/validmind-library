@@ -4,7 +4,9 @@
 
 import json
 import sys
+from typing import Any, Dict, Tuple
 
+import matplotlib.figure
 import matplotlib.pyplot as plt
 import pandas as pd
 
@@ -36,7 +38,7 @@ logger = get_logger(__name__)
 @tasks("classification", "regression")
 def ProtectedClassesThresholdOptimizer(
     dataset, pipeline=None, protected_classes=None, X_train=None, y_train=None
-):
+) -> Tuple[Dict[str, Any], matplotlib.figure.Figure, RawData]:
     """
     Obtains a classifier by applying group-specific thresholds to the provided estimator.
 

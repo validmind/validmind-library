@@ -2,6 +2,9 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+
+from typing import Any, Dict, Tuple
+
 from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset
 
@@ -18,7 +21,9 @@ def compute_outliers(series, threshold=1.5):
 
 @tags("tabular_data", "numerical_data")
 @tasks("classification", "regression")
-def IQROutliersTable(dataset: VMDataset, threshold: float = 1.5):
+def IQROutliersTable(
+    dataset: VMDataset, threshold: float = 1.5
+) -> Tuple[Dict[str, Any], RawData]:
     """
     Determines and summarizes outliers in numerical features using the Interquartile Range method.
 
