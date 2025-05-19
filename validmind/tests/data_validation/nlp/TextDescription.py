@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 import string
+from typing import Tuple
 
 import nltk
 import pandas as pd
@@ -95,7 +96,7 @@ def TextDescription(
         "``",
     },
     lang: str = "english",
-) -> Tuple[go.Figure, ...]:
+) -> Tuple[go.Figure, RawData]:
     """
     Conducts comprehensive textual analysis on a dataset using NLTK to evaluate various parameters and generate
     visualizations.

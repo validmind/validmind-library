@@ -10,6 +10,8 @@ import string
 from collections import defaultdict
 from typing import Tuple
 
+import plotly.graph_objects as go
+
 from validmind import RawData, tags, tasks
 
 
