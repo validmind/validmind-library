@@ -448,6 +448,7 @@ async def alog_metric(
     params: Optional[Dict[str, Any]] = None,
     recorded_at: Optional[str] = None,
     thresholds: Optional[Dict[str, Any]] = None,
+    passed: Optional[bool] = None,
 ):
     """See log_metric for details."""
     if not key or not isinstance(key, str):
@@ -476,6 +477,7 @@ async def alog_metric(
                     "params": params or {},
                     "recorded_at": recorded_at,
                     "thresholds": thresholds or {},
+                    "passed": passed if passed is not None else None,
                 },
                 cls=NumpyEncoder,
                 allow_nan=False,
@@ -493,6 +495,7 @@ def log_metric(
     params: Optional[Dict[str, Any]] = None,
     recorded_at: Optional[str] = None,
     thresholds: Optional[Dict[str, Any]] = None,
+    passed: Optional[bool] = None,
 ):
     """Logs a unit metric.
 
@@ -518,6 +521,7 @@ def log_metric(
         params=params,
         recorded_at=recorded_at,
         thresholds=thresholds,
+        passed=passed,
     )
 
 
