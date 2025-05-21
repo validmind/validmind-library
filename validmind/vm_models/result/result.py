@@ -475,12 +475,10 @@ class TestResult(Result):
                     config=config,
                 )
             )
-
         if self.figures:
             tasks.extend(
                 [api_client.alog_figure(figure) for figure in (self.figures or [])]
             )
-
         if self.description:
             revision_name = (
                 AI_REVISION_NAME

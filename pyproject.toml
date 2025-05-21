@@ -10,7 +10,7 @@ description = "ValidMind Library"
 license = "Commercial License"
 name = "validmind"
 readme = "README.pypi.md"
-version = "2.8.23"
+version = "2.8.25"
 
 [tool.poetry.dependencies]
 aiohttp = {extras = ["speedups"], version = "*"}
@@ -38,7 +38,7 @@ plotly = "<6.0.0"
 plotly-express = "*"
 polars = "*"
 pycocoevalcap = {version = "^1.2", optional = true}
-python = ">=3.8.1,<3.12"
+python = ">=3.9.0,<3.12"
 python-dotenv = "*"
 ragas = {version = ">=0.2.3,<=0.2.7", optional = true}
 rouge = ">=1"
@@ -53,7 +53,7 @@ statsmodels = "*"
 tabulate = "^0.8.9"
 textblob = "^0.18.0.post0"
 tiktoken = "*"
-torch = {version = ">=1.10.0", optional = true}
+torch = {version = "2.7.0", optional = true}
 tqdm = "*"
 transformers = {version = "^4.32.0", optional = true}
 xgboost = ">=1.5.2,<3"
