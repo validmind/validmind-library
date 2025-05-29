@@ -1,9 +1,10 @@
-import os
 import json
+import os
+import sys
 
-from openai import OpenAI
 from github import Github
-from tiktoken import encoding_for_model
+from openai import APIConnectionError, OpenAI, OpenAIError
+
 
 # Initialize GitHub and OpenAI clients
 github_token = os.getenv("GITHUB_TOKEN")
@@ -28,13 +29,15 @@ for file in files:
 
 diff = "\n\n".join(diffs)
 
+# Add a unique marker at the start of the comment to find comments by the bot
+COMMENT_MARKER = "<!-- AI-EXPLAIN-COMMENT -->"
+
 # Fetch existing AI explanation comment
-existing_explanation_comment = None
-comments = sorted(pr.get_issue_comments(), key=lambda x: x.created_at, reverse=True)
+existing_explanation_comments = []
+comments = pr.get_issue_comments()
 for comment in comments:
-    if comment.user.login == "github-actions[bot]":
-        existing_explanation_comment = comment
-        break
+    if comment.user.login == "github-actions[bot]" and COMMENT_MARKER in comment.body:
+        existing_explanation_comments.append(comment)
 
 # OpenAI prompt template
 prompt_template = """
@@ -70,52 +73,53 @@ diff:
 # Prepare OpenAI prompt
 prompt = prompt_template.format(diff=diff)
 
-# check number of tokens
-encoding = encoding_for_model("gpt-4o-mini")
-tokens = encoding.encode(prompt)
-print(f"Number of tokens: {len(tokens)}")
-# 128k is max tokens for gpt-4o-mini
-num_output_tokens = 1000
-if len(tokens) > 128000 - num_output_tokens:
-    tokens = tokens[: 128000 - num_output_tokens]
-    prompt = encoding.decode(tokens)
-
-# Call OpenAI API
-client = OpenAI()
-response = client.chat.completions.create(
-    model="gpt-4o",
-    response_format={"type": "json_object"},
-    messages=[
-        {
-            "role": "user",
-            "content": prompt,
-        }
-    ],
-    temperature=0,
-)
+try:
+    # Call OpenAI API
+    client = OpenAI()
+    response = client.chat.completions.create(
+        model="o3-mini",
+        response_format={"type": "json_object"},
+        messages=[
+            {
+                "role": "user",
+                "content": prompt,
+            }
+        ],
+    )
+except APIConnectionError as e:
+    print(f"OpenAI API connection error: {e}")
+    sys.exit(0)  # happy exit so that the workflow will continue
+except OpenAIError as e:
+    print(f"OpenAI API error: {e}")
+    sys.exit(0)  # happy exit so that the workflow will continue
+except Exception as e:
+    print(f"Unexpected error: {e}")
+    sys.exit(0)  # happy exit so that the workflow will continue
 
 # Parse OpenAI response
 ai_response = json.loads(response.choices[0].message.content.strip())
 
 # Create a new comment and delete the existing explanation comment
 new_comment = pr.create_issue_comment(
+    f"{COMMENT_MARKER}\n"
     f"{ai_response['summary']}\n\n"
     f"## Test Suggestions\n"
     f"- " + "\n- ".join(ai_response["test_suggestions"])
     if ai_response.get("test_suggestions", None)
     else (
-        "n/a" + "\n\n"
-        f"## Code Quality Assessment\n"
-        f"- " + "\n- ".join(ai_response["code_quality_assessment"])
+        "n/a" + "\n\n## Code Quality Assessment\n- " + "\n- ".join(ai_response["code_quality_assessment"])
         if ai_response.get("code_quality_assessment", None)
         else (
-            "n/a" + "\n\n"
-            f"## Security Assessment\n"
-            f"- " + "\n- ".join(ai_response["security_assessment"])
+            "n/a" + "\n\n## Security Assessment\n- " + "\n- ".join(ai_response["security_assessment"])
             if ai_response.get("security_assessment", None)
             else "n/a" + "\n\n"
         )
     )
 )
-if existing_explanation_comment:
-    existing_explanation_comment.delete()
+
+# Delete all previous AI explain comments
+for comment in existing_explanation_comments:
+    try:
+        comment.delete()
+    except Exception as e:
+        print(f"Failed to delete comment: {e!s}")

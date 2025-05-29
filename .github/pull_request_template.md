@@ -1,13 +1,22 @@
 # Pull Request Description
 
-## What
-<!-- Describe what the change is doing, including behavior before and after the change -->
+## What and why?
+<!-- Briefly describe what changed and why — include behavior before and after if helpful -->
+<!-- Frontend: Add screenshots or videos showing before/after -->
 
-## Why
-<!-- Explain why the change is being made and needed -->
-
-## How to Test
+## How to test
 <!-- Describe how the change has been tested, and how a reviewer can test the change locally -->
+
+## What needs special review?
+<!-- Optional: Call out specific areas needing detailed review -->
+
+## Dependencies, breaking changes, and deployment notes
+<!-- A list of links to pull requests that are depend on or are dependencies of this PR -->
+<!-- Any special deployment considerations? -->
+<!-- List any breaking changes -->
+
+## Release notes
+<!--- REPLACE THIS COMMENT WITH YOUR DESCRIPTION --->
 
 <!--
 PR instructions for release notes:
@@ -21,40 +30,21 @@ PR instructions for release notes:
 - `breaking-change`
 - `deprecation`
 - `documentation`
+- `environment-variables`
 
 2. In the next section, describe the changes so that an external user can understand them. Keep it simple and link to the docs with [Learn more ...](<relative-link>), if available.
 -->
 
-## Pull Request Dependencies
-
-<!-- A list of links to pull requests that are depend on or are dependencies of this PR -->
-
-## External Release Notes
-<!--- REPLACE THIS COMMENT WITH YOUR DESCRIPTION --->
-
-## Deployment Notes
-<!-- Any special deployment considerations? -->
-
-## Breaking Changes
-<!-- List any breaking changes -->
-
-## Screenshots/Videos (Frontend Only)
-<!-- Add screenshots or videos showing before/after -->
-
 ## Checklist
-- [ ] PR body describes what, why, and how to test
-- [ ] Release notes written
-- [ ] Deployment notes written
-- [ ] Breaking changes identified
+- [ ] What and why
+- [ ] Screenshots or videos (Frontend)
+- [ ] How to test
+- [ ] What needs special review
+- [ ] Dependencies, breaking changes, and deployment notes
 - [ ] Labels applied
 - [ ] PR linked to Shortcut
-- [ ] Screenshots/videos added (Frontend)
 - [ ] Unit tests added (Backend)
 - [ ] Tested locally
 - [ ] Documentation updated (if required)
+- [ ] Environment variable additions/changes documented (if required)
 
-## Areas Needing Special Review
-<!-- Optional: Call out specific areas needing detailed review -->
-
-## Additional Notes
-<!-- Any other information that would be helpful to reviewers -->
