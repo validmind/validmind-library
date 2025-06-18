@@ -197,6 +197,8 @@ lending_club_loan_data_*.csv
 !notebooks/code_samples/model_validation/xgb_model_champion.pkl
 # Sample logistic regression model for validation series — do not remove!
 !notebooks/tutorials/model_validation/lr_model_champion.pkl
+# Sample XGBoost model for validation quickstart — do not remove!
+!notebooks/quickstart/xgboost_model_champion.pkl
 
 notebooks/llm/datasets/*.jsonl
 
