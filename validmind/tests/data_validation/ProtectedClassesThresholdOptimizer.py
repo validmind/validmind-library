@@ -13,6 +13,7 @@ import pandas as pd
 from validmind import RawData, tags, tasks
 from validmind.errors import MissingDependencyError
 from validmind.logging import get_logger
+from validmind.vm_models import VMDataset
 
 try:
     from fairlearn.metrics import (
@@ -37,7 +38,11 @@ logger = get_logger(__name__)
 @tags("bias_and_fairness")
 @tasks("classification", "regression")
 def ProtectedClassesThresholdOptimizer(
-    dataset, pipeline=None, protected_classes=None, X_train=None, y_train=None
+    dataset: VMDataset,
+    pipeline=None,
+    protected_classes=None,
+    X_train=None,
+    y_train=None,
 ) -> Tuple[Dict[str, Any], matplotlib.figure.Figure, RawData]:
     """
     Obtains a classifier by applying group-specific thresholds to the provided estimator.

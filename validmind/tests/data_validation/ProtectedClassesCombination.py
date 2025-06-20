@@ -12,6 +12,7 @@ import plotly.subplots as sp
 from validmind import RawData, tags, tasks
 from validmind.errors import MissingDependencyError
 from validmind.logging import get_logger
+from validmind.vm_models import VMDataset, VMModel
 
 try:
     from fairlearn.metrics import (
@@ -35,7 +36,7 @@ logger = get_logger(__name__)
 @tags("bias_and_fairness")
 @tasks("classification", "regression")
 def ProtectedClassesCombination(
-    dataset, model, protected_classes=None
+    dataset: VMDataset, model: VMModel, protected_classes=None
 ) -> Tuple[Dict[str, pd.DataFrame], Dict[str, pd.DataFrame], go.Figure, RawData]:
     """
     Visualizes combinations of protected classes and their corresponding error metric differences.

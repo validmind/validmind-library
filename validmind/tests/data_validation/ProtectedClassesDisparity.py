@@ -11,6 +11,7 @@ import pandas as pd
 from validmind import RawData, tags, tasks
 from validmind.errors import MissingDependencyError
 from validmind.logging import get_logger
+from validmind.vm_models import VMDataset, VMModel
 
 try:
     import aequitas.plot as ap
@@ -29,8 +30,8 @@ logger = get_logger(__name__)
 @tags("bias_and_fairness")
 @tasks("classification", "regression")
 def ProtectedClassesDisparity(
-    dataset,
-    model,
+    dataset: VMDataset,
+    model: VMModel,
     protected_classes=None,
     disparity_tolerance=1.25,
     metrics=["fnr", "fpr", "tpr"],

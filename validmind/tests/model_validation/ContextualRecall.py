@@ -2,17 +2,22 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Tuple
+
 import nltk
 import pandas as pd
 import plotly.graph_objects as go
 
 from validmind import RawData, tags, tasks
 from validmind.tests.utils import validate_prediction
+from validmind.vm_models import VMDataset, VMModel
 
 
 @tags("nlp", "text_data", "visualization")
 @tasks("text_classification", "text_summarization")
-def ContextualRecall(dataset, model):
+def ContextualRecall(
+    dataset: VMDataset, model: VMModel
+) -> Tuple[pd.DataFrame, go.Figure, RawData]:
     """
     Evaluates a Natural Language Generation model's ability to generate contextually relevant and factually correct
     text, visualizing the results through histograms and bar charts, alongside compiling a comprehensive table of
