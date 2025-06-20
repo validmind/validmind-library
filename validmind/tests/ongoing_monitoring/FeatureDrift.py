@@ -2,11 +2,14 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Dict, List, Tuple
+
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 
 from validmind import RawData, tags, tasks
+from validmind.vm_models import VMDataset
 
 
 def calculate_psi_score(actual, expected):
@@ -92,11 +95,11 @@ def create_distribution_plot(feature_name, reference_dist, monitoring_dist, bins
 @tags("visualization")
 @tasks("monitoring")
 def FeatureDrift(
-    datasets,
+    datasets: List[VMDataset],
     bins=[0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9],
     feature_columns=None,
     psi_threshold=0.2,
-):
+) -> Tuple[Dict[str, pd.DataFrame], go.Figure, bool, RawData]:
     """
     Evaluates changes in feature distribution over time to identify potential model drift.
 

@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Tuple
+
 import pandas as pd
 from sklearn.inspection import permutation_importance
 
@@ -11,7 +13,9 @@ from validmind.vm_models import VMDataset, VMModel
 
 @tags("model_explainability", "sklearn")
 @tasks("regression", "time_series_forecasting")
-def FeatureImportance(dataset: VMDataset, model: VMModel, num_features: int = 3):
+def FeatureImportance(
+    dataset: VMDataset, model: VMModel, num_features: int = 3
+) -> Tuple[pd.DataFrame, RawData]:
     """
     Compute feature importance scores for a given model and generate a summary table
     with the top important features.

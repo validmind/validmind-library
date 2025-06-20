@@ -3,12 +3,15 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 import warnings
+from typing import Dict, List, Optional, Tuple
 
 import plotly.express as px
+import plotly.graph_objects as go
 from datasets import Dataset
 
 from validmind import RawData, tags, tasks
 from validmind.errors import MissingDependencyError
+from validmind.vm_models import VMDataset
 
 from .utils import get_ragas_config, get_renamed_columns
 
@@ -39,19 +42,19 @@ LOWER_IS_BETTER_ASPECTS = ["harmfulness", "maliciousness"]
 @tags("ragas", "llm", "qualitative")
 @tasks("text_summarization", "text_generation", "text_qa")
 def AspectCritic(
-    dataset,
-    user_input_column="user_input",
-    response_column="response",
-    retrieved_contexts_column=None,
-    aspects: list = [
+    dataset: VMDataset,
+    user_input_column: str = "user_input",
+    response_column: str = "response",
+    retrieved_contexts_column: Optional[str] = None,
+    aspects: List[str] = [
         "coherence",
         "conciseness",
         "correctness",
         "harmfulness",
         "maliciousness",
     ],
-    additional_aspects: list = None,
-):
+    additional_aspects: Optional[List[Tuple[str, str]]] = None,
+) -> Tuple[Dict[str, list], go.Figure, RawData]:
     """
     Evaluates generations against the following aspects: harmfulness, maliciousness,
     coherence, correctness, and conciseness.

@@ -3,12 +3,15 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 import warnings
+from typing import Dict, Tuple
 
 import plotly.express as px
+import plotly.graph_objects as go
 from datasets import Dataset
 
 from validmind import RawData, tags, tasks
 from validmind.errors import MissingDependencyError
+from validmind.vm_models import VMDataset
 
 from .utils import get_ragas_config, get_renamed_columns
 
@@ -32,13 +35,13 @@ VALID_FOCUS_VALUES = ["relevant", "irrelevant"]
 @tags("ragas", "llm", "rag_performance")
 @tasks("text_qa", "text_generation", "text_summarization")
 def NoiseSensitivity(
-    dataset,
-    response_column="response",
-    retrieved_contexts_column="retrieved_contexts",
-    reference_column="reference",
-    focus="relevant",
-    user_input_column="user_input",
-):
+    dataset: VMDataset,
+    response_column: str = "response",
+    retrieved_contexts_column: str = "retrieved_contexts",
+    reference_column: str = "reference",
+    focus: str = "relevant",
+    user_input_column: str = "user_input",
+) -> Tuple[Dict[str, list], go.Figure, go.Figure, RawData]:
     """
     Assesses the sensitivity of a Large Language Model (LLM) to noise in retrieved context by measuring how often it
     generates incorrect responses.

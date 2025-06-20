@@ -2,7 +2,10 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Tuple
+
 import matplotlib.pyplot as plt
+import plotly.graph_objects as go
 import seaborn as sns
 
 from validmind import RawData, tags, tasks
@@ -16,8 +19,10 @@ logger = get_logger(__name__)
 @tags("statistical_test", "model_interpretation", "visualization", "feature_importance")
 @tasks("regression")
 def RegressionFeatureSignificance(
-    model: VMModel, fontsize: int = 10, p_threshold: float = 0.05
-):
+    model: VMModel,
+    fontsize: int = 10,
+    p_threshold: float = 0.05,
+) -> Tuple[go.Figure, RawData]:
     """
     Assesses and visualizes the statistical significance of features in a regression model.
 

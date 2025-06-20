@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Dict, List, Tuple
+
 from sklearn.metrics import completeness_score
 
 from validmind import RawData, tags, tasks
@@ -10,7 +12,9 @@ from validmind.vm_models import VMDataset, VMModel
 
 @tags("sklearn", "model_performance", "clustering")
 @tasks("clustering")
-def CompletenessScore(model: VMModel, dataset: VMDataset):
+def CompletenessScore(
+    model: VMModel, dataset: VMDataset
+) -> Tuple[List[Dict[str, float]], RawData]:
     """
     Evaluates a clustering model's capacity to categorize instances from a single class into the same cluster.
 

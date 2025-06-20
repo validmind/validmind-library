@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Dict, List, Tuple
+
 import numpy as np
 from sklearn.metrics import roc_auc_score
 from sklearn.preprocessing import LabelBinarizer
@@ -14,7 +16,9 @@ from validmind.vm_models import VMDataset, VMModel
     "sklearn", "binary_classification", "multiclass_classification", "model_performance"
 )
 @tasks("classification", "text_classification")
-def MinimumROCAUCScore(dataset: VMDataset, model: VMModel, min_threshold: float = 0.5):
+def MinimumROCAUCScore(
+    dataset: VMDataset, model: VMModel, min_threshold: float = 0.5
+) -> Tuple[List[Dict[str, float]], bool, RawData]:
     """
     Validates model by checking if the ROC AUC score meets or surpasses a specified threshold.
 

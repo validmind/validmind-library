@@ -6,11 +6,16 @@ import plotly.graph_objects as go
 from matplotlib import cm
 
 from validmind import tags, tasks
+from validmind.vm_models import VMDataset
 
 
 @tags("visualization", "credit_risk", "logistic_regression")
 @tasks("classification")
-def ScorecardHistogram(dataset, title="Histogram of Scores", score_column="score"):
+def ScorecardHistogram(
+    dataset: VMDataset,
+    title: str = "Histogram of Scores",
+    score_column: str = "score",
+) -> go.Figure:
     """
     The Scorecard Histogram test evaluates the distribution of credit scores between default and non-default instances,
     providing critical insights into the performance and generalizability of credit-risk models.
