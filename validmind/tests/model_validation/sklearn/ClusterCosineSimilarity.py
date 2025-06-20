@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Dict, List, Tuple
+
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 
@@ -12,7 +14,9 @@ from validmind.vm_models import VMDataset, VMModel
 
 @tags("sklearn", "model_performance", "clustering")
 @tasks("clustering")
-def ClusterCosineSimilarity(model: VMModel, dataset: VMDataset):
+def ClusterCosineSimilarity(
+    model: VMModel, dataset: VMDataset
+) -> Tuple[List[Dict[str, float]], RawData]:
     """
     Measures the intra-cluster similarity of a clustering model using cosine similarity.
 

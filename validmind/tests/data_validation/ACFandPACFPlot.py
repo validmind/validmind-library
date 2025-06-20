@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Tuple
+
 import pandas as pd
 import plotly.graph_objects as go
 from statsmodels.tsa.stattools import acf, pacf
@@ -12,7 +14,7 @@ from validmind.vm_models import VMDataset
 
 @tags("time_series_data", "forecasting", "statistical_test", "visualization")
 @tasks("regression")
-def ACFandPACFPlot(dataset: VMDataset):
+def ACFandPACFPlot(dataset: VMDataset) -> Tuple[go.Figure, RawData]:
     """
     Analyzes time series data using Autocorrelation Function (ACF) and Partial Autocorrelation Function (PACF) plots to
     reveal trends and correlations.

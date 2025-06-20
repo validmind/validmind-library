@@ -2,15 +2,20 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Tuple
+
 import pandas as pd
 import plotly.graph_objects as go
 
 from validmind import RawData, tags, tasks
+from validmind.vm_models import VMDataset, VMModel
 
 
 @tags("nlp", "text_data", "visualization")
 @tasks("text_classification", "text_summarization")
-def TokenDisparity(dataset, model):
+def TokenDisparity(
+    dataset: VMDataset, model: VMModel
+) -> Tuple[pd.DataFrame, go.Figure, RawData]:
     """
     Evaluates the token disparity between reference and generated texts, visualizing the results through histograms and
     bar charts, alongside compiling a comprehensive table of descriptive statistics for token counts.

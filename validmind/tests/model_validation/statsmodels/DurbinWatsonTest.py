@@ -2,15 +2,20 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import List, Tuple
+
 import pandas as pd
 from statsmodels.stats.stattools import durbin_watson
 
 from validmind import RawData, tags, tasks
+from validmind.vm_models import VMDataset, VMModel
 
 
 @tasks("regression")
 @tags("time_series_data", "forecasting", "statistical_test", "statsmodels")
-def DurbinWatsonTest(dataset, model, threshold=[1.5, 2.5]):
+def DurbinWatsonTest(
+    dataset: VMDataset, model: VMModel, threshold: List[float] = [1.5, 2.5]
+) -> Tuple[pd.DataFrame, RawData]:
     """
     Assesses autocorrelation in time series data features using the Durbin-Watson statistic.
 

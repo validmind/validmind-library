@@ -3,6 +3,8 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 
+from typing import Tuple
+
 import matplotlib.pyplot as plt
 import nltk
 import seaborn as sns
@@ -13,7 +15,7 @@ from validmind import RawData, tags, tasks
 
 @tags("nlp", "text_data", "data_validation")
 @tasks("nlp")
-def Sentiment(dataset):
+def Sentiment(dataset) -> Tuple[plt.Figure, RawData]:
     """
     Analyzes the sentiment of text data within a dataset using the VADER sentiment analysis tool.
 

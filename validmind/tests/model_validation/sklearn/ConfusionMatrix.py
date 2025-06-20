@@ -3,8 +3,11 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 
+from typing import Tuple
+
 import numpy as np
 import plotly.figure_factory as ff
+import plotly.graph_objects as go
 from sklearn.metrics import confusion_matrix
 
 from validmind import RawData, tags, tasks
@@ -23,7 +26,7 @@ def ConfusionMatrix(
     dataset: VMDataset,
     model: VMModel,
     threshold: float = 0.5,
-):
+) -> Tuple[go.Figure, RawData]:
     """
     Evaluates and visually represents the classification ML model's predictive performance using a Confusion Matrix
     heatmap.

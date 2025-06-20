@@ -2,9 +2,12 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Tuple
+
 import numpy as np
 import pandas as pd
 import plotly.figure_factory as ff
+import plotly.graph_objects as go
 
 from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset
@@ -15,7 +18,9 @@ COOLWARM = [[0, "rgb(95,5,255)"], [0.5, "rgb(255,255,255)"], [1, "rgb(255,5,0)"]
 
 @tags("time_series_data", "visualization")
 @tasks("regression")
-def LaggedCorrelationHeatmap(dataset: VMDataset, num_lags: int = 10):
+def LaggedCorrelationHeatmap(
+    dataset: VMDataset, num_lags: int = 10
+) -> Tuple[go.Figure, RawData]:
     """
     Assesses and visualizes correlation between target variable and lagged independent variables in a time-series
     dataset.

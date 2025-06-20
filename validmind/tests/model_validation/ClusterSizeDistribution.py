@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Tuple
+
 import pandas as pd
 import plotly.graph_objects as go
 
@@ -11,7 +13,9 @@ from validmind.vm_models import VMDataset, VMModel
 
 @tags("sklearn", "model_performance")
 @tasks("clustering")
-def ClusterSizeDistribution(dataset: VMDataset, model: VMModel):
+def ClusterSizeDistribution(
+    dataset: VMDataset, model: VMModel
+) -> Tuple[go.Figure, RawData]:
     """
     Assesses the performance of clustering models by comparing the distribution of cluster sizes in model predictions
     with the actual data.

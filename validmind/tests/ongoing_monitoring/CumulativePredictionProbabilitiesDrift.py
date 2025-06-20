@@ -2,7 +2,7 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from typing import List
+from typing import List, Tuple
 
 import numpy as np
 import plotly.graph_objects as go
@@ -17,7 +17,7 @@ from validmind.vm_models import VMDataset, VMModel
 def CumulativePredictionProbabilitiesDrift(
     datasets: List[VMDataset],
     model: VMModel,
-):
+) -> Tuple[go.Figure, RawData]:
     """
     Compares cumulative prediction probability distributions between reference and monitoring datasets.
 

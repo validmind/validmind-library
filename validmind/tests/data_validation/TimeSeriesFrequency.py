@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Any, Dict, List, Tuple
+
 import pandas as pd
 import plotly.graph_objects as go
 
@@ -12,7 +14,9 @@ from validmind.vm_models import VMDataset
 
 @tags("time_series_data")
 @tasks("regression")
-def TimeSeriesFrequency(dataset: VMDataset):
+def TimeSeriesFrequency(
+    dataset: VMDataset,
+) -> Tuple[List[Dict[str, Any]], go.Figure, bool, RawData]:
     """
     Evaluates consistency of time series data frequency and generates a frequency plot.
 

@@ -3,14 +3,19 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 
+from typing import List, Tuple
+
 import matplotlib.pyplot as plt
 
 from validmind import RawData, tags, tasks
+from validmind.vm_models import VMDataset, VMModel
 
 
 @tags("visualization")
 @tasks("monitoring")
-def PredictionAcrossEachFeature(datasets, model):
+def PredictionAcrossEachFeature(
+    datasets: List[VMDataset], model: VMModel
+) -> Tuple[plt.Figure, RawData]:
     """
     Assesses differences in model predictions across individual features between reference and monitoring datasets
     through visual analysis.

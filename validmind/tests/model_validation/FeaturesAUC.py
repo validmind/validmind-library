@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Tuple
+
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
@@ -17,7 +19,9 @@ logger = get_logger(__name__)
 
 @tags("feature_importance", "AUC", "visualization")
 @tasks("classification")
-def FeaturesAUC(dataset: VMDataset, fontsize: int = 12, figure_height: int = 500):
+def FeaturesAUC(
+    dataset: VMDataset, fontsize: int = 12, figure_height: int = 500
+) -> Tuple[go.Figure, RawData]:
     """
     Evaluates the discriminatory power of each individual feature within a binary classification model by calculating
     the Area Under the Curve (AUC) for each feature separately.

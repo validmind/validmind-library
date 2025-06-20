@@ -2,7 +2,10 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Tuple
+
 import plotly.express as px
+import plotly.graph_objects as go
 from sklearn.metrics.pairwise import cosine_similarity
 
 from validmind import RawData, tags, tasks
@@ -11,7 +14,9 @@ from validmind.vm_models import VMDataset, VMModel
 
 @tags("llm", "text_data", "embeddings", "visualization")
 @tasks("feature_extraction")
-def CosineSimilarityDistribution(dataset: VMDataset, model: VMModel):
+def CosineSimilarityDistribution(
+    dataset: VMDataset, model: VMModel
+) -> Tuple[go.Figure, RawData]:
     """
     Assesses the similarity between predicted text embeddings from a model using a Cosine Similarity distribution
     histogram.

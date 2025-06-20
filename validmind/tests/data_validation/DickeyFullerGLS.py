@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Any, Dict, Tuple
+
 import pandas as pd
 from arch.unitroot import DFGLS
 from numpy.linalg import LinAlgError
@@ -16,7 +18,7 @@ logger = get_logger(__name__)
 
 @tags("time_series_data", "forecasting", "unit_root_test")
 @tasks("regression")
-def DickeyFullerGLS(dataset: VMDataset):
+def DickeyFullerGLS(dataset: VMDataset) -> Tuple[Dict[str, Any], RawData]:
     """
     Assesses stationarity in time series data using the Dickey-Fuller GLS test to determine the order of integration.
 

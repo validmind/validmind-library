@@ -2,6 +2,9 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+
+from typing import Dict
+
 import pandas as pd
 from statsmodels.tsa.stattools import coint
 
@@ -12,7 +15,9 @@ from validmind.vm_models import VMDataset
 
 @tags("time_series_data", "statistical_test", "forecasting")
 @tasks("regression")
-def EngleGrangerCoint(dataset: VMDataset, threshold: float = 0.05):
+def EngleGrangerCoint(
+    dataset: VMDataset, threshold: float = 0.05
+) -> Dict[str, pd.DataFrame]:
     """
     Assesses the degree of co-movement between pairs of time series data using the Engle-Granger cointegration test.
 

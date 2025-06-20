@@ -12,9 +12,9 @@ import plotly.graph_objects as go
 import seaborn as sns
 from sklearn import metrics
 
+from validmind import tags, tasks
 from validmind.errors import MissingOrInvalidModelPredictFnError
 from validmind.logging import get_logger
-from validmind.tests import tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 
 logger = get_logger(__name__)
@@ -221,7 +221,7 @@ def RobustnessDiagnosis(
     metric: str = None,
     scaling_factor_std_dev_list: List[float] = DEFAULT_STD_DEV_LIST,
     performance_decay_threshold: float = DEFAULT_DECAY_THRESHOLD,
-):
+) -> Tuple[pd.DataFrame, go.Figure, bool]:
     """
     Assesses the robustness of a machine learning model by evaluating performance decay under noisy conditions.
 

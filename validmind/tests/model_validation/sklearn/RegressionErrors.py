@@ -2,16 +2,21 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Tuple
+
 import numpy as np
 import pandas as pd
 from sklearn import metrics
 
 from validmind import RawData, tags, tasks
+from validmind.vm_models import VMDataset, VMModel
 
 
 @tags("sklearn", "model_performance")
 @tasks("regression", "classification")
-def RegressionErrors(model, dataset):
+def RegressionErrors(
+    model: VMModel, dataset: VMDataset
+) -> Tuple[pd.DataFrame, RawData]:
     """
     Assesses the performance and error distribution of a regression model using various error metrics.
 

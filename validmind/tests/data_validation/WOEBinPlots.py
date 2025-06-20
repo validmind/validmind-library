@@ -2,6 +2,9 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+
+from typing import Tuple
+
 import numpy as np
 import pandas as pd
 import plotly.express as px
@@ -24,7 +27,7 @@ def WOEBinPlots(
     breaks_adj: list = None,
     fig_height: int = 600,
     fig_width: int = 500,
-):
+) -> Tuple[go.Figure, RawData]:
     """
     Generates visualizations of Weight of Evidence (WoE) and Information Value (IV) for understanding predictive power
     of categorical variables in a data set.

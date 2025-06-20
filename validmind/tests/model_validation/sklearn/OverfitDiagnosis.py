@@ -2,11 +2,12 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from typing import List
+from typing import Dict, List, Tuple
 
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import plotly.graph_objects as go
 import seaborn as sns
 from sklearn import metrics
 
@@ -178,7 +179,7 @@ def OverfitDiagnosis(
     datasets: List[VMDataset],
     metric: str = None,
     cut_off_threshold: float = DEFAULT_THRESHOLD,
-):
+) -> Tuple[Dict[str, List[Dict[str, float]]], go.Figure, RawData]:
     """
     Assesses potential overfitting in a model's predictions, identifying regions where performance between training and
     testing sets deviates significantly.

@@ -2,13 +2,15 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Any, Dict, List, Tuple
+
 from validmind import tags, tasks
 from validmind.utils import infer_datatypes
 
 
 @tags("data_quality", "tabular_data")
 @tasks("classification", "regression")
-def Skewness(dataset, max_threshold=1):
+def Skewness(dataset, max_threshold=1) -> Tuple[Dict[str, List[Dict[str, Any]]], bool]:
     """
     Evaluates the skewness of numerical data in a dataset to check against a defined threshold, aiming to ensure data
     quality and optimize model performance.

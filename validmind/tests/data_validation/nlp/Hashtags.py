@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 import re
+from typing import Tuple
 
 import plotly.graph_objects as go
 
@@ -13,7 +14,7 @@ from validmind.vm_models import VMDataset
 
 @tags("nlp", "text_data", "visualization", "frequency_analysis")
 @tasks("text_classification", "text_summarization")
-def Hashtags(dataset: VMDataset, top_hashtags: int = 25):
+def Hashtags(dataset: VMDataset, top_hashtags: int = 25) -> Tuple[go.Figure, RawData]:
     """
     Assesses hashtag frequency in a text column, highlighting usage trends and potential dataset bias or spam.
 

@@ -2,7 +2,7 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from typing import List
+from typing import Dict, List, Tuple
 
 import numpy as np
 import pandas as pd
@@ -18,7 +18,7 @@ from validmind.vm_models import VMDataset, VMModel
 @tasks("classification", "text_classification")
 def ConfusionMatrixDrift(
     datasets: List[VMDataset], model: VMModel, drift_pct_threshold=20
-):
+) -> Tuple[Dict[str, pd.DataFrame], bool, RawData]:
     """
     Compares confusion matrix metrics between reference and monitoring datasets.
 

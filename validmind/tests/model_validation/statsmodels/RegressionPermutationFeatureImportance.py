@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Tuple
+
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
@@ -19,7 +21,7 @@ logger = get_logger(__name__)
 @tasks("regression")
 def RegressionPermutationFeatureImportance(
     dataset: VMDataset, model: VMModel, fontsize: int = 12, figure_height: int = 500
-):
+) -> Tuple[go.Figure, RawData]:
     """
     Assesses the significance of each feature in a model by evaluating the impact on model performance when feature
     values are randomly rearranged.

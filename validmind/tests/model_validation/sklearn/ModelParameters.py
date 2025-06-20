@@ -2,14 +2,19 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import List, Optional
+
 import pandas as pd
 
 from validmind import tags, tasks
+from validmind.vm_models import VMModel
 
 
 @tags("model_training", "metadata")
 @tasks("classification", "regression")
-def ModelParameters(model, model_params=None):
+def ModelParameters(
+    model: VMModel, model_params: Optional[List[str]] = None
+) -> pd.DataFrame:
     """
     Extracts and displays model parameters in a structured format for transparency and reproducibility.
 

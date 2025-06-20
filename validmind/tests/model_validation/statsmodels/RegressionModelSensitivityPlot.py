@@ -2,10 +2,11 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from typing import List, Union
+from typing import List, Tuple, Union
 
 import matplotlib.pyplot as plt
 import numpy as np
+import plotly.graph_objects as go
 
 from validmind import RawData, tags, tasks
 from validmind.logging import get_logger
@@ -29,7 +30,7 @@ def RegressionModelSensitivityPlot(
     model: VMModel,
     shocks: List[float] = [0.1],
     transformation: Union[str, None] = None,
-):
+) -> Tuple[go.Figure, RawData]:
     """
     Assesses the sensitivity of a regression model to changes in independent variables by applying shocks and
     visualizing the impact.

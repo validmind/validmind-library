@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Tuple
+
 import numpy as np
 import plotly.graph_objects as go
 from sklearn.metrics import roc_auc_score, roc_curve
@@ -19,7 +21,7 @@ from validmind.vm_models import VMDataset, VMModel
     "visualization",
 )
 @tasks("classification", "text_classification")
-def ROCCurve(model: VMModel, dataset: VMDataset):
+def ROCCurve(model: VMModel, dataset: VMDataset) -> Tuple[go.Figure, RawData]:
     """
     Evaluates binary classification model performance by generating and plotting the Receiver Operating Characteristic
     (ROC) curve and calculating the Area Under Curve (AUC) score.

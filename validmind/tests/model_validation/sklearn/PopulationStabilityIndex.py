@@ -2,7 +2,7 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from typing import List
+from typing import Dict, List, Tuple
 
 import numpy as np
 import pandas as pd
@@ -82,7 +82,7 @@ def calculate_psi(score_initial, score_new, num_bins=10, mode="fixed"):
 @tasks("classification", "text_classification")
 def PopulationStabilityIndex(
     datasets: List[VMDataset], model: VMModel, num_bins: int = 10, mode: str = "fixed"
-):
+) -> Tuple[Dict[str, List[Dict[str, float]]], go.Figure, RawData]:
     """
     Assesses the Population Stability Index (PSI) to quantify the stability of an ML model's predictions across
     different datasets.
