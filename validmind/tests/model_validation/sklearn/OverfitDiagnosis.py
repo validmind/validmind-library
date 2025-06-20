@@ -221,13 +221,12 @@ def OverfitDiagnosis(
     - Assumes that the binning of features adequately represents the data segments.
     """
 
-    feature_columns = datasets[0].feature_columns
     numeric_and_categorical_columns = (
         datasets[0].feature_columns_numeric + datasets[0].feature_columns_categorical
     )
 
     feature_columns = [
-        col for col in feature_columns if col in numeric_and_categorical_columns
+        col for col in datasets[0].feature_columns if col in numeric_and_categorical_columns
     ]
 
     if not feature_columns:
