@@ -4,32 +4,14 @@
 
 import os
 
-from validmind.ai.utils import get_client_and_model, is_configured
+from validmind.ai.utils import get_judge_config
 
 EMBEDDINGS_MODEL = "text-embedding-3-small"
 
 
-def get_ragas_config():
-    # import here since its an optional dependency
-    try:
-        from langchain_openai import ChatOpenAI, OpenAIEmbeddings
-    except ImportError:
-        raise ImportError("Please run `pip install validmind[llm]` to use LLM tests")
-
-    if not is_configured():
-        raise ValueError(
-            "LLM is not configured. Please set an `OPENAI_API_KEY` environment variable "
-            "or ensure that you are connected to the ValidMind API and ValidMind AI is "
-            "enabled for your account."
-        )
-
-    client, model = get_client_and_model()
-    os.environ["OPENAI_API_BASE"] = str(client.base_url)
-
-    return {
-        "llm": ChatOpenAI(api_key=client.api_key, model=model),
-        "embeddings": OpenAIEmbeddings(api_key=client.api_key, model=EMBEDDINGS_MODEL),
-    }
+def get_ragas_config(judge_llm=None, judge_embeddings=None):
+    judge_llm, judge_embeddings = get_judge_config(judge_llm, judge_embeddings)
+    return {"llm": judge_llm, "embeddings": judge_embeddings}
 
 
 def make_sub_col_udf(root_col, sub_col):

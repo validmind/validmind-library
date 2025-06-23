@@ -34,6 +34,8 @@ def Faithfulness(
     user_input_column="user_input",
     response_column="response",
     retrieved_contexts_column="retrieved_contexts",
+    judge_llm=None,
+    judge_embeddings=None,
 ):  # noqa
     """
     Evaluates the faithfulness of the generated answers with respect to retrieved contexts.
@@ -114,7 +116,9 @@ def Faithfulness(
     df = get_renamed_columns(dataset._df, required_columns)
 
     result_df = evaluate(
-        Dataset.from_pandas(df), metrics=[faithfulness()], **get_ragas_config()
+        Dataset.from_pandas(df),
+        metrics=[faithfulness()],
+        **get_ragas_config(judge_llm, judge_embeddings)
     ).to_pandas()
 
     score_column = "faithfulness"

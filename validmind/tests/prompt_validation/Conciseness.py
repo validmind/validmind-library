@@ -54,7 +54,7 @@ Prompt:
 
 @tags("llm", "zero_shot", "few_shot")
 @tasks("text_classification", "text_summarization")
-def Conciseness(model, min_threshold=7):
+def Conciseness(model, min_threshold=7, judge_llm=None):
     """
     Analyzes and grades the conciseness of prompts provided to a Large Language Model.
 
@@ -97,6 +97,7 @@ def Conciseness(model, min_threshold=7):
     response = call_model(
         system_prompt=SYSTEM,
         user_prompt=USER.format(prompt_to_test=model.prompt.template),
+        judge_llm=judge_llm,
     )
     score = get_score(response)
     explanation = get_explanation(response)

@@ -33,6 +33,8 @@ def SemanticSimilarity(
     dataset,
     response_column="response",
     reference_column="reference",
+    judge_llm=None,
+    judge_embeddings=None,
 ):
     """
     Calculates the semantic similarity between generated responses and ground truths
@@ -107,7 +109,9 @@ def SemanticSimilarity(
     df = get_renamed_columns(dataset._df, required_columns)
 
     result_df = evaluate(
-        Dataset.from_pandas(df), metrics=[semantic_similarity()], **get_ragas_config()
+        Dataset.from_pandas(df),
+        metrics=[semantic_similarity()],
+        **get_ragas_config(judge_llm, judge_embeddings)
     ).to_pandas()
 
     score_column = "semantic_similarity"

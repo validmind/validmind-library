@@ -33,6 +33,8 @@ def ContextEntityRecall(
     dataset,
     retrieved_contexts_column: str = "retrieved_contexts",
     reference_column: str = "reference",
+    judge_llm=None,
+    judge_embeddings=None,
 ):
     """
     Evaluates the context entity recall for dataset entries and visualizes the results.
@@ -113,7 +115,9 @@ def ContextEntityRecall(
     df = get_renamed_columns(dataset._df, required_columns)
 
     result_df = evaluate(
-        Dataset.from_pandas(df), metrics=[context_entity_recall()], **get_ragas_config()
+        Dataset.from_pandas(df),
+        metrics=[context_entity_recall()],
+        **get_ragas_config(judge_llm, judge_embeddings)
     ).to_pandas()
 
     score_column = "context_entity_recall"
