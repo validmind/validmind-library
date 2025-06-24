@@ -7,8 +7,6 @@ from urllib.parse import urljoin
 
 from openai import AzureOpenAI, Client, OpenAI
 
-from validmind.models.function import FunctionModel
-
 from ..logging import get_logger
 from ..utils import md_to_html
 
@@ -120,21 +118,20 @@ def get_judge_config(judge_llm=None, judge_embeddings=None):
         from validmind.models.function import FunctionModel
     except ImportError:
         raise ImportError("Please run `pip install validmind[llm]` to use LLM tests")
-    if judge_llm != None or judge_embeddings != None:
+    if judge_llm is not None or judge_embeddings is not None:
         if isinstance(judge_llm, FunctionModel):
             judge_llm = judge_llm.model
         if isinstance(judge_embeddings, FunctionModel):
             judge_embeddings = judge_embeddings.model
-        if (
-            judge_llm != None or judge_embeddings != None
-        ):  ### error checking-  probably a smarter way to do this
+        if judge_llm is None and judge_embeddings is None:
+            # error checking-  probably a smarter way to do this
             raise ValueError(
                 "Provided Judge LLM/Embeddings are not Langchain compatible. Ensure the judge LLM/embedding provided are an instance of "
                 "Langchain BaseChatModel and LangchainEmbeddings.  To use default ValidMind LLM, do not set judge_llm/judge_embedding parameter, "
                 "ensure that you are connected to the ValidMind API and confirm ValidMind AI is enabled for your account."
             )
-        if (isinstance(judge_llm, BaseChatModel) or judge_llm == None) and (
-            isinstance(judge_embeddings.model, Embeddings) or judge_llm == None
+        if (isinstance(judge_llm, BaseChatModel) or judge_llm is None) and (
+            isinstance(judge_embeddings, Embeddings) or judge_embeddings is None
         ):
             return judge_llm, judge_embeddings
         else:
@@ -144,7 +141,7 @@ def get_judge_config(judge_llm=None, judge_embeddings=None):
                 "ensure that you are connected to the ValidMind API and confirm ValidMind AI is enabled for your account."
             )
 
-    ## grab default values if not passed at run time
+    # grab default values if not passed at run time
     global __judge_llm, __judge_embeddings
     if __judge_llm and __judge_embeddings:
         return __judge_llm, __judge_embeddings
@@ -152,11 +149,13 @@ def get_judge_config(judge_llm=None, judge_embeddings=None):
     client, model = get_client_and_model()
     os.environ["OPENAI_API_BASE"] = str(client.base_url)
 
-    __judge_llm = (ChatOpenAI(api_key=client.api_key, model=model),)
-    __judge_embeddings = (
-        OpenAIEmbeddings(api_key=client.api_key, model=EMBEDDINGS_MODEL),
+    __judge_llm = ChatOpenAI(api_key=client.api_key, model=model)
+    __judge_embeddings = OpenAIEmbeddings(
+        api_key=client.api_key, model=EMBEDDINGS_MODEL
     )
 
+    print(__judge_llm)
+    print(__judge_embeddings)
     return __judge_llm, __judge_embeddings
 
 

@@ -2,8 +2,6 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-import os
-
 from validmind.ai.utils import get_judge_config
 
 EMBEDDINGS_MODEL = "text-embedding-3-small"
