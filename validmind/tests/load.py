@@ -31,12 +31,6 @@ INPUT_TYPE_MAP = {
     "models": List[VMModel],
 }
 
-OUTPUT_TYPE_MAP = {
-    "figures": VMDataset,
-    "tables": List[VMDataset],
-    "bool": bool,
-}
-
 
 def _inspect_signature(
     test_func: Callable[..., Any],
@@ -175,38 +169,10 @@ def _test_description(test_description: str, num_lines: int = 5) -> str:
     return description
 
 
-def _list_outputs(test: Callable[..., Any]) -> List[str]:
-    """List the expected outputs of a test"""
-
-    # All tests in ValidMind can return these standard outputs
-    # We'll return all of them as potential outputs
-    outputs = ["raw_data", "tables", "figures", "passed"]
-
-    return outputs
-
-
 def _pretty_list_tests(
     tests: Dict[str, Callable[..., Any]], truncate: bool = True
 ) -> None:
     """Pretty print a list of tests"""
-
-    # Print all test IDs and their annotations
-    print("Test Annotations:")
-    print("-" * 50)
-    for test_id, test in tests.items():
-        try:
-            test_func = load_test(test_id)
-            print(f"\nTest ID: {test_id}")
-            print(
-                f"Return Annotation: {inspect.signature(test_func).return_annotation}"
-            )
-            print(f"Input Annotation: {inspect.signature(test_func).parameters}")
-            print("-" * 50)
-        except Exception as e:
-            print(f"\nTest ID: {test_id}")
-            print(f"Error getting annotations: {e}")
-            print("-" * 50)
-
     table = [
         {
             "ID": test_id,
@@ -216,7 +182,6 @@ def _pretty_list_tests(
                 num_lines=(5 if truncate else 999999),
             ),
             "Required Inputs": list(test.inputs.keys()),
-            "Outputs": _list_outputs(test),
             "Params": test.params,
             "Tags": test.__tags__,
             "Tasks": test.__tasks__,
