@@ -154,8 +154,6 @@ def get_judge_config(judge_llm=None, judge_embeddings=None):
         api_key=client.api_key, model=EMBEDDINGS_MODEL
     )
 
-    print(__judge_llm)
-    print(__judge_embeddings)
     return __judge_llm, __judge_embeddings
 
 
