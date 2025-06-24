@@ -271,6 +271,10 @@ def init_model(
     return vm_model
 
 
+def init_agent(input_id, agent_fcn):
+    return init_model(input_id=input_id, predict_fn=agent_fcn)
+
+
 def init_r_model(
     model_path: str,
     input_id: str = "model",
