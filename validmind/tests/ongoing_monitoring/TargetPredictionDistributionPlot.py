@@ -2,17 +2,24 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Dict, List, Tuple
+
 import pandas as pd
 import plotly.figure_factory as ff
 import plotly.graph_objects as go
 from scipy.stats import kurtosis, skew
 
 from validmind import RawData, tags, tasks
+from validmind.vm_models import VMDataset, VMModel
 
 
 @tags("visualization")
 @tasks("monitoring")
-def TargetPredictionDistributionPlot(datasets, model, drift_pct_threshold=20):
+def TargetPredictionDistributionPlot(
+    datasets: List[VMDataset],
+    model: VMModel,
+    drift_pct_threshold: float = 20,
+) -> Tuple[Dict[str, pd.DataFrame], go.Figure, bool, RawData]:
     """
     Assesses differences in prediction distributions between a reference dataset and a monitoring dataset to identify
     potential data drift.

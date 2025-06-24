@@ -2,6 +2,9 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+
+from typing import Tuple
+
 import numpy as np
 import plotly.graph_objs as go
 from plotly.subplots import make_subplots
@@ -13,7 +16,7 @@ from validmind.vm_models import VMDataset
 
 @tags("tabular_data", "visualization", "categorical_data")
 @tasks("classification")
-def TargetRateBarPlots(dataset: VMDataset):
+def TargetRateBarPlots(dataset: VMDataset) -> Tuple[go.Figure, RawData]:
     """
     Generates bar plots visualizing the default rates of categorical features for a classification machine learning
     model.

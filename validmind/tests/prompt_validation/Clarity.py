@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Any, Dict, List, Tuple
+
 from validmind import RawData, tags, tasks
 from validmind.errors import MissingRequiredTestInputError
 
@@ -46,7 +48,7 @@ Prompt:
 
 @tags("llm", "zero_shot", "few_shot")
 @tasks("text_classification", "text_summarization")
-def Clarity(model, min_threshold=7):
+def Clarity(model, min_threshold=7) -> Tuple[List[Dict[str, Any]], bool, RawData]:
     """
     Evaluates and scores the clarity of prompts in a Large Language Model based on specified guidelines.
 

@@ -4,6 +4,7 @@
 
 import re
 from collections import Counter
+from typing import Any, Dict, List, Tuple
 
 import numpy as np
 
@@ -142,7 +143,9 @@ def describe_column(df, column):
 
 @tags("tabular_data", "time_series_data", "text_data")
 @tasks("classification", "regression", "text_classification", "text_summarization")
-def DatasetDescription(dataset: VMDataset):
+def DatasetDescription(
+    dataset: VMDataset,
+) -> Tuple[Dict[str, List[Dict[str, Any]]], RawData]:
     """
     Provides comprehensive analysis and statistical summaries of each column in a machine learning model's dataset.
 

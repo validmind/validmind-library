@@ -264,6 +264,98 @@ Some notes:
 DO NOT CHANGE ANYTHING OTHER THAN ADDING THE NEW RAW DATA MECHANISM... I.E. DO NOT REMOVE ANYTHING FROM THE RETURN TUPLE OR THE RETURN VALUE (if it is a single object)
 """
 
+add_return_type_prompt = """
+You are an expert Python engineer and data scientist with broad experience across many domains.
+ValidMind is a company that provides a Python SDK for building and running tests for the purposes of model risk management.
+ValidMind's SDK offers a library of "test" functions that are run with our test harness against many types of models and datasets.
+
+Your task is to analyze the test function and add appropriate return type annotations to the function signature.
+
+CRITICAL: DO NOT CHANGE ANYTHING IN THE CODE EXCEPT:
+1. Adding the return type annotation to the function signature
+2. Adding any necessary import statements WITH THE EXISTING IMPORTS (do not add imports elsewhere)
+
+EXTREMELY IMPORTANT: ALWAYS PRESERVE COPYRIGHT AND LICENSE INFORMATION AT THE TOP OF THE FILE!
+You must include any copyright, license, and SPDX identifier lines from the original file!
+
+ValidMind test functions return either a single object or a tuple of objects.
+These objects are turned into a test result report by the test harness.
+They can return any number of the following types of objects:
+- Tables (pd.DataFrame or List[Dict[str, Any]])
+- Figures (matplotlib.figure.Figure, plotly.graph_objects.Figure (go.Figure), or List of these)
+- Values (scalar values like float, int, str, or container types like List, Dict)
+- Pass/Fail (bool value indicating whether the test passed or failed)
+- Raw Data (RawData object containing intermediate data)
+
+Common imports that might be needed in the return type annotation:
+- from typing import Any, Dict, List, Tuple, Union, Optional
+- import plotly.graph_objects as go
+- import matplotlib.figure
+- import pandas as pd
+- from validmind import RawData
+
+You should inspect the return statement(s) in the function to determine what the function actually returns.
+Then, add the appropriate return type annotation to the function signature.
+
+If the function already has a return type annotation, don't change it - in this case, return the original code without any changes.
+
+Examples:
+
+1. For a function that returns a single figure:
+```python
+def PlotHistogram(dataset: VMDataset):
+    # ... code ...
+    return fig
+```
+Should become:
+```python
+def PlotHistogram(dataset: VMDataset) -> go.Figure:
+    # ... code ...
+    return fig
+```
+
+2. For a function that returns multiple objects in a tuple:
+```python
+def ClassImbalance(dataset: VMDataset):
+    # ... code ...
+    return stats, fig, passed
+```
+Should become:
+```python
+def ClassImbalance(dataset: VMDataset) -> Tuple[Dict[str, Any], go.Figure, bool]:
+    # ... code ...
+    return stats, fig, passed
+```
+
+3. For a function that builds a list of figures and returns it as a tuple:
+```python
+def MultiplePlots(dataset: VMDataset):
+    # ... code ...
+    returns = []
+    returns.append(fig1)
+    returns.append(fig2)
+    returns.append(RawData(...))
+    return tuple(returns)
+```
+Should become:
+```python
+def MultiplePlots(dataset: VMDataset) -> Tuple[go.Figure, go.Figure, RawData]:
+    # ... code ...
+    returns = []
+    returns.append(fig1)
+    returns.append(fig2)
+    returns.append(RawData(...))
+    return tuple(returns)
+```
+
+Return only the updated code and nothing else.
+Do not wrap the code in backticks, simply return valid Python code.
+Only add the correct imports if they are not already present in the file, and place them with the existing imports.
+DO NOT modify the function body in any way - the only changes should be to the function signature and possibly adding imports.
+NEVER REMOVE COPYRIGHT NOTICES OR LICENSE INFORMATION!
+If the function already has a return type annotation, return the original code without any changes.
+""".strip()
+
 custom_prompt_system = """
 You are an expert Python engineer and data scientist with broad experience across many domains.
 ValidMind is a company that provides a Python SDK for building and running tests for the purposes of model risk management.
@@ -394,6 +486,31 @@ def add_raw_data_to_test(path):
         f.write(updated_file_contents)
 
 
+def add_return_type_to_test(path):
+    """Add return type annotation to a test function"""
+    # get file contents from path
+    click.echo(f"> {path}")
+    with open(path, "r") as f:
+        file_contents = f.read()
+
+    response = client.chat.completions.create(
+        model=OPENAI_GPT_MODEL,
+        messages=[
+            {"role": "system", "content": add_return_type_prompt},
+            {"role": "user", "content": f"```python\n{file_contents}```"},
+        ],
+    )
+
+    updated_file_contents = response.choices[0].message.content
+    # remove starting "```python" and ending "```"
+    updated_file_contents = (
+        updated_file_contents.lstrip("```python").rstrip("```").strip()
+    )
+
+    with open(path, "w") as f:
+        f.write(updated_file_contents)
+
+
 def custom_prompt(path, user_prompt):
     """Custom prompt for a test file"""
     # get file contents from path
@@ -461,7 +578,13 @@ def _is_test_file(path):
 @click.option(
     "--action",
     type=click.Choice(
-        ["add_description", "add_raw_data", "custom_prompt", "custom_review"]
+        [
+            "add_description",
+            "add_raw_data",
+            "add_return_type",
+            "custom_prompt",
+            "custom_review",
+        ]
     ),
     required=True,
 )
@@ -494,6 +617,8 @@ def main(action, path, model):
         func = add_description_to_test
     elif action == "add_raw_data":
         func = add_raw_data_to_test
+    elif action == "add_return_type":
+        func = add_return_type_to_test
     elif action == "custom_prompt":
         if not USER_PROMPT:
             user_prompt = input("Enter your prompt: ")

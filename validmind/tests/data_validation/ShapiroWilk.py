@@ -2,6 +2,9 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+
+from typing import Tuple
+
 import pandas as pd
 from scipy import stats
 
@@ -10,7 +13,7 @@ from validmind import RawData, tags, tasks
 
 @tasks("classification", "regression")
 @tags("tabular_data", "data_distribution", "statistical_test")
-def ShapiroWilk(dataset):
+def ShapiroWilk(dataset) -> Tuple[pd.DataFrame, RawData]:
     """
     Evaluates feature-wise normality of training data using the Shapiro-Wilk test.
 

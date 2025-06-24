@@ -3,6 +3,8 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 
+from typing import Tuple
+
 import plotly.graph_objects as go
 
 from validmind import RawData, tags, tasks
@@ -10,7 +12,7 @@ from validmind import RawData, tags, tasks
 
 @tags("tabular_data", "numerical_data", "correlation")
 @tasks("classification", "regression")
-def PearsonCorrelationMatrix(dataset):
+def PearsonCorrelationMatrix(dataset) -> Tuple[go.Figure, RawData]:
     """
     Evaluates linear dependency between numerical variables in a dataset via a Pearson Correlation coefficient heat map.
 

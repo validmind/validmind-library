@@ -2,6 +2,9 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+
+from typing import Tuple
+
 import pandas as pd
 
 from validmind import tags, tasks
@@ -9,7 +12,7 @@ from validmind import tags, tasks
 
 @tags("tabular_data")
 @tasks("classification", "regression")
-def TabularDescriptionTables(dataset):
+def TabularDescriptionTables(dataset) -> Tuple[pd.DataFrame]:
     """
     Summarizes key descriptive statistics for numerical, categorical, and datetime variables in a dataset.
 

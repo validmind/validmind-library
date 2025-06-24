@@ -2,6 +2,9 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+
+from typing import Tuple
+
 import plotly.graph_objects as go
 from sklearn.feature_selection import mutual_info_classif, mutual_info_regression
 
@@ -14,7 +17,7 @@ from validmind.vm_models.result import RawData
 @tasks("classification", "regression")
 def MutualInformation(
     dataset: VMDataset, min_threshold: float = 0.01, task: str = "classification"
-):
+) -> Tuple[go.Figure, RawData]:
     """
     Calculates mutual information scores between features and target variable to evaluate feature relevance.
 

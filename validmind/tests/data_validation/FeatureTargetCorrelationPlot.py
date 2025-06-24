@@ -3,6 +3,8 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 
+from typing import Tuple
+
 import numpy as np
 import plotly.graph_objects as go
 
@@ -11,7 +13,7 @@ from validmind import RawData, tags, tasks
 
 @tags("tabular_data", "visualization", "correlation")
 @tasks("classification", "regression")
-def FeatureTargetCorrelationPlot(dataset, fig_height=600):
+def FeatureTargetCorrelationPlot(dataset, fig_height=600) -> Tuple[go.Figure, RawData]:
     """
     Visualizes the correlation between input features and the model's target output in a color-coded horizontal bar
     plot.

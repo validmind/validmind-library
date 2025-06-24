@@ -10,7 +10,7 @@ from validmind import tags, tasks
 
 @tags("time_series_data", "analysis")
 @tasks("regression")
-def TimeSeriesDescriptiveStatistics(dataset):
+def TimeSeriesDescriptiveStatistics(dataset) -> pd.DataFrame:
     """
     Evaluates the descriptive statistics of a time series dataset to identify trends, patterns, and data quality issues.
 

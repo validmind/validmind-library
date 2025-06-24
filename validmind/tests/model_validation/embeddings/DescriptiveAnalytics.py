@@ -2,8 +2,11 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Tuple
+
 import numpy as np
 import plotly.express as px
+import plotly.graph_objects as go
 
 from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset, VMModel
@@ -11,7 +14,9 @@ from validmind.vm_models import VMDataset, VMModel
 
 @tags("llm", "text_data", "embeddings", "visualization")
 @tasks("feature_extraction")
-def DescriptiveAnalytics(dataset: VMDataset, model: VMModel):
+def DescriptiveAnalytics(
+    dataset: VMDataset, model: VMModel
+) -> Tuple[go.Figure, go.Figure, go.Figure, RawData]:
     """
     Evaluates statistical properties of text embeddings in an ML model via mean, median, and standard deviation
     histograms.

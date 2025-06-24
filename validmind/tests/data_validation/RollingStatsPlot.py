@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Tuple
+
 import matplotlib.pyplot as plt
 import pandas as pd
 
@@ -42,7 +44,9 @@ def plot_rolling_statistics(df, col, window_size):
 
 @tags("time_series_data", "visualization", "stationarity")
 @tasks("regression")
-def RollingStatsPlot(dataset: VMDataset, window_size: int = 12):
+def RollingStatsPlot(
+    dataset: VMDataset, window_size: int = 12
+) -> Tuple[plt.Figure, RawData]:
     """
     Evaluates the stationarity of time series data by plotting its rolling mean and standard deviation over a specified
     window.

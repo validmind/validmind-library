@@ -3,8 +3,11 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 import random
+from typing import Tuple
 
 import nltk
+import pandas as pd
+import plotly.graph_objects as go
 from nltk.corpus import wordnet as wn
 
 from validmind import RawData, tags, tasks
@@ -20,7 +23,7 @@ def StabilityAnalysisSynonyms(
     model: VMModel,
     probability: float = 0.02,
     mean_similarity_threshold: float = 0.7,
-):
+) -> Tuple[go.Figure, pd.DataFrame, RawData]:
     """
     Evaluates the stability of text embeddings models when words in test data are replaced by their synonyms randomly.
 

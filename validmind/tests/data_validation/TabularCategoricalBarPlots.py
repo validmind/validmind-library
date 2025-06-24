@@ -2,6 +2,9 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+
+from typing import Tuple
+
 import plotly.graph_objs as go
 
 from validmind import RawData, tags, tasks
@@ -11,7 +14,7 @@ from validmind.vm_models import VMDataset
 
 @tags("tabular_data", "visualization")
 @tasks("classification", "regression")
-def TabularCategoricalBarPlots(dataset: VMDataset):
+def TabularCategoricalBarPlots(dataset: VMDataset) -> Tuple[go.Figure, RawData]:
     """
     Generates and visualizes bar plots for each category in categorical features to evaluate the dataset's composition.
 

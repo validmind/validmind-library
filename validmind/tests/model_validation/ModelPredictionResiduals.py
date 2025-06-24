@@ -2,18 +2,26 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Optional, Tuple
+
 import pandas as pd
 import plotly.graph_objects as go
 from scipy.stats import kstest
 
 from validmind import RawData, tags, tasks
+from validmind.vm_models import VMDataset, VMModel
 
 
 @tags("regression")
 @tasks("residual_analysis", "visualization")
 def ModelPredictionResiduals(
-    dataset, model, nbins=100, p_value_threshold=0.05, start_date=None, end_date=None
-):
+    dataset: VMDataset,
+    model: VMModel,
+    nbins: int = 100,
+    p_value_threshold: float = 0.05,
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None,
+) -> Tuple[pd.DataFrame, go.Figure, RawData]:
     """
     Assesses normality and behavior of residuals in regression models through visualization and statistical tests.
 

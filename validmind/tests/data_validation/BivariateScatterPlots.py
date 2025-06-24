@@ -3,15 +3,17 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 import itertools
+from typing import Tuple
 
 import plotly.express as px
+import plotly.graph_objects as go
 
 from validmind import RawData, tags, tasks
 
 
 @tags("tabular_data", "numerical_data", "visualization")
 @tasks("classification")
-def BivariateScatterPlots(dataset):
+def BivariateScatterPlots(dataset) -> Tuple[go.Figure, RawData]:
     """
     Generates bivariate scatterplots to visually inspect relationships between pairs of numerical predictor variables
     in machine learning classification tasks.

@@ -2,6 +2,9 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+
+from typing import Tuple
+
 import plotly.graph_objects as go
 
 from validmind import RawData, tags, tasks
@@ -22,7 +25,7 @@ def compute_outliers(series, threshold):
 @tasks("classification", "regression")
 def IQROutliersBarPlot(
     dataset: VMDataset, threshold: float = 1.5, fig_width: int = 800
-):
+) -> Tuple[go.Figure, RawData]:
     """
     Visualizes outlier distribution across percentiles in numerical data using the Interquartile Range (IQR) method.
 

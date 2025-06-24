@@ -2,14 +2,20 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Tuple
+
 import plotly.graph_objects as go
 
 from validmind import RawData, tags, tasks
+from validmind.vm_models import VMDataset, VMModel
 
 
 @tags("model_predictions", "visualization")
 @tasks("regression", "time_series_forecasting")
-def TimeSeriesPredictionsPlot(dataset, model):
+def TimeSeriesPredictionsPlot(
+    dataset: VMDataset,
+    model: VMModel,
+) -> Tuple[go.Figure, RawData]:
     """
     Plot actual vs predicted values for time series data and generate a visual comparison for the model.
 

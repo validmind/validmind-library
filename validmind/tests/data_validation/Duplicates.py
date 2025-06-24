@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Any, Dict, Tuple
+
 import pandas as pd
 
 from validmind import tags, tasks
@@ -9,7 +11,7 @@ from validmind import tags, tasks
 
 @tags("tabular_data", "data_quality", "text_data")
 @tasks("classification", "regression")
-def Duplicates(dataset, min_threshold=1):
+def Duplicates(dataset, min_threshold=1) -> Tuple[Dict[str, Any], bool]:
     """
     Tests dataset for duplicate entries, ensuring model reliability via data quality verification.
 

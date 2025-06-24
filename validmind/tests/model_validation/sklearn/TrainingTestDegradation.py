@@ -2,7 +2,7 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from typing import List
+from typing import Dict, List, Tuple
 
 from numpy import unique
 from sklearn.metrics import classification_report
@@ -22,7 +22,7 @@ from validmind.vm_models import VMDataset, VMModel
 @tasks("classification", "text_classification")
 def TrainingTestDegradation(
     datasets: List[VMDataset], model: VMModel, max_threshold: float = 0.10
-):
+) -> Tuple[List[Dict[str, float]], bool, RawData]:
     """
     Tests if model performance degradation between training and test datasets exceeds a predefined threshold.
 

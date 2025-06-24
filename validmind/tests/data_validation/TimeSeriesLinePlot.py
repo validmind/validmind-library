@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Tuple
+
 import pandas as pd
 import plotly.graph_objects as go
 
@@ -12,7 +14,7 @@ from validmind.vm_models import VMDataset
 
 @tags("time_series_data", "visualization")
 @tasks("regression")
-def TimeSeriesLinePlot(dataset: VMDataset):
+def TimeSeriesLinePlot(dataset: VMDataset) -> Tuple[go.Figure]:
     """
     Generates and analyses time-series data through line plots revealing trends, patterns, anomalies over time.
 
