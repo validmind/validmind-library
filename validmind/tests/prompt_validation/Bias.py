@@ -45,7 +45,7 @@ Prompt:
 
 @tags("llm", "few_shot")
 @tasks("text_classification", "text_summarization")
-def Bias(model, min_threshold=7, judge_llm=None, judge_embeddings=None):
+def Bias(model, min_threshold=7, judge_llm=None):
     """
     Assesses potential bias in a Large Language Model by analyzing the distribution and order of exemplars in the
     prompt.

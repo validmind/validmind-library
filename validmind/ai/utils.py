@@ -118,18 +118,27 @@ def get_judge_config(judge_llm=None, judge_embeddings=None):
         from validmind.models.function import FunctionModel
     except ImportError:
         raise ImportError("Please run `pip install validmind[llm]` to use LLM tests")
+
     if judge_llm is not None or judge_embeddings is not None:
-        if isinstance(judge_llm, FunctionModel):
-            judge_llm = judge_llm.model
-        if isinstance(judge_embeddings, FunctionModel):
-            judge_embeddings = judge_embeddings.model
-        if judge_llm is None and judge_embeddings is None:
-            # error checking-  probably a smarter way to do this
-            raise ValueError(
-                "Provided Judge LLM/Embeddings are not Langchain compatible. Ensure the judge LLM/embedding provided are an instance of "
-                "Langchain BaseChatModel and LangchainEmbeddings.  To use default ValidMind LLM, do not set judge_llm/judge_embedding parameter, "
-                "ensure that you are connected to the ValidMind API and confirm ValidMind AI is enabled for your account."
-            )
+        if isinstance(judge_llm, FunctionModel) and judge_llm is not None:
+            if isinstance(judge_llm.model, BaseChatModel):
+                judge_llm = judge_llm.model
+            else:
+                raise ValueError(
+                    "The ValidMind Functional model provided does not have have a langchain compatible LLM as a model attribute."
+                    "To use default ValidMind LLM, do not set judge_llm/judge_embedding parameter, "
+                    "ensure that you are connected to the ValidMind API and confirm ValidMind AI is enabled for your account."
+                )
+        if isinstance(judge_embeddings, FunctionModel) and judge_embeddings is not None:
+            if isinstance(judge_llm.model, BaseChatModel):
+                judge_embeddings = judge_embeddings.model
+            else:
+                raise ValueError(
+                    "The ValidMind Functional model provided does not have have a langchain compatible embeddings model as a model attribute."
+                    "To use default ValidMind LLM, do not set judge_embedding parameter, "
+                    "ensure that you are connected to the ValidMind API and confirm ValidMind AI is enabled for your account."
+                )
+
         if (isinstance(judge_llm, BaseChatModel) or judge_llm is None) and (
             isinstance(judge_embeddings, Embeddings) or judge_embeddings is None
         ):
