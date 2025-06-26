@@ -46,7 +46,7 @@ Prompt:
 
 @tags("llm", "zero_shot", "few_shot")
 @tasks("text_classification", "text_summarization")
-def Clarity(model, min_threshold=7):
+def Clarity(model, min_threshold=7, judge_llm=None):
     """
     Evaluates and scores the clarity of prompts in a Large Language Model based on specified guidelines.
 
@@ -89,6 +89,7 @@ def Clarity(model, min_threshold=7):
     response = call_model(
         system_prompt=SYSTEM,
         user_prompt=USER.format(prompt_to_test=model.prompt.template),
+        judge_llm=judge_llm,
     )
 
     score = get_score(response)
