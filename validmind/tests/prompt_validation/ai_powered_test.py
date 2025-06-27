@@ -4,7 +4,7 @@
 
 import re
 
-from validmind.ai.utils import get_client_and_model, is_configured
+from validmind.ai.utils import get_judge_config, is_configured
 
 missing_prompt_message = """
 Cannot run prompt validation tests on a model with no prompt.
@@ -21,7 +21,12 @@ my_vm_model = vm.init_model(
 
 
 def call_model(
-    system_prompt: str, user_prompt: str, temperature: float = 0.0, seed: int = 42
+    system_prompt: str,
+    user_prompt: str,
+    temperature: float = 0.0,
+    seed: int = 42,
+    judge_llm=None,
+    judge_embeddings=None,
 ):
     """Call LLM with the given prompts and return the response"""
     if not is_configured():
@@ -31,21 +36,17 @@ def call_model(
             "enabled for your account."
         )
 
-    client, model = get_client_and_model()
+    judge_llm, judge_embeddings = get_judge_config(judge_llm, judge_embeddings)
+    messages = [
+        ("system", system_prompt.strip("\n").strip()),
+        ("user", user_prompt.strip("\n").strip()),
+    ]
 
-    return (
-        client.chat.completions.create(
-            model=model,
-            messages=[
-                {"role": "system", "content": system_prompt.strip("\n").strip()},
-                {"role": "user", "content": user_prompt.strip("\n").strip()},
-            ],
-            temperature=temperature,
-            seed=seed,
-        )
-        .choices[0]
-        .message.content
-    )
+    return judge_llm.invoke(
+        messages,
+        temperature=temperature,
+        seed=seed,
+    ).content
 
 
 def get_score(response: str):
