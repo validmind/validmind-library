@@ -34,6 +34,8 @@ def ContextPrecision(
     user_input_column: str = "user_input",
     retrieved_contexts_column: str = "retrieved_contexts",
     reference_column: str = "reference",
+    judge_llm=None,
+    judge_embeddings=None,
 ):  # noqa: B950
     """
     Context Precision is a metric that evaluates whether all of the ground-truth
@@ -109,7 +111,9 @@ def ContextPrecision(
     df = get_renamed_columns(dataset._df, required_columns)
 
     result_df = evaluate(
-        Dataset.from_pandas(df), metrics=[context_precision()], **get_ragas_config()
+        Dataset.from_pandas(df),
+        metrics=[context_precision()],
+        **get_ragas_config(judge_llm, judge_embeddings)
     ).to_pandas()
 
     score_column = "llm_context_precision_with_reference"

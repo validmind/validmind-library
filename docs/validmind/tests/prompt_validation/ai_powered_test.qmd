@@ -14,7 +14,7 @@ toc-expand: 4
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">call_model</span>(<span class="params"><span class="n">system_prompt</span><span class="p">:</span><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">user_prompt</span><span class="p">:</span><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">temperature</span><span class="p">:</span><span class="nb">float</span><span class="o">=</span><span class="kc">0.0</span><span class="muted">,</span></span><span class="params"><span class="n">seed</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="kc">42</span></span>):
+<span class="kw">def</span><span class="name">call_model</span>(<span class="params"><span class="n">system_prompt</span><span class="p">:</span><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">user_prompt</span><span class="p">:</span><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">temperature</span><span class="p">:</span><span class="nb">float</span><span class="o">=</span><span class="kc">0.0</span><span class="muted">,</span></span><span class="params"><span class="n">seed</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="kc">42</span><span class="muted">,</span></span><span class="params"><span class="n">judge_llm</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">judge_embeddings</span><span class="o">=</span><span class="kc">None</span></span>):
 
 :::
 

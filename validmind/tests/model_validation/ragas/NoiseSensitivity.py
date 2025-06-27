@@ -38,6 +38,8 @@ def NoiseSensitivity(
     reference_column="reference",
     focus="relevant",
     user_input_column="user_input",
+    judge_llm=None,
+    judge_embeddings=None,
 ):
     """
     Assesses the sensitivity of a Large Language Model (LLM) to noise in retrieved context by measuring how often it
@@ -149,7 +151,7 @@ def NoiseSensitivity(
     result_df = evaluate(
         Dataset.from_pandas(df),
         metrics=[noise_sensitivity(focus=focus)],
-        **get_ragas_config(),
+        **get_ragas_config(judge_llm, judge_embeddings),
     ).to_pandas()
 
     score_column = f"noise_sensitivity_{focus}"

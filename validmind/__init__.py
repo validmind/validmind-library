@@ -53,6 +53,7 @@ from .client import (  # noqa: E402
     run_documentation_tests,
     run_test_suite,
 )
+from .experimental import agents as experimental_agent
 from .tests.decorator import tags, tasks, test
 from .tests.run import print_env
 from .utils import is_notebook, parse_version
@@ -126,4 +127,6 @@ __all__ = [  # noqa
     "unit_metrics",
     "test_suites",
     "log_text",
+    # experimental features
+    "experimental_agent",
 ]
