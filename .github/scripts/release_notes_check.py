@@ -48,8 +48,8 @@ def ci_check(pr_number, access_token):
     # Check for the presence of at least one label
     if not any(label in labels for label in required_labels):
         # Check for description of external change
-        release_notes_pattern = r"## External Release Notes[\n\r]+(.*?)(?:\n##|\Z)"
-        release_notes_match = re.search(release_notes_pattern, description, re.DOTALL)
+        release_notes_pattern = r"## (?:External )?Release Notes[\n\r]+(.*?)(?:\n##|\Z)"
+        release_notes_match = re.search(release_notes_pattern, description, re.DOTALL | re.IGNORECASE)
         if release_notes_match:
             release_notes_text = release_notes_match.group(1).strip()
             if release_notes_text and release_notes_text != "<!--- REPLACE THIS COMMENT WITH YOUR DESCRIPTION --->":
@@ -62,8 +62,8 @@ def ci_check(pr_number, access_token):
         return False
 
     # Check for description of external change
-    release_notes_pattern = r"## External Release Notes[\n\r]+(.*?)(?:\n##|\Z)"
-    release_notes_match = re.search(release_notes_pattern, description, re.DOTALL)
+    release_notes_pattern = r"## (?:External )?Release Notes[\n\r]+(.*?)(?:\n##|\Z)"
+    release_notes_match = re.search(release_notes_pattern, description, re.DOTALL | re.IGNORECASE)
     if release_notes_match:
         release_notes_text = release_notes_match.group(1).strip()
         if release_notes_text and release_notes_text != "<!--- REPLACE THIS COMMENT WITH YOUR DESCRIPTION --->":
