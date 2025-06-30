@@ -46,9 +46,9 @@ from .__version__ import __version__  # noqa: E402
 from .api_client import init, log_metric, log_text, reload
 from .client import (  # noqa: E402
     get_test_suite,
+    init_agent,
     init_dataset,
     init_model,
-    init_agent,
     init_r_model,
     preview_template,
     run_documentation_tests,
