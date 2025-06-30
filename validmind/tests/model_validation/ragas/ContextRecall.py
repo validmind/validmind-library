@@ -105,8 +105,9 @@ def ContextRecall(
         "retrieved_contexts": retrieved_contexts_column,
         "reference": reference_column,
     }
-
+    
     df = get_renamed_columns(dataset._df, required_columns)
+    df = df[required_columns.keys()]
 
     result_df = evaluate(
         Dataset.from_pandas(df), metrics=[context_recall()], **get_ragas_config()
