@@ -221,6 +221,16 @@ def OverfitDiagnosis(
     - May not capture more subtle forms of overfitting that do not exceed the threshold.
     - Assumes that the binning of features adequately represents the data segments.
     """
+
+    numeric_and_categorical_feature_columns = (
+        datasets[0].feature_columns_numeric + datasets[0].feature_columns_categorical
+    )
+
+    if not numeric_and_categorical_feature_columns:
+        raise ValueError(
+            "No valid numeric or categorical columns found in features_columns"
+        )
+
     is_classification = bool(datasets[0].probability_column(model))
 
     if not metric:
@@ -247,7 +257,7 @@ def OverfitDiagnosis(
     figures = []
     results_headers = ["slice", "shape", "feature", metric]
 
-    for feature_column in datasets[0].feature_columns:
+    for feature_column in numeric_and_categorical_feature_columns:
         bins = 10
         if feature_column in datasets[0].feature_columns_categorical:
             bins = len(train_df[feature_column].unique())

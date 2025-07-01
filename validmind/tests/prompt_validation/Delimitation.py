@@ -41,7 +41,9 @@ Prompt:
 
 @tags("llm", "zero_shot", "few_shot")
 @tasks("text_classification", "text_summarization")
-def Delimitation(model, min_threshold=7) -> Tuple[List[Dict[str, Any]], bool, RawData]:
+def Delimitation(
+    model, min_threshold=7, judge_llm=None
+) -> Tuple[List[Dict[str, Any]], bool, RawData]:
     """
     Evaluates the proper use of delimiters in prompts provided to Large Language Models.
 
@@ -85,6 +87,7 @@ def Delimitation(model, min_threshold=7) -> Tuple[List[Dict[str, Any]], bool, Ra
     response = call_model(
         system_prompt=SYSTEM,
         user_prompt=USER.format(prompt_to_test=model.prompt.template),
+        judge_llm=judge_llm,
     )
     score = get_score(response)
     explanation = get_explanation(response)

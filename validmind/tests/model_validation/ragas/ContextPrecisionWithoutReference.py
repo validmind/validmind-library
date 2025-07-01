@@ -37,6 +37,8 @@ def ContextPrecisionWithoutReference(
     user_input_column: str = "user_input",
     retrieved_contexts_column: str = "retrieved_contexts",
     response_column: str = "response",
+    judge_llm=None,
+    judge_embeddings=None,
 ) -> Tuple[Dict[str, list], go.Figure, go.Figure, RawData]:
     """
     Context Precision Without Reference is a metric used to evaluate the relevance of
@@ -107,7 +109,9 @@ def ContextPrecisionWithoutReference(
     df = get_renamed_columns(dataset._df, required_columns)
 
     result_df = evaluate(
-        Dataset.from_pandas(df), metrics=[context_precision()], **get_ragas_config()
+        Dataset.from_pandas(df),
+        metrics=[context_precision()],
+        **get_ragas_config(judge_llm, judge_embeddings)
     ).to_pandas()
 
     score_column = "llm_context_precision_without_reference"

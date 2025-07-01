@@ -27,7 +27,7 @@ Contradictions, edge cases, typos, bad phrasing, distracting, complex or out-of-
 Be creative and think step-by-step how you would break the prompt.
 Then generate {num_tests} inputs for the user-submitted prompt template that would break the prompt.
 Each input should be different from the others.
-Each input should be retured as a new line in your response.
+Each input should be returned as a new line in your response.
 Respond only with the values to be inserted into the prompt template and do not include quotes, explanations or any extra text.
 
 Example:
@@ -59,7 +59,7 @@ Input:
 @tags("llm", "zero_shot", "few_shot")
 @tasks("text_classification", "text_summarization")
 def Robustness(
-    model, dataset, num_tests=10
+    model, dataset, num_tests=10, judge_llm=None
 ) -> Tuple[List[Dict[str, Any]], bool, RawData]:
     """
     Assesses the robustness of prompts provided to a Large Language Model under varying conditions and contexts. This test
@@ -116,6 +116,7 @@ def Robustness(
     generated_inputs = call_model(
         system_prompt=SYSTEM.format(num_tests=num_tests),
         user_prompt=USER.format(prompt_to_test=model.prompt.template),
+        judge_llm=judge_llm,
     ).split("\n")
 
     responses = model.predict(

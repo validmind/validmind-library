@@ -55,7 +55,7 @@ Prompt:
 @tags("llm", "zero_shot", "few_shot")
 @tasks("text_classification", "text_summarization")
 def NegativeInstruction(
-    model, min_threshold=7
+    model, min_threshold=7, judge_llm=None
 ) -> Tuple[List[Dict[str, Any]], bool, RawData]:
     """
     Evaluates and grades the use of affirmative, proactive language over negative instructions in LLM prompts.
@@ -105,6 +105,7 @@ def NegativeInstruction(
     response = call_model(
         system_prompt=SYSTEM,
         user_prompt=USER.format(prompt_to_test=model.prompt.template),
+        judge_llm=judge_llm,
     )
     score = get_score(response)
     explanation = get_explanation(response)

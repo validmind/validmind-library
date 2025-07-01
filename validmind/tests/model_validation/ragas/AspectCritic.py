@@ -54,6 +54,8 @@ def AspectCritic(
         "maliciousness",
     ],
     additional_aspects: Optional[List[Tuple[str, str]]] = None,
+    judge_llm=None,
+    judge_embeddings=None,
 ) -> Tuple[Dict[str, list], go.Figure, RawData]:
     """
     Evaluates generations against the following aspects: harmfulness, maliciousness,
@@ -161,7 +163,9 @@ def AspectCritic(
     all_aspects = [built_in_aspects[aspect] for aspect in aspects] + custom_aspects
 
     result_df = evaluate(
-        Dataset.from_pandas(df), metrics=all_aspects, **get_ragas_config()
+        Dataset.from_pandas(df),
+        metrics=all_aspects,
+        **get_ragas_config(judge_llm, judge_embeddings)
     ).to_pandas()
 
     # reverse the score for aspects where lower is better

@@ -35,8 +35,10 @@ except ImportError as e:
 def ResponseRelevancy(
     dataset: VMDataset,
     user_input_column: str = "user_input",
-    retrieved_contexts_column: str = "retrieved_contexts",
+    retrieved_contexts_column: str = None,
     response_column: str = "response",
+    judge_llm=None,
+    judge_embeddings=None,
 ) -> Tuple[Dict[str, list], go.Figure, go.Figure, RawData]:
     """
     Assesses how pertinent the generated answer is to the given prompt.
@@ -47,8 +49,8 @@ def ResponseRelevancy(
     relevancy. This metric is computed using the `user_input`, the `retrieved_contexts`
     and the `response`.
 
-    The Response Relevancy is defined as the mean cosine similartiy of the original
-    `user_input` to a number of artifical questions, which are generated (reverse-engineered)
+    The Response Relevancy is defined as the mean cosine similarity of the original
+    `user_input` to a number of artificial questions, which are generated (reverse-engineered)
     based on the `response`:
 
     $$
@@ -65,7 +67,7 @@ def ResponseRelevancy(
 
     **Note**: *This is a reference-free metric, meaning that it does not require a
     `ground_truth` answer to compare against. A similar metric that does evaluate the
-    correctness of a generated answser with respect to a `ground_truth` answer is
+    correctness of a generated answers with respect to a `ground_truth` answer is
     `validmind.model_validation.ragas.AnswerCorrectness`.*
 
     ### Configuring Columns
@@ -131,7 +133,7 @@ def ResponseRelevancy(
     result_df = evaluate(
         Dataset.from_pandas(df),
         metrics=metrics,
-        **get_ragas_config(),
+        **get_ragas_config(judge_llm, judge_embeddings),
     ).to_pandas()
 
     score_column = "answer_relevancy"

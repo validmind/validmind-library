@@ -37,6 +37,8 @@ def AnswerCorrectness(
     user_input_column: str = "user_input",
     response_column: str = "response",
     reference_column: str = "reference",
+    judge_llm=None,
+    judge_embeddings=None,
 ) -> Tuple[Dict[str, list], go.Figure, go.Figure, RawData]:
     """
     Evaluates the correctness of answers in a dataset with respect to the provided ground
@@ -121,7 +123,9 @@ def AnswerCorrectness(
     df = get_renamed_columns(dataset._df, required_columns)
 
     result_df = evaluate(
-        Dataset.from_pandas(df), metrics=[answer_correctness()], **get_ragas_config()
+        Dataset.from_pandas(df),
+        metrics=[answer_correctness()],
+        **get_ragas_config(judge_llm, judge_embeddings)
     ).to_pandas()
 
     score_column = "answer_correctness"

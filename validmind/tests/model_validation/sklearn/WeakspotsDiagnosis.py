@@ -212,6 +212,19 @@ def WeakspotsDiagnosis(
     improvement.
     """
     feature_columns = features_columns or datasets[0].feature_columns
+    numeric_and_categorical_columns = (
+        datasets[0].feature_columns_numeric + datasets[0].feature_columns_categorical
+    )
+
+    feature_columns = [
+        col for col in feature_columns if col in numeric_and_categorical_columns
+    ]
+
+    if not feature_columns:
+        raise ValueError(
+            "No valid numeric or categorical columns found in features_columns"
+        )
+
     if not all(col in datasets[0].feature_columns for col in feature_columns):
         raise ValueError(
             "Column(s) provided in features_columns do not exist in the dataset"
