@@ -34,6 +34,8 @@ def ContextRecall(
     user_input_column: str = "user_input",
     retrieved_contexts_column: str = "retrieved_contexts",
     reference_column: str = "reference",
+    judge_llm=None,
+    judge_embeddings=None,
 ):
     """
     Context recall measures the extent to which the retrieved context aligns with the
@@ -110,7 +112,9 @@ def ContextRecall(
     df = df[required_columns.keys()]
 
     result_df = evaluate(
-        Dataset.from_pandas(df), metrics=[context_recall()], **get_ragas_config()
+        Dataset.from_pandas(df),
+        metrics=[context_recall()],
+        **get_ragas_config(judge_llm, judge_embeddings)
     ).to_pandas()
 
     score_column = "context_recall"

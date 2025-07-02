@@ -68,8 +68,20 @@ def MutualInformation(
     if task not in ["classification", "regression"]:
         raise ValueError("task must be either 'classification' or 'regression'")
 
-    X = dataset.x
-    y = dataset.y
+    # Check if numeric features exist
+    if not dataset.feature_columns_numeric:
+        raise ValueError(
+            "No numeric features found in dataset. Mutual Information test requires numeric features."
+        )
+
+    # Check if target column exists
+    if not dataset.target_column:
+        raise ValueError(
+            "Target column is required for Mutual Information calculation but was not provided."
+        )
+
+    X = dataset._df[dataset.feature_columns_numeric]
+    y = dataset._df[dataset.target_column]
 
     # Select appropriate MI function based on task type
     if task == "classification":
