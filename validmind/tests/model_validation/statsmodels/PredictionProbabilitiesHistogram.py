@@ -2,18 +2,22 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Tuple
 
 import plotly.graph_objects as go
 from matplotlib import cm
 
 from validmind import RawData, tags, tasks
+from validmind.vm_models import VMDataset, VMModel
 
 
 @tags("visualization", "credit_risk")
 @tasks("classification")
 def PredictionProbabilitiesHistogram(
-    dataset, model, title="Histogram of Predictive Probabilities"
-):
+    dataset: VMDataset,
+    model: VMModel,
+    title: str = "Histogram of Predictive Probabilities",
+) -> Tuple[go.Figure, RawData]:
     """
     Assesses the predictive probability distribution for binary classification to evaluate model performance and
     potential overfitting or bias.

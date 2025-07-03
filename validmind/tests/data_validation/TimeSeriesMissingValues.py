@@ -2,9 +2,12 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Any, Dict, List, Tuple
+
 import pandas as pd
 import plotly.express as px
 import plotly.figure_factory as ff
+import plotly.graph_objects as go
 
 from validmind import RawData, tags, tasks
 from validmind.errors import SkipTestError
@@ -13,7 +16,9 @@ from validmind.vm_models import VMDataset
 
 @tags("time_series_data")
 @tasks("regression")
-def TimeSeriesMissingValues(dataset: VMDataset, min_threshold: int = 1):
+def TimeSeriesMissingValues(
+    dataset: VMDataset, min_threshold: int = 1
+) -> Tuple[List[Dict[str, Any]], go.Figure, go.Figure, bool, RawData]:
     """
     Validates time-series data quality by confirming the count of missing values is below a certain threshold.
 

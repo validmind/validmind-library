@@ -3,9 +3,11 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 import re
+from typing import Tuple
 
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 
 from validmind import RawData, tags, tasks
 from validmind.errors import SkipTestError
@@ -14,7 +16,7 @@ from validmind.vm_models import VMDataset
 
 @tags("nlp", "text_data", "visualization", "frequency_analysis")
 @tasks("text_classification", "text_summarization")
-def Mentions(dataset: VMDataset, top_mentions: int = 25):
+def Mentions(dataset: VMDataset, top_mentions: int = 25) -> Tuple[go.Figure, RawData]:
     """
     Calculates and visualizes frequencies of '@' prefixed mentions in a text-based dataset for NLP model analysis.
 

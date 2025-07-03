@@ -7,7 +7,17 @@
 import inspect
 import json
 from pprint import pformat
-from typing import Any, Callable, Dict, List, Optional, Tuple, Union
+from typing import (
+    Any,
+    Callable,
+    Dict,
+    List,
+    Optional,
+    Tuple,
+    Union,
+    get_args,
+    get_origin,
+)
 from uuid import uuid4
 
 import pandas as pd
@@ -18,10 +28,29 @@ from ..html_templates.content_blocks import test_content_block_html
 from ..logging import get_logger
 from ..utils import display, format_dataframe, fuzzy_match, md_to_html, test_id_to_name
 from ..vm_models import VMDataset, VMModel
+from ..vm_models.figure import Figure
+from ..vm_models.result import ResultTable
 from .__types__ import TestID
 from ._store import test_provider_store, test_store
 
 logger = get_logger(__name__)
+
+
+try:
+    from matplotlib.figure import Figure as MatplotlibFigure
+except ImportError:
+    MatplotlibFigure = None
+
+try:
+    from plotly.graph_objects import Figure as PlotlyFigure
+except ImportError:
+    PlotlyFigure = None
+
+FIGURE_TYPES = tuple(
+    item for item in (Figure, MatplotlibFigure, PlotlyFigure) if inspect.isclass(item)
+)
+TABLE_TYPES = (pd.DataFrame, ResultTable)
+GENERIC_TABLE_TYPES = (list, dict)
 
 
 INPUT_TYPE_MAP = {
@@ -30,6 +59,45 @@ INPUT_TYPE_MAP = {
     "model": VMModel,
     "models": List[VMModel],
 }
+
+
+def _inspect_return_type(annotation: Any) -> Tuple[bool, bool]:
+    """
+    Inspects a return type annotation to determine if it contains a Figure or Table.
+
+    Returns a tuple (has_figure, has_table).
+    """
+    has_figure = False
+    has_table = False
+
+    origin = get_origin(annotation)
+    args = get_args(annotation)
+
+    # A Union means the return type could be one of several types.
+    # A tuple in a type hint means multiple return values.
+    # We recursively inspect the arguments of Union and tuple.
+    if origin is Union or origin is tuple:
+        for arg in args:
+            fig, table = _inspect_return_type(arg)
+            has_figure |= fig
+            has_table |= table
+        return has_figure, has_table
+
+    check_type = origin if origin is not None else annotation
+
+    if not inspect.isclass(check_type):
+        return has_figure, has_table  # Can't do issubclass on non-class like Any
+
+    if FIGURE_TYPES and issubclass(check_type, FIGURE_TYPES):
+        has_figure = True
+
+    if TABLE_TYPES and issubclass(check_type, TABLE_TYPES):
+        has_table = True
+
+    if check_type in GENERIC_TABLE_TYPES:
+        has_table = True
+
+    return has_figure, has_table
 
 
 def _inspect_signature(
@@ -173,23 +241,29 @@ def _pretty_list_tests(
     tests: Dict[str, Callable[..., Any]], truncate: bool = True
 ) -> None:
     """Pretty print a list of tests"""
-    table = [
-        {
-            "ID": test_id,
-            "Name": test_id_to_name(test_id),
-            "Description": _test_description(
-                inspect.getdoc(test),
-                num_lines=(5 if truncate else 999999),
-            ),
-            "Required Inputs": list(test.inputs.keys()),
-            "Params": test.params,
-            "Tags": test.__tags__,
-            "Tasks": test.__tasks__,
-        }
-        for test_id, test in tests.items()
-    ]
+    rows = []
+    for test_id, test in tests.items():
+        has_figure, has_table = _inspect_return_type(
+            inspect.signature(test).return_annotation
+        )
+        rows.append(
+            {
+                "ID": test_id,
+                "Name": test_id_to_name(test_id),
+                "Description": _test_description(
+                    inspect.getdoc(test),
+                    num_lines=(5 if truncate else 999999),
+                ),
+                "Has Figure": has_figure,
+                "Has Table": has_table,
+                "Required Inputs": list(test.inputs.keys()),
+                "Params": test.params,
+                "Tags": test.__tags__,
+                "Tasks": test.__tasks__,
+            }
+        )
 
-    return format_dataframe(pd.DataFrame(table))
+    return format_dataframe(pd.DataFrame(rows))
 
 
 def list_tags() -> List[str]:

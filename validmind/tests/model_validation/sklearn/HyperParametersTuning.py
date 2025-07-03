@@ -2,7 +2,7 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from typing import Dict, List, Union
+from typing import Dict, List, Tuple, Union
 
 from sklearn.metrics import make_scorer, recall_score
 from sklearn.model_selection import GridSearchCV
@@ -11,8 +11,6 @@ from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 
 
-@tags("sklearn", "model_performance")
-@tasks("classification", "clustering")
 def custom_recall(y_true, y_pred_proba, threshold=0.5):
     y_pred = (y_pred_proba >= threshold).astype(int)
     return recall_score(y_true, y_pred)
@@ -65,7 +63,7 @@ def HyperParametersTuning(
     scoring: Union[str, List, Dict] = None,
     thresholds: Union[float, List[float]] = None,
     fit_params: dict = None,
-):
+) -> Tuple[List[Dict[str, float]], RawData]:
     """
     Performs exhaustive grid search over specified parameter ranges to find optimal model configurations
     across different metrics and decision thresholds.

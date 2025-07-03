@@ -2,16 +2,19 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Tuple
+
 import numpy as np
 import pandas as pd
 from sklearn.metrics import roc_auc_score, roc_curve
 
 from validmind import RawData, tags, tasks
+from validmind.vm_models import VMDataset, VMModel
 
 
 @tags("model_performance")
 @tasks("classification")
-def GINITable(dataset, model):
+def GINITable(dataset: VMDataset, model: VMModel) -> Tuple[pd.DataFrame, RawData]:
     """
     Evaluates classification model performance using AUC, GINI, and KS metrics for training and test datasets.
 

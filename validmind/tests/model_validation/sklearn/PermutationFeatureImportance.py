@@ -2,7 +2,7 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from typing import Union
+from typing import Optional, Tuple
 
 import plotly.graph_objects as go
 from sklearn.inspection import permutation_importance
@@ -26,9 +26,9 @@ logger = get_logger(__name__)
 def PermutationFeatureImportance(
     model: VMModel,
     dataset: VMDataset,
-    fontsize: Union[int, None] = None,
-    figure_height: Union[int, None] = None,
-):
+    fontsize: Optional[int] = None,
+    figure_height: Optional[int] = None,
+) -> Tuple[go.Figure, RawData]:
     """
     Assesses the significance of each feature in a model by evaluating the impact on model performance when feature
     values are randomly rearranged.

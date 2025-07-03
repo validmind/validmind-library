@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Any, Dict
+
 import numpy as np
 import pandas as pd
 from arch.unitroot import PhillipsPerron
@@ -17,7 +19,7 @@ logger = get_logger(__name__)
 
 @tags("time_series_data", "forecasting", "statistical_test", "unit_root_test")
 @tasks("regression")
-def PhillipsPerronArch(dataset: VMDataset):
+def PhillipsPerronArch(dataset: VMDataset) -> Dict[str, Any]:
     """
     Assesses the stationarity of time series data in each feature of the ML model using the Phillips-Perron test.
 

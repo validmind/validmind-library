@@ -1,6 +1,8 @@
 # Copyright © 2023-2024 ValidMind Inc. All rights reserved.
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
+from typing import Dict, List, Tuple
+
 from sklearn.metrics import accuracy_score
 
 from validmind import RawData
@@ -12,7 +14,9 @@ from validmind.vm_models import VMDataset, VMModel
     "sklearn", "binary_classification", "multiclass_classification", "model_performance"
 )
 @tasks("classification", "text_classification")
-def MinimumAccuracy(dataset: VMDataset, model: VMModel, min_threshold: float = 0.7):
+def MinimumAccuracy(
+    dataset: VMDataset, model: VMModel, min_threshold: float = 0.7
+) -> Tuple[List[Dict[str, float]], bool, RawData]:
     """
     Checks if the model's prediction accuracy meets or surpasses a specified threshold.
 

@@ -2,17 +2,24 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Tuple
+
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 from scipy.stats import norm
 
 from validmind import RawData, tags, tasks
+from validmind.vm_models import VMDataset, VMModel
 
 
 @tags("model_predictions", "visualization")
 @tasks("regression", "time_series_forecasting")
-def TimeSeriesPredictionWithCI(dataset, model, confidence=0.95):
+def TimeSeriesPredictionWithCI(
+    dataset: VMDataset,
+    model: VMModel,
+    confidence: float = 0.95,
+) -> Tuple[pd.DataFrame, go.Figure, RawData]:
     """
     Assesses predictive accuracy and uncertainty in time series models, highlighting breaches beyond confidence
     intervals.

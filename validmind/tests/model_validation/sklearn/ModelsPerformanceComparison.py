@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Dict, List
+
 import numpy as np
 from sklearn.metrics import classification_report
 
@@ -19,7 +21,9 @@ from .ClassifierPerformance import multiclass_roc_auc_score
     "model_comparison",
 )
 @tasks("classification", "text_classification")
-def ModelsPerformanceComparison(dataset: VMDataset, models: list[VMModel]):
+def ModelsPerformanceComparison(
+    dataset: VMDataset, models: list[VMModel]
+) -> Dict[str, List[Dict[str, float]]]:
     """
     Evaluates and compares the performance of multiple Machine Learning models using various metrics like accuracy,
     precision, recall, and F1 score.

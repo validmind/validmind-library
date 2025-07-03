@@ -2,16 +2,21 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import List
+
 import pandas as pd
 from sklearn import metrics
 
 from validmind import tags, tasks
 from validmind.tests.model_validation.statsmodels.statsutils import adj_r2_score
+from validmind.vm_models import VMDataset, VMModel
 
 
 @tags("model_performance", "sklearn")
 @tasks("regression", "time_series_forecasting")
-def RegressionR2SquareComparison(datasets, models):
+def RegressionR2SquareComparison(
+    datasets: List[VMDataset], models: List[VMModel]
+) -> pd.DataFrame:
     """
     Compares R-Squared and Adjusted R-Squared values for different regression models across multiple datasets to assess
     model performance and relevance of features.

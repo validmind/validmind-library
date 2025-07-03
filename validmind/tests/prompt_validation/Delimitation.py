@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Any, Dict, List, Tuple
+
 from validmind import RawData, tags, tasks
 from validmind.errors import MissingRequiredTestInputError
 
@@ -39,7 +41,9 @@ Prompt:
 
 @tags("llm", "zero_shot", "few_shot")
 @tasks("text_classification", "text_summarization")
-def Delimitation(model, min_threshold=7, judge_llm=None):
+def Delimitation(
+    model, min_threshold=7, judge_llm=None
+) -> Tuple[List[Dict[str, Any]], bool, RawData]:
     """
     Evaluates the proper use of delimiters in prompts provided to Large Language Models.
 

@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Any, Dict
+
 import pandas as pd
 
 from validmind import tags, tasks
@@ -46,7 +48,7 @@ def get_summary_statistics_categorical(df, categorical_fields):
 
 @tags("tabular_data", "time_series_data", "data_quality")
 @tasks("classification", "regression")
-def DescriptiveStatistics(dataset: VMDataset):
+def DescriptiveStatistics(dataset: VMDataset) -> Dict[str, Any]:
     """
     Performs a detailed descriptive statistical analysis of both numerical and categorical data within a model's
     dataset.

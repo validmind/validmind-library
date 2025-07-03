@@ -5,10 +5,11 @@
 from sklearn.metrics import r2_score
 
 from validmind import tags, tasks
+from validmind.vm_models import VMDataset, VMModel
 
 
 @tags("regression")
 @tasks("regression")
-def RSquaredScore(model, dataset):
+def RSquaredScore(model: VMModel, dataset: VMDataset) -> float:
     """Calculates the R-squared score for a regression model."""
     return r2_score(dataset.y, dataset.y_pred(model))

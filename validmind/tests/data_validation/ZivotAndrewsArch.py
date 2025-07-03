@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Any, Dict, Tuple
+
 import pandas as pd
 from arch.unitroot import ZivotAndrews
 from numpy.linalg import LinAlgError
@@ -16,7 +18,7 @@ logger = get_logger(__name__)
 
 @tags("time_series_data", "stationarity", "unit_root_test")
 @tasks("regression")
-def ZivotAndrewsArch(dataset: VMDataset):
+def ZivotAndrewsArch(dataset: VMDataset) -> Tuple[Dict[str, Any], RawData]:
     """
     Evaluates the order of integration and stationarity of time series data using the Zivot-Andrews unit root test.
 

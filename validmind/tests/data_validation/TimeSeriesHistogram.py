@@ -2,8 +2,11 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Tuple
+
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 
 from validmind import tags, tasks
 from validmind.logging import get_logger
@@ -13,7 +16,7 @@ logger = get_logger(__name__)
 
 @tags("data_validation", "visualization", "time_series_data")
 @tasks("regression", "time_series_forecasting")
-def TimeSeriesHistogram(dataset, nbins=30):
+def TimeSeriesHistogram(dataset, nbins=30) -> Tuple[go.Figure]:
     """
     Visualizes distribution of time-series data using histograms and Kernel Density Estimation (KDE) lines.
 

@@ -9,7 +9,7 @@ from validmind import tags, tasks
 
 @tags("time_series_data", "analysis")
 @tasks("regression")
-def TimeSeriesDescription(dataset):
+def TimeSeriesDescription(dataset) -> pd.DataFrame:
     """
     Generates a detailed analysis for the provided time series dataset, summarizing key statistics to identify trends,
     patterns, and data quality issues.

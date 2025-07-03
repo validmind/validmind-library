@@ -10,7 +10,7 @@ from validmind import tags, tasks
 
 @tasks("classification", "regression")
 @tags("tabular_data", "statistical_test", "statsmodels")
-def RunsTest(dataset):
+def RunsTest(dataset) -> pd.DataFrame:
     """
     Executes Runs Test on ML model to detect non-random patterns in output data sequence.
 

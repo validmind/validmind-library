@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import List, Tuple
+
 import pandas as pd
 import plotly.graph_objects as go
 
@@ -12,7 +14,9 @@ from validmind.vm_models import VMDataset
 
 @tags("time_series_data")
 @tasks("regression")
-def TimeSeriesOutliers(dataset: VMDataset, zscore_threshold: int = 3):
+def TimeSeriesOutliers(
+    dataset: VMDataset, zscore_threshold: int = 3
+) -> Tuple[pd.DataFrame, List[go.Figure], bool, RawData]:
     """
     Identifies and visualizes outliers in time-series data using the z-score method.
 

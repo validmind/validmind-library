@@ -2,15 +2,20 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import List, Tuple
+
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
 from validmind import tags, tasks
+from validmind.vm_models import VMDataset, VMModel
 
 
 @tags("visualization")
 @tasks("monitoring")
-def PredictionQuantilesAcrossFeatures(datasets, model):
+def PredictionQuantilesAcrossFeatures(
+    datasets: List[VMDataset], model: VMModel
+) -> Tuple[go.Figure, ...]:
     """
     Assesses differences in model prediction distributions across individual features between reference
     and monitoring datasets through quantile analysis.

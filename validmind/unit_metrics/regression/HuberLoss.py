@@ -5,11 +5,12 @@
 import numpy as np
 
 from validmind import tags, tasks
+from validmind.vm_models import VMDataset, VMModel
 
 
 @tags("regression")
 @tasks("regression")
-def HuberLoss(model, dataset):
+def HuberLoss(model: VMModel, dataset: VMDataset) -> float:
     """Calculates the Huber loss for a regression model."""
     y_true = dataset.y
     y_pred = dataset.y_pred(model)

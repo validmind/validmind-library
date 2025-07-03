@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Tuple
+
 import evaluate
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -11,7 +13,7 @@ from validmind import RawData, tags, tasks
 
 @tags("nlp", "text_data", "data_validation")
 @tasks("nlp")
-def Toxicity(dataset):
+def Toxicity(dataset) -> Tuple[plt.Figure, RawData]:
     """
     Assesses the toxicity of text data within a dataset to visualize the distribution of toxicity scores.
 

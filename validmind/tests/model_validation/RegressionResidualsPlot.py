@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Tuple
+
 import numpy as np
 import plotly.figure_factory as ff
 import plotly.graph_objects as go
@@ -12,7 +14,9 @@ from validmind.vm_models import VMDataset, VMModel
 
 @tags("model_performance", "visualization")
 @tasks("regression")
-def RegressionResidualsPlot(model: VMModel, dataset: VMDataset, bin_size: float = 0.1):
+def RegressionResidualsPlot(
+    model: VMModel, dataset: VMDataset, bin_size: float = 0.1
+) -> Tuple[go.Figure, go.Figure, RawData]:
     """
     Evaluates regression model performance using residual distribution and actual vs. predicted plots.
 

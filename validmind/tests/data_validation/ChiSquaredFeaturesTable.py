@@ -12,7 +12,7 @@ from validmind.errors import SkipTestError
 
 @tags("tabular_data", "categorical_data", "statistical_test")
 @tasks("classification")
-def ChiSquaredFeaturesTable(dataset, p_threshold=0.05):
+def ChiSquaredFeaturesTable(dataset, p_threshold=0.05) -> pd.DataFrame:
     """
     Assesses the statistical association between categorical features and a target variable using the Chi-Squared test.
 

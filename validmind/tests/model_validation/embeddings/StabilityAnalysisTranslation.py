@@ -2,6 +2,10 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Tuple
+
+import pandas as pd
+import plotly.graph_objects as go
 from transformers import MarianMTModel, MarianTokenizer
 
 from validmind import RawData, tags, tasks
@@ -21,7 +25,7 @@ def StabilityAnalysisTranslation(
     source_lang: str = "en",
     target_lang: str = "fr",
     mean_similarity_threshold: float = 0.7,
-):
+) -> Tuple[go.Figure, pd.DataFrame, RawData]:
     """
     Evaluates robustness of text embeddings models to noise introduced by translating the original text to another
     language and back.

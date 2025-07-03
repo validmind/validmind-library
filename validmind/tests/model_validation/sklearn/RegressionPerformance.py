@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Dict, List, Tuple
+
 import numpy as np
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 
@@ -14,7 +16,9 @@ logger = get_logger(__name__)
 
 @tags("sklearn", "model_performance")
 @tasks("regression")
-def RegressionPerformance(model: VMModel, dataset: VMDataset):
+def RegressionPerformance(
+    model: VMModel, dataset: VMDataset
+) -> Tuple[List[Dict[str, float]], RawData]:
     """
     Evaluates the performance of a regression model using five different metrics: MAE, MSE, RMSE, MAPE, and MBD.
 

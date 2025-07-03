@@ -3,7 +3,10 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 import re
-from typing import Dict
+from typing import Dict, Tuple
+
+import pandas as pd
+import plotly.graph_objects as go
 
 from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset, VMModel
@@ -18,7 +21,7 @@ def StabilityAnalysisKeyword(
     model: VMModel,
     keyword_dict: Dict[str, str],
     mean_similarity_threshold: float = 0.7,
-):
+) -> Tuple[go.Figure, pd.DataFrame, RawData]:
     """
     Evaluates robustness of embedding models to keyword swaps in the test dataset.
 

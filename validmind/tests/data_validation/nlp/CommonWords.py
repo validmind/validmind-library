@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 from collections import Counter
+from typing import Tuple
 
 import nltk
 import plotly.graph_objects as go
@@ -14,7 +15,7 @@ from validmind.vm_models import VMDataset
 
 @tags("nlp", "text_data", "visualization", "frequency_analysis")
 @tasks("text_classification", "text_summarization")
-def CommonWords(dataset: VMDataset):
+def CommonWords(dataset: VMDataset) -> Tuple[go.Figure, RawData]:
     """
     Assesses the most frequent non-stopwords in a text column for identifying prevalent language patterns.
 

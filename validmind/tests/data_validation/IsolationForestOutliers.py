@@ -3,7 +3,9 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 import itertools
+from typing import Tuple
 
+import matplotlib.figure
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.ensemble import IsolationForest
@@ -19,7 +21,7 @@ def IsolationForestOutliers(
     random_state: int = 0,
     contamination: float = 0.1,
     feature_columns: list = None,
-):
+) -> Tuple[matplotlib.figure.Figure, RawData]:
     """
     Detects outliers in a dataset using the Isolation Forest algorithm and visualizes results through scatter plots.
 

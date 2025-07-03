@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Any, Dict, List, Tuple
+
 from validmind import RawData, tags, tasks
 from validmind.errors import MissingRequiredTestInputError
 
@@ -45,7 +47,9 @@ Prompt:
 
 @tags("llm", "few_shot")
 @tasks("text_classification", "text_summarization")
-def Bias(model, min_threshold=7, judge_llm=None):
+def Bias(
+    model, min_threshold=7, judge_llm=None
+) -> Tuple[List[Dict[str, Any]], bool, RawData]:
     """
     Assesses potential bias in a Large Language Model by analyzing the distribution and order of exemplars in the
     prompt.

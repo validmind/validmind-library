@@ -2,16 +2,21 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Tuple
+
 import pandas as pd
 from sklearn import metrics
 
 from validmind import RawData, tags, tasks
 from validmind.tests.model_validation.statsmodels.statsutils import adj_r2_score
+from validmind.vm_models import VMDataset, VMModel
 
 
 @tags("sklearn", "model_performance")
 @tasks("regression")
-def RegressionR2Square(dataset, model):
+def RegressionR2Square(
+    dataset: VMDataset, model: VMModel
+) -> Tuple[pd.DataFrame, RawData]:
     """
     Assesses the overall goodness-of-fit of a regression model by evaluating R-squared (R2) and Adjusted R-squared (Adj
     R2) scores to determine the model's explanatory power over the dependent variable.

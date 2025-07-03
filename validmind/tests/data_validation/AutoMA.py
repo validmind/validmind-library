@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Dict, Tuple
+
 import pandas as pd
 from statsmodels.tsa.arima.model import ARIMA
 from statsmodels.tsa.stattools import adfuller
@@ -15,7 +17,9 @@ logger = get_logger(__name__)
 
 @tags("time_series_data", "statsmodels", "forecasting", "statistical_test")
 @tasks("regression")
-def AutoMA(dataset: VMDataset, max_ma_order: int = 3):
+def AutoMA(
+    dataset: VMDataset, max_ma_order: int = 3
+) -> Tuple[Dict[str, pd.DataFrame], RawData]:
     """
     Automatically selects the optimal Moving Average (MA) order for each variable in a time series dataset based on
     minimal BIC and AIC values.

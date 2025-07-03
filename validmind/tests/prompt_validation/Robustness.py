@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Any, Dict, List, Tuple
+
 import pandas as pd
 
 from validmind import RawData, tags, tasks
@@ -56,7 +58,9 @@ Input:
 
 @tags("llm", "zero_shot", "few_shot")
 @tasks("text_classification", "text_summarization")
-def Robustness(model, dataset, num_tests=10, judge_llm=None):
+def Robustness(
+    model, dataset, num_tests=10, judge_llm=None
+) -> Tuple[List[Dict[str, Any]], bool, RawData]:
     """
     Assesses the robustness of prompts provided to a Large Language Model under varying conditions and contexts. This test
     specifically measures the model's ability to generate correct classifications with the given prompt even when the

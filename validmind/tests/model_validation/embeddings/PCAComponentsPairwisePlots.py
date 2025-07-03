@@ -3,19 +3,24 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 import itertools
+from typing import Tuple
 
 import numpy as np
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 
 from validmind import RawData, tags, tasks
+from validmind.vm_models import VMDataset, VMModel
 
 
 @tags("visualization", "dimensionality_reduction", "embeddings")
 @tasks("text_qa", "text_generation", "text_summarization")
-def PCAComponentsPairwisePlots(dataset, model, n_components=3):
+def PCAComponentsPairwisePlots(
+    dataset: VMDataset, model: VMModel, n_components: int = 3
+) -> Tuple[go.Figure, RawData]:
     """
     Generates scatter plots for pairwise combinations of principal component analysis (PCA) components of model
     embeddings.
