@@ -2,6 +2,9 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+
+from typing import Any, Dict, List, Tuple
+
 from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset
 
@@ -13,7 +16,7 @@ def HighPearsonCorrelation(
     max_threshold: float = 0.3,
     top_n_correlations: int = 10,
     feature_columns: list = None,
-):
+) -> Tuple[List[Dict[str, Any]], bool, RawData]:
     """
     Identifies highly correlated feature pairs in a dataset suggesting feature redundancy or multicollinearity.
 

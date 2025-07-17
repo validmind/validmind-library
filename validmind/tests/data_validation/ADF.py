@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Dict
+
 import pandas as pd
 from statsmodels.tsa.stattools import adfuller
 
@@ -16,7 +18,7 @@ logger = get_logger(__name__)
     "time_series_data", "statsmodels", "forecasting", "statistical_test", "stationarity"
 )
 @tasks("regression")
-def ADF(dataset: VMDataset):
+def ADF(dataset: VMDataset) -> Dict[str, pd.DataFrame]:
     """
     Assesses the stationarity of a time series dataset using the Augmented Dickey-Fuller (ADF) test.
 

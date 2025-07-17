@@ -2,7 +2,10 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Tuple
+
 import plotly.express as px
+import plotly.graph_objects as go
 from sklearn.cluster import KMeans
 
 from validmind import RawData, tags, tasks
@@ -11,7 +14,9 @@ from validmind.vm_models import VMDataset, VMModel
 
 @tags("llm", "text_data", "embeddings", "visualization")
 @tasks("feature_extraction")
-def ClusterDistribution(model: VMModel, dataset: VMDataset, num_clusters: int = 5):
+def ClusterDistribution(
+    model: VMModel, dataset: VMDataset, num_clusters: int = 5
+) -> Tuple[go.Figure, RawData]:
     """
     Assesses the distribution of text embeddings across clusters produced by a model using KMeans clustering.
 

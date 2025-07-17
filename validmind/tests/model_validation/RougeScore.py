@@ -2,16 +2,23 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Tuple
+
 import pandas as pd
 import plotly.graph_objects as go
 from rouge import Rouge
 
 from validmind import RawData, tags, tasks
+from validmind.vm_models import VMDataset, VMModel
 
 
 @tags("nlp", "text_data", "visualization")
 @tasks("text_classification", "text_summarization")
-def RougeScore(dataset, model, metric="rouge-1"):
+def RougeScore(
+    dataset: VMDataset,
+    model: VMModel,
+    metric: str = "rouge-1",
+) -> Tuple[pd.DataFrame, go.Figure, RawData]:
     """
     Assesses the quality of machine-generated text using ROUGE metrics and visualizes the results to provide
     comprehensive performance insights.

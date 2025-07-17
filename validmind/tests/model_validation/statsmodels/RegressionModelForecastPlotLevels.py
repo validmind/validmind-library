@@ -2,9 +2,12 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Tuple
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import plotly.graph_objects as go
 
 from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset, VMModel
@@ -23,7 +26,7 @@ def integrate_diff(series_diff, start_value):
 def RegressionModelForecastPlotLevels(
     model: VMModel,
     dataset: VMDataset,
-):
+) -> Tuple[go.Figure, RawData]:
     """
     Assesses the alignment between forecasted and observed values in regression models through visual plots
 

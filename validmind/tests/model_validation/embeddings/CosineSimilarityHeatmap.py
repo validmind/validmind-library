@@ -2,24 +2,28 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Tuple
+
 import numpy as np
 import plotly.express as px
+import plotly.graph_objects as go
 from sklearn.metrics.pairwise import cosine_similarity
 
 from validmind import RawData, tags, tasks
+from validmind.vm_models import VMDataset, VMModel
 
 
 @tags("visualization", "dimensionality_reduction", "embeddings")
 @tasks("text_qa", "text_generation", "text_summarization")
 def CosineSimilarityHeatmap(
-    dataset,
-    model,
+    dataset: VMDataset,
+    model: VMModel,
     title="Cosine Similarity Matrix",
     color="Cosine Similarity",
     xaxis_title="Index",
     yaxis_title="Index",
     color_scale="Blues",
-):
+) -> Tuple[go.Figure, RawData]:
     """
     Generates an interactive heatmap to visualize the cosine similarities among embeddings derived from a given model.
 

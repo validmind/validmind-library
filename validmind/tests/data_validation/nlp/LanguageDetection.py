@@ -2,7 +2,10 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Tuple
+
 import plotly.express as px
+import plotly.graph_objects as go
 from langdetect import LangDetectException, detect
 
 from validmind import RawData, tags, tasks
@@ -10,7 +13,7 @@ from validmind import RawData, tags, tasks
 
 @tags("nlp", "text_data", "visualization")
 @tasks("text_classification", "text_summarization")
-def LanguageDetection(dataset):
+def LanguageDetection(dataset) -> Tuple[go.Figure, RawData]:
     """
     Assesses the diversity of languages in a textual dataset by detecting and visualizing the distribution of languages.
 

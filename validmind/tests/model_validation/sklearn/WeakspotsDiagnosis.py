@@ -2,10 +2,11 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from typing import Callable, Dict, List, Tuple, Union
+from typing import Callable, Dict, List, Optional, Tuple
 
 import matplotlib.pyplot as plt
 import pandas as pd
+import plotly.graph_objects as go
 import seaborn as sns
 from sklearn import metrics
 
@@ -157,10 +158,10 @@ def _plot_weak_spots(
 def WeakspotsDiagnosis(
     datasets: List[VMDataset],
     model: VMModel,
-    features_columns: Union[List[str], None] = None,
-    metrics: Union[Dict[str, Callable], None] = None,
-    thresholds: Union[Dict[str, float], None] = None,
-):
+    features_columns: Optional[List[str]] = None,
+    metrics: Optional[Dict[str, Callable]] = None,
+    thresholds: Optional[Dict[str, float]] = None,
+) -> Tuple[pd.DataFrame, go.Figure, bool]:
     """
     Identifies and visualizes weak spots in a machine learning model's performance across various sections of the
     feature space.

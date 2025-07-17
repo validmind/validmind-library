@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Tuple
+
 import plotly.graph_objects as go
 from sklearn.calibration import calibration_curve
 
@@ -12,7 +14,9 @@ from validmind.vm_models.result import RawData
 
 @tags("sklearn", "model_performance", "classification")
 @tasks("classification")
-def CalibrationCurve(model: VMModel, dataset: VMDataset, n_bins: int = 10):
+def CalibrationCurve(
+    model: VMModel, dataset: VMDataset, n_bins: int = 10
+) -> Tuple[go.Figure, RawData]:
     """
     Evaluates the calibration of probability estimates by comparing predicted probabilities against observed
     frequencies.

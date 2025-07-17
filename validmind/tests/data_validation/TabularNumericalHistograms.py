@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Tuple
+
 import plotly.graph_objs as go
 
 from validmind import tags, tasks
@@ -10,7 +12,7 @@ from validmind.vm_models import VMDataset
 
 @tags("tabular_data", "visualization")
 @tasks("classification", "regression")
-def TabularNumericalHistograms(dataset: VMDataset):
+def TabularNumericalHistograms(dataset: VMDataset) -> Tuple[go.Figure]:
     """
     Generates histograms for each numerical feature in a dataset to provide visual insights into data distribution and
     detect potential issues.
