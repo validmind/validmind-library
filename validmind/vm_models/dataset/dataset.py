@@ -315,9 +315,22 @@ class VMDataset(VMInput):
                 model, X, **kwargs
             )
 
-        prediction_column = prediction_column or f"{model.input_id}_prediction"
-        self._add_column(prediction_column, prediction_values)
-        self.prediction_column(model, prediction_column)
+        # Handle dictionary predictions by converting to separate columns
+        if prediction_values and isinstance(prediction_values[0], dict):
+            # Get all keys from the first dictionary
+            df_prediction_values = pd.DataFrame.from_dict(prediction_values, orient='columns')
+
+            for column_name in df_prediction_values.columns.tolist():  # Iterate over all keys
+                values = df_prediction_values[column_name].values
+                self._add_column(column_name, values)
+
+                if column_name == "prediction":
+                    prediction_column = f"{model.input_id}_prediction"
+                    self.prediction_column(model, column_name)
+        else:
+            prediction_column = prediction_column or f"{model.input_id}_prediction"
+            self._add_column(prediction_column, prediction_values)
+            self.prediction_column(model, prediction_column)
 
         if probability_values is not None:
             probability_column = probability_column or f"{model.input_id}_probabilities"
