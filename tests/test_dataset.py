@@ -303,6 +303,219 @@ class TestTabularDataset(TestCase):
         # Probabilities are not auto-assigned if prediction_values are provided
         self.assertTrue("logreg_probabilities" not in vm_dataset._df.columns)
 
+    def test_assign_predictions_with_classification_predict_fn(self):
+        """
+        Test assigning predictions to dataset with a model created using predict_fn for classification
+        """
+        df = pd.DataFrame({"x1": [1, 2, 3], "x2": [4, 5, 6], "y": [0, 1, 0]})
+        vm_dataset = DataFrameDataset(
+            raw_dataset=df, target_column="y", feature_columns=["x1", "x2"]
+        )
+
+        # Define a simple classification predict function
+        def simple_classify_fn(input_dict):
+            # Simple rule: if x1 + x2 > 5, return 1, else 0
+            return 1 if input_dict["x1"] + input_dict["x2"] > 5 else 0
+
+        vm_model = init_model(
+            input_id="predict_fn_classifier", predict_fn=simple_classify_fn, __log=False
+        )
+        self.assertIsNone(vm_dataset.prediction_column(vm_model))
+
+        vm_dataset.assign_predictions(model=vm_model)
+        self.assertEqual(
+            vm_dataset.prediction_column(vm_model), "predict_fn_classifier_prediction"
+        )
+
+        # Check that the predictions are assigned to the dataset
+        self.assertTrue("predict_fn_classifier_prediction" in vm_dataset._df.columns)
+        self.assertIsInstance(vm_dataset.y_pred(vm_model), np.ndarray)
+        self.assertIsInstance(vm_dataset.y_pred_df(vm_model), pd.DataFrame)
+
+        # Verify the actual predictions match our function logic
+        expected_predictions = [0, 1, 1]  # [1+4=5 -> 0, 2+5=7 -> 1, 3+6=9 -> 1]
+        np.testing.assert_array_equal(vm_dataset.y_pred(vm_model), expected_predictions)
+
+    def test_assign_predictions_with_regression_predict_fn(self):
+        """
+        Test assigning predictions to dataset with a model created using predict_fn for regression
+        """
+        df = pd.DataFrame({"x1": [1, 2, 3], "x2": [4, 5, 6], "y": [0.1, 1.2, 2.3]})
+        vm_dataset = DataFrameDataset(
+            raw_dataset=df, target_column="y", feature_columns=["x1", "x2"]
+        )
+
+        # Define a simple regression predict function
+        def simple_regression_fn(input_dict):
+            # Simple linear combination: x1 * 0.5 + x2 * 0.3
+            return input_dict["x1"] * 0.5 + input_dict["x2"] * 0.3
+
+        vm_model = init_model(
+            input_id="predict_fn_regressor", predict_fn=simple_regression_fn, __log=False
+        )
+        self.assertIsNone(vm_dataset.prediction_column(vm_model))
+
+        vm_dataset.assign_predictions(model=vm_model)
+        self.assertEqual(
+            vm_dataset.prediction_column(vm_model), "predict_fn_regressor_prediction"
+        )
+
+        # Check that the predictions are assigned to the dataset
+        self.assertTrue("predict_fn_regressor_prediction" in vm_dataset._df.columns)
+        self.assertIsInstance(vm_dataset.y_pred(vm_model), np.ndarray)
+        self.assertIsInstance(vm_dataset.y_pred_df(vm_model), pd.DataFrame)
+
+        # Verify the actual predictions match our function logic
+        expected_predictions = [
+            1 * 0.5 + 4 * 0.3,  # 0.5 + 1.2 = 1.7
+            2 * 0.5 + 5 * 0.3,  # 1.0 + 1.5 = 2.5
+            3 * 0.5 + 6 * 0.3,  # 1.5 + 1.8 = 3.3
+        ]
+        np.testing.assert_array_almost_equal(
+            vm_dataset.y_pred(vm_model), expected_predictions
+        )
+
+    def test_assign_predictions_with_complex_predict_fn(self):
+        """
+        Test assigning predictions to dataset with a predict_fn that returns complex outputs
+        """
+        df = pd.DataFrame({"x1": [1, 2, 3], "x2": [4, 5, 6], "y": [0, 1, 0]})
+        vm_dataset = DataFrameDataset(
+            raw_dataset=df, target_column="y", feature_columns=["x1", "x2"]
+        )
+
+        # Define a predict function that returns a dictionary
+        def complex_predict_fn(input_dict):
+            prediction = 1 if input_dict["x1"] + input_dict["x2"] > 5 else 0
+            confidence = abs(input_dict["x1"] - input_dict["x2"]) / 10.0
+            return {
+                "prediction": prediction,
+                "confidence": confidence,
+                "feature_sum": input_dict["x1"] + input_dict["x2"],
+            }
+
+        vm_model = init_model(
+            input_id="complex_predict_fn", predict_fn=complex_predict_fn, __log=False
+        )
+
+        vm_dataset.assign_predictions(model=vm_model)
+        self.assertEqual(
+            vm_dataset.prediction_column(vm_model), "complex_predict_fn_prediction"
+        )
+
+        # Check that the predictions and other columns are assigned to the dataset
+        self.assertTrue("complex_predict_fn_prediction" in vm_dataset._df.columns)
+        self.assertTrue("confidence" in vm_dataset._df.columns)
+        self.assertTrue("feature_sum" in vm_dataset._df.columns)
+
+        # Verify the prediction values (extracted from "prediction" key in dict)
+        predictions = vm_dataset.y_pred(vm_model)
+        expected_predictions = [0, 1, 1]  # [1+4=5 -> 0, 2+5=7 -> 1, 3+6=9 -> 1]
+        np.testing.assert_array_equal(predictions, expected_predictions)
+
+        # Verify other dictionary keys were added as separate columns
+        confidence_values = vm_dataset._df["confidence"].values
+        expected_confidence = [0.3, 0.3, 0.3]  # |1-4|/10, |2-5|/10, |3-6|/10
+        np.testing.assert_array_almost_equal(confidence_values, expected_confidence)
+
+        feature_sum_values = vm_dataset._df["feature_sum"].values
+        expected_feature_sums = [5, 7, 9]  # 1+4, 2+5, 3+6
+        np.testing.assert_array_equal(feature_sum_values, expected_feature_sums)
+
+    def test_assign_predictions_with_multiple_predict_fn_models(self):
+        """
+        Test assigning predictions from multiple models created with predict_fn
+        """
+        df = pd.DataFrame({"x1": [1, 2, 3], "x2": [4, 5, 6], "y": [0, 1, 0]})
+        vm_dataset = DataFrameDataset(
+            raw_dataset=df, target_column="y", feature_columns=["x1", "x2"]
+        )
+
+        # Define two different predict functions
+        def predict_fn_1(input_dict):
+            return 1 if input_dict["x1"] > 1.5 else 0
+
+        def predict_fn_2(input_dict):
+            return 1 if input_dict["x2"] > 4.5 else 0
+
+        vm_model_1 = init_model(
+            input_id="predict_fn_model_1", predict_fn=predict_fn_1, __log=False
+        )
+        vm_model_2 = init_model(
+            input_id="predict_fn_model_2", predict_fn=predict_fn_2, __log=False
+        )
+
+        vm_dataset.assign_predictions(model=vm_model_1)
+        vm_dataset.assign_predictions(model=vm_model_2)
+
+        self.assertEqual(
+            vm_dataset.prediction_column(vm_model_1), "predict_fn_model_1_prediction"
+        )
+        self.assertEqual(
+            vm_dataset.prediction_column(vm_model_2), "predict_fn_model_2_prediction"
+        )
+
+        # Check that both prediction columns exist
+        self.assertTrue("predict_fn_model_1_prediction" in vm_dataset._df.columns)
+        self.assertTrue("predict_fn_model_2_prediction" in vm_dataset._df.columns)
+
+        # Verify predictions are different based on the different logic
+        predictions_1 = vm_dataset.y_pred(vm_model_1)
+        predictions_2 = vm_dataset.y_pred(vm_model_2)
+
+        expected_predictions_1 = [0, 1, 1]  # x1 > 1.5: [1 -> 0, 2 -> 1, 3 -> 1]
+        expected_predictions_2 = [0, 1, 1]  # x2 > 4.5: [4 -> 0, 5 -> 1, 6 -> 1]
+
+        np.testing.assert_array_equal(predictions_1, expected_predictions_1)
+        np.testing.assert_array_equal(predictions_2, expected_predictions_2)
+
+    def test_assign_predictions_with_predict_fn_and_prediction_values(self):
+        """
+        Test assigning predictions with predict_fn model but using pre-computed prediction values
+        """
+        df = pd.DataFrame({"x1": [1, 2, 3], "x2": [4, 5, 6], "y": [0, 1, 0]})
+        vm_dataset = DataFrameDataset(
+            raw_dataset=df, target_column="y", feature_columns=["x1", "x2"]
+        )
+
+        # Define a predict function
+        def predict_fn(input_dict):
+            return 1 if input_dict["x1"] + input_dict["x2"] > 5 else 0
+
+        vm_model = init_model(
+            input_id="predict_fn_with_values", predict_fn=predict_fn, __log=False
+        )
+
+        # Pre-computed predictions (different from what the function would return)
+        precomputed_predictions = [1, 0, 1]
+
+        with patch.object(vm_model, "predict") as mock_predict:
+            vm_dataset.assign_predictions(
+                model=vm_model, prediction_values=precomputed_predictions
+            )
+            # The model's predict method should not be called
+            mock_predict.assert_not_called()
+
+        self.assertEqual(
+            vm_dataset.prediction_column(vm_model), "predict_fn_with_values_prediction"
+        )
+
+        # Check that the precomputed predictions are used
+        self.assertTrue("predict_fn_with_values_prediction" in vm_dataset._df.columns)
+        np.testing.assert_array_equal(
+            vm_dataset.y_pred(vm_model), precomputed_predictions
+        )
+
+    def test_assign_predictions_with_invalid_predict_fn(self):
+        """
+        Test assigning predictions with an invalid predict_fn (should raise error during model creation)
+        """
+        # Try to create a model with a non-callable predict_fn
+        with self.assertRaises(ValueError) as context:
+            init_model(input_id="invalid_predict_fn", predict_fn="not_a_function", __log=False)
+
+        self.assertIn("FunctionModel requires a callable predict_fn", str(context.exception))
+
 
 if __name__ == "__main__":
     unittest.main()

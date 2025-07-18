@@ -35,7 +35,8 @@ class FunctionModel(VMModel):
 
     Attributes:
         predict_fn (callable): The predict function that should take a dictionary of
-            input features and return a prediction.
+            input features and return a prediction. Can return simple values or
+            dictionary objects.
         input_id (str, optional): The input ID for the model. Defaults to None.
         name (str, optional): The name of the model. Defaults to the name of the predict_fn.
         prompt (Prompt, optional): If using a prompt, the prompt object that defines the template
@@ -55,6 +56,13 @@ class FunctionModel(VMModel):
             X (pandas.DataFrame): The input features to predict on
 
         Returns:
-            List[Any]: The predictions
+            List[Any]: The predictions. Can contain simple values or dictionary objects
+                       depending on what the predict_fn returns.
         """
-        return [self.predict_fn(x) for x in X.to_dict(orient="records")]
+        predictions = []
+        for x in X.to_dict(orient="records"):
+            result = self.predict_fn(x)
+            # Handle both simple values and complex dictionary returns
+            predictions.append(result)
+
+        return predictions
