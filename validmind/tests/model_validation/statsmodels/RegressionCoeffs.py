@@ -7,10 +7,22 @@ from typing import Tuple
 
 import pandas as pd
 import plotly.graph_objects as go
-from scipy import stats
 
 from validmind import RawData, tags, tasks
-from validmind.errors import SkipTestError
+from validmind.errors import MissingDependencyError, SkipTestError
+
+try:
+    from scipy import stats
+except ImportError as e:
+    if "scipy" in str(e):
+        raise MissingDependencyError(
+            "Missing required package `scipy` for RegressionCoeffs. "
+            "Please run `pip install validmind[stats]` to use statistical tests",
+            required_dependencies=["scipy"],
+            extra="stats",
+        ) from e
+
+    raise e
 from validmind.vm_models import VMModel
 
 
