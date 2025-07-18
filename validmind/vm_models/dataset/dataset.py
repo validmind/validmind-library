@@ -258,6 +258,95 @@ class VMDataset(VMInput):
                 f"Options {kwargs} are not supported for this input"
             )
 
+    def _handle_deprecated_parameters(
+        self, prediction_probabilities, probability_values
+    ):
+        """Handle deprecated parameters and return the correct probability values."""
+        if prediction_probabilities is not None:
+            warnings.warn(
+                "The `prediction_probabilities` argument is deprecated. Use `probability_values` instead.",
+                DeprecationWarning,
+            )
+            return prediction_probabilities
+        return probability_values
+
+    def _check_existing_predictions(self, model):
+        """Check for existing predictions and probabilities, warn if overwriting."""
+        if self.prediction_column(model):
+            logger.warning("Model predictions already assigned... Overwriting.")
+
+        if self.probability_column(model):
+            logger.warning("Model probabilities already assigned... Overwriting.")
+
+    def _get_precomputed_values(self, prediction_column, probability_column):
+        """Get precomputed prediction and probability values from existing columns."""
+        prediction_values = None
+        probability_values = None
+
+        if prediction_column:
+            prediction_values = self._df[prediction_column].values
+
+            if probability_column:
+                probability_values = self._df[probability_column].values
+
+        return prediction_values, probability_values
+
+    def _compute_predictions_if_needed(self, model, prediction_values, **kwargs):
+        """Compute predictions if not provided."""
+        if prediction_values is None:
+            X = self.df if isinstance(model, (FunctionModel, PipelineModel)) else self.x
+            return compute_predictions(model, X, **kwargs)
+        return None, prediction_values
+
+    def _handle_dictionary_predictions(self, model, prediction_values):
+        """Handle dictionary predictions by converting to separate columns."""
+        if prediction_values and isinstance(prediction_values[0], dict):
+            df_prediction_values = pd.DataFrame.from_dict(
+                prediction_values, orient="columns"
+            )
+
+            for column_name in df_prediction_values.columns.tolist():
+                values = df_prediction_values[column_name].values
+
+                if column_name == "prediction":
+                    prediction_column = f"{model.input_id}_prediction"
+                    self._add_column(prediction_column, values)
+                    self.prediction_column(model, prediction_column)
+                else:
+                    self._add_column(column_name, values)
+
+            return (
+                True,
+                None,
+            )  # Return True to indicate dictionary handled, None for prediction_column
+        return False, None
+
+    def _add_prediction_columns(
+        self,
+        model,
+        prediction_column,
+        prediction_values,
+        probability_column,
+        probability_values,
+    ):
+        """Add prediction and probability columns to the dataset."""
+        if prediction_column is None:
+            prediction_column = f"{model.input_id}_prediction"
+
+        self._add_column(prediction_column, prediction_values)
+        self.prediction_column(model, prediction_column)
+
+        if probability_values is not None:
+            if probability_column is None:
+                probability_column = f"{model.input_id}_probabilities"
+            self._add_column(probability_column, probability_values)
+            self.probability_column(model, probability_column)
+        else:
+            logger.info(
+                "No probabilities computed or provided. "
+                "Not adding probability column to the dataset."
+            )
+
     def assign_predictions(
         self,
         model: VMModel,
@@ -281,13 +370,12 @@ class VMDataset(VMInput):
             prediction_probabilities (Optional[List[float]]): DEPRECATED: The values of the probabilities.
             **kwargs: Additional keyword arguments that will get passed through to the model's `predict` method.
         """
-        if prediction_probabilities is not None:
-            warnings.warn(
-                "The `prediction_probabilities` argument is deprecated. Use `probability_values` instead.",
-                DeprecationWarning,
-            )
-            probability_values = prediction_probabilities
+        # Handle deprecated parameters
+        probability_values = self._handle_deprecated_parameters(
+            prediction_probabilities, probability_values
+        )
 
+        # Validate input parameters
         self._validate_assign_predictions(
             model,
             prediction_column,
@@ -296,50 +384,36 @@ class VMDataset(VMInput):
             probability_values,
         )
 
-        if self.prediction_column(model):
-            logger.warning("Model predictions already assigned... Overwriting.")
+        # Check for existing predictions and warn if overwriting
+        self._check_existing_predictions(model)
 
-        if self.probability_column(model):
-            logger.warning("Model probabilities already assigned... Overwriting.")
+        # Get precomputed values if column names are provided
+        if prediction_column or probability_column:
+            prediction_values, prob_values_from_column = self._get_precomputed_values(
+                prediction_column, probability_column
+            )
+            if prob_values_from_column is not None:
+                probability_values = prob_values_from_column
 
-        # if the user passes a column name, we assume it has precomputed predictions
-        if prediction_column:
-            prediction_values = self._df[prediction_column].values
-
-            if probability_column:
-                probability_values = self._df[probability_column].values
-
+        # Compute predictions if not provided
         if prediction_values is None:
-            X = self.df if isinstance(model, (FunctionModel, PipelineModel)) else self.x
-            probability_values, prediction_values = compute_predictions(
-                model, X, **kwargs
+            probability_values, prediction_values = self._compute_predictions_if_needed(
+                model, prediction_values, **kwargs
             )
 
-        # Handle dictionary predictions by converting to separate columns
-        if prediction_values and isinstance(prediction_values[0], dict):
-            # Get all keys from the first dictionary
-            df_prediction_values = pd.DataFrame.from_dict(prediction_values, orient='columns')
+        # Handle dictionary predictions
+        is_dict_handled, _ = self._handle_dictionary_predictions(
+            model, prediction_values
+        )
 
-            for column_name in df_prediction_values.columns.tolist():  # Iterate over all keys
-                values = df_prediction_values[column_name].values
-                self._add_column(column_name, values)
-
-                if column_name == "prediction":
-                    prediction_column = f"{model.input_id}_prediction"
-                    self.prediction_column(model, column_name)
-        else:
-            prediction_column = prediction_column or f"{model.input_id}_prediction"
-            self._add_column(prediction_column, prediction_values)
-            self.prediction_column(model, prediction_column)
-
-        if probability_values is not None:
-            probability_column = probability_column or f"{model.input_id}_probabilities"
-            self._add_column(probability_column, probability_values)
-            self.probability_column(model, probability_column)
-        else:
-            logger.info(
-                "No probabilities computed or provided. "
-                "Not adding probability column to the dataset."
+        # Add prediction and probability columns (skip if dictionary was handled)
+        if not is_dict_handled:
+            self._add_prediction_columns(
+                model,
+                prediction_column,
+                prediction_values,
+                probability_column,
+                probability_values,
             )
 
     def prediction_column(self, model: VMModel, column_name: str = None) -> str:

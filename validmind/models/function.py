@@ -35,7 +35,7 @@ class FunctionModel(VMModel):
 
     Attributes:
         predict_fn (callable): The predict function that should take a dictionary of
-            input features and return a prediction. Can return simple values or 
+            input features and return a prediction. Can return simple values or
             dictionary objects.
         input_id (str, optional): The input ID for the model. Defaults to None.
         name (str, optional): The name of the model. Defaults to the name of the predict_fn.
