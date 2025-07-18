@@ -112,6 +112,7 @@ def ContextRecall(
     }
 
     df = get_renamed_columns(dataset._df, required_columns)
+    df = df[required_columns.keys()]
 
     result_df = evaluate(
         Dataset.from_pandas(df),

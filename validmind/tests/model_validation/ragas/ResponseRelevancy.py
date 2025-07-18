@@ -127,6 +127,7 @@ def ResponseRelevancy(
         required_columns["retrieved_contexts"] = retrieved_contexts_column
 
     df = get_renamed_columns(dataset._df, required_columns)
+    df = df[required_columns.keys()]
 
     metrics = [response_relevancy()]
 
@@ -137,7 +138,6 @@ def ResponseRelevancy(
     ).to_pandas()
 
     score_column = "answer_relevancy"
-
     fig_histogram = px.histogram(
         x=result_df[score_column].to_list(), nbins=10, title="Response Relevancy"
     )

@@ -149,8 +149,8 @@ def AspectCritic(
 
     if retrieved_contexts_column:
         required_columns["retrieved_contexts"] = retrieved_contexts_column
-
     df = get_renamed_columns(dataset._df, required_columns)
+    df = df[required_columns.keys()]
 
     custom_aspects = (
         [
