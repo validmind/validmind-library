@@ -3,18 +3,23 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 from itertools import combinations
+from typing import List, Tuple
 
 import numpy as np
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 from sklearn.metrics.pairwise import euclidean_distances
 
 from validmind import RawData, tags, tasks
+from validmind.vm_models import VMDataset, VMModel
 
 
 @tags("visualization", "dimensionality_reduction", "embeddings")
 @tasks("text_qa", "text_generation", "text_summarization")
-def EuclideanDistanceComparison(dataset, models):
+def EuclideanDistanceComparison(
+    dataset: VMDataset, models: List[VMModel]
+) -> Tuple[pd.DataFrame, go.Figure, RawData]:
     """
     Assesses and visualizes the dissimilarity between model embeddings using Euclidean distance, providing insights
     into model behavior and potential redundancy or diversity.

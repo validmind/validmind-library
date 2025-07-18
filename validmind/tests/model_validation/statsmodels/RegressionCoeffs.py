@@ -3,17 +3,20 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 
+from typing import Tuple
+
 import pandas as pd
 import plotly.graph_objects as go
 from scipy import stats
 
 from validmind import RawData, tags, tasks
 from validmind.errors import SkipTestError
+from validmind.vm_models import VMModel
 
 
 @tags("tabular_data", "visualization", "model_training")
 @tasks("regression")
-def RegressionCoeffs(model):
+def RegressionCoeffs(model: VMModel) -> Tuple[go.Figure, RawData, pd.DataFrame]:
     """
     Assesses the significance and uncertainty of predictor variables in a regression model through visualization of
     coefficients and their 95% confidence intervals.

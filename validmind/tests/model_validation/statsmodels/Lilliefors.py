@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Dict, List
+
 from statsmodels.stats.diagnostic import lilliefors
 
 from validmind import tags, tasks
@@ -10,7 +12,7 @@ from validmind.vm_models import VMDataset
 
 @tags("tabular_data", "data_distribution", "statistical_test", "statsmodels")
 @tasks("classification", "regression")
-def Lilliefors(dataset: VMDataset):
+def Lilliefors(dataset: VMDataset) -> List[Dict[str, float]]:
     """
     Assesses the normality of feature distributions in an ML model's training dataset using the Lilliefors test.
 

@@ -2,17 +2,22 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Tuple
+
 import evaluate
 import pandas as pd
 import plotly.graph_objects as go
 
 from validmind import RawData, tags, tasks
 from validmind.tests.utils import validate_prediction
+from validmind.vm_models import VMDataset, VMModel
 
 
 @tags("nlp", "text_data", "visualization")
 @tasks("text_classification", "text_summarization")
-def BleuScore(dataset, model):
+def BleuScore(
+    dataset: VMDataset, model: VMModel
+) -> Tuple[pd.DataFrame, go.Figure, RawData]:
     """
     Evaluates the quality of machine-generated text using BLEU metrics and visualizes the results through histograms
     and bar charts, alongside compiling a comprehensive table of descriptive statistics for BLEU scores.

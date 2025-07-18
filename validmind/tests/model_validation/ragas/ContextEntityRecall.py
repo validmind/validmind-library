@@ -3,12 +3,15 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 import warnings
+from typing import Dict, Tuple
 
 import plotly.express as px
+import plotly.graph_objects as go
 from datasets import Dataset
 
 from validmind import RawData, tags, tasks
 from validmind.errors import MissingDependencyError
+from validmind.vm_models import VMDataset
 
 from .utils import get_ragas_config, get_renamed_columns
 
@@ -30,12 +33,12 @@ except ImportError as e:
 @tags("ragas", "llm", "retrieval_performance")
 @tasks("text_qa", "text_generation", "text_summarization")
 def ContextEntityRecall(
-    dataset,
+    dataset: VMDataset,
     retrieved_contexts_column: str = "retrieved_contexts",
     reference_column: str = "reference",
     judge_llm=None,
     judge_embeddings=None,
-):
+) -> Tuple[Dict[str, list], go.Figure, go.Figure, RawData]:
     """
     Evaluates the context entity recall for dataset entries and visualizes the results.
 

@@ -2,7 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from typing import List
+
+from typing import Any, Dict, List, Tuple
 
 from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset
@@ -17,7 +18,7 @@ DATASET_LABELS = {
 
 @tags("tabular_data", "time_series_data", "text_data")
 @tasks("classification", "regression", "text_classification", "text_summarization")
-def DatasetSplit(datasets: List[VMDataset]):
+def DatasetSplit(datasets: List[VMDataset]) -> Tuple[List[Dict[str, Any]], RawData]:
     """
     Evaluates and visualizes the distribution proportions among training, testing, and validation datasets of an ML
     model.

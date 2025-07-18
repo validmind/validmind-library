@@ -9,7 +9,7 @@ from validmind import tags, tasks
 
 @tags("regression")
 @tasks("regression")
-def QuantileLoss(model, dataset, quantile=0.5):
+def QuantileLoss(model, dataset, quantile=0.5) -> float:
     """Calculates the quantile loss for a regression model."""
     error = dataset.y - dataset.y_pred(model)
 

@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Dict
+
 import pandas as pd
 from statsmodels.tsa.ar_model import AutoReg
 from statsmodels.tsa.stattools import adfuller
@@ -15,7 +17,7 @@ logger = get_logger(__name__)
 
 @tags("time_series_data", "statsmodels", "forecasting", "statistical_test")
 @tasks("regression")
-def AutoAR(dataset: VMDataset, max_ar_order: int = 3):
+def AutoAR(dataset: VMDataset, max_ar_order: int = 3) -> Dict[str, pd.DataFrame]:
     """
     Automatically identifies the optimal Autoregressive (AR) order for a time series using BIC and AIC criteria.
 

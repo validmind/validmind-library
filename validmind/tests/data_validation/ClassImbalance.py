@@ -20,7 +20,7 @@ from validmind.vm_models import VMDataset
 @tasks("classification")
 def ClassImbalance(
     dataset: VMDataset, min_percent_threshold: int = 10
-) -> Tuple[Dict[str, Any], go.Figure, bool]:
+) -> Tuple[Dict[str, Any], go.Figure, bool, RawData]:
     """
     Evaluates and quantifies class distribution imbalance in a dataset used by a machine learning model.
 
