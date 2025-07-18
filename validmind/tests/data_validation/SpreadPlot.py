@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Tuple
+
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
@@ -13,7 +15,7 @@ from validmind.vm_models import VMDataset
 
 @tags("time_series_data", "visualization")
 @tasks("regression")
-def SpreadPlot(dataset: VMDataset):
+def SpreadPlot(dataset: VMDataset) -> Tuple[plt.Figure, RawData]:
     """
     Assesses potential correlations between pairs of time series variables through visualization to enhance
     understanding of their relationships.

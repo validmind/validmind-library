@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Tuple
+
 import pandas as pd
 from statsmodels.stats.stattools import jarque_bera
 
@@ -10,7 +12,7 @@ from validmind import RawData, tags, tasks
 
 @tasks("classification", "regression")
 @tags("tabular_data", "data_distribution", "statistical_test", "statsmodels")
-def JarqueBera(dataset):
+def JarqueBera(dataset) -> Tuple[pd.DataFrame, RawData]:
     """
     Assesses normality of dataset features in an ML model using the Jarque-Bera test.
 

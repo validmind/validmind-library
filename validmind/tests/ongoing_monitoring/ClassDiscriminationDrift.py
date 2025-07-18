@@ -2,7 +2,7 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from typing import List
+from typing import Dict, List, Tuple
 
 import numpy as np
 import pandas as pd
@@ -38,7 +38,7 @@ def calculate_ks_statistic(y_true, y_prob):
 @tasks("classification", "text_classification")
 def ClassDiscriminationDrift(
     datasets: List[VMDataset], model: VMModel, drift_pct_threshold=20
-):
+) -> Tuple[Dict[str, pd.DataFrame], bool]:
     """
     Compares classification discrimination metrics between reference and monitoring datasets.
 

@@ -2,8 +2,11 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Dict, Tuple
+
 import matplotlib.pyplot as plt
 import numpy as np
+import plotly.graph_objects as go
 from sklearn.metrics import silhouette_samples, silhouette_score
 
 from validmind import RawData, tags, tasks
@@ -12,7 +15,9 @@ from validmind.vm_models import VMDataset, VMModel
 
 @tags("sklearn", "model_performance")
 @tasks("clustering")
-def SilhouettePlot(model: VMModel, dataset: VMDataset):
+def SilhouettePlot(
+    model: VMModel, dataset: VMDataset
+) -> Tuple[Dict[str, float], go.Figure, RawData]:
     """
     Calculates and visualizes Silhouette Score, assessing the degree of data point suitability to its cluster in ML
     models.

@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Dict, Tuple
+
 import pandas as pd
 import scorecardpy as sc
 
@@ -12,7 +14,9 @@ from validmind.vm_models import VMDataset
 
 @tags("tabular_data", "categorical_data")
 @tasks("classification")
-def WOEBinTable(dataset: VMDataset, breaks_adj: list = None):
+def WOEBinTable(
+    dataset: VMDataset, breaks_adj: list = None
+) -> Tuple[Dict[str, pd.DataFrame], RawData]:
     """
     Assesses the Weight of Evidence (WoE) and Information Value (IV) of each feature to evaluate its predictive power
     in a binary classification model.

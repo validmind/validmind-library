@@ -2,7 +2,7 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from typing import List
+from typing import Dict, List, Tuple
 
 import pandas as pd
 import plotly.graph_objs as go
@@ -18,7 +18,7 @@ def ClassImbalanceDrift(
     datasets: List[VMDataset],
     drift_pct_threshold: float = 5.0,
     title: str = "Class Distribution Drift",
-):
+) -> Tuple[go.Figure, Dict[str, pd.DataFrame], bool]:
     """
     Evaluates drift in class distribution between reference and monitoring datasets.
 

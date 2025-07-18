@@ -2,7 +2,7 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from typing import List
+from typing import Dict, List, Tuple
 
 import numpy as np
 import pandas as pd
@@ -26,7 +26,7 @@ def CalibrationCurveDrift(
     model: VMModel,
     n_bins: int = 10,
     drift_pct_threshold: float = 20,
-):
+) -> Tuple[go.Figure, Dict[str, pd.DataFrame], bool, RawData]:
     """
     Evaluates changes in probability calibration between reference and monitoring datasets.
 

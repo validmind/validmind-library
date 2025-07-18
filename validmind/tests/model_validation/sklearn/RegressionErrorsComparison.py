@@ -2,19 +2,24 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import List
+
 import numpy as np
 import pandas as pd
 from sklearn import metrics
 
 from validmind import tags, tasks
 from validmind.logging import get_logger
+from validmind.vm_models import VMDataset, VMModel
 
 logger = get_logger(__name__)
 
 
 @tags("model_performance", "sklearn")
 @tasks("regression", "time_series_forecasting")
-def RegressionErrorsComparison(datasets, models):
+def RegressionErrorsComparison(
+    datasets: List[VMDataset], models: List[VMModel]
+) -> pd.DataFrame:
     """
     Assesses multiple regression error metrics to compare model performance across different datasets, emphasizing
     systematic overestimation or underestimation and large percentage errors.

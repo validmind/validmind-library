@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Tuple
+
 import numpy as np
 import pandas as pd
 
@@ -16,7 +18,7 @@ def ScoreBandDefaultRates(
     model: VMModel,
     score_column: str = "score",
     score_bands: list = None,
-):
+) -> Tuple[pd.DataFrame, RawData]:
     """
     Analyzes default rates and population distribution across credit score bands.
 

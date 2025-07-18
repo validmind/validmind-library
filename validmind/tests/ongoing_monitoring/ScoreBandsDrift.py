@@ -2,7 +2,7 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from typing import List
+from typing import Dict, List, Tuple
 
 import numpy as np
 import pandas as pd
@@ -19,7 +19,7 @@ def ScoreBandsDrift(
     score_column: str = "score",
     score_bands: list = None,
     drift_threshold: float = 20.0,
-):
+) -> Tuple[Dict[str, pd.DataFrame], bool, RawData]:
     """
     Analyzes drift in population distribution and default rates across score bands.
 

@@ -455,6 +455,15 @@ class TestResult(Result):
         # Default empty dict if None
         config = config or {}
 
+        tasks.append(
+            api_client.alog_test_result(
+                result=self.serialize(),
+                section_id=section_id,
+                position=position,
+                config=config,
+            )
+        )
+
         if self.metric is not None:
             # metrics are logged as separate entities
             tasks.append(
@@ -466,15 +475,6 @@ class TestResult(Result):
                 )
             )
 
-        if self.tables:
-            tasks.append(
-                api_client.alog_test_result(
-                    result=self.serialize(),
-                    section_id=section_id,
-                    position=position,
-                    config=config,
-                )
-            )
         if self.figures:
             tasks.extend(
                 [api_client.alog_figure(figure) for figure in (self.figures or [])]
@@ -488,9 +488,11 @@ class TestResult(Result):
 
             tasks.append(
                 update_metadata(
-                    content_id=f"{content_id}::{revision_name}"
-                    if content_id
-                    else f"test_description:{self.result_id}::{revision_name}",
+                    content_id=(
+                        f"{content_id}::{revision_name}"
+                        if content_id
+                        else f"test_description:{self.result_id}::{revision_name}"
+                    ),
                     text=self.description,
                 )
             )

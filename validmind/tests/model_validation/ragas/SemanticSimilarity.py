@@ -3,12 +3,15 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 import warnings
+from typing import Dict, Tuple
 
 import plotly.express as px
+import plotly.graph_objects as go
 from datasets import Dataset
 
 from validmind import RawData, tags, tasks
 from validmind.errors import MissingDependencyError
+from validmind.vm_models import VMDataset
 
 from .utils import get_ragas_config, get_renamed_columns
 
@@ -30,12 +33,12 @@ except ImportError as e:
 @tags("ragas", "llm")
 @tasks("text_qa", "text_generation", "text_summarization")
 def SemanticSimilarity(
-    dataset,
-    response_column="response",
-    reference_column="reference",
+    dataset: VMDataset,
+    response_column: str = "response",
+    reference_column: str = "reference",
     judge_llm=None,
     judge_embeddings=None,
-):
+) -> Tuple[Dict[str, list], go.Figure, go.Figure, RawData]:
     """
     Calculates the semantic similarity between generated responses and ground truths
 

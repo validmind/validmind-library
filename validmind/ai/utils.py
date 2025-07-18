@@ -130,7 +130,7 @@ def get_judge_config(judge_llm=None, judge_embeddings=None):
                     "ensure that you are connected to the ValidMind API and confirm ValidMind AI is enabled for your account."
                 )
         if isinstance(judge_embeddings, FunctionModel) and judge_embeddings is not None:
-            if isinstance(judge_llm.model, BaseChatModel):
+            if isinstance(judge_embeddings.model, Embeddings):
                 judge_embeddings = judge_embeddings.model
             else:
                 raise ValueError(

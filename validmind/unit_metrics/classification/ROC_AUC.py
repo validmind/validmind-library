@@ -7,11 +7,12 @@ from sklearn.metrics import roc_auc_score
 from sklearn.preprocessing import LabelBinarizer
 
 from validmind import tags, tasks
+from validmind.vm_models import VMDataset, VMModel
 
 
 @tasks("classification")
 @tags("classification")
-def ROC_AUC(model, dataset, **kwargs):
+def ROC_AUC(model: VMModel, dataset: VMDataset, **kwargs) -> float:
     """Calculates the ROC AUC for a classification model."""
     y_true = dataset.y
 

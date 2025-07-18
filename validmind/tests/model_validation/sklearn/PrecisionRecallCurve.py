@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Tuple
+
 import numpy as np
 import plotly.graph_objects as go
 from sklearn.metrics import precision_recall_curve
@@ -14,7 +16,9 @@ from validmind.vm_models import VMDataset, VMModel
 
 @tags("sklearn", "binary_classification", "model_performance", "visualization")
 @tasks("classification", "text_classification")
-def PrecisionRecallCurve(model: VMModel, dataset: VMDataset):
+def PrecisionRecallCurve(
+    model: VMModel, dataset: VMDataset
+) -> Tuple[go.Figure, RawData]:
     """
     Evaluates the precision-recall trade-off for binary classification models and visualizes the Precision-Recall curve.
 

@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Dict, List, Tuple
+
 from sklearn.metrics import (
     adjusted_mutual_info_score,
     adjusted_rand_score,
@@ -69,7 +71,9 @@ identify members of the same class (precision) and the ability to capture all me
 
 @tags("sklearn", "model_performance", "clustering")
 @tasks("clustering")
-def ClusterPerformanceMetrics(model: VMModel, dataset: VMDataset):
+def ClusterPerformanceMetrics(
+    model: VMModel, dataset: VMDataset
+) -> Tuple[List[Dict[str, float]], RawData]:
     """
     Evaluates the performance of clustering machine learning models using multiple established metrics.
 
