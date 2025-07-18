@@ -300,7 +300,7 @@ class VMDataset(VMInput):
 
     def _handle_dictionary_predictions(self, model, prediction_values):
         """Handle dictionary predictions by converting to separate columns."""
-        if prediction_values and isinstance(prediction_values[0], dict):
+        if prediction_values is not None and len(prediction_values) > 0 and isinstance(prediction_values[0], dict):
             df_prediction_values = pd.DataFrame.from_dict(
                 prediction_values, orient="columns"
             )
