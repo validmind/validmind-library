@@ -8,7 +8,7 @@ Dataset class wrapper
 
 import warnings
 from copy import deepcopy
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 import numpy as np
 import pandas as pd
@@ -317,7 +317,7 @@ class VMDataset(VMInput):
                     self._add_column(prediction_column, values)
                     self.prediction_column(model, prediction_column)
                 else:
-                    self._add_column(column_name, values)
+                    self._add_column(f"{model.input_id}_{column_name}", values)
 
             return (
                 True,
@@ -355,11 +355,11 @@ class VMDataset(VMInput):
         self,
         model: VMModel,
         prediction_column: Optional[str] = None,
-        prediction_values: Optional[List[Any]] = None,
+        prediction_values: Optional[Any] = None,
         probability_column: Optional[str] = None,
-        probability_values: Optional[List[float]] = None,
+        probability_values: Optional[Any] = None,
         prediction_probabilities: Optional[
-            List[float]
+            Any
         ] = None,  # DEPRECATED: use probability_values
         **kwargs: Dict[str, Any],
     ) -> None:
@@ -368,16 +368,32 @@ class VMDataset(VMInput):
         Args:
             model (VMModel): The model used to generate the predictions.
             prediction_column (Optional[str]): The name of the column containing the predictions.
-            prediction_values (Optional[List[Any]]): The values of the predictions.
+            prediction_values (Optional[Any]): The values of the predictions. Can be array-like (list, numpy array, pandas Series, etc.).
             probability_column (Optional[str]): The name of the column containing the probabilities.
-            probability_values (Optional[List[float]]): The values of the probabilities.
-            prediction_probabilities (Optional[List[float]]): DEPRECATED: The values of the probabilities.
+            probability_values (Optional[Any]): The values of the probabilities. Can be array-like (list, numpy array, pandas Series, etc.).
+            prediction_probabilities (Optional[Any]): DEPRECATED: The values of the probabilities. Use probability_values instead.
             **kwargs: Additional keyword arguments that will get passed through to the model's `predict` method.
         """
         # Handle deprecated parameters
         probability_values = self._handle_deprecated_parameters(
             prediction_probabilities, probability_values
         )
+
+        # Convert pandas Series to numpy array for prediction_values
+        if (
+            hasattr(prediction_values, "values")
+            and hasattr(prediction_values, "index")
+            and hasattr(prediction_values, "dtype")
+        ):
+            prediction_values = prediction_values.values
+
+        # Convert pandas Series to numpy array for probability_values
+        if (
+            hasattr(probability_values, "values")
+            and hasattr(probability_values, "index")
+            and hasattr(probability_values, "dtype")
+        ):
+            probability_values = probability_values.values
 
         # Validate input parameters
         self._validate_assign_predictions(
