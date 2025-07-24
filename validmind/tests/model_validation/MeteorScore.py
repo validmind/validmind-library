@@ -2,17 +2,22 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Tuple
+
 import evaluate
 import pandas as pd
 import plotly.graph_objects as go
 
 from validmind import RawData, tags, tasks
 from validmind.tests.utils import validate_prediction
+from validmind.vm_models import VMDataset, VMModel
 
 
 @tags("nlp", "text_data", "visualization")
 @tasks("text_classification", "text_summarization")
-def MeteorScore(dataset, model):
+def MeteorScore(
+    dataset: VMDataset, model: VMModel
+) -> Tuple[pd.DataFrame, go.Figure, RawData]:
     """
     Assesses the quality of machine-generated translations by comparing them to human-produced references using the
     METEOR score, which evaluates precision, recall, and word order.

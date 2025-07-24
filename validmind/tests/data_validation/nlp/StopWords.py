@@ -7,6 +7,7 @@ Threshold based tests
 """
 
 from collections import defaultdict
+from typing import Dict, Tuple
 
 import nltk
 import pandas as pd
@@ -21,7 +22,7 @@ from validmind.vm_models import VMDataset
 @tasks("text_classification", "text_summarization")
 def StopWords(
     dataset: VMDataset, min_percent_threshold: float = 0.5, num_words: int = 25
-):
+) -> Tuple[Dict[str, pd.DataFrame], go.Figure, bool, RawData]:
     """
     Evaluates and visualizes the frequency of English stop words in a text dataset against a defined threshold.
 

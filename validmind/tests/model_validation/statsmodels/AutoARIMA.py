@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Dict, List
+
 from statsmodels.tsa.arima.model import ARIMA
 from statsmodels.tsa.stattools import adfuller
 
@@ -14,7 +16,7 @@ logger = get_logger(__name__)
 
 @tags("time_series_data", "forecasting", "model_selection", "statsmodels")
 @tasks("regression")
-def AutoARIMA(model: VMModel, dataset: VMDataset):
+def AutoARIMA(model: VMModel, dataset: VMDataset) -> List[Dict[str, float]]:
     """
     Evaluates ARIMA models for time-series forecasting, ranking them using Bayesian and Akaike Information Criteria.
 

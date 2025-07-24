@@ -2,17 +2,22 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Optional, Tuple
 
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 from sklearn import metrics
 
 from validmind import RawData, tags, tasks
+from validmind.vm_models import VMDataset, VMModel
 
 
 @tags("model_performance", "sklearn")
 @tasks("regression", "time_series_forecasting")
-def TimeSeriesR2SquareBySegments(dataset, model, segments=None):
+def TimeSeriesR2SquareBySegments(
+    dataset: VMDataset, model: VMModel, segments: Optional[int] = None
+) -> Tuple[pd.DataFrame, go.Figure, RawData]:
     """
     Evaluates the R-Squared values of regression models over specified time segments in time series data to assess
     segment-wise model performance.

@@ -2,7 +2,7 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from typing import List
+from typing import Dict, List, Tuple
 
 import numpy as np
 import pandas as pd
@@ -21,7 +21,7 @@ def PredictionProbabilitiesHistogramDrift(
     model: VMModel,
     title="Prediction Probabilities Histogram Drift",
     drift_pct_threshold: float = 20.0,
-):
+) -> Tuple[go.Figure, Dict[str, pd.DataFrame], bool, RawData]:
     """
     Compares prediction probability distributions between reference and monitoring datasets.
 

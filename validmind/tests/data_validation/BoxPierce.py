@@ -2,6 +2,9 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+
+from typing import Tuple
+
 import pandas as pd
 from statsmodels.stats.diagnostic import acorr_ljungbox
 
@@ -10,7 +13,7 @@ from validmind import RawData, tags, tasks
 
 @tasks("regression")
 @tags("time_series_data", "forecasting", "statistical_test", "statsmodels")
-def BoxPierce(dataset):
+def BoxPierce(dataset) -> Tuple[pd.DataFrame, RawData]:
     """
     Detects autocorrelation in time-series data through the Box-Pierce test to validate model performance.
 
