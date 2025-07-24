@@ -405,8 +405,8 @@ class TestTabularDataset(TestCase):
 
         # Check that the predictions and other columns are assigned to the dataset
         self.assertTrue("complex_predict_fn_prediction" in vm_dataset._df.columns)
-        self.assertTrue("confidence" in vm_dataset._df.columns)
-        self.assertTrue("feature_sum" in vm_dataset._df.columns)
+        self.assertTrue("complex_predict_fn_confidence" in vm_dataset._df.columns)
+        self.assertTrue("complex_predict_fn_feature_sum" in vm_dataset._df.columns)
 
         # Verify the prediction values (extracted from "prediction" key in dict)
         predictions = vm_dataset.y_pred(vm_model)
@@ -414,11 +414,11 @@ class TestTabularDataset(TestCase):
         np.testing.assert_array_equal(predictions, expected_predictions)
 
         # Verify other dictionary keys were added as separate columns
-        confidence_values = vm_dataset._df["confidence"].values
+        confidence_values = vm_dataset._df["complex_predict_fn_confidence"].values
         expected_confidence = [0.3, 0.3, 0.3]  # |1-4|/10, |2-5|/10, |3-6|/10
         np.testing.assert_array_almost_equal(confidence_values, expected_confidence)
 
-        feature_sum_values = vm_dataset._df["feature_sum"].values
+        feature_sum_values = vm_dataset._df["complex_predict_fn_feature_sum"].values
         expected_feature_sums = [5, 7, 9]  # 1+4, 2+5, 3+6
         np.testing.assert_array_equal(feature_sum_values, expected_feature_sums)
 
