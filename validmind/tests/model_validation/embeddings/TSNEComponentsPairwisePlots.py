@@ -3,25 +3,28 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 import itertools
+from typing import Tuple
 
 import numpy as np
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 from sklearn.manifold import TSNE
 from sklearn.preprocessing import StandardScaler
 
 from validmind import RawData, tags, tasks
+from validmind.vm_models import VMDataset, VMModel
 
 
 @tags("visualization", "dimensionality_reduction", "embeddings")
 @tasks("text_qa", "text_generation", "text_summarization")
 def TSNEComponentsPairwisePlots(
-    dataset,
-    model,
-    n_components=2,
-    perplexity=30,
-    title="t-SNE",
-):
+    dataset: VMDataset,
+    model: VMModel,
+    n_components: int = 2,
+    perplexity: int = 30,
+    title: str = "t-SNE",
+) -> Tuple[go.Figure, RawData]:
     """
     Creates scatter plots for pairwise combinations of t-SNE components to visualize embeddings and highlight potential
     clustering structures.

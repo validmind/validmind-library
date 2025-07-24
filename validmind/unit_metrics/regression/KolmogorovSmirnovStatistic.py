@@ -5,11 +5,12 @@
 import numpy as np
 
 from validmind import tags, tasks
+from validmind.vm_models import VMDataset, VMModel
 
 
 @tags("regression")
 @tasks("regression")
-def KolmogorovSmirnovStatistic(dataset, model):
+def KolmogorovSmirnovStatistic(dataset: VMDataset, model: VMModel) -> float:
     """Calculates the Kolmogorov-Smirnov statistic for a regression model."""
     y_true = dataset.y.flatten()
     y_pred = dataset.y_pred(model)

@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Dict, List, Tuple
+
 from sklearn.metrics import mean_squared_error, r2_score
 
 from validmind import RawData, tags, tasks
@@ -12,7 +14,9 @@ from .statsutils import adj_r2_score
 
 @tags("model_performance", "regression")
 @tasks("regression")
-def RegressionModelSummary(dataset: VMDataset, model: VMModel):
+def RegressionModelSummary(
+    dataset: VMDataset, model: VMModel
+) -> Tuple[List[Dict[str, float]], RawData]:
     """
     Evaluates regression model performance using metrics including R-Squared, Adjusted R-Squared, MSE, and RMSE.
 

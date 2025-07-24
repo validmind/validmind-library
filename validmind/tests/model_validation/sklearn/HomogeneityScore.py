@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Dict, List, Tuple
+
 from sklearn import metrics
 
 from validmind import RawData, tags, tasks
@@ -10,7 +12,9 @@ from validmind.vm_models import VMDataset, VMModel
 
 @tags("sklearn", "model_performance")
 @tasks("clustering")
-def HomogeneityScore(dataset: VMDataset, model: VMModel):
+def HomogeneityScore(
+    dataset: VMDataset, model: VMModel
+) -> Tuple[List[Dict[str, float]], RawData]:
     """
     Assesses clustering homogeneity by comparing true and predicted labels, scoring from 0 (heterogeneous) to 1
     (homogeneous).

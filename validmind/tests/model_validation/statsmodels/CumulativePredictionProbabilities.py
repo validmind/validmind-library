@@ -2,16 +2,21 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Tuple
+
 import numpy as np
 import plotly.graph_objects as go
 from matplotlib import cm
 
 from validmind import RawData, tags, tasks
+from validmind.vm_models import VMDataset, VMModel
 
 
 @tags("visualization", "credit_risk")
 @tasks("classification")
-def CumulativePredictionProbabilities(dataset, model, title="Cumulative Probabilities"):
+def CumulativePredictionProbabilities(
+    dataset: VMDataset, model: VMModel, title: str = "Cumulative Probabilities"
+) -> Tuple[go.Figure, RawData]:
     """
     Visualizes cumulative probabilities of positive and negative classes for both training and testing in classification models.
 

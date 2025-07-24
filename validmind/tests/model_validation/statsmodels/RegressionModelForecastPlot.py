@@ -2,10 +2,11 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from typing import Union
+from typing import Optional, Tuple
 
 import matplotlib.pyplot as plt
 import pandas as pd
+import plotly.graph_objects as go
 
 from validmind import RawData, tags, tasks
 from validmind.logging import get_logger
@@ -19,9 +20,9 @@ logger = get_logger(__name__)
 def RegressionModelForecastPlot(
     model: VMModel,
     dataset: VMDataset,
-    start_date: Union[str, None] = None,
-    end_date: Union[str, None] = None,
-):
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None,
+) -> Tuple[go.Figure, RawData]:
     """
     Generates plots to visually compare the forecasted outcomes of a regression model against actual observed values over
     a specified date range.

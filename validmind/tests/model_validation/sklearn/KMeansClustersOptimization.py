@@ -2,7 +2,7 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from typing import List, Union
+from typing import List, Optional, Tuple
 
 import numpy as np
 import plotly.graph_objects as go
@@ -19,8 +19,8 @@ from validmind.vm_models import VMDataset, VMModel
 @tags("sklearn", "model_performance", "kmeans")
 @tasks("clustering")
 def KMeansClustersOptimization(
-    model: VMModel, dataset: VMDataset, n_clusters: Union[List[int], None] = None
-):
+    model: VMModel, dataset: VMDataset, n_clusters: Optional[List[int]] = None
+) -> Tuple[go.Figure, RawData]:
     """
     Optimizes the number of clusters in K-means models using Elbow and Silhouette methods.
 

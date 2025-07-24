@@ -6,11 +6,12 @@ import pandas as pd
 
 from validmind import tags, tasks
 from validmind.utils import get_model_info
+from validmind.vm_models import VMModel
 
 
 @tags("model_training", "metadata")
 @tasks("regression", "time_series_forecasting")
-def ModelMetadata(model):
+def ModelMetadata(model: VMModel) -> pd.DataFrame:
     """
     Compare metadata of different models and generate a summary table with the results.
 

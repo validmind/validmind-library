@@ -2,7 +2,7 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from typing import List
+from typing import List, Tuple
 
 import numpy as np
 import plotly.graph_objects as go
@@ -20,7 +20,9 @@ from validmind.vm_models import VMDataset, VMModel
     "visualization",
 )
 @tasks("classification", "text_classification")
-def ROCCurveDrift(datasets: List[VMDataset], model: VMModel):
+def ROCCurveDrift(
+    datasets: List[VMDataset], model: VMModel
+) -> Tuple[go.Figure, go.Figure, RawData]:
     """
     Compares ROC curves between reference and monitoring datasets.
 

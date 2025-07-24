@@ -3,12 +3,15 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 import warnings
+from typing import Dict, Tuple
 
 import plotly.express as px
+import plotly.graph_objects as go
 from datasets import Dataset
 
 from validmind import RawData, tags, tasks
 from validmind.errors import MissingDependencyError
+from validmind.vm_models import VMDataset
 
 from .utils import get_ragas_config, get_renamed_columns
 
@@ -30,13 +33,13 @@ except ImportError as e:
 @tags("ragas", "llm", "rag_performance")
 @tasks("text_qa", "text_generation", "text_summarization")
 def ResponseRelevancy(
-    dataset,
-    user_input_column="user_input",
-    retrieved_contexts_column=None,
-    response_column="response",
+    dataset: VMDataset,
+    user_input_column: str = "user_input",
+    retrieved_contexts_column: str = None,
+    response_column: str = "response",
     judge_llm=None,
     judge_embeddings=None,
-):
+) -> Tuple[Dict[str, list], go.Figure, go.Figure, RawData]:
     """
     Assesses how pertinent the generated answer is to the given prompt.
 
@@ -124,6 +127,7 @@ def ResponseRelevancy(
         required_columns["retrieved_contexts"] = retrieved_contexts_column
 
     df = get_renamed_columns(dataset._df, required_columns)
+    df = df[required_columns.keys()]
 
     metrics = [response_relevancy()]
 
@@ -134,7 +138,6 @@ def ResponseRelevancy(
     ).to_pandas()
 
     score_column = "answer_relevancy"
-
     fig_histogram = px.histogram(
         x=result_df[score_column].to_list(), nbins=10, title="Response Relevancy"
     )

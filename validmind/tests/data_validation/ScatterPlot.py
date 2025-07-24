@@ -2,6 +2,7 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+import matplotlib.figure
 import matplotlib.pyplot as plt
 import seaborn as sns
 
@@ -10,7 +11,7 @@ from validmind import tags, tasks
 
 @tags("tabular_data", "visualization")
 @tasks("classification", "regression")
-def ScatterPlot(dataset):
+def ScatterPlot(dataset) -> matplotlib.figure.Figure:
     """
     Assesses visual relationships, patterns, and outliers among features in a dataset through scatter plot matrices.
 
