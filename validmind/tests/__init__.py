@@ -43,6 +43,8 @@ __all__ = [
     "data_validation",
     "model_validation",
     "prompt_validation",
+    "plots",
+    "stats",
     "list_tests",
     "load_test",
     "describe_test",
