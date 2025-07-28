@@ -7,10 +7,23 @@ from typing import Tuple
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
-from scipy.stats import norm
 
 from validmind import RawData, tags, tasks
+from validmind.errors import MissingDependencyError
 from validmind.vm_models import VMDataset, VMModel
+
+try:
+    from scipy.stats import norm
+except ImportError as e:
+    if "scipy" in str(e):
+        raise MissingDependencyError(
+            "Missing required package `scipy` for TimeSeriesPredictionWithCI. "
+            "Please run `pip install validmind[stats]` to use statistical tests",
+            required_dependencies=["scipy"],
+            extra="stats",
+        ) from e
+
+    raise e
 
 
 @tags("model_predictions", "visualization")
