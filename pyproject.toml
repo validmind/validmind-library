@@ -13,51 +13,45 @@ readme = "README.pypi.md"
 version = "2.8.29"
 
 [tool.poetry.dependencies]
-aiohttp = {extras = ["speedups"], version = "*"}
-anywidget = "^0.9.13"
+aiohttp = { extras = ["speedups"], version = "*" }
 arch = "*"
 bert-score = ">=0.3.13"
 catboost = "*"
 datasets = "^2.10.0"
 evaluate = "*"
-h11 = ">=0.16.0"
 ipywidgets = "*"
 kaleido = ">=0.2.1,!=0.2.1.post1"
-langchain-openai = {version = ">=0.1.8", optional = true}
+langchain-openai = { version = ">=0.1.8", optional = true }
 langdetect = "*"
-llvmlite = {version = "*", python = ">=3.8,<=3.11"}
 matplotlib = "*"
 mistune = "^3.0.2"
 nest-asyncio = "^1.6.0"
 nltk = "^3.8.1"
-numba = "<0.59.0" # TODO: https://github.com/validmind/validmind-library/pull/28
-numpy = "*"
+numba = "*"                                                 # TODO: https://github.com/validmind/validmind-library/pull/28
 openai = ">=1"
-pandas = ">=1.1,<=2.0.3"
-plotly = "<6.0.0"
-plotly-express = "*"
+pandas = "^2.0.3"
+plotly = ">=5.0.0"
 polars = "*"
-pycocoevalcap = {version = "^1.2", optional = true}
-python = ">=3.9.0,<3.12"
+python = ">=3.9.0,<3.13"
 python-dotenv = "*"
-ragas = {version = ">=0.2.3,<=0.2.7", optional = true}
+ragas = { version = ">=0.2.3,<=0.2.7", optional = true }
 rouge = ">=1"
-scikit-learn = "*,<1.6.0"
-scipy = "*"
+scikit-learn = "*"
+scipy = { version = "*", optional = true }
 scorecardpy = "^0.1.9.6"
 seaborn = "*"
-sentencepiece = {version = "^0.2.0", optional = true}
+sentencepiece = { version = "^0.2.0", optional = true }
 sentry-sdk = "^1.24.0"
-shap = "0.44.1"
-statsmodels = "*"
+shap = ">=0.46.0"
+statsmodels = { version = "*", optional = true }
 tabulate = "^0.8.9"
 textblob = "^0.18.0.post0"
 tiktoken = "*"
-torch = {version = "2.7.0", optional = true}
+torch = { version = "2.7.0", optional = true }
 tqdm = "*"
-transformers = {version = "^4.32.0", optional = true}
-xgboost = ">=1.5.2,<3"
-yfinance = "^0.2.48"
+transformers = { version = "^4.32.0", optional = true }
+xgboost = { version = ">=1.5.2,<3", optional = true }
+anywidget = "*"
 
 [tool.poetry.group.dev.dependencies]
 black = "^22.1.0"
@@ -81,11 +75,14 @@ twine = "^4.0.2"
 [tool.poetry.extras]
 all = [
   "torch",
+  "xgboost",
   "transformers",
   "pycocoevalcap",
   "ragas",
   "sentencepiece",
   "langchain-openai",
+  "scipy",
+  "statsmodels",
 ]
 huggingface = ["transformers", "sentencepiece"]
 llm = [
@@ -97,6 +94,8 @@ llm = [
   "langchain-openai",
 ]
 pytorch = ["torch"]
+stats = ["scipy", "statsmodels"]
+xgboost = ["xgboost"]
 
 [build-system]
 build-backend = "poetry.core.masonry.api"
