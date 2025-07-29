@@ -76,6 +76,14 @@ jobs:
       - name: Unit Tests
         run: make test
 
+      - name: Test Minimum Dependencies (Python 3.9)
+        run: |
+          poetry run tox -e py39-min
+
+      - name: Test Latest Dependencies (Python 3.9)  
+        run: |
+          poetry run tox -e py39-max
+
       # Tests that we can build the docs
       - name: Generate Docs
         run: make docs

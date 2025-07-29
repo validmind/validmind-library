@@ -87,10 +87,30 @@ verify-exposed-credentials:
 ensure-clean-notebooks:
 	poetry run python scripts/ensure_clean_notebooks.py
 
+# Dependency testing with tox
+test-deps-min:
+	poetry run tox -e py39-min,py310-min,py311-min,py312-min
+
+test-deps-max:
+	poetry run tox -e py39-max,py310-max,py311-max,py312-max
+
+test-python-versions:
+	poetry run tox -e py39,py310,py311,py312
+
+test-freeze-env:
+ifdef FREEZE_FILE
+	FREEZE_FILE=$(FREEZE_FILE) poetry run tox -e freeze
+else
+	@echo "Usage: make test-freeze-env FREEZE_FILE=path/to/requirements.txt"
+endif
+
+test-tox-all:
+	poetry run tox
+
 # Quick target to run all checks
 check: copyright format lint test verify-copyright verify-exposed-credentials ensure-clean-notebooks
 
-.PHONY: docs quarto-docs
+.PHONY: docs quarto-docs test-deps-min test-deps-max test-python-versions test-freeze-env test-tox-all
 
 notebook:
 	@python notebooks/templates/e2e_template.py
