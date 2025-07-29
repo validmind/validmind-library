@@ -7,5 +7,9 @@
   "python.analysis.typeCheckingMode": "off",
   "python.analysis.extraPaths": [
     "./tests"
-  ]
+  ],
+  "cursorpyright.analysis.extraPaths": [
+    "./tests"
+  ],
+  "cursorpyright.analysis.typeCheckingMode": "off"
 }

@@ -1,0 +1,224 @@
+name: Dependency Compatibility Testing
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'pyproject.toml'
+      - 'requirements/**'
+      - 'tox.ini'
+      - 'validmind/**'
+      - 'tests/**'
+  pull_request:
+    branches: ['*']
+    paths:
+      - 'pyproject.toml'
+      - 'requirements/**'
+      - 'tox.ini'
+      - 'validmind/**'
+      - 'tests/**'
+  schedule:
+    # Run weekly on Sundays at 2 AM UTC to catch new dependency releases
+    - cron: '0 2 * * 0'
+  workflow_dispatch:
+    inputs:
+      test_type:
+        description: 'Type of dependency test to run'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - 'all'
+          - 'min-versions'
+          - 'max-versions'
+          - 'python-versions'
+          - 'pip-freeze'
+
+permissions:
+  contents: read
+
+jobs:
+  dependency-matrix:
+    name: Test Python ${{ matrix.python-version }} with ${{ matrix.deps-type }} dependencies
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.9', '3.10', '3.11', '3.12']
+        deps-type: ['min', 'max', 'default']
+        exclude:
+          # Skip some combinations to reduce CI time
+          - python-version: '3.10'
+            deps-type: 'default'
+          - python-version: '3.11'
+            deps-type: 'default'
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential
+
+      - name: Install tox
+        run: |
+          python -m pip install --upgrade pip
+          pip install tox
+
+      - name: Run dependency tests
+        run: |
+          tox -e py$(echo ${{ matrix.python-version }} | tr -d .)-deps-${{ matrix.deps-type }}
+        env:
+          # Limit OpenMP threads to prevent CI resource issues
+          OMP_NUM_THREADS: 1
+          MKL_NUM_THREADS: 1
+
+  pip-freeze-testing:
+    name: Test Client Pip Freeze Environments
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.test_type == 'pip-freeze' || github.event_name == 'schedule'
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+          cache: 'pip'
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential
+
+      - name: Install tox
+        run: |
+          python -m pip install --upgrade pip
+          pip install tox
+
+      - name: Test pip freeze environments
+        run: |
+          tox -e pip-freeze-test
+        env:
+          OMP_NUM_THREADS: 1
+          MKL_NUM_THREADS: 1
+
+  min-versions-only:
+    name: Test Minimum Dependency Versions
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.test_type == 'min-versions'
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+          cache: 'pip'
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential
+
+      - name: Install tox
+        run: |
+          python -m pip install --upgrade pip
+          pip install tox
+
+      - name: Test minimum versions
+        run: |
+          make test-deps-min
+        env:
+          OMP_NUM_THREADS: 1
+          MKL_NUM_THREADS: 1
+
+  max-versions-only:
+    name: Test Maximum Dependency Versions  
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.test_type == 'max-versions'
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential
+
+      - name: Install tox
+        run: |
+          python -m pip install --upgrade pip
+          pip install tox
+
+      - name: Test maximum versions
+        run: |
+          make test-deps-max
+        env:
+          OMP_NUM_THREADS: 1
+          MKL_NUM_THREADS: 1
+
+  python-versions-only:
+    name: Test All Python Versions with Default Dependencies
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.test_type == 'python-versions'
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+          cache: 'pip'
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential
+
+      - name: Install tox
+        run: |
+          python -m pip install --upgrade pip
+          pip install tox
+
+      - name: Test all Python versions
+        run: |
+          make test-python-versions
+        env:
+          OMP_NUM_THREADS: 1
+          MKL_NUM_THREADS: 1
+
+  report-status:
+    name: Report Dependency Testing Status
+    runs-on: ubuntu-latest
+    needs: [dependency-matrix]
+    if: always()
+    
+    steps:
+      - name: Report results
+        run: |
+          echo "Dependency testing completed"
+          echo "Matrix job status: ${{ needs.dependency-matrix.result }}"
+          
+          if [[ "${{ needs.dependency-matrix.result }}" == "failure" ]]; then
+            echo "❌ Some dependency combinations failed"
+            exit 1
+          else
+            echo "✅ All dependency combinations passed"
+          fi 
