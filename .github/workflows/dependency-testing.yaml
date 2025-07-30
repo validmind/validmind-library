@@ -74,7 +74,11 @@ jobs:
 
       - name: Run dependency tests
         run: |
-          tox -e py$(echo ${{ matrix.python-version }} | tr -d .)-${{ matrix.deps-type }}
+          if [[ "${{ matrix.deps-type }}" == "default" ]]; then
+            tox -e py$(echo ${{ matrix.python-version }} | tr -d .)
+          else
+            tox -e py$(echo ${{ matrix.python-version }} | tr -d .)-${{ matrix.deps-type }}
+          fi
         env:
           # Limit OpenMP threads to prevent CI resource issues
           OMP_NUM_THREADS: 1
