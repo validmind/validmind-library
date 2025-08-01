@@ -32,8 +32,8 @@ After you have pasted the code snippet into your development source code and exe
 """
 import threading
 import warnings
+from importlib import metadata
 
-import pkg_resources
 from IPython.display import HTML, display
 
 # Ignore Numba warnings. We are not requiring this package directly
@@ -81,7 +81,12 @@ def check_version():
     # get the installed vs running version of validmind
     # to make sure we are using the latest installed version
     # in case user has updated the package but forgot to restart the kernel
-    installed = pkg_resources.get_distribution("validmind").version
+    try:
+        installed = metadata.version("validmind")
+    except metadata.PackageNotFoundError:
+        # Package metadata not found, skip version check
+        return
+    
     running = __version__
 
     if parse_version(installed) > parse_version(running):

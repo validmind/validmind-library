@@ -3,9 +3,22 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 import pandas as pd
-from scipy.stats import kurtosis, skew
 
 from validmind import tags, tasks
+from validmind.errors import MissingDependencyError
+
+try:
+    from scipy.stats import kurtosis, skew
+except ImportError as e:
+    if "scipy" in str(e):
+        raise MissingDependencyError(
+            "Missing required package `scipy` for TimeSeriesDescriptiveStatistics. "
+            "Please run `pip install validmind[stats]` to use statistical tests",
+            required_dependencies=["scipy"],
+            extra="stats",
+        ) from e
+
+    raise e
 
 
 @tags("time_series_data", "analysis")

@@ -4,10 +4,22 @@
 
 
 import pandas as pd
-from scipy.stats import chi2_contingency
 
 from validmind import tags, tasks
-from validmind.errors import SkipTestError
+from validmind.errors import MissingDependencyError, SkipTestError
+
+try:
+    from scipy.stats import chi2_contingency
+except ImportError as e:
+    if "scipy" in str(e):
+        raise MissingDependencyError(
+            "Missing required package `scipy` for ChiSquaredFeaturesTable. "
+            "Please run `pip install validmind[stats]` to use statistical tests",
+            required_dependencies=["scipy"],
+            extra="stats",
+        ) from e
+
+    raise e
 
 
 @tags("tabular_data", "categorical_data", "statistical_test")
