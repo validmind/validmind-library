@@ -525,21 +525,6 @@ def log_metric(
     )
 
 
-def get_ai_key() -> Dict[str, Any]:
-    """Calls the API to get an API key for our LLM proxy."""
-    r = requests.get(
-        url=_get_url("ai/key"),
-        headers=_get_api_headers(),
-    )
-
-    if r.status_code != 200:
-        # TODO: improve error handling when there's no Open AI API or AI key available
-        # logger.error("Could not get AI key from ValidMind API")
-        raise_api_error(r.text)
-
-    return r.json()
-
-
 def generate_test_result_description(test_result_data: Dict[str, Any]) -> str:
     r = requests.post(
         url=_get_url("ai/generate/test_result_description"),

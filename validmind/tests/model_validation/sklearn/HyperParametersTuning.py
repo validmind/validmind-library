@@ -23,9 +23,7 @@ def _get_metrics(scoring):
     return (
         scoring
         if isinstance(scoring, list)
-        else list(scoring.keys())
-        if isinstance(scoring, dict)
-        else [scoring]
+        else list(scoring.keys()) if isinstance(scoring, dict) else [scoring]
     )
 
 

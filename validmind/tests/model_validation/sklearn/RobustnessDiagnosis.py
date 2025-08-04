@@ -323,9 +323,9 @@ def RobustnessDiagnosis(
         model=model.input_id,
     )
     # rename perturbation size for baseline
-    results_df.loc[
-        results_df["Perturbation Size"] == 0.0, "Perturbation Size"
-    ] = "Baseline (0.0)"
+    results_df.loc[results_df["Perturbation Size"] == 0.0, "Perturbation Size"] = (
+        "Baseline (0.0)"
+    )
 
     return (
         results_df,
