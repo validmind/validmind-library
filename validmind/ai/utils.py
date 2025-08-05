@@ -3,9 +3,8 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 import os
-from urllib.parse import urljoin
 
-from openai import AzureOpenAI, Client, OpenAI
+from openai import AzureOpenAI, OpenAI
 
 from ..logging import get_logger
 from ..utils import md_to_html
