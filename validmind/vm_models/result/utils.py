@@ -14,6 +14,7 @@ from ...logging import get_logger
 from ..dataset import VMDataset
 from ..figure import Figure
 from ..input import VMInput
+from ..html_renderer import StatefulHTMLRenderer
 
 if TYPE_CHECKING:
     from .result import ResultTable
@@ -127,6 +128,23 @@ def tables_to_widgets(tables: List["ResultTable"]):
     return widgets
 
 
+def tables_to_html(tables: List["ResultTable"]) -> str:
+    """Convert a list of tables to HTML."""
+    if not tables:
+        return ""
+    
+    html_parts = ["<h3>Tables</h3>"]
+    
+    for table in tables:
+        table_html = StatefulHTMLRenderer.render_table(
+            data=table.data,
+            title=table.title
+        )
+        html_parts.append(table_html)
+    
+    return "".join(html_parts)
+
+
 def figures_to_widgets(figures: List[Figure]) -> list:
     """Convert a list of figures to ipywidgets."""
     num_columns = 2 if len(figures) > 1 else 1
@@ -139,3 +157,22 @@ def figures_to_widgets(figures: List[Figure]) -> list:
     )
 
     return [HTML("<h3>Figures</h3>"), plot_widgets]
+
+
+def figures_to_html(figures: List[Figure]) -> str:
+    """Convert a list of figures to HTML."""
+    if not figures:
+        return ""
+    
+    html_parts = ["<h3>Figures</h3>"]
+    
+    # Create a simple grid layout for multiple figures
+    if len(figures) > 1:
+        html_parts.append('<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">')
+        for figure in figures:
+            html_parts.append(f'<div>{figure.to_html()}</div>')
+        html_parts.append('</div>')
+    else:
+        html_parts.append(figures[0].to_html())
+    
+    return "".join(html_parts)

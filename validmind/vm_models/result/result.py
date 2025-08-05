@@ -29,14 +29,17 @@ from ...utils import (
     test_id_to_name,
 )
 from ..figure import Figure, create_figure
+from ..html_renderer import StatefulHTMLRenderer
 from ..input import VMInput
 from .utils import (
     AI_REVISION_NAME,
     DEFAULT_REVISION_NAME,
     check_for_sensitive_data,
     figures_to_widgets,
+    figures_to_html,
     get_result_template,
     tables_to_widgets,
+    tables_to_html,
     update_metadata,
 )
 
@@ -163,6 +166,16 @@ class ErrorResult(Result):
 
     def to_widget(self):
         return HTML(f"<h3 style='color: red;'>{self.message}</h3><p>{self.error}</p>")
+
+    def to_html(self):
+        """Generate HTML that persists in saved notebooks."""
+        return f"""
+        {StatefulHTMLRenderer.get_base_css()}
+        <div class="vm-result">
+            <h3 style="color: red;">{self.message}</h3>
+            <p>{self.error}</p>
+        </div>
+        """
 
     async def log_async(self):
         pass
@@ -350,6 +363,42 @@ class TestResult(Result):
             widgets.extend(figures_to_widgets(self.figures))
 
         return VBox(widgets)
+
+    def to_html(self):
+        """Generate HTML that persists in saved notebooks."""
+        if self.metric is not None and not self.tables and not self.figures:
+            return StatefulHTMLRenderer.render_result_header(
+                test_name=self.test_name,
+                passed=self.passed,
+                metric=self.metric
+            )
+
+        html_parts = [StatefulHTMLRenderer.get_base_css()]
+        
+        # Add result header
+        html_parts.append(StatefulHTMLRenderer.render_result_header(
+            test_name=self.test_name,
+            passed=self.passed,
+            metric=self.metric
+        ))
+
+        # Add description
+        if self.description:
+            html_parts.append(StatefulHTMLRenderer.render_description(self.description))
+
+        # Add parameters
+        if self.params:
+            html_parts.append(StatefulHTMLRenderer.render_parameters(self.params))
+
+        # Add tables
+        if self.tables:
+            html_parts.append(tables_to_html(self.tables))
+
+        # Add figures
+        if self.figures:
+            html_parts.append(figures_to_html(self.figures))
+
+        return f'<div class="vm-result">{"".join(html_parts)}</div>'
 
     @classmethod
     def _get_client_config(cls):
@@ -644,6 +693,26 @@ class TextGenerationResult(Result):
         widgets = [HTML(rendered)]
 
         return VBox(widgets)
+
+    def to_html(self):
+        """Generate HTML that persists in saved notebooks."""
+        html_parts = [StatefulHTMLRenderer.get_base_css()]
+        
+        # Add result header
+        html_parts.append(StatefulHTMLRenderer.render_result_header(
+            test_name=self.test_name,
+            passed=None
+        ))
+
+        # Add description
+        if self.description:
+            html_parts.append(StatefulHTMLRenderer.render_description(self.description))
+
+        # Add parameters
+        if self.params:
+            html_parts.append(StatefulHTMLRenderer.render_parameters(self.params))
+
+        return f'<div class="vm-result">{"".join(html_parts)}</div>'
 
     def serialize(self):
         """Serialize the result for the API."""

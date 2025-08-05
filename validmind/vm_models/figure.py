@@ -19,6 +19,7 @@ import plotly.graph_objs as go
 from ..client_config import client_config
 from ..errors import UnsupportedFigureError
 from ..utils import get_full_typename
+from .html_renderer import StatefulHTMLRenderer
 
 
 def is_matplotlib_figure(figure) -> bool:
@@ -107,6 +108,39 @@ class Figure:
                 <img style="width:100%; height: auto;" src="data:image/png;base64,{encoded}"/>
                 """
             )
+
+        else:
+            raise UnsupportedFigureError(
+                f"Figure type {type(self.figure)} not supported for plotting"
+            )
+
+    def to_html(self):
+        """
+        Returns HTML representation that preserves state when notebook is saved.
+        This is the preferred method for displaying figures in notebooks.
+        """
+        metadata = {
+            "key": self.key,
+            "ref_id": self.ref_id,
+            "type": self._type
+        }
+
+        if is_matplotlib_figure(self.figure):
+            tmpfile = BytesIO()
+            self.figure.savefig(tmpfile, format="png")
+            encoded = base64.b64encode(tmpfile.getvalue()).decode("utf-8")
+            return StatefulHTMLRenderer.render_figure(encoded, self.key, metadata)
+
+        elif is_plotly_figure(self.figure):
+            png_file = self.figure.to_image(format="png")
+            encoded = base64.b64encode(png_file).decode("utf-8")
+            # Add plotly-specific metadata
+            metadata["plotly_json"] = self.figure.to_json()
+            return StatefulHTMLRenderer.render_figure(encoded, self.key, metadata)
+
+        elif is_png_image(self.figure):
+            encoded = base64.b64encode(self.figure).decode("utf-8")
+            return StatefulHTMLRenderer.render_figure(encoded, self.key, metadata)
 
         else:
             raise UnsupportedFigureError(

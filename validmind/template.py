@@ -14,6 +14,7 @@ from .logging import get_logger
 from .tests import LoadTestError, describe_test
 from .utils import display, is_notebook
 from .vm_models import TestSuite
+from .vm_models.html_renderer import StatefulHTMLRenderer
 
 logger = get_logger(__name__)
 
@@ -159,6 +160,115 @@ def preview_template(template: str) -> None:
     display(
         _create_section_widget(_convert_sections_to_section_tree(template["sections"]))
     )
+
+
+def preview_template_html(template: str) -> str:
+    """Generate HTML preview of a template that preserves state.
+
+    Args:
+        template (dict): The template to preview.
+        
+    Returns:
+        HTML string representation of the template
+    """
+    section_tree = _convert_sections_to_section_tree(template["sections"])
+    return _create_section_html(section_tree)
+
+
+def _create_content_html(content: Dict[str, Any]) -> str:
+    """Create HTML representation of a content block."""
+    content_type = CONTENT_TYPE_MAP[content["content_type"]]
+
+    if content["content_type"] not in ["metric", "test"]:
+        return f"""
+        <div class="vm-content-block">
+            <h4>{content_type} Block: '{content['content_id']}'</h4>
+            <p>Content ID: {content['content_id']}</p>
+            <p>Content Type: {content_type}</p>
+        </div>
+        """
+
+    try:
+        test_html = describe_test(test_id=content["content_id"], show=False)
+        return f"""
+        <div class="vm-test-block">
+            <h4>{content_type} Block: '{content['content_id']}'</h4>
+            <div class="vm-test-description">
+                {test_html}
+            </div>
+        </div>
+        """
+    except LoadTestError:
+        return f"""
+        <div class="vm-failed-test-block" style="color: red;">
+            <h4>❌ Failed Test Block: '{content['content_id']}'</h4>
+            <p>Test could not be loaded</p>
+        </div>
+        """
+
+
+def _create_sub_section_html(sub_sections: List[Dict[str, Any]], section_number: str) -> str:
+    """Create HTML for sub-sections."""
+    if not sub_sections:
+        return "<p>Empty Section</p>"
+
+    accordion_items = []
+    accordion_titles = []
+
+    for i, section in enumerate(sub_sections):
+        section_num = f"{section_number}.{i + 1}"
+        
+        if section["sections"]:
+            # Has sub-sections
+            content_html = _create_sub_section_html(section["sections"], section_num)
+        elif contents := section.get("contents", []):
+            # Has content blocks
+            content_parts = [_create_content_html(content) for content in contents]
+            content_html = "".join(content_parts)
+        else:
+            # Empty section
+            content_html = "<p>Empty Section</p>"
+
+        accordion_items.append(content_html)
+        accordion_titles.append(f"{section_num}. {section['title']} ('{section['id']}')")
+
+    return StatefulHTMLRenderer.render_accordion(accordion_items, accordion_titles)
+
+
+def _create_section_html(tree: List[Dict[str, Any]]) -> str:
+    """Create HTML representation of the section tree."""
+    html_parts = [StatefulHTMLRenderer.get_base_css()]
+    
+    accordion_items = []
+    accordion_titles = []
+    
+    for i, section in enumerate(tree):
+        section_content_parts = []
+        
+        # Add sub-sections if they exist
+        if section.get("sections"):
+            sub_section_html = _create_sub_section_html(section["sections"], str(i + 1))
+            section_content_parts.append(sub_section_html)
+
+        # Add direct content blocks if they exist
+        if section.get("contents"):
+            content_parts = [_create_content_html(content) for content in section["contents"]]
+            section_content_parts.extend(content_parts)
+
+        # Combine all content for this section
+        if section_content_parts:
+            section_html = "".join(section_content_parts)
+        else:
+            section_html = "<p>Empty Section</p>"
+
+        accordion_items.append(section_html)
+        accordion_titles.append(f"{i + 1}. {section['title']} ('{section['id']}')")
+
+    if accordion_items:
+        main_accordion = StatefulHTMLRenderer.render_accordion(accordion_items, accordion_titles)
+        html_parts.append(main_accordion)
+    
+    return f'<div class="vm-template-preview">{"".join(html_parts)}</div>'
 
 
 def _get_section_tests(section: Dict[str, Any]) -> List[str]:
