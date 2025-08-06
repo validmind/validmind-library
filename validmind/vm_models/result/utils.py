@@ -12,7 +12,6 @@ from jinja2 import Template
 from ... import api_client
 from ...logging import get_logger
 from ..figure import Figure
-from ..input import VMInput
 
 if TYPE_CHECKING:
     from .result import ResultTable
