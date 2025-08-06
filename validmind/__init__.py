@@ -86,7 +86,7 @@ def check_version():
     except metadata.PackageNotFoundError:
         # Package metadata not found, skip version check
         return
-    
+
     running = __version__
 
     if parse_version(installed) > parse_version(running):
