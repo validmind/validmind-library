@@ -84,7 +84,7 @@ jobs:
         run: |
           poetry run tox -e py39-min
 
-      - name: Test Latest Dependencies (Python 3.9)  
+      - name: Test Latest Dependencies (Python 3.9)
         run: |
           poetry run tox -e py39-max
 

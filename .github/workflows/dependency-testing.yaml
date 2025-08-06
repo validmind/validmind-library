@@ -52,7 +52,7 @@ jobs:
             deps-type: 'default'
           - python-version: '3.11'
             deps-type: 'default'
-    
+
     steps:
       - uses: actions/checkout@v4
 
@@ -60,7 +60,6 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-          cache: 'pip'
 
       - name: Install system dependencies
         run: |
@@ -83,12 +82,14 @@ jobs:
           # Limit OpenMP threads to prevent CI resource issues
           OMP_NUM_THREADS: 1
           MKL_NUM_THREADS: 1
+          # Disable pip caching to prevent matrix job conflicts
+          PIP_NO_CACHE_DIR: 1
 
   pip-freeze-testing:
     name: Test Client Pip Freeze Environments
     runs-on: ubuntu-latest
     if: github.event_name == 'workflow_dispatch' && github.event.inputs.test_type == 'pip-freeze' || github.event_name == 'schedule'
-    
+
     steps:
       - uses: actions/checkout@v4
 
@@ -96,7 +97,6 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.9'
-          cache: 'pip'
 
       - name: Install system dependencies
         run: |
@@ -114,12 +114,13 @@ jobs:
         env:
           OMP_NUM_THREADS: 1
           MKL_NUM_THREADS: 1
+          PIP_NO_CACHE_DIR: 1
 
   min-versions-only:
     name: Test Minimum Dependency Versions
     runs-on: ubuntu-latest
     if: github.event_name == 'workflow_dispatch' && github.event.inputs.test_type == 'min-versions'
-    
+
     steps:
       - uses: actions/checkout@v4
 
@@ -127,7 +128,6 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.9'
-          cache: 'pip'
 
       - name: Install system dependencies
         run: |
@@ -145,12 +145,13 @@ jobs:
         env:
           OMP_NUM_THREADS: 1
           MKL_NUM_THREADS: 1
+          PIP_NO_CACHE_DIR: 1
 
   max-versions-only:
-    name: Test Maximum Dependency Versions  
+    name: Test Maximum Dependency Versions
     runs-on: ubuntu-latest
     if: github.event_name == 'workflow_dispatch' && github.event.inputs.test_type == 'max-versions'
-    
+
     steps:
       - uses: actions/checkout@v4
 
@@ -158,7 +159,6 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-          cache: 'pip'
 
       - name: Install system dependencies
         run: |
@@ -176,12 +176,13 @@ jobs:
         env:
           OMP_NUM_THREADS: 1
           MKL_NUM_THREADS: 1
+          PIP_NO_CACHE_DIR: 1
 
   python-versions-only:
     name: Test All Python Versions with Default Dependencies
     runs-on: ubuntu-latest
     if: github.event_name == 'workflow_dispatch' && github.event.inputs.test_type == 'python-versions'
-    
+
     steps:
       - uses: actions/checkout@v4
 
@@ -189,7 +190,6 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.9'
-          cache: 'pip'
 
       - name: Install system dependencies
         run: |
@@ -207,22 +207,23 @@ jobs:
         env:
           OMP_NUM_THREADS: 1
           MKL_NUM_THREADS: 1
+          PIP_NO_CACHE_DIR: 1
 
   report-status:
     name: Report Dependency Testing Status
     runs-on: ubuntu-latest
     needs: [dependency-matrix]
     if: always()
-    
+
     steps:
       - name: Report results
         run: |
           echo "Dependency testing completed"
           echo "Matrix job status: ${{ needs.dependency-matrix.result }}"
-          
+
           if [[ "${{ needs.dependency-matrix.result }}" == "failure" ]]; then
             echo "❌ Some dependency combinations failed"
             exit 1
           else
             echo "✅ All dependency combinations passed"
-          fi 
+          fi
