@@ -9,7 +9,7 @@ on:
       - main
       - prod
       - release-v1
-      - '*'
+      - cachafla/fix-tests
     paths-ignore:
       - 'docs/**'
 
