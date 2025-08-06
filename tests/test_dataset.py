@@ -516,6 +516,301 @@ class TestTabularDataset(TestCase):
 
         self.assertIn("FunctionModel requires a callable predict_fn", str(context.exception))
 
+    def test_assign_score_single_metric(self):
+        """
+        Test assigning a single metric score to dataset
+        """
+        df = pd.DataFrame({"x1": [1, 2, 3], "x2": [4, 5, 6], "y": [0, 1, 0]})
+        vm_dataset = DataFrameDataset(
+            raw_dataset=df, target_column="y", feature_columns=["x1", "x2"]
+        )
+
+        # Train a simple model
+        model = LogisticRegression()
+        model.fit(vm_dataset.x, vm_dataset.y.ravel())
+        vm_model = init_model(input_id="test_model", model=model, __log=False)
+
+        # Assign predictions first (required for unit metrics)
+        vm_dataset.assign_predictions(model=vm_model)
+
+        # Test assign_score with single metric
+        vm_dataset.assign_score(vm_model, "F1")
+
+        # Check that the metric column was added
+        expected_column = f"{vm_model.input_id}_F1"
+        self.assertTrue(expected_column in vm_dataset.df.columns)
+
+        # Verify the column has the same value for all rows (scalar metric)
+        metric_values = vm_dataset.df[expected_column]
+        self.assertEqual(metric_values.nunique(), 1, "All rows should have the same metric value")
+
+        # Verify the value is reasonable for F1 score (between 0 and 1)
+        f1_value = metric_values.iloc[0]
+        self.assertTrue(0 <= f1_value <= 1, f"F1 score should be between 0 and 1, got {f1_value}")
+
+    def test_assign_score_multiple_metrics(self):
+        """
+        Test assigning multiple metric scores to dataset
+        """
+        df = pd.DataFrame({"x1": [1, 2, 3], "x2": [4, 5, 6], "y": [0, 1, 0]})
+        vm_dataset = DataFrameDataset(
+            raw_dataset=df, target_column="y", feature_columns=["x1", "x2"]
+        )
+
+        # Train a simple model
+        model = LogisticRegression()
+        model.fit(vm_dataset.x, vm_dataset.y.ravel())
+        vm_model = init_model(input_id="test_model", model=model, __log=False)
+
+        # Assign predictions first
+        vm_dataset.assign_predictions(model=vm_model)
+
+        # Test assign_score with multiple metrics
+        metrics = ["F1", "Precision", "Recall"]
+        vm_dataset.assign_score(vm_model, metrics)
+
+        # Check that all metric columns were added
+        for metric in metrics:
+            expected_column = f"{vm_model.input_id}_{metric}"
+            self.assertTrue(expected_column in vm_dataset.df.columns)
+
+            # Verify each column has the same value for all rows
+            metric_values = vm_dataset.df[expected_column]
+            self.assertEqual(metric_values.nunique(), 1, f"All rows should have the same {metric} value")
+
+            # Verify the value is reasonable (between 0 and 1 for these metrics)
+            metric_value = metric_values.iloc[0]
+            self.assertTrue(0 <= metric_value <= 1, f"{metric} should be between 0 and 1, got {metric_value}")
+
+    def test_assign_score_with_parameters(self):
+        """
+        Test assigning metric scores with custom parameters
+        """
+        df = pd.DataFrame({"x1": [1, 2, 3], "x2": [4, 5, 6], "y": [0, 1, 0]})
+        vm_dataset = DataFrameDataset(
+            raw_dataset=df, target_column="y", feature_columns=["x1", "x2"]
+        )
+
+        # Train a simple model
+        model = LogisticRegression()
+        model.fit(vm_dataset.x, vm_dataset.y.ravel())
+        vm_model = init_model(input_id="test_model", model=model, __log=False)
+
+        # Assign predictions first
+        vm_dataset.assign_predictions(model=vm_model)
+
+        # Test assign_score with parameters
+        vm_dataset.assign_score(vm_model, "ROC_AUC", **{"average": "weighted"})
+
+        # Check that the metric column was added
+        expected_column = f"{vm_model.input_id}_ROC_AUC"
+        self.assertTrue(expected_column in vm_dataset.df.columns)
+
+        # Verify the value is reasonable for ROC AUC (between 0 and 1)
+        roc_values = vm_dataset.df[expected_column]
+        roc_value = roc_values.iloc[0]
+        self.assertTrue(0 <= roc_value <= 1, f"ROC AUC should be between 0 and 1, got {roc_value}")
+
+    def test_assign_score_full_metric_id(self):
+        """
+        Test assigning scores using full metric IDs
+        """
+        df = pd.DataFrame({"x1": [1, 2, 3], "x2": [4, 5, 6], "y": [0, 1, 0]})
+        vm_dataset = DataFrameDataset(
+            raw_dataset=df, target_column="y", feature_columns=["x1", "x2"]
+        )
+
+        # Train a simple model
+        model = LogisticRegression()
+        model.fit(vm_dataset.x, vm_dataset.y.ravel())
+        vm_model = init_model(input_id="test_model", model=model, __log=False)
+
+        # Assign predictions first
+        vm_dataset.assign_predictions(model=vm_model)
+
+        # Test assign_score with full metric ID
+        full_metric_id = "validmind.unit_metrics.classification.Accuracy"
+        vm_dataset.assign_score(vm_model, full_metric_id)
+
+        # Check that the metric column was added with correct name
+        expected_column = f"{vm_model.input_id}_Accuracy"
+        self.assertTrue(expected_column in vm_dataset.df.columns)
+
+        # Verify the value is reasonable for accuracy (between 0 and 1)
+        accuracy_values = vm_dataset.df[expected_column]
+        accuracy_value = accuracy_values.iloc[0]
+        self.assertTrue(0 <= accuracy_value <= 1, f"Accuracy should be between 0 and 1, got {accuracy_value}")
+
+    def test_assign_score_regression_model(self):
+        """
+        Test assigning metric scores for regression model
+        """
+        df = pd.DataFrame({"x1": [1, 2, 3], "x2": [4, 5, 6], "y": [0.1, 1.2, 2.3]})
+        vm_dataset = DataFrameDataset(
+            raw_dataset=df, target_column="y", feature_columns=["x1", "x2"]
+        )
+
+        # Train a regression model
+        model = LinearRegression()
+        model.fit(vm_dataset.x, vm_dataset.y.ravel())
+        vm_model = init_model(input_id="reg_model", model=model, __log=False)
+
+        # Assign predictions first
+        vm_dataset.assign_predictions(model=vm_model)
+
+        # Test assign_score with regression metrics
+        vm_dataset.assign_score(vm_model, ["MeanSquaredError", "RSquaredScore"])
+
+        # Check that both metric columns were added
+        expected_columns = ["reg_model_MeanSquaredError", "reg_model_RSquaredScore"]
+        for column in expected_columns:
+            self.assertTrue(column in vm_dataset.df.columns)
+
+        # Verify R-squared is reasonable (can be negative, but typically between -1 and 1 for reasonable models)
+        r2_values = vm_dataset.df["reg_model_RSquaredScore"]
+        r2_value = r2_values.iloc[0]
+        self.assertTrue(-2 <= r2_value <= 1, f"R-squared should be reasonable, got {r2_value}")
+
+        # Verify MSE is non-negative
+        mse_values = vm_dataset.df["reg_model_MeanSquaredError"]
+        mse_value = mse_values.iloc[0]
+        self.assertTrue(mse_value >= 0, f"MSE should be non-negative, got {mse_value}")
+
+    def test_assign_score_no_model_input_id(self):
+        """
+        Test that assign_score raises error when model has no input_id
+        """
+        df = pd.DataFrame({"x1": [1, 2, 3], "x2": [4, 5, 6], "y": [0, 1, 0]})
+        vm_dataset = DataFrameDataset(
+            raw_dataset=df, target_column="y", feature_columns=["x1", "x2"]
+        )
+
+        # Create model without input_id
+        model = LogisticRegression()
+        model.fit(vm_dataset.x, vm_dataset.y.ravel())
+        vm_model = init_model(model=model, __log=False)  # No input_id provided
+
+        # Clear the input_id to test the error case
+        vm_model.input_id = None
+
+        # Should raise ValueError
+        with self.assertRaises(ValueError) as context:
+            vm_dataset.assign_score(vm_model, "F1")
+
+        self.assertIn("Model input_id must be set", str(context.exception))
+
+    def test_assign_score_invalid_metric(self):
+        """
+        Test that assign_score raises error for invalid metric
+        """
+        df = pd.DataFrame({"x1": [1, 2, 3], "x2": [4, 5, 6], "y": [0, 1, 0]})
+        vm_dataset = DataFrameDataset(
+            raw_dataset=df, target_column="y", feature_columns=["x1", "x2"]
+        )
+
+        # Train a simple model
+        model = LogisticRegression()
+        model.fit(vm_dataset.x, vm_dataset.y.ravel())
+        vm_model = init_model(input_id="test_model", model=model, __log=False)
+
+        # Assign predictions first
+        vm_dataset.assign_predictions(model=vm_model)
+
+        # Should raise ValueError for invalid metric
+        with self.assertRaises(ValueError) as context:
+            vm_dataset.assign_score(vm_model, "InvalidMetricName")
+
+        self.assertIn("Metric 'InvalidMetricName' not found", str(context.exception))
+
+    def test_assign_score_no_predictions(self):
+        """
+        Test that assign_score raises error when predictions haven't been assigned yet
+        """
+        df = pd.DataFrame({"x1": [1, 2, 3], "x2": [4, 5, 6], "y": [0, 1, 0]})
+        vm_dataset = DataFrameDataset(
+            raw_dataset=df, target_column="y", feature_columns=["x1", "x2"]
+        )
+
+        # Train a simple model
+        model = LogisticRegression()
+        model.fit(vm_dataset.x, vm_dataset.y.ravel())
+        vm_model = init_model(input_id="test_model", model=model, __log=False)
+
+        # Don't assign predictions - test that assign_score raises error
+        # (unit metrics require predictions to be available)
+        with self.assertRaises(ValueError) as context:
+            vm_dataset.assign_score(vm_model, "F1")
+
+        self.assertIn("No prediction column found", str(context.exception))
+
+    def test_assign_score_column_naming_convention(self):
+        """
+        Test that assign_score follows the correct column naming convention
+        """
+        df = pd.DataFrame({"x1": [1, 2, 3], "x2": [4, 5, 6], "y": [0, 1, 0]})
+        vm_dataset = DataFrameDataset(
+            raw_dataset=df, target_column="y", feature_columns=["x1", "x2"]
+        )
+
+        # Train a simple model
+        model = LogisticRegression()
+        model.fit(vm_dataset.x, vm_dataset.y.ravel())
+        vm_model = init_model(input_id="my_special_model", model=model, __log=False)
+
+        # Assign predictions first
+        vm_dataset.assign_predictions(model=vm_model)
+
+        # Test multiple metrics to verify naming convention
+        metrics = ["F1", "Precision", "Recall"]
+        vm_dataset.assign_score(vm_model, metrics)
+
+        # Verify all columns follow the naming convention: {model.input_id}_{metric_name}
+        for metric in metrics:
+            expected_column = f"my_special_model_{metric}"
+            self.assertTrue(expected_column in vm_dataset.df.columns,
+                            f"Expected column '{expected_column}' not found")
+
+    def test_assign_score_multiple_models(self):
+        """
+        Test assigning scores from multiple models to same dataset
+        """
+        df = pd.DataFrame({"x1": [1, 2, 3], "x2": [4, 5, 6], "y": [0, 1, 0]})
+        vm_dataset = DataFrameDataset(
+            raw_dataset=df, target_column="y", feature_columns=["x1", "x2"]
+        )
+
+        # Train two different models
+        lr_model = LogisticRegression()
+        lr_model.fit(vm_dataset.x, vm_dataset.y.ravel())
+        vm_lr_model = init_model(input_id="lr_model", model=lr_model, __log=False)
+
+        rf_model = RandomForestClassifier(n_estimators=5, random_state=42)
+        rf_model.fit(vm_dataset.x, vm_dataset.y.ravel())
+        vm_rf_model = init_model(input_id="rf_model", model=rf_model, __log=False)
+
+        # Assign predictions for both models
+        vm_dataset.assign_predictions(model=vm_lr_model)
+        vm_dataset.assign_predictions(model=vm_rf_model)
+
+        # Assign scores for both models
+        vm_dataset.assign_score(vm_lr_model, "F1")
+        vm_dataset.assign_score(vm_rf_model, "F1")
+
+        # Check that both metric columns exist with correct names
+        lr_column = "lr_model_F1"
+        rf_column = "rf_model_F1"
+
+        self.assertTrue(lr_column in vm_dataset.df.columns)
+        self.assertTrue(rf_column in vm_dataset.df.columns)
+
+        # Verify that the values might be different (different models)
+        lr_f1 = vm_dataset.df[lr_column].iloc[0]
+        rf_f1 = vm_dataset.df[rf_column].iloc[0]
+
+        # Both should be valid F1 scores
+        self.assertTrue(0 <= lr_f1 <= 1)
+        self.assertTrue(0 <= rf_f1 <= 1)
+
 
 if __name__ == "__main__":
     unittest.main()
