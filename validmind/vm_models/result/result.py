@@ -532,7 +532,7 @@ class TestResult(Result):
 
         if not unsafe:
             for table in self.tables or []:
-                check_for_sensitive_data(table.data, self._get_flat_inputs())
+                check_for_sensitive_data(table.data)
 
         if section_id:
             self._validate_section_id_for_block(section_id, position)
