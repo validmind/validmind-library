@@ -2,13 +2,18 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+
+from typing import Any, Dict, List, Tuple
+
 from validmind.tests import tags, tasks
 from validmind.vm_models import VMDataset
 
 
 @tags("tabular_data")
 @tasks("regression", "classification")
-def TooManyZeroValues(dataset: VMDataset, max_percent_threshold: float = 0.03):
+def TooManyZeroValues(
+    dataset: VMDataset, max_percent_threshold: float = 0.03
+) -> Tuple[List[Dict[str, Any]], bool]:
     """
     Identifies numerical columns in a dataset that contain an excessive number of zero values, defined by a threshold
     percentage.

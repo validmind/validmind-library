@@ -2,13 +2,17 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Any, Dict, List, Tuple
+
 from validmind import tags, tasks
 from validmind.vm_models import VMDataset
 
 
 @tags("tabular_data")
 @tasks("regression", "classification")
-def UniqueRows(dataset: VMDataset, min_percent_threshold: float = 1):
+def UniqueRows(
+    dataset: VMDataset, min_percent_threshold: float = 1
+) -> Tuple[List[Dict[str, Any]], bool]:
     """
     Verifies the diversity of the dataset by ensuring that the count of unique rows exceeds a prescribed threshold.
 

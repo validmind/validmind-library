@@ -3,8 +3,11 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 
+from typing import Dict, Tuple
+
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 from textblob import TextBlob
 
 from validmind import RawData, tags, tasks
@@ -12,7 +15,9 @@ from validmind import RawData, tags, tasks
 
 @tags("nlp", "text_data", "data_validation")
 @tasks("nlp")
-def PolarityAndSubjectivity(dataset, threshold_subjectivity=0.5, threshold_polarity=0):
+def PolarityAndSubjectivity(
+    dataset, threshold_subjectivity=0.5, threshold_polarity=0
+) -> Tuple[go.Figure, Dict[str, pd.DataFrame], RawData]:
     """
     Analyzes the polarity and subjectivity of text data within a given dataset to visualize the sentiment distribution.
 

@@ -4,6 +4,10 @@
 
 import random
 import string
+from typing import Tuple
+
+import pandas as pd
+import plotly.graph_objects as go
 
 from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset, VMModel
@@ -69,7 +73,7 @@ def StabilityAnalysisRandomNoise(
     model: VMModel,
     probability: float = 0.02,
     mean_similarity_threshold: float = 0.7,
-):
+) -> Tuple[go.Figure, pd.DataFrame, RawData]:
     """
     Assesses the robustness of text embeddings models to random noise introduced via text perturbations.
 

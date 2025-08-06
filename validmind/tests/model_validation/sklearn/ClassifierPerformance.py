@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Dict, List
+
 import numpy as np
 from sklearn.metrics import classification_report, roc_auc_score
 from sklearn.preprocessing import LabelBinarizer
@@ -20,7 +22,9 @@ def multiclass_roc_auc_score(y_test, y_pred, average="macro"):
     "sklearn", "binary_classification", "multiclass_classification", "model_performance"
 )
 @tasks("classification", "text_classification")
-def ClassifierPerformance(dataset: VMDataset, model: VMModel, average: str = "macro"):
+def ClassifierPerformance(
+    dataset: VMDataset, model: VMModel, average: str = "macro"
+) -> Dict[str, List[Dict[str, float]]]:
     """
     Evaluates performance of binary or multiclass classification models using precision, recall, F1-Score, accuracy,
     and ROC AUC scores.

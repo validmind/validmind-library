@@ -3,6 +3,8 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 
+from typing import List, Tuple, Union
+
 import pandas as pd
 import plotly.graph_objects as go
 
@@ -14,7 +16,9 @@ logger = get_logger(__name__)
 
 @tags("bias_and_fairness", "descriptive_statistics")
 @tasks("classification", "regression")
-def ProtectedClassesDescription(dataset, protected_classes=None):
+def ProtectedClassesDescription(
+    dataset, protected_classes=None
+) -> Tuple[pd.DataFrame, Union[go.Figure, List[go.Figure]], RawData]:
     """
     Visualizes the distribution of protected classes in the dataset relative to the target variable
     and provides descriptive statistics.

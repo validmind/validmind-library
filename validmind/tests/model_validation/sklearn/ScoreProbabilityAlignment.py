@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Tuple
+
 import pandas as pd
 import plotly.graph_objects as go
 
@@ -13,7 +15,7 @@ from validmind.vm_models import VMDataset, VMModel
 @tasks("classification")
 def ScoreProbabilityAlignment(
     model: VMModel, dataset: VMDataset, score_column: str = "score", n_bins: int = 10
-):
+) -> Tuple[pd.DataFrame, go.Figure, RawData]:
     """
     Analyzes the alignment between credit scores and predicted probabilities.
 

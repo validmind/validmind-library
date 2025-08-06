@@ -3,12 +3,15 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 import warnings
+from typing import Dict, Tuple
 
 import plotly.express as px
+import plotly.graph_objects as go
 from datasets import Dataset
 
 from validmind import RawData, tags, tasks
 from validmind.errors import MissingDependencyError
+from validmind.vm_models import VMDataset
 
 from .utils import get_ragas_config, get_renamed_columns
 
@@ -30,13 +33,13 @@ except ImportError as e:
 @tags("ragas", "llm", "retrieval_performance")
 @tasks("text_qa", "text_generation", "text_summarization", "text_classification")
 def ContextPrecisionWithoutReference(
-    dataset,
+    dataset: VMDataset,
     user_input_column: str = "user_input",
     retrieved_contexts_column: str = "retrieved_contexts",
     response_column: str = "response",
     judge_llm=None,
     judge_embeddings=None,
-):  # noqa: B950
+) -> Tuple[Dict[str, list], go.Figure, go.Figure, RawData]:
     """
     Context Precision Without Reference is a metric used to evaluate the relevance of
     retrieved contexts compared to the expected response for a given user input. This

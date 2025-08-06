@@ -2,6 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from typing import Dict
+
 import numpy as np
 import pandas as pd
 from statsmodels.tsa.stattools import adfuller
@@ -12,7 +14,9 @@ from validmind.vm_models import VMDataset
 
 @tags("time_series_data", "statsmodels", "forecasting", "statistical_test")
 @tasks("regression")
-def AutoStationarity(dataset: VMDataset, max_order: int = 5, threshold: float = 0.05):
+def AutoStationarity(
+    dataset: VMDataset, max_order: int = 5, threshold: float = 0.05
+) -> Dict[str, pd.DataFrame]:
     """
     Automates Augmented Dickey-Fuller test to assess stationarity across multiple time series in a DataFrame.
 
