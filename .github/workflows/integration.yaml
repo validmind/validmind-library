@@ -9,6 +9,7 @@ on:
       - main
       - prod
       - release-v1
+      - '*'
     paths-ignore:
       - 'docs/**'
 
