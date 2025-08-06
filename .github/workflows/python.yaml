@@ -5,7 +5,7 @@ name: Code Quality and Unit Testing
 
 on:
   push:
-    branches: [main]
+    branches: ['*']
     paths-ignore:
       - 'docs/**'
       - 'notebooks/**'
@@ -64,6 +64,7 @@ jobs:
           poetry install --all-extras
           poetry run pip install torch==2.0.1 --extra-index-url https://download.pytorch.org/whl/cpu
           poetry run pip install aequitas fairlearn vl-convert-python
+          poetry run pip install -U kaleido
 
       - name: Ensure notebooks have no printed outputs
         run: make ensure-clean-notebooks
