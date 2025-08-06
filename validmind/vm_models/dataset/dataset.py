@@ -8,7 +8,7 @@ Dataset class wrapper
 
 import warnings
 from copy import deepcopy
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional, Union
 
 import numpy as np
 import pandas as pd
@@ -457,6 +457,147 @@ class VMDataset(VMInput):
             self._set_feature_columns(self.feature_columns)
 
         return self.extra_columns.probability_column(model, column_name)
+
+    def assign_score(
+        self,
+        model: VMModel,
+        metrics: Union[str, List[str]],
+        **kwargs: Dict[str, Any],
+    ) -> None:
+        """Assign computed unit metric scores to the dataset as new columns.
+
+        This method computes unit metrics for the given model and dataset, then adds
+        the computed scores as new columns to the dataset using the naming convention:
+        {model.input_id}_{metric_name}
+
+        Args:
+            model (VMModel): The model used to compute the scores.
+            metrics (Union[str, List[str]]): Single metric ID or list of metric IDs.
+                Can be either:
+                - Short name (e.g., "F1", "Precision")
+                - Full metric ID (e.g., "validmind.unit_metrics.classification.F1")
+            **kwargs: Additional parameters passed to the unit metrics.
+
+        Examples:
+            # Single metric
+            dataset.assign_score(model, "F1")
+
+            # Multiple metrics
+            dataset.assign_score(model, ["F1", "Precision", "Recall"])
+
+            # With parameters
+            dataset.assign_score(model, "ROC_AUC", average="weighted")
+
+        Raises:
+            ValueError: If the model input_id is None or if metric computation fails.
+            ImportError: If unit_metrics module cannot be imported.
+        """
+        if model.input_id is None:
+            raise ValueError("Model input_id must be set to use assign_score")
+
+        # Import unit_metrics module
+        try:
+            from validmind.unit_metrics import run_metric
+        except ImportError as e:
+            raise ImportError(
+                f"Failed to import unit_metrics module: {e}. "
+                "Make sure validmind.unit_metrics is available."
+            ) from e
+
+        # Normalize metrics to a list
+        if isinstance(metrics, str):
+            metrics = [metrics]
+
+        # Process each metric
+        for metric in metrics:
+            # Normalize metric ID
+            metric_id = self._normalize_metric_id(metric)
+
+            # Extract metric name for column naming
+            metric_name = self._extract_metric_name(metric_id)
+
+            # Generate column name
+            column_name = f"{model.input_id}_{metric_name}"
+
+            try:
+                # Run the unit metric
+                result = run_metric(
+                    metric_id,
+                    inputs={
+                        "model": model,
+                        "dataset": self,
+                    },
+                    params=kwargs,
+                    show=False,  # Don't show widget output
+                )
+
+                # Extract the metric value
+                metric_value = result.metric
+
+                # Create column values (repeat the scalar value for all rows)
+                column_values = np.full(len(self._df), metric_value)
+
+                # Add the column to the dataset
+                self.add_extra_column(column_name, column_values)
+
+                logger.info(
+                    f"Added metric column '{column_name}' with value {metric_value}"
+                )
+            except Exception as e:
+                logger.error(f"Failed to compute metric {metric_id}: {e}")
+                raise ValueError(f"Failed to compute metric {metric_id}: {e}") from e
+
+    def _normalize_metric_id(self, metric: str) -> str:
+        """Normalize metric identifier to full validmind unit metric ID.
+
+        Args:
+            metric (str): Metric identifier (short name or full ID)
+
+        Returns:
+            str: Full metric ID
+        """
+        # If already a full ID, return as-is
+        if metric.startswith("validmind.unit_metrics."):
+            return metric
+
+        # Try to find the metric by short name
+        try:
+            from validmind.unit_metrics import list_metrics
+
+            available_metrics = list_metrics()
+
+            # Look for exact match with short name
+            for metric_id in available_metrics:
+                if metric_id.endswith(f".{metric}"):
+                    return metric_id
+
+            # If no exact match found, raise error with suggestions
+            suggestions = [m for m in available_metrics if metric.lower() in m.lower()]
+            if suggestions:
+                raise ValueError(
+                    f"Metric '{metric}' not found. Did you mean one of: {suggestions[:5]}"
+                )
+            else:
+                raise ValueError(
+                    f"Metric '{metric}' not found. Available metrics: {available_metrics[:10]}..."
+                )
+
+        except ImportError as e:
+            raise ImportError(
+                f"Failed to import unit_metrics for metric lookup: {e}"
+            ) from e
+
+    def _extract_metric_name(self, metric_id: str) -> str:
+        """Extract the metric name from a full metric ID.
+
+        Args:
+            metric_id (str): Full metric ID
+
+        Returns:
+            str: Metric name
+        """
+        # Extract the last part after the final dot
+        return metric_id.split(".")[-1]
 
     def add_extra_column(self, column_name, column_values=None):
         """Adds an extra column to the dataset without modifying the dataset `features` and `target` columns.
