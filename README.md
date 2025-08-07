@@ -73,10 +73,20 @@ The ValidMind Library includes optional PII detection capabilities using Microso
 pip install validmind[pii-detection]
 ```
 
-**Enable PII detection:**
+**Configure PII filtering:**
 
 ```bash
-export VALIDMIND_PII_FILTERING_ENABLED=true
+# Enable PII filtering for test results only (default behavior)
+export VALIDMIND_PII_FILTERING=test_results
+
+# Enable PII filtering for test descriptions only
+export VALIDMIND_PII_FILTERING=test_descriptions
+
+# Enable PII filtering for both test results and descriptions
+export VALIDMIND_PII_FILTERING=all
+
+# Disable PII filtering (default)
+export VALIDMIND_PII_FILTERING=disabled
 ```
 
 ## How to contribute

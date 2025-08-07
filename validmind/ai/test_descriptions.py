@@ -37,6 +37,23 @@ def _get_llm_global_context():
     return context if context_enabled and context else None
 
 
+def _filter_pii_from_summary(summary: Union[str, None]) -> Union[str, None]:
+    """Filter PII from summary text before sending to LLM."""
+    if summary is None:
+        return summary
+
+    try:
+        from ..vm_models.result.pii_filter import filter_pii_from_text
+
+        return filter_pii_from_text(summary)
+    except ImportError:
+        logger.debug("PII filtering not available - skipping PII filtering for summary")
+        return summary
+    except Exception as e:
+        logger.warning(f"PII filtering failed for summary: {e}")
+        return summary
+
+
 def _truncate_summary(
     summary: Union[str, None], test_id: str, max_tokens: int = 100_000
 ):
@@ -101,12 +118,15 @@ def generate_description(
     else:
         summary = None
 
+    # Filter PII from summary before sending to LLM
+    filtered_summary = _filter_pii_from_summary(summary)
+
     return generate_test_result_description(
         {
             "test_name": test_name,
             "test_description": test_description,
             "title": title,
-            "summary": _truncate_summary(summary, test_id),
+            "summary": _truncate_summary(filtered_summary, test_id),
             "figures": [
                 figure._get_b64_url() for figure in ([] if tables else figures)
             ],

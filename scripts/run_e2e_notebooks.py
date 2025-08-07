@@ -89,6 +89,7 @@ DATA_TEMPLATE_NOTEBOOKS = [
 INIT_CELL_CODE = """
 import os
 os.environ["VALIDMIND_LLM_DESCRIPTIONS_ENABLED"] = "0"
+os.environ["VALIDMIND_PII_FILTERING"] = "{pii_filtering_mode}"
 import validmind as vm
 
 vm.init(
@@ -110,6 +111,9 @@ logger.info("Python executable path: " + sys.executable)
 
 # Print the path to the site-packages directory
 logger.info("Site-packages path: " + str(site.getsitepackages()))
+
+# Print PII filtering configuration for debugging
+logger.info("PII filtering mode: " + os.environ.get("VALIDMIND_PII_FILTERING", "disabled"))
 """
 
 
@@ -135,7 +139,19 @@ logger.info("Site-packages path: " + str(site.getsitepackages()))
     default=False,
     help="Run notebooks for purpose of updating model data templates in backend.",
 )
-def main(kernel, log_output=False, progress_bar=True, update_data_template=False):
+@click.option(
+    "--pii-filtering-mode",
+    default="disabled",
+    type=click.Choice(["disabled", "test_results", "test_descriptions", "all"]),
+    help="PII filtering mode to use for testing.",
+)
+def main(
+    kernel,
+    log_output=False,
+    progress_bar=True,
+    update_data_template=False,
+    pii_filtering_mode="disabled",
+):
     """Run notebooks from the specified directory for end-to-end testing."""
     if update_data_template:
         notebooks = DATA_TEMPLATE_NOTEBOOKS
@@ -152,8 +168,10 @@ def main(kernel, log_output=False, progress_bar=True, update_data_template=False
         backup_notebook(notebook_path)
 
         try:
-            update_vm_init_cell(notebook_path, model)
-            click.echo(f"\n -------- Executing {notebook_path} ---------- \n")
+            update_vm_init_cell(notebook_path, model, pii_filtering_mode)
+            click.echo(
+                f"\n -------- Executing {notebook_path} (PII filtering: {pii_filtering_mode}) ---------- \n"
+            )
             run_notebook(
                 notebook_path=notebook_path,
                 kernel_name=kernel,
@@ -192,7 +210,7 @@ def run_notebook(notebook_path, kernel_name, log_output=False, progress_bar=True
     os.remove(output_path)
 
 
-def update_vm_init_cell(notebook_path, model):
+def update_vm_init_cell(notebook_path, model, pii_filtering_mode="disabled"):
     api_host = os.getenv(
         "NOTEBOOK_RUNNER_API_HOST", "https://api.dev.vm.validmind.ai/api/v1/tracking"
     )
@@ -204,6 +222,7 @@ def update_vm_init_cell(notebook_path, model):
         api_key=api_key,
         api_secret=api_secret,
         model=model,
+        pii_filtering_mode=pii_filtering_mode,
     )
 
     with open(notebook_path, "r") as f:
