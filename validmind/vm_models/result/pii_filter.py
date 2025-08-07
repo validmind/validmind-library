@@ -18,8 +18,8 @@ from ...logging import get_logger
 logger = get_logger(__name__)
 
 
-class PIIFilteringMode(Enum):
-    """Enum for PII filtering modes."""
+class PIIDetectionMode(Enum):
+    """Enum for PII detection modes."""
 
     DISABLED = "disabled"
     TEST_RESULTS = "test_results"
@@ -27,19 +27,19 @@ class PIIFilteringMode(Enum):
     ALL = "all"
 
 
-def _get_pii_filtering_mode() -> PIIFilteringMode:
-    """Get the current PII filtering mode from environment variable."""
-    mode_str = os.getenv("VALIDMIND_PII_FILTERING", "disabled").lower()
+def _get_pii_detection_mode() -> PIIDetectionMode:
+    """Get the current PII detection mode from environment variable."""
+    mode_str = os.getenv("VALIDMIND_PII_DETECTION", "disabled").lower()
 
     try:
-        return PIIFilteringMode(mode_str)
+        return PIIDetectionMode(mode_str)
     except ValueError:
         logger.warning(
-            f"Invalid PII filtering mode '{mode_str}'. "
-            f"Valid options: {', '.join([mode.value for mode in PIIFilteringMode])}. "
+            f"Invalid PII detection mode '{mode_str}'. "
+            f"Valid options: {', '.join([mode.value for mode in PIIDetectionMode])}. "
             f"Defaulting to 'disabled'."
         )
-        return PIIFilteringMode.DISABLED
+        return PIIDetectionMode.DISABLED
 
 
 # Lazy load presidio components to avoid import errors when not installed
@@ -63,28 +63,28 @@ def _get_presidio_analyzer():
     return _analyzer if _analyzer is not False else None
 
 
-def is_pii_filtering_enabled_for_test_results() -> bool:
-    """Check if PII filtering is enabled for test results and available."""
-    mode = _get_pii_filtering_mode()
+def is_pii_detection_enabled_for_test_results() -> bool:
+    """Check if PII detection is enabled for test results and available."""
+    mode = _get_pii_detection_mode()
     return (
-        mode in [PIIFilteringMode.TEST_RESULTS, PIIFilteringMode.ALL]
+        mode in [PIIDetectionMode.TEST_RESULTS, PIIDetectionMode.ALL]
         and _get_presidio_analyzer() is not None
     )
 
 
-def is_pii_filtering_enabled_for_test_descriptions() -> bool:
-    """Check if PII filtering is enabled for test descriptions and available."""
-    mode = _get_pii_filtering_mode()
+def is_pii_detection_enabled_for_test_descriptions() -> bool:
+    """Check if PII detection is enabled for test descriptions and available."""
+    mode = _get_pii_detection_mode()
     return (
-        mode in [PIIFilteringMode.TEST_DESCRIPTIONS, PIIFilteringMode.ALL]
+        mode in [PIIDetectionMode.TEST_DESCRIPTIONS, PIIDetectionMode.ALL]
         and _get_presidio_analyzer() is not None
     )
 
 
-def is_pii_filtering_enabled() -> bool:
-    """Check if PII filtering is enabled for any mode and available."""
-    mode = _get_pii_filtering_mode()
-    return mode != PIIFilteringMode.DISABLED and _get_presidio_analyzer() is not None
+def is_pii_detection_enabled() -> bool:
+    """Check if PII detection is enabled for any mode and available."""
+    mode = _get_pii_detection_mode()
+    return mode != PIIDetectionMode.DISABLED and _get_presidio_analyzer() is not None
 
 
 def detect_pii_in_text(
@@ -171,7 +171,7 @@ def scan_dataframe_for_pii(
     Returns:
         Dictionary mapping column names to lists of detected PII entities
     """
-    if not is_pii_filtering_enabled_for_test_results():
+    if not is_pii_detection_enabled_for_test_results():
         return {}
 
     pii_findings = {}
@@ -210,7 +210,7 @@ def scan_dataframe_for_pii(
 def check_table_for_pii(
     table_data: Union[pd.DataFrame, List[Dict]],
     threshold: float = 0.5,
-    raise_on_detection: bool = False,
+    raise_on_detection: bool = True,
 ) -> None:
     """
     Check a table (DataFrame or list of dicts) for PII content.
@@ -218,12 +218,12 @@ def check_table_for_pii(
     Args:
         table_data: The table data to check
         threshold: Minimum confidence score for PII detection
-        raise_on_detection: If True, raises ValueError when PII is detected
+        raise_on_detection: If True, raises ValueError when PII is detected (default: True)
 
     Raises:
         ValueError: If PII is detected and raise_on_detection is True
     """
-    if not is_pii_filtering_enabled_for_test_results():
+    if not is_pii_detection_enabled_for_test_results():
         return
 
     # Convert to DataFrame if it's a list of dicts
@@ -245,53 +245,45 @@ def check_table_for_pii(
 
         raise ValueError(
             f"PII detected in table data. Entity types found: {', '.join(entity_types)}. "
-            f"Pass `unsafe=True` to bypass PII filtering."
+            f"Pass `unsafe=True` to bypass PII detection."
         )
 
 
-def filter_pii_from_text(
+def check_text_for_pii(
     text: str,
     entities: Optional[List[str]] = None,
     language: str = "en",
     threshold: float = 0.5,
-    mask_char: str = "*",
-) -> str:
+    raise_on_detection: bool = True,
+) -> List[Dict]:
     """
-    Filter PII from text by replacing detected entities with mask characters.
+    Check text for PII content and optionally raise an exception.
 
     Args:
-        text: The text to filter
-        entities: List of entity types to detect and filter
+        text: The text to check for PII
+        entities: List of entity types to detect
         language: Language code for analysis
         threshold: Minimum confidence score for PII detection
-        mask_char: Character to use for masking PII
+        raise_on_detection: If True, raises ValueError when PII is detected (default: True)
 
     Returns:
-        Text with PII entities masked
+        List of detected PII entities
+
+    Raises:
+        ValueError: If PII is detected and raise_on_detection is True
     """
-    if not is_pii_filtering_enabled_for_test_descriptions():
-        return text
+    if not is_pii_detection_enabled_for_test_descriptions():
+        return []
 
     pii_entities = detect_pii_in_text(
         text=text, entities=entities, language=language, threshold=threshold
     )
 
-    if not pii_entities:
-        return text
-
-    # Sort entities by start position in reverse order to avoid index shifting
-    pii_entities.sort(key=lambda x: x["start"], reverse=True)
-
-    filtered_text = text
-    for entity in pii_entities:
-        # Replace the PII text with mask characters
-        mask_length = entity["end"] - entity["start"]
-        mask = mask_char * mask_length
-        filtered_text = (
-            filtered_text[: entity["start"]] + mask + filtered_text[entity["end"] :]
+    if pii_entities and raise_on_detection:
+        entity_types = set(entity["entity_type"] for entity in pii_entities)
+        raise ValueError(
+            f"PII detected in text content. Entity types found: {', '.join(entity_types)}. "
+            f"Pass `unsafe=True` to bypass PII detection."
         )
 
-    if pii_entities:
-        logger.info(f"Masked {len(pii_entities)} PII entities from text")
-
-    return filtered_text
+    return pii_entities

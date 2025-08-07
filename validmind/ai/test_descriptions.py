@@ -37,21 +37,22 @@ def _get_llm_global_context():
     return context if context_enabled and context else None
 
 
-def _filter_pii_from_summary(summary: Union[str, None]) -> Union[str, None]:
-    """Filter PII from summary text before sending to LLM."""
+def _check_summary_for_pii(summary: Union[str, None]) -> None:
+    """Check summary text for PII content before sending to LLM."""
     if summary is None:
-        return summary
+        return
 
     try:
-        from ..vm_models.result.pii_filter import filter_pii_from_text
+        from ..vm_models.result.pii_filter import check_text_for_pii
 
-        return filter_pii_from_text(summary)
+        check_text_for_pii(summary, raise_on_detection=True)
     except ImportError:
-        logger.debug("PII filtering not available - skipping PII filtering for summary")
-        return summary
+        logger.debug("PII detection not available - skipping PII check for summary")
+    except ValueError:
+        # Re-raise PII detection errors
+        raise
     except Exception as e:
-        logger.warning(f"PII filtering failed for summary: {e}")
-        return summary
+        logger.warning(f"PII detection failed for summary: {e}")
 
 
 def _truncate_summary(
@@ -118,15 +119,15 @@ def generate_description(
     else:
         summary = None
 
-    # Filter PII from summary before sending to LLM
-    filtered_summary = _filter_pii_from_summary(summary)
+    # Check summary for PII before sending to LLM (will raise exception if PII found)
+    _check_summary_for_pii(summary)
 
     return generate_test_result_description(
         {
             "test_name": test_name,
             "test_description": test_description,
             "title": title,
-            "summary": _truncate_summary(filtered_summary, test_id),
+            "summary": _truncate_summary(summary, test_id),
             "figures": [
                 figure._get_b64_url() for figure in ([] if tables else figures)
             ],
