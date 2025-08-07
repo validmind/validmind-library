@@ -177,7 +177,7 @@ class TestResult(Result):
     title: Optional[str] = None
     doc: Optional[str] = None
     description: Optional[Union[str, DescriptionFuture]] = None
-    metric: Optional[Union[int, float]] = None
+    metric: Optional[Union[int, float, List[Union[int, float]]]] = None
     tables: Optional[List[ResultTable]] = None
     raw_data: Optional[RawData] = None
     figures: Optional[List[Figure]] = None

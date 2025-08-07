@@ -535,14 +535,19 @@ class VMDataset(VMInput):
                 metric_value = result.metric
 
                 # Create column values (repeat the scalar value for all rows)
-                column_values = np.full(len(self._df), metric_value)
+                if np.isscalar(metric_value):
+                    column_values = np.full(len(self._df), metric_value)
+                else:
+                    if len(metric_value) != len(self._df):
+                        raise ValueError(
+                            f"Metric value length {len(metric_value)} does not match dataset length {len(self._df)}"
+                        )
+                    column_values = metric_value
 
                 # Add the column to the dataset
                 self.add_extra_column(column_name, column_values)
 
-                logger.info(
-                    f"Added metric column '{column_name}' with value {metric_value}"
-                )
+                logger.info(f"Added metric column '{column_name}'")
             except Exception as e:
                 logger.error(f"Failed to compute metric {metric_id}: {e}")
                 raise ValueError(f"Failed to compute metric {metric_id}: {e}") from e
