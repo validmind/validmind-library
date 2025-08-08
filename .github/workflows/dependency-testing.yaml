@@ -83,6 +83,7 @@ jobs:
 
           if [[ "${{ matrix.deps-type }}" == "default" ]]; then
             # Install only from built artifacts (let pip resolve deps normally)
+            pip install beautifulsoup4
             pip install dist/*.whl
             pip check
             python -m tests.test_unit_tests | cat
