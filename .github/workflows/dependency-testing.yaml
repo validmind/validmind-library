@@ -141,7 +141,7 @@ jobs:
 
       - name: Test minimum versions
         run: |
-          make test-deps-min
+          tox -e py39-min
         env:
           OMP_NUM_THREADS: 1
           MKL_NUM_THREADS: 1
@@ -172,7 +172,7 @@ jobs:
 
       - name: Test maximum versions
         run: |
-          make test-deps-max
+          tox -e py39-max,py310-max,py311-max,py312-max
         env:
           OMP_NUM_THREADS: 1
           MKL_NUM_THREADS: 1
@@ -203,7 +203,7 @@ jobs:
 
       - name: Test all Python versions
         run: |
-          make test-python-versions
+          tox -e py39,py310,py311,py312
         env:
           OMP_NUM_THREADS: 1
           MKL_NUM_THREADS: 1
