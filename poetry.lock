@@ -483,7 +483,7 @@ version = "4.13.4"
 description = "Screen-scraping library"
 optional = false
 python-versions = ">=3.7.0"
-groups = ["dev"]
+groups = ["main", "dev"]
 files = [
     {file = "beautifulsoup4-4.13.4-py3-none-any.whl", hash = "sha256:9bbbb14bfde9d79f38b8cd5f8c7c85f4b8f2523190ebed90e950a8dea4cb1c4b"},
     {file = "beautifulsoup4-4.13.4.tar.gz", hash = "sha256:dbb3c4e1ceae6aefebdaf2423247260cd062430a410e38c66f2baa50a8437195"},
@@ -2276,7 +2276,7 @@ files = [
     {file = "importlib_metadata-8.7.0-py3-none-any.whl", hash = "sha256:e5dd1551894c77868a30651cef00984d50e1002d06942a7101d34870c5f02afd"},
     {file = "importlib_metadata-8.7.0.tar.gz", hash = "sha256:d13b81ad223b890aa16c5471f2ac3056cf76c5f10f82d6f9292f0b415f389000"},
 ]
-markers = {main = "platform_system == \"Linux\" and platform_machine == \"x86_64\" and python_version < \"3.10\""}
+markers = {main = "platform_system == \"Linux\" and platform_machine == \"x86_64\" and python_version == \"3.9\""}
 
 [package.dependencies]
 zipp = ">=3.20"
@@ -2297,7 +2297,7 @@ description = "Read resources from Python packages"
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
-markers = "python_version < \"3.10\""
+markers = "python_version == \"3.9\""
 files = [
     {file = "importlib_resources-6.5.2-py3-none-any.whl", hash = "sha256:789cfdc3ed28c78b67a06acb8126751ced69a3d5f79c095a98298cd8a760ccec"},
     {file = "importlib_resources-6.5.2.tar.gz", hash = "sha256:185f87adef5bcc288449d98fb4fba07cea78bc036455dd44c5fc4a2fe78fed2c"},
@@ -5785,6 +5785,75 @@ cffi = ">=1.5.0"
 idna = ["idna (>=2.1)"]
 
 [[package]]
+name = "pycocoevalcap"
+version = "1.2"
+description = "MS-COCO Caption Evaluation for Python 3"
+optional = true
+python-versions = ">=3"
+groups = ["main"]
+markers = "extra == \"all\" or extra == \"llm\""
+files = [
+    {file = "pycocoevalcap-1.2-py3-none-any.whl", hash = "sha256:083ed7910f1aec000b0a237ef6665f74edf19954204d0b1cbdb8399ed132228d"},
+    {file = "pycocoevalcap-1.2.tar.gz", hash = "sha256:7857f4d596ca2fa0b1a9a3c2067588a4257556077b7ad614d00b2b7b8f57cdde"},
+]
+
+[package.dependencies]
+pycocotools = ">=2.0.2"
+
+[[package]]
+name = "pycocotools"
+version = "2.0.10"
+description = "Official APIs for the MS-COCO dataset"
+optional = true
+python-versions = ">=3.9"
+groups = ["main"]
+markers = "extra == \"all\" or extra == \"llm\""
+files = [
+    {file = "pycocotools-2.0.10-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:94d558e6a4b92620dad1684b74b6c1404e20d5ed3b4f3aed64ad817d5dd46c72"},
+    {file = "pycocotools-2.0.10-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:c4d61959f505f1333afd1666ece1a9f8dad318de160c56c7d03f22d7b5556478"},
+    {file = "pycocotools-2.0.10-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:0bb54826c5d3b651597ec15ae5f4226b727159ec7798af81aa3895f734518993"},
+    {file = "pycocotools-2.0.10-cp310-cp310-musllinux_1_2_aarch64.whl", hash = "sha256:9d3b4d0aa38c76153ec244f17939bbc65d24b6a119eb99184f7f636421ef0d8a"},
+    {file = "pycocotools-2.0.10-cp310-cp310-musllinux_1_2_x86_64.whl", hash = "sha256:714dda1fccc3a9a1f10893530df6e927678daf6c49bc8a932d7ec2042e9a11f2"},
+    {file = "pycocotools-2.0.10-cp310-cp310-win_amd64.whl", hash = "sha256:8b4f26d44dde3e0b1e3df3ddcc7e27560e52dfe53db708c26af22a57e8ea3d47"},
+    {file = "pycocotools-2.0.10-cp310-cp310-win_arm64.whl", hash = "sha256:16836530552d6ce5e7f1cbcdfe6ead94c0cee71d61bfa3e3c832aef57d21c027"},
+    {file = "pycocotools-2.0.10-cp311-cp311-macosx_10_9_universal2.whl", hash = "sha256:68846da0ee3ea82d71bcbd99ed28271633a67a899cfbacd2ef309b2e455524b2"},
+    {file = "pycocotools-2.0.10-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:20831839a771d4bc60a814e7b54a92d9a45a773dee47959d30888d00066059c3"},
+    {file = "pycocotools-2.0.10-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:1760c10459dfb4229e7436ae380228428efb0115bbe332a51b72d07fa085d8c0"},
+    {file = "pycocotools-2.0.10-cp311-cp311-musllinux_1_2_aarch64.whl", hash = "sha256:5146bc881f380e8fb493e49216083298e4a06f778841f8b9b1d45b21e211d0e4"},
+    {file = "pycocotools-2.0.10-cp311-cp311-musllinux_1_2_x86_64.whl", hash = "sha256:23f7d0c551d4c31cab629ce177186db9562f10414320add5267707a84cf6cdfa"},
+    {file = "pycocotools-2.0.10-cp311-cp311-win_amd64.whl", hash = "sha256:03c3aacec2a6aa5171016303a539d07a7b22a34557456eadf0eb40853bdd813e"},
+    {file = "pycocotools-2.0.10-cp311-cp311-win_arm64.whl", hash = "sha256:1f942352b1ab11b9732443ab832cbe5836441f4ec30e1f61b44e1421dbb0a0f5"},
+    {file = "pycocotools-2.0.10-cp312-abi3-macosx_10_13_universal2.whl", hash = "sha256:e1359f556986c8c4ac996bf8e473ff891d87630491357aaabd12601687af5edb"},
+    {file = "pycocotools-2.0.10-cp312-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:075788c90bfa6a8989d628932854f3e32c25dac3c1bf7c1183cefad29aee16c8"},
+    {file = "pycocotools-2.0.10-cp312-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:4539d8b29230de042f574012edd0b5227528da083c4f12bbd6488567aabd3920"},
+    {file = "pycocotools-2.0.10-cp312-abi3-musllinux_1_2_aarch64.whl", hash = "sha256:da7b339624d0f78aa5bdc1c86a53f2dcb36ae7e10ab5fe45ba69878bb7837c7a"},
+    {file = "pycocotools-2.0.10-cp312-abi3-musllinux_1_2_x86_64.whl", hash = "sha256:ffdbf8810f27b32c5c5c85d9cd65e8e066852fef9775e58a7b23abdffeaf8252"},
+    {file = "pycocotools-2.0.10-cp312-abi3-win_amd64.whl", hash = "sha256:998a88f90bb663548e767470181175343d406b6673b8b9ef5bdbb3a6d3eb3b11"},
+    {file = "pycocotools-2.0.10-cp312-abi3-win_arm64.whl", hash = "sha256:76cd86a80171f8f7da3250be0e40d75084f1f1505d376ae0d08ed0be1ba8a90d"},
+    {file = "pycocotools-2.0.10-cp313-cp313t-macosx_10_13_universal2.whl", hash = "sha256:df7796ec8b9e32879028f929b77968039ca7ced7ecdad23147da55f144e753c8"},
+    {file = "pycocotools-2.0.10-cp313-cp313t-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:9d76ab632494f5dd8578230e5123e595446389598e0832a86f3dc8d7f236c3e5"},
+    {file = "pycocotools-2.0.10-cp313-cp313t-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:8b165aaa9d435571ce34cdb5fae9d47cfe923db2c687362c2607c1e5f1a7ffa8"},
+    {file = "pycocotools-2.0.10-cp313-cp313t-musllinux_1_2_aarch64.whl", hash = "sha256:5faf8bb60228c44fb171eb0674ae31d72a82bcc0d099c0fececfe7cae49010f3"},
+    {file = "pycocotools-2.0.10-cp313-cp313t-musllinux_1_2_x86_64.whl", hash = "sha256:63c8aa107c96f19634ec9795c9c34d563c7da45009a342ca7ad36070d82792e1"},
+    {file = "pycocotools-2.0.10-cp313-cp313t-win_amd64.whl", hash = "sha256:d1fcf39acdee901de7665b1853e4f79f7a8c2f88eb100a9c24229a255c9efc59"},
+    {file = "pycocotools-2.0.10-cp313-cp313t-win_arm64.whl", hash = "sha256:3e323b0ed7c15df34929b2d99ff720be8d6a35c58c7566e29559d9bebd2d09f6"},
+    {file = "pycocotools-2.0.10-cp39-cp39-macosx_10_9_universal2.whl", hash = "sha256:ec515c405fb600d424777a4dbb256c7101071178ad9659801edcef20f25bb393"},
+    {file = "pycocotools-2.0.10-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:a65983dbad84f93421a73c7f1365c588babd2b8bdcaaf3d1351e448ee1a01ccc"},
+    {file = "pycocotools-2.0.10-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:87ba2710752372b5ec14cf446cf9a0a3a8069f461595991b977e7caf5a2788af"},
+    {file = "pycocotools-2.0.10-cp39-cp39-musllinux_1_2_aarch64.whl", hash = "sha256:c415f00fa0d60db20e8ff0f3c641b32ed0910c6102f719b46918bbd139ab5692"},
+    {file = "pycocotools-2.0.10-cp39-cp39-musllinux_1_2_x86_64.whl", hash = "sha256:cd777096a06d6aa560362bc51df084640d31c6e2ea69fe03d03dd185bbc27173"},
+    {file = "pycocotools-2.0.10-cp39-cp39-win_amd64.whl", hash = "sha256:2daf190f33e7befb353d3b5a023678d6c10c04b51d86386d0d8b353198e25e0c"},
+    {file = "pycocotools-2.0.10-cp39-cp39-win_arm64.whl", hash = "sha256:9e31c95d85ee5b36ea5a2f945565ea797301d3a46c2dd3ec35d427edf4e2f5e6"},
+    {file = "pycocotools-2.0.10.tar.gz", hash = "sha256:7a47609cdefc95e5e151313c7d93a61cf06e15d42c7ba99b601e3bc0f9ece2e1"},
+]
+
+[package.dependencies]
+numpy = "*"
+
+[package.extras]
+all = ["matplotlib (>=2.1.0)"]
+
+[[package]]
 name = "pycodestyle"
 version = "2.8.0"
 description = "Python style guide checker"
@@ -7400,7 +7469,7 @@ version = "2.7"
 description = "A modern CSS selector implementation for Beautiful Soup."
 optional = false
 python-versions = ">=3.8"
-groups = ["dev"]
+groups = ["main", "dev"]
 files = [
     {file = "soupsieve-2.7-py3-none-any.whl", hash = "sha256:6e60cc5c1ffaf1cebcc12e8188320b72071e922c2e897f737cadce79ad5d30c4"},
     {file = "soupsieve-2.7.tar.gz", hash = "sha256:ad282f9b6926286d2ead4750552c8a6142bc4c783fd66b0293547c8fe6ae126a"},
@@ -8807,7 +8876,7 @@ files = [
     {file = "zipp-3.23.0-py3-none-any.whl", hash = "sha256:071652d6115ed432f5ce1d34c336c0adfd6a884660d1e9712a256d3d3bd4b14e"},
     {file = "zipp-3.23.0.tar.gz", hash = "sha256:a07157588a12518c9d4034df3fbbee09c814741a33ff63c05fa29d26a2404166"},
 ]
-markers = {main = "python_version < \"3.10\""}
+markers = {main = "python_version == \"3.9\""}
 
 [package.extras]
 check = ["pytest-checkdocs (>=2.4)", "pytest-ruff (>=0.2.1) ; sys_platform != \"cygwin\""]
@@ -8932,14 +9001,14 @@ cffi = {version = ">=1.11", markers = "platform_python_implementation == \"PyPy\
 cffi = ["cffi (>=1.11)"]
 
 [extras]
-all = ["langchain-openai", "ragas", "scipy", "sentencepiece", "statsmodels", "torch", "transformers", "xgboost"]
+all = ["langchain-openai", "pycocoevalcap", "ragas", "scipy", "sentencepiece", "statsmodels", "torch", "transformers", "xgboost"]
 huggingface = ["sentencepiece", "transformers"]
-llm = ["langchain-openai", "ragas", "sentencepiece", "torch", "transformers"]
+llm = ["langchain-openai", "pycocoevalcap", "ragas", "sentencepiece", "torch", "transformers"]
 pytorch = ["torch"]
 stats = ["scipy", "statsmodels"]
 xgboost = ["xgboost"]
 
 [metadata]
 lock-version = "2.1"
-python-versions = ">=3.9.0,<3.13"
-content-hash = "cda95f44d58295e26d61fb22f52bb0cc8716913a7501bfac40b1649c381624e0"
+python-versions = ">=3.9,<3.13"
+content-hash = "9ac390e008af3e0f2463277917935d5b981e16e3ecd4a1fae3aa3c650a2c9c4a"
