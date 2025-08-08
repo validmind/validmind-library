@@ -1,17 +1,3 @@
-[tool.poetry]
-authors = [
-  "Andres Rodriguez <andres@validmind.ai>",
-  "Juan Martinez <juan@validmind.ai>",
-  "Anil Sorathiya <anil@validmind.ai>",
-  "Luis Pallares <luis@validmind.ai>",
-  "John Halz <john@validmind.ai>",
-]
-description = "ValidMind Library"
-license = "Commercial License"
-name = "validmind"
-readme = "README.pypi.md"
-version = "2.9.0"
-
 [project]
 name = "validmind"
 version = "2.9.0"
@@ -46,11 +32,6 @@ dependencies = [
   "tqdm",
   "anywidget",
   "beautifulsoup4",
-]
-
-classifiers = [
-  "License :: OSI Approved :: GNU Affero General Public License v3",
-  "License :: Other/Proprietary License",
 ]
 
 [project.optional-dependencies]
@@ -101,9 +82,6 @@ explainability = ["shap (>=0.46.0)"]
 credit_risk = ["scorecardpy (>=0.1.9.6,<0.2.0)"]
 datasets = ["datasets (>=2.10.0,<3.0.0)"]
 
-[project.scripts]
-vm-create-new-test = "scripts.create_new_test:generate_test"
-
 [tool.poetry.group.dev.dependencies]
 black = "^22.1.0"
 click = "*"
@@ -123,6 +101,9 @@ sphinx-markdown-builder = "^0.5.5"
 sphinx-rtd-theme = "^1.2.0"
 tox = "^4.0.0"
 twine = "^4.0.2"
+
+[project.scripts]
+vm-create-new-test = "scripts.create_new_test:generate_test"
 
 [build-system]
 build-backend = "poetry.core.masonry.api"
