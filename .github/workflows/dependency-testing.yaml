@@ -83,7 +83,8 @@ jobs:
 
           if [[ "${{ matrix.deps-type }}" == "default" ]]; then
             # Install only from built artifacts (let pip resolve deps normally)
-            pip install "dist/*.whl[all]"
+            WHEEL=$(ls dist/*.whl | head -n 1)
+            python -m pip install "${WHEEL}[all]"
             pip check
             python -m tests.test_unit_tests | cat
           else
@@ -92,7 +93,8 @@ jobs:
             uv pip compile pyproject.toml --all-extras --no-emit-index-url --no-annotate --output-file "$OUT" --upgrade
             # Install constraints then the wheel without reinstalling deps
             pip install -r "$OUT"
-            pip install "dist/*.whl[all]" --no-deps
+            WHEEL=$(ls dist/*.whl | head -n 1)
+            python -m pip install "${WHEEL}[all]" --no-deps
             pip check
             python -m tests.test_unit_tests | cat
           fi
