@@ -45,7 +45,13 @@ class BooleanOutputHandler(OutputHandler):
 
 class MetricOutputHandler(OutputHandler):
     def can_handle(self, item: Any) -> bool:
-        return isinstance(item, (int, float))
+        # Accept individual numbers
+        if isinstance(item, (int, float)):
+            return True
+        # Accept lists/arrays of numbers for per-row metrics
+        if isinstance(item, (list, tuple, np.ndarray)):
+            return all(isinstance(x, (int, float, np.number)) for x in item)
+        return False
 
     def process(self, item: Any, result: TestResult) -> None:
         if result.metric is not None:
