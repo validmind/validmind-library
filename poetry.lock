@@ -3462,9 +3462,10 @@ langchain-core = ">=0.3.72,<1.0.0"
 name = "langdetect"
 version = "1.0.9"
 description = "Language detection library ported from Google's language-detection."
-optional = false
+optional = true
 python-versions = "*"
 groups = ["main"]
+markers = "extra == \"all\" or extra == \"nlp\""
 files = [
     {file = "langdetect-1.0.9-py2-none-any.whl", hash = "sha256:7cbc0746252f19e76f77c0b1690aadf01963be835ef0cd4b56dddf2a8f1dfc2a"},
     {file = "langdetect-1.0.9.tar.gz", hash = "sha256:cbc1fef89f8d062739774bd51eda3da3274006b3661d199c2655f6b3f6d605a0"},
@@ -9001,9 +9002,10 @@ cffi = {version = ">=1.11", markers = "platform_python_implementation == \"PyPy\
 cffi = ["cffi (>=1.11)"]
 
 [extras]
-all = ["langchain-openai", "pycocoevalcap", "ragas", "scipy", "sentencepiece", "statsmodels", "torch", "transformers", "xgboost"]
+all = ["langchain-openai", "langdetect", "pycocoevalcap", "ragas", "scipy", "sentencepiece", "statsmodels", "torch", "transformers", "xgboost"]
 huggingface = ["sentencepiece", "transformers"]
 llm = ["langchain-openai", "pycocoevalcap", "ragas", "sentencepiece", "torch", "transformers"]
+nlp = ["langdetect"]
 pytorch = ["torch"]
 stats = ["scipy", "statsmodels"]
 xgboost = ["xgboost"]
@@ -9011,4 +9013,4 @@ xgboost = ["xgboost"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.9,<3.13"
-content-hash = "9ac390e008af3e0f2463277917935d5b981e16e3ecd4a1fae3aa3c650a2c9c4a"
+content-hash = "571193985e8dea9fa04aeaf37e14d4b16a2d84f9399892eed3e4c272bf19aef4"
