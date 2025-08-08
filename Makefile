@@ -87,12 +87,10 @@ verify-exposed-credentials:
 ensure-clean-notebooks:
 	poetry run python scripts/ensure_clean_notebooks.py
 
-# Dependency testing moved to GitHub Actions using built artifacts and dynamic constraints
-
 # Quick target to run all checks
 check: copyright format lint test verify-copyright verify-exposed-credentials ensure-clean-notebooks
 
-.PHONY: docs quarto-docs test-deps-min test-deps-max test-python-versions test-freeze-env test-tox-all
+.PHONY: docs quarto-docs
 
 notebook:
 	@python notebooks/templates/e2e_template.py

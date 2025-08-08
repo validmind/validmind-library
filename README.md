@@ -119,35 +119,6 @@ The value of `tag` corresponds to one of the options provided by Poetry: <https:
 
 ## Generating API Reference Docs
 
-## Dependency Testing
-
-Test compatibility across different Python versions and dependency combinations:
-
-```bash
-# Test all Python versions with default dependencies
-make test-python-versions
-
-# Test minimum supported dependency versions
-make test-deps-min
-
-# Test latest dependency versions  
-make test-deps-max
-
-# Test with a specific pip freeze file
-make test-freeze-env FREEZE_FILE=requirements.txt
-
-# Run all tox environments
-make test-tox-all
-```
-
-### Available tox environments:
-- `py{39,310,311,312}` - Test with default Poetry-managed dependencies
-- `py{39,310,311,312}-min` - Test with minimum supported dependency versions
-- `py{39,310,311,312}-max` - Test with latest dependency versions
-- `freeze` - Test with specific pip freeze file (requires `FREEZE_FILE` env var)
-
-## Documentation
-
 The [API reference documentation](https://docs.validmind.ai/validmind/validmind.html) you see in our docs site is generated in HTML format with `pdoc` with the following
 command:
 
