@@ -170,6 +170,54 @@ async def log_performance_async(
     return wrap
 
 
+def log_api_operation(
+    operation_name: Optional[str] = None,
+    logger: Optional[logging.Logger] = None,
+    extract_key: Optional[Callable] = None,
+    force: bool = False,
+) -> Callable[[F], F]:
+    """Decorator to log API operations like figure uploads.
+
+    Args:
+        operation_name (str, optional): The name of the operation. Defaults to function name.
+        logger (logging.Logger, optional): The logger to use. Defaults to None.
+        extract_key (Callable, optional): Function to extract a key from args for logging.
+        force (bool, optional): Whether to force logging even if env var is off.
+
+    Returns:
+        Callable: The decorated function.
+    """
+
+    def decorator(func: F) -> F:
+        # check if log level is set to debug
+        if _get_log_level() != logging.DEBUG and not force:
+            return func
+
+        nonlocal logger
+        if logger is None:
+            logger = get_logger()
+
+        nonlocal operation_name
+        if operation_name is None:
+            operation_name = func.__name__
+
+        async def wrapped(*args: Any, **kwargs: Any) -> Any:
+            # Try to extract a meaningful identifier from the arguments
+            identifier = ""
+            if extract_key and args:
+                try:
+                    identifier = f": {extract_key(args[0])}"
+                except (AttributeError, IndexError):
+                    pass
+
+            logger.debug(f"{operation_name}{identifier}")
+            return await func(*args, **kwargs)
+
+        return wrapped
+
+    return decorator
+
+
 def send_single_error(error: Exception) -> None:
     """Send a single error to Sentry.
 
