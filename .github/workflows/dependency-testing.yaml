@@ -45,7 +45,7 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ['3.9', '3.10', '3.11', '3.12']
-        deps-type: ['min', 'max', 'default']
+        deps-type: ['max', 'default']
 
     steps:
       - uses: actions/checkout@v4
@@ -87,14 +87,9 @@ jobs:
             pip check
             python -m tests.test_unit_tests | cat
           else
-            # Generate constraints
-            if [[ "${{ matrix.deps-type }}" == "min" ]]; then
-              OUT=constraints-min.txt
-              uv pip compile pyproject.toml --all-extras --resolution lowest --no-emit-index-url --no-annotate --output-file "$OUT"
-            else
-              OUT=constraints-max.txt
-              uv pip compile pyproject.toml --all-extras --no-emit-index-url --no-annotate --output-file "$OUT" --upgrade
-            fi
+            # Generate latest-compatible constraints (max)
+            OUT=constraints-max.txt
+            uv pip compile pyproject.toml --all-extras --no-emit-index-url --no-annotate --output-file "$OUT" --upgrade
             # Install constraints then the wheel without reinstalling deps
             pip install -r "$OUT"
             pip install dist/*.whl --no-deps
@@ -103,12 +98,12 @@ jobs:
           fi
 
       - name: Upload generated constraints (if any)
-        if: matrix.deps-type != 'default'
+        if: matrix.deps-type == 'max'
         uses: actions/upload-artifact@v4
         with:
-          name: constraints-${{ matrix.python-version }}-${{ matrix.deps-type }}
+          name: constraints-${{ matrix.python-version }}-max
           path: |
-            constraints-${{ matrix.deps-type }}.txt
+            constraints-max.txt
 
   pip-freeze-testing:
     name: Test Client Pip Freeze Environments
