@@ -37,6 +37,24 @@ def _get_llm_global_context():
     return context if context_enabled and context else None
 
 
+def _check_summary_for_pii(summary: Union[str, None]) -> None:
+    """Check summary text for PII content before sending to LLM."""
+    if summary is None:
+        return
+
+    try:
+        from ..vm_models.result.pii_filter import check_text_for_pii
+
+        check_text_for_pii(summary, raise_on_detection=True)
+    except ImportError:
+        logger.debug("PII detection not available - skipping PII check for summary")
+    except ValueError:
+        # Re-raise PII detection errors
+        raise
+    except Exception as e:
+        logger.warning(f"PII detection failed for summary: {e}")
+
+
 def _truncate_summary(
     summary: Union[str, None], test_id: str, max_tokens: int = 100_000
 ):
@@ -100,6 +118,9 @@ def generate_description(
         )
     else:
         summary = None
+
+    # Check summary for PII before sending to LLM (will raise exception if PII found)
+    _check_summary_for_pii(summary)
 
     return generate_test_result_description(
         {
