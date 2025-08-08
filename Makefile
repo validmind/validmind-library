@@ -56,10 +56,10 @@ quarto-docs:
 	rm -f docs/validmind.json
 	rm -rf docs/validmind
 	mkdir -p docs/validmind
-	
+
 	# Generate API JSON dump
 	poetry run python -m griffe dump validmind -f -o docs/validmind.json -d google -r -U
-	
+
 	# Generate Quarto docs from templates
 	poetry run python scripts/generate_quarto_docs.py
 
@@ -87,25 +87,7 @@ verify-exposed-credentials:
 ensure-clean-notebooks:
 	poetry run python scripts/ensure_clean_notebooks.py
 
-# Dependency testing with tox
-test-deps-min:
-	poetry run tox -e py39-min,py310-min,py311-min,py312-min
-
-test-deps-max:
-	poetry run tox -e py39-max,py310-max,py311-max,py312-max
-
-test-python-versions:
-	poetry run tox -e py39,py310,py311,py312
-
-test-freeze-env:
-ifdef FREEZE_FILE
-	FREEZE_FILE=$(FREEZE_FILE) poetry run tox -e freeze
-else
-	@echo "Usage: make test-freeze-env FREEZE_FILE=path/to/requirements.txt"
-endif
-
-test-tox-all:
-	poetry run tox
+# Dependency testing moved to GitHub Actions using built artifacts and dynamic constraints
 
 # Quick target to run all checks
 check: copyright format lint test verify-copyright verify-exposed-credentials ensure-clean-notebooks

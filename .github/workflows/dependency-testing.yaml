@@ -46,12 +46,6 @@ jobs:
       matrix:
         python-version: ['3.9', '3.10', '3.11', '3.12']
         deps-type: ['min', 'max', 'default']
-        exclude:
-          # Skip some combinations to reduce CI time
-          - python-version: '3.10'
-            deps-type: 'default'
-          - python-version: '3.11'
-            deps-type: 'default'
 
     steps:
       - uses: actions/checkout@v4
@@ -66,24 +60,55 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y build-essential libomp-dev
 
-      - name: Install tox
+      - name: Install build tooling (Poetry and uv)
         run: |
           python -m pip install --upgrade pip
-          pip install tox
+          curl -sSL https://install.python-poetry.org | python3 - --yes
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+          echo "$HOME/.poetry/bin" >> $GITHUB_PATH
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
 
-      - name: Run dependency tests
+      - name: Build wheel and sdist
         run: |
+          poetry --version
+          poetry build
+
+      - name: Install and test via pip artifacts (${{ matrix.deps-type }})
+        run: |
+          set -euxo pipefail
+          # limit threads to avoid resource contention
+          export OMP_NUM_THREADS=1
+          export MKL_NUM_THREADS=1
+
           if [[ "${{ matrix.deps-type }}" == "default" ]]; then
-            tox -e py$(echo ${{ matrix.python-version }} | tr -d .)
+            # Install only from built artifacts (let pip resolve deps normally)
+            pip install dist/*.whl
+            pip check
+            python -m tests.test_unit_tests | cat
           else
-            tox -e py$(echo ${{ matrix.python-version }} | tr -d .)-${{ matrix.deps-type }}
+            # Generate constraints
+            if [[ "${{ matrix.deps-type }}" == "min" ]]; then
+              OUT=constraints-min.txt
+              uv pip compile pyproject.toml --all-extras --resolution lowest --no-emit-index-url --no-annotate --output-file "$OUT"
+            else
+              OUT=constraints-max.txt
+              uv pip compile pyproject.toml --all-extras --no-emit-index-url --no-annotate --output-file "$OUT" --upgrade
+            fi
+            # Install constraints then the wheel without reinstalling deps
+            pip install -r "$OUT"
+            pip install dist/*.whl --no-deps
+            pip check
+            python -m tests.test_unit_tests | cat
           fi
-        env:
-          # Limit OpenMP threads to prevent CI resource issues
-          OMP_NUM_THREADS: 1
-          MKL_NUM_THREADS: 1
-          # Disable pip caching to prevent matrix job conflicts
-          PIP_NO_CACHE_DIR: 1
+
+      - name: Upload generated constraints (if any)
+        if: matrix.deps-type != 'default'
+        uses: actions/upload-artifact@v4
+        with:
+          name: constraints-${{ matrix.python-version }}-${{ matrix.deps-type }}
+          path: |
+            constraints-${{ matrix.deps-type }}.txt
 
   pip-freeze-testing:
     name: Test Client Pip Freeze Environments
