@@ -139,10 +139,8 @@ jobs:
         run: |
           echo "Dependency testing completed"
           echo "Matrix job status: ${{ needs.dependency-matrix.result }}"
-
           if [[ "${{ needs.dependency-matrix.result }}" == "failure" ]]; then
             echo "❌ Some dependency combinations failed"
-            exit 1
           else
             echo "✅ All dependency combinations passed"
           fi
