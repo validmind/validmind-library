@@ -97,14 +97,6 @@ jobs:
             python -m tests.test_unit_tests | cat
           fi
 
-      - name: Upload generated constraints (if any)
-        if: matrix.deps-type == 'max'
-        uses: actions/upload-artifact@v4
-        with:
-          name: constraints-${{ matrix.python-version }}-max
-          path: |
-            constraints-max.txt
-
   pip-freeze-testing:
     name: Test Client Pip Freeze Environments
     runs-on: ubuntu-latest
