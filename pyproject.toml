@@ -28,31 +28,20 @@ authors = [
 ]
 dependencies = [
   "aiohttp[speedups]",
-  "arch",
-  "bert-score (>=0.3.13)",
-  "catboost",
-  "datasets (>=2.10.0,<3.0.0)",
-  "evaluate",
   "ipywidgets",
   "kaleido (>=0.2.1,!=0.2.1.post1,<1.0.0)",
   "matplotlib",
   "mistune (>=3.0.2,<4.0.0)",
   "nest-asyncio (>=1.6.0,<2.0.0)",
-  "nltk (>=3.8.1,<4.0.0)",
-  "numba",
   "openai (>=1)",
   "pandas (>=2.0.3,<3.0.0)",
   "plotly (>=5.0.0)",
   "polars",
   "python-dotenv",
-  "rouge (>=1)",
   "scikit-learn",
-  "scorecardpy (>=0.1.9.6,<0.2.0)",
   "seaborn",
   "sentry-sdk (>=1.24.0,<2.0.0)",
-  "shap (>=0.46.0)",
   "tabulate (>=0.8.9,<0.9.0)",
-  "textblob (>=0.18.0.post0,<0.19.0)",
   "tiktoken",
   "tqdm",
   "anywidget",
@@ -76,6 +65,14 @@ all = [
   "scipy",
   "statsmodels",
   "langdetect",
+  "nltk (>=3.8.1,<4.0.0)",
+  "textblob (>=0.18.0.post0,<0.19.0)",
+  "evaluate",
+  "rouge (>=1)",
+  "bert-score (>=0.3.13)",
+  "arch",
+  "shap (>=0.46.0)",
+  "scorecardpy (>=0.1.9.6,<0.2.0)",
 ]
 huggingface = [
   "transformers (>=4.32.0,<5.0.0)",
@@ -89,10 +86,20 @@ llm = [
   "sentencepiece (>=0.2.0,<0.3.0)",
   "langchain-openai (>=0.1.8)",
 ]
-nlp = ["langdetect"]
+nlp = [
+  "langdetect",
+  "nltk (>=3.8.1,<4.0.0)",
+  "textblob (>=0.18.0.post0,<0.19.0)",
+  "evaluate",
+  "rouge (>=1)",
+  "bert-score (>=0.3.13)",
+]
 pytorch = ["torch (>=2.0.0)"]
-stats = ["scipy", "statsmodels"]
+stats = ["scipy", "statsmodels", "arch"]
 xgboost = ["xgboost (>=1.5.2,<3)"]
+explainability = ["shap (>=0.46.0)"]
+credit_risk = ["scorecardpy (>=0.1.9.6,<0.2.0)"]
+datasets = ["datasets (>=2.10.0,<3.0.0)"]
 
 [project.scripts]
 vm-create-new-test = "scripts.create_new_test:generate_test"

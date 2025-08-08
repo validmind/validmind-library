@@ -9,13 +9,24 @@ from warnings import filters as _warnings_filters
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import shap
 
 from validmind import RawData, tags, tasks
-from validmind.errors import UnsupportedModelForSHAPError
+from validmind.errors import MissingDependencyError, UnsupportedModelForSHAPError
 from validmind.logging import get_logger
 from validmind.models import CatBoostModel, SKlearnModel, StatsModelsModel
 from validmind.vm_models import VMDataset, VMModel
+
+try:
+    import shap
+except ImportError as e:
+    if "shap" in str(e):
+        raise MissingDependencyError(
+            "Missing required package `shap` for SHAPGlobalImportance. "
+            "Please run `pip install validmind[explainability]` to use SHAP tests",
+            required_dependencies=["shap"],
+            extra="explainability",
+        ) from e
+    raise e
 
 logger = get_logger(__name__)
 

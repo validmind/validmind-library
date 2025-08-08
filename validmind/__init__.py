@@ -37,10 +37,16 @@ from importlib import metadata
 from IPython.display import HTML, display
 
 # Ignore Numba warnings. We are not requiring this package directly
-from numba.core.errors import NumbaDeprecationWarning, NumbaPendingDeprecationWarning
+try:
+    from numba.core.errors import (
+        NumbaDeprecationWarning,
+        NumbaPendingDeprecationWarning,
+    )
 
-warnings.simplefilter("ignore", category=NumbaDeprecationWarning)
-warnings.simplefilter("ignore", category=NumbaPendingDeprecationWarning)
+    warnings.simplefilter("ignore", category=NumbaDeprecationWarning)
+    warnings.simplefilter("ignore", category=NumbaPendingDeprecationWarning)
+except ImportError:
+    ...
 
 from .__version__ import __version__  # noqa: E402
 from .api_client import init, log_metric, log_text, reload
