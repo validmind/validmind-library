@@ -458,7 +458,7 @@ class VMDataset(VMInput):
 
         return self.extra_columns.probability_column(model, column_name)
 
-    def assign_score(
+    def assign_scores(
         self,
         model: VMModel,
         metrics: Union[str, List[str]],
@@ -480,20 +480,20 @@ class VMDataset(VMInput):
 
         Examples:
             # Single metric
-            dataset.assign_score(model, "F1")
+            dataset.assign_scores(model, "F1")
 
             # Multiple metrics
-            dataset.assign_score(model, ["F1", "Precision", "Recall"])
+            dataset.assign_scores(model, ["F1", "Precision", "Recall"])
 
             # With parameters
-            dataset.assign_score(model, "ROC_AUC", average="weighted")
+            dataset.assign_scores(model, "ROC_AUC", average="weighted")
 
         Raises:
             ValueError: If the model input_id is None or if metric computation fails.
             ImportError: If unit_metrics module cannot be imported.
         """
         if model.input_id is None:
-            raise ValueError("Model input_id must be set to use assign_score")
+            raise ValueError("Model input_id must be set to use assign_scores")
 
         # Import unit_metrics module
         try:

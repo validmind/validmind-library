@@ -516,7 +516,7 @@ class TestTabularDataset(TestCase):
 
         self.assertIn("FunctionModel requires a callable predict_fn", str(context.exception))
 
-    def test_assign_score_single_metric(self):
+    def test_assign_scores_single_metric(self):
         """
         Test assigning a single metric score to dataset
         """
@@ -533,8 +533,8 @@ class TestTabularDataset(TestCase):
         # Assign predictions first (required for unit metrics)
         vm_dataset.assign_predictions(model=vm_model)
 
-        # Test assign_score with single metric
-        vm_dataset.assign_score(vm_model, "F1")
+        # Test assign_scores with single metric
+        vm_dataset.assign_scores(vm_model, "F1")
 
         # Check that the metric column was added
         expected_column = f"{vm_model.input_id}_F1"
@@ -548,7 +548,7 @@ class TestTabularDataset(TestCase):
         f1_value = metric_values.iloc[0]
         self.assertTrue(0 <= f1_value <= 1, f"F1 score should be between 0 and 1, got {f1_value}")
 
-    def test_assign_score_multiple_metrics(self):
+    def test_assign_scores_multiple_metrics(self):
         """
         Test assigning multiple metric scores to dataset
         """
@@ -565,9 +565,9 @@ class TestTabularDataset(TestCase):
         # Assign predictions first
         vm_dataset.assign_predictions(model=vm_model)
 
-        # Test assign_score with multiple metrics
+        # Test assign_scores with multiple metrics
         metrics = ["F1", "Precision", "Recall"]
-        vm_dataset.assign_score(vm_model, metrics)
+        vm_dataset.assign_scores(vm_model, metrics)
 
         # Check that all metric columns were added
         for metric in metrics:
@@ -582,7 +582,7 @@ class TestTabularDataset(TestCase):
             metric_value = metric_values.iloc[0]
             self.assertTrue(0 <= metric_value <= 1, f"{metric} should be between 0 and 1, got {metric_value}")
 
-    def test_assign_score_with_parameters(self):
+    def test_assign_scores_with_parameters(self):
         """
         Test assigning metric scores with custom parameters
         """
@@ -599,8 +599,8 @@ class TestTabularDataset(TestCase):
         # Assign predictions first
         vm_dataset.assign_predictions(model=vm_model)
 
-        # Test assign_score with parameters
-        vm_dataset.assign_score(vm_model, "ROC_AUC", **{"average": "weighted"})
+        # Test assign_scores with parameters
+        vm_dataset.assign_scores(vm_model, "ROC_AUC", **{"average": "weighted"})
 
         # Check that the metric column was added
         expected_column = f"{vm_model.input_id}_ROC_AUC"
@@ -611,7 +611,7 @@ class TestTabularDataset(TestCase):
         roc_value = roc_values.iloc[0]
         self.assertTrue(0 <= roc_value <= 1, f"ROC AUC should be between 0 and 1, got {roc_value}")
 
-    def test_assign_score_full_metric_id(self):
+    def test_assign_scores_full_metric_id(self):
         """
         Test assigning scores using full metric IDs
         """
@@ -628,9 +628,9 @@ class TestTabularDataset(TestCase):
         # Assign predictions first
         vm_dataset.assign_predictions(model=vm_model)
 
-        # Test assign_score with full metric ID
+        # Test assign_scores with full metric ID
         full_metric_id = "validmind.unit_metrics.classification.Accuracy"
-        vm_dataset.assign_score(vm_model, full_metric_id)
+        vm_dataset.assign_scores(vm_model, full_metric_id)
 
         # Check that the metric column was added with correct name
         expected_column = f"{vm_model.input_id}_Accuracy"
@@ -641,7 +641,7 @@ class TestTabularDataset(TestCase):
         accuracy_value = accuracy_values.iloc[0]
         self.assertTrue(0 <= accuracy_value <= 1, f"Accuracy should be between 0 and 1, got {accuracy_value}")
 
-    def test_assign_score_regression_model(self):
+    def test_assign_scores_regression_model(self):
         """
         Test assigning metric scores for regression model
         """
@@ -658,8 +658,8 @@ class TestTabularDataset(TestCase):
         # Assign predictions first
         vm_dataset.assign_predictions(model=vm_model)
 
-        # Test assign_score with regression metrics
-        vm_dataset.assign_score(vm_model, ["MeanSquaredError", "RSquaredScore"])
+        # Test assign_scores with regression metrics
+        vm_dataset.assign_scores(vm_model, ["MeanSquaredError", "RSquaredScore"])
 
         # Check that both metric columns were added
         expected_columns = ["reg_model_MeanSquaredError", "reg_model_RSquaredScore"]
@@ -676,9 +676,9 @@ class TestTabularDataset(TestCase):
         mse_value = mse_values.iloc[0]
         self.assertTrue(mse_value >= 0, f"MSE should be non-negative, got {mse_value}")
 
-    def test_assign_score_no_model_input_id(self):
+    def test_assign_scores_no_model_input_id(self):
         """
-        Test that assign_score raises error when model has no input_id
+        Test that assign_scores raises error when model has no input_id
         """
         df = pd.DataFrame({"x1": [1, 2, 3], "x2": [4, 5, 6], "y": [0, 1, 0]})
         vm_dataset = DataFrameDataset(
@@ -695,13 +695,13 @@ class TestTabularDataset(TestCase):
 
         # Should raise ValueError
         with self.assertRaises(ValueError) as context:
-            vm_dataset.assign_score(vm_model, "F1")
+            vm_dataset.assign_scores(vm_model, "F1")
 
         self.assertIn("Model input_id must be set", str(context.exception))
 
-    def test_assign_score_invalid_metric(self):
+    def test_assign_scores_invalid_metric(self):
         """
-        Test that assign_score raises error for invalid metric
+        Test that assign_scores raises error for invalid metric
         """
         df = pd.DataFrame({"x1": [1, 2, 3], "x2": [4, 5, 6], "y": [0, 1, 0]})
         vm_dataset = DataFrameDataset(
@@ -718,13 +718,13 @@ class TestTabularDataset(TestCase):
 
         # Should raise ValueError for invalid metric
         with self.assertRaises(ValueError) as context:
-            vm_dataset.assign_score(vm_model, "InvalidMetricName")
+            vm_dataset.assign_scores(vm_model, "InvalidMetricName")
 
         self.assertIn("Metric 'InvalidMetricName' not found", str(context.exception))
 
-    def test_assign_score_no_predictions(self):
+    def test_assign_scores_no_predictions(self):
         """
-        Test that assign_score raises error when predictions haven't been assigned yet
+        Test that assign_scores raises error when predictions haven't been assigned yet
         """
         df = pd.DataFrame({"x1": [1, 2, 3], "x2": [4, 5, 6], "y": [0, 1, 0]})
         vm_dataset = DataFrameDataset(
@@ -736,16 +736,16 @@ class TestTabularDataset(TestCase):
         model.fit(vm_dataset.x, vm_dataset.y.ravel())
         vm_model = init_model(input_id="test_model", model=model, __log=False)
 
-        # Don't assign predictions - test that assign_score raises error
+        # Don't assign predictions - test that assign_scores raises error
         # (unit metrics require predictions to be available)
         with self.assertRaises(ValueError) as context:
-            vm_dataset.assign_score(vm_model, "F1")
+            vm_dataset.assign_scores(vm_model, "F1")
 
         self.assertIn("No prediction column found", str(context.exception))
 
-    def test_assign_score_column_naming_convention(self):
+    def test_assign_scores_column_naming_convention(self):
         """
-        Test that assign_score follows the correct column naming convention
+        Test that assign_scores follows the correct column naming convention
         """
         df = pd.DataFrame({"x1": [1, 2, 3], "x2": [4, 5, 6], "y": [0, 1, 0]})
         vm_dataset = DataFrameDataset(
@@ -762,7 +762,7 @@ class TestTabularDataset(TestCase):
 
         # Test multiple metrics to verify naming convention
         metrics = ["F1", "Precision", "Recall"]
-        vm_dataset.assign_score(vm_model, metrics)
+        vm_dataset.assign_scores(vm_model, metrics)
 
         # Verify all columns follow the naming convention: {model.input_id}_{metric_name}
         for metric in metrics:
@@ -770,7 +770,7 @@ class TestTabularDataset(TestCase):
             self.assertTrue(expected_column in vm_dataset.df.columns,
                             f"Expected column '{expected_column}' not found")
 
-    def test_assign_score_multiple_models(self):
+    def test_assign_scores_multiple_models(self):
         """
         Test assigning scores from multiple models to same dataset
         """
@@ -793,8 +793,8 @@ class TestTabularDataset(TestCase):
         vm_dataset.assign_predictions(model=vm_rf_model)
 
         # Assign scores for both models
-        vm_dataset.assign_score(vm_lr_model, "F1")
-        vm_dataset.assign_score(vm_rf_model, "F1")
+        vm_dataset.assign_scores(vm_lr_model, "F1")
+        vm_dataset.assign_scores(vm_rf_model, "F1")
 
         # Check that both metric columns exist with correct names
         lr_column = "lr_model_F1"
