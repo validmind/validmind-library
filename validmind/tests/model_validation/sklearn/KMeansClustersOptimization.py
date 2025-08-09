@@ -7,12 +7,24 @@ from typing import List, Optional, Tuple
 import numpy as np
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-from scipy.spatial.distance import cdist
 from sklearn import clone
 from sklearn.metrics import silhouette_score
 
 from validmind import RawData, tags, tasks
-from validmind.errors import SkipTestError
+from validmind.errors import MissingDependencyError, SkipTestError
+
+try:
+    from scipy.spatial.distance import cdist
+except ImportError as e:
+    if "scipy" in str(e):
+        raise MissingDependencyError(
+            "Missing required package `scipy` for KMeansClustersOptimization. "
+            "Please run `pip install validmind[stats]` to use statistical tests",
+            required_dependencies=["scipy"],
+            extra="stats",
+        ) from e
+
+    raise e
 from validmind.vm_models import VMDataset, VMModel
 
 

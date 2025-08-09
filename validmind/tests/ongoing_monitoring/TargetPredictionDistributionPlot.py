@@ -7,10 +7,23 @@ from typing import Dict, List, Tuple
 import pandas as pd
 import plotly.figure_factory as ff
 import plotly.graph_objects as go
-from scipy.stats import kurtosis, skew
 
 from validmind import RawData, tags, tasks
+from validmind.errors import MissingDependencyError
 from validmind.vm_models import VMDataset, VMModel
+
+try:
+    from scipy.stats import kurtosis, skew
+except ImportError as e:
+    if "scipy" in str(e):
+        raise MissingDependencyError(
+            "Missing required package `scipy` for TargetPredictionDistributionPlot. "
+            "Please run `pip install validmind[stats]` to use statistical tests",
+            required_dependencies=["scipy"],
+            extra="stats",
+        ) from e
+
+    raise e
 
 
 @tags("visualization")

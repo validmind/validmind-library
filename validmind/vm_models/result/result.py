@@ -465,8 +465,10 @@ class TestResult(Result):
             )
         )
 
-        if self.metric is not None:
-            # metrics are logged as separate entities
+        # Only log unit metrics when the metric is a scalar value.
+        # Some tests may assign a list/array of per-row metrics to `self.metric`.
+        # Those should not be sent to the unit-metric endpoint which expects scalars.
+        if self.metric is not None and not hasattr(self.metric, "__len__"):
             tasks.append(
                 api_client.alog_metric(
                     key=self.result_id,

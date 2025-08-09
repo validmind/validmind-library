@@ -4,12 +4,24 @@
 
 from typing import Tuple
 
-import evaluate
 import pandas as pd
 import plotly.graph_objects as go
 
 from validmind import RawData, tags, tasks
+from validmind.errors import MissingDependencyError
 from validmind.vm_models import VMDataset, VMModel
+
+try:
+    import evaluate
+except ImportError as e:
+    if "evaluate" in str(e):
+        raise MissingDependencyError(
+            "Missing required package `evaluate` for ToxicityScore. "
+            "Please run `pip install validmind[nlp]` to use NLP tests",
+            required_dependencies=["evaluate"],
+            extra="nlp",
+        ) from e
+    raise e
 
 
 @tags("nlp", "text_data", "visualization")

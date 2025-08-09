@@ -56,10 +56,10 @@ quarto-docs:
 	rm -f docs/validmind.json
 	rm -rf docs/validmind
 	mkdir -p docs/validmind
-	
+
 	# Generate API JSON dump
 	poetry run python -m griffe dump validmind -f -o docs/validmind.json -d google -r -U
-	
+
 	# Generate Quarto docs from templates
 	poetry run python scripts/generate_quarto_docs.py
 
