@@ -175,11 +175,11 @@ def process_output(item: Any, result: TestResult) -> None:
     """Process a single test output item and update the TestResult."""
     handlers = [
         BooleanOutputHandler(),
-        MetricOutputHandler(),
         FigureOutputHandler(),
         TableOutputHandler(),
         RawDataOutputHandler(),
         StringOutputHandler(),
+        MetricOutputHandler(),
     ]
 
     for handler in handlers:
