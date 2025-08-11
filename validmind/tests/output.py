@@ -179,6 +179,7 @@ def process_output(item: Any, result: TestResult) -> None:
         TableOutputHandler(),
         RawDataOutputHandler(),
         StringOutputHandler(),
+        # Unit metrics should be processed last
         MetricOutputHandler(),
     ]
 
