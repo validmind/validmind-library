@@ -7,6 +7,7 @@ Result objects for test results
 """
 import asyncio
 import json
+import os
 from abc import abstractmethod
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Union
@@ -20,7 +21,7 @@ from ipywidgets import HTML, VBox
 from ... import api_client
 from ...ai.utils import DescriptionFuture
 from ...errors import InvalidParameterError
-from ...logging import get_logger
+from ...logging import get_logger, log_api_operation
 from ...utils import (
     HumanReadableEncoder,
     NumpyEncoder,
@@ -177,7 +178,7 @@ class TestResult(Result):
     title: Optional[str] = None
     doc: Optional[str] = None
     description: Optional[Union[str, DescriptionFuture]] = None
-    metric: Optional[Union[int, float]] = None
+    metric: Optional[Union[int, float, List[Union[int, float]]]] = None
     tables: Optional[List[ResultTable]] = None
     raw_data: Optional[RawData] = None
     figures: Optional[List[Figure]] = None
@@ -476,9 +477,30 @@ class TestResult(Result):
             )
 
         if self.figures:
-            tasks.extend(
-                [api_client.alog_figure(figure) for figure in (self.figures or [])]
+            batch_size = min(
+                len(self.figures), int(os.getenv("VM_FIGURE_MAX_BATCH_SIZE", 20))
             )
+            figure_batches = [
+                self.figures[i : i + batch_size]
+                for i in range(0, len(self.figures), batch_size)
+            ]
+
+            async def upload_figures_in_batches():
+                for batch in figure_batches:
+
+                    @log_api_operation(
+                        operation_name=f"Uploading batch of {len(batch)} figures"
+                    )
+                    async def process_batch():
+                        batch_tasks = [
+                            api_client.alog_figure(figure) for figure in batch
+                        ]
+                        return await asyncio.gather(*batch_tasks)
+
+                    await process_batch()
+
+            tasks.append(upload_figures_in_batches())
+
         if self.description:
             revision_name = (
                 AI_REVISION_NAME
