@@ -8,10 +8,23 @@ import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-from scipy import stats
 
 from validmind import tags, tasks
+from validmind.errors import MissingDependencyError
 from validmind.vm_models import VMDataset
+
+try:
+    from scipy import stats
+except ImportError as e:
+    if "scipy" in str(e):
+        raise MissingDependencyError(
+            "Missing required package `scipy` for ScorecardHistogramDrift. "
+            "Please run `pip install validmind[stats]` to use statistical tests",
+            required_dependencies=["scipy"],
+            extra="stats",
+        ) from e
+
+    raise e
 
 
 @tags("visualization", "credit_risk", "logistic_regression")

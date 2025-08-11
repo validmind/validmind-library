@@ -4,11 +4,23 @@
 
 from typing import Tuple
 
-import nltk
 import pandas as pd
 import plotly.graph_objects as go
 
 from validmind import RawData, tags, tasks
+from validmind.errors import MissingDependencyError
+
+try:
+    import nltk
+except ImportError as e:
+    if "nltk" in str(e).lower():
+        raise MissingDependencyError(
+            "Missing required package `nltk` for ContextualRecall. "
+            "Please run `pip install validmind[nlp]` to use NLP tests",
+            required_dependencies=["nltk"],
+            extra="nlp",
+        ) from e
+    raise e
 from validmind.tests.utils import validate_prediction
 from validmind.vm_models import VMDataset, VMModel
 

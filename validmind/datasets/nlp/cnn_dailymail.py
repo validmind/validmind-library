@@ -7,9 +7,10 @@ import textwrap
 from typing import Optional, Tuple
 
 import pandas as pd
-from datasets import load_dataset
 from IPython.display import HTML, display
 from tabulate import tabulate
+
+from validmind.errors import MissingDependencyError
 
 # Define column names
 text_column = "article"
@@ -37,6 +38,19 @@ def load_data(
         Tuple containing (train_df, test_df) DataFrames with the loaded data.
     """
     if source == "online":
+        try:
+            from datasets import load_dataset
+        except ImportError as e:
+            if "datasets" in str(e):
+                raise MissingDependencyError(
+                    "Missing required package `datasets` for CNN Daily Mail. "
+                    "Please run `pip install validmind[datasets]` or "
+                    "`pip install datasets` to use CNN Daily Mail dataset",
+                    required_dependencies=["datasets"],
+                    extra="datasets",
+                ) from e
+            raise e
+
         # Load online data without predictions
         cnn_dataset = load_dataset("cnn_dailymail", "3.0.0")
         train_df = cnn_dataset["train"].to_pandas()

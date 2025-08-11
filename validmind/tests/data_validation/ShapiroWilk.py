@@ -6,9 +6,22 @@
 from typing import Tuple
 
 import pandas as pd
-from scipy import stats
 
 from validmind import RawData, tags, tasks
+from validmind.errors import MissingDependencyError
+
+try:
+    from scipy import stats
+except ImportError as e:
+    if "scipy" in str(e):
+        raise MissingDependencyError(
+            "Missing required package `scipy` for ShapiroWilk. "
+            "Please run `pip install validmind[stats]` to use statistical tests",
+            required_dependencies=["scipy"],
+            extra="stats",
+        ) from e
+
+    raise e
 
 
 @tasks("classification", "regression")

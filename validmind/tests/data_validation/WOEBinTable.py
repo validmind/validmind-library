@@ -5,11 +5,22 @@
 from typing import Dict, Tuple
 
 import pandas as pd
-import scorecardpy as sc
 
 from validmind import RawData, tags, tasks
-from validmind.errors import SkipTestError
+from validmind.errors import MissingDependencyError, SkipTestError
 from validmind.vm_models import VMDataset
+
+try:
+    import scorecardpy as sc
+except ImportError as e:
+    if "scorecardpy" in str(e):
+        raise MissingDependencyError(
+            "Missing required package `scorecardpy` for WOEBinTable. "
+            "Please run `pip install validmind[credit_risk]` to use these tests",
+            required_dependencies=["scorecardpy"],
+            extra="credit_risk",
+        ) from e
+    raise e
 
 
 @tags("tabular_data", "categorical_data")

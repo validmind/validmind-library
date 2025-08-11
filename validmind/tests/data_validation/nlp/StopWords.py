@@ -9,13 +9,25 @@ Threshold based tests
 from collections import defaultdict
 from typing import Dict, Tuple
 
-import nltk
 import pandas as pd
 import plotly.graph_objects as go
-from nltk.corpus import stopwords
 
 from validmind import RawData, tags, tasks
+from validmind.errors import MissingDependencyError
 from validmind.vm_models import VMDataset
+
+try:
+    import nltk
+    from nltk.corpus import stopwords
+except ImportError as e:
+    if "nltk" in str(e).lower():
+        raise MissingDependencyError(
+            "Missing required package `nltk` for StopWords. "
+            "Please run `pip install validmind[nlp]` to use NLP tests",
+            required_dependencies=["nltk"],
+            extra="nlp",
+        ) from e
+    raise e
 
 
 @tags("nlp", "text_data", "frequency_analysis", "visualization")

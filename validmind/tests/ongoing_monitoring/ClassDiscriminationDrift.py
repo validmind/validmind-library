@@ -6,12 +6,25 @@ from typing import Dict, List, Tuple
 
 import numpy as np
 import pandas as pd
-from scipy import stats
 from sklearn.metrics import roc_auc_score
 from sklearn.preprocessing import LabelBinarizer
 
 from validmind import tags, tasks
+from validmind.errors import MissingDependencyError
 from validmind.vm_models import VMDataset, VMModel
+
+try:
+    from scipy import stats
+except ImportError as e:
+    if "scipy" in str(e):
+        raise MissingDependencyError(
+            "Missing required package `scipy` for ClassDiscriminationDrift. "
+            "Please run `pip install validmind[stats]` to use statistical tests",
+            required_dependencies=["scipy"],
+            extra="stats",
+        ) from e
+
+    raise e
 
 
 def multiclass_roc_auc_score(y_test, y_pred, average="macro"):

@@ -5,12 +5,24 @@
 from collections import Counter
 from typing import Tuple
 
-import nltk
 import plotly.graph_objects as go
-from nltk.corpus import stopwords
 
 from validmind import RawData, tags, tasks
+from validmind.errors import MissingDependencyError
 from validmind.vm_models import VMDataset
+
+try:
+    import nltk
+    from nltk.corpus import stopwords
+except ImportError as e:
+    if "nltk" in str(e).lower():
+        raise MissingDependencyError(
+            "Missing required package `nltk` for CommonWords. "
+            "Please run `pip install validmind[nlp]` to use NLP tests",
+            required_dependencies=["nltk"],
+            extra="nlp",
+        ) from e
+    raise e
 
 
 @tags("nlp", "text_data", "visualization", "frequency_analysis")

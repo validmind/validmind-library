@@ -8,9 +8,21 @@ from typing import Tuple
 import matplotlib.pyplot as plt
 import nltk
 import seaborn as sns
-from nltk.sentiment import SentimentIntensityAnalyzer
 
 from validmind import RawData, tags, tasks
+from validmind.errors import MissingDependencyError
+
+try:
+    from nltk.sentiment import SentimentIntensityAnalyzer
+except ImportError as e:
+    if "nltk" in str(e).lower():
+        raise MissingDependencyError(
+            "Missing required package `nltk` for Sentiment. "
+            "Please run `pip install validmind[nlp]` to use NLP tests",
+            required_dependencies=["nltk"],
+            extra="nlp",
+        ) from e
+    raise e
 
 
 @tags("nlp", "text_data", "data_validation")

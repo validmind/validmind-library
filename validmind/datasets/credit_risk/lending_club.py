@@ -9,13 +9,25 @@ from typing import Any, Dict, Optional, Tuple
 
 import numpy as np
 import pandas as pd
-import scorecardpy as sc
 import statsmodels.api as sm
 import xgboost as xgb
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 
 import validmind as vm
+from validmind.errors import MissingDependencyError
+
+try:
+    import scorecardpy as sc
+except ImportError as e:
+    if "scorecardpy" in str(e):
+        raise MissingDependencyError(
+            "Missing required package `scorecardpy` for credit risk demos. "
+            "Please run `pip install validmind[credit_risk]` or `pip install scorecardpy`.",
+            required_dependencies=["scorecardpy"],
+            extra="credit_risk",
+        ) from e
+    raise e
 
 current_path = os.path.dirname(os.path.abspath(__file__))
 dataset_path = os.path.join(current_path, "datasets")
