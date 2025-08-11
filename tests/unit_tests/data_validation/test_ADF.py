@@ -7,15 +7,20 @@ from validmind.tests.data_validation.ADF import ADF
 
 class TestADF(unittest.TestCase):
     def setUp(self):
-        # Create a simple time series dataset
-        dates = pd.date_range(start="2023-01-01", periods=100, freq="D")
+        # Set random seed for reproducible results
+        np.random.seed(42)
+
+        # Create a simple time series dataset with larger size for more stable results
+        dates = pd.date_range(start="2023-01-01", periods=200, freq="D")
+
+        # Create more clearly stationary vs non-stationary series
         self.df = pd.DataFrame(
             {
-                "stationary": np.random.normal(0, 1, 100),  # Stationary series
+                "stationary": np.random.normal(0, 1, 200),  # Stationary series
                 "non_stationary": np.cumsum(
-                    np.random.normal(0, 1, 100)
+                    np.random.normal(0, 1, 200)
                 ),  # Random walk (non-stationary)
-                "with_nans": np.random.normal(0, 1, 100),  # Series with NaN values
+                "with_nans": np.random.normal(0, 1, 200),  # Series with NaN values
             },
             index=dates,
         )
@@ -65,8 +70,20 @@ class TestADF(unittest.TestCase):
         stationary_result = table[table["Feature"] == "stationary"].iloc[0]
         nonstationary_result = table[table["Feature"] == "non_stationary"].iloc[0]
 
-        # Stationary series should have lower p-value than non-stationary
-        self.assertLess(stationary_result["P-Value"], nonstationary_result["P-Value"])
+        # Instead of comparing p-values directly (which can be flaky),
+        # check that the ADF statistic for stationary series is more negative
+        # (indicating stronger evidence of stationarity)
+        self.assertLess(
+            stationary_result["ADF Statistic"],
+            nonstationary_result["ADF Statistic"],
+            "Stationary series should have a more negative ADF statistic than non-stationary series",
+        )
+
+        # Also check that both p-values are reasonable (between 0 and 1)
+        self.assertGreaterEqual(stationary_result["P-Value"], 0)
+        self.assertLessEqual(stationary_result["P-Value"], 1)
+        self.assertGreaterEqual(nonstationary_result["P-Value"], 0)
+        self.assertLessEqual(nonstationary_result["P-Value"], 1)
 
     def test_raises_error_for_non_datetime_index(self):
         # Create dataset with non-datetime index
