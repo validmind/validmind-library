@@ -7,16 +7,19 @@ from sklearn.metrics import mean_squared_error
 
 from validmind import tags, tasks
 from validmind.vm_models import VMDataset, VMModel
+from validmind.vm_models.result.result import MetricValues
 
 
 @tags("regression")
 @tasks("regression")
 def RootMeanSquaredError(model: VMModel, dataset: VMDataset, **kwargs) -> float:
     """Calculates the root mean squared error for a regression model."""
-    return np.sqrt(
-        mean_squared_error(
-            dataset.y,
-            dataset.y_pred(model),
-            **kwargs,
+    return MetricValues(
+        np.sqrt(
+            mean_squared_error(
+                dataset.y,
+                dataset.y_pred(model),
+                **kwargs,
+            )
         )
     )

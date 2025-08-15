@@ -6,10 +6,11 @@ from sklearn.metrics import recall_score
 
 from validmind import tags, tasks
 from validmind.vm_models import VMDataset, VMModel
+from validmind.vm_models.result.result import MetricValues
 
 
 @tasks("classification")
 @tags("classification")
 def Recall(model: VMModel, dataset: VMDataset, **kwargs) -> float:
     """Calculates the recall for a classification model."""
-    return recall_score(dataset.y, dataset.y_pred(model), **kwargs)
+    return MetricValues(recall_score(dataset.y, dataset.y_pred(model), **kwargs))

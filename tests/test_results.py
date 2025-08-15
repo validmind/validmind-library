@@ -1,44 +1,44 @@
 import asyncio
-import json
 import unittest
-from unittest.mock import MagicMock, Mock, patch
+from unittest.mock import patch
 import pandas as pd
 import matplotlib.pyplot as plt
-import plotly.graph_objs as go
 from ipywidgets import HTML, VBox
 
 from validmind.vm_models.result import (
-    Result,
     TestResult,
     ErrorResult,
     TextGenerationResult,
     ResultTable,
     RawData,
+    MetricValues,
 )
+
 from validmind.vm_models.figure import Figure
 from validmind.errors import InvalidParameterError
-from validmind.ai.utils import DescriptionFuture
 
 loop = asyncio.new_event_loop()
 
+
 class MockAsyncResponse:
-    def __init__(self, status, text=None, json=None):
+    def __init__(self, status, text=None, json_data=None):
         self.status = status
         self.status_code = status
         self._text = text
-        self._json = json
+        self._json_data = json_data
 
     async def text(self):
         return self._text
 
     async def json(self):
-        return self._json
+        return self._json_data
 
     async def __aexit__(self, exc_type, exc, tb):
         pass
 
     async def __aenter__(self):
         return self
+
 
 class TestResultClasses(unittest.TestCase):
     def tearDownClass():
@@ -50,7 +50,7 @@ class TestResultClasses(unittest.TestCase):
     def test_raw_data_initialization(self):
         """Test RawData initialization and methods"""
         raw_data = RawData(log=True, dataset_duplicates=pd.DataFrame({'col1': [1, 2]}))
-        
+
         self.assertTrue(raw_data.log)
         self.assertIsInstance(raw_data.dataset_duplicates, pd.DataFrame)
         self.assertEqual(raw_data.__repr__(), "RawData(log, dataset_duplicates)")
@@ -59,7 +59,7 @@ class TestResultClasses(unittest.TestCase):
         """Test ResultTable initialization and methods"""
         df = pd.DataFrame({'col1': [1, 2, 3]})
         table = ResultTable(data=df, title="Test Table")
-        
+
         self.assertEqual(table.title, "Test Table")
         self.assertIsInstance(table.data, pd.DataFrame)
         self.assertEqual(table.__repr__(), 'ResultTable(title="Test Table")')
@@ -72,11 +72,11 @@ class TestResultClasses(unittest.TestCase):
             error=error,
             message="Test error message"
         )
-        
+
         self.assertEqual(error_result.name, "Failed Test")
         self.assertEqual(error_result.error, error)
         self.assertEqual(error_result.message, "Test error message")
-        
+
         widget = error_result.to_widget()
         self.assertIsInstance(widget, HTML)
 
@@ -89,7 +89,7 @@ class TestResultClasses(unittest.TestCase):
             metric=0.95,
             passed=True
         )
-        
+
         self.assertEqual(test_result.result_id, "test_1")
         self.assertEqual(test_result.name, "Test 1")
         self.assertEqual(test_result.description, "Test description")
@@ -100,7 +100,7 @@ class TestResultClasses(unittest.TestCase):
         """Test adding tables to TestResult"""
         test_result = TestResult(result_id="test_1")
         df = pd.DataFrame({'col1': [1, 2, 3]})
-        
+
         test_result.add_table(df, title="Test Table")
         self.assertEqual(len(test_result.tables), 1)
         self.assertEqual(test_result.tables[0].title, "Test Table")
@@ -119,7 +119,7 @@ class TestResultClasses(unittest.TestCase):
         """Test removing tables from TestResult"""
         test_result = TestResult(result_id="test_1")
         df = pd.DataFrame({'col1': [1, 2, 3]})
-        
+
         test_result.add_table(df)
         test_result.remove_table(0)
         self.assertEqual(len(test_result.tables), 0)
@@ -244,5 +244,240 @@ class TestResultClasses(unittest.TestCase):
             text="Test description"
         )
 
+    def test_metric_values_initialization_scalar(self):
+        """Test MetricValues initialization with scalar values"""
+        # Test integer
+        mv_int = MetricValues(42)
+        self.assertEqual(mv_int.get_values(), 42)
+        self.assertTrue(mv_int.is_scalar())
+        self.assertFalse(mv_int.is_list())
+
+        # Test float
+        mv_float = MetricValues(3.14)
+        self.assertEqual(mv_float.get_values(), 3.14)
+        self.assertTrue(mv_float.is_scalar())
+        self.assertFalse(mv_float.is_list())
+
+    def test_metric_values_initialization_list(self):
+        """Test MetricValues initialization with list values"""
+        # Test list of mixed numeric types
+        mv_list = MetricValues([1, 2.5, 3, 4.0])
+        self.assertEqual(mv_list.get_values(), [1, 2.5, 3, 4.0])
+        self.assertFalse(mv_list.is_scalar())
+        self.assertTrue(mv_list.is_list())
+
+        # Test empty list
+        mv_empty = MetricValues([])
+        self.assertEqual(mv_empty.get_values(), [])
+        self.assertFalse(mv_empty.is_scalar())
+        self.assertTrue(mv_empty.is_list())
+
+    def test_metric_values_validation_valid(self):
+        """Test MetricValues validation with valid inputs"""
+        # These should not raise any exceptions
+        MetricValues(42)
+        MetricValues(3.14)
+        MetricValues([1, 2, 3])
+        MetricValues([1.1, 2.2, 3.3])
+        MetricValues([])
+        MetricValues([42])
+
+    def test_metric_values_validation_invalid_types(self):
+        """Test MetricValues validation with invalid types"""
+        invalid_values = [
+            "string",
+            {"key": "value"},
+            None,
+            [1, 2, "invalid"],
+            [1, None, 3],
+            [1, {"key": "val"}, 3],
+        ]
+
+        for invalid_value in invalid_values:
+            with self.assertRaises(ValueError):
+                MetricValues(invalid_value)
+
+    def test_metric_values_validation_boolean_rejection(self):
+        """Test MetricValues rejection of boolean values"""
+        # Boolean scalars should be rejected
+        with self.assertRaises(ValueError) as context:
+            MetricValues(True)
+        self.assertIn("Boolean values are not allowed", str(context.exception))
+
+        with self.assertRaises(ValueError) as context:
+            MetricValues(False)
+        self.assertIn("Boolean values are not allowed", str(context.exception))
+
+        # Boolean in lists should be rejected
+        with self.assertRaises(ValueError) as context:
+            MetricValues([1, True, 3])
+        self.assertIn("Boolean values are not allowed in metric value lists", str(context.exception))
+
+        with self.assertRaises(ValueError) as context:
+            MetricValues([False, 1, 2])
+        self.assertIn("Boolean values are not allowed in metric value lists", str(context.exception))
+
+    def test_metric_values_string_representation(self):
+        """Test MetricValues string representation methods"""
+        # Scalar representation
+        mv_scalar = MetricValues(42)
+        self.assertEqual(str(mv_scalar), "42")
+        self.assertEqual(repr(mv_scalar), "MetricValues(42)")
+
+        # List representation
+        mv_list = MetricValues([1, 2, 3])
+        self.assertEqual(str(mv_list), "[1, 2, 3]")
+        self.assertEqual(repr(mv_list), "MetricValues([3 values])")
+
+        # Empty list representation
+        mv_empty = MetricValues([])
+        self.assertEqual(str(mv_empty), "[]")
+        self.assertEqual(repr(mv_empty), "MetricValues([0 values])")
+
+    def test_metric_values_equality(self):
+        """Test MetricValues equality comparison"""
+        # Scalar equality
+        mv1 = MetricValues(42)
+        mv2 = MetricValues(42)
+        mv3 = MetricValues(43)
+
+        self.assertEqual(mv1, mv2)
+        self.assertNotEqual(mv1, mv3)
+        self.assertEqual(mv1, 42)  # Equality with raw value
+        self.assertNotEqual(mv1, 43)
+
+        # List equality
+        mv_list1 = MetricValues([1, 2, 3])
+        mv_list2 = MetricValues([1, 2, 3])
+        mv_list3 = MetricValues([1, 2, 4])
+
+        self.assertEqual(mv_list1, mv_list2)
+        self.assertNotEqual(mv_list1, mv_list3)
+        self.assertEqual(mv_list1, [1, 2, 3])  # Equality with raw list
+        self.assertNotEqual(mv_list1, [1, 2, 4])
+
+    def test_metric_values_serialization(self):
+        """Test MetricValues serialization"""
+        # Scalar serialization
+        mv_scalar = MetricValues(42)
+        self.assertEqual(mv_scalar.serialize(), 42)
+
+        # List serialization
+        mv_list = MetricValues([1, 2.5, 3])
+        self.assertEqual(mv_list.serialize(), [1, 2.5, 3])
+
+        # Empty list serialization
+        mv_empty = MetricValues([])
+        self.assertEqual(mv_empty.serialize(), [])
+
+    def test_test_result_metric_values_integration(self):
+        """Test MetricValues integration with TestResult"""
+        test_result = TestResult(result_id="test_metric_values")
+
+        # Test setting metric with scalar using set_metric
+        test_result.set_metric(0.85)
+        self.assertIsInstance(test_result.metric, MetricValues)
+        self.assertEqual(test_result.metric.get_values(), 0.85)
+        self.assertEqual(test_result._get_metric_display_value(), 0.85)
+        self.assertEqual(test_result._get_metric_serialized_value(), 0.85)
+
+        # Test setting metric with list using set_metric
+        test_result.set_metric([0.1, 0.2, 0.3])
+        self.assertIsInstance(test_result.metric, MetricValues)
+        self.assertEqual(test_result.metric.get_values(), [0.1, 0.2, 0.3])
+        self.assertEqual(test_result._get_metric_display_value(), [0.1, 0.2, 0.3])
+        self.assertEqual(test_result._get_metric_serialized_value(), [0.1, 0.2, 0.3])
+
+        # Test setting metric with MetricValues object directly
+        mv = MetricValues(99.9)
+        test_result.set_metric(mv)
+        self.assertIs(test_result.metric, mv)
+        self.assertEqual(test_result._get_metric_display_value(), 99.9)
+        self.assertEqual(test_result._get_metric_serialized_value(), 99.9)
+
+    def test_test_result_backward_compatibility(self):
+        """Test backward compatibility with direct metric assignment"""
+        test_result = TestResult(result_id="test_backward_compat")
+
+        # Direct assignment of raw values (old style)
+        test_result.metric = 42.0
+        self.assertEqual(test_result._get_metric_display_value(), 42.0)
+        self.assertEqual(test_result._get_metric_serialized_value(), 42.0)
+
+        # Direct assignment of list (old style)
+        test_result.metric = [1.0, 2.0, 3.0]
+        self.assertEqual(test_result._get_metric_display_value(), [1.0, 2.0, 3.0])
+        self.assertEqual(test_result._get_metric_serialized_value(), [1.0, 2.0, 3.0])
+
+        # Mixed usage - set with set_metric then access display value
+        test_result.set_metric(100)
+        self.assertIsInstance(test_result.metric, MetricValues)
+        self.assertEqual(test_result._get_metric_display_value(), 100)
+
+    def test_test_result_metric_values_widget_display(self):
+        """Test MetricValues display in TestResult widgets"""
+        # Test scalar metric display
+        test_result_scalar = TestResult(result_id="test_scalar_widget")
+        test_result_scalar.set_metric(0.95)
+
+        widget_scalar = test_result_scalar.to_widget()
+        self.assertIsInstance(widget_scalar, HTML)
+        # Check that the metric value appears in the HTML
+        self.assertIn("0.95", widget_scalar.value)
+
+        # Test list metric display
+        test_result_list = TestResult(result_id="test_list_widget")
+        test_result_list.set_metric([0.1, 0.2, 0.3])
+
+        widget_list = test_result_list.to_widget()
+        # Even with lists, when no tables/figures exist, it returns HTML
+        self.assertIsInstance(widget_list, HTML)
+        # Check that the list values appear in the HTML
+        self.assertIn("[0.1, 0.2, 0.3]", widget_list.value)
+
+    def test_metric_values_edge_cases(self):
+        """Test MetricValues edge cases"""
+        # Test with very large numbers
+        large_num = 1e10
+        mv_large = MetricValues(large_num)
+        self.assertEqual(mv_large.get_values(), large_num)
+
+        # Test with very small numbers
+        small_num = 1e-10
+        mv_small = MetricValues(small_num)
+        self.assertEqual(mv_small.get_values(), small_num)
+
+        # Test with negative numbers
+        negative_num = -42.5
+        mv_negative = MetricValues(negative_num)
+        self.assertEqual(mv_negative.get_values(), negative_num)
+
+        # Test with zero
+        mv_zero = MetricValues(0)
+        self.assertEqual(mv_zero.get_values(), 0)
+
+        # Test with list containing zeros and negatives
+        mixed_list = [0, -1, 2.5, -3.14]
+        mv_mixed = MetricValues(mixed_list)
+        self.assertEqual(mv_mixed.get_values(), mixed_list)
+
+    def test_metric_values_type_consistency(self):
+        """Test that MetricValues maintains type consistency"""
+        # Integer input should remain integer
+        mv_int = MetricValues(42)
+        self.assertIsInstance(mv_int.get_values(), int)
+        self.assertIsInstance(mv_int.serialize(), int)
+
+        # Float input should remain float
+        mv_float = MetricValues(3.14)
+        self.assertIsInstance(mv_float.get_values(), float)
+        self.assertIsInstance(mv_float.serialize(), float)
+
+        # List input should remain list
+        mv_list = MetricValues([1, 2, 3])
+        self.assertIsInstance(mv_list.get_values(), list)
+        self.assertIsInstance(mv_list.serialize(), list)
+
+
 if __name__ == "__main__":
-    unittest.main() 
+    unittest.main()

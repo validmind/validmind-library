@@ -4,6 +4,7 @@
 
 from .result import (
     ErrorResult,
+    MetricValues,
     RawData,
     Result,
     ResultTable,
@@ -18,4 +19,5 @@ __all__ = [
     "ResultTable",
     "TestResult",
     "TextGenerationResult",
+    "MetricValues",
 ]

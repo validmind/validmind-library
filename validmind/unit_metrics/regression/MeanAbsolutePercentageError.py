@@ -6,6 +6,7 @@ import numpy as np
 
 from validmind import tags, tasks
 from validmind.vm_models import VMDataset, VMModel
+from validmind.vm_models.result.result import MetricValues
 
 
 @tags("regression")
@@ -15,4 +16,4 @@ def MeanAbsolutePercentageError(model: VMModel, dataset: VMDataset) -> float:
     y_true = dataset.y
     y_pred = dataset.y_pred(model)
 
-    return np.mean(np.abs((y_true - y_pred) / y_true)) * 100
+    return MetricValues(np.mean(np.abs((y_true - y_pred) / y_true)) * 100)
