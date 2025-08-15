@@ -25,6 +25,7 @@ from .errors import MissingAPICredentialsError, MissingModelIdError, raise_api_e
 from .logging import get_logger, init_sentry, log_api_operation, send_single_error
 from .utils import NumpyEncoder, is_html, md_to_html, run_async
 from .vm_models import Figure
+from .vm_models.result.result import MetricValues
 
 logger = get_logger(__name__)
 
@@ -461,11 +462,11 @@ async def alog_metric(
     if value is None:
         raise ValueError("Must provide a value for the metric")
 
-    if not isinstance(value, (int, float)):
+    if not isinstance(value, MetricValues):
         try:
-            value = float(value)
+            value = MetricValues(value)
         except (ValueError, TypeError):
-            raise ValueError("`value` must be a scalar (int or float)")
+            raise ValueError("`value` must be a MetricValues object")
 
     if thresholds is not None and not isinstance(thresholds, dict):
         raise ValueError("`thresholds` must be a dictionary or None")
@@ -476,7 +477,7 @@ async def alog_metric(
             data=json.dumps(
                 {
                     "key": key,
-                    "value": value,
+                    "value": value.get_values(),
                     "inputs": inputs or [],
                     "params": params or {},
                     "recorded_at": recorded_at,
