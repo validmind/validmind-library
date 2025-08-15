@@ -354,7 +354,7 @@ class TestResult(Result):
         if self.metric is None:
             return None
         if isinstance(self.metric, MetricValues):
-            return self.metric.get_value()
+            return self.metric.get_values()
         return self.metric
 
     def _get_metric_serialized_value(
