@@ -6,6 +6,7 @@ from sklearn.metrics import r2_score as _r2_score
 
 from validmind import tags, tasks
 from validmind.vm_models import VMDataset, VMModel
+from validmind.vm_models.result.result import MetricValues
 
 
 @tags("regression")
@@ -20,4 +21,6 @@ def AdjustedRSquaredScore(model: VMModel, dataset: VMDataset) -> float:
     row_count = len(dataset.y)
     feature_count = len(dataset.feature_columns)
 
-    return 1 - (1 - r2_score) * (row_count - 1) / (row_count - feature_count)
+    return MetricValues(
+        1 - (1 - r2_score) * (row_count - 1) / (row_count - feature_count)
+    )

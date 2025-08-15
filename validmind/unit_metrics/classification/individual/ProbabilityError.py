@@ -8,6 +8,7 @@ import numpy as np
 
 from validmind import tags, tasks
 from validmind.vm_models import VMDataset, VMModel
+from validmind.vm_models.result.result import MetricValues
 
 
 @tasks("classification")
@@ -51,4 +52,4 @@ def ProbabilityError(model: VMModel, dataset: VMDataset, **kwargs) -> List[float
     probability_errors = np.abs(y_true - y_prob)
 
     # Return as a list of floats
-    return probability_errors.tolist()
+    return MetricValues(probability_errors.tolist())

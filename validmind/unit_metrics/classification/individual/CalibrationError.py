@@ -8,6 +8,7 @@ import numpy as np
 
 from validmind import tags, tasks
 from validmind.vm_models import VMDataset, VMModel
+from validmind.vm_models.result.result import MetricValues
 
 
 @tasks("classification")
@@ -74,4 +75,4 @@ def CalibrationError(
         calibration_errors[in_bin] = abs(avg_predicted_prob - empirical_freq)
 
     # Return as a list of floats
-    return calibration_errors.tolist()
+    return MetricValues(calibration_errors.tolist())

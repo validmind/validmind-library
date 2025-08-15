@@ -8,6 +8,7 @@ import numpy as np
 
 from validmind import tags, tasks
 from validmind.vm_models import VMDataset, VMModel
+from validmind.vm_models.result.result import MetricValues
 
 
 @tasks("classification")
@@ -58,4 +59,4 @@ def LogLoss(
     log_loss_per_row = -(y_true * np.log(y_prob) + (1 - y_true) * np.log(1 - y_prob))
 
     # Return as a list of floats
-    return log_loss_per_row.tolist()
+    return MetricValues(log_loss_per_row.tolist())
