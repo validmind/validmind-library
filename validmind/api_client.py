@@ -448,7 +448,7 @@ def log_text(
 
 async def alog_metric(
     key: str,
-    value: Union[int, float],
+    value: Union[int, float, List[Union[int, float]], MetricValues],
     inputs: Optional[List[str]] = None,
     params: Optional[Dict[str, Any]] = None,
     recorded_at: Optional[str] = None,
@@ -462,11 +462,12 @@ async def alog_metric(
     if value is None:
         raise ValueError("Must provide a value for the metric")
 
-    if not isinstance(value, MetricValues):
-        try:
-            value = MetricValues(value)
-        except (ValueError, TypeError):
-            raise ValueError("`value` must be a MetricValues object")
+    # print(value)
+    # if not isinstance(value, MetricValues):
+    #     try:
+    #         value = MetricValues(value)
+    #     except (ValueError, TypeError):
+    #         raise ValueError("`value` must be a MetricValues object")
 
     if thresholds is not None and not isinstance(thresholds, dict):
         raise ValueError("`thresholds` must be a dictionary or None")
@@ -477,7 +478,7 @@ async def alog_metric(
             data=json.dumps(
                 {
                     "key": key,
-                    "value": value.get_values(),
+                    "value": value,
                     "inputs": inputs or [],
                     "params": params or {},
                     "recorded_at": recorded_at,
@@ -495,7 +496,7 @@ async def alog_metric(
 
 def log_metric(
     key: str,
-    value: float,
+    value: MetricValues,
     inputs: Optional[List[str]] = None,
     params: Optional[Dict[str, Any]] = None,
     recorded_at: Optional[str] = None,
