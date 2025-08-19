@@ -499,7 +499,7 @@ class TestResult(Result):
 
         return await asyncio.gather(*tasks)
 
-    def log(
+    def log(  # noqa: C901
         self,
         section_id: str = None,
         content_id: str = None,

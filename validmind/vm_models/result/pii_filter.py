@@ -176,7 +176,7 @@ def detect_pii_in_text(
         return []
 
 
-def scan_dataframe_for_pii(
+def scan_dataframe_for_pii(  # noqa: C901
     df: pd.DataFrame,
     columns: Optional[List[str]] = None,
     threshold: float = 0.5,
@@ -276,7 +276,7 @@ def scan_dataframe_for_pii(
     return pii_findings
 
 
-def _coerce_to_dataframe(table_like: Any) -> Optional[pd.DataFrame]:
+def _coerce_to_dataframe(table_like: Any) -> Optional[pd.DataFrame]:  # noqa: C901
     """Best-effort conversion of supported inputs into a DataFrame.
 
     Supports:
