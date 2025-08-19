@@ -37,22 +37,30 @@ def _get_llm_global_context():
     return context if context_enabled and context else None
 
 
-def _check_summary_for_pii(summary: Union[str, None]) -> None:
-    """Check summary text for PII content before sending to LLM."""
-    if summary is None:
+def _check_tables_for_pii(tables: Union[List[ResultTable], None]) -> None:
+    """Check structured tables for PII before converting them to text.
+
+    Uses Presidio Structured through `check_table_for_pii` to scan the
+    underlying DataFrame of each `ResultTable`.
+    """
+    if not tables:
         return
 
     try:
-        from ..vm_models.result.pii_filter import check_text_for_pii
+        from ..vm_models.result.pii_filter import check_table_for_pii
 
-        check_text_for_pii(summary, raise_on_detection=True)
+        for table in tables:
+            # Use the exact structure that goes into the summary (list of dicts)
+            serialized = table.serialize()
+            table_rows = serialized.get("data", [])
+            check_table_for_pii(table_data=table_rows, raise_on_detection=True)
     except ImportError:
-        logger.debug("PII detection not available - skipping PII check for summary")
+        logger.debug("PII detection not available - skipping PII check for tables")
     except ValueError:
         # Re-raise PII detection errors
         raise
     except Exception as e:
-        logger.warning(f"PII detection failed for summary: {e}")
+        logger.warning(f"PII detection failed for tables: {e}")
 
 
 def _truncate_summary(
@@ -110,6 +118,9 @@ def generate_description(
         )
 
     if tables:
+        # Check structured tables for PII before converting them to text
+        _check_tables_for_pii(tables)
+
         summary = "\n---\n".join(
             [
                 json.dumps(table.serialize(), cls=NumpyEncoder, separators=(",", ":"))
@@ -118,9 +129,6 @@ def generate_description(
         )
     else:
         summary = None
-
-    # Check summary for PII before sending to LLM (will raise exception if PII found)
-    _check_summary_for_pii(summary)
 
     return generate_test_result_description(
         {

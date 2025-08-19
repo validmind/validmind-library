@@ -532,7 +532,30 @@ class TestResult(Result):
 
         if not unsafe:
             for table in self.tables or []:
-                check_for_sensitive_data(table.data)
+                # Robust table PII check that accepts ResultTable directly
+                try:
+                    from .pii_filter import check_table_for_pii
+
+                    check_table_for_pii(table)
+                except Exception:
+                    # Fall back to prior behavior if new helper fails unexpectedly
+                    check_for_sensitive_data(table.data)
+
+            # Check description text for PII when available
+            if self.description:
+                try:
+                    from .pii_filter import check_text_for_pii
+
+                    check_text_for_pii(self.description, raise_on_detection=True)
+                except ImportError:
+                    logger.debug(
+                        "PII detection not available - skipping PII check for description"
+                    )
+                except ValueError:
+                    # Re-raise PII detection errors
+                    raise
+                except Exception as e:
+                    logger.warning(f"PII detection failed for description: {e}")
 
         if section_id:
             self._validate_section_id_for_block(section_id, position)
@@ -679,6 +702,22 @@ class TextGenerationResult(Result):
             position (int): The position (index) within the section to insert the test
                 result.
         """
+        # Check description text for PII when available
+        if self.description:
+            try:
+                from .pii_filter import check_text_for_pii
+
+                check_text_for_pii(self.description, raise_on_detection=True)
+            except ImportError:
+                logger.debug(
+                    "PII detection not available - skipping PII check for description"
+                )
+            except ValueError:
+                # Re-raise PII detection errors
+                raise
+            except Exception as e:
+                logger.warning(f"PII detection failed for description: {e}")
+
         run_async(
             self.log_async,
             content_id=content_id,

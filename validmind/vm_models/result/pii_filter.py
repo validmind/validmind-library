@@ -9,7 +9,7 @@ personally identifiable information in test result data.
 
 import os
 from enum import Enum
-from typing import Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 import pandas as pd
 
@@ -63,12 +63,28 @@ def _get_presidio_analyzer():
     return _analyzer if _analyzer is not False else None
 
 
+def _get_presidio_structured_builder():
+    """Lazy load Presidio Structured PandasAnalysisBuilder.
+
+    Returns None if not available.
+    """
+    try:
+        from presidio_structured import PandasAnalysisBuilder  # type: ignore
+
+        return PandasAnalysisBuilder
+    except ImportError:
+        logger.warning(
+            "Presidio Structured not available. Install with: pip install validmind[pii-detection]"
+        )
+        return None
+
+
 def is_pii_detection_enabled_for_test_results() -> bool:
     """Check if PII detection is enabled for test results and available."""
     mode = _get_pii_detection_mode()
-    return (
-        mode in [PIIDetectionMode.TEST_RESULTS, PIIDetectionMode.ALL]
-        and _get_presidio_analyzer() is not None
+    return mode in [PIIDetectionMode.TEST_RESULTS, PIIDetectionMode.ALL] and (
+        _get_presidio_structured_builder() is not None
+        or _get_presidio_analyzer() is not None
     )
 
 
@@ -84,7 +100,14 @@ def is_pii_detection_enabled_for_test_descriptions() -> bool:
 def is_pii_detection_enabled() -> bool:
     """Check if PII detection is enabled for any mode and available."""
     mode = _get_pii_detection_mode()
-    return mode != PIIDetectionMode.DISABLED and _get_presidio_analyzer() is not None
+    if mode == PIIDetectionMode.DISABLED:
+        return False
+
+    # Either text analyzer (for descriptions) or structured (for tables) should be available
+    return (
+        _get_presidio_analyzer() is not None
+        or _get_presidio_structured_builder() is not None
+    )
 
 
 def detect_pii_in_text(
@@ -162,19 +185,28 @@ def scan_dataframe_for_pii(
     """
     Scan a pandas DataFrame for PII content in text columns.
 
+    This implementation uses Microsoft Presidio Structured to analyze tabular data
+    and determine which columns contain PII entities. It returns a mapping of
+    column names to detected entity metadata. Unlike token-level detection, the
+    structured analysis reports at the column level.
+
     Args:
         df: The DataFrame to scan
         columns: List of column names to scan (if None, scans all string columns)
-        threshold: Minimum confidence score for PII detection
+        threshold: Minimum confidence score for PII detection (not used directly by structured analysis)
         sample_size: Maximum number of rows to sample for PII detection
 
     Returns:
-        Dictionary mapping column names to lists of detected PII entities
+        Dictionary mapping column names to lists of detected PII entities. Each list
+        contains a single dict with at least the 'entity_type' key.
     """
-    if not is_pii_detection_enabled_for_test_results():
+    if not (
+        is_pii_detection_enabled_for_test_results()
+        or is_pii_detection_enabled_for_test_descriptions()
+    ):
         return {}
 
-    pii_findings = {}
+    builder_cls = _get_presidio_structured_builder()
 
     # Determine which columns to scan
     if columns is None:
@@ -184,14 +216,52 @@ def scan_dataframe_for_pii(
     # Limit the number of rows to scan for performance
     sample_df = df.head(sample_size) if len(df) > sample_size else df
 
-    for column in columns:
-        column_pii = []
+    # Prefer Presidio Structured if available
+    if builder_cls is not None:
+        try:
+            builder = builder_cls()
+            # Use mixed strategy and map our threshold parameter to the mixed threshold
+            tabular_analysis = builder.generate_analysis(
+                sample_df,
+                selection_strategy="mixed",
+                mixed_strategy_threshold=threshold,
+            )
 
-        # Scan non-null string values in the column
+            # The analysis exposes an entity mapping of column -> entity type
+            entity_mapping: Dict[str, str] = getattr(
+                tabular_analysis, "entity_mapping", {}
+            )
+
+            pii_findings: Dict[str, List[Dict]] = {}
+            for column in columns:
+                if column in entity_mapping and entity_mapping[column]:
+                    entity_type = entity_mapping[column]
+                    pii_findings[column] = [
+                        {
+                            "entity_type": entity_type,
+                            "column": column,
+                        }
+                    ]
+                    logger.info(
+                        f"Detected PII entity '{entity_type}' in column '{column}'"
+                    )
+
+            return pii_findings
+        except Exception as e:
+            logger.warning(f"PII structured analysis failed: {e}")
+            # fall back to token-level analyzer below
+
+    # Fallback: use token-level Presidio Analyzer on sampled rows if available
+    analyzer_available = _get_presidio_analyzer() is not None
+    if not analyzer_available:
+        return {}
+
+    pii_findings = {}
+    for column in columns:
+        column_pii: List[Dict] = []
         for idx, value in sample_df[column].dropna().items():
             if isinstance(value, str) and len(value.strip()) > 0:
                 pii_entities = detect_pii_in_text(text=str(value), threshold=threshold)
-
                 if pii_entities:
                     column_pii.extend(
                         [
@@ -199,7 +269,6 @@ def scan_dataframe_for_pii(
                             for entity in pii_entities
                         ]
                     )
-
         if column_pii:
             pii_findings[column] = column_pii
             logger.info(f"Found {len(column_pii)} PII entities in column '{column}'")
@@ -207,8 +276,46 @@ def scan_dataframe_for_pii(
     return pii_findings
 
 
+def _coerce_to_dataframe(table_like: Any) -> Optional[pd.DataFrame]:
+    """Best-effort conversion of supported inputs into a DataFrame.
+
+    Supports:
+    - pandas.DataFrame
+    - list[dict]
+    - objects with a `.data` attribute containing a DataFrame or list[dict]
+    - objects with `.serialize()` returning {"data": list[dict]}
+    """
+    if table_like is None:
+        return None
+
+    if isinstance(table_like, pd.DataFrame):
+        return table_like
+
+    if isinstance(table_like, list):
+        return pd.DataFrame(table_like) if table_like else pd.DataFrame()
+
+    data_attr = getattr(table_like, "data", None)
+    if data_attr is not None:
+        if isinstance(data_attr, pd.DataFrame):
+            return data_attr
+        if isinstance(data_attr, list):
+            return pd.DataFrame(data_attr)
+
+    serialize_fn = getattr(table_like, "serialize", None)
+    if callable(serialize_fn):
+        try:
+            serialized = serialize_fn()
+            records = serialized.get("data") if isinstance(serialized, dict) else None
+            if isinstance(records, list):
+                return pd.DataFrame(records)
+        except Exception:
+            pass
+
+    return None
+
+
 def check_table_for_pii(
-    table_data: Union[pd.DataFrame, List[Dict]],
+    table_data: Union[pd.DataFrame, List[Dict], Any],
     threshold: float = 0.5,
     raise_on_detection: bool = True,
 ) -> None:
@@ -223,16 +330,15 @@ def check_table_for_pii(
     Raises:
         ValueError: If PII is detected and raise_on_detection is True
     """
-    if not is_pii_detection_enabled_for_test_results():
+    if not (
+        is_pii_detection_enabled_for_test_results()
+        or is_pii_detection_enabled_for_test_descriptions()
+    ):
         return
 
-    # Convert to DataFrame if it's a list of dicts
-    if isinstance(table_data, list):
-        if not table_data:
-            return
-        df = pd.DataFrame(table_data)
-    else:
-        df = table_data
+    df = _coerce_to_dataframe(table_data)
+    if df is None or df.empty:
+        return
 
     # Scan for PII
     pii_findings = scan_dataframe_for_pii(df, threshold=threshold)
@@ -246,6 +352,59 @@ def check_table_for_pii(
         raise ValueError(
             f"PII detected in table data. Entity types found: {', '.join(entity_types)}. "
             f"Pass `unsafe=True` to bypass PII detection."
+        )
+
+
+def check_table_for_pii_in_descriptions(
+    table_data: Union[pd.DataFrame, List[Dict]],
+    threshold: float = 0.5,
+    raise_on_detection: bool = True,
+) -> None:
+    """Check a table for PII when used in description generation.
+
+    Enabled under the "test_descriptions" or "all" modes. Uses Presidio Structured
+    directly to analyze the DataFrame, independent of the test_results gating.
+    """
+    if not is_pii_detection_enabled_for_test_descriptions():
+        return
+
+    # Convert to DataFrame if it's a list of dicts
+    if isinstance(table_data, list):
+        if not table_data:
+            return
+        df = pd.DataFrame(table_data)
+    else:
+        df = table_data
+
+    builder_cls = _get_presidio_structured_builder()
+    if builder_cls is None:
+        # If Structured is not available, try token-level analyzer as a fallback
+        pii_findings = scan_dataframe_for_pii(df, threshold=threshold)
+    else:
+        try:
+            builder = builder_cls()
+            tabular_analysis = builder.generate_analysis(
+                df, selection_strategy="mixed", mixed_strategy_threshold=threshold
+            )
+            entity_mapping: Dict[str, str] = getattr(
+                tabular_analysis, "entity_mapping", {}
+            )
+            pii_findings = {
+                col: [{"entity_type": ent}]
+                for col, ent in entity_mapping.items()
+                if ent
+            }
+        except Exception as e:
+            logger.warning(f"PII structured analysis (descriptions) failed: {e}")
+            pii_findings = {}
+
+    if pii_findings and raise_on_detection:
+        entity_types = set()
+        for findings in pii_findings.values():
+            entity_types.update(entity["entity_type"] for entity in findings)
+
+        raise ValueError(
+            f"PII detected in table data for description. Entity types found: {', '.join(entity_types)}."
         )
 
 
