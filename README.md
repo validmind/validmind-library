@@ -76,7 +76,7 @@ pip install validmind[pii-detection]
 **Configure PII detection:**
 
 ```bash
-# Enable PII detection for test results only (default behavior)
+# Enable PII detection for test results only
 export VALIDMIND_PII_DETECTION=test_results
 
 # Enable PII detection for test descriptions only
