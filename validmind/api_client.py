@@ -22,7 +22,7 @@ from ipywidgets import HTML, Accordion
 
 from .client_config import client_config
 from .errors import MissingAPICredentialsError, MissingModelIdError, raise_api_error
-from .logging import get_logger, init_sentry, send_single_error
+from .logging import get_logger, init_sentry, log_api_operation, send_single_error
 from .utils import NumpyEncoder, is_html, md_to_html, run_async
 from .vm_models import Figure
 
@@ -85,7 +85,7 @@ def _get_session() -> aiohttp.ClientSession:
     if not __api_session or __api_session.closed:
         __api_session = aiohttp.ClientSession(
             headers=_get_api_headers(),
-            timeout=aiohttp.ClientTimeout(total=30),
+            timeout=aiohttp.ClientTimeout(total=int(os.getenv("VM_API_TIMEOUT", 30))),
         )
 
     return __api_session
@@ -304,6 +304,10 @@ async def alog_metadata(
         raise e
 
 
+@log_api_operation(
+    operation_name="Sending figure to ValidMind API",
+    extract_key=lambda figure: figure.key,
+)
 async def alog_figure(figure: Figure) -> Dict[str, Any]:
     """Logs a figure.
 
