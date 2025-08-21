@@ -1,64 +1,87 @@
-[tool.poetry]
-authors = [
-  "Andres Rodriguez <andres@validmind.ai>",
-  "Juan Martinez <juan@validmind.ai>",
-  "Anil Sorathiya <anil@validmind.ai>",
-  "Luis Pallares <luis@validmind.ai>",
-  "John Halz <john@validmind.ai>",
-]
-description = "ValidMind Library"
-license = "Commercial License"
+[project]
 name = "validmind"
-readme = "README.pypi.md"
 version = "2.9.1"
+description = "ValidMind Library"
+readme = "README.pypi.md"
+requires-python = ">=3.9,<3.13"
+license = { file = "LICENSE" }
+authors = [
+  { name = "Andres Rodriguez", email = "andres@validmind.ai" },
+  { name = "Juan Martinez", email = "juan@validmind.ai" },
+  { name = "Anil Sorathiya", email = "anil@validmind.ai" },
+  { name = "Luis Pallares", email = "luis@validmind.ai" },
+  { name = "John Walz", email = "john@validmind.ai" },
+]
+dependencies = [
+  "aiohttp[speedups]",
+  "ipywidgets",
+  "kaleido (>=0.2.1,!=0.2.1.post1,<1.0.0)",
+  "matplotlib",
+  "mistune (>=3.0.2,<4.0.0)",
+  "nest-asyncio (>=1.6.0,<2.0.0)",
+  "openai (>=1)",
+  "pandas (>=2.0.3,<3.0.0)",
+  "plotly (>=5.0.0)",
+  "polars",
+  "python-dotenv",
+  "scikit-learn",
+  "seaborn",
+  "sentry-sdk (>=1.24.0,<2.0.0)",
+  "tabulate (>=0.9.0,<0.10.0)",
+  "tiktoken",
+  "tqdm",
+  "anywidget",
+  "beautifulsoup4",
+]
 
-[tool.poetry.dependencies]
-aiohttp = {extras = ["speedups"], version = "*"}
-anywidget = "^0.9.13"
-arch = "*"
-bert-score = ">=0.3.13"
-catboost = "*"
-datasets = "^2.10.0"
-evaluate = "*"
-h11 = ">=0.16.0"
-ipywidgets = "*"
-kaleido = ">=0.2.1,!=0.2.1.post1,<1.0.0"
-langchain-openai = {version = ">=0.1.8", optional = true}
-langdetect = "*"
-llvmlite = {version = "*", python = ">=3.8,<=3.11"}
-matplotlib = "*"
-mistune = "^3.0.2"
-nest-asyncio = "^1.6.0"
-nltk = "^3.8.1"
-numba = "<0.59.0" # TODO: https://github.com/validmind/validmind-library/pull/28
-numpy = "*"
-openai = ">=1"
-pandas = ">=1.1,<=2.0.3"
-plotly = "<6.0.0"
-plotly-express = "*"
-polars = "*"
-pycocoevalcap = {version = "^1.2", optional = true}
-python = ">=3.9.0,<3.12"
-python-dotenv = "*"
-ragas = {version = ">=0.2.3,<=0.2.7", optional = true}
-rouge = ">=1"
-scikit-learn = "*,<1.6.0"
-scipy = "*"
-scorecardpy = "^0.1.9.6"
-seaborn = "*"
-sentencepiece = {version = "^0.2.0", optional = true}
-sentry-sdk = "^1.24.0"
-shap = "0.44.1"
-statsmodels = "*"
-tabulate = ">=0.8.9"
-textblob = "^0.18.0.post0"
-tiktoken = "*"
-torch = {version = "2.7.0", optional = true}
-tqdm = "*"
-transformers = {version = "^4.32.0", optional = true}
-xgboost = ">=1.5.2,<3"
-yfinance = "^0.2.48"
-deepeval = {version = "^3.3.9", optional = true}
+[project.optional-dependencies]
+all = [
+  "torch (>=2.0.0)",
+  "xgboost (>=1.5.2,<3)",
+  "transformers (>=4.32.0,<5.0.0)",
+  "pycocoevalcap",
+  "ragas (>=0.2.3,<=0.2.7)",
+  "sentencepiece (>=0.2.0,<0.3.0)",
+  "langchain-openai (>=0.1.8)",
+  "scipy",
+  "statsmodels",
+  "langdetect",
+  "nltk (>=3.8.1,<4.0.0)",
+  "textblob (>=0.18.0.post0,<0.19.0)",
+  "evaluate",
+  "rouge (>=1)",
+  "bert-score (>=0.3.13)",
+  "arch",
+  "shap (>=0.46.0)",
+  "scorecardpy (>=0.1.9.6,<0.2.0)",
+]
+huggingface = [
+  "transformers (>=4.32.0,<5.0.0)",
+  "sentencepiece (>=0.2.0,<0.3.0)",
+]
+llm = [
+  "torch (>=2.0.0)",
+  "transformers (>=4.32.0,<5.0.0)",
+  "pycocoevalcap",
+  "ragas (>=0.2.3,<=0.2.7)",
+  "sentencepiece (>=0.2.0,<0.3.0)",
+  "langchain-openai (>=0.1.8)",
+  "deepeval (>3.3.9)",
+]
+nlp = [
+  "langdetect",
+  "nltk (>=3.8.1,<4.0.0)",
+  "textblob (>=0.18.0.post0,<0.19.0)",
+  "evaluate",
+  "rouge (>=1)",
+  "bert-score (>=0.3.13)",
+]
+pytorch = ["torch (>=2.0.0)"]
+stats = ["scipy", "statsmodels", "arch"]
+xgboost = ["xgboost (>=1.5.2,<3)"]
+explainability = ["shap (>=0.46.0)"]
+credit_risk = ["scorecardpy (>=0.1.9.6,<0.2.0)"]
+datasets = ["datasets (>=2.10.0,<3.0.0)"]
 
 [tool.poetry.group.dev.dependencies]
 black = "^22.1.0"
@@ -79,35 +102,13 @@ sphinx-markdown-builder = "^0.5.5"
 sphinx-rtd-theme = "^1.2.0"
 twine = "^4.0.2"
 
-[tool.poetry.extras]
-all = [
-  "torch",
-  "transformers",
-  "pycocoevalcap",
-  "ragas",
-  "sentencepiece",
-  "langchain-openai",
-  "deepeval",
-]
-huggingface = ["transformers", "sentencepiece"]
-llm = [
-  "torch",
-  "transformers",
-  "pycocoevalcap",
-  "ragas",
-  "sentencepiece",
-  "langchain-openai",
-  "deepeval",
-]
-pytorch = ["torch"]
+[project.scripts]
+vm-create-new-test = "scripts.create_new_test:generate_test"
 
 [build-system]
 build-backend = "poetry.core.masonry.api"
-requires = ["poetry-core>=1.0.0"]
+requires = ["poetry-core>=1.9.0"]
 
 [tool.isort]
 known_first_party = "validmind"
 profile = "black"
-
-[tool.poetry.scripts]
-vm-create-new-test = "scripts.create_new_test:generate_test"

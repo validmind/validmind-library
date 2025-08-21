@@ -6,10 +6,23 @@ from typing import Tuple
 
 import pandas as pd
 import plotly.graph_objects as go
-from rouge import Rouge
 
 from validmind import RawData, tags, tasks
+from validmind.errors import MissingDependencyError
 from validmind.vm_models import VMDataset, VMModel
+
+try:
+    from rouge import Rouge
+except ImportError as e:
+    if "rouge" in str(e):
+        raise MissingDependencyError(
+            "Missing required package `rouge` for RougeScore. "
+            "Please run `pip install validmind[nlp]` to use NLP tests",
+            required_dependencies=["rouge"],
+            extra="nlp",
+        ) from e
+
+    raise e
 
 
 @tags("nlp", "text_data", "visualization")

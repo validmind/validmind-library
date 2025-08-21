@@ -4,11 +4,23 @@
 
 from typing import Tuple
 
-import evaluate
 import matplotlib.pyplot as plt
 import seaborn as sns
 
 from validmind import RawData, tags, tasks
+from validmind.errors import MissingDependencyError
+
+try:
+    import evaluate
+except ImportError as e:
+    if "evaluate" in str(e):
+        raise MissingDependencyError(
+            "Missing required package `evaluate` for Toxicity. "
+            "Please run `pip install validmind[nlp]` to use NLP tests",
+            required_dependencies=["evaluate"],
+            extra="nlp",
+        ) from e
+    raise e
 
 
 @tags("nlp", "text_data", "data_validation")
