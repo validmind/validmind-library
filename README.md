@@ -63,6 +63,32 @@ pip install validmind
     pip install rpy2
     ```
 
+## PII Detection
+
+The ValidMind Library includes optional PII detection capabilities using Microsoft Presidio to automatically detect sensitive data in test results and prevent accidental logging.
+
+**Installation:**
+
+```bash
+pip install validmind[pii-detection]
+```
+
+**Configure PII detection:**
+
+```bash
+# Enable PII detection for test results only
+export VALIDMIND_PII_DETECTION=test_results
+
+# Enable PII detection for test descriptions only
+export VALIDMIND_PII_DETECTION=test_descriptions
+
+# Enable PII detection for both test results and descriptions
+export VALIDMIND_PII_DETECTION=all
+
+# Disable PII detection (default)
+export VALIDMIND_PII_DETECTION=disabled
+```
+
 ## How to contribute
 
 ### Install dependencies

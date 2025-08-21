@@ -96,7 +96,7 @@ def CalibrationCurveDrift(
 
     # Create bin labels
     bin_edges = np.linspace(0, 1, n_bins + 1)
-    bin_labels = [f"{bin_edges[i]:.1f}-{bin_edges[i+1]:.1f}" for i in range(n_bins)]
+    bin_labels = [f"{bin_edges[i]:.1f}-{bin_edges[i + 1]:.1f}" for i in range(n_bins)]
 
     # Create predicted probabilities table
     pred_metrics = []
