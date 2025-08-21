@@ -75,7 +75,7 @@ def PCAComponentsPairwisePlots(
 
     # Prepare DataFrame for Plotly
     pca_df = pd.DataFrame(
-        pca_results, columns=[f"PC{i+1}" for i in range(n_components)]
+        pca_results, columns=[f"PC{i + 1}" for i in range(n_components)]
     )
 
     # List to store each plot
