@@ -31,10 +31,10 @@ from ...utils import (
 )
 from ..figure import Figure, create_figure
 from ..input import VMInput
+from .pii_filter import PIIDetectionMode, get_pii_detection_mode, scan_df, scan_text
 from .utils import (
     AI_REVISION_NAME,
     DEFAULT_REVISION_NAME,
-    check_for_sensitive_data,
     figures_to_widgets,
     get_result_template,
     tables_to_widgets,
@@ -222,8 +222,10 @@ class TestResult(Result):
             description = super().__getattribute__("description")
 
             if isinstance(description, DescriptionFuture):
-                self._was_description_generated = True
-                self.description = description.get_description()
+                (
+                    self.description,
+                    self._was_description_generated,
+                ) = description.get_description()
 
         return super().__getattribute__(name)
 
@@ -554,32 +556,15 @@ class TestResult(Result):
 
         self.check_result_id_exist()
 
-        if not unsafe:
+        if not unsafe and get_pii_detection_mode() in [
+            PIIDetectionMode.TEST_RESULTS,
+            PIIDetectionMode.ALL,
+        ]:
             for table in self.tables or []:
-                # Robust table PII check that accepts ResultTable directly
-                try:
-                    from .pii_filter import check_table_for_pii
+                scan_df(table.data)
 
-                    check_table_for_pii(table)
-                except Exception:
-                    # Fall back to prior behavior if new helper fails unexpectedly
-                    check_for_sensitive_data(table.data)
-
-            # Check description text for PII when available
             if self.description:
-                try:
-                    from .pii_filter import check_text_for_pii
-
-                    check_text_for_pii(self.description, raise_on_detection=True)
-                except ImportError:
-                    logger.debug(
-                        "PII detection not available - skipping PII check for description"
-                    )
-                except ValueError:
-                    # Re-raise PII detection errors
-                    raise
-                except Exception as e:
-                    logger.warning(f"PII detection failed for description: {e}")
+                scan_text(self.description)
 
         if section_id:
             self._validate_section_id_for_block(section_id, position)

@@ -5,7 +5,6 @@
 import os
 from typing import TYPE_CHECKING, Dict, List, Union
 
-import pandas as pd
 from ipywidgets import HTML, GridBox, Layout
 from jinja2 import Template
 
@@ -48,24 +47,6 @@ async def update_metadata(content_id: str, text: str, _json: Union[Dict, List] =
     logger.debug(f"Updating metadata for `{content_id}`")
 
     await api_client.alog_metadata(content_id, text, _json)
-
-
-def check_for_sensitive_data(data: pd.DataFrame):
-    """Check if the data contains sensitive information (PII)."""
-    # Check for PII content
-    try:
-        from .pii_filter import check_table_for_pii
-
-        check_table_for_pii(table_data=data, threshold=0.5, raise_on_detection=True)
-
-    except ImportError:
-        logger.debug("PII filtering not installed - skipping PII check")
-    except ValueError as e:
-        # PII was detected and raise_on_detection is True
-        raise e
-    except Exception as e:
-        # Log other PII checking errors but don't fail the entire operation
-        logger.warning(f"PII checking failed: {e}")
 
 
 def tables_to_widgets(tables: List["ResultTable"]):

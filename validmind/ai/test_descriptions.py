@@ -14,6 +14,11 @@ from ..logging import get_logger
 from ..utils import NumpyEncoder, md_to_html, test_id_to_name
 from ..vm_models.figure import Figure
 from ..vm_models.result import ResultTable
+from ..vm_models.result.pii_filter import (
+    PIIDetectionMode,
+    get_pii_detection_mode,
+    scan_df,
+)
 from .utils import DescriptionFuture
 
 __executor = ThreadPoolExecutor()
@@ -35,32 +40,6 @@ def _get_llm_global_context():
 
     # Only use context if it's enabled and not empty
     return context if context_enabled and context else None
-
-
-def _check_tables_for_pii(tables: Union[List[ResultTable], None]) -> None:
-    """Check structured tables for PII before converting them to text.
-
-    Uses Presidio Structured through `check_table_for_pii` to scan the
-    underlying DataFrame of each `ResultTable`.
-    """
-    if not tables:
-        return
-
-    try:
-        from ..vm_models.result.pii_filter import check_table_for_pii
-
-        for table in tables:
-            # Use the exact structure that goes into the summary (list of dicts)
-            serialized = table.serialize()
-            table_rows = serialized.get("data", [])
-            check_table_for_pii(table_data=table_rows, raise_on_detection=True)
-    except ImportError:
-        logger.debug("PII detection not available - skipping PII check for tables")
-    except ValueError:
-        # Re-raise PII detection errors
-        raise
-    except Exception as e:
-        logger.warning(f"PII detection failed for tables: {e}")
 
 
 def _truncate_summary(
@@ -118,8 +97,12 @@ def generate_description(
         )
 
     if tables:
-        # Check structured tables for PII before converting them to text
-        _check_tables_for_pii(tables)
+        if get_pii_detection_mode() in [
+            PIIDetectionMode.TEST_DESCRIPTIONS,
+            PIIDetectionMode.ALL,
+        ]:
+            for table in tables:
+                scan_df(table.data)
 
         summary = "\n---\n".join(
             [
@@ -154,13 +137,16 @@ def background_generate_description(
 ):
     def wrapped():
         try:
-            return generate_description(
-                test_id=test_id,
-                test_description=test_description,
-                tables=tables,
-                figures=figures,
-                metric=metric,
-                title=title,
+            return (
+                generate_description(
+                    test_id=test_id,
+                    test_description=test_description,
+                    tables=tables,
+                    figures=figures,
+                    metric=metric,
+                    title=title,
+                ),
+                True,
             )
         except Exception as e:
             if "maximum context length" in str(e):
@@ -175,7 +161,7 @@ def background_generate_description(
                 logger.warning(f"Failed to generate description for {test_id}: {e}")
             logger.warning(f"Using default description for {test_id}")
 
-            return test_description
+            return test_description, False
 
     return DescriptionFuture(__executor.submit(wrapped))
 

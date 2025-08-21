@@ -434,19 +434,6 @@ def log_text(
     if not text or not isinstance(text, str):
         raise ValueError("`text` must be a non-empty string")
 
-    # PII detection for free-form text prior to logging
-    try:
-        from .vm_models.result.pii_filter import check_text_for_pii
-
-        check_text_for_pii(text, raise_on_detection=True)
-    except ImportError:
-        logger.debug("PII detection not available - skipping PII check for text")
-    except ValueError:
-        # Re-raise PII detection errors
-        raise
-    except Exception as e:
-        logger.warning(f"PII detection failed for text: {e}")
-
     if not is_html(text):
         text = md_to_html(text, mathml=True)
 
