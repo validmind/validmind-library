@@ -21,6 +21,7 @@ from validmind.errors import InvalidParameterError
 loop = asyncio.new_event_loop()
 
 
+
 class MockAsyncResponse:
     def __init__(self, status, text=None, json_data=None):
         self.status = status
@@ -58,7 +59,7 @@ class TestResultClasses(unittest.TestCase):
 
     def test_result_table_initialization(self):
         """Test ResultTable initialization and methods"""
-        df = pd.DataFrame({'col1': [1, 2, 3]})
+        df = pd.DataFrame({"col1": [1, 2, 3]})
         table = ResultTable(data=df, title="Test Table")
 
         self.assertEqual(table.title, "Test Table")
@@ -69,9 +70,7 @@ class TestResultClasses(unittest.TestCase):
         """Test ErrorResult initialization and methods"""
         error = ValueError("Test error")
         error_result = ErrorResult(
-            result_id="test_error",
-            error=error,
-            message="Test error message"
+            result_id="test_error", error=error, message="Test error message"
         )
 
         self.assertEqual(error_result.name, "Failed Test")
@@ -88,7 +87,7 @@ class TestResultClasses(unittest.TestCase):
             name="Test 1",
             description="Test description",
             metric=0.95,
-            passed=True
+            passed=True,
         )
 
         self.assertEqual(test_result.result_id, "test_1")
@@ -100,7 +99,7 @@ class TestResultClasses(unittest.TestCase):
     def test_test_result_add_table(self):
         """Test adding tables to TestResult"""
         test_result = TestResult(result_id="test_1")
-        df = pd.DataFrame({'col1': [1, 2, 3]})
+        df = pd.DataFrame({"col1": [1, 2, 3]})
 
         test_result.add_table(df, title="Test Table")
         self.assertEqual(len(test_result.tables), 1)
@@ -111,7 +110,7 @@ class TestResultClasses(unittest.TestCase):
         test_result = TestResult(result_id="test_1")
         fig = plt.figure()
         plt.plot([1, 2, 3])
-        
+
         test_result.add_figure(fig)
         self.assertEqual(len(test_result.figures), 1)
         self.assertIsInstance(test_result.figures[0], Figure)
@@ -119,7 +118,7 @@ class TestResultClasses(unittest.TestCase):
     def test_test_result_remove_table(self):
         """Test removing tables from TestResult"""
         test_result = TestResult(result_id="test_1")
-        df = pd.DataFrame({'col1': [1, 2, 3]})
+        df = pd.DataFrame({"col1": [1, 2, 3]})
 
         test_result.add_table(df)
         test_result.remove_table(0)
@@ -130,7 +129,7 @@ class TestResultClasses(unittest.TestCase):
         test_result = TestResult(result_id="test_1")
         fig = plt.figure()
         plt.plot([1, 2, 3])
-        
+
         test_result.add_figure(fig)
         test_result.remove_figure(0)
         self.assertEqual(len(test_result.figures), 0)
@@ -143,9 +142,9 @@ class TestResultClasses(unittest.TestCase):
             ref_id="ref_1",
             params={"param1": 1},
             passed=True,
-            inputs={}  # Initialize empty inputs dictionary
+            inputs={},  # Initialize empty inputs dictionary
         )
-        
+
         serialized = test_result.serialize()
         self.assertEqual(serialized["test_name"], "test_1")
         self.assertEqual(serialized["title"], "Test Title")
@@ -157,19 +156,21 @@ class TestResultClasses(unittest.TestCase):
     @patch("validmind.api_client.alog_test_result")
     @patch("validmind.api_client.alog_figure")
     @patch("validmind.api_client.alog_metric")
-    async def test_test_result_log_async(self, mock_metric, mock_figure, mock_test_result):
+    async def test_test_result_log_async(
+        self, mock_metric, mock_figure, mock_test_result
+    ):
         """Test async logging of TestResult"""
         mock_test_result.return_value = MockAsyncResponse(200, json={"cuid": "123"})
         mock_figure.return_value = MockAsyncResponse(200, json={"cuid": "456"})
         mock_metric.return_value = MockAsyncResponse(200, json={"cuid": "789"})
 
         test_result = TestResult(
-            result_id="test_1",
-            metric=0.95,
-            description="Test description"
+            result_id="test_1", metric=0.95, description="Test description"
         )
+
        
         await test_result.log_async(section_id="section_1", position=0)
+
        
         mock_test_result.assert_called_once()
         mock_metric.assert_called_once()
@@ -177,37 +178,35 @@ class TestResultClasses(unittest.TestCase):
     def test_text_generation_result(self):
         """Test TextGenerationResult initialization and methods"""
         text_result = TextGenerationResult(
-            result_id="text_1",
-            title="Text Test",
-            description="Generated text"
+            result_id="text_1", title="Text Test", description="Generated text"
         )
-        
+
         self.assertEqual(text_result.name, "Text Generation Result")
         self.assertEqual(text_result.title, "Text Test")
         self.assertEqual(text_result.description, "Generated text")
-        
+
         widget = text_result.to_widget()
         self.assertIsInstance(widget, VBox)
 
     def test_validate_log_config(self):
         """Test validation of log configuration"""
         test_result = TestResult(result_id="test_1")
-        
+
         # Test valid config
         valid_config = {
             "hideTitle": True,
             "hideText": False,
             "hideParams": True,
             "hideTables": False,
-            "hideFigures": True
+            "hideFigures": True,
         }
         test_result.validate_log_config(valid_config)  # Should not raise exception
-        
+
         # Test invalid keys
         invalid_config = {"invalidKey": True}
         with self.assertRaises(InvalidParameterError):
             test_result.validate_log_config(invalid_config)
-        
+
         # Test non-boolean values
         invalid_type_config = {"hideTitle": "true"}
         with self.assertRaises(InvalidParameterError):
@@ -220,20 +219,18 @@ class TestResultClasses(unittest.TestCase):
         test_result = TestResult(
             result_id="test_1",
             description="Test description",
-            _was_description_generated=False
+            _was_description_generated=False,
         )
         await test_result.log_async(content_id="custom_content_id")
         mock_update_metadata.assert_called_with(
-            content_id="custom_content_id::default",
-            text="Test description"
+            content_id="custom_content_id::default", text="Test description"
         )
 
         # Test case 2: Without content_id
         mock_update_metadata.reset_mock()
         await test_result.log_async()
         mock_update_metadata.assert_called_with(
-            content_id="test_description:test_1::default",
-            text="Test description"
+            content_id="test_description:test_1::default", text="Test description"
         )
 
         # Test case 3: With AI generated description
@@ -241,8 +238,7 @@ class TestResultClasses(unittest.TestCase):
         mock_update_metadata.reset_mock()
         await test_result.log_async()
         mock_update_metadata.assert_called_with(
-            content_id="test_description:test_1::ai",
-            text="Test description"
+            content_id="test_description:test_1::ai", text="Test description"
         )
 
     def test_metric_values_initialization_scalar(self):

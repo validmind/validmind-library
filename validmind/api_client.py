@@ -41,8 +41,6 @@ __api_session: Optional[aiohttp.ClientSession] = None
 @atexit.register
 def _close_session():
     """Closes the async client session at exit."""
-    global __api_session
-
     if __api_session and not __api_session.closed:
         try:
             loop = asyncio.get_event_loop()

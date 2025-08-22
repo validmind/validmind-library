@@ -209,7 +209,7 @@ def ScorecardHistogramDrift(
         # Add separate legend for each subplot
         fig.update_layout(
             **{
-                f'legend{i+1 if i > 0 else ""}': dict(
+                f'legend{i + 1 if i > 0 else ""}': dict(
                     yanchor="middle",
                     y=1 - (i / len(classes)) - (0.5 / len(classes)),
                     xanchor="left",

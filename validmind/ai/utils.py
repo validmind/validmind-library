@@ -35,13 +35,13 @@ class DescriptionFuture:
         self._future = future
 
     def get_description(self):
-        if isinstance(self._future, str):
+        if isinstance(self._future, tuple):
             description = self._future
         else:
             # This will block until the future is completed
             description = self._future.result()
 
-        return md_to_html(description, mathml=True)
+        return md_to_html(description[0], mathml=True), description[1]
 
 
 def get_client_and_model():

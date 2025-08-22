@@ -5,15 +5,12 @@
 import os
 from typing import TYPE_CHECKING, Dict, List, Union
 
-import pandas as pd
 from ipywidgets import HTML, GridBox, Layout
 from jinja2 import Template
 
 from ... import api_client
 from ...logging import get_logger
-from ..dataset import VMDataset
 from ..figure import Figure
-from ..input import VMInput
 
 if TYPE_CHECKING:
     from .result import ResultTable
@@ -50,30 +47,6 @@ async def update_metadata(content_id: str, text: str, _json: Union[Dict, List] =
     logger.debug(f"Updating metadata for `{content_id}`")
 
     await api_client.alog_metadata(content_id, text, _json)
-
-
-def check_for_sensitive_data(data: pd.DataFrame, inputs: List[VMInput]):
-    """Check if the data contains sensitive information from input datasets."""
-    dataset_columns = {
-        col: len(input_obj.df)
-        for input_obj in inputs
-        if isinstance(input_obj, VMDataset)
-        for col in input_obj.columns
-    }
-
-    table_columns = {col: len(data) for col in data.columns}
-
-    offending_columns = [
-        col
-        for col in table_columns
-        if col in dataset_columns and table_columns[col] == dataset_columns[col]
-    ]
-
-    if offending_columns:
-        raise ValueError(
-            f"Raw input data found in table, pass `unsafe=True` "
-            f"or remove the offending columns: {offending_columns}"
-        )
 
 
 def tables_to_widgets(tables: List["ResultTable"]):

@@ -82,13 +82,14 @@ xgboost = ["xgboost (>=1.5.2,<3)"]
 explainability = ["shap (>=0.46.0)"]
 credit_risk = ["scorecardpy (>=0.1.9.6,<0.2.0)"]
 datasets = ["datasets (>=2.10.0,<3.0.0)"]
+pii-detection = ["presidio-analyzer", "presidio-structured"]
 
 [tool.poetry.group.dev.dependencies]
 black = "^22.1.0"
 click = "*"
 cython = "^0.29.34"
 docstring_parser = "*"
-flake8 = "^4.0.1"
+flake8 = "^7.0.0"
 griffe = "*"
 ipykernel = "^6.22.0"
 isort = "^5.12.0"
