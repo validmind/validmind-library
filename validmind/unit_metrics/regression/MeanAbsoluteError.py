@@ -6,13 +6,13 @@ from sklearn.metrics import mean_absolute_error as _mean_absolute_error
 
 from validmind import tags, tasks
 from validmind.vm_models import VMDataset, VMModel
-from validmind.vm_models.result.result import MetricValues
+from validmind.vm_models.result.result import UnitMetricValue
 
 
 @tags("regression")
 @tasks("regression")
 def MeanAbsoluteError(model: VMModel, dataset: VMDataset, **kwargs) -> float:
     """Calculates the mean absolute error for a regression model."""
-    return MetricValues(
+    return UnitMetricValue(
         _mean_absolute_error(dataset.y, dataset.y_pred(model), **kwargs)
     )

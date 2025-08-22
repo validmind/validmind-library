@@ -6,11 +6,11 @@ import numpy as np
 
 from validmind import tags, tasks
 from validmind.vm_models import VMDataset, VMModel
-from validmind.vm_models.result.result import MetricValues
+from validmind.vm_models.result.result import UnitMetricValue
 
 
 @tags("regression")
 @tasks("regression")
 def MeanBiasDeviation(model: VMModel, dataset: VMDataset) -> float:
     """Calculates the mean bias deviation for a regression model."""
-    return MetricValues(np.mean(dataset.y - dataset.y_pred(model)))
+    return UnitMetricValue(np.mean(dataset.y - dataset.y_pred(model)))

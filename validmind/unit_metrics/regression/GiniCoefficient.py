@@ -6,7 +6,7 @@ import numpy as np
 
 from validmind import tags, tasks
 from validmind.vm_models import VMDataset, VMModel
-from validmind.vm_models.result.result import MetricValues
+from validmind.vm_models.result.result import UnitMetricValue
 
 
 @tags("regression")
@@ -33,4 +33,4 @@ def GiniCoefficient(dataset: VMDataset, model: VMModel) -> float:
     area_lorenz = np.trapz(cumsum_pred_norm, x=cumsum_true_norm)
 
     # Compute Gini coefficient
-    return MetricValues(1 - 2 * area_lorenz)
+    return UnitMetricValue(1 - 2 * area_lorenz)

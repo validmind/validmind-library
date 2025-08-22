@@ -11,7 +11,7 @@ from deepeval.test_case import LLMTestCase
 from validmind import tags, tasks
 from validmind.ai.utils import get_client_and_model
 from validmind.vm_models.dataset import VMDataset
-from validmind.vm_models.result.result import MetricValues
+from validmind.vm_models.result.result import RowMetricValues
 
 
 # Create custom ValidMind tests for DeepEval metrics
@@ -53,4 +53,4 @@ def AnswerRelevancy(
         print(result.test_results[0].metrics_data[0].score)
         results.append(result.test_results[0].metrics_data[0].score)
 
-    return MetricValues(results)
+    return RowMetricValues(results)

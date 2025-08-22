@@ -10,7 +10,7 @@ from sklearn.preprocessing import StandardScaler
 
 from validmind import tags, tasks
 from validmind.vm_models import VMDataset, VMModel
-from validmind.vm_models.result.result import MetricValues
+from validmind.vm_models.result.result import RowMetricValues
 
 
 @tasks("classification")
@@ -84,4 +84,4 @@ def OutlierScore(
         outlier_scores = (max_score - anomaly_scores) / (max_score - min_score)
 
     # Return as a list of floats
-    return MetricValues(outlier_scores.tolist())
+    return RowMetricValues(outlier_scores.tolist())

@@ -8,7 +8,7 @@ import numpy as np
 
 from validmind import tags, tasks
 from validmind.vm_models import VMDataset, VMModel
-from validmind.vm_models.result.result import MetricValues
+from validmind.vm_models.result.result import RowMetricValues
 
 
 @tasks("classification")
@@ -63,4 +63,4 @@ def ClassBalance(model: VMModel, dataset: VMDataset, **kwargs) -> List[float]:
         balance_scores.append(balance_score)
 
     # Return as a list of floats
-    return MetricValues(balance_scores)
+    return RowMetricValues(balance_scores)

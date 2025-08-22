@@ -8,7 +8,7 @@ import numpy as np
 
 from validmind import tags, tasks
 from validmind.vm_models import VMDataset, VMModel
-from validmind.vm_models.result.result import MetricValues
+from validmind.vm_models.result.result import RowMetricValues
 
 
 @tasks("classification")
@@ -39,4 +39,4 @@ def Correctness(model: VMModel, dataset: VMDataset, **kwargs) -> List[int]:
     correctness = (y_true == y_pred).astype(int)
 
     # Return as a list of integers
-    return MetricValues(correctness.tolist())
+    return RowMetricValues(correctness.tolist())

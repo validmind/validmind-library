@@ -5,7 +5,7 @@
 import numpy as np
 
 from validmind import tags, tasks
-from validmind.vm_models.result.result import MetricValues
+from validmind.vm_models.result.result import UnitMetricValue
 
 
 @tags("regression")
@@ -14,4 +14,6 @@ def QuantileLoss(model, dataset, quantile=0.5) -> float:
     """Calculates the quantile loss for a regression model."""
     error = dataset.y - dataset.y_pred(model)
 
-    return MetricValues(np.mean(np.maximum(quantile * error, (quantile - 1) * error)))
+    return UnitMetricValue(
+        np.mean(np.maximum(quantile * error, (quantile - 1) * error))
+    )

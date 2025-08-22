@@ -8,7 +8,7 @@ import numpy as np
 
 from validmind import tags, tasks
 from validmind.vm_models import VMDataset, VMModel
-from validmind.vm_models.result.result import MetricValues
+from validmind.vm_models.result.result import RowMetricValues
 
 
 @tasks("classification")
@@ -58,4 +58,4 @@ def Uncertainty(model: VMModel, dataset: VMDataset, **kwargs) -> List[float]:
         uncertainty = np.zeros(n_samples)
 
     # Return as a list of floats
-    return MetricValues(uncertainty.tolist())
+    return RowMetricValues(uncertainty.tolist())

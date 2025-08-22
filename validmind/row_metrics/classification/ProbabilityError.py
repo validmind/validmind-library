@@ -8,35 +8,33 @@ import numpy as np
 
 from validmind import tags, tasks
 from validmind.vm_models import VMDataset, VMModel
-from validmind.vm_models.result.result import MetricValues
+from validmind.vm_models.result.result import RowMetricValues
 
 
 @tasks("classification")
 @tags("classification")
-def LogLoss(
-    model: VMModel, dataset: VMDataset, eps: float = 1e-15, **kwargs
-) -> List[float]:
-    """Calculates the logarithmic loss per row for a classification model.
+def ProbabilityError(model: VMModel, dataset: VMDataset, **kwargs) -> List[float]:
+    """Calculates the probability error per row for a classification model.
 
-    Log loss measures the performance of a classification model where the prediction
-    is a probability value between 0 and 1. The log loss increases as the predicted
-    probability diverges from the actual label.
+    For binary classification tasks, this computes the absolute difference between
+    the true class labels (0 or 1) and the predicted probabilities for each row.
+    This provides insight into how confident the model's predictions are and
+    how far off they are from the actual labels.
 
     Args:
         model: The classification model to evaluate
         dataset: The dataset containing true labels and predicted probabilities
-        eps: Small value to avoid log(0), defaults to 1e-15
         **kwargs: Additional parameters (unused for compatibility)
 
     Returns:
-        List[float]: Per-row log loss values as a list of float values
+        List[float]: Per-row probability errors as a list of float values
 
     Raises:
         ValueError: If probability column is not found for the model
     """
     y_true = dataset.y
 
-    # Try to get probabilities
+    # Try to get probabilities, fall back to predictions if not available
     try:
         y_prob = dataset.y_prob(model)
         # For binary classification, use the positive class probability
@@ -44,19 +42,14 @@ def LogLoss(
             y_prob = y_prob[:, 1]  # Use probability of positive class
     except ValueError:
         # Fall back to predictions if probabilities not available
-        # Convert predictions to "probabilities" (0.99 for correct class, 0.01 for wrong)
-        y_pred = dataset.y_pred(model)
-        y_prob = np.where(y_true == y_pred, 0.99, 0.01)
+        y_prob = dataset.y_pred(model)
 
     # Convert to numpy arrays and ensure same data type
     y_true = np.asarray(y_true, dtype=float)
     y_prob = np.asarray(y_prob, dtype=float)
 
-    # Clip probabilities to avoid log(0) and log(1)
-    y_prob = np.clip(y_prob, eps, 1 - eps)
-
-    # Calculate log loss per row: -[y*log(p) + (1-y)*log(1-p)]
-    log_loss_per_row = -(y_true * np.log(y_prob) + (1 - y_true) * np.log(1 - y_prob))
+    # Compute absolute difference between true labels and predicted probabilities
+    probability_errors = np.abs(y_true - y_prob)
 
     # Return as a list of floats
-    return MetricValues(log_loss_per_row.tolist())
+    return RowMetricValues(probability_errors.tolist())

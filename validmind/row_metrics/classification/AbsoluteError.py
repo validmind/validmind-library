@@ -8,7 +8,7 @@ import numpy as np
 
 from validmind import tags, tasks
 from validmind.vm_models import VMDataset, VMModel
-from validmind.vm_models.result.result import MetricValues
+from validmind.vm_models.result.result import RowMetricValues
 
 
 @tasks("classification")
@@ -40,4 +40,4 @@ def AbsoluteError(model: VMModel, dataset: VMDataset, **kwargs) -> List[float]:
     absolute_errors = np.abs(y_true - y_pred)
 
     # Return as a list of floats
-    return MetricValues(absolute_errors.astype(float).tolist())
+    return RowMetricValues(absolute_errors.astype(float).tolist())
