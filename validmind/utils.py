@@ -11,6 +11,7 @@ import re
 import sys
 import warnings
 from datetime import date, datetime, time
+from packaging.version import Version
 from platform import python_version
 from typing import Any, Awaitable, Callable, Dict, List, Optional, TypeVar
 
@@ -73,7 +74,9 @@ def parse_version(version: str) -> tuple[int, ...]:
     Returns:
         tuple[int, ...]: A tuple of major, minor, patch integers.
     """
-    return tuple(int(x) for x in version.split(".")[:3])
+    v = Version(version)
+
+    return (v.major, v.minor, v.micro)
 
 
 def is_notebook() -> bool:
