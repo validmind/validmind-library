@@ -464,9 +464,9 @@ class VMDataset(VMInput):
         metrics: Union[str, List[str]],
         **kwargs: Dict[str, Any],
     ) -> None:
-        """Assign computed unit metric scores to the dataset as new columns.
+        """Assign computed row metric scores to the dataset as new columns.
 
-        This method computes unit metrics for the given model and dataset, then adds
+        This method computes row metrics for the given model and dataset, then adds
         the computed scores as new columns to the dataset using the naming convention:
         {model.input_id}_{metric_name}
 
@@ -474,34 +474,34 @@ class VMDataset(VMInput):
             model (VMModel): The model used to compute the scores.
             metrics (Union[str, List[str]]): Single metric ID or list of metric IDs.
                 Can be either:
-                - Short name (e.g., "F1", "Precision")
-                - Full metric ID (e.g., "validmind.unit_metrics.classification.F1")
-            **kwargs: Additional parameters passed to the unit metrics.
+                - Short name (e.g., "BrierScore", "LogLoss")
+                - Full metric ID (e.g., "validmind.row_metrics.classification.BrierScore")
+            **kwargs: Additional parameters passed to the row metrics.
 
         Examples:
             # Single metric
-            dataset.assign_scores(model, "F1")
+            dataset.assign_scores(model, "BrierScore")
 
             # Multiple metrics
-            dataset.assign_scores(model, ["F1", "Precision", "Recall"])
+            dataset.assign_scores(model, ["BrierScore", "LogLoss"])
 
             # With parameters
-            dataset.assign_scores(model, "ROC_AUC", average="weighted")
+            dataset.assign_scores(model, "ClassBalance", threshold=0.5)
 
         Raises:
             ValueError: If the model input_id is None or if metric computation fails.
-            ImportError: If unit_metrics module cannot be imported.
+            ImportError: If row_metrics module cannot be imported.
         """
         if model.input_id is None:
             raise ValueError("Model input_id must be set to use assign_scores")
 
-        # Import unit_metrics module
+        # Import row_metrics module
         try:
-            from validmind.unit_metrics import run_metric
+            from validmind.row_metrics import run_row_metric
         except ImportError as e:
             raise ImportError(
-                f"Failed to import unit_metrics module: {e}. "
-                "Make sure validmind.unit_metrics is available."
+                f"Failed to import row_metrics module: {e}. "
+                "Make sure validmind.row_metrics is available."
             ) from e
 
         # Normalize metrics to a list
@@ -520,8 +520,8 @@ class VMDataset(VMInput):
             column_name = f"{model.input_id}_{metric_name}"
 
             try:
-                # Run the unit metric
-                result = run_metric(
+                # Run the row metric
+                result = run_row_metric(
                     metric_id,
                     inputs={
                         "model": model,
@@ -531,20 +531,8 @@ class VMDataset(VMInput):
                     show=False,  # Don't show widget output
                 )
 
-                # Extract the metric value
-                metric_value = result.metric
-
-                # Create column values (repeat the scalar value for all rows)
-                if np.isscalar(metric_value):
-                    column_values = np.full(len(self._df), metric_value)
-                else:
-                    if len(metric_value) != len(self._df):
-                        raise ValueError(
-                            f"Metric value length {len(metric_value)} does not match dataset length {len(self._df)}"
-                        )
-                    column_values = metric_value
-
-                # Add the column to the dataset
+                # Process the metric value and add as column
+                column_values = self._process_metric_value(result.metric)
                 self.add_extra_column(column_name, column_values)
 
                 logger.info(f"Added metric column '{column_name}'")
@@ -552,8 +540,45 @@ class VMDataset(VMInput):
                 logger.error(f"Failed to compute metric {metric_id}: {e}")
                 raise ValueError(f"Failed to compute metric {metric_id}: {e}") from e
 
+    def _process_metric_value(self, metric_value: Any) -> np.ndarray:
+        """Process metric value and return column values for the dataset.
+
+        Args:
+            metric_value: The metric value to process (could be MetricValues object or raw value)
+
+        Returns:
+            np.ndarray: Column values for the dataset
+
+        Raises:
+            ValueError: If metric value length doesn't match dataset length
+        """
+        # Handle different metric value types
+        if hasattr(metric_value, "get_values"):
+            # New MetricValues object (UnitMetricValue or RowMetricValues)
+            values = metric_value.get_values()
+            if metric_value.is_list():
+                # Row metrics - should be one value per row
+                if len(values) != len(self._df):
+                    raise ValueError(
+                        f"Row metric value length {len(values)} does not match dataset length {len(self._df)}"
+                    )
+                return np.array(values)
+            else:
+                # Unit metrics - repeat scalar value for all rows
+                return np.full(len(self._df), values)
+        elif np.isscalar(metric_value):
+            # Legacy scalar value - repeat for all rows
+            return np.full(len(self._df), metric_value)
+        else:
+            # Legacy list value - use directly
+            if len(metric_value) != len(self._df):
+                raise ValueError(
+                    f"Metric value length {len(metric_value)} does not match dataset length {len(self._df)}"
+                )
+            return np.array(metric_value)
+
     def _normalize_metric_id(self, metric: str) -> str:
-        """Normalize metric identifier to full validmind unit metric ID.
+        """Normalize metric identifier to full validmind row metric ID.
 
         Args:
             metric (str): Metric identifier (short name or full ID)
@@ -562,14 +587,14 @@ class VMDataset(VMInput):
             str: Full metric ID
         """
         # If already a full ID, return as-is
-        if metric.startswith("validmind.unit_metrics."):
+        if metric.startswith("validmind.row_metrics."):
             return metric
 
         # Try to find the metric by short name
         try:
-            from validmind.unit_metrics import list_metrics
+            from validmind.row_metrics import list_row_metrics
 
-            available_metrics = list_metrics()
+            available_metrics = list_row_metrics()
 
             # Look for exact match with short name
             for metric_id in available_metrics:
@@ -580,16 +605,16 @@ class VMDataset(VMInput):
             suggestions = [m for m in available_metrics if metric.lower() in m.lower()]
             if suggestions:
                 raise ValueError(
-                    f"Metric '{metric}' not found. Did you mean one of: {suggestions[:5]}"
+                    f"Metric '{metric}' not found in row_metrics. Did you mean one of: {suggestions[:5]}"
                 )
             else:
                 raise ValueError(
-                    f"Metric '{metric}' not found. Available metrics: {available_metrics[:10]}..."
+                    f"Metric '{metric}' not found in row_metrics. Available metrics: {available_metrics[:10]}..."
                 )
 
         except ImportError as e:
             raise ImportError(
-                f"Failed to import unit_metrics for metric lookup: {e}"
+                f"Failed to import row_metrics for metric lookup: {e}"
             ) from e
 
     def _extract_metric_name(self, metric_id: str) -> str:

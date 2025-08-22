@@ -4,11 +4,14 @@
 
 from .result import (
     ErrorResult,
+    MetricValues,
     RawData,
     Result,
     ResultTable,
+    RowMetricValues,
     TestResult,
     TextGenerationResult,
+    UnitMetricValue,
 )
 
 __all__ = [
@@ -18,4 +21,7 @@ __all__ = [
     "ResultTable",
     "TestResult",
     "TextGenerationResult",
+    "MetricValues",
+    "UnitMetricValue",
+    "RowMetricValues",
 ]

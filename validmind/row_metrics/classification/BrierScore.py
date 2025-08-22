@@ -8,27 +8,26 @@ import numpy as np
 
 from validmind import tags, tasks
 from validmind.vm_models import VMDataset, VMModel
+from validmind.vm_models.result.result import RowMetricValues
 
 
 @tasks("classification")
 @tags("classification")
-def LogLoss(
-    model: VMModel, dataset: VMDataset, eps: float = 1e-15, **kwargs
-) -> List[float]:
-    """Calculates the logarithmic loss per row for a classification model.
+def BrierScore(model: VMModel, dataset: VMDataset, **kwargs) -> List[float]:
+    """Calculates the Brier score per row for a classification model.
 
-    Log loss measures the performance of a classification model where the prediction
-    is a probability value between 0 and 1. The log loss increases as the predicted
-    probability diverges from the actual label.
+    The Brier score is a proper score function that measures the accuracy of
+    probabilistic predictions. It is calculated as the mean squared difference
+    between predicted probabilities and the actual binary outcomes.
+    Lower scores indicate better calibration.
 
     Args:
         model: The classification model to evaluate
         dataset: The dataset containing true labels and predicted probabilities
-        eps: Small value to avoid log(0), defaults to 1e-15
         **kwargs: Additional parameters (unused for compatibility)
 
     Returns:
-        List[float]: Per-row log loss values as a list of float values
+        List[float]: Per-row Brier scores as a list of float values
 
     Raises:
         ValueError: If probability column is not found for the model
@@ -43,19 +42,16 @@ def LogLoss(
             y_prob = y_prob[:, 1]  # Use probability of positive class
     except ValueError:
         # Fall back to predictions if probabilities not available
-        # Convert predictions to "probabilities" (0.99 for correct class, 0.01 for wrong)
+        # Convert predictions to "probabilities" (1.0 for predicted class, 0.0 for other)
         y_pred = dataset.y_pred(model)
-        y_prob = np.where(y_true == y_pred, 0.99, 0.01)
+        y_prob = y_pred.astype(float)
 
     # Convert to numpy arrays and ensure same data type
     y_true = np.asarray(y_true, dtype=float)
     y_prob = np.asarray(y_prob, dtype=float)
 
-    # Clip probabilities to avoid log(0) and log(1)
-    y_prob = np.clip(y_prob, eps, 1 - eps)
-
-    # Calculate log loss per row: -[y*log(p) + (1-y)*log(1-p)]
-    log_loss_per_row = -(y_true * np.log(y_prob) + (1 - y_true) * np.log(1 - y_prob))
+    # Calculate Brier score per row: (predicted_probability - actual_outcome)²
+    brier_scores = (y_prob - y_true) ** 2
 
     # Return as a list of floats
-    return log_loss_per_row.tolist()
+    return RowMetricValues(brier_scores.tolist())
