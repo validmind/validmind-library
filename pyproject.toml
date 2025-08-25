@@ -1,6 +1,6 @@
 [project]
 name = "validmind"
-version = "2.10.0-rc.1"
+version = "2.10.0-rc.2"
 description = "ValidMind Library"
 readme = "README.pypi.md"
 requires-python = ">=3.9,<3.13"

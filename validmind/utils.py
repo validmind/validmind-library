@@ -11,7 +11,6 @@ import re
 import sys
 import warnings
 from datetime import date, datetime, time
-from packaging.version import Version
 from platform import python_version
 from typing import Any, Awaitable, Callable, Dict, List, Optional, TypeVar
 
@@ -27,6 +26,7 @@ from IPython.display import HTML
 from IPython.display import display as ipy_display
 from matplotlib.axes._axes import _log as matplotlib_axes_logger
 from numpy import ndarray
+from packaging.version import Version
 from sklearn.exceptions import UndefinedMetricWarning
 from tabulate import tabulate
 
