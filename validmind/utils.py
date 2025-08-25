@@ -26,6 +26,7 @@ from IPython.display import HTML
 from IPython.display import display as ipy_display
 from matplotlib.axes._axes import _log as matplotlib_axes_logger
 from numpy import ndarray
+from packaging.version import Version
 from sklearn.exceptions import UndefinedMetricWarning
 from tabulate import tabulate
 
@@ -73,7 +74,9 @@ def parse_version(version: str) -> tuple[int, ...]:
     Returns:
         tuple[int, ...]: A tuple of major, minor, patch integers.
     """
-    return tuple(int(x) for x in version.split(".")[:3])
+    v = Version(version)
+
+    return (v.major, v.minor, v.micro)
 
 
 def is_notebook() -> bool:
