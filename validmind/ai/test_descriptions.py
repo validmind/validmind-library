@@ -191,15 +191,7 @@ def get_result_description(
         not in ["0", "false"]
     )
 
-    # TODO: fix circular import
-    from validmind.ai.utils import is_configured
-
-    if (
-        should_generate
-        and (tables or figures)
-        and llm_descriptions_enabled
-        and is_configured()
-    ):
+    if should_generate and (tables or figures) and llm_descriptions_enabled:
         # get description future and set it as the description in the metadata
         # this will lazily retrieved so it can run in the background in parallel
         description = background_generate_description(
