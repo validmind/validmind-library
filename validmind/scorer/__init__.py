@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 from validmind.tests._store import test_provider_store
+from validmind.tests.decorator import scorer
 from validmind.tests.load import describe_test
 from validmind.tests.run import run_test
 
@@ -29,4 +30,4 @@ def run_scorer(scorer_id: str, **kwargs):
     return run_test(scorer_id, **kwargs)
 
 
-__all__ = ["list_scorers", "describe_scorer", "run_scorer"]
+__all__ = ["list_scorers", "describe_scorer", "run_scorer", "scorer"]

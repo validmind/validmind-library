@@ -60,7 +60,7 @@ from .client import (  # noqa: E402
     run_test_suite,
 )
 from .experimental import agents as experimental_agent
-from .tests.decorator import tags, tasks, test
+from .tests.decorator import scorer, tags, tasks, test
 from .tests.run import print_env
 from .utils import is_notebook, parse_version
 from .vm_models.result import RawData
@@ -128,6 +128,7 @@ __all__ = [  # noqa
     "tags",
     "tasks",
     "test",
+    "scorer",
     # raw data (for post-processing test results and building tests)
     "RawData",
     # submodules

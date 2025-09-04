@@ -7,7 +7,7 @@
 from ..errors import LoadTestError
 from ..logging import get_logger
 from ._store import test_provider_store
-from .decorator import tags, tasks, test
+from .decorator import scorer, tags, tasks, test
 from .load import (
     describe_test,
     list_tags,
@@ -59,6 +59,7 @@ __all__ = [
     "list_tasks_and_tags",
     # Decorators for functional metrics
     "test",
+    "scorer",
     "tags",
     "tasks",
 ]

@@ -172,9 +172,7 @@ class ValidMindTestProvider:
         unit_metric_ids = [
             f"unit_metrics.{test}" for test in self.unit_metrics_provider.list_tests()
         ]
-        scorer_ids = [
-            f"scorer.{test}" for test in self.scorers_provider.list_tests()
-        ]
+        scorer_ids = [f"scorer.{test}" for test in self.scorers_provider.list_tests()]
         test_ids = self.test_provider.list_tests()
 
         return unit_metric_ids + scorer_ids + test_ids
@@ -186,8 +184,6 @@ class ValidMindTestProvider:
                 test_id.replace("unit_metrics.", "")
             )
         elif test_id.startswith("scorer."):
-            return self.scorers_provider.load_test(
-                test_id.replace("scorer.", "")
-            )
+            return self.scorers_provider.load_test(test_id.replace("scorer.", ""))
         else:
             return self.test_provider.load_test(test_id)

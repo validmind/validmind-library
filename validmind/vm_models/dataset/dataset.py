@@ -613,9 +613,7 @@ class VMDataset(VMInput):
                 )
 
         except ImportError as e:
-            raise ImportError(
-                f"Failed to import scorer for metric lookup: {e}"
-            ) from e
+            raise ImportError(f"Failed to import scorer for metric lookup: {e}") from e
 
     def _extract_metric_name(self, metric_id: str) -> str:
         """Extract the metric name from a full metric ID.

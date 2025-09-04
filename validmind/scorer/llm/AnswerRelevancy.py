@@ -10,11 +10,13 @@ from deepeval.test_case import LLMTestCase
 
 from validmind import tags, tasks
 from validmind.ai.utils import get_client_and_model
+from validmind.tests.decorator import scorer
 from validmind.vm_models.dataset import VMDataset
 from validmind.vm_models.result.result import RowMetricValues
 
 
 # Create custom ValidMind tests for DeepEval metrics
+@scorer()
 @tags("llm", "AnswerRelevancy", "deepeval")
 @tasks("llm")
 def AnswerRelevancy(

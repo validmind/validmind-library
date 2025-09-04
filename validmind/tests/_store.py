@@ -90,7 +90,38 @@ class TestStore:
         self.tests[test_id] = test
 
 
+@singleton
+class ScorerStore:
+    """Singleton class for storing loaded scorers"""
+
+    def __init__(self):
+        self.scorers = {}
+
+    def get_scorer(self, scorer_id: str) -> Optional[Callable[..., Any]]:
+        """Get a scorer by scorer ID
+
+        Args:
+            scorer_id (str): The scorer ID
+
+        Returns:
+            Optional[Callable[..., Any]]: The scorer function if found, None otherwise
+        """
+        return self.scorers.get(scorer_id)
+
+    def register_scorer(
+        self, scorer_id: str, scorer: Optional[Callable[..., Any]] = None
+    ) -> None:
+        """Register a scorer
+
+        Args:
+            scorer_id (str): The scorer ID
+            scorer (Optional[Callable[..., Any]], optional): The scorer function. Defaults to None.
+        """
+        self.scorers[scorer_id] = scorer
+
+
 test_store = TestStore()
+scorer_store = ScorerStore()
 test_provider_store = TestProviderStore()
 
 # setup built-in test providers
