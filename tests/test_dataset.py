@@ -628,7 +628,7 @@ class TestTabularDataset(TestCase):
         vm_dataset.assign_predictions(model=vm_model)
 
         # Test assign_scores with full metric ID
-        full_metric_id = "validmind.row_metrics.classification.LogLoss"
+        full_metric_id = "validmind.scorer.classification.LogLoss"
         vm_dataset.assign_scores(vm_model, full_metric_id)
 
         # Check that the metric column was added with correct name

@@ -264,14 +264,14 @@ class TestResultClasses(unittest.TestCase):
         self.assertEqual(mv_list.get_values(), [1, 2.5, 3, 4.0])
         self.assertFalse(mv_list.is_scalar())
         self.assertTrue(mv_list.is_list())
-        self.assertEqual(mv_list.get_metric_type(), "row_metrics")
+        self.assertEqual(mv_list.get_metric_type(), "scorer")
 
         # Test empty list
         mv_empty = RowMetricValues([])
         self.assertEqual(mv_empty.get_values(), [])
         self.assertFalse(mv_empty.is_scalar())
         self.assertTrue(mv_empty.is_list())
-        self.assertEqual(mv_empty.get_metric_type(), "row_metrics")
+        self.assertEqual(mv_empty.get_metric_type(), "scorer")
 
     def test_metric_values_validation_valid(self):
         """Test metric values validation with valid inputs"""
@@ -420,14 +420,14 @@ class TestResultClasses(unittest.TestCase):
         
         # Test row metric type
         test_result.set_metric([1.0, 2.0, 3.0])
-        self.assertEqual(test_result._get_metric_type(), "row_metrics")
+        self.assertEqual(test_result._get_metric_type(), "scorer")
         
         # Test with MetricValues objects
         test_result.set_metric(UnitMetricValue(99.9))
         self.assertEqual(test_result._get_metric_type(), "unit_metric")
         
         test_result.set_metric(RowMetricValues([4.0, 5.0]))
-        self.assertEqual(test_result._get_metric_type(), "row_metrics")
+        self.assertEqual(test_result._get_metric_type(), "scorer")
         
         # Test with no metric
         test_result.metric = None

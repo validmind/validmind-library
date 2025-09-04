@@ -158,12 +158,12 @@ class ValidMindTestProvider:
     """Provider for built-in ValidMind tests"""
 
     def __init__(self) -> None:
-        # three subproviders: unit_metrics, row_metrics, and normal tests
+        # three subproviders: unit_metrics, scorers, and normal tests
         self.unit_metrics_provider = LocalTestProvider(
             os.path.join(os.path.dirname(__file__), "..", "unit_metrics")
         )
-        self.row_metrics_provider = LocalTestProvider(
-            os.path.join(os.path.dirname(__file__), "..", "row_metrics")
+        self.scorers_provider = LocalTestProvider(
+            os.path.join(os.path.dirname(__file__), "..", "scorer")
         )
         self.test_provider = LocalTestProvider(os.path.dirname(__file__))
 
@@ -172,12 +172,12 @@ class ValidMindTestProvider:
         unit_metric_ids = [
             f"unit_metrics.{test}" for test in self.unit_metrics_provider.list_tests()
         ]
-        row_metric_ids = [
-            f"row_metrics.{test}" for test in self.row_metrics_provider.list_tests()
+        scorer_ids = [
+            f"scorer.{test}" for test in self.scorers_provider.list_tests()
         ]
         test_ids = self.test_provider.list_tests()
 
-        return unit_metric_ids + row_metric_ids + test_ids
+        return unit_metric_ids + scorer_ids + test_ids
 
     def load_test(self, test_id: str) -> Callable[..., Any]:
         """Load the test function identified by the given test_id"""
@@ -185,9 +185,9 @@ class ValidMindTestProvider:
             return self.unit_metrics_provider.load_test(
                 test_id.replace("unit_metrics.", "")
             )
-        elif test_id.startswith("row_metrics."):
-            return self.row_metrics_provider.load_test(
-                test_id.replace("row_metrics.", "")
+        elif test_id.startswith("scorer."):
+            return self.scorers_provider.load_test(
+                test_id.replace("scorer.", "")
             )
         else:
             return self.test_provider.load_test(test_id)

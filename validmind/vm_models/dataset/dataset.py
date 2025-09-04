@@ -495,13 +495,13 @@ class VMDataset(VMInput):
         if model.input_id is None:
             raise ValueError("Model input_id must be set to use assign_scores")
 
-        # Import row_metrics module
+        # Import scorer module
         try:
-            from validmind.row_metrics import run_row_metric
+            from validmind.scorer import run_scorer
         except ImportError as e:
             raise ImportError(
-                f"Failed to import row_metrics module: {e}. "
-                "Make sure validmind.row_metrics is available."
+                f"Failed to import scorer module: {e}. "
+                "Make sure validmind.scorer is available."
             ) from e
 
         # Normalize metrics to a list
@@ -520,8 +520,8 @@ class VMDataset(VMInput):
             column_name = f"{model.input_id}_{metric_name}"
 
             try:
-                # Run the row metric
-                result = run_row_metric(
+                # Run the scorer
+                result = run_scorer(
                     metric_id,
                     inputs={
                         "model": model,
@@ -587,14 +587,14 @@ class VMDataset(VMInput):
             str: Full metric ID
         """
         # If already a full ID, return as-is
-        if metric.startswith("validmind.row_metrics."):
+        if metric.startswith("validmind.scorer."):
             return metric
 
         # Try to find the metric by short name
         try:
-            from validmind.row_metrics import list_row_metrics
+            from validmind.scorer import list_scorers
 
-            available_metrics = list_row_metrics()
+            available_metrics = list_scorers()
 
             # Look for exact match with short name
             for metric_id in available_metrics:
@@ -605,16 +605,16 @@ class VMDataset(VMInput):
             suggestions = [m for m in available_metrics if metric.lower() in m.lower()]
             if suggestions:
                 raise ValueError(
-                    f"Metric '{metric}' not found in row_metrics. Did you mean one of: {suggestions[:5]}"
+                    f"Metric '{metric}' not found in scorer. Did you mean one of: {suggestions[:5]}"
                 )
             else:
                 raise ValueError(
-                    f"Metric '{metric}' not found in row_metrics. Available metrics: {available_metrics[:10]}..."
+                    f"Metric '{metric}' not found in scorer. Available metrics: {available_metrics[:10]}..."
                 )
 
         except ImportError as e:
             raise ImportError(
-                f"Failed to import row_metrics for metric lookup: {e}"
+                f"Failed to import scorer for metric lookup: {e}"
             ) from e
 
     def _extract_metric_name(self, metric_id: str) -> str:

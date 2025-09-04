@@ -273,7 +273,7 @@ class RowMetricValues(MetricValues):
         Returns:
             str: The metric type identifier.
         """
-        return "row_metrics"
+        return "scorer"
 
     def get_values(self) -> List[Union[int, float]]:
         """Get the raw metric values.
@@ -783,8 +783,8 @@ class TestResult(Result):
 
             # Use appropriate metric key based on type
             metric_key = self.result_id
-            if metric_type == "row_metrics":
-                metric_key = f"{self.result_id}_row_metrics"
+            if metric_type == "scorer":
+                metric_key = f"{self.result_id}_scorer"
 
             tasks.append(
                 api_client.alog_metric(
