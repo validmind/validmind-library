@@ -85,7 +85,7 @@ def _plot_score_histogram(df, score_col, target_col, title):
     classes = sorted(df[target_col].unique())
     colors = [colormap(i / len(classes))[:3] for i in range(len(classes))]  # RGB
     color_dict = {
-        cls: f"rgb({int(rgb[0]*255)}, {int(rgb[1]*255)}, {int(rgb[2]*255)})"
+        cls: f"rgb({int(rgb[0] * 255)}, {int(rgb[1] * 255)}, {int(rgb[2] * 255)})"
         for cls, rgb in zip(classes, colors)
     }
 

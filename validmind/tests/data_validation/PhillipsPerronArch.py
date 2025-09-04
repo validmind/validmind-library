@@ -6,13 +6,24 @@ from typing import Any, Dict
 
 import numpy as np
 import pandas as pd
-from arch.unitroot import PhillipsPerron
 from numpy.linalg import LinAlgError
 
 from validmind import tags, tasks
-from validmind.errors import SkipTestError
+from validmind.errors import MissingDependencyError, SkipTestError
 from validmind.logging import get_logger
 from validmind.vm_models import VMDataset
+
+try:
+    from arch.unitroot import PhillipsPerron
+except ImportError as e:
+    if "arch" in str(e):
+        raise MissingDependencyError(
+            "Missing required package `arch` for PhillipsPerronArch. "
+            "Please run `pip install validmind[stats]` to use statistical tests",
+            required_dependencies=["arch"],
+            extra="stats",
+        ) from e
+    raise e
 
 logger = get_logger(__name__)
 

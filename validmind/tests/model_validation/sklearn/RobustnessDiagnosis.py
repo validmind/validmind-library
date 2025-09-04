@@ -129,7 +129,7 @@ def _plot_robustness(
 
     datasets = results["Dataset"].unique()
     pallete = [
-        f"#{int(r*255):02x}{int(g*255):02x}{int(b*255):02x}"
+        f"#{int(r * 255):02x}{int(g * 255):02x}{int(b * 255):02x}"
         for r, g, b in sns.color_palette("husl", len(datasets))
     ]
 

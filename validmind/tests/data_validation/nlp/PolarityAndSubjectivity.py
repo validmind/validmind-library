@@ -8,9 +8,21 @@ from typing import Dict, Tuple
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
-from textblob import TextBlob
 
 from validmind import RawData, tags, tasks
+from validmind.errors import MissingDependencyError
+
+try:
+    from textblob import TextBlob
+except ImportError as e:
+    if "textblob" in str(e).lower():
+        raise MissingDependencyError(
+            "Missing required package `textblob` for PolarityAndSubjectivity. "
+            "Please run `pip install validmind[nlp]` to use NLP tests",
+            required_dependencies=["textblob"],
+            extra="nlp",
+        ) from e
+    raise e
 
 
 @tags("nlp", "text_data", "data_validation")
