@@ -531,14 +531,54 @@ class VMDataset(VMInput):
                     show=False,  # Don't show widget output
                 )
 
-                # Process the metric value and add as column
-                column_values = self._process_metric_value(result.metric)
+                # Process the scorer output and add as column
+                if result.raw_data and hasattr(result.raw_data, "scorer_output"):
+                    # New scorer format - get the raw output
+                    scorer_output = result.raw_data.scorer_output
+                    column_values = self._process_scorer_output(scorer_output)
+                else:
+                    # Legacy format - process as metric value
+                    column_values = self._process_metric_value(result.metric)
                 self.add_extra_column(column_name, column_values)
 
                 logger.info(f"Added metric column '{column_name}'")
             except Exception as e:
                 logger.error(f"Failed to compute metric {metric_id}: {e}")
                 raise ValueError(f"Failed to compute metric {metric_id}: {e}") from e
+
+    def _process_scorer_output(self, scorer_output: Any) -> np.ndarray:
+        """Process scorer output and return column values for the dataset.
+
+        Args:
+            scorer_output: The raw scorer output (list, scalar, etc.)
+
+        Returns:
+            np.ndarray: Column values for the dataset
+
+        Raises:
+            ValueError: If scorer output length doesn't match dataset length
+        """
+        if isinstance(scorer_output, list):
+            # List output - should be one value per row
+            if len(scorer_output) != len(self._df):
+                raise ValueError(
+                    f"Scorer output length {len(scorer_output)} does not match dataset length {len(self._df)}"
+                )
+            return np.array(scorer_output)
+        elif np.isscalar(scorer_output):
+            # Scalar output - repeat for all rows
+            return np.full(len(self._df), scorer_output)
+        else:
+            # Other types - try to convert to array
+            try:
+                output_array = np.array(scorer_output)
+                if len(output_array) != len(self._df):
+                    raise ValueError(
+                        f"Scorer output length {len(output_array)} does not match dataset length {len(self._df)}"
+                    )
+                return output_array
+            except Exception as e:
+                raise ValueError(f"Could not process scorer output: {e}") from e
 
     def _process_metric_value(self, metric_value: Any) -> np.ndarray:
         """Process metric value and return column values for the dataset.

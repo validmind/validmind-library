@@ -192,7 +192,11 @@ def scorer(func_or_id: Union[Callable[..., Any], str, None] = None) -> Callable[
     - Plot: Either a matplotlib figure or a plotly figure
     - Scalar: A single number (int or float)
     - Boolean: A single boolean value indicating whether the test passed or failed
-    - RowMetricValues: A list of metric values for each row in the dataset
+    - List: A list of values (for row-level metrics)
+    - Any other type: The output will be stored as raw data for use by calling code
+
+    Note: Scorer outputs are not logged to the backend and are intended for use
+    by other parts of the system (e.g., assign_scores method).
 
     The function may also include a docstring. This docstring will be used and logged
     as the scorer's description.
@@ -227,6 +231,7 @@ def scorer(func_or_id: Union[Callable[..., Any], str, None] = None) -> Callable[
         # Add attributes to the function
         func.scorer_id = scorer_id
         func.save = save_func
+        func._is_scorer = True  # Mark this function as a scorer
 
         return func
 

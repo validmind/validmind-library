@@ -407,6 +407,7 @@ class TestResult(Result):
     _was_description_generated: bool = False
     _unsafe: bool = False
     _client_config_cache: Optional[Any] = None
+    _is_scorer_result: bool = False
 
     def __post_init__(self):
         if self.ref_id is None:
@@ -762,6 +763,10 @@ class TestResult(Result):
         position: int = None,
         config: Dict[str, bool] = None,
     ):
+        # Skip logging for scorers - they should not be saved to the backend
+        if self._is_scorer_result:
+            return
+
         tasks = []  # collect tasks to run in parallel (async)
 
         # Default empty dict if None

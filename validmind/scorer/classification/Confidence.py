@@ -7,10 +7,11 @@ from typing import List
 import numpy as np
 
 from validmind import tags, tasks
+from validmind.tests.decorator import scorer
 from validmind.vm_models import VMDataset, VMModel
-from validmind.vm_models.result.result import RowMetricValues
 
 
+@scorer()
 @tasks("classification")
 @tags("classification")
 def Confidence(model: VMModel, dataset: VMDataset, **kwargs) -> List[float]:
@@ -50,4 +51,4 @@ def Confidence(model: VMModel, dataset: VMDataset, **kwargs) -> List[float]:
         confidence = (y_true == y_pred).astype(float)
 
     # Return as a list of floats
-    return RowMetricValues(confidence.tolist())
+    return confidence.tolist()

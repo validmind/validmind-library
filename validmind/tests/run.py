@@ -139,6 +139,7 @@ def build_test_result(
     inputs: Dict[str, Union[VMInput, List[VMInput]]],
     params: Union[Dict[str, Any], None],
     title: Optional[str] = None,
+    test_func: Optional[Callable] = None,
 ):
     """Build a TestResult object from a set of raw test function outputs"""
     ref_id = str(uuid4())
@@ -150,13 +151,16 @@ def build_test_result(
         inputs=inputs,
         params=params if params else None,  # None if empty dict or None
         doc=test_doc,
+        _is_scorer_result=test_func is not None
+        and hasattr(test_func, "_is_scorer")
+        and test_func._is_scorer,
     )
 
     if not isinstance(outputs, tuple):
         outputs = (outputs,)
 
     for item in outputs:
-        process_output(item, result)
+        process_output(item, result, test_func)
 
     return result
 
@@ -292,6 +296,7 @@ def _run_test(
         inputs=input_kwargs,
         params=param_kwargs,
         title=title,
+        test_func=test_func,
     )
 
 

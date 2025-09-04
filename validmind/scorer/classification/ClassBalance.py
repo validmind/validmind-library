@@ -7,10 +7,11 @@ from typing import List
 import numpy as np
 
 from validmind import tags, tasks
+from validmind.tests.decorator import scorer
 from validmind.vm_models import VMDataset, VMModel
-from validmind.vm_models.result.result import RowMetricValues
 
 
+@scorer()
 @tasks("classification")
 @tags("classification")
 def ClassBalance(model: VMModel, dataset: VMDataset, **kwargs) -> List[float]:
@@ -63,4 +64,4 @@ def ClassBalance(model: VMModel, dataset: VMDataset, **kwargs) -> List[float]:
         balance_scores.append(balance_score)
 
     # Return as a list of floats
-    return RowMetricValues(balance_scores)
+    return balance_scores

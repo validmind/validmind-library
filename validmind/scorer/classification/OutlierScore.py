@@ -9,10 +9,11 @@ from sklearn.ensemble import IsolationForest
 from sklearn.preprocessing import StandardScaler
 
 from validmind import tags, tasks
+from validmind.tests.decorator import scorer
 from validmind.vm_models import VMDataset, VMModel
-from validmind.vm_models.result.result import RowMetricValues
 
 
+@scorer()
 @tasks("classification")
 @tags("classification")
 def OutlierScore(
@@ -84,4 +85,4 @@ def OutlierScore(
         outlier_scores = (max_score - anomaly_scores) / (max_score - min_score)
 
     # Return as a list of floats
-    return RowMetricValues(outlier_scores.tolist())
+    return outlier_scores.tolist()

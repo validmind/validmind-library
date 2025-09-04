@@ -7,10 +7,11 @@ from typing import List
 import numpy as np
 
 from validmind import tags, tasks
+from validmind.tests.decorator import scorer
 from validmind.vm_models import VMDataset, VMModel
-from validmind.vm_models.result.result import RowMetricValues
 
 
+@scorer()
 @tasks("classification")
 @tags("classification")
 def LogLoss(
@@ -59,4 +60,4 @@ def LogLoss(
     log_loss_per_row = -(y_true * np.log(y_prob) + (1 - y_true) * np.log(1 - y_prob))
 
     # Return as a list of floats
-    return RowMetricValues(log_loss_per_row.tolist())
+    return log_loss_per_row.tolist()

@@ -7,10 +7,11 @@ from typing import List
 import numpy as np
 
 from validmind import tags, tasks
+from validmind.tests.decorator import scorer
 from validmind.vm_models import VMDataset, VMModel
-from validmind.vm_models.result.result import RowMetricValues
 
 
+@scorer()
 @tasks("classification")
 @tags("classification")
 def AbsoluteError(model: VMModel, dataset: VMDataset, **kwargs) -> List[float]:
@@ -40,4 +41,4 @@ def AbsoluteError(model: VMModel, dataset: VMDataset, **kwargs) -> List[float]:
     absolute_errors = np.abs(y_true - y_pred)
 
     # Return as a list of floats
-    return RowMetricValues(absolute_errors.astype(float).tolist())
+    return absolute_errors.astype(float).tolist()
