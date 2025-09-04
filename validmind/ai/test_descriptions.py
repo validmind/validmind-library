@@ -14,6 +14,11 @@ from ..logging import get_logger
 from ..utils import NumpyEncoder, md_to_html, test_id_to_name
 from ..vm_models.figure import Figure
 from ..vm_models.result import ResultTable
+from ..vm_models.result.pii_filter import (
+    PIIDetectionMode,
+    get_pii_detection_mode,
+    scan_df,
+)
 from .utils import DescriptionFuture
 
 __executor = ThreadPoolExecutor()
@@ -92,6 +97,13 @@ def generate_description(
         )
 
     if tables:
+        if get_pii_detection_mode() in [
+            PIIDetectionMode.TEST_DESCRIPTIONS,
+            PIIDetectionMode.ALL,
+        ]:
+            for table in tables:
+                scan_df(table.data)
+
         summary = "\n---\n".join(
             [
                 json.dumps(table.serialize(), cls=NumpyEncoder, separators=(",", ":"))
@@ -125,13 +137,16 @@ def background_generate_description(
 ):
     def wrapped():
         try:
-            return generate_description(
-                test_id=test_id,
-                test_description=test_description,
-                tables=tables,
-                figures=figures,
-                metric=metric,
-                title=title,
+            return (
+                generate_description(
+                    test_id=test_id,
+                    test_description=test_description,
+                    tables=tables,
+                    figures=figures,
+                    metric=metric,
+                    title=title,
+                ),
+                True,
             )
         except Exception as e:
             if "maximum context length" in str(e):
@@ -146,7 +161,7 @@ def background_generate_description(
                 logger.warning(f"Failed to generate description for {test_id}: {e}")
             logger.warning(f"Using default description for {test_id}")
 
-            return test_description
+            return test_description, False
 
     return DescriptionFuture(__executor.submit(wrapped))
 

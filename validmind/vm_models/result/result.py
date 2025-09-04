@@ -31,10 +31,10 @@ from ...utils import (
 )
 from ..figure import Figure, create_figure
 from ..input import VMInput
+from .pii_filter import PIIDetectionMode, get_pii_detection_mode, scan_df, scan_text
 from .utils import (
     AI_REVISION_NAME,
     DEFAULT_REVISION_NAME,
-    check_for_sensitive_data,
     figures_to_widgets,
     get_result_template,
     tables_to_widgets,
@@ -222,8 +222,10 @@ class TestResult(Result):
             description = super().__getattribute__("description")
 
             if isinstance(description, DescriptionFuture):
-                self._was_description_generated = True
-                self.description = description.get_description()
+                (
+                    self.description,
+                    self._was_description_generated,
+                ) = description.get_description()
 
         return super().__getattribute__(name)
 
@@ -465,8 +467,10 @@ class TestResult(Result):
             )
         )
 
-        if self.metric is not None:
-            # metrics are logged as separate entities
+        # Only log unit metrics when the metric is a scalar value.
+        # Some tests may assign a list/array of per-row metrics to `self.metric`.
+        # Those should not be sent to the unit-metric endpoint which expects scalars.
+        if self.metric is not None and not hasattr(self.metric, "__len__"):
             tasks.append(
                 api_client.alog_metric(
                     key=self.result_id,
@@ -521,7 +525,7 @@ class TestResult(Result):
 
         return await asyncio.gather(*tasks)
 
-    def log(
+    def log(  # noqa: C901
         self,
         section_id: str = None,
         content_id: str = None,
@@ -552,9 +556,15 @@ class TestResult(Result):
 
         self.check_result_id_exist()
 
-        if not unsafe:
+        if not unsafe and get_pii_detection_mode() in [
+            PIIDetectionMode.TEST_RESULTS,
+            PIIDetectionMode.ALL,
+        ]:
             for table in self.tables or []:
-                check_for_sensitive_data(table.data, self._get_flat_inputs())
+                scan_df(table.data)
+
+            if self.description:
+                scan_text(self.description)
 
         if section_id:
             self._validate_section_id_for_block(section_id, position)
@@ -701,6 +711,22 @@ class TextGenerationResult(Result):
             position (int): The position (index) within the section to insert the test
                 result.
         """
+        # Check description text for PII when available
+        if self.description:
+            try:
+                from .pii_filter import check_text_for_pii
+
+                check_text_for_pii(self.description, raise_on_detection=True)
+            except ImportError:
+                logger.debug(
+                    "PII detection not available - skipping PII check for description"
+                )
+            except ValueError:
+                # Re-raise PII detection errors
+                raise
+            except Exception as e:
+                logger.warning(f"PII detection failed for description: {e}")
+
         run_async(
             self.log_async,
             content_id=content_id,
