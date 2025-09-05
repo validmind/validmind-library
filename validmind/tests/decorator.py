@@ -192,8 +192,14 @@ def scorer(func_or_id: Union[Callable[..., Any], str, None] = None) -> Callable[
     - Plot: Either a matplotlib figure or a plotly figure
     - Scalar: A single number (int or float)
     - Boolean: A single boolean value indicating whether the test passed or failed
-    - List: A list of values (for row-level metrics)
+    - List: A list of values (for row-level metrics) or a list of dictionaries with consistent keys
     - Any other type: The output will be stored as raw data for use by calling code
+
+    When returning a list of dictionaries:
+    - All dictionaries must have the same keys
+    - The list length must match the number of rows in the dataset
+    - Each dictionary key will become a separate column when using assign_scores
+    - Column naming follows the pattern: {model_id}_{metric_name}_{dict_key}
 
     Note: Scorer outputs are not logged to the backend and are intended for use
     by other parts of the system (e.g., assign_scores method).

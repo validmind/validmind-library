@@ -2,7 +2,7 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from typing import Any, Dict
+from typing import Any, Dict, List
 
 from deepeval import evaluate
 from deepeval.metrics import AnswerRelevancyMetric
@@ -23,7 +23,28 @@ def AnswerRelevancy(
     threshold: float = 0.8,
     input_column: str = "input",
     actual_output_column: str = "actual_output",
-) -> Dict[str, Any]:
+) -> List[Dict[str, Any]]:
+    """Calculates answer relevancy scores with explanations for LLM responses.
+
+    This scorer evaluates how relevant an LLM's answer is to the given input question.
+    It returns a list of dictionaries, where each dictionary contains both the relevancy
+    score and the reasoning behind the score for each row in the dataset.
+
+    Args:
+        dataset: The dataset containing input questions and LLM responses
+        threshold: The threshold for determining relevancy (default: 0.8)
+        input_column: Name of the column containing input questions (default: "input")
+        actual_output_column: Name of the column containing LLM responses (default: "actual_output")
+
+    Returns:
+        List[Dict[str, Any]]: Per-row relevancy scores and reasons as a list of dictionaries.
+        Each dictionary contains:
+        - "score": float - The relevancy score (0.0 to 1.0)
+        - "reason": str - Explanation of why the score was assigned
+
+    Raises:
+        ValueError: If required columns are not found in the dataset
+    """
 
     # Validate required columns exist in dataset
     if input_column not in dataset.df.columns:
@@ -51,7 +72,13 @@ def AnswerRelevancy(
             actual_output=actual_output,
         )
         result = evaluate(test_cases=[test_case], metrics=[metric])
-        print(result.test_results[0].metrics_data[0].score)
-        results.append(result.test_results[0].metrics_data[0].score)
+
+        # Extract score and reason from the metric result
+        metric_data = result.test_results[0].metrics_data[0]
+        score = metric_data.score
+        reason = getattr(metric_data, "reason", "No reason provided")
+
+        # Create dictionary with score and reason
+        results.append({"score": score, "reason": reason})
 
     return results

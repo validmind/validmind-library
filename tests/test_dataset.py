@@ -807,6 +807,149 @@ class TestTabularDataset(TestCase):
         self.assertTrue(lr_logloss >= 0)
         self.assertTrue(rf_logloss >= 0)
 
+    def test_process_dict_list_scorer_output(self):
+        """Test that _process_dict_list_scorer_output correctly handles list of dictionaries."""
+        # Create a sample dataset
+        df = pd.DataFrame({"col1": [1, 2, 3], "col2": ["a", "b", "c"], "target": [0, 1, 0]})
+        vm_dataset = DataFrameDataset(raw_dataset=df, target_column="target")
+
+        # Test with valid list of dictionaries
+        scorer_output = [
+            {"score": 0.1, "confidence": 0.9},
+            {"score": 0.2, "confidence": 0.8},
+            {"score": 0.3, "confidence": 0.7}
+        ]
+
+        vm_dataset._process_dict_list_scorer_output(scorer_output, "test_model", "TestMetric")
+
+        # Check that columns were added
+        self.assertTrue("test_model_TestMetric_score" in vm_dataset.df.columns)
+        self.assertTrue("test_model_TestMetric_confidence" in vm_dataset.df.columns)
+
+        # Check values
+        expected_scores = [0.1, 0.2, 0.3]
+        expected_confidences = [0.9, 0.8, 0.7]
+        np.testing.assert_array_equal(vm_dataset.df["test_model_TestMetric_score"].values, expected_scores)
+        np.testing.assert_array_equal(vm_dataset.df["test_model_TestMetric_confidence"].values, expected_confidences)
+
+    def test_process_dict_list_scorer_output_inconsistent_keys(self):
+        """Test that _process_dict_list_scorer_output raises error for inconsistent keys."""
+        # Create a sample dataset
+        df = pd.DataFrame({"col1": [1, 2, 3], "col2": ["a", "b", "c"], "target": [0, 1, 0]})
+        vm_dataset = DataFrameDataset(raw_dataset=df, target_column="target")
+
+        # Test with inconsistent keys
+        scorer_output = [
+            {"score": 0.1, "confidence": 0.9},
+            {"score": 0.2, "confidence": 0.8},
+            {"score": 0.3, "error": 0.1}  # Different key
+        ]
+
+        with self.assertRaises(ValueError) as context:
+            vm_dataset._process_dict_list_scorer_output(scorer_output, "test_model", "TestMetric")
+
+        self.assertIn("All dictionaries must have the same keys", str(context.exception))
+
+    def test_process_dict_list_scorer_output_non_dict_items(self):
+        """Test that _process_dict_list_scorer_output raises error for non-dict items."""
+        # Create a sample dataset
+        df = pd.DataFrame({"col1": [1, 2, 3], "col2": ["a", "b", "c"], "target": [0, 1, 0]})
+        vm_dataset = DataFrameDataset(raw_dataset=df, target_column="target")
+
+        # Test with non-dict items
+        scorer_output = [
+            {"score": 0.1, "confidence": 0.9},
+            {"score": 0.2, "confidence": 0.8},
+            "not_a_dict"  # Not a dictionary
+        ]
+
+        with self.assertRaises(ValueError) as context:
+            vm_dataset._process_dict_list_scorer_output(scorer_output, "test_model", "TestMetric")
+
+        self.assertIn("All items in list must be dictionaries", str(context.exception))
+
+    def test_process_list_scorer_output_dict_list(self):
+        """Test that _process_list_scorer_output correctly handles list of dictionaries."""
+        # Create a sample dataset
+        df = pd.DataFrame({"col1": [1, 2, 3], "col2": ["a", "b", "c"], "target": [0, 1, 0]})
+        vm_dataset = DataFrameDataset(raw_dataset=df, target_column="target")
+
+        # Test with valid list of dictionaries
+        scorer_output = [
+            {"score": 0.1, "confidence": 0.9},
+            {"score": 0.2, "confidence": 0.8},
+            {"score": 0.3, "confidence": 0.7}
+        ]
+
+        vm_dataset._process_list_scorer_output(scorer_output, "test_model", "TestMetric")
+
+        # Check that columns were added
+        self.assertTrue("test_model_TestMetric_score" in vm_dataset.df.columns)
+        self.assertTrue("test_model_TestMetric_confidence" in vm_dataset.df.columns)
+
+    def test_process_list_scorer_output_regular_list(self):
+        """Test that _process_list_scorer_output correctly handles regular list."""
+        # Create a sample dataset
+        df = pd.DataFrame({"col1": [1, 2, 3], "col2": ["a", "b", "c"], "target": [0, 1, 0]})
+        vm_dataset = DataFrameDataset(raw_dataset=df, target_column="target")
+
+        # Test with regular list
+        scorer_output = [0.1, 0.2, 0.3]
+
+        vm_dataset._process_list_scorer_output(scorer_output, "test_model", "TestMetric")
+
+        # Check that single column was added
+        self.assertTrue("test_model_TestMetric" in vm_dataset.df.columns)
+        np.testing.assert_array_equal(vm_dataset.df["test_model_TestMetric"].values, [0.1, 0.2, 0.3])
+
+    def test_process_list_scorer_output_wrong_length(self):
+        """Test that _process_list_scorer_output raises error for wrong length."""
+        # Create a sample dataset
+        df = pd.DataFrame({"col1": [1, 2, 3], "col2": ["a", "b", "c"], "target": [0, 1, 0]})
+        vm_dataset = DataFrameDataset(raw_dataset=df, target_column="target")
+
+        # Test with wrong length
+        scorer_output = [0.1, 0.2]  # Only 2 items, but dataset has 3 rows
+
+        with self.assertRaises(ValueError) as context:
+            vm_dataset._process_list_scorer_output(scorer_output, "test_model", "TestMetric")
+
+        self.assertIn("does not match dataset length", str(context.exception))
+
+    def test_process_and_add_scorer_output_dict_list(self):
+        """Test that _process_and_add_scorer_output correctly handles list of dictionaries."""
+        # Create a sample dataset
+        df = pd.DataFrame({"col1": [1, 2, 3], "col2": ["a", "b", "c"], "target": [0, 1, 0]})
+        vm_dataset = DataFrameDataset(raw_dataset=df, target_column="target")
+
+        # Test with valid list of dictionaries
+        scorer_output = [
+            {"score": 0.1, "confidence": 0.9},
+            {"score": 0.2, "confidence": 0.8},
+            {"score": 0.3, "confidence": 0.7}
+        ]
+
+        vm_dataset._process_and_add_scorer_output(scorer_output, "test_model", "TestMetric")
+
+        # Check that columns were added
+        self.assertTrue("test_model_TestMetric_score" in vm_dataset.df.columns)
+        self.assertTrue("test_model_TestMetric_confidence" in vm_dataset.df.columns)
+
+    def test_process_and_add_scorer_output_scalar(self):
+        """Test that _process_and_add_scorer_output correctly handles scalar values."""
+        # Create a sample dataset
+        df = pd.DataFrame({"col1": [1, 2, 3], "col2": ["a", "b", "c"], "target": [0, 1, 0]})
+        vm_dataset = DataFrameDataset(raw_dataset=df, target_column="target")
+
+        # Test with scalar
+        scorer_output = 0.5
+
+        vm_dataset._process_and_add_scorer_output(scorer_output, "test_model", "TestMetric")
+
+        # Check that single column was added with repeated values
+        self.assertTrue("test_model_TestMetric" in vm_dataset.df.columns)
+        np.testing.assert_array_equal(vm_dataset.df["test_model_TestMetric"].values, [0.5, 0.5, 0.5])
+
 
 if __name__ == "__main__":
     unittest.main()

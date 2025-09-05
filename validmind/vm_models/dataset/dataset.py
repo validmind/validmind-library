@@ -531,20 +531,124 @@ class VMDataset(VMInput):
                     show=False,  # Don't show widget output
                 )
 
-                # Process the scorer output and add as column
+                # Process the scorer output and add as column(s)
                 if result.raw_data and hasattr(result.raw_data, "scorer_output"):
                     # New scorer format - get the raw output
                     scorer_output = result.raw_data.scorer_output
-                    column_values = self._process_scorer_output(scorer_output)
+                    self._process_and_add_scorer_output(
+                        scorer_output, model.input_id, metric_name
+                    )
                 else:
                     # Legacy format - process as metric value
                     column_values = self._process_metric_value(result.metric)
-                self.add_extra_column(column_name, column_values)
+                    self.add_extra_column(column_name, column_values)
 
-                logger.info(f"Added metric column '{column_name}'")
+                logger.info(f"Added metric column(s) for '{metric_name}'")
             except Exception as e:
                 logger.error(f"Failed to compute metric {metric_id}: {e}")
                 raise ValueError(f"Failed to compute metric {metric_id}: {e}") from e
+
+    def _process_and_add_scorer_output(
+        self, scorer_output: Any, model_input_id: str, metric_name: str
+    ) -> None:
+        """Process scorer output and add appropriate columns to the dataset.
+
+        Args:
+            scorer_output: The raw scorer output (list, scalar, list of dicts, etc.)
+            model_input_id: The model input ID for column naming
+            metric_name: The metric name for column naming
+
+        Raises:
+            ValueError: If scorer output length doesn't match dataset length or
+                       if list of dictionaries has inconsistent keys
+        """
+        if isinstance(scorer_output, list):
+            self._process_list_scorer_output(scorer_output, model_input_id, metric_name)
+        elif np.isscalar(scorer_output):
+            self._process_scalar_scorer_output(
+                scorer_output, model_input_id, metric_name
+            )
+        else:
+            self._process_other_scorer_output(
+                scorer_output, model_input_id, metric_name
+            )
+
+    def _process_list_scorer_output(
+        self, scorer_output: list, model_input_id: str, metric_name: str
+    ) -> None:
+        """Process list scorer output and add appropriate columns."""
+        if len(scorer_output) != len(self._df):
+            raise ValueError(
+                f"Scorer output length {len(scorer_output)} does not match dataset length {len(self._df)}"
+            )
+
+        if scorer_output and isinstance(scorer_output[0], dict):
+            self._process_dict_list_scorer_output(
+                scorer_output, model_input_id, metric_name
+            )
+        else:
+            self._process_regular_list_scorer_output(
+                scorer_output, model_input_id, metric_name
+            )
+
+    def _process_dict_list_scorer_output(
+        self, scorer_output: list, model_input_id: str, metric_name: str
+    ) -> None:
+        """Process list of dictionaries scorer output."""
+        # Validate that all dictionaries have the same keys
+        first_keys = set(scorer_output[0].keys())
+        for i, item in enumerate(scorer_output):
+            if not isinstance(item, dict):
+                raise ValueError(
+                    f"All items in list must be dictionaries, but item at index {i} is {type(item)}"
+                )
+            if set(item.keys()) != first_keys:
+                raise ValueError(
+                    f"All dictionaries must have the same keys. "
+                    f"First dict has keys {sorted(first_keys)}, "
+                    f"but dict at index {i} has keys {sorted(item.keys())}"
+                )
+
+        # Add a column for each key in the dictionaries
+        for key in first_keys:
+            column_name = f"{model_input_id}_{metric_name}_{key}"
+            column_values = np.array([item[key] for item in scorer_output])
+            self.add_extra_column(column_name, column_values)
+            logger.info(f"Added metric column '{column_name}'")
+
+    def _process_regular_list_scorer_output(
+        self, scorer_output: list, model_input_id: str, metric_name: str
+    ) -> None:
+        """Process regular list scorer output."""
+        column_name = f"{model_input_id}_{metric_name}"
+        column_values = np.array(scorer_output)
+        self.add_extra_column(column_name, column_values)
+        logger.info(f"Added metric column '{column_name}'")
+
+    def _process_scalar_scorer_output(
+        self, scorer_output: Any, model_input_id: str, metric_name: str
+    ) -> None:
+        """Process scalar scorer output."""
+        column_name = f"{model_input_id}_{metric_name}"
+        column_values = np.full(len(self._df), scorer_output)
+        self.add_extra_column(column_name, column_values)
+        logger.info(f"Added metric column '{column_name}'")
+
+    def _process_other_scorer_output(
+        self, scorer_output: Any, model_input_id: str, metric_name: str
+    ) -> None:
+        """Process other types of scorer output."""
+        try:
+            output_array = np.array(scorer_output)
+            if len(output_array) != len(self._df):
+                raise ValueError(
+                    f"Scorer output length {len(output_array)} does not match dataset length {len(self._df)}"
+                )
+            column_name = f"{model_input_id}_{metric_name}"
+            self.add_extra_column(column_name, output_array)
+            logger.info(f"Added metric column '{column_name}'")
+        except Exception as e:
+            raise ValueError(f"Could not process scorer output: {e}") from e
 
     def _process_scorer_output(self, scorer_output: Any) -> np.ndarray:
         """Process scorer output and return column values for the dataset.
