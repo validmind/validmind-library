@@ -21,7 +21,6 @@ from unittest.mock import patch, MagicMock
 # Real imports for integration tests; may fail in certain dev environments
 from validmind.tests.decorator import scorer, _generate_scorer_id_from_path, tags, tasks
 from validmind.tests._store import scorer_store, test_store
-from validmind.vm_models.result.result import RowMetricValues
 
 
 class TestScorerDecorator(unittest.TestCase):
@@ -44,7 +43,7 @@ class TestScorerDecorator(unittest.TestCase):
         @scorer("validmind.scorer.test.ExplicitScorer")
         def explicit_scorer(model, dataset):
             """A scorer with explicit ID."""
-            return RowMetricValues([1.0, 2.0, 3.0])
+            return [1.0, 2.0, 3.0]
 
         # Check that the scorer is registered
         registered_scorer = scorer_store.get_scorer("validmind.scorer.test.ExplicitScorer")
@@ -57,7 +56,7 @@ class TestScorerDecorator(unittest.TestCase):
         @scorer()
         def empty_parentheses_scorer(model, dataset):
             """A scorer with empty parentheses."""
-            return RowMetricValues([4.0, 5.0, 6.0])
+            return list([4.0, 5.0, 6.0])
 
         # Check that the scorer is registered with auto-generated ID
         # The ID will be based on the file path since we're in a test file
@@ -75,7 +74,7 @@ class TestScorerDecorator(unittest.TestCase):
         @scorer
         def no_parentheses_scorer(model, dataset):
             """A scorer without parentheses."""
-            return RowMetricValues([7.0, 8.0, 9.0])
+            return list([7.0, 8.0, 9.0])
 
         # Check that the scorer is registered with auto-generated ID
         # The ID will be based on the file path since we're in a test file
@@ -93,7 +92,7 @@ class TestScorerDecorator(unittest.TestCase):
         @scorer("validmind.scorer.test.SeparationTest")
         def separation_scorer(model, dataset):
             """A scorer for separation testing."""
-            return RowMetricValues([1.0])
+            return list([1.0])
 
         # Check that scorer is in scorer store
         scorer_in_store = scorer_store.get_scorer("validmind.scorer.test.SeparationTest")
@@ -111,7 +110,7 @@ class TestScorerDecorator(unittest.TestCase):
         @tasks("classification")
         def tagged_scorer(model, dataset):
             """A scorer with tags and tasks."""
-            return RowMetricValues([1.0])
+            return list([1.0])
 
         # Check that the scorer is registered
         registered_scorer = scorer_store.get_scorer("validmind.scorer.test.TaggedScorer")
@@ -129,7 +128,7 @@ class TestScorerDecorator(unittest.TestCase):
         @scorer("validmind.scorer.test.SaveTest")
         def save_test_scorer(model, dataset):
             """A scorer for testing save functionality."""
-            return RowMetricValues([1.0])
+            return list([1.0])
 
         # Check that save function is available
         self.assertTrue(hasattr(save_test_scorer, 'save'))
@@ -139,15 +138,15 @@ class TestScorerDecorator(unittest.TestCase):
         """Test that multiple scorers can be registered without conflicts."""
         @scorer("validmind.scorer.test.Multiple1")
         def scorer1(model, dataset):
-            return RowMetricValues([1.0])
+            return list([1.0])
 
         @scorer("validmind.scorer.test.Multiple2")
         def scorer2(model, dataset):
-            return RowMetricValues([2.0])
+            return list([2.0])
 
         @scorer("validmind.scorer.test.Multiple3")
         def scorer3(model, dataset):
-            return RowMetricValues([3.0])
+            return list([3.0])
 
         # Check that all scorers are registered
         self.assertIsNotNone(scorer_store.get_scorer("validmind.scorer.test.Multiple1"))
@@ -165,7 +164,7 @@ class TestScorerDecorator(unittest.TestCase):
         @scorer("validmind.scorer.test.ParameterScorer")
         def parameter_scorer(model, dataset, threshold: float = 0.5, multiplier: int = 2):
             """A scorer with parameters."""
-            return RowMetricValues([threshold * multiplier])
+            return list([threshold * multiplier])
 
         # Check that the scorer is registered
         registered_scorer = scorer_store.get_scorer("validmind.scorer.test.ParameterScorer")
@@ -177,7 +176,7 @@ class TestScorerDecorator(unittest.TestCase):
         @scorer("validmind.scorer.test.DocstringTest")
         def docstring_scorer(model, dataset):
             """This is a test docstring for the scorer."""
-            return RowMetricValues([1.0])
+            return list([1.0])
 
         # Check that docstring is preserved
         self.assertEqual(docstring_scorer.__doc__, "This is a test docstring for the scorer.")
@@ -303,7 +302,7 @@ class TestScorerIntegration(unittest.TestCase):
         @scorer("validmind.scorer.test.IntegrationTest")
         def integration_scorer(model, dataset):
             """Integration test scorer."""
-            return RowMetricValues([1.0, 2.0, 3.0])
+            return list([1.0, 2.0, 3.0])
 
         # Test registration
         self.assertIsNotNone(scorer_store.get_scorer("validmind.scorer.test.IntegrationTest"))
@@ -320,7 +319,7 @@ class TestScorerIntegration(unittest.TestCase):
         @scorer("validmind.scorer.test.MockExecution")
         def mock_execution_scorer(model, dataset):
             """Scorer for mock execution testing."""
-            return RowMetricValues([1.0, 2.0, 3.0])
+            return list([1.0, 2.0, 3.0])
 
         # Create mock model and dataset
         mock_model = MagicMock()
@@ -330,7 +329,7 @@ class TestScorerIntegration(unittest.TestCase):
         result = mock_execution_scorer(mock_model, mock_dataset)
 
         # Check result
-        self.assertIsInstance(result, RowMetricValues)
+        self.assertIsInstance(result, list)
         self.assertEqual(result, [1.0, 2.0, 3.0])
 
 
@@ -341,7 +340,7 @@ class TestScorerIntegration(unittest.TestCase):
 from typing import Any, Callable, Optional, Union, List  # noqa: E402
 
 
-class _MockRowMetricValues:
+class _MockList:
     def __init__(self, values):
         self.values = values
 
@@ -408,7 +407,7 @@ class TestScorerDecoratorSimple(unittest.TestCase):
     def test_scorer_with_explicit_id(self):
         @_mock_scorer("validmind.scorer.test.ExplicitScorer")
         def explicit_scorer(model, dataset):
-            return _MockRowMetricValues([1.0, 2.0, 3.0])
+            return _MockList([1.0, 2.0, 3.0])
 
         self.assertIsNotNone(_mock_scorer_store.get_scorer("validmind.scorer.test.ExplicitScorer"))
         self.assertEqual(explicit_scorer.scorer_id, "validmind.scorer.test.ExplicitScorer")
@@ -416,7 +415,7 @@ class TestScorerDecoratorSimple(unittest.TestCase):
     def test_scorer_with_empty_parentheses(self):
         @_mock_scorer()
         def empty_parentheses_scorer(model, dataset):
-            return _MockRowMetricValues([4.0, 5.0, 6.0])
+            return _MockList([4.0, 5.0, 6.0])
 
         expected_id = "validmind.scorer.empty_parentheses_scorer"
         self.assertIsNotNone(_mock_scorer_store.get_scorer(expected_id))
@@ -425,7 +424,7 @@ class TestScorerDecoratorSimple(unittest.TestCase):
     def test_scorer_without_parentheses(self):
         @_mock_scorer
         def no_parentheses_scorer(model, dataset):
-            return _MockRowMetricValues([7.0, 8.0, 9.0])
+            return _MockList([7.0, 8.0, 9.0])
 
         expected_id = "validmind.scorer.no_parentheses_scorer"
         self.assertIsNotNone(_mock_scorer_store.get_scorer(expected_id))
@@ -434,7 +433,7 @@ class TestScorerDecoratorSimple(unittest.TestCase):
     def test_scorer_separation_from_tests(self):
         @_mock_scorer("validmind.scorer.test.SeparationTest")
         def separation_scorer(model, dataset):
-            return _MockRowMetricValues([1.0])
+            return _MockList([1.0])
 
         self.assertIsNotNone(_mock_scorer_store.get_scorer("validmind.scorer.test.SeparationTest"))
         self.assertIsNone(_mock_test_store.get_test("validmind.scorer.test.SeparationTest"))
@@ -442,15 +441,15 @@ class TestScorerDecoratorSimple(unittest.TestCase):
     def test_multiple_scorers_registration(self):
         @_mock_scorer("validmind.scorer.test.Multiple1")
         def scorer1(model, dataset):
-            return _MockRowMetricValues([1.0])
+            return _MockList([1.0])
 
         @_mock_scorer("validmind.scorer.test.Multiple2")
         def scorer2(model, dataset):
-            return _MockRowMetricValues([2.0])
+            return _MockList([2.0])
 
         @_mock_scorer("validmind.scorer.test.Multiple3")
         def scorer3(model, dataset):
-            return _MockRowMetricValues([3.0])
+            return _MockList([3.0])
 
         self.assertIsNotNone(_mock_scorer_store.get_scorer("validmind.scorer.test.Multiple1"))
         self.assertIsNotNone(_mock_scorer_store.get_scorer("validmind.scorer.test.Multiple2"))
@@ -463,7 +462,7 @@ class TestScorerDecoratorSimple(unittest.TestCase):
     def test_scorer_with_parameters(self):
         @_mock_scorer("validmind.scorer.test.ParameterScorer")
         def parameter_scorer(model, dataset, threshold: float = 0.5, multiplier: int = 2):
-            return _MockRowMetricValues([threshold * multiplier])
+            return _MockList([threshold * multiplier])
 
         self.assertIsNotNone(_mock_scorer_store.get_scorer("validmind.scorer.test.ParameterScorer"))
 
@@ -471,33 +470,33 @@ class TestScorerDecoratorSimple(unittest.TestCase):
         @_mock_scorer("validmind.scorer.test.DocstringTest")
         def docstring_scorer(model, dataset):
             """This is a test docstring for the scorer."""
-            return _MockRowMetricValues([1.0])
+            return _MockList([1.0])
 
         self.assertEqual(docstring_scorer.__doc__, "This is a test docstring for the scorer.")
 
     def test_scorer_execution(self):
         @_mock_scorer("validmind.scorer.test.ExecutionTest")
         def execution_scorer(model, dataset):
-            return _MockRowMetricValues([1.0, 2.0, 3.0])
+            return _MockList([1.0, 2.0, 3.0])
 
         result = execution_scorer(MagicMock(), MagicMock())
-        self.assertIsInstance(result, _MockRowMetricValues)
+        self.assertIsInstance(result, _MockList)
         self.assertEqual(result, [1.0, 2.0, 3.0])
 
     def test_scorer_id_generation_patterns(self):
         @_mock_scorer("validmind.scorer.custom.ExplicitId")
         def explicit_id_scorer(model, dataset):
-            return _MockRowMetricValues([1.0])
+            return _MockList([1.0])
         self.assertEqual(explicit_id_scorer.scorer_id, "validmind.scorer.custom.ExplicitId")
 
         @_mock_scorer()
         def auto_id_scorer(model, dataset):
-            return _MockRowMetricValues([2.0])
+            return _MockList([2.0])
         self.assertEqual(auto_id_scorer.scorer_id, "validmind.scorer.auto_id_scorer")
 
         @_mock_scorer
         def no_parens_scorer(model, dataset):
-            return _MockRowMetricValues([3.0])
+            return _MockList([3.0])
         self.assertEqual(no_parens_scorer.scorer_id, "validmind.scorer.no_parens_scorer")
 
 
@@ -513,14 +512,14 @@ class TestScorerDecoratorEdgeCases(unittest.TestCase):
     def test_scorer_with_empty_string_id(self):
         @_mock_scorer("")
         def empty_string_scorer(model, dataset):
-            return _MockRowMetricValues([1.0])
+            return _MockList([1.0])
         self.assertEqual(empty_string_scorer.scorer_id, "validmind.scorer.empty_string_scorer")
         self.assertIsNotNone(_mock_scorer_store.get_scorer("validmind.scorer.empty_string_scorer"))
 
     def test_scorer_with_none_id(self):
         @_mock_scorer(None)
         def none_id_scorer(model, dataset):
-            return _MockRowMetricValues([1.0])
+            return _MockList([1.0])
         self.assertEqual(none_id_scorer.scorer_id, "validmind.scorer.none_id_scorer")
         self.assertIsNotNone(_mock_scorer_store.get_scorer("validmind.scorer.none_id_scorer"))
 
@@ -538,14 +537,14 @@ class TestScorerDecoratorEdgeCases(unittest.TestCase):
                 categories = ["A", "B", "C"]
             if config is None:
                 config = {"key": "value"}
-            return _MockRowMetricValues([threshold, float(enabled), len(categories)])
+            return _MockList([threshold, float(enabled), len(categories)])
 
         self.assertIsNotNone(_mock_scorer_store.get_scorer("validmind.scorer.test.ComplexParams"))
 
     def test_scorer_with_no_parameters(self):
         @_mock_scorer("validmind.scorer.test.NoParams")
         def no_params_scorer(model, dataset):
-            return _MockRowMetricValues([1.0])
+            return _MockList([1.0])
         self.assertIsNotNone(_mock_scorer_store.get_scorer("validmind.scorer.test.NoParams"))
 
 

@@ -475,7 +475,7 @@ class VMDataset(VMInput):
             metrics (Union[str, List[str]]): Single metric ID or list of metric IDs.
                 Can be either:
                 - Short name (e.g., "BrierScore", "LogLoss")
-                - Full metric ID (e.g., "validmind.row_metrics.classification.BrierScore")
+                - Full metric ID (e.g., "validmind.scorer.classification.BrierScore")
             **kwargs: Additional parameters passed to the row metrics.
 
         Examples:
@@ -490,7 +490,7 @@ class VMDataset(VMInput):
 
         Raises:
             ValueError: If the model input_id is None or if metric computation fails.
-            ImportError: If row_metrics module cannot be imported.
+            ImportError: If scorer module cannot be imported.
         """
         if model.input_id is None:
             raise ValueError("Model input_id must be set to use assign_scores")

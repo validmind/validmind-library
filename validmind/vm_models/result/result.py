@@ -8,7 +8,6 @@ Result objects for test results
 import asyncio
 import json
 import os
-from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Union
 from uuid import uuid4
@@ -94,223 +93,6 @@ class RawData:
         return {key: getattr(self, key) for key in self.__dict__}
 
 
-class MetricValues(ABC):
-    """Abstract base class for metric values in test results."""
-
-    @abstractmethod
-    def get_metric_type(self) -> str:
-        """Get the type of metric this represents.
-
-        Returns:
-            str: The metric type identifier.
-        """
-        pass
-
-    @abstractmethod
-    def get_values(self) -> Union[int, float, List[Union[int, float]]]:
-        """Get the raw metric values.
-
-        Returns:
-            Union[int, float, List[Union[int, float]]]: The stored metric value.
-        """
-        pass
-
-    @abstractmethod
-    def serialize(self) -> Union[int, float, List[Union[int, float]]]:
-        """Serialize the metric value for API transmission.
-
-        Returns:
-            Union[int, float, List[Union[int, float]]]: The serialized metric value.
-        """
-        pass
-
-    @abstractmethod
-    def is_scalar(self) -> bool:
-        """Check if the metric value is a scalar (single value).
-
-        Returns:
-            bool: True if the value is a scalar, False if it's a list.
-        """
-        pass
-
-    @abstractmethod
-    def is_list(self) -> bool:
-        """Check if the metric value is a list.
-
-        Returns:
-            bool: True if the value is a list, False if it's a scalar.
-        """
-        pass
-
-    def __eq__(self, other) -> bool:
-        """Check equality with another MetricValue or raw value."""
-        if isinstance(other, MetricValues):
-            return self.get_values() == other.get_values()
-        return self.get_values() == other
-
-    def __str__(self) -> str:
-        return str(self.get_values())
-
-    def _validate_values(self, values: Any) -> None:
-        """Validate that the value is a single numeric value or list of numeric values.
-
-        Args:
-            values: The value to validate.
-
-        Raises:
-            ValueError: If the value is not a valid metric type.
-        """
-        # Explicitly reject boolean values (bool is a subtype of int in Python)
-        if isinstance(values, bool):
-            raise ValueError(
-                f"Boolean values are not allowed as metric values. Got: {values}"
-            )
-
-        if isinstance(values, (int, float)):
-            return
-        if isinstance(values, list):
-            if not values:  # Empty list is allowed
-                return
-            # Check for boolean values in the list
-            if any(isinstance(item, bool) for item in values):
-                raise ValueError(
-                    "Boolean values are not allowed in metric value lists. "
-                    f"Found boolean values at positions: {[i for i, item in enumerate(values) if isinstance(item, bool)]}"
-                )
-            if not all(isinstance(item, (int, float)) for item in values):
-                raise ValueError(
-                    "All items in metric value list must be int or float types. "
-                    f"Found types: {[type(item).__name__ for item in values]}"
-                )
-            return
-        raise ValueError(
-            f"Metric value must be int, float, or List[Union[int, float]]. "
-            f"Got {type(values).__name__}: {values}"
-        )
-
-
-class UnitMetricValue(MetricValues):
-    """Represents a single unit metric value for a test result."""
-
-    def __init__(self, value: Union[int, float]) -> None:
-        """Create a new UnitMetricValue object.
-
-        Args:
-            value: A single numeric value (int or float).
-
-        Raises:
-            ValueError: If the value is not a single numeric value.
-        """
-        if isinstance(value, list):
-            raise ValueError("UnitMetricValue must be a single value, not a list")
-        self._validate_values(value)
-        self.values = value
-
-    def get_metric_type(self) -> str:
-        """Get the type of metric this represents.
-
-        Returns:
-            str: The metric type identifier.
-        """
-        return "unit_metric"
-
-    def get_values(self) -> Union[int, float]:
-        """Get the raw metric values.
-
-        Returns:
-            Union[int, float]: The stored metric value.
-        """
-        return self.values
-
-    def serialize(self) -> Union[int, float]:
-        """Serialize the metric value for API transmission.
-
-        Returns:
-            Union[int, float]: The serialized metric value.
-        """
-        return self.values
-
-    def is_scalar(self) -> bool:
-        """Check if the metric value is a scalar (single value).
-
-        Returns:
-            bool: True if the value is a scalar, False if it's a list.
-        """
-        return True
-
-    def is_list(self) -> bool:
-        """Check if the metric value is a list.
-
-        Returns:
-            bool: True if the value is a list, False if it's a scalar.
-        """
-        return False
-
-    def __repr__(self) -> str:
-        return f"UnitMetricValue({self.values})"
-
-
-class RowMetricValues(MetricValues):
-    """Represents a list of row-level metric values for a test result."""
-
-    def __init__(self, values: List[Union[int, float]]) -> None:
-        """Create a new RowMetricValues object.
-
-        Args:
-            values: A list of numeric values (int or float).
-
-        Raises:
-            ValueError: If the value is not a list of numeric values.
-        """
-        if not isinstance(values, list):
-            raise ValueError("RowMetricValues must be a list of values")
-        self._validate_values(values)
-        self.values = values
-
-    def get_metric_type(self) -> str:
-        """Get the type of metric this represents.
-
-        Returns:
-            str: The metric type identifier.
-        """
-        return "scorer"
-
-    def get_values(self) -> List[Union[int, float]]:
-        """Get the raw metric values.
-
-        Returns:
-            List[Union[int, float]]: The stored metric value.
-        """
-        return self.values
-
-    def serialize(self) -> List[Union[int, float]]:
-        """Serialize the metric value for API transmission.
-
-        Returns:
-            List[Union[int, float]]: The serialized metric value.
-        """
-        return self.values
-
-    def is_scalar(self) -> bool:
-        """Check if the metric value is a scalar (single value).
-
-        Returns:
-            bool: True if the value is a scalar, False if it's a list.
-        """
-        return False
-
-    def is_list(self) -> bool:
-        """Check if the metric value is a list.
-
-        Returns:
-            bool: True if the value is a list, False if it's a scalar.
-        """
-        return True
-
-    def __repr__(self) -> str:
-        return f"RowMetricValues([{len(self.values)} values])"
-
-
 @dataclass
 class ResultTable:
     """
@@ -353,12 +135,10 @@ class Result:
         """May be overridden by subclasses."""
         return self.__class__.__name__
 
-    @abstractmethod
     def to_widget(self):
         """Create an ipywidget representation of the result... Must be overridden by subclasses."""
         raise NotImplementedError
 
-    @abstractmethod
     def log(self):
         """Log the result... Must be overridden by subclasses."""
         raise NotImplementedError
@@ -395,8 +175,8 @@ class TestResult(Result):
     title: Optional[str] = None
     doc: Optional[str] = None
     description: Optional[Union[str, DescriptionFuture]] = None
-    metric: Optional[Union[int, float, MetricValues]] = None
-    row_metric: Optional[MetricValues] = None
+    metric: Optional[Union[int, float]] = None
+    scorer: Optional[List[Union[int, float]]] = None
     tables: Optional[List[ResultTable]] = None
     raw_data: Optional[RawData] = None
     figures: Optional[List[Figure]] = None
@@ -465,46 +245,34 @@ class TestResult(Result):
 
         return list(inputs.values())
 
-    def set_metric(
-        self, values: Union[int, float, List[Union[int, float]], MetricValues]
-    ) -> None:
-        """Set the metric value, automatically wrapping raw values in appropriate MetricValues subclass.
+    def set_metric(self, values: Union[int, float, List[Union[int, float]]]) -> None:
+        """Set the metric value.
         Args:
-            values: The metric values to set. Can be int, float, List[Union[int, float]], or MetricValues.
+            values: The metric values to set. Can be int, float, or List[Union[int, float]].
         """
-        if isinstance(values, MetricValues):
-            # If it's already a MetricValues object, store it in the appropriate field
-            if isinstance(values, RowMetricValues):
-                self.row_metric = values
-                self.metric = None  # Clear metric field when using row_metric
-            else:
-                self.metric = values
-                self.row_metric = None  # Clear row_metric field when using metric
-        elif isinstance(values, list):
-            # Lists should be stored as RowMetricValues in row_metric
-            self.row_metric = RowMetricValues(values)
-            self.metric = None  # Clear metric field when using row_metric
+        if isinstance(values, list):
+            # Lists should be stored in scorer
+            self.scorer = values
+            self.metric = None  # Clear metric field when using scorer
         else:
-            # Single values should be stored as UnitMetricValue in metric
-            self.metric = UnitMetricValue(values)
-            self.row_metric = None  # Clear row_metric field when using metric
+            # Single values should be stored in metric
+            self.metric = values
+            self.scorer = None  # Clear scorer field when using metric
 
     def _get_metric_display_value(
         self,
     ) -> Union[int, float, List[Union[int, float]], None]:
         """Get the metric value for display purposes.
         Returns:
-            The raw metric value, handling both metric and row_metric fields.
+            The raw metric value, handling both metric and scorer fields.
         """
         # Check metric field first
         if self.metric is not None:
-            if isinstance(self.metric, MetricValues):
-                return self.metric.get_values()
             return self.metric
 
-        # Check row_metric field
-        if self.row_metric is not None:
-            return self.row_metric.get_values()
+        # Check scorer field
+        if self.scorer is not None:
+            return self.scorer
 
         return None
 
@@ -513,17 +281,15 @@ class TestResult(Result):
     ) -> Union[int, float, List[Union[int, float]], None]:
         """Get the metric value for API serialization.
         Returns:
-            The serialized metric value, handling both metric and row_metric fields.
+            The serialized metric value, handling both metric and scorer fields.
         """
         # Check metric field first
         if self.metric is not None:
-            if isinstance(self.metric, MetricValues):
-                return self.metric.serialize()
             return self.metric
 
-        # Check row_metric field
-        if self.row_metric is not None:
-            return self.row_metric.serialize()
+        # Check scorer field
+        if self.scorer is not None:
+            return self.scorer
 
         return None
 
@@ -533,12 +299,10 @@ class TestResult(Result):
             The metric type identifier or None if no metric is set.
         """
         if self.metric is not None:
-            if isinstance(self.metric, MetricValues):
-                return self.metric.get_metric_type()
             return "unit_metric"
 
-        if self.row_metric is not None:
-            return self.row_metric.get_metric_type()
+        if self.scorer is not None:
+            return "scorer"
 
         return None
 
@@ -626,7 +390,7 @@ class TestResult(Result):
     def to_widget(self):
         metric_display_value = self._get_metric_display_value()
         if (
-            (self.metric is not None or self.row_metric is not None)
+            (self.metric is not None or self.scorer is not None)
             and not self.tables
             and not self.figures
         ):
@@ -781,7 +545,7 @@ class TestResult(Result):
             )
         )
 
-        if self.metric is not None or self.row_metric is not None:
+        if self.metric is not None or self.scorer is not None:
             # metrics are logged as separate entities
             metric_value = self._get_metric_serialized_value()
             metric_type = self._get_metric_type()

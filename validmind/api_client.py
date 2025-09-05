@@ -25,7 +25,6 @@ from .errors import MissingAPICredentialsError, MissingModelIdError, raise_api_e
 from .logging import get_logger, init_sentry, log_api_operation, send_single_error
 from .utils import NumpyEncoder, is_html, md_to_html, run_async
 from .vm_models import Figure
-from .vm_models.result.result import MetricValues, UnitMetricValue
 
 logger = get_logger(__name__)
 
@@ -446,7 +445,7 @@ def log_text(
 
 async def alog_metric(
     key: str,
-    value: Union[int, float, UnitMetricValue],
+    value: Union[int, float],
     inputs: Optional[List[str]] = None,
     params: Optional[Dict[str, Any]] = None,
     recorded_at: Optional[str] = None,
@@ -460,10 +459,10 @@ async def alog_metric(
     if value is None:
         raise ValueError("Must provide a value for the metric")
 
-    # Validate that only UnitMetricValue is accepted, not RowMetricValues
-    if isinstance(value, MetricValues) and value.get_metric_type() != "unit_metric":
+    # Validate that value is a scalar (int or float)
+    if not isinstance(value, (int, float)):
         raise ValueError(
-            "Only UnitMetricValue is allowed for logging metrics. RowMetricValues are not supported."
+            "Only scalar values (int or float) are allowed for logging metrics."
         )
 
     if thresholds is not None and not isinstance(thresholds, dict):
@@ -493,7 +492,7 @@ async def alog_metric(
 
 def log_metric(
     key: str,
-    value: Union[int, float, UnitMetricValue],
+    value: Union[int, float],
     inputs: Optional[List[str]] = None,
     params: Optional[Dict[str, Any]] = None,
     recorded_at: Optional[str] = None,
@@ -503,16 +502,14 @@ def log_metric(
     """Logs a unit metric.
 
     Unit metrics are key-value pairs where the key is the metric name and the value is
-    a scalar (int or float) or a UnitMetricValue object. These key-value pairs are associated
+    a scalar (int or float). These key-value pairs are associated
     with the currently selected model (inventory model in the ValidMind Platform) and keys
     can be logged to over time to create a history of the metric. On the ValidMind Platform,
     these metrics will be used to create plots/visualizations for documentation and dashboards etc.
 
-    Note: Only UnitMetricValue objects are supported. RowMetricValues are not allowed.
-
     Args:
         key (str): The metric key
-        value (Union[int, float, UnitMetricValue]): The metric value (scalar or UnitMetricValue object)
+        value (Union[int, float]): The metric value (scalar)
         inputs (List[str], optional): List of input IDs
         params (Dict[str, Any], optional): Parameters used to generate the metric
         recorded_at (str, optional): Timestamp when the metric was recorded

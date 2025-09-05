@@ -6,11 +6,10 @@ from sklearn.metrics import accuracy_score
 
 from validmind import tags, tasks
 from validmind.vm_models import VMDataset, VMModel
-from validmind.vm_models.result.result import UnitMetricValue
 
 
 @tasks("classification")
 @tags("classification")
 def Accuracy(dataset: VMDataset, model: VMModel) -> float:
     """Calculates the accuracy of a model"""
-    return UnitMetricValue(accuracy_score(dataset.y, dataset.y_pred(model)))
+    return accuracy_score(dataset.y, dataset.y_pred(model))

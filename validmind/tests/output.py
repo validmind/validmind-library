@@ -17,7 +17,6 @@ from validmind.vm_models.figure import (
     is_png_image,
 )
 from validmind.vm_models.result import RawData, ResultTable, TestResult
-from validmind.vm_models.result.result import MetricValues
 
 
 class OutputHandler(ABC):
@@ -46,12 +45,12 @@ class BooleanOutputHandler(OutputHandler):
 
 class MetricValuesOutputHandler(OutputHandler):
     def can_handle(self, item: Any) -> bool:
-        return isinstance(item, MetricValues)
+        return isinstance(item, (int, float, list))
 
     def process(self, item: Any, result: TestResult) -> None:
         if result.metric is not None:
             raise ValueError("Only one unit metric may be returned per test.")
-        result.metric = item.get_values()
+        result.metric = item
 
 
 class FigureOutputHandler(OutputHandler):
