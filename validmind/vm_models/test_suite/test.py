@@ -43,6 +43,7 @@ class TestSuiteTest:
     def get_default_config(self):
         """Returns the default configuration for the test."""
         from ...tests.load import load_test
+
         try:
             test_func = load_test(self.test_id)
         except LoadTestError as e:
