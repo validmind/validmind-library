@@ -217,7 +217,7 @@ TestID = Union[
         "validmind.scorer.classification.OutlierScore",
         "validmind.scorer.classification.ProbabilityError",
         "validmind.scorer.classification.Uncertainty",
-        "validmind.scorer.llm.AnswerRelevancy",
+        "validmind.scorer.llm.deepeval.AnswerRelevancy",
         "validmind.unit_metrics.regression.AdjustedRSquaredScore",
         "validmind.unit_metrics.regression.GiniCoefficient",
         "validmind.unit_metrics.regression.HuberLoss",

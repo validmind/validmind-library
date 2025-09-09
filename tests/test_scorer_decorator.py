@@ -216,15 +216,15 @@ class TestScorerIdGeneration(unittest.TestCase):
     def test_generate_id_from_path_llm(self, mock_abspath, mock_relpath, mock_getfile):
         """Test ID generation for LLM scorer."""
         # Mock the file path
-        mock_getfile.return_value = "/path/to/validmind/scorer/llm/AnswerRelevancy.py"
+        mock_getfile.return_value = "/path/to/validmind/scorer/llm/deepeval/AnswerRelevancy.py"
         mock_abspath.return_value = "/path/to/validmind/scorer"
-        mock_relpath.return_value = "llm/AnswerRelevancy.py"
+        mock_relpath.return_value = "llm/deepeval/AnswerRelevancy.py"
 
         def mock_function():
             pass
 
         scorer_id = _generate_scorer_id_from_path(mock_function)
-        expected_id = "validmind.scorer.llm.AnswerRelevancy"
+        expected_id = "validmind.scorer.llm.deepeval.AnswerRelevancy"
         self.assertEqual(scorer_id, expected_id)
 
     @patch('validmind.tests.decorator.inspect.getfile')
