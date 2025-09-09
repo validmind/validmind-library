@@ -4,15 +4,26 @@
 
 from typing import Any, Dict, List
 
-from deepeval import evaluate
-from deepeval.metrics import AnswerRelevancyMetric
-from deepeval.test_case import LLMTestCase
-
 from validmind import tags, tasks
 from validmind.ai.utils import get_client_and_model
+from validmind.errors import MissingDependencyError
 from validmind.tests.decorator import scorer
 from validmind.vm_models.dataset import VMDataset
 
+try:
+    from deepeval import evaluate
+    from deepeval.metrics import AnswerRelevancyMetric
+    from deepeval.test_case import LLMTestCase
+except ImportError as e:
+    if "deepeval" in str(e):
+        raise MissingDependencyError(
+            "Missing required package `deepeval` for AnswerRelevancy. "
+            "Please run `pip install validmind[llm]` to use LLM tests",
+            required_dependencies=["deepeval"],
+            extra="llm",
+        ) from e
+
+    raise e
 
 # Create custom ValidMind tests for DeepEval metrics
 @scorer()

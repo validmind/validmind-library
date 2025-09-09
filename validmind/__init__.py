@@ -48,6 +48,7 @@ try:
 except ImportError:
     ...
 
+from . import scorer
 from .__version__ import __version__  # noqa: E402
 from .api_client import init, log_metric, log_text, reload
 from .client import (  # noqa: E402
@@ -60,7 +61,8 @@ from .client import (  # noqa: E402
     run_test_suite,
 )
 from .experimental import agents as experimental_agent
-from .tests.decorator import scorer, tags, tasks, test
+from .tests.decorator import scorer as scorer_decorator
+from .tests.decorator import tags, tasks, test
 from .tests.run import print_env
 from .utils import is_notebook, parse_version
 from .vm_models.result import RawData
@@ -128,6 +130,8 @@ __all__ = [  # noqa
     "tags",
     "tasks",
     "test",
+    "scorer_decorator",
+    # scorer module
     "scorer",
     # raw data (for post-processing test results and building tests)
     "RawData",
