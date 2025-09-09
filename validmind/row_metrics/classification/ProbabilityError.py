@@ -8,17 +8,18 @@ import numpy as np
 
 from validmind import tags, tasks
 from validmind.vm_models import VMDataset, VMModel
+from validmind.vm_models.result.result import RowMetricValues
 
 
 @tasks("classification")
 @tags("classification")
-def BrierScore(model: VMModel, dataset: VMDataset, **kwargs) -> List[float]:
-    """Calculates the Brier score per row for a classification model.
+def ProbabilityError(model: VMModel, dataset: VMDataset, **kwargs) -> List[float]:
+    """Calculates the probability error per row for a classification model.
 
-    The Brier score is a proper score function that measures the accuracy of
-    probabilistic predictions. It is calculated as the mean squared difference
-    between predicted probabilities and the actual binary outcomes.
-    Lower scores indicate better calibration.
+    For binary classification tasks, this computes the absolute difference between
+    the true class labels (0 or 1) and the predicted probabilities for each row.
+    This provides insight into how confident the model's predictions are and
+    how far off they are from the actual labels.
 
     Args:
         model: The classification model to evaluate
@@ -26,14 +27,14 @@ def BrierScore(model: VMModel, dataset: VMDataset, **kwargs) -> List[float]:
         **kwargs: Additional parameters (unused for compatibility)
 
     Returns:
-        List[float]: Per-row Brier scores as a list of float values
+        List[float]: Per-row probability errors as a list of float values
 
     Raises:
         ValueError: If probability column is not found for the model
     """
     y_true = dataset.y
 
-    # Try to get probabilities
+    # Try to get probabilities, fall back to predictions if not available
     try:
         y_prob = dataset.y_prob(model)
         # For binary classification, use the positive class probability
@@ -41,16 +42,14 @@ def BrierScore(model: VMModel, dataset: VMDataset, **kwargs) -> List[float]:
             y_prob = y_prob[:, 1]  # Use probability of positive class
     except ValueError:
         # Fall back to predictions if probabilities not available
-        # Convert predictions to "probabilities" (1.0 for predicted class, 0.0 for other)
-        y_pred = dataset.y_pred(model)
-        y_prob = y_pred.astype(float)
+        y_prob = dataset.y_pred(model)
 
     # Convert to numpy arrays and ensure same data type
     y_true = np.asarray(y_true, dtype=float)
     y_prob = np.asarray(y_prob, dtype=float)
 
-    # Calculate Brier score per row: (predicted_probability - actual_outcome)²
-    brier_scores = (y_prob - y_true) ** 2
+    # Compute absolute difference between true labels and predicted probabilities
+    probability_errors = np.abs(y_true - y_prob)
 
     # Return as a list of floats
-    return brier_scores.tolist()
+    return RowMetricValues(probability_errors.tolist())

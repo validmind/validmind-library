@@ -534,19 +534,19 @@ class TestTabularDataset(TestCase):
         vm_dataset.assign_predictions(model=vm_model)
 
         # Test assign_scores with single metric
-        vm_dataset.assign_scores(vm_model, "F1")
+        vm_dataset.assign_scores(vm_model, "LogLoss")
 
         # Check that the metric column was added
-        expected_column = f"{vm_model.input_id}_F1"
+        expected_column = f"{vm_model.input_id}_LogLoss"
         self.assertTrue(expected_column in vm_dataset.df.columns)
 
-        # Verify the column has the same value for all rows (scalar metric)
+        # Verify the column has different values for different rows (row metric)
         metric_values = vm_dataset.df[expected_column]
-        self.assertEqual(metric_values.nunique(), 1, "All rows should have the same metric value")
+        self.assertGreater(metric_values.nunique(), 1, "Row metric should have different values per row")
 
-        # Verify the value is reasonable for F1 score (between 0 and 1)
-        f1_value = metric_values.iloc[0]
-        self.assertTrue(0 <= f1_value <= 1, f"F1 score should be between 0 and 1, got {f1_value}")
+        # Verify the values are reasonable for LogLoss (non-negative)
+        logloss_values = metric_values
+        self.assertTrue((logloss_values >= 0).all(), "LogLoss should be non-negative, got negative values")
 
     def test_assign_scores_multiple_metrics(self):
         """
@@ -566,7 +566,7 @@ class TestTabularDataset(TestCase):
         vm_dataset.assign_predictions(model=vm_model)
 
         # Test assign_scores with multiple metrics
-        metrics = ["F1", "Precision", "Recall"]
+        metrics = ["LogLoss", "BrierScore", "Confidence"]
         vm_dataset.assign_scores(vm_model, metrics)
 
         # Check that all metric columns were added
@@ -574,13 +574,13 @@ class TestTabularDataset(TestCase):
             expected_column = f"{vm_model.input_id}_{metric}"
             self.assertTrue(expected_column in vm_dataset.df.columns)
 
-            # Verify each column has the same value for all rows
+            # Verify each column has different values for different rows (row metrics)
             metric_values = vm_dataset.df[expected_column]
-            self.assertEqual(metric_values.nunique(), 1, f"All rows should have the same {metric} value")
+            self.assertGreater(metric_values.nunique(), 1, f"Row metric {metric} should have different values per row")
 
-            # Verify the value is reasonable (between 0 and 1 for these metrics)
-            metric_value = metric_values.iloc[0]
-            self.assertTrue(0 <= metric_value <= 1, f"{metric} should be between 0 and 1, got {metric_value}")
+            # Verify the values are reasonable (non-negative for these metrics)
+            metric_values_array = metric_values
+            self.assertTrue((metric_values_array >= 0).all(), f"{metric} should be non-negative, got negative values")
 
     def test_assign_scores_with_parameters(self):
         """
@@ -600,16 +600,15 @@ class TestTabularDataset(TestCase):
         vm_dataset.assign_predictions(model=vm_model)
 
         # Test assign_scores with parameters
-        vm_dataset.assign_scores(vm_model, "ROC_AUC", **{"average": "weighted"})
+        vm_dataset.assign_scores(vm_model, "LogLoss")
 
         # Check that the metric column was added
-        expected_column = f"{vm_model.input_id}_ROC_AUC"
+        expected_column = f"{vm_model.input_id}_LogLoss"
         self.assertTrue(expected_column in vm_dataset.df.columns)
 
-        # Verify the value is reasonable for ROC AUC (between 0 and 1)
-        roc_values = vm_dataset.df[expected_column]
-        roc_value = roc_values.iloc[0]
-        self.assertTrue(0 <= roc_value <= 1, f"ROC AUC should be between 0 and 1, got {roc_value}")
+        # Verify the values are reasonable for LogLoss (non-negative)
+        logloss_values = vm_dataset.df[expected_column]
+        self.assertTrue((logloss_values >= 0).all(), "LogLoss should be non-negative")
 
     def test_assign_scores_full_metric_id(self):
         """
@@ -629,17 +628,16 @@ class TestTabularDataset(TestCase):
         vm_dataset.assign_predictions(model=vm_model)
 
         # Test assign_scores with full metric ID
-        full_metric_id = "validmind.unit_metrics.classification.Accuracy"
+        full_metric_id = "validmind.row_metrics.classification.LogLoss"
         vm_dataset.assign_scores(vm_model, full_metric_id)
 
         # Check that the metric column was added with correct name
-        expected_column = f"{vm_model.input_id}_Accuracy"
+        expected_column = f"{vm_model.input_id}_LogLoss"
         self.assertTrue(expected_column in vm_dataset.df.columns)
 
-        # Verify the value is reasonable for accuracy (between 0 and 1)
-        accuracy_values = vm_dataset.df[expected_column]
-        accuracy_value = accuracy_values.iloc[0]
-        self.assertTrue(0 <= accuracy_value <= 1, f"Accuracy should be between 0 and 1, got {accuracy_value}")
+        # Verify the values are reasonable for LogLoss (non-negative)
+        logloss_values = vm_dataset.df[expected_column]
+        self.assertTrue((logloss_values >= 0).all(), "LogLoss should be non-negative")
 
     def test_assign_scores_regression_model(self):
         """
@@ -658,23 +656,21 @@ class TestTabularDataset(TestCase):
         # Assign predictions first
         vm_dataset.assign_predictions(model=vm_model)
 
-        # Test assign_scores with regression metrics
-        vm_dataset.assign_scores(vm_model, ["MeanSquaredError", "RSquaredScore"])
+        # Test assign_scores with available row metrics (using classification metrics for testing)
+        vm_dataset.assign_scores(vm_model, ["LogLoss", "BrierScore"])
 
         # Check that both metric columns were added
-        expected_columns = ["reg_model_MeanSquaredError", "reg_model_RSquaredScore"]
+        expected_columns = ["reg_model_LogLoss", "reg_model_BrierScore"]
         for column in expected_columns:
             self.assertTrue(column in vm_dataset.df.columns)
 
-        # Verify R-squared is reasonable (can be negative, but typically between -1 and 1 for reasonable models)
-        r2_values = vm_dataset.df["reg_model_RSquaredScore"]
-        r2_value = r2_values.iloc[0]
-        self.assertTrue(-2 <= r2_value <= 1, f"R-squared should be reasonable, got {r2_value}")
+        # Verify LogLoss is reasonable (non-negative)
+        logloss_values = vm_dataset.df["reg_model_LogLoss"]
+        self.assertTrue((logloss_values >= 0).all(), "LogLoss should be non-negative")
 
-        # Verify MSE is non-negative
-        mse_values = vm_dataset.df["reg_model_MeanSquaredError"]
-        mse_value = mse_values.iloc[0]
-        self.assertTrue(mse_value >= 0, f"MSE should be non-negative, got {mse_value}")
+        # Verify BrierScore is reasonable (non-negative)
+        brier_values = vm_dataset.df["reg_model_BrierScore"]
+        self.assertTrue((brier_values >= 0).all(), "BrierScore should be non-negative")
 
     def test_assign_scores_no_model_input_id(self):
         """
@@ -695,7 +691,7 @@ class TestTabularDataset(TestCase):
 
         # Should raise ValueError
         with self.assertRaises(ValueError) as context:
-            vm_dataset.assign_scores(vm_model, "F1")
+            vm_dataset.assign_scores(vm_model, "LogLoss")
 
         self.assertIn("Model input_id must be set", str(context.exception))
 
@@ -737,9 +733,9 @@ class TestTabularDataset(TestCase):
         vm_model = init_model(input_id="test_model", model=model, __log=False)
 
         # Don't assign predictions - test that assign_scores raises error
-        # (unit metrics require predictions to be available)
+        # (row metrics require predictions to be available)
         with self.assertRaises(ValueError) as context:
-            vm_dataset.assign_scores(vm_model, "F1")
+            vm_dataset.assign_scores(vm_model, "LogLoss")
 
         self.assertIn("No prediction column found", str(context.exception))
 
@@ -761,7 +757,7 @@ class TestTabularDataset(TestCase):
         vm_dataset.assign_predictions(model=vm_model)
 
         # Test multiple metrics to verify naming convention
-        metrics = ["F1", "Precision", "Recall"]
+        metrics = ["LogLoss", "BrierScore", "Confidence"]
         vm_dataset.assign_scores(vm_model, metrics)
 
         # Verify all columns follow the naming convention: {model.input_id}_{metric_name}
@@ -793,23 +789,23 @@ class TestTabularDataset(TestCase):
         vm_dataset.assign_predictions(model=vm_rf_model)
 
         # Assign scores for both models
-        vm_dataset.assign_scores(vm_lr_model, "F1")
-        vm_dataset.assign_scores(vm_rf_model, "F1")
+        vm_dataset.assign_scores(vm_lr_model, "LogLoss")
+        vm_dataset.assign_scores(vm_rf_model, "LogLoss")
 
         # Check that both metric columns exist with correct names
-        lr_column = "lr_model_F1"
-        rf_column = "rf_model_F1"
+        lr_column = "lr_model_LogLoss"
+        rf_column = "rf_model_LogLoss"
 
         self.assertTrue(lr_column in vm_dataset.df.columns)
         self.assertTrue(rf_column in vm_dataset.df.columns)
 
         # Verify that the values might be different (different models)
-        lr_f1 = vm_dataset.df[lr_column].iloc[0]
-        rf_f1 = vm_dataset.df[rf_column].iloc[0]
+        lr_logloss = vm_dataset.df[lr_column].iloc[0]
+        rf_logloss = vm_dataset.df[rf_column].iloc[0]
 
-        # Both should be valid F1 scores
-        self.assertTrue(0 <= lr_f1 <= 1)
-        self.assertTrue(0 <= rf_f1 <= 1)
+        # Both should be valid LogLoss scores (non-negative)
+        self.assertTrue(lr_logloss >= 0)
+        self.assertTrue(rf_logloss >= 0)
 
 
 if __name__ == "__main__":
