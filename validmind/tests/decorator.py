@@ -229,6 +229,7 @@ def scorer(func_or_id: Union[Callable[..., Any], str, None] = None) -> Callable[
 
         # Don't call load_test during registration to avoid circular imports
         # Just register the function directly in the scorer store
+        # Scorers should only be stored in the scorer store, not the test store
         scorer_store.register_scorer(scorer_id, func)
 
         # special function to allow the function to be saved to a file

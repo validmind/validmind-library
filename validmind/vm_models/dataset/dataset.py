@@ -737,8 +737,14 @@ class VMDataset(VMInput):
         # Try to find the metric by short name
         try:
             from validmind.scorer import list_scorers
+            from validmind.tests._store import scorer_store
 
+            # Get built-in scorers
             available_metrics = list_scorers()
+
+            # Add custom scorers from scorer store
+            custom_scorers = list(scorer_store.scorers.keys())
+            available_metrics.extend(custom_scorers)
 
             # Look for exact match with short name
             for metric_id in available_metrics:
