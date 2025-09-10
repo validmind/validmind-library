@@ -168,14 +168,14 @@ class ValidMindTestProvider:
         self.test_provider = LocalTestProvider(os.path.dirname(__file__))
 
     def list_tests(self) -> List[str]:
-        """List all tests in the given namespace"""
+        """List all tests in the given namespace (excludes scorers)"""
         unit_metric_ids = [
             f"unit_metrics.{test}" for test in self.unit_metrics_provider.list_tests()
         ]
-        scorer_ids = [f"scorer.{test}" for test in self.scorers_provider.list_tests()]
+        # Exclude scorers from general test list - they have their own list_scorers() function
         test_ids = self.test_provider.list_tests()
 
-        return unit_metric_ids + scorer_ids + test_ids
+        return unit_metric_ids + test_ids
 
     def load_test(self, test_id: str) -> Callable[..., Any]:
         """Load the test function identified by the given test_id"""
