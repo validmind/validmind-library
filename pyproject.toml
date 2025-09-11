@@ -1,8 +1,8 @@
 [project]
 name = "validmind"
+version = "2.9.4"
 description = "ValidMind Library"
 readme = "README.pypi.md"
-version = "2.9.3"
 requires-python = ">=3.9,<3.13"
 license = { file = "LICENSE" }
 authors = [
