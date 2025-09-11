@@ -10,7 +10,7 @@ from sklearn.preprocessing import StandardScaler
 
 from validmind import tags, tasks
 from validmind.tests.decorator import scorer
-from validmind.vm_models import VMDataset, VMModel
+from validmind.vm_models import VMDataset
 
 
 @scorer()
