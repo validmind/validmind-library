@@ -27,8 +27,9 @@ from ..errors import LoadTestError, MissingDependencyError
 from ..html_templates.content_blocks import test_content_block_html
 from ..logging import get_logger
 from ..utils import display, format_dataframe, fuzzy_match, md_to_html, test_id_to_name
-from ..vm_models import VMDataset, VMModel
+from ..vm_models.dataset.dataset import VMDataset
 from ..vm_models.figure import Figure
+from ..vm_models.model import VMModel
 from ..vm_models.result import ResultTable
 from .__types__ import TestID
 from ._store import test_provider_store, test_store

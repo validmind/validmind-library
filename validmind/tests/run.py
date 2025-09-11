@@ -22,8 +22,7 @@ from validmind.vm_models.result import TestResult
 
 from .__types__ import TestID
 from .comparison import combine_results, get_comparison_test_configs
-
-# Import moved to local scope to avoid circular imports
+from .load import _test_description
 from .output import process_output
 
 logger = get_logger(__name__)
@@ -176,7 +175,7 @@ def _run_composite_test(
     title: Optional[str] = None,
 ):
     """Run a composite test i.e. a test made up of multiple metrics"""
-    from .load import _test_description
+    # no-op: _test_description imported at module scope now that circular import is resolved
 
     results = [
         run_test(

@@ -718,7 +718,7 @@ class TestTabularDataset(TestCase):
         with self.assertRaises(ValueError) as context:
             vm_dataset.assign_scores(vm_model, "InvalidMetricName")
 
-        self.assertIn("Metric 'InvalidMetricName' not found", str(context.exception))
+        self.assertIn("Failed to compute metric InvalidMetricName:", str(context.exception))
 
     def test_assign_scores_no_predictions(self):
         """

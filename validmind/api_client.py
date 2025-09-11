@@ -24,7 +24,7 @@ from .client_config import client_config
 from .errors import MissingAPICredentialsError, MissingModelIdError, raise_api_error
 from .logging import get_logger, init_sentry, log_api_operation, send_single_error
 from .utils import NumpyEncoder, is_html, md_to_html, run_async
-from .vm_models import Figure
+from .vm_models.figure import Figure
 
 logger = get_logger(__name__)
 
