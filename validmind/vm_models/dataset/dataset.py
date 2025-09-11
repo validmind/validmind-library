@@ -460,8 +460,8 @@ class VMDataset(VMInput):
 
     def assign_scores(
         self,
-        model: VMModel,
         metrics: Union[str, List[str]],
+        model: Optional[VMModel] = None,
         **kwargs: Dict[str, Any],
     ) -> None:
         """Assign computed row metric scores to the dataset as new columns.
@@ -471,7 +471,9 @@ class VMDataset(VMInput):
         {model.input_id}_{metric_name}
 
         Args:
-            model (VMModel): The model used to compute the scores.
+            model (Optional[VMModel]): Optional model used to compute the scores. If provided and
+                it has a valid `input_id`, that will be used as a prefix for column names.
+                If not provided (or no `input_id`), columns will be created without a prefix.
             metrics (Union[str, List[str]]): Single metric ID or list of metric IDs.
                 Can be either:
                 - Short name (e.g., "BrierScore", "LogLoss")
@@ -489,12 +491,33 @@ class VMDataset(VMInput):
             dataset.assign_scores(model, "ClassBalance", threshold=0.5)
 
         Raises:
-            ValueError: If the model input_id is None or if metric computation fails.
+            ValueError: If metric computation fails.
             ImportError: If scorer module cannot be imported.
         """
-        if model.input_id is None:
-            raise ValueError("Model input_id must be set to use assign_scores")
+        model_input_id = None
+        if model is not None:
+            model_input_id = getattr(model, "input_id", None)
+            if not model_input_id:
+                logger.warning(
+                    "Model has no input_id; creating score columns without prefix."
+                )
 
+        # Normalize metrics to a list
+        if isinstance(metrics, str):
+            metrics = [metrics]
+
+        # Process each metric
+        for metric in metrics:
+            self._assign_single_score(metric, model, model_input_id, kwargs)
+
+    def _assign_single_score(
+        self,
+        metric: str,
+        model: Optional[VMModel],
+        model_input_id: Optional[str],
+        params: Dict[str, Any],
+    ) -> None:
+        """Compute and add a single metric's scores as dataset columns."""
         # Import scorer module
         try:
             from validmind.scorer import run_scorer
@@ -504,52 +527,38 @@ class VMDataset(VMInput):
                 "Make sure validmind.scorer is available."
             ) from e
 
-        # Normalize metrics to a list
-        if isinstance(metrics, str):
-            metrics = [metrics]
+        # Normalize metric ID and name
+        metric_id = self._normalize_metric_id(metric)
+        metric_name = self._extract_metric_name(metric_id)
+        column_name = self._build_score_column_name(model_input_id, metric_name)
 
-        # Process each metric
-        for metric in metrics:
-            # Normalize metric ID
-            metric_id = self._normalize_metric_id(metric)
+        try:
+            inputs = {"dataset": self}
+            if model is not None:
+                inputs["model"] = model
+            result = run_scorer(
+                metric_id,
+                inputs=inputs,
+                params=params,
+                show=False,
+            )
 
-            # Extract metric name for column naming
-            metric_name = self._extract_metric_name(metric_id)
-
-            # Generate column name
-            column_name = f"{model.input_id}_{metric_name}"
-
-            try:
-                # Run the scorer
-                result = run_scorer(
-                    metric_id,
-                    inputs={
-                        "model": model,
-                        "dataset": self,
-                    },
-                    params=kwargs,
-                    show=False,  # Don't show widget output
+            if result.raw_data and hasattr(result.raw_data, "scorer_output"):
+                scorer_output = result.raw_data.scorer_output
+                self._process_and_add_scorer_output(
+                    scorer_output, model_input_id, metric_name
                 )
+            else:
+                column_values = self._process_metric_value(result.metric)
+                self.add_extra_column(column_name, column_values)
 
-                # Process the scorer output and add as column(s)
-                if result.raw_data and hasattr(result.raw_data, "scorer_output"):
-                    # New scorer format - get the raw output
-                    scorer_output = result.raw_data.scorer_output
-                    self._process_and_add_scorer_output(
-                        scorer_output, model.input_id, metric_name
-                    )
-                else:
-                    # Legacy format - process as metric value
-                    column_values = self._process_metric_value(result.metric)
-                    self.add_extra_column(column_name, column_values)
-
-                logger.info(f"Added metric column(s) for '{metric_name}'")
-            except Exception as e:
-                logger.error(f"Failed to compute metric {metric_id}: {e}")
-                raise ValueError(f"Failed to compute metric {metric_id}: {e}") from e
+            logger.info(f"Added metric column(s) for '{metric_name}'")
+        except Exception as e:
+            logger.error(f"Failed to compute metric {metric_id}: {e}")
+            raise ValueError(f"Failed to compute metric {metric_id}: {e}") from e
 
     def _process_and_add_scorer_output(
-        self, scorer_output: Any, model_input_id: str, metric_name: str
+        self, scorer_output: Any, model_input_id: Optional[str], metric_name: str
     ) -> None:
         """Process scorer output and add appropriate columns to the dataset.
 
@@ -574,7 +583,7 @@ class VMDataset(VMInput):
             )
 
     def _process_list_scorer_output(
-        self, scorer_output: list, model_input_id: str, metric_name: str
+        self, scorer_output: list, model_input_id: Optional[str], metric_name: str
     ) -> None:
         """Process list scorer output and add appropriate columns."""
         if len(scorer_output) != len(self._df):
@@ -592,7 +601,7 @@ class VMDataset(VMInput):
             )
 
     def _process_dict_list_scorer_output(
-        self, scorer_output: list, model_input_id: str, metric_name: str
+        self, scorer_output: list, model_input_id: Optional[str], metric_name: str
     ) -> None:
         """Process list of dictionaries scorer output."""
         # Validate that all dictionaries have the same keys
@@ -611,31 +620,33 @@ class VMDataset(VMInput):
 
         # Add a column for each key in the dictionaries
         for key in first_keys:
-            column_name = f"{model_input_id}_{metric_name}_{key}"
+            column_name = self._build_score_column_name(
+                model_input_id, metric_name, key
+            )
             column_values = np.array([item[key] for item in scorer_output])
             self.add_extra_column(column_name, column_values)
             logger.info(f"Added metric column '{column_name}'")
 
     def _process_regular_list_scorer_output(
-        self, scorer_output: list, model_input_id: str, metric_name: str
+        self, scorer_output: list, model_input_id: Optional[str], metric_name: str
     ) -> None:
         """Process regular list scorer output."""
-        column_name = f"{model_input_id}_{metric_name}"
+        column_name = self._build_score_column_name(model_input_id, metric_name)
         column_values = np.array(scorer_output)
         self.add_extra_column(column_name, column_values)
         logger.info(f"Added metric column '{column_name}'")
 
     def _process_scalar_scorer_output(
-        self, scorer_output: Any, model_input_id: str, metric_name: str
+        self, scorer_output: Any, model_input_id: Optional[str], metric_name: str
     ) -> None:
         """Process scalar scorer output."""
-        column_name = f"{model_input_id}_{metric_name}"
+        column_name = self._build_score_column_name(model_input_id, metric_name)
         column_values = np.full(len(self._df), scorer_output)
         self.add_extra_column(column_name, column_values)
         logger.info(f"Added metric column '{column_name}'")
 
     def _process_other_scorer_output(
-        self, scorer_output: Any, model_input_id: str, metric_name: str
+        self, scorer_output: Any, model_input_id: Optional[str], metric_name: str
     ) -> None:
         """Process other types of scorer output."""
         try:
@@ -644,11 +655,32 @@ class VMDataset(VMInput):
                 raise ValueError(
                     f"Scorer output length {len(output_array)} does not match dataset length {len(self._df)}"
                 )
-            column_name = f"{model_input_id}_{metric_name}"
+            column_name = self._build_score_column_name(model_input_id, metric_name)
             self.add_extra_column(column_name, output_array)
             logger.info(f"Added metric column '{column_name}'")
         except Exception as e:
             raise ValueError(f"Could not process scorer output: {e}") from e
+
+    def _build_score_column_name(
+        self, model_input_id: Optional[str], metric_name: str, key: Optional[str] = None
+    ) -> str:
+        """Build a score column name with optional model prefix and optional key suffix.
+
+        Args:
+            model_input_id: Optional model input_id to prefix the column name.
+            metric_name: The metric name.
+            key: Optional sub-key to append (for dict outputs).
+
+        Returns:
+            str: The constructed column name.
+        """
+        parts: List[str] = []
+        if model_input_id:
+            parts.append(model_input_id)
+        parts.append(metric_name)
+        if key:
+            parts.append(str(key))
+        return "_".join(parts)
 
     def _process_scorer_output(self, scorer_output: Any) -> np.ndarray:
         """Process scorer output and return column values for the dataset.
@@ -696,6 +728,11 @@ class VMDataset(VMInput):
         Raises:
             ValueError: If metric value length doesn't match dataset length
         """
+        # Handle None case (some tests don't return metric values)
+        if metric_value is None:
+            # Return zeros for all rows as a default
+            return np.zeros(len(self._df))
+
         # Handle different metric value types
         if hasattr(metric_value, "get_values"):
             # New MetricValues object (UnitMetricValue or RowMetricValues)

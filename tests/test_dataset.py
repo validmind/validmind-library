@@ -534,7 +534,7 @@ class TestTabularDataset(TestCase):
         vm_dataset.assign_predictions(model=vm_model)
 
         # Test assign_scores with single metric
-        vm_dataset.assign_scores(vm_model, "validmind.scorer.classification.LogLoss")
+        vm_dataset.assign_scores(model = vm_model, metrics = "validmind.scorer.classification.LogLoss")
 
         # Check that the metric column was added
         expected_column = f"{vm_model.input_id}_LogLoss"
@@ -569,7 +569,7 @@ class TestTabularDataset(TestCase):
         metrics = ["validmind.scorer.classification.LogLoss", "validmind.scorer.classification.BrierScore", "validmind.scorer.classification.Confidence"]
         metrics_column_name = [metric.split(".")[-1] for metric in metrics]
 
-        vm_dataset.assign_scores(vm_model, metrics)
+        vm_dataset.assign_scores(model = vm_model, metrics = metrics)
 
         # Check that all metric columns were added
         for metric in metrics_column_name:
@@ -602,7 +602,7 @@ class TestTabularDataset(TestCase):
         vm_dataset.assign_predictions(model=vm_model)
 
         # Test assign_scores with parameters
-        vm_dataset.assign_scores(vm_model, "validmind.scorer.classification.LogLoss")
+        vm_dataset.assign_scores(model = vm_model, metrics = "validmind.scorer.classification.LogLoss")
 
         # Check that the metric column was added
         expected_column = f"{vm_model.input_id}_LogLoss"
@@ -631,7 +631,7 @@ class TestTabularDataset(TestCase):
 
         # Test assign_scores with full metric ID
         full_metric_id = "validmind.scorer.classification.LogLoss"
-        vm_dataset.assign_scores(vm_model, full_metric_id)
+        vm_dataset.assign_scores(model = vm_model, metrics = full_metric_id)
 
         # Check that the metric column was added with correct name
         expected_column = f"{vm_model.input_id}_LogLoss"
@@ -659,7 +659,7 @@ class TestTabularDataset(TestCase):
         vm_dataset.assign_predictions(model=vm_model)
 
         # Test assign_scores with available row metrics (using classification metrics for testing)
-        vm_dataset.assign_scores(vm_model, ["validmind.scorer.classification.LogLoss", "validmind.scorer.classification.BrierScore"])
+        vm_dataset.assign_scores(model=vm_model, metrics=["validmind.scorer.classification.LogLoss", "validmind.scorer.classification.BrierScore"])
 
         # Check that both metric columns were added
         expected_columns = ["reg_model_LogLoss", "reg_model_BrierScore"]
@@ -676,7 +676,7 @@ class TestTabularDataset(TestCase):
 
     def test_assign_scores_no_model_input_id(self):
         """
-        Test that assign_scores raises error when model has no input_id
+        Test that assign_scores works when model has no input_id (creates columns without prefix)
         """
         df = pd.DataFrame({"x1": [1, 2, 3], "x2": [4, 5, 6], "y": [0, 1, 0]})
         vm_dataset = DataFrameDataset(
@@ -688,14 +688,22 @@ class TestTabularDataset(TestCase):
         model.fit(vm_dataset.x, vm_dataset.y.ravel())
         vm_model = init_model(model=model, __log=False)  # No input_id provided
 
-        # Clear the input_id to test the error case
+        # Clear the input_id to test the no prefix case
         vm_model.input_id = None
 
-        # Should raise ValueError
-        with self.assertRaises(ValueError) as context:
-            vm_dataset.assign_scores(vm_model, "validmind.scorer.classification.LogLoss")
+        # Assign predictions first (after clearing input_id)
+        vm_dataset.assign_predictions(model=vm_model)
 
-        self.assertIn("Model input_id must be set", str(context.exception))
+        # Should work and create column without prefix
+        vm_dataset.assign_scores(model = vm_model, metrics = "validmind.scorer.classification.LogLoss")
+
+        # Check that the metric column was added without prefix
+        expected_column = "LogLoss"  # No model prefix
+        self.assertTrue(expected_column in vm_dataset.df.columns)
+
+        # Verify the values are reasonable for LogLoss (non-negative)
+        logloss_values = vm_dataset.df[expected_column]
+        self.assertTrue((logloss_values >= 0).all(), "LogLoss should be non-negative")
 
     def test_assign_scores_invalid_metric(self):
         """
@@ -716,7 +724,7 @@ class TestTabularDataset(TestCase):
 
         # Should raise ValueError for invalid metric
         with self.assertRaises(ValueError) as context:
-            vm_dataset.assign_scores(vm_model, "InvalidMetricName")
+            vm_dataset.assign_scores(model = vm_model, metrics = "InvalidMetricName")
 
         self.assertIn("Failed to compute metric InvalidMetricName:", str(context.exception))
 
@@ -737,7 +745,7 @@ class TestTabularDataset(TestCase):
         # Don't assign predictions - test that assign_scores raises error
         # (row metrics require predictions to be available)
         with self.assertRaises(ValueError) as context:
-            vm_dataset.assign_scores(vm_model, "validmind.scorer.classification.LogLoss")
+            vm_dataset.assign_scores(model = vm_model, metrics = "validmind.scorer.classification.LogLoss")
 
         self.assertIn("No prediction column found", str(context.exception))
 
@@ -761,7 +769,7 @@ class TestTabularDataset(TestCase):
         # Test multiple metrics to verify naming convention
         metrics = ["validmind.scorer.classification.LogLoss", "validmind.scorer.classification.BrierScore", "validmind.scorer.classification.Confidence"]
         metrics_column_name = [metric.split(".")[-1] for metric in metrics]
-        vm_dataset.assign_scores(vm_model, metrics)
+        vm_dataset.assign_scores(model = vm_model, metrics = metrics)
 
         # Verify all columns follow the naming convention: {model.input_id}_{metric_name}
         for metric in metrics_column_name:
@@ -792,8 +800,8 @@ class TestTabularDataset(TestCase):
         vm_dataset.assign_predictions(model=vm_rf_model)
 
         # Assign scores for both models
-        vm_dataset.assign_scores(vm_lr_model, "validmind.scorer.classification.LogLoss")
-        vm_dataset.assign_scores(vm_rf_model, "validmind.scorer.classification.LogLoss")
+        vm_dataset.assign_scores(model = vm_lr_model, metrics = "validmind.scorer.classification.LogLoss")
+        vm_dataset.assign_scores(model = vm_rf_model, metrics = "validmind.scorer.classification.LogLoss")
 
         # Check that both metric columns exist with correct names
         lr_column = "lr_model_LogLoss"
@@ -809,6 +817,146 @@ class TestTabularDataset(TestCase):
         # Both should be valid LogLoss scores (non-negative)
         self.assertTrue(lr_logloss >= 0)
         self.assertTrue(rf_logloss >= 0)
+
+    def test_assign_scores_without_model(self):
+        """
+        Test that assign_scores works without a model (creates columns without prefix)
+        """
+        df = pd.DataFrame({"x1": [1, 2, 3], "x2": [4, 5, 6], "y": [0, 1, 0]})
+        vm_dataset = DataFrameDataset(
+            raw_dataset=df, target_column="y", feature_columns=["x1", "x2"]
+        )
+
+        # Test assign_scores without model using a data validation test that doesn't require model
+        vm_dataset.assign_scores(metrics = "validmind.data_validation.MissingValues")
+
+        # Check that the metric column was added without prefix
+        expected_column = "MissingValues"  # No model prefix
+        self.assertTrue(expected_column in vm_dataset.df.columns)
+
+        # Verify the values are reasonable (should be boolean or numeric)
+        missing_values = vm_dataset.df[expected_column]
+        self.assertTrue(len(missing_values) == len(df), "Should have one value per row")
+
+    def test_assign_scores_without_model_multiple_metrics(self):
+        """
+        Test that assign_scores works without a model for multiple metrics
+        """
+        df = pd.DataFrame({"x1": [1, 2, 3], "x2": [4, 5, 6], "y": [0, 1, 0]})
+        vm_dataset = DataFrameDataset(
+            raw_dataset=df, target_column="y", feature_columns=["x1", "x2"]
+        )
+
+        # Test assign_scores without model for multiple data validation metrics
+        metrics = ["validmind.data_validation.MissingValues", "validmind.data_validation.UniqueRows"]
+        vm_dataset.assign_scores(metrics)
+
+        # Check that both metric columns were added without prefix
+        expected_columns = ["MissingValues", "UniqueRows"]
+        for column in expected_columns:
+            self.assertTrue(column in vm_dataset.df.columns)
+
+        # Verify the values are reasonable (should have one value per row)
+        for column in expected_columns:
+            values = vm_dataset.df[column]
+            self.assertTrue(len(values) == len(df), f"{column} should have one value per row")
+
+    def test_assign_scores_column_overwriting(self):
+        """
+        Test that assign_scores overwrites existing columns with warning
+        """
+        df = pd.DataFrame({"x1": [1, 2, 3], "x2": [4, 5, 6], "y": [0, 1, 0]})
+        vm_dataset = DataFrameDataset(
+            raw_dataset=df, target_column="y", feature_columns=["x1", "x2"]
+        )
+
+        # First, add a column manually
+        vm_dataset.add_extra_column("MissingValues", [0.1, 0.2, 0.3])
+        original_values = vm_dataset.df["MissingValues"].copy()
+
+        # Now assign scores without model (should overwrite)
+        # Note: The warning is logged but not raised as an exception
+        vm_dataset.assign_scores("validmind.data_validation.MissingValues")
+
+        # Check that the column still exists
+        self.assertTrue("MissingValues" in vm_dataset.df.columns)
+
+        # Check that values were overwritten (should be different from original)
+        new_values = vm_dataset.df["MissingValues"]
+        self.assertFalse(original_values.equals(new_values), "Column values should have been overwritten")
+
+    def test_assign_scores_mixed_model_scenarios(self):
+        """
+        Test assign_scores with mixed scenarios: model with input_id, model without input_id, and no model
+        """
+        df = pd.DataFrame({"x1": [1, 2, 3], "x2": [4, 5, 6], "y": [0, 1, 0]})
+        vm_dataset = DataFrameDataset(
+            raw_dataset=df, target_column="y", feature_columns=["x1", "x2"]
+        )
+
+        # Train a model
+        model = LogisticRegression()
+        model.fit(vm_dataset.x, vm_dataset.y.ravel())
+        vm_model = init_model(input_id="test_model", model=model, __log=False)
+
+        # Assign predictions
+        vm_dataset.assign_predictions(model=vm_model)
+
+        # Scenario 1: Model with input_id (should have prefix)
+        vm_dataset.assign_scores(model = vm_model, metrics = "validmind.scorer.classification.LogLoss")
+        self.assertTrue("test_model_LogLoss" in vm_dataset.df.columns)
+
+        # Scenario 2: Model without input_id (should not have prefix)
+        vm_model_no_id = init_model(model=model, __log=False)
+        vm_model_no_id.input_id = None
+        # Assign predictions for this model too
+        vm_dataset.assign_predictions(model=vm_model_no_id)
+        vm_dataset.assign_scores(model = vm_model_no_id, metrics = "validmind.scorer.classification.BrierScore")
+        self.assertTrue("BrierScore" in vm_dataset.df.columns)
+
+        # Scenario 3: No model (should not have prefix)
+        vm_dataset.assign_scores(metrics = "validmind.data_validation.MissingValues")
+        self.assertTrue("MissingValues" in vm_dataset.df.columns)
+
+        # Verify all columns exist and have reasonable values
+        for column in ["test_model_LogLoss", "BrierScore", "MissingValues"]:
+            values = vm_dataset.df[column]
+            self.assertTrue(len(values) == len(df), f"{column} should have one value per row")
+
+    def test_assign_scores_dict_output_without_model(self):
+        """
+        Test assign_scores with dictionary output without model (no prefix)
+        """
+        df = pd.DataFrame({"x1": [1, 2, 3], "x2": [4, 5, 6], "y": [0, 1, 0]})
+        vm_dataset = DataFrameDataset(
+            raw_dataset=df, target_column="y", feature_columns=["x1", "x2"]
+        )
+
+        # Test with a data validation metric that doesn't require model
+        vm_dataset.assign_scores(metrics = "validmind.data_validation.MissingValues")
+
+        # Check that the main column was created without prefix
+        self.assertTrue("MissingValues" in vm_dataset.df.columns)
+
+    def test_assign_scores_scalar_output_without_model(self):
+        """
+        Test assign_scores with scalar output without model (no prefix)
+        """
+        df = pd.DataFrame({"x1": [1, 2, 3], "x2": [4, 5, 6], "y": [0, 1, 0]})
+        vm_dataset = DataFrameDataset(
+            raw_dataset=df, target_column="y", feature_columns=["x1", "x2"]
+        )
+
+        # Test assign_scores without model using data validation metric
+        vm_dataset.assign_scores(metrics = "validmind.data_validation.MissingValues")
+
+        # Check that the metric column was added without prefix
+        expected_column = "MissingValues"
+        self.assertTrue(expected_column in vm_dataset.df.columns)
+
+        # Verify the column has values for all rows
+        values = vm_dataset.df[expected_column]
+        self.assertTrue(len(values) == len(df), "Should have one value per row")
 
     def test_process_dict_list_scorer_output(self):
         """Test that _process_dict_list_scorer_output correctly handles list of dictionaries."""
