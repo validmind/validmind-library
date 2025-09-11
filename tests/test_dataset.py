@@ -534,7 +534,7 @@ class TestTabularDataset(TestCase):
         vm_dataset.assign_predictions(model=vm_model)
 
         # Test assign_scores with single metric
-        vm_dataset.assign_scores(vm_model, "LogLoss")
+        vm_dataset.assign_scores(vm_model, "validmind.scorer.classification.LogLoss")
 
         # Check that the metric column was added
         expected_column = f"{vm_model.input_id}_LogLoss"
@@ -566,11 +566,13 @@ class TestTabularDataset(TestCase):
         vm_dataset.assign_predictions(model=vm_model)
 
         # Test assign_scores with multiple metrics
-        metrics = ["LogLoss", "BrierScore", "Confidence"]
+        metrics = ["validmind.scorer.classification.LogLoss", "validmind.scorer.classification.BrierScore", "validmind.scorer.classification.Confidence"]
+        metrics_column_name = [metric.split(".")[-1] for metric in metrics]
+
         vm_dataset.assign_scores(vm_model, metrics)
 
         # Check that all metric columns were added
-        for metric in metrics:
+        for metric in metrics_column_name:
             expected_column = f"{vm_model.input_id}_{metric}"
             self.assertTrue(expected_column in vm_dataset.df.columns)
 
@@ -600,7 +602,7 @@ class TestTabularDataset(TestCase):
         vm_dataset.assign_predictions(model=vm_model)
 
         # Test assign_scores with parameters
-        vm_dataset.assign_scores(vm_model, "LogLoss")
+        vm_dataset.assign_scores(vm_model, "validmind.scorer.classification.LogLoss")
 
         # Check that the metric column was added
         expected_column = f"{vm_model.input_id}_LogLoss"
@@ -657,7 +659,7 @@ class TestTabularDataset(TestCase):
         vm_dataset.assign_predictions(model=vm_model)
 
         # Test assign_scores with available row metrics (using classification metrics for testing)
-        vm_dataset.assign_scores(vm_model, ["LogLoss", "BrierScore"])
+        vm_dataset.assign_scores(vm_model, ["validmind.scorer.classification.LogLoss", "validmind.scorer.classification.BrierScore"])
 
         # Check that both metric columns were added
         expected_columns = ["reg_model_LogLoss", "reg_model_BrierScore"]
@@ -691,7 +693,7 @@ class TestTabularDataset(TestCase):
 
         # Should raise ValueError
         with self.assertRaises(ValueError) as context:
-            vm_dataset.assign_scores(vm_model, "LogLoss")
+            vm_dataset.assign_scores(vm_model, "validmind.scorer.classification.LogLoss")
 
         self.assertIn("Model input_id must be set", str(context.exception))
 
@@ -735,7 +737,7 @@ class TestTabularDataset(TestCase):
         # Don't assign predictions - test that assign_scores raises error
         # (row metrics require predictions to be available)
         with self.assertRaises(ValueError) as context:
-            vm_dataset.assign_scores(vm_model, "LogLoss")
+            vm_dataset.assign_scores(vm_model, "validmind.scorer.classification.LogLoss")
 
         self.assertIn("No prediction column found", str(context.exception))
 
@@ -757,11 +759,12 @@ class TestTabularDataset(TestCase):
         vm_dataset.assign_predictions(model=vm_model)
 
         # Test multiple metrics to verify naming convention
-        metrics = ["LogLoss", "BrierScore", "Confidence"]
+        metrics = ["validmind.scorer.classification.LogLoss", "validmind.scorer.classification.BrierScore", "validmind.scorer.classification.Confidence"]
+        metrics_column_name = [metric.split(".")[-1] for metric in metrics]
         vm_dataset.assign_scores(vm_model, metrics)
 
         # Verify all columns follow the naming convention: {model.input_id}_{metric_name}
-        for metric in metrics:
+        for metric in metrics_column_name:
             expected_column = f"my_special_model_{metric}"
             self.assertTrue(expected_column in vm_dataset.df.columns,
                             f"Expected column '{expected_column}' not found")
@@ -789,8 +792,8 @@ class TestTabularDataset(TestCase):
         vm_dataset.assign_predictions(model=vm_rf_model)
 
         # Assign scores for both models
-        vm_dataset.assign_scores(vm_lr_model, "LogLoss")
-        vm_dataset.assign_scores(vm_rf_model, "LogLoss")
+        vm_dataset.assign_scores(vm_lr_model, "validmind.scorer.classification.LogLoss")
+        vm_dataset.assign_scores(vm_rf_model, "validmind.scorer.classification.LogLoss")
 
         # Check that both metric columns exist with correct names
         lr_column = "lr_model_LogLoss"

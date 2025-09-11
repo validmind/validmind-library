@@ -743,12 +743,17 @@ class VMDataset(VMInput):
             available_metrics = list_scorers()
 
             # Add custom scorers from scorer store
-            custom_scorers = list(scorer_store.scorers.keys())
-            available_metrics.extend(custom_scorers)
+            # Register custom metric if not already in scorer store
+            if metric not in scorer_store.scorers:
+                scorer_store.register_scorer(metric)
+            all_scorers = list(scorer_store.scorers.keys())
+            # Find metrics in custom_scorers that aren't already in available_metrics
+            new_metrics = [m for m in all_scorers if m not in available_metrics]
+            available_metrics.extend(new_metrics)
 
             # Look for exact match with short name
             for metric_id in available_metrics:
-                if metric_id.endswith(f".{metric}"):
+                if metric_id == metric:
                     return metric_id
 
             # If no exact match found, raise error with suggestions
