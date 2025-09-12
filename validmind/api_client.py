@@ -24,7 +24,7 @@ from .client_config import client_config
 from .errors import MissingAPICredentialsError, MissingModelIdError, raise_api_error
 from .logging import get_logger, init_sentry, log_api_operation, send_single_error
 from .utils import NumpyEncoder, is_html, md_to_html, run_async
-from .vm_models import Figure
+from .vm_models.figure import Figure
 
 logger = get_logger(__name__)
 
@@ -459,11 +459,11 @@ async def alog_metric(
     if value is None:
         raise ValueError("Must provide a value for the metric")
 
+    # Validate that value is a scalar (int or float)
     if not isinstance(value, (int, float)):
-        try:
-            value = float(value)
-        except (ValueError, TypeError):
-            raise ValueError("`value` must be a scalar (int or float)")
+        raise ValueError(
+            "Only scalar values (int or float) are allowed for logging metrics."
+        )
 
     if thresholds is not None and not isinstance(thresholds, dict):
         raise ValueError("`thresholds` must be a dictionary or None")
@@ -492,7 +492,7 @@ async def alog_metric(
 
 def log_metric(
     key: str,
-    value: float,
+    value: Union[int, float],
     inputs: Optional[List[str]] = None,
     params: Optional[Dict[str, Any]] = None,
     recorded_at: Optional[str] = None,
@@ -502,18 +502,19 @@ def log_metric(
     """Logs a unit metric.
 
     Unit metrics are key-value pairs where the key is the metric name and the value is
-    a scalar (int or float). These key-value pairs are associated with the currently
-    selected model (inventory model in the ValidMind Platform) and keys can be logged
-    to over time to create a history of the metric. On the ValidMind Platform, these metrics
-    will be used to create plots/visualizations for documentation and dashboards etc.
+    a scalar (int or float). These key-value pairs are associated
+    with the currently selected model (inventory model in the ValidMind Platform) and keys
+    can be logged to over time to create a history of the metric. On the ValidMind Platform,
+    these metrics will be used to create plots/visualizations for documentation and dashboards etc.
 
     Args:
         key (str): The metric key
-        value (Union[int, float]): The metric value
+        value (Union[int, float]): The metric value (scalar)
         inputs (List[str], optional): List of input IDs
         params (Dict[str, Any], optional): Parameters used to generate the metric
         recorded_at (str, optional): Timestamp when the metric was recorded
         thresholds (Dict[str, Any], optional): Thresholds for the metric
+        passed (bool, optional): Whether the metric passed validation thresholds
     """
     return run_async(
         alog_metric,

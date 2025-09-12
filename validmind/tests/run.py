@@ -22,7 +22,7 @@ from validmind.vm_models.result import TestResult
 
 from .__types__ import TestID
 from .comparison import combine_results, get_comparison_test_configs
-from .load import _test_description, describe_test, load_test
+from .load import _test_description
 from .output import process_output
 
 logger = get_logger(__name__)
@@ -139,6 +139,7 @@ def build_test_result(
     inputs: Dict[str, Union[VMInput, List[VMInput]]],
     params: Union[Dict[str, Any], None],
     title: Optional[str] = None,
+    test_func: Optional[Callable] = None,
 ):
     """Build a TestResult object from a set of raw test function outputs"""
     ref_id = str(uuid4())
@@ -150,13 +151,16 @@ def build_test_result(
         inputs=inputs,
         params=params if params else None,  # None if empty dict or None
         doc=test_doc,
+        _is_scorer_result=test_func is not None
+        and hasattr(test_func, "_is_scorer")
+        and test_func._is_scorer,
     )
 
     if not isinstance(outputs, tuple):
         outputs = (outputs,)
 
     for item in outputs:
-        process_output(item, result)
+        process_output(item, result, test_func)
 
     return result
 
@@ -171,6 +175,8 @@ def _run_composite_test(
     title: Optional[str] = None,
 ):
     """Run a composite test i.e. a test made up of multiple metrics"""
+    # no-op: _test_description imported at module scope now that circular import is resolved
+
     results = [
         run_test(
             test_id=metric_id,
@@ -226,6 +232,8 @@ def _run_comparison_test(
 ):
     """Run a comparison test i.e. a test that compares multiple outputs of a test across
     different input and/or param combinations"""
+    from .load import describe_test
+
     run_test_configs = get_comparison_test_configs(
         input_grid=input_grid,
         param_grid=param_grid,
@@ -276,6 +284,8 @@ def _run_test(
     title: Optional[str] = None,
 ):
     """Run a standard test and return a TestResult object"""
+    from .load import load_test
+
     test_func = load_test(test_id)
     input_kwargs, param_kwargs = _get_test_kwargs(
         test_func=test_func,
@@ -292,6 +302,7 @@ def _run_test(
         inputs=input_kwargs,
         params=param_kwargs,
         title=title,
+        test_func=test_func,
     )
 
 
