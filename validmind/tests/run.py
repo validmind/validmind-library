@@ -274,6 +274,7 @@ def _run_test(
     inputs: Dict[str, Any],
     params: Dict[str, Any],
     title: Optional[str] = None,
+    doc: Optional[str] = None,
 ):
     """Run a standard test and return a TestResult object"""
     test_func = load_test(test_id)
@@ -285,10 +286,13 @@ def _run_test(
 
     raw_result = test_func(**input_kwargs, **param_kwargs)
 
+    # Use custom doc if provided, otherwise use the test function's docstring
+    _doc = doc if doc is not None else getdoc(test_func)
+
     return build_test_result(
         outputs=raw_result,
         test_id=test_id,
-        test_doc=getdoc(test_func),
+        test_doc=_doc,
         inputs=input_kwargs,
         params=param_kwargs,
         title=title,
@@ -308,6 +312,9 @@ def run_test(  # noqa: C901
     title: Optional[str] = None,
     post_process_fn: Union[Callable[[TestResult], None], None] = None,
     show_params: bool = True,
+    instructions: Optional[str] = None,
+    knowledge: Optional[str] = None,
+    doc: Optional[str] = None,
     **kwargs,
 ) -> TestResult:
     """Run a ValidMind or custom test
@@ -333,6 +340,9 @@ def run_test(  # noqa: C901
         title (str, optional): Custom title for the test result
         post_process_fn (Callable[[TestResult], None], optional): Function to post-process the test result
         show_params (bool, optional): Whether to include parameter values in figure titles for comparison tests. Defaults to True.
+        instructions (str, optional): Instructions for the LLM to generate a description. Defaults to None.
+        knowledge (str, optional): Knowledge base for the LLM to generate the description. Defaults to None.
+        doc (str, optional): Custom docstring to override the test's built-in documentation. Defaults to None.
 
     Returns:
         TestResult: A TestResult object containing the test results
@@ -388,7 +398,7 @@ def run_test(  # noqa: C901
         )
 
     else:
-        result = _run_test(test_id, inputs, params, title)
+        result = _run_test(test_id, inputs, params, title, doc)
 
     end_time = time.perf_counter()
     result.metadata = _get_run_metadata(duration_seconds=end_time - start_time)
@@ -405,6 +415,8 @@ def run_test(  # noqa: C901
             metric=result.metric,
             should_generate=generate_description,
             title=title,
+            instructions=instructions,
+            knowledge=knowledge,
         )
 
     if show:
