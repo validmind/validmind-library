@@ -240,6 +240,11 @@ def scorer(func_or_id: Union[Callable[..., Any], str, None] = None) -> Callable[
         func.save = save_func
         func._is_scorer = True  # Mark this function as a scorer
 
+        # Set up inputs and params attributes like the @test decorator does
+        from .load import _inspect_signature
+
+        func.inputs, func.params = _inspect_signature(func)
+
         return func
 
     if callable(func_or_id):

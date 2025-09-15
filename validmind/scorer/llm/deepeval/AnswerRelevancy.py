@@ -76,8 +76,8 @@ def AnswerRelevancy(
     )
     results = []
     for _, test_case in dataset.df.iterrows():
-        input = test_case["input"]
-        actual_output = test_case["actual_output"]
+        input = test_case[input_column]
+        actual_output = test_case[actual_output_column]
 
         test_case = LLMTestCase(
             input=input,
