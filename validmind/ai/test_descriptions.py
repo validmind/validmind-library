@@ -75,7 +75,7 @@ def generate_description(
     figures: List[Figure] = None,
     title: Optional[str] = None,
     instructions: Optional[str] = None,
-    knowledge: Optional[str] = None,
+    additional_context: Optional[str] = None,
 ):
     """Generate the description for the test results."""
     from validmind.api_client import generate_test_result_description
@@ -124,7 +124,7 @@ def generate_description(
             "figures": [
                 figure._get_b64_url() for figure in ([] if tables else figures)
             ],
-            "knowledge": knowledge,
+            "additional_context": additional_context,
             "instructions": instructions,
         }
     )["content"]
@@ -138,7 +138,7 @@ def background_generate_description(
     metric: Union[int, float] = None,
     title: Optional[str] = None,
     instructions: Optional[str] = None,
-    knowledge: Optional[str] = None,
+    additional_context: Optional[str] = None,
 ):
     def wrapped():
         try:
@@ -151,7 +151,7 @@ def background_generate_description(
                     metric=metric,
                     title=title,
                     instructions=instructions,
-                    knowledge=knowledge,
+                    additional_context=additional_context,
                 ),
                 True,
             )
@@ -182,7 +182,7 @@ def get_result_description(
     should_generate: bool = True,
     title: Optional[str] = None,
     instructions: Optional[str] = None,
-    knowledge: Optional[str] = None,
+    additional_context: Optional[str] = None,
 ):
     """Get the metadata dictionary for a test or metric result.
 
@@ -205,7 +205,7 @@ def get_result_description(
         metric (Union[int, float]): Unit metrics attached to the test result.
         should_generate (bool): Whether to generate the description or not. Defaults to True.
         instructions (Optional[str]): Instructions for the LLM to generate the description.
-        knowledge (Optional[str]): Knowledge base for the LLM to generate the description.
+        additional_context (Optional[str]): Additional context for the LLM to generate the description.
 
     Returns:
         str: The description to be logged with the test results.
@@ -233,7 +233,7 @@ def get_result_description(
             metric=metric,
             title=title,
             instructions=_instructions,
-            knowledge=knowledge,
+            additional_context=additional_context,
         )
 
     else:

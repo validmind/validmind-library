@@ -74,6 +74,37 @@ def _get_run_metadata(**metadata: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
+def _validate_context(
+    context: Union[Dict[str, str], None],
+) -> Tuple[Optional[str], Optional[str], Optional[str]]:
+    """Validate the context dictionary and return extracted values.
+
+    Returns:
+        Tuple[Optional[str], Optional[str], Optional[str]]: test_description, instructions, additional_context
+    """
+    context = context or {}
+    allowed_context_keys = {"test_description", "instructions", "additional_context"}
+
+    # Validate keys
+    invalid_keys = set(context.keys()) - allowed_context_keys
+    if invalid_keys:
+        raise ValueError(
+            f"Invalid context keys: {invalid_keys}. "
+            f"Allowed keys are: {allowed_context_keys}"
+        )
+
+    # Validate value types
+    for key, value in context.items():
+        if not isinstance(value, str):
+            raise ValueError(f"Context value for key '{key}' must be a string.")
+
+    return (
+        context.get("test_description"),
+        context.get("instructions"),
+        context.get("additional_context"),
+    )
+
+
 def _get_test_kwargs(
     test_func: callable, inputs: Dict[str, Any], params: Dict[str, Any]
 ) -> Tuple[Dict[str, Any], Dict[str, Any]]:
@@ -323,9 +354,7 @@ def run_test(  # noqa: C901
     title: Optional[str] = None,
     post_process_fn: Union[Callable[[TestResult], None], None] = None,
     show_params: bool = True,
-    instructions: Optional[str] = None,
-    knowledge: Optional[str] = None,
-    doc: Optional[str] = None,
+    context: Union[Dict[str, str], None] = None,
     **kwargs,
 ) -> TestResult:
     """Run a ValidMind or custom test
@@ -351,9 +380,10 @@ def run_test(  # noqa: C901
         title (str, optional): Custom title for the test result
         post_process_fn (Callable[[TestResult], None], optional): Function to post-process the test result
         show_params (bool, optional): Whether to include parameter values in figure titles for comparison tests. Defaults to True.
-        instructions (str, optional): Instructions for the LLM to generate a description. Defaults to None.
-        knowledge (str, optional): Knowledge base for the LLM to generate the description. Defaults to None.
-        doc (str, optional): Custom docstring to override the test's built-in documentation. Defaults to None.
+        context (Dict[str, str], optional): Context for test description generation. Supported keys:
+            - 'test_description': Custom docstring to override the test's built-in documentation
+            - 'instructions': Instructions for the LLM to format the description output
+            - 'additional_context': Background information for the LLM to contextualize results
 
     Returns:
         TestResult: A TestResult object containing the test results
@@ -378,6 +408,9 @@ def run_test(  # noqa: C901
 
     if param_grid and params:
         raise ValueError("Cannot provide `param_grid` along with `params`")
+
+    # Validate and extract individual context values
+    test_description, instructions, additional_context = _validate_context(context)
 
     start_time = time.perf_counter()
 
@@ -409,7 +442,7 @@ def run_test(  # noqa: C901
         )
 
     else:
-        result = _run_test(test_id, inputs, params, title, doc)
+        result = _run_test(test_id, inputs, params, title, test_description)
 
     end_time = time.perf_counter()
     result.metadata = _get_run_metadata(duration_seconds=end_time - start_time)
@@ -427,7 +460,7 @@ def run_test(  # noqa: C901
             should_generate=generate_description,
             title=title,
             instructions=instructions,
-            knowledge=knowledge,
+            additional_context=additional_context,
         )
 
     if show:
