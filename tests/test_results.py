@@ -11,15 +11,12 @@ from validmind.vm_models.result import (
     TextGenerationResult,
     ResultTable,
     RawData,
-    UnitMetricValue,
-    RowMetricValues,
 )
 
 from validmind.vm_models.figure import Figure
 from validmind.errors import InvalidParameterError
 
 loop = asyncio.new_event_loop()
-
 
 
 class MockAsyncResponse:
@@ -168,10 +165,8 @@ class TestResultClasses(unittest.TestCase):
             result_id="test_1", metric=0.95, description="Test description"
         )
 
-       
         await test_result.log_async(section_id="section_1", position=0)
 
-       
         mock_test_result.assert_called_once()
         mock_metric.assert_called_once()
 
