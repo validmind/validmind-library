@@ -8,7 +8,6 @@ from sklearn.preprocessing import LabelBinarizer
 
 from validmind import tags, tasks
 from validmind.vm_models import VMDataset, VMModel
-from validmind.vm_models.result.result import UnitMetricValue
 
 
 @tasks("classification")
@@ -26,7 +25,7 @@ def ROC_AUC(model: VMModel, dataset: VMDataset, **kwargs) -> float:
         y_true = y_true.astype(y_prob.dtype).flatten()
         roc_auc = roc_auc_score(y_true, y_prob, **kwargs)
 
-    return UnitMetricValue(roc_auc)
+    return roc_auc
 
 
 def _multiclass_roc_auc_score(y_test, y_pred, average="macro"):

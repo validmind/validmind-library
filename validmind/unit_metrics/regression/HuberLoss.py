@@ -6,7 +6,6 @@ import numpy as np
 
 from validmind import tags, tasks
 from validmind.vm_models import VMDataset, VMModel
-from validmind.vm_models.result.result import UnitMetricValue
 
 
 @tags("regression")
@@ -23,4 +22,4 @@ def HuberLoss(model: VMModel, dataset: VMDataset) -> float:
     quadratic_part = np.minimum(np.abs(error), delta)
     linear_part = np.abs(error) - quadratic_part
 
-    return UnitMetricValue(np.mean(0.5 * quadratic_part**2 + delta * linear_part))
+    return np.mean(0.5 * quadratic_part**2 + delta * linear_part)

@@ -6,7 +6,6 @@ import numpy as np
 
 from validmind import tags, tasks
 from validmind.vm_models import VMDataset, VMModel
-from validmind.vm_models.result.result import UnitMetricValue
 
 
 @tags("regression")
@@ -30,4 +29,4 @@ def KolmogorovSmirnovStatistic(dataset: VMDataset, model: VMModel) -> float:
     diff_cdf = np.abs(cdf_true - cdf_pred)
 
     # Find maximum absolute difference
-    return UnitMetricValue(np.max(diff_cdf))
+    return np.max(diff_cdf)

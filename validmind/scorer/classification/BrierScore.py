@@ -9,7 +9,6 @@ import numpy as np
 from validmind import tags, tasks
 from validmind.tests.decorator import scorer
 from validmind.vm_models import VMDataset, VMModel
-from validmind.vm_models.result.result import RowMetricValues
 
 
 @scorer()
@@ -56,4 +55,4 @@ def BrierScore(model: VMModel, dataset: VMDataset, **kwargs) -> List[float]:
     brier_scores = (y_prob - y_true) ** 2
 
     # Return as a list of floats
-    return RowMetricValues(brier_scores.tolist())
+    return brier_scores.tolist()
