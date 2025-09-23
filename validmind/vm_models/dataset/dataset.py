@@ -758,43 +758,6 @@ class VMDataset(VMInput):
                 )
             return np.array(metric_value)
 
-    def _process_metric_value(self, metric_value: Any) -> np.ndarray:
-        """Process metric value and return column values for the dataset.
-
-        Args:
-            metric_value: The metric value to process (could be MetricValues object or raw value)
-
-        Returns:
-            np.ndarray: Column values for the dataset
-
-        Raises:
-            ValueError: If metric value length doesn't match dataset length
-        """
-        # Handle different metric value types
-        if hasattr(metric_value, "get_values"):
-            # New MetricValues object (UnitMetricValue or RowMetricValues)
-            values = metric_value.get_values()
-            if metric_value.is_list():
-                # Row metrics - should be one value per row
-                if len(values) != len(self._df):
-                    raise ValueError(
-                        f"Row metric value length {len(values)} does not match dataset length {len(self._df)}"
-                    )
-                return np.array(values)
-            else:
-                # Unit metrics - repeat scalar value for all rows
-                return np.full(len(self._df), values)
-        elif np.isscalar(metric_value):
-            # Legacy scalar value - repeat for all rows
-            return np.full(len(self._df), metric_value)
-        else:
-            # Legacy list value - use directly
-            if len(metric_value) != len(self._df):
-                raise ValueError(
-                    f"Metric value length {len(metric_value)} does not match dataset length {len(self._df)}"
-                )
-            return np.array(metric_value)
-
     def _normalize_metric_id(self, metric: str) -> str:
         """Normalize metric identifier to full validmind row metric ID.
 

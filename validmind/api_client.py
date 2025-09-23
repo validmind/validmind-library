@@ -445,7 +445,7 @@ def log_text(
 
 async def alog_metric(
     key: str,
-    value: Union[int, float, UnitMetricValue],
+    value: Union[int, float],
     inputs: Optional[List[str]] = None,
     params: Optional[Dict[str, Any]] = None,
     recorded_at: Optional[str] = None,
