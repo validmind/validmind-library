@@ -8,7 +8,6 @@ Result objects for test results
 import asyncio
 import json
 import os
-from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Union
 from uuid import uuid4
@@ -353,12 +352,10 @@ class Result:
         """May be overridden by subclasses."""
         return self.__class__.__name__
 
-    @abstractmethod
     def to_widget(self):
         """Create an ipywidget representation of the result... Must be overridden by subclasses."""
         raise NotImplementedError
 
-    @abstractmethod
     def log(self):
         """Log the result... Must be overridden by subclasses."""
         raise NotImplementedError
@@ -395,8 +392,8 @@ class TestResult(Result):
     title: Optional[str] = None
     doc: Optional[str] = None
     description: Optional[Union[str, DescriptionFuture]] = None
-    metric: Optional[Union[int, float, MetricValues]] = None
-    row_metric: Optional[MetricValues] = None
+    metric: Optional[Union[int, float]] = None
+    scorer: Optional[List[Union[int, float]]] = None
     tables: Optional[List[ResultTable]] = None
     raw_data: Optional[RawData] = None
     figures: Optional[List[Figure]] = None
@@ -407,6 +404,7 @@ class TestResult(Result):
     _was_description_generated: bool = False
     _unsafe: bool = False
     _client_config_cache: Optional[Any] = None
+    _is_scorer_result: bool = False
 
     def __post_init__(self):
         if self.ref_id is None:
@@ -464,46 +462,34 @@ class TestResult(Result):
 
         return list(inputs.values())
 
-    def set_metric(
-        self, values: Union[int, float, List[Union[int, float]], MetricValues]
-    ) -> None:
-        """Set the metric value, automatically wrapping raw values in appropriate MetricValues subclass.
+    def set_metric(self, values: Union[int, float, List[Union[int, float]]]) -> None:
+        """Set the metric value.
         Args:
-            values: The metric values to set. Can be int, float, List[Union[int, float]], or MetricValues.
+            values: The metric values to set. Can be int, float, or List[Union[int, float]].
         """
-        if isinstance(values, MetricValues):
-            # If it's already a MetricValues object, store it in the appropriate field
-            if isinstance(values, RowMetricValues):
-                self.row_metric = values
-                self.metric = None  # Clear metric field when using row_metric
-            else:
-                self.metric = values
-                self.row_metric = None  # Clear row_metric field when using metric
-        elif isinstance(values, list):
-            # Lists should be stored as RowMetricValues in row_metric
-            self.row_metric = RowMetricValues(values)
-            self.metric = None  # Clear metric field when using row_metric
+        if isinstance(values, list):
+            # Lists should be stored in scorer
+            self.scorer = values
+            self.metric = None  # Clear metric field when using scorer
         else:
-            # Single values should be stored as UnitMetricValue in metric
-            self.metric = UnitMetricValue(values)
-            self.row_metric = None  # Clear row_metric field when using metric
+            # Single values should be stored in metric
+            self.metric = values
+            self.scorer = None  # Clear scorer field when using metric
 
     def _get_metric_display_value(
         self,
     ) -> Union[int, float, List[Union[int, float]], None]:
         """Get the metric value for display purposes.
         Returns:
-            The raw metric value, handling both metric and row_metric fields.
+            The raw metric value, handling both metric and scorer fields.
         """
         # Check metric field first
         if self.metric is not None:
-            if isinstance(self.metric, MetricValues):
-                return self.metric.get_values()
             return self.metric
 
-        # Check row_metric field
-        if self.row_metric is not None:
-            return self.row_metric.get_values()
+        # Check scorer field
+        if self.scorer is not None:
+            return self.scorer
 
         return None
 
@@ -512,17 +498,15 @@ class TestResult(Result):
     ) -> Union[int, float, List[Union[int, float]], None]:
         """Get the metric value for API serialization.
         Returns:
-            The serialized metric value, handling both metric and row_metric fields.
+            The serialized metric value, handling both metric and scorer fields.
         """
         # Check metric field first
         if self.metric is not None:
-            if isinstance(self.metric, MetricValues):
-                return self.metric.serialize()
             return self.metric
 
-        # Check row_metric field
-        if self.row_metric is not None:
-            return self.row_metric.serialize()
+        # Check scorer field
+        if self.scorer is not None:
+            return self.scorer
 
         return None
 
@@ -532,12 +516,10 @@ class TestResult(Result):
             The metric type identifier or None if no metric is set.
         """
         if self.metric is not None:
-            if isinstance(self.metric, MetricValues):
-                return self.metric.get_metric_type()
             return "unit_metric"
 
-        if self.row_metric is not None:
-            return self.row_metric.get_metric_type()
+        if self.scorer is not None:
+            return "scorer"
 
         return None
 
@@ -625,7 +607,7 @@ class TestResult(Result):
     def to_widget(self):
         metric_display_value = self._get_metric_display_value()
         if (
-            (self.metric is not None or self.row_metric is not None)
+            (self.metric is not None or self.scorer is not None)
             and not self.tables
             and not self.figures
         ):
@@ -762,6 +744,10 @@ class TestResult(Result):
         position: int = None,
         config: Dict[str, bool] = None,
     ):
+        # Skip logging for scorers - they should not be saved to the backend
+        if self._is_scorer_result:
+            return
+
         tasks = []  # collect tasks to run in parallel (async)
 
         # Default empty dict if None
@@ -776,15 +762,15 @@ class TestResult(Result):
             )
         )
 
-        if self.metric is not None or self.row_metric is not None:
+        if self.metric is not None or self.scorer is not None:
             # metrics are logged as separate entities
             metric_value = self._get_metric_serialized_value()
             metric_type = self._get_metric_type()
 
             # Use appropriate metric key based on type
             metric_key = self.result_id
-            if metric_type == "row_metrics":
-                metric_key = f"{self.result_id}_row_metrics"
+            if metric_type == "scorer":
+                metric_key = f"{self.result_id}_scorer"
 
             tasks.append(
                 api_client.alog_metric(

@@ -11,7 +11,11 @@ from typing import Any, Callable, Dict, List, Optional, Union
 import numpy as np
 import pandas as pd
 import polars as pl
-import torch
+
+try:
+    import torch  # noqa: F401
+except Exception:
+    torch = None  # type: ignore  # noqa: F401
 
 from .api_client import log_input as log_input
 from .client_config import client_config

@@ -11,8 +11,6 @@ from .figure import Figure
 from .input import VMInput
 from .model import R_MODEL_TYPES, ModelAttributes, VMModel
 from .result import ResultTable, TestResult
-from .test_suite.runner import TestSuiteRunner
-from .test_suite.test_suite import TestSuite
 
 __all__ = [
     "VMInput",
@@ -26,3 +24,15 @@ __all__ = [
     "TestSuite",
     "TestSuiteRunner",
 ]
+
+
+def __getattr__(name):  # Lazy access to avoid circular imports at module import time
+    if name == "TestSuite":
+        from .test_suite.test_suite import TestSuite as _TestSuite
+
+        return _TestSuite
+    if name == "TestSuiteRunner":
+        from .test_suite.runner import TestSuiteRunner as _TestSuiteRunner
+
+        return _TestSuiteRunner
+    raise AttributeError(f"module 'validmind.vm_models' has no attribute {name!r}")

@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 from abc import ABC, abstractmethod
-from typing import Any, Dict, List, Union
+from typing import Any, Callable, Dict, List, Optional, Union
 from uuid import uuid4
 
 import numpy as np
@@ -46,7 +46,7 @@ class BooleanOutputHandler(OutputHandler):
 
 class MetricValuesOutputHandler(OutputHandler):
     def can_handle(self, item: Any) -> bool:
-        return isinstance(item, MetricValues)
+        return isinstance(item, (int, float))
 
     def process(self, item: Any, result: TestResult) -> None:
         if result.metric is not None:
@@ -166,7 +166,24 @@ class StringOutputHandler(OutputHandler):
         result.description = item
 
 
-def process_output(item: Any, result: TestResult) -> None:
+class ScorerOutputHandler(OutputHandler):
+    """Handler for scorer outputs that should not be logged to backend"""
+
+    def can_handle(self, item: Any) -> bool:
+        # This handler is only called when we've already determined it's a scorer
+        # based on the _is_scorer marker on the test function
+        return True
+
+    def process(self, item: Any, result: TestResult) -> None:
+        # For scorers, we just store the raw output without special processing
+        # The output will be used by the calling code (e.g., assign_scores)
+        # but won't be logged to the backend
+        result.raw_data = RawData(scorer_output=item)
+
+
+def process_output(
+    item: Any, result: TestResult, test_func: Optional[Callable] = None
+) -> None:
     """Process a single test output item and update the TestResult."""
     handlers = [
         BooleanOutputHandler(),
@@ -177,6 +194,15 @@ def process_output(item: Any, result: TestResult) -> None:
         # Unit metrics should be processed last
         MetricValuesOutputHandler(),
     ]
+
+    # Check if this is a scorer first by looking for the _is_scorer marker
+    if test_func and hasattr(test_func, "_is_scorer") and test_func._is_scorer:
+        # For scorers, handle the output specially
+        scorer_handler = ScorerOutputHandler()
+        scorer_handler._result = result
+        if scorer_handler.can_handle(item):
+            scorer_handler.process(item, result)
+            return
 
     for handler in handlers:
         if handler.can_handle(item):
