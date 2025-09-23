@@ -19,6 +19,7 @@ dependencies = [
   "matplotlib",
   "mistune (>=3.0.2,<4.0.0)",
   "nest-asyncio (>=1.6.0,<2.0.0)",
+  "numpy (>=1.22.0,<1.27.0)",
   "openai (>=1)",
   "pandas (>=2.0.3,<3.0.0)",
   "plotly (>=5.0.0)",
@@ -77,9 +78,9 @@ nlp = [
   "bert-score (>=0.3.13)",
 ]
 pytorch = ["torch (>=2.0.0)"]
-stats = ["scipy", "statsmodels", "arch"]
+stats = ["scipy (>=1.8.0,<1.17.0)", "statsmodels (>=0.12.0)", "arch (>=7.0.0)"]
 xgboost = ["xgboost (>=1.5.2,<3)"]
-explainability = ["shap (>=0.46.0)"]
+explainability = ["shap (>=0.46.0)", "numba (>=0.56.0)"]
 credit_risk = ["scorecardpy (>=0.1.9.6,<0.2.0)"]
 datasets = ["datasets (>=2.10.0,<3.0.0)"]
 pii-detection = ["presidio-analyzer", "presidio-structured"]
