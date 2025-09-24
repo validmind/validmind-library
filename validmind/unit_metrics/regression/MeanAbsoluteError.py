@@ -12,4 +12,4 @@ from validmind.vm_models import VMDataset, VMModel
 @tasks("regression")
 def MeanAbsoluteError(model: VMModel, dataset: VMDataset, **kwargs) -> float:
     """Calculates the mean absolute error for a regression model."""
-    return _mean_absolute_error(dataset.y, dataset.y_pred(model, **kwargs))
+    return _mean_absolute_error(dataset.y, dataset.y_pred(model), **kwargs)

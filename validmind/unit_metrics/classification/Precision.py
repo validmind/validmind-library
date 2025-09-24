@@ -12,4 +12,4 @@ from validmind.vm_models import VMDataset, VMModel
 @tags("classification")
 def Precision(model: VMModel, dataset: VMDataset, **kwargs) -> float:
     """Calculates the precision for a classification model."""
-    return precision_score(dataset.y, dataset.y_pred(model, **kwargs))
+    return precision_score(dataset.y, dataset.y_pred(model), **kwargs)

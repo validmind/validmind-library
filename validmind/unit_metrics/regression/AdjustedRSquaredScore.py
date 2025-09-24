@@ -20,4 +20,4 @@ def AdjustedRSquaredScore(model: VMModel, dataset: VMDataset) -> float:
     row_count = len(dataset.y)
     feature_count = len(dataset.feature_columns)
 
-    return 1 - (1 - r2_score * (row_count - 1) / (row_count - feature_count))
+    return 1 - (1 - r2_score) * (row_count - 1) / (row_count - feature_count)

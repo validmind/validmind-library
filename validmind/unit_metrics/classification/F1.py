@@ -12,4 +12,4 @@ from validmind.vm_models import VMDataset, VMModel
 @tags("classification")
 def F1(model: VMModel, dataset: VMDataset, **kwargs) -> float:
     """Calculates the F1 score for a classification model."""
-    return f1_score(dataset.y, dataset.y_pred(model, **kwargs))
+    return f1_score(dataset.y, dataset.y_pred(model), **kwargs)

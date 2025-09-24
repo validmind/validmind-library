@@ -12,4 +12,4 @@ from validmind.vm_models import VMDataset, VMModel
 @tags("classification")
 def Recall(model: VMModel, dataset: VMDataset, **kwargs) -> float:
     """Calculates the recall for a classification model."""
-    return recall_score(dataset.y, dataset.y_pred(model, **kwargs))
+    return recall_score(dataset.y, dataset.y_pred(model), **kwargs)
