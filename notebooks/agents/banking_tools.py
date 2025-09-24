@@ -342,7 +342,7 @@ def customer_account_manager(
         - "Get account information for loan account 11111"
     """
     customer_db = _get_customer_database()
-    
+
     if customer_id not in customer_db:
         return f"Customer ID {customer_id} not found in system."
 
