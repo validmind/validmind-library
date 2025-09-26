@@ -10535,7 +10535,7 @@ cffi = ["cffi (>=1.17) ; python_version >= \"3.13\" and platform_python_implemen
 all = ["arch", "bert-score", "evaluate", "langchain-openai", "langdetect", "nltk", "pycocoevalcap", "ragas", "rouge", "scipy", "scorecardpy", "sentencepiece", "shap", "statsmodels", "textblob", "torch", "transformers", "xgboost"]
 credit-risk = ["scorecardpy"]
 datasets = ["datasets"]
-explainability = ["numba", "shap"]
+explainability = ["shap"]
 huggingface = ["sentencepiece", "transformers"]
 llm = ["deepeval", "langchain-openai", "pycocoevalcap", "ragas", "sentencepiece", "torch", "transformers"]
 nlp = ["bert-score", "evaluate", "langdetect", "nltk", "rouge", "textblob"]
@@ -10547,4 +10547,4 @@ xgboost = ["xgboost"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.9,<3.13"
-content-hash = "e9b170a5376b0309a50895e81ed0d73e55c3474e6a89561b91fc5d4c7ba78fea"
+content-hash = "c0d19b5f56a04e23ab24ef3dda0ff866f7cadc21ab47721b083021feea7a0104"
