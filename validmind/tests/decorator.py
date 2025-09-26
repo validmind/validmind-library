@@ -12,7 +12,7 @@ from typing import Any, Callable, List, Optional, TypeVar, Union
 from validmind.logging import get_logger
 
 from ._store import scorer_store, test_store
-from .load import load_test
+from .load import _inspect_signature, load_test
 
 logger = get_logger(__name__)
 
@@ -239,6 +239,8 @@ def scorer(func_or_id: Union[Callable[..., Any], str, None] = None) -> Callable[
         func.scorer_id = scorer_id
         func.save = save_func
         func._is_scorer = True  # Mark this function as a scorer
+
+        func.inputs, func.params = _inspect_signature(func)
 
         return func
 
