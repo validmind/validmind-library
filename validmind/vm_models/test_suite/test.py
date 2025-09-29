@@ -110,10 +110,10 @@ class TestSuiteTest:
                 result_id=self.test_id,
             )
 
-    async def log_async(self):
+    def log_sync(self):
         """Log the result for this test to ValidMind."""
         if not self.result:
             raise ValueError("Cannot log test result before running the test")
 
         if isinstance(self.result, TestResult):
-            return await self.result.log_async()
+            return self.result.log_sync()

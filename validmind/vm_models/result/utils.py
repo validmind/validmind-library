@@ -35,7 +35,7 @@ def get_result_template():
     return _result_template
 
 
-async def update_metadata(content_id: str, text: str, _json: Union[Dict, List] = None):
+def update_metadata(content_id: str, text: str, _json: Union[Dict, List] = None):
     """Create or update a metadata object."""
     parts = content_id.split("::")
     content_id = parts[0]
@@ -46,7 +46,7 @@ async def update_metadata(content_id: str, text: str, _json: Union[Dict, List] =
 
     logger.debug(f"Updating metadata for `{content_id}`")
 
-    await api_client.alog_metadata(content_id, text, _json)
+    api_client.log_metadata(content_id, text, _json)
 
 
 def tables_to_widgets(tables: List["ResultTable"]):

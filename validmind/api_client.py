@@ -5,25 +5,21 @@
 """ValidMind API client
 
 Note that this takes advantage of the fact that python modules are singletons to store and share
-the configuration and session across the entire project regardless of where the client is imported.
+the configuration across the entire project regardless of where the client is imported.
 """
-import asyncio
-import atexit
 import json
 import os
 from io import BytesIO
 from typing import Any, Dict, List, Optional, Tuple, Union
 from urllib.parse import urlencode, urljoin
 
-import aiohttp
 import requests
-from aiohttp import FormData
 from ipywidgets import HTML, Accordion
 
 from .client_config import client_config
 from .errors import MissingAPICredentialsError, MissingModelIdError, raise_api_error
 from .logging import get_logger, init_sentry, log_api_operation, send_single_error
-from .utils import NumpyEncoder, is_html, md_to_html, run_async
+from .utils import NumpyEncoder, is_html, md_to_html
 from .vm_models.figure import Figure
 
 logger = get_logger(__name__)
@@ -34,29 +30,7 @@ _api_host = os.getenv("VM_API_HOST")
 _model_cuid = os.getenv("VM_API_MODEL")
 _monitoring = False
 
-__api_session: Optional[aiohttp.ClientSession] = None
-
-
-@atexit.register
-def _close_session():
-    """Closes the async client session at exit."""
-    if __api_session and not __api_session.closed:
-        try:
-            loop = asyncio.get_event_loop()
-            if loop.is_running():
-                loop.create_task(__api_session.close())
-            else:
-                loop.run_until_complete(__api_session.close())
-        except RuntimeError as e:
-            # ignore RuntimeError when closing the session from the main thread
-            if "no current event loop in thread" in str(e):
-                pass
-            elif "Event loop is closed" in str(e):
-                pass
-            else:
-                raise e
-        except Exception as e:
-            logger.exception("Error closing aiohttp session at exit: %s", e)
+__session: Optional[requests.Session] = None
 
 
 def get_api_host() -> Optional[str]:
@@ -76,17 +50,16 @@ def _get_api_headers() -> Dict[str, str]:
     }
 
 
-def _get_session() -> aiohttp.ClientSession:
-    """Initializes the async client session."""
-    global __api_session
+def _get_session() -> requests.Session:
+    """Initializes the client session."""
+    global __session
 
-    if not __api_session or __api_session.closed:
-        __api_session = aiohttp.ClientSession(
-            headers=_get_api_headers(),
-            timeout=aiohttp.ClientTimeout(total=int(os.getenv("VM_API_TIMEOUT", 30))),
-        )
+    if not __session:
+        __session = requests.Session()
+        __session.headers.update(_get_api_headers())
+        __session.timeout = int(os.getenv("VM_API_TIMEOUT", 30))
 
-    return __api_session
+    return __session
 
 
 def _get_url(
@@ -106,56 +79,56 @@ def _get_url(
     return urljoin(_api_host, endpoint)
 
 
-async def _get(
+def _get(
     endpoint: str, params: Optional[Dict[str, str]] = None
 ) -> Dict[str, Any]:
     url = _get_url(endpoint, params)
     session = _get_session()
 
-    async with session.get(url) as r:
-        if r.status != 200:
-            raise_api_error(await r.text())
+    r = session.get(url)
+    if r.status_code != 200:
+        raise_api_error(r.text)
 
-        return await r.json()
+    return r.json()
 
 
-async def _post(
+def _post(
     endpoint: str,
     params: Optional[Dict[str, str]] = None,
-    data: Optional[Union[dict, FormData]] = None,
+    data: Optional[Union[dict, str]] = None,
     files: Optional[Dict[str, Tuple[str, BytesIO, str]]] = None,
 ) -> Dict[str, Any]:
     url = _get_url(endpoint, params)
     session = _get_session()
 
-    if not isinstance(data, (dict)) and files is not None:
-        raise ValueError("Cannot pass both non-json data and file objects to _post")
-
-    if files:
-        _data = FormData()
-
-        for key, value in (data or {}).items():
-            _data.add_field(key, value)
-
+    if isinstance(data, dict) and files is not None:
+        # When sending files, data should be added to the form data
+        form_data = data or {}
+        file_data = {}
+        
         for key, file_info in (files or {}).items():
-            _data.add_field(
-                key,
-                file_info[1],
-                filename=file_info[0],
-                content_type=file_info[2] if len(file_info) > 2 else None,
+            file_data[key] = (
+                file_info[0],  # filename
+                file_info[1],  # file object
+                file_info[2] if len(file_info) > 2 else None,  # content_type
             )
+        
+        r = session.post(url, data=form_data, files=file_data)
+    elif isinstance(data, str):
+        # JSON data
+        r = session.post(url, data=data, headers={"Content-Type": "application/json"})
     else:
-        _data = data
+        # Regular form data
+        r = session.post(url, data=data)
 
-    async with session.post(url, data=_data) as r:
-        if r.status != 200:
-            raise_api_error(await r.text())
+    if r.status_code != 200:
+        raise_api_error(r.text)
 
-        return await r.json()
+    return r.json()
 
 
 def _ping() -> Dict[str, Any]:
-    """Validates that we can connect to the ValidMind API (does not use the async session)."""
+    """Validates that we can connect to the ValidMind API."""
     r = requests.get(
         url=_get_url("ping"),
         headers=_get_api_headers(),
@@ -184,6 +157,8 @@ def _ping() -> Dict[str, Any]:
             f"(ID: {client_config.model.get('cuid', 'N/A')})\n"
             f"📁 Document Type: {client_config.document_type}"
         )
+
+    return client_info
 
 
 def init(
@@ -253,7 +228,7 @@ def reload():
         raise e
 
 
-async def aget_metadata(content_id: str) -> Dict[str, Any]:
+def get_metadata(content_id: str) -> Dict[str, Any]:
     """Gets a metadata object from ValidMind API.
 
     Args:
@@ -265,10 +240,10 @@ async def aget_metadata(content_id: str) -> Dict[str, Any]:
     Returns:
         dict: Metadata object.
     """
-    return await _get(f"get_metadata/{content_id}")
+    return _get(f"get_metadata/{content_id}")
 
 
-async def alog_metadata(
+def log_metadata(
     content_id: str,
     text: Optional[str] = None,
     _json: Optional[Dict[str, Any]] = None,
@@ -293,7 +268,7 @@ async def alog_metadata(
         metadata_dict["json"] = _json
 
     try:
-        return await _post(
+        return _post(
             "log_metadata",
             data=json.dumps(metadata_dict, cls=NumpyEncoder, allow_nan=False),
         )
@@ -306,7 +281,7 @@ async def alog_metadata(
     operation_name="Sending figure to ValidMind API",
     extract_key=lambda figure: figure.key,
 )
-async def alog_figure(figure: Figure) -> Dict[str, Any]:
+def log_figure(figure: Figure) -> Dict[str, Any]:
     """Logs a figure.
 
     Args:
@@ -319,7 +294,7 @@ async def alog_figure(figure: Figure) -> Dict[str, Any]:
         dict: The response from the API.
     """
     try:
-        return await _post(
+        return _post(
             "log_figure",
             data=figure.serialize(),
             files=figure.serialize_files(),
@@ -329,7 +304,7 @@ async def alog_figure(figure: Figure) -> Dict[str, Any]:
         raise e
 
 
-async def alog_test_result(
+def log_test_result(
     result: Dict[str, Any],
     section_id: str = None,
     position: int = None,
@@ -358,7 +333,7 @@ async def alog_test_result(
     if position is not None:
         request_params["position"] = position
     try:
-        return await _post(
+        return _post(
             "log_test_results",
             params=request_params,
             data=json.dumps(
@@ -372,7 +347,7 @@ async def alog_test_result(
         raise e
 
 
-async def alog_input(
+def log_input(
     input_id: str, type: str, metadata: Dict[str, Any]
 ) -> Dict[str, Any]:
     """Logs input information - internal use for now (don't expose via public API)
@@ -389,7 +364,7 @@ async def alog_input(
         dict: The response from the API
     """
     try:
-        return await _post(
+        return _post(
             "log_input",
             data=json.dumps(
                 {
@@ -404,10 +379,6 @@ async def alog_input(
     except Exception as e:
         logger.error("Error logging input to ValidMind API")
         raise e
-
-
-def log_input(input_id: str, type: str, metadata: Dict[str, Any]) -> Dict[str, Any]:
-    return run_async(alog_input, input_id, type, metadata)
 
 
 def log_text(
@@ -435,59 +406,12 @@ def log_text(
     if not is_html(text):
         text = md_to_html(text, mathml=True)
 
-    log_text = run_async(alog_metadata, content_id, text, _json)
+    log_text = log_metadata(content_id, text, _json)
 
     return Accordion(
         children=[HTML(log_text["text"])],
         titles=[f"Text Block: '{log_text['content_id']}'"],
     )
-
-
-async def alog_metric(
-    key: str,
-    value: Union[int, float],
-    inputs: Optional[List[str]] = None,
-    params: Optional[Dict[str, Any]] = None,
-    recorded_at: Optional[str] = None,
-    thresholds: Optional[Dict[str, Any]] = None,
-    passed: Optional[bool] = None,
-):
-    """See log_metric for details."""
-    if not key or not isinstance(key, str):
-        raise ValueError("`key` must be a non-empty string")
-
-    if value is None:
-        raise ValueError("Must provide a value for the metric")
-
-    # Validate that value is a scalar (int or float)
-    if not isinstance(value, (int, float)):
-        raise ValueError(
-            "Only scalar values (int or float) are allowed for logging metrics."
-        )
-
-    if thresholds is not None and not isinstance(thresholds, dict):
-        raise ValueError("`thresholds` must be a dictionary or None")
-
-    try:
-        return await _post(
-            "log_unit_metric",
-            data=json.dumps(
-                {
-                    "key": key,
-                    "value": value,
-                    "inputs": inputs or [],
-                    "params": params or {},
-                    "recorded_at": recorded_at,
-                    "thresholds": thresholds or {},
-                    "passed": passed if passed is not None else None,
-                },
-                cls=NumpyEncoder,
-                allow_nan=False,
-            ),
-        )
-    except Exception as e:
-        logger.error("Error logging metric to ValidMind API")
-        raise e
 
 
 def log_metric(
@@ -516,16 +440,41 @@ def log_metric(
         thresholds (Dict[str, Any], optional): Thresholds for the metric
         passed (bool, optional): Whether the metric passed validation thresholds
     """
-    return run_async(
-        alog_metric,
-        key=key,
-        value=value,
-        inputs=inputs,
-        params=params,
-        recorded_at=recorded_at,
-        thresholds=thresholds,
-        passed=passed,
-    )
+    if not key or not isinstance(key, str):
+        raise ValueError("`key` must be a non-empty string")
+
+    if value is None:
+        raise ValueError("Must provide a value for the metric")
+
+    # Validate that value is a scalar (int or float)
+    if not isinstance(value, (int, float)):
+        raise ValueError(
+            "Only scalar values (int or float) are allowed for logging metrics."
+        )
+
+    if thresholds is not None and not isinstance(thresholds, dict):
+        raise ValueError("`thresholds` must be a dictionary or None")
+
+    try:
+        return _post(
+            "log_unit_metric",
+            data=json.dumps(
+                {
+                    "key": key,
+                    "value": value,
+                    "inputs": inputs or [],
+                    "params": params or {},
+                    "recorded_at": recorded_at,
+                    "thresholds": thresholds or {},
+                    "passed": passed if passed is not None else None,
+                },
+                cls=NumpyEncoder,
+                allow_nan=False,
+            ),
+        )
+    except Exception as e:
+        logger.error("Error logging metric to ValidMind API")
+        raise e
 
 
 def generate_test_result_description(test_result_data: Dict[str, Any]) -> str:

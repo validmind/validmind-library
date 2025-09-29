@@ -13,12 +13,11 @@ authors = [
   { name = "John Walz", email = "john@validmind.ai" },
 ]
 dependencies = [
-  "aiohttp[speedups]",
+  "requests",
   "ipywidgets",
   "kaleido (>=0.2.1,!=0.2.1.post1,<1.0.0)",
   "matplotlib",
   "mistune (>=3.0.2,<4.0.0)",
-  "nest-asyncio (>=1.6.0,<2.0.0)",
   "openai (>=1)",
   "pandas (>=2.0.3,<3.0.0)",
   "plotly (>=5.0.0)",

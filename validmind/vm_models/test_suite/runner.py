@@ -2,13 +2,11 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-import asyncio
-
 import ipywidgets as widgets
 from IPython.display import display
 
 from ...logging import get_logger
-from ...utils import is_notebook, run_async, run_async_check
+from ...utils import is_notebook
 from .summary import TestSuiteSummary
 from .test_suite import TestSuite
 
@@ -75,7 +73,7 @@ class TestSuiteRunner:
         self.pbar_description.value = "Test suite complete!"
         self.pbar.close()
 
-    async def log_results(self):
+    def log_results(self):
         """Logs the results of the test suite to ValidMind.
 
         This method will be called after the test suite has been run and all results have been
@@ -86,14 +84,13 @@ class TestSuiteRunner:
         )
 
         tests = [test for section in self.suite.sections for test in section.tests]
-        # TODO: use asyncio.gather here for better performance
         for test in tests:
             self.pbar_description.value = (
                 f"Sending result to ValidMind: {test.test_id}..."
             )
 
             try:
-                await test.log_async()
+                test.log_sync()
             except Exception as e:
                 self.pbar_description.value = "Failed to send result to ValidMind"
                 logger.error(f"Failed to log result: {test.result}")
@@ -102,15 +99,9 @@ class TestSuiteRunner:
 
             self.pbar.value += 1
 
-    async def _check_progress(self):
-        done = False
-
-        while not done:
-            if self.pbar.value == self.pbar.max:
-                self.pbar_description.value = "Test suite complete!"
-                done = True
-
-            await asyncio.sleep(0.5)
+    def _check_progress(self):
+        if self.pbar.value == self.pbar.max:
+            self.pbar_description.value = "Test suite complete!"
 
     def summarize(self, show_link: bool = True):
         if not is_notebook():
@@ -147,8 +138,8 @@ class TestSuiteRunner:
                 self.pbar.value += 1
 
         if send:
-            run_async(self.log_results)
-            run_async_check(self._check_progress)
+            self.log_results()
+            self._check_progress()
 
         self.summarize(show_link=send)
 

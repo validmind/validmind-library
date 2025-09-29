@@ -5,7 +5,6 @@
 """
 Result objects for test results
 """
-import asyncio
 import json
 import os
 from dataclasses import dataclass
@@ -25,7 +24,6 @@ from ...utils import (
     HumanReadableEncoder,
     NumpyEncoder,
     display,
-    run_async,
     test_id_to_name,
 )
 from ..figure import Figure, create_figure
@@ -162,7 +160,7 @@ class ErrorResult(Result):
     def to_widget(self):
         return HTML(f"<h3 style='color: red;'>{self.message}</h3><p>{self.error}</p>")
 
-    async def log_async(self):
+    def log_sync(self):
         pass
 
 
@@ -520,7 +518,7 @@ class TestResult(Result):
 
         return serialized
 
-    async def log_async(
+    def log_sync(
         self,
         section_id: str = None,
         content_id: str = None,
@@ -531,18 +529,14 @@ class TestResult(Result):
         if self._is_scorer_result:
             return
 
-        tasks = []  # collect tasks to run in parallel (async)
-
         # Default empty dict if None
         config = config or {}
 
-        tasks.append(
-            api_client.alog_test_result(
-                result=self.serialize(),
-                section_id=section_id,
-                position=position,
-                config=config,
-            )
+        api_client.log_test_result(
+            result=self.serialize(),
+            section_id=section_id,
+            position=position,
+            config=config,
         )
 
         if self.metric is not None or self.scorer is not None:
@@ -555,13 +549,11 @@ class TestResult(Result):
             if metric_type == "scorer":
                 metric_key = f"{self.result_id}_scorer"
 
-            tasks.append(
-                api_client.alog_metric(
-                    key=metric_key,
-                    value=metric_value,
-                    inputs=[input.input_id for input in self._get_flat_inputs()],
-                    params=self.params,
-                )
+            api_client.log_metric(
+                key=metric_key,
+                value=metric_value,
+                inputs=[input.input_id for input in self._get_flat_inputs()],
+                params=self.params,
             )
 
         if self.figures:
@@ -573,21 +565,19 @@ class TestResult(Result):
                 for i in range(0, len(self.figures), batch_size)
             ]
 
-            async def upload_figures_in_batches():
+            def upload_figures_in_batches():
                 for batch in figure_batches:
 
                     @log_api_operation(
                         operation_name=f"Uploading batch of {len(batch)} figures"
                     )
-                    async def process_batch():
-                        batch_tasks = [
-                            api_client.alog_figure(figure) for figure in batch
-                        ]
-                        return await asyncio.gather(*batch_tasks)
+                    def process_batch():
+                        for figure in batch:
+                            api_client.log_figure(figure)
 
-                    await process_batch()
+                    process_batch()
 
-            tasks.append(upload_figures_in_batches())
+            upload_figures_in_batches()
 
         if self.description:
             revision_name = (
@@ -596,18 +586,14 @@ class TestResult(Result):
                 else DEFAULT_REVISION_NAME
             )
 
-            tasks.append(
-                update_metadata(
-                    content_id=(
-                        f"{content_id}::{revision_name}"
-                        if content_id
-                        else f"test_description:{self.result_id}::{revision_name}"
-                    ),
-                    text=self.description,
-                )
+            update_metadata(
+                content_id=(
+                    f"{content_id}::{revision_name}"
+                    if content_id
+                    else f"test_description:{self.result_id}::{revision_name}"
+                ),
+                text=self.description,
             )
-
-        return await asyncio.gather(*tasks)
 
     def log(  # noqa: C901
         self,
@@ -653,8 +639,7 @@ class TestResult(Result):
         if section_id:
             self._validate_section_id_for_block(section_id, position)
 
-        run_async(
-            self.log_async,
+        self.log_sync(
             section_id=section_id,
             content_id=content_id,
             position=position,
@@ -771,15 +756,13 @@ class TextGenerationResult(Result):
             "metadata": self.metadata,
         }
 
-    async def log_async(
+    def log_sync(
         self,
         content_id: str = None,
     ):
-        return await asyncio.gather(
-            update_metadata(
-                content_id=f"{content_id}",
-                text=self.description,
-            )
+        return update_metadata(
+            content_id=f"{content_id}",
+            text=self.description,
         )
 
     def log(
@@ -811,7 +794,6 @@ class TextGenerationResult(Result):
             except Exception as e:
                 logger.warning(f"PII detection failed for description: {e}")
 
-        run_async(
-            self.log_async,
+        self.log_sync(
             content_id=content_id,
         )
