@@ -84,6 +84,7 @@ def _get_session() -> aiohttp.ClientSession:
         __api_session = aiohttp.ClientSession(
             headers=_get_api_headers(),
             timeout=aiohttp.ClientTimeout(total=int(os.getenv("VM_API_TIMEOUT", 30))),
+            trust_env=True,
         )
 
     return __api_session
