@@ -7,9 +7,11 @@ from typing import List
 import numpy as np
 
 from validmind import tags, tasks
+from validmind.tests.decorator import scorer
 from validmind.vm_models import VMDataset, VMModel
 
 
+@scorer()
 @tasks("classification")
 @tags("classification")
 def AbsoluteError(model: VMModel, dataset: VMDataset, **kwargs) -> List[float]:

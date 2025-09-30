@@ -8,7 +8,6 @@ Result objects for test results
 import asyncio
 import json
 import os
-from abc import abstractmethod
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Union
 from uuid import uuid4
@@ -136,12 +135,10 @@ class Result:
         """May be overridden by subclasses."""
         return self.__class__.__name__
 
-    @abstractmethod
     def to_widget(self):
         """Create an ipywidget representation of the result... Must be overridden by subclasses."""
         raise NotImplementedError
 
-    @abstractmethod
     def log(self):
         """Log the result... Must be overridden by subclasses."""
         raise NotImplementedError
@@ -178,7 +175,8 @@ class TestResult(Result):
     title: Optional[str] = None
     doc: Optional[str] = None
     description: Optional[Union[str, DescriptionFuture]] = None
-    metric: Optional[Union[int, float, List[Union[int, float]]]] = None
+    metric: Optional[Union[int, float]] = None
+    scorer: Optional[List[Union[int, float]]] = None
     tables: Optional[List[ResultTable]] = None
     raw_data: Optional[RawData] = None
     figures: Optional[List[Figure]] = None
@@ -189,6 +187,7 @@ class TestResult(Result):
     _was_description_generated: bool = False
     _unsafe: bool = False
     _client_config_cache: Optional[Any] = None
+    _is_scorer_result: bool = False
 
     def __post_init__(self):
         if self.ref_id is None:
@@ -245,6 +244,67 @@ class TestResult(Result):
                 inputs[input_or_list.input_id] = input_or_list
 
         return list(inputs.values())
+
+    def set_metric(self, values: Union[int, float, List[Union[int, float]]]) -> None:
+        """Set the metric value.
+        Args:
+            values: The metric values to set. Can be int, float, or List[Union[int, float]].
+        """
+        if isinstance(values, list):
+            # Lists should be stored in scorer
+            self.scorer = values
+            self.metric = None  # Clear metric field when using scorer
+        else:
+            # Single values should be stored in metric
+            self.metric = values
+            self.scorer = None  # Clear scorer field when using metric
+
+    def _get_metric_display_value(
+        self,
+    ) -> Union[int, float, List[Union[int, float]], None]:
+        """Get the metric value for display purposes.
+        Returns:
+            The raw metric value, handling both metric and scorer fields.
+        """
+        # Check metric field first
+        if self.metric is not None:
+            return self.metric
+
+        # Check scorer field
+        if self.scorer is not None:
+            return self.scorer
+
+        return None
+
+    def _get_metric_serialized_value(
+        self,
+    ) -> Union[int, float, List[Union[int, float]], None]:
+        """Get the metric value for API serialization.
+        Returns:
+            The serialized metric value, handling both metric and scorer fields.
+        """
+        # Check metric field first
+        if self.metric is not None:
+            return self.metric
+
+        # Check scorer field
+        if self.scorer is not None:
+            return self.scorer
+
+        return None
+
+    def _get_metric_type(self) -> Optional[str]:
+        """Get the type of metric being stored.
+        Returns:
+            The metric type identifier or None if no metric is set.
+        """
+        if self.metric is not None:
+            return "unit_metric"
+
+        if self.scorer is not None:
+            return "scorer"
+
+        return None
 
     def add_table(
         self,
@@ -328,8 +388,15 @@ class TestResult(Result):
         self.figures.pop(index)
 
     def to_widget(self):
-        if self.metric is not None and not self.tables and not self.figures:
-            return HTML(f"<h3>{self.test_name}: <code>{self.metric}</code></h3>")
+        metric_display_value = self._get_metric_display_value()
+        if (
+            (self.metric is not None or self.scorer is not None)
+            and not self.tables
+            and not self.figures
+        ):
+            return HTML(
+                f"<h3>{self.test_name}: <code>{metric_display_value}</code></h3>"
+            )
 
         template_data = {
             "test_name": self.test_name,
@@ -341,7 +408,7 @@ class TestResult(Result):
                 else None
             ),
             "show_metric": self.metric is not None,
-            "metric": self.metric,
+            "metric": metric_display_value,
         }
         rendered = get_result_template().render(**template_data)
 
@@ -435,7 +502,7 @@ class TestResult(Result):
 
     def serialize(self):
         """Serialize the result for the API."""
-        return {
+        serialized = {
             "test_name": self.result_id,
             "title": self.title,
             "ref_id": self.ref_id,
@@ -446,6 +513,13 @@ class TestResult(Result):
             "metadata": self.metadata,
         }
 
+        # Add metric type information if available
+        metric_type = self._get_metric_type()
+        if metric_type:
+            serialized["metric_type"] = metric_type
+
+        return serialized
+
     async def log_async(
         self,
         section_id: str = None,
@@ -453,6 +527,10 @@ class TestResult(Result):
         position: int = None,
         config: Dict[str, bool] = None,
     ):
+        # Skip logging for scorers - they should not be saved to the backend
+        if self._is_scorer_result:
+            return
+
         tasks = []  # collect tasks to run in parallel (async)
 
         # Default empty dict if None
@@ -467,14 +545,20 @@ class TestResult(Result):
             )
         )
 
-        # Only log unit metrics when the metric is a scalar value.
-        # Some tests may assign a list/array of per-row metrics to `self.metric`.
-        # Those should not be sent to the unit-metric endpoint which expects scalars.
-        if self.metric is not None and not hasattr(self.metric, "__len__"):
+        if self.metric is not None or self.scorer is not None:
+            # metrics are logged as separate entities
+            metric_value = self._get_metric_serialized_value()
+            metric_type = self._get_metric_type()
+
+            # Use appropriate metric key based on type
+            metric_key = self.result_id
+            if metric_type == "scorer":
+                metric_key = f"{self.result_id}_scorer"
+
             tasks.append(
                 api_client.alog_metric(
-                    key=self.result_id,
-                    value=self.metric,
+                    key=metric_key,
+                    value=metric_value,
                     inputs=[input.input_id for input in self._get_flat_inputs()],
                     params=self.params,
                 )

@@ -11,8 +11,8 @@ from typing import Any, Callable, List, Optional, TypeVar, Union
 
 from validmind.logging import get_logger
 
-from ._store import test_store
-from .load import load_test
+from ._store import scorer_store, test_store
+from .load import _inspect_signature, load_test
 
 logger = get_logger(__name__)
 
@@ -165,3 +165,134 @@ def tags(*tags: str) -> Callable[[F], F]:
         return func
 
     return decorator
+
+
+def scorer(func_or_id: Union[Callable[..., Any], str, None] = None) -> Callable[[F], F]:
+    """Decorator for creating and registering custom scorers
+
+    This decorator registers the function it wraps as a scorer function within ValidMind
+    under the provided ID. Once decorated, the function can be run using the
+    `validmind.scorer.run_scorer` function.
+
+    The scorer ID can be provided in three ways:
+    1. Explicit ID: `@scorer("validmind.scorer.classification.BrierScore")`
+    2. Auto-generated from path: `@scorer()` - automatically generates ID from file path
+    3. Function name only: `@scorer` - uses function name with validmind.scorer prefix
+
+    The function can take two different types of arguments:
+
+    - Inputs: ValidMind model or dataset (or list of models/datasets). These arguments
+      must use the following names: `model`, `models`, `dataset`, `datasets`.
+    - Parameters: Any additional keyword arguments of any type (must have a default
+      value) that can have any name.
+
+    The function should return one of the following types:
+
+    - Table: Either a list of dictionaries or a pandas DataFrame
+    - Plot: Either a matplotlib figure or a plotly figure
+    - Scalar: A single number (int or float)
+    - Boolean: A single boolean value indicating whether the test passed or failed
+    - List: A list of values (for row-level metrics) or a list of dictionaries with consistent keys
+    - Any other type: The output will be stored as raw data for use by calling code
+
+    When returning a list of dictionaries:
+    - All dictionaries must have the same keys
+    - The list length must match the number of rows in the dataset
+    - Each dictionary key will become a separate column when using assign_scores
+    - Column naming follows the pattern: {model_id}_{metric_name}_{dict_key}
+
+    Note: Scorer outputs are not logged to the backend and are intended for use
+    by other parts of the system (e.g., assign_scores method).
+
+    The function may also include a docstring. This docstring will be used and logged
+    as the scorer's description.
+
+    Args:
+        func_or_id (Union[Callable[..., Any], str, None], optional): Either the function to decorate
+            or the scorer ID. If None or empty string, the ID is auto-generated from the file path.
+            Defaults to None.
+
+    Returns:
+        Callable[[F], F]: The decorated function.
+    """
+
+    def decorator(func: F) -> F:
+        # Determine the scorer ID
+        if func_or_id is None or func_or_id == "":
+            # Auto-generate ID from file path
+            scorer_id = _generate_scorer_id_from_path(func)
+        elif isinstance(func_or_id, str):
+            scorer_id = func_or_id
+        else:
+            # func_or_id is the function itself, auto-generate ID
+            scorer_id = _generate_scorer_id_from_path(func)
+
+        # Don't call load_test during registration to avoid circular imports
+        # Just register the function directly in the scorer store
+        # Scorers should only be stored in the scorer store, not the test store
+        scorer_store.register_scorer(scorer_id, func)
+
+        # special function to allow the function to be saved to a file
+        save_func = _get_save_func(func, scorer_id)
+
+        # Add attributes to the function
+        func.scorer_id = scorer_id
+        func.save = save_func
+        func._is_scorer = True  # Mark this function as a scorer
+
+        func.inputs, func.params = _inspect_signature(func)
+
+        return func
+
+    if callable(func_or_id):
+        return decorator(func_or_id)
+    elif func_or_id is None:
+        # Handle @scorer() case - return decorator that will auto-generate ID
+        return decorator
+
+    return decorator
+
+
+def _generate_scorer_id_from_path(func: Callable[..., Any]) -> str:
+    """Generate a scorer ID from the function's file path.
+
+    This function automatically generates a scorer ID based on the file path
+    where the function is defined, following the same pattern as the test system.
+
+    Args:
+        func: The function to generate an ID for
+
+    Returns:
+        str: The generated scorer ID in the format validmind.scorer.path.to.function
+    """
+    import inspect
+
+    try:
+        # Get the file path of the function
+        file_path = inspect.getfile(func)
+
+        # Find the scorer directory in the path
+        scorer_dir = os.path.join(os.path.dirname(__file__), "..", "scorer")
+        scorer_dir = os.path.abspath(scorer_dir)
+
+        # Get relative path from scorer directory
+        try:
+            rel_path = os.path.relpath(file_path, scorer_dir)
+        except ValueError:
+            # If file is not under scorer directory, fall back to function name
+            return f"validmind.scorer.{func.__name__}"
+
+        # Convert path to scorer ID
+        # Remove .py extension and replace path separators with dots
+        scorer_path = os.path.splitext(rel_path)[0].replace(os.sep, ".")
+
+        # If the path is just the filename (no subdirectories), use it as is
+        if scorer_path == func.__name__:
+            return f"validmind.scorer.{func.__name__}"
+
+        # Otherwise, use the full path
+        return f"validmind.scorer.{scorer_path}"
+
+    except (OSError, TypeError):
+        # Fallback to function name if we can't determine the path
+        return f"validmind.scorer.{func.__name__}"
