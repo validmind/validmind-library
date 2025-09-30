@@ -158,25 +158,32 @@ class ValidMindTestProvider:
     """Provider for built-in ValidMind tests"""
 
     def __init__(self) -> None:
-        # two subproviders: unit_metrics and normal tests
+        # three subproviders: unit_metrics, scorers, and normal tests
         self.unit_metrics_provider = LocalTestProvider(
             os.path.join(os.path.dirname(__file__), "..", "unit_metrics")
+        )
+        self.scorers_provider = LocalTestProvider(
+            os.path.join(os.path.dirname(__file__), "..", "scorer")
         )
         self.test_provider = LocalTestProvider(os.path.dirname(__file__))
 
     def list_tests(self) -> List[str]:
-        """List all tests in the given namespace"""
-        metric_ids = [
+        """List all tests in the given namespace (excludes scorers)"""
+        unit_metric_ids = [
             f"unit_metrics.{test}" for test in self.unit_metrics_provider.list_tests()
         ]
+        # Exclude scorers from general test list - they have their own list_scorers() function
         test_ids = self.test_provider.list_tests()
 
-        return metric_ids + test_ids
+        return unit_metric_ids + test_ids
 
     def load_test(self, test_id: str) -> Callable[..., Any]:
         """Load the test function identified by the given test_id"""
-        return (
-            self.unit_metrics_provider.load_test(test_id.replace("unit_metrics.", ""))
-            if test_id.startswith("unit_metrics.")
-            else self.test_provider.load_test(test_id)
-        )
+        if test_id.startswith("unit_metrics."):
+            return self.unit_metrics_provider.load_test(
+                test_id.replace("unit_metrics.", "")
+            )
+        elif test_id.startswith("scorer."):
+            return self.scorers_provider.load_test(test_id.replace("scorer.", ""))
+        else:
+            return self.test_provider.load_test(test_id)

@@ -1,20 +1,18 @@
 import asyncio
-import json
 import unittest
-from unittest.mock import MagicMock, Mock, patch
+from unittest.mock import patch
 import pandas as pd
 import matplotlib.pyplot as plt
-import plotly.graph_objs as go
 from ipywidgets import HTML, VBox
 
 from validmind.vm_models.result import (
-    Result,
     TestResult,
     ErrorResult,
     TextGenerationResult,
     ResultTable,
     RawData,
 )
+
 from validmind.vm_models.figure import Figure
 from validmind.errors import InvalidParameterError
 
@@ -22,17 +20,17 @@ loop = asyncio.new_event_loop()
 
 
 class MockAsyncResponse:
-    def __init__(self, status, text=None, json=None):
+    def __init__(self, status, text=None, json_data=None):
         self.status = status
         self.status_code = status
         self._text = text
-        self._json = json
+        self._json_data = json_data
 
     async def text(self):
         return self._text
 
     async def json(self):
-        return self._json
+        return self._json_data
 
     async def __aexit__(self, exc_type, exc, tb):
         pass
@@ -50,7 +48,7 @@ class TestResultClasses(unittest.TestCase):
 
     def test_raw_data_initialization(self):
         """Test RawData initialization and methods"""
-        raw_data = RawData(log=True, dataset_duplicates=pd.DataFrame({"col1": [1, 2]}))
+        raw_data = RawData(log=True, dataset_duplicates=pd.DataFrame({'col1': [1, 2]}))
 
         self.assertTrue(raw_data.log)
         self.assertIsInstance(raw_data.dataset_duplicates, pd.DataFrame)
@@ -237,6 +235,81 @@ class TestResultClasses(unittest.TestCase):
         mock_update_metadata.assert_called_with(
             content_id="test_description:test_1::ai", text="Test description"
         )
+
+    def test_test_result_metric_values_integration(self):
+        """Test metric values integration with TestResult"""
+        test_result = TestResult(result_id="test_metric_values")
+
+        # Test setting metric with scalar using set_metric
+        test_result.set_metric(0.85)
+        self.assertEqual(test_result.metric, 0.85)
+        self.assertIsNone(test_result.scorer)
+        self.assertEqual(test_result._get_metric_display_value(), 0.85)
+        self.assertEqual(test_result._get_metric_serialized_value(), 0.85)
+
+        # Test setting metric with list using set_metric
+        test_result.set_metric([0.1, 0.2, 0.3])
+        self.assertEqual(test_result.scorer, [0.1, 0.2, 0.3])
+        self.assertIsNone(test_result.metric)
+        self.assertEqual(test_result._get_metric_display_value(), [0.1, 0.2, 0.3])
+        self.assertEqual(test_result._get_metric_serialized_value(), [0.1, 0.2, 0.3])
+
+    def test_test_result_metric_type_detection(self):
+        """Test metric type detection for both metric and scorer fields"""
+        test_result = TestResult(result_id="test_metric_type")
+
+        # Test unit metric type
+        test_result.set_metric(42.0)
+        self.assertEqual(test_result._get_metric_type(), "unit_metric")
+
+        # Test row metric type
+        test_result.set_metric([1.0, 2.0, 3.0])
+        self.assertEqual(test_result._get_metric_type(), "scorer")
+
+        # Test with no metric
+        test_result.metric = None
+        test_result.scorer = None
+        self.assertIsNone(test_result._get_metric_type())
+
+    def test_test_result_backward_compatibility(self):
+        """Test backward compatibility with direct metric assignment"""
+        test_result = TestResult(result_id="test_backward_compat")
+
+        # Direct assignment of raw values (old style)
+        test_result.metric = 42.0
+        self.assertEqual(test_result._get_metric_display_value(), 42.0)
+        self.assertEqual(test_result._get_metric_serialized_value(), 42.0)
+
+        # Direct assignment of list (old style)
+        test_result.metric = [1.0, 2.0, 3.0]
+        self.assertEqual(test_result._get_metric_display_value(), [1.0, 2.0, 3.0])
+        self.assertEqual(test_result._get_metric_serialized_value(), [1.0, 2.0, 3.0])
+
+        # Mixed usage - set with set_metric then access display value
+        test_result.set_metric(100)
+        self.assertEqual(test_result.metric, 100)
+        self.assertEqual(test_result._get_metric_display_value(), 100)
+
+    def test_test_result_metric_values_widget_display(self):
+        """Test MetricValues display in TestResult widgets"""
+        # Test scalar metric display
+        test_result_scalar = TestResult(result_id="test_scalar_widget")
+        test_result_scalar.set_metric(0.95)
+
+        widget_scalar = test_result_scalar.to_widget()
+        self.assertIsInstance(widget_scalar, HTML)
+        # Check that the metric value appears in the HTML
+        self.assertIn("0.95", widget_scalar.value)
+
+        # Test list metric display
+        test_result_list = TestResult(result_id="test_list_widget")
+        test_result_list.set_metric([0.1, 0.2, 0.3])
+
+        widget_list = test_result_list.to_widget()
+        # Even with lists, when no tables/figures exist, it returns HTML
+        self.assertIsInstance(widget_list, HTML)
+        # Check that the list values appear in the HTML
+        self.assertIn("[0.1, 0.2, 0.3]", widget_list.value)
 
 
 if __name__ == "__main__":
