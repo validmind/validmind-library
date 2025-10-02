@@ -1,3 +1,7 @@
+# Copyright © 2023-2024 ValidMind Inc. All rights reserved.
+# See the LICENSE file in the root of this repository for details.
+# SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
+
 from typing import Any, Dict, List
 
 from validmind import tags, tasks
@@ -8,12 +12,12 @@ from validmind.vm_models.dataset import VMDataset
 
 try:
     from deepeval import evaluate
-    from deepeval.metrics import ContextualRelevancyMetric
+    from deepeval.metrics import FaithfulnessMetric
     from deepeval.test_case import LLMTestCase
 except ImportError as e:
     if "deepeval" in str(e):
         raise MissingDependencyError(
-            "Missing required package `deepeval` for ContextualRelevancyMetric. "
+            "Missing required package `deepeval` for Faithfulness. "
             "Please run `pip install validmind[llm]` to use LLM tests",
             required_dependencies=["deepeval"],
             extra="llm",
@@ -24,26 +28,26 @@ except ImportError as e:
 
 # Create custom ValidMind tests for DeepEval metrics
 @scorer()
-@tags("llm", "ContextualRelevancy", "deepeval")
+@tags("llm", "Faithfulness", "deepeval")
 @tasks("llm")
-def ContextualRelevancy(
+def Faithfulness(
     dataset: VMDataset,
     threshold: float = 0.5,
     input_column: str = "input",
-    expected_output_column: str = "expected_output",
+    actual_output_column: str = "actual_output",
     retrieval_context_column: str = "retrieval_context",
     strict_mode: bool = False,
 ) -> List[Dict[str, Any]]:
-    """Evaluates RAG retriever relevancy using deepeval's ContextualRelevancyMetric.
+    """Evaluates RAG generator faithfulness using deepeval's FaithfulnessMetric.
 
-    This metric checks whether statements in the retrieved context are relevant to the
-    query-only input. Returns per-row score and reason.
+    The metric extracts claims from the actual output and checks how many are
+    supported by the retrieved context. Returns per-row score and reason.
 
     Args:
-        dataset: Dataset containing query, expected_output, and retrieval_context
+        dataset: Dataset containing query, actual_output, and retrieval_context
         threshold: Minimum passing threshold (default: 0.5)
         input_column: Column name for the query-only input (default: "input")
-        expected_output_column: Column for the reference output (default: "expected_output")
+        actual_output_column: Column for the generator output (default: "actual_output")
         retrieval_context_column: Column with ranked retrieved nodes list (default: "retrieval_context")
         strict_mode: If True, enforces a binary score (0 for perfect, 1 otherwise)
 
@@ -54,9 +58,9 @@ def ContextualRelevancy(
         ValueError: If required columns are missing
     """
 
-    # Validate required columns
+    # Validate required columns exist in dataset
     missing_columns: List[str] = []
-    for col in [input_column, expected_output_column, retrieval_context_column]:
+    for col in [input_column, actual_output_column, retrieval_context_column]:
         if col not in dataset.df.columns:
             missing_columns.append(col)
     if missing_columns:
@@ -67,7 +71,7 @@ def ContextualRelevancy(
 
     _, model = get_client_and_model()
 
-    metric = ContextualRelevancyMetric(
+    metric = FaithfulnessMetric(
         threshold=threshold,
         model=model,
         include_reason=True,
@@ -78,7 +82,7 @@ def ContextualRelevancy(
     results: List[Dict[str, Any]] = []
     for _, row in dataset.df.iterrows():
         input_value = row[input_column]
-        expected_output_value = row[expected_output_column]
+        actual_output_value = row[actual_output_column]
         retrieval_context_value = (
             [row[retrieval_context_column]]
             if not isinstance(row[retrieval_context_column], list)
@@ -93,7 +97,7 @@ def ContextualRelevancy(
 
         test_case = LLMTestCase(
             input=input_value,
-            expected_output=expected_output_value,
+            actual_output=actual_output_value,
             retrieval_context=retrieval_context_value,
         )
 

@@ -1,4 +1,8 @@
-from typing import Any, Dict, List
+# Copyright © 2023-2024 ValidMind Inc. All rights reserved.
+# See the LICENSE file in the root of this repository for details.
+# SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
+
+from typing import Any, Dict, List, Optional
 
 from validmind import tags, tasks
 from validmind.ai.utils import get_client_and_model
@@ -8,12 +12,12 @@ from validmind.vm_models.dataset import VMDataset
 
 try:
     from deepeval import evaluate
-    from deepeval.metrics import ContextualRelevancyMetric
+    from deepeval.metrics import SummarizationMetric
     from deepeval.test_case import LLMTestCase
 except ImportError as e:
     if "deepeval" in str(e):
         raise MissingDependencyError(
-            "Missing required package `deepeval` for ContextualRelevancyMetric. "
+            "Missing required package `deepeval` for Summarization. "
             "Please run `pip install validmind[llm]` to use LLM tests",
             required_dependencies=["deepeval"],
             extra="llm",
@@ -24,27 +28,31 @@ except ImportError as e:
 
 # Create custom ValidMind tests for DeepEval metrics
 @scorer()
-@tags("llm", "ContextualRelevancy", "deepeval")
+@tags("llm", "Summarization", "deepeval")
 @tasks("llm")
-def ContextualRelevancy(
+def Summarization(
     dataset: VMDataset,
     threshold: float = 0.5,
     input_column: str = "input",
-    expected_output_column: str = "expected_output",
-    retrieval_context_column: str = "retrieval_context",
+    actual_output_column: str = "actual_output",
+    assessment_questions: Optional[List[str]] = None,
+    n: int = 5,
+    truths_extraction_limit: Optional[int] = None,
     strict_mode: bool = False,
 ) -> List[Dict[str, Any]]:
-    """Evaluates RAG retriever relevancy using deepeval's ContextualRelevancyMetric.
+    """Evaluates summary quality using deepeval's SummarizationMetric.
 
-    This metric checks whether statements in the retrieved context are relevant to the
-    query-only input. Returns per-row score and reason.
+    The metric generates or uses provided close-ended questions to assess if the
+    summary is factually aligned with and sufficiently covers the source text.
 
     Args:
-        dataset: Dataset containing query, expected_output, and retrieval_context
+        dataset: Dataset containing original text and generated summary
         threshold: Minimum passing threshold (default: 0.5)
-        input_column: Column name for the query-only input (default: "input")
-        expected_output_column: Column for the reference output (default: "expected_output")
-        retrieval_context_column: Column with ranked retrieved nodes list (default: "retrieval_context")
+        input_column: Column name for the original text (default: "input")
+        actual_output_column: Column for the generated summary (default: "actual_output")
+        assessment_questions: Optional list of yes/no questions to assess the summary
+        n: Number of assessment questions to generate when not provided (default: 5)
+        truths_extraction_limit: Optional cap for number of truths extracted from input
         strict_mode: If True, enforces a binary score (0 for perfect, 1 otherwise)
 
     Returns:
@@ -54,9 +62,9 @@ def ContextualRelevancy(
         ValueError: If required columns are missing
     """
 
-    # Validate required columns
+    # Validate required columns exist in dataset
     missing_columns: List[str] = []
-    for col in [input_column, expected_output_column, retrieval_context_column]:
+    for col in [input_column, actual_output_column]:
         if col not in dataset.df.columns:
             missing_columns.append(col)
     if missing_columns:
@@ -67,34 +75,31 @@ def ContextualRelevancy(
 
     _, model = get_client_and_model()
 
-    metric = ContextualRelevancyMetric(
+    # Build metric with optional parameters
+    metric_kwargs: Dict[str, Any] = dict(
         threshold=threshold,
         model=model,
         include_reason=True,
         strict_mode=strict_mode,
         verbose_mode=False,
     )
+    if assessment_questions is not None:
+        metric_kwargs["assessment_questions"] = assessment_questions
+    else:
+        metric_kwargs["n"] = n
+    if truths_extraction_limit is not None:
+        metric_kwargs["truths_extraction_limit"] = truths_extraction_limit
+
+    metric = SummarizationMetric(**metric_kwargs)
 
     results: List[Dict[str, Any]] = []
     for _, row in dataset.df.iterrows():
         input_value = row[input_column]
-        expected_output_value = row[expected_output_column]
-        retrieval_context_value = (
-            [row[retrieval_context_column]]
-            if not isinstance(row[retrieval_context_column], list)
-            else row[retrieval_context_column]
-        )
-
-        # Ensure retrieval_context is a list of strings
-        if not isinstance(retrieval_context_value, list):
-            raise ValueError(
-                f"Value in '{retrieval_context_column}' must be a list of strings; got {type(retrieval_context_value)}"
-            )
+        actual_output_value = row[actual_output_column]
 
         test_case = LLMTestCase(
             input=input_value,
-            expected_output=expected_output_value,
-            retrieval_context=retrieval_context_value,
+            actual_output=actual_output_value,
         )
 
         result = evaluate(test_cases=[test_case], metrics=[metric])
