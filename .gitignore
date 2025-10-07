@@ -225,3 +225,4 @@ my_tests/
 
 # Quarto docs
 docs/validmind.json
+*.deepeval/
