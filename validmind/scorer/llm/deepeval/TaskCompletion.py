@@ -140,7 +140,7 @@ def TaskCompletion(
     threshold: float = 0.5,
     input_column: str = "input",
     actual_output_column: str = "actual_output",
-    agent_output_column: str = "banking_agent_model_output",
+    agent_output_column: str = "agent_output",
     tools_called_column: str = "tools_called",
     strict_mode: bool = False,
 ) -> List[Dict[str, Any]]:
@@ -193,7 +193,6 @@ def TaskCompletion(
             agent_output = row.get(agent_output_column, {})
             all_tool_calls = extract_tool_calls_from_agent_output(agent_output)
 
-        print(all_tool_calls)
         test_case = LLMTestCase(
             input=input_value,
             actual_output=actual_output_value,
