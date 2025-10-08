@@ -53,7 +53,7 @@ def ci_check(pr_number, access_token):
         if release_notes_match:
             release_notes_text = release_notes_match.group(1).strip()
             if release_notes_text and release_notes_text != "<!--- REPLACE THIS COMMENT WITH YOUR DESCRIPTION --->":
-                comment = "Pull requests must include at least one of the required labels: `internal` (no release notes required), `highlight`, `enhancement`, `bug`, `deprecation`, `documentation`."
+                comment = "Pull requests must include at least one of the required labels: `internal` (no release notes required), `highlight`, `enhancement`, `bug`, `deprecation`, `documentation`. Except for `internal`, pull requests must also include a description in the release notes section."
                 pr.create_issue_comment(comment)
                 return False
         # Pull request has neither a label nor a description
