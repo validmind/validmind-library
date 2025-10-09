@@ -3,7 +3,7 @@ import os
 import re
 
 import requests
-from github import Github
+from github import Auth, Github
 
 
 def get_pull_request_number(pr_url):
@@ -16,7 +16,8 @@ def get_pull_request_number(pr_url):
 
 
 def ci_check(pr_number, access_token):
-    g = Github(access_token)
+    auth = Auth.Token(access_token)
+    g = Github(auth=auth)
     # Get repository, pull request, and labels
     repo = g.get_repo(os.environ["GITHUB_REPOSITORY"])
     pr = repo.get_pull(pr_number)
