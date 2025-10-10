@@ -49,11 +49,27 @@ jobs:
       - name: Generate Quarto Docs
         run: make quarto-docs
 
-      - name: Commit changes
-        uses: EndBug/add-and-commit@v9
+      - name: Create Pull Request
+        id: cpr
+        uses: peter-evans/create-pull-request@v5
         with:
-          default_author: github_actions
-          message: "Generate quarto docs"
-          add: "docs/"
-          pathspec_error_handling: ignore
-          push: true
+          token: ${{ secrets.GH_TOKEN }}
+          commit-message: "Generate quarto docs"
+          title: "Generate quarto docs"
+          body: |
+            Auto-generated PR to update Quarto documentation.
+            
+            ${{ github.event.inputs.note || 'Triggered by push to main' }}
+          branch: quarto-docs-update
+          delete-branch: true
+          add-paths: |
+            docs/
+
+      # Requires auto-merge to be enabled
+      # - name: Enable Pull Request Automerge
+      #   if: steps.cpr.outputs.pull-request-operation == 'created'
+      #   uses: peter-evans/enable-pull-request-automerge@v3
+      #   with:
+      #     token: ${{ secrets.GH_TOKEN }}
+      #     pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
+      #     merge-method: squash
