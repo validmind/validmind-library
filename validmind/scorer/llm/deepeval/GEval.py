@@ -41,8 +41,8 @@ def GEval(
 ) -> List[Dict[str, Any]]:
     """Detects evaluation criteria in LLM outputs using deepeval's GEval metric.
 
-    This scorer evaluates whether an LLM's output contains the specified evaluation criteria. It uses the GEval framework 
-    (https://arxiv.org/pdf/2303.16634.pdf) to assess outputs against defined criteria and rubrics. The scorer processes each row 
+    This scorer evaluates whether an LLM's output contains the specified evaluation criteria. It uses the GEval framework
+    (https://arxiv.org/pdf/2303.16634.pdf) to assess outputs against defined criteria and rubrics. The scorer processes each row
     in the dataset and returns evaluation scores and explanations.
 
     Args:
@@ -50,11 +50,11 @@ def GEval(
         metric_name (str): Name of the GEval metric to use for evaluation
         criteria (str): Evaluation criteria to assess the outputs against
         evaluation_steps (List[str], optional): Specific steps to follow during evaluation. Defaults to empty list.
-        rubrics (List[Dict[str, Any]], optional): List of rubric dictionaries defining evaluation criteria. Each rubric should 
+        rubrics (List[Dict[str, Any]], optional): List of rubric dictionaries defining evaluation criteria. Each rubric should
             contain score and description. Defaults to empty list.
-        strict_mode (bool, optional): If True, enforces binary scoring (0 or 1). If False, allows fractional scores. 
+        strict_mode (bool, optional): If True, enforces binary scoring (0 or 1). If False, allows fractional scores.
             Defaults to False.
-        threshold (float, optional): Minimum score threshold for considering an evaluation successful. Range 0.0-1.0. 
+        threshold (float, optional): Minimum score threshold for considering an evaluation successful. Range 0.0-1.0.
             Defaults to 0.5.
 
     Returns:
@@ -71,7 +71,7 @@ def GEval(
             dataset=my_dataset,
             metric_name="response_quality",
             criteria="Response should be clear, accurate and well-structured",
-            rubrics=[{"score": 1, "description": "Perfect response"}, 
+            rubrics=[{"score": 1, "description": "Perfect response"},
                     {"score": 0, "description": "Poor response"}],
             strict_mode=True
         )
