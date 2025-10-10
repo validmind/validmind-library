@@ -18,7 +18,7 @@ toc-expand: 4
 
 <span class="decorator">@<span class="n">tasks(<span class="s">'regression'</span>)</span></span> </span>
 
-<span class="kw">def</span><span class="name">ADF</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span><a href="/validmind/validmind/vm_models.qmd#vmdataset">validmind.vm_models.VMDataset</a></span>):
+<span class="kw">def</span><span class="name">ADF</span>(<span class="param"><span class="n">dataset</span><span class="p">:</span><a href="/validmind/validmind/vm_models.qmd#vmdataset">validmind.vm_models.VMDataset</a></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">pd</span>.<span class="n">DataFrame</span><span class="p">\]</span></span>:
 
 :::
 
