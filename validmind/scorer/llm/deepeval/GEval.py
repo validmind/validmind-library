@@ -126,7 +126,7 @@ def GEval(
         )
 
         result = metric.measure(test_case)
-
+        metric_name = metric_name.replace(" ", "_")
         results.append({f"{metric_name}_score": result})
 
     return results
