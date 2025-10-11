@@ -18,7 +18,7 @@ toc-expand: 4
 
 <span class="decorator">@<span class="n">tasks(<span class="s">'classification'</span>, <span class="s">'text_classification'</span>)</span></span> </span>
 
-<span class="kw">def</span><span class="name">ModelsPerformanceComparison</span>(<span class="params"><span class="n">dataset</span><span class="p">:</span><a href="/validmind/validmind/vm_models.qmd#vmdataset">validmind.vm_models.VMDataset</a><span class="muted">,</span></span><span class="params"><span class="n">models</span><span class="p">:</span><span class="nb">list</span><span class="p">\[</span><a href="/validmind/validmind/vm_models.qmd#vmmodel">validmind.vm_models.VMModel</a><span class="p">\]</span></span>):
+<span class="kw">def</span><span class="name">ModelsPerformanceComparison</span>(<span class="params"><span class="n">dataset</span><span class="p">:</span><a href="/validmind/validmind/vm_models.qmd#vmdataset">validmind.vm_models.VMDataset</a><span class="muted">,</span></span><span class="params"><span class="n">models</span><span class="p">:</span><span class="nb">list</span><span class="p">\[</span><a href="/validmind/validmind/vm_models.qmd#vmmodel">validmind.vm_models.VMModel</a><span class="p">\]</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">List</span><span class="p">\[</span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="nb">float</span><span class="p">\]</span><span class="p">\]</span><span class="p">\]</span></span>:
 
 :::
 

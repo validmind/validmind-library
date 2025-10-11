@@ -16,7 +16,7 @@ Models entrypoint
 
 ::: {.signature}
 
-<span class="kw"></span><span class="name">R_MODEL_TYPES</span><span class="o">=</span> <span class="default_value">\['LogisticRegression', 'LinearRegression', 'XGBClassifier', 'XGBRegressor'\]</span>:
+<span class="kw"></span><span class="name">R_MODEL_TYPES</span><span class="o">=</span> <span class="default_value">['LogisticRegression', 'LinearRegression', 'XGBClassifier', 'XGBRegressor']</span>:
 
 :::
 
@@ -150,7 +150,7 @@ Adds an extra column to the dataset without modifying the dataset `features` and
 
 ::: {.signature}
 
-<span class="kw">def</span><span class="name">assign_predictions</span>(<span class="params"><span class="bp">self</span><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="p">:</span><a href="/validmind/validmind/vm_models.qmd#vmmodel">validmind.vm_models.VMModel</a><span class="muted">,</span></span><span class="params"><span class="n">prediction_column</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">prediction_values</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">List</span><span class="p">\[</span><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">probability_column</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">probability_values</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">List</span><span class="p">\[</span><span class="nb">float</span><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">prediction_probabilities</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">List</span><span class="p">\[</span><span class="nb">float</span><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span><span class="p">:</span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span></span>):
+<span class="kw">def</span><span class="name">assign_predictions</span>(<span class="params"><span class="bp">self</span><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="p">:</span><a href="/validmind/validmind/vm_models.qmd#vmmodel">validmind.vm_models.VMModel</a><span class="muted">,</span></span><span class="params"><span class="n">prediction_column</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">prediction_values</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">Any</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">probability_column</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">probability_values</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">Any</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">prediction_probabilities</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">Any</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span><span class="p">:</span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span></span>):
 
 :::
 
@@ -162,11 +162,40 @@ Assign predictions and probabilities to the dataset.
 
 - `model (VMModel)`: The model used to generate the predictions.
 - `prediction_column (Optional[str])`: The name of the column containing the predictions.
-- `prediction_values (Optional[List[Any]])`: The values of the predictions.
+- `prediction_values (Optional[Any])`: The values of the predictions. Can be array-like (list, numpy array, pandas Series, etc.).
 - `probability_column (Optional[str])`: The name of the column containing the probabilities.
-- `probability_values (Optional[List[float]])`: The values of the probabilities.
-- `prediction_probabilities (Optional[List[float]])`: DEPRECATED: The values of the probabilities.
+- `probability_values (Optional[Any])`: The values of the probabilities. Can be array-like (list, numpy array, pandas Series, etc.).
+- `prediction_probabilities (Optional[Any])`: DEPRECATED: The values of the probabilities. Use probability_values instead.
 - `**kwargs`: Additional keyword arguments that will get passed through to the model's `predict` method.
+
+### assign_scores<span class="suffix"></span>
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">assign_scores</span>(<span class="params"><span class="bp">self</span><span class="muted">,</span></span><span class="params"><span class="n">metrics</span><span class="p">:</span><span class="n">Union</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">List</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="p">\]</span><span class="muted">,</span></span><span class="params"><span class="n">model</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><a href="/validmind/validmind/vm_models.qmd#vmmodel">validmind.vm_models.VMModel</a><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span><span class="p">:</span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span></span>):
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Assign computed row metric scores to the dataset as new columns.
+
+This method computes row metrics for the given model and dataset, then adds the computed scores as new columns to the dataset using the naming convention: {model.input_id}\_{metric_name}
+
+**Arguments**
+
+- `model (Optional[VMModel])`: Optional model used to compute the scores. If provided and it has a valid `input_id`, that will be used as a prefix for column names. If not provided (or no `input_id`), columns will be created without a prefix.
+- `metrics (Union[str, List[str]])`: Single metric ID or list of metric IDs. Can be either:
+- Short name (e.g., "BrierScore", "LogLoss")
+- Full metric ID (e.g., "validmind.scorer.classification.BrierScore")
+- `**kwargs`: Additional parameters passed to the row metrics.
+
+**Raises**
+
+- `ValueError`: If metric computation fails.
+- `ImportError`: If scorer module cannot be imported.
 
 ### prediction_column<span class="suffix"></span>
 
@@ -642,7 +671,7 @@ Test result.
 
 ::: {.signature}
 
-<span class="name">TestResult</span>(<span class="params"><span class="n">result_id</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">name</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s1">'Test Result'</span><span class="muted">,</span></span><span class="params"><span class="n">result_type</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">ref_id</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">title</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">doc</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">description</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">Union</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><a href="/validmind/validmind/vm_models.qmd#descriptionfuture">validmind.vm_models.DescriptionFuture</a><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">metric</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">Union</span><span class="p">\[</span><span class="nb">int</span><span class="p">, </span><span class="nb">float</span><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">tables</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">List</span><span class="p">\[</span><a href="/validmind/validmind/vm_models.qmd#resulttable">validmind.vm_models.ResultTable</a><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">raw_data</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><a href="/validmind/validmind/vm_models.qmd#rawdata">validmind.vm_models.RawData</a><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">figures</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">List</span><span class="p">\[</span><span class="n">Figure</span><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">passed</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">bool</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">params</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">inputs</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Union</span><span class="p">\[</span><span class="n">List</span><span class="p">\[</span><a href="/validmind/validmind/vm_models.qmd#vminput">validmind.vm_models.VMInput</a><span class="p">\]</span><span class="p">, </span><a href="/validmind/validmind/vm_models.qmd#vminput">validmind.vm_models.VMInput</a><span class="p">\]</span><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">metadata</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">\_was_description_generated</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">\_unsafe</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">\_client_config_cache</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">Any</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span></span>)
+<span class="name">TestResult</span>(<span class="params"><span class="n">result_id</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">name</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s1">'Test Result'</span><span class="muted">,</span></span><span class="params"><span class="n">result_type</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">ref_id</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">title</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">doc</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">description</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">Union</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><a href="/validmind/validmind/vm_models.qmd#descriptionfuture">validmind.vm_models.DescriptionFuture</a><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">metric</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">Union</span><span class="p">\[</span><span class="nb">int</span><span class="p">, </span><span class="nb">float</span><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">scorer</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">List</span><span class="p">\[</span><span class="n">Union</span><span class="p">\[</span><span class="nb">int</span><span class="p">, </span><span class="nb">float</span><span class="p">\]</span><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">tables</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">List</span><span class="p">\[</span><a href="/validmind/validmind/vm_models.qmd#resulttable">validmind.vm_models.ResultTable</a><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">raw_data</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><a href="/validmind/validmind/vm_models.qmd#rawdata">validmind.vm_models.RawData</a><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">figures</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">List</span><span class="p">\[</span><span class="n">Figure</span><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">passed</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">bool</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">params</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">inputs</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Union</span><span class="p">\[</span><span class="n">List</span><span class="p">\[</span><a href="/validmind/validmind/vm_models.qmd#vminput">validmind.vm_models.VMInput</a><span class="p">\]</span><span class="p">, </span><a href="/validmind/validmind/vm_models.qmd#vminput">validmind.vm_models.VMInput</a><span class="p">\]</span><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">metadata</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">\_was_description_generated</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">\_unsafe</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">\_client_config_cache</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">Any</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">\_is_scorer_result</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span></span>)
 
 :::
 
@@ -690,7 +719,7 @@ Add a new table to the result.
 **Arguments**
 
 - `table (Union[ResultTable, pd.DataFrame, List[Dict[str, Any]]])`: The table to add.
-- `title (Optional[str])`: The title of the table (can optionally be provided for pd.DataFrame and List\[Dict\[str, Any\]\] tables).
+- `title (Optional[str])`: The title of the table (can optionally be provided for pd.DataFrame and List\[Dict[str, Any]\] tables).
 
 ### check_result_id_exist<span class="suffix"></span>
 
@@ -793,6 +822,20 @@ Remove a table from the result by index.
 
 Serialize the result for the API.
 
+### set_metric<span class="suffix"></span>
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">set_metric</span>(<span class="param"><span class="bp">self</span><span class="muted">,</span></span><span class="param"><span class="n">values</span><span class="p">:</span><span class="n">Union</span><span class="p">\[</span><span class="nb">int</span><span class="p">, </span><span class="nb">float</span><span class="p">, </span><span class="n">List</span><span class="p">\[</span><span class="n">Union</span><span class="p">\[</span><span class="nb">int</span><span class="p">, </span><span class="nb">float</span><span class="p">\]</span><span class="p">\]</span><span class="p">\]</span></span>):
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Set the metric value. Args: values: The metric values to set. Can be int, float, or List\[Union[int, float]\].
+
 ### to_widget<span class="suffix"></span>
 
 <!-- signatures.jinja2 -->
@@ -838,152 +881,3 @@ Validate the configuration options for logging a test result
 <!-- docstring.jinja2 -->
 
 Get the test name, using custom title if available.
-
-<!-- class.qmd.jinja2 -->
-
-## <span class="prefix"></span> TestSuite
-
-<!-- signatures.jinja2 -->
-
-::: {.signature}
-
-<span class="decorators"><span class="decorator">@<span class="n">dataclass</span></span> </span>
-
-<span class="kw">class</span><span class="name">TestSuite</span>:
-
-:::
-
-<!-- docstring.jinja2 -->
-
-Base class for test suites. Test suites are used to define a grouping of tests that can be run as a suite against datasets and models. Test Suites can be defined by inheriting from this base class and defining the list of tests as a class variable.
-
-Tests can be a flat list of strings or may be nested into sections by using a dict.
-
-### TestSuite<span class="suffix"></span>
-
-<!-- signatures.jinja2 -->
-
-::: {.signature}
-
-<span class="name">TestSuite</span>(<span class="param"><span class="n">sections</span><span class="p">:</span><span class="n">List</span><span class="p">\[</span><a href="/validmind/validmind/vm_models.qmd#testsuitesection">validmind.vm_models.TestSuiteSection</a><span class="p">\]</span><span class="o">=</span><span class="kc">None</span></span>)
-
-:::
-
-### get_default_config<span class="suffix"></span>
-
-<!-- signatures.jinja2 -->
-
-::: {.signature}
-
-<span class="kw">def</span><span class="name">get_default_config</span>(<span class="param"><span class="bp">self</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="nb">dict</span></span>:
-
-:::
-
-<!-- docstring.jinja2 -->
-
-Returns the default configuration for the test suite.
-
-Each test in a test suite can accept parameters and those parameters can have default values. Both the parameters and their defaults are set in the test class and a config object can be passed to the test suite's run method to override the defaults. This function returns a dictionary containing the parameters and their default values for every test to allow users to view and set values.
-
-**Returns**
-
-- A dictionary of test names and their default parameters.
-
-### get_tests<span class="suffix"></span>
-
-<!-- signatures.jinja2 -->
-
-::: {.signature}
-
-<span class="kw">def</span><span class="name">get_tests</span>(<span class="param"><span class="bp">self</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">List</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span></span>:
-
-:::
-
-<!-- docstring.jinja2 -->
-
-Get all test suite test objects from all sections.
-
-### num_tests<span class="suffix"></span>
-
-<!-- signatures.jinja2 -->
-
-::: {.signature}
-
-<span class="kw">def</span><span class="name">num_tests</span>(<span class="param"><span class="bp">self</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="nb">int</span></span>:
-
-:::
-
-<!-- docstring.jinja2 -->
-
-Returns the total number of tests in the test suite.
-
-<!-- class.qmd.jinja2 -->
-
-## <span class="prefix"></span> TestSuiteRunner
-
-<!-- signatures.jinja2 -->
-
-::: {.signature}
-
-<span class="kw">class</span><span class="name">TestSuiteRunner</span>:
-
-:::
-
-<!-- docstring.jinja2 -->
-
-Runs a test suite.
-
-### TestSuiteRunner<span class="suffix"></span>
-
-<!-- signatures.jinja2 -->
-
-::: {.signature}
-
-<span class="name">TestSuiteRunner</span>(<span class="params"><span class="n">suite</span><span class="p">:</span><a href="/validmind/validmind/vm_models.qmd#testsuite">validmind.vm_models.TestSuite</a><span class="muted">,</span></span><span class="params"><span class="n">config</span><span class="p">:</span><span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">inputs</span><span class="p">:</span><span class="nb">dict</span><span class="o">=</span><span class="kc">None</span></span>)
-
-:::
-
-### log_results<span class="suffix"></span>
-
-<!-- signatures.jinja2 -->
-
-::: {.signature}
-
-<span class="kw">async def</span><span class="name">log_results</span>(<span class="param"><span class="bp">self</span></span>):
-
-:::
-
-<!-- docstring.jinja2 -->
-
-Logs the results of the test suite to ValidMind.
-
-This method will be called after the test suite has been run and all results have been collected. This method will log the results to ValidMind.
-
-### run<span class="suffix"></span>
-
-<!-- signatures.jinja2 -->
-
-::: {.signature}
-
-<span class="kw">def</span><span class="name">run</span>(<span class="params"><span class="bp">self</span><span class="muted">,</span></span><span class="params"><span class="n">send</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="muted">,</span></span><span class="params"><span class="n">fail_fast</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span></span>):
-
-:::
-
-<!-- docstring.jinja2 -->
-
-Runs the test suite, renders the summary and sends the results to ValidMind.
-
-**Arguments**
-
-- `send (bool, optional)`: Whether to send the results to ValidMind. Defaults to True.
-- `fail_fast (bool, optional)`: Whether to stop running tests after the first failure. Defaults to False.
-
-### summarize<span class="suffix"></span>
-
-<!-- signatures.jinja2 -->
-
-::: {.signature}
-
-<span class="kw">def</span><span class="name">summarize</span>(<span class="param"><span class="bp">self</span><span class="muted">,</span></span><span class="param"><span class="n">show_link</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span></span>):
-
-:::
