@@ -3,7 +3,7 @@ import os
 import re
 
 import requests
-from github import Github
+from github import Auth, Github
 
 
 def get_pull_request_number(pr_url):
@@ -16,7 +16,8 @@ def get_pull_request_number(pr_url):
 
 
 def ci_check(pr_number, access_token):
-    g = Github(access_token)
+    auth = Auth.Token(access_token)
+    g = Github(auth=auth)
     # Get repository, pull request, and labels
     repo = g.get_repo(os.environ["GITHUB_REPOSITORY"])
     pr = repo.get_pull(pr_number)
@@ -53,7 +54,7 @@ def ci_check(pr_number, access_token):
         if release_notes_match:
             release_notes_text = release_notes_match.group(1).strip()
             if release_notes_text and release_notes_text != "<!--- REPLACE THIS COMMENT WITH YOUR DESCRIPTION --->":
-                comment = "Pull requests must include at least one of the required labels: `internal` (no release notes required), `highlight`, `enhancement`, `bug`, `deprecation`, `documentation`."
+                comment = "Pull requests must include at least one of the required labels: `internal` (no release notes required), `highlight`, `enhancement`, `bug`, `deprecation`, `documentation`. Except for `internal`, pull requests must also include a description in the release notes section."
                 pr.create_issue_comment(comment)
                 return False
         # Pull request has neither a label nor a description

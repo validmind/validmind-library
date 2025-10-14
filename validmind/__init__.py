@@ -21,7 +21,7 @@ To initialize the ValidMind Library, paste the code snippet with the model ident
 import validmind as vm
 
 vm.init(
-  api_host = "https://api.dev.vm.validmind.ai/api/v1/tracking/tracking",
+  api_host = "https://app.prod.validmind.ai/api/v1/tracking/tracking",
   api_key = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
   api_secret = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
   project = "<project-identifier>"
@@ -48,6 +48,7 @@ try:
 except ImportError:
     ...
 
+from . import scorer
 from .__version__ import __version__  # noqa: E402
 from .api_client import init, log_metric, log_text, reload
 from .client import (  # noqa: E402
@@ -60,6 +61,7 @@ from .client import (  # noqa: E402
     run_test_suite,
 )
 from .experimental import agents as experimental_agent
+from .tests.decorator import scorer as scorer_decorator
 from .tests.decorator import tags, tasks, test
 from .tests.run import print_env
 from .utils import is_notebook, parse_version
@@ -128,6 +130,9 @@ __all__ = [  # noqa
     "tags",
     "tasks",
     "test",
+    "scorer_decorator",
+    # scorer module
+    "scorer",
     # raw data (for post-processing test results and building tests)
     "RawData",
     # submodules

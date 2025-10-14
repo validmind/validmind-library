@@ -83,7 +83,7 @@ def ScoreBandDefaultRates(
 
     # Create band labels
     band_labels = [
-        f"{score_bands[i]}-{score_bands[i+1]}" for i in range(len(score_bands) - 1)
+        f"{score_bands[i]}-{score_bands[i + 1]}" for i in range(len(score_bands) - 1)
     ]
     band_labels.insert(0, f"<{score_bands[0]}")
     band_labels.append(f">{score_bands[-1]}")

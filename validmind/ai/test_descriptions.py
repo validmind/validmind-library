@@ -14,6 +14,11 @@ from ..logging import get_logger
 from ..utils import NumpyEncoder, md_to_html, test_id_to_name
 from ..vm_models.figure import Figure
 from ..vm_models.result import ResultTable
+from ..vm_models.result.pii_filter import (
+    PIIDetectionMode,
+    get_pii_detection_mode,
+    scan_df,
+)
 from .utils import DescriptionFuture
 
 __executor = ThreadPoolExecutor()
@@ -69,6 +74,8 @@ def generate_description(
     metric: Union[float, int] = None,
     figures: List[Figure] = None,
     title: Optional[str] = None,
+    instructions: Optional[str] = None,
+    additional_context: Optional[str] = None,
 ):
     """Generate the description for the test results."""
     from validmind.api_client import generate_test_result_description
@@ -92,6 +99,13 @@ def generate_description(
         )
 
     if tables:
+        if get_pii_detection_mode() in [
+            PIIDetectionMode.TEST_DESCRIPTIONS,
+            PIIDetectionMode.ALL,
+        ]:
+            for table in tables:
+                scan_df(table.data)
+
         summary = "\n---\n".join(
             [
                 json.dumps(table.serialize(), cls=NumpyEncoder, separators=(",", ":"))
@@ -110,7 +124,8 @@ def generate_description(
             "figures": [
                 figure._get_b64_url() for figure in ([] if tables else figures)
             ],
-            "context": _get_llm_global_context(),
+            "additional_context": additional_context,
+            "instructions": instructions,
         }
     )["content"]
 
@@ -122,16 +137,23 @@ def background_generate_description(
     figures: List[Figure] = None,
     metric: Union[int, float] = None,
     title: Optional[str] = None,
+    instructions: Optional[str] = None,
+    additional_context: Optional[str] = None,
 ):
     def wrapped():
         try:
-            return generate_description(
-                test_id=test_id,
-                test_description=test_description,
-                tables=tables,
-                figures=figures,
-                metric=metric,
-                title=title,
+            return (
+                generate_description(
+                    test_id=test_id,
+                    test_description=test_description,
+                    tables=tables,
+                    figures=figures,
+                    metric=metric,
+                    title=title,
+                    instructions=instructions,
+                    additional_context=additional_context,
+                ),
+                True,
             )
         except Exception as e:
             if "maximum context length" in str(e):
@@ -146,7 +168,7 @@ def background_generate_description(
                 logger.warning(f"Failed to generate description for {test_id}: {e}")
             logger.warning(f"Using default description for {test_id}")
 
-            return test_description
+            return test_description, False
 
     return DescriptionFuture(__executor.submit(wrapped))
 
@@ -159,6 +181,8 @@ def get_result_description(
     metric: Union[int, float] = None,
     should_generate: bool = True,
     title: Optional[str] = None,
+    instructions: Optional[str] = None,
+    additional_context: Optional[str] = None,
 ):
     """Get the metadata dictionary for a test or metric result.
 
@@ -180,10 +204,17 @@ def get_result_description(
         figures (List[Figure]): The figures to attach to the test suite result.
         metric (Union[int, float]): Unit metrics attached to the test result.
         should_generate (bool): Whether to generate the description or not. Defaults to True.
+        instructions (Optional[str]): Instructions for the LLM to generate the description.
+        additional_context (Optional[str]): Additional context for the LLM to generate the description.
 
     Returns:
         str: The description to be logged with the test results.
     """
+    # Backwards compatibility: parameter instructions override environment variable
+    env_instructions = _get_llm_global_context()
+    # Parameter instructions take precedence and override environment variable
+    _instructions = instructions if instructions is not None else env_instructions
+
     # Check the feature flag first, then the environment variable
     llm_descriptions_enabled = (
         client_config.can_generate_llm_test_descriptions()
@@ -191,15 +222,7 @@ def get_result_description(
         not in ["0", "false"]
     )
 
-    # TODO: fix circular import
-    from validmind.ai.utils import is_configured
-
-    if (
-        should_generate
-        and (tables or figures)
-        and llm_descriptions_enabled
-        and is_configured()
-    ):
+    if should_generate and (tables or figures) and llm_descriptions_enabled:
         # get description future and set it as the description in the metadata
         # this will lazily retrieved so it can run in the background in parallel
         description = background_generate_description(
@@ -209,6 +232,8 @@ def get_result_description(
             figures=figures,
             metric=metric,
             title=title,
+            instructions=_instructions,
+            additional_context=additional_context,
         )
 
     else:

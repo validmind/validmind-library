@@ -6,7 +6,6 @@ from typing import Any, Dict, Union
 
 from ...errors import LoadTestError, should_raise_on_fail_fast
 from ...logging import get_logger, log_performance
-from ...tests.load import load_test
 from ...tests.run import run_test
 from ...utils import test_id_to_name
 from ..result import ErrorResult, Result, TestResult
@@ -43,6 +42,8 @@ class TestSuiteTest:
 
     def get_default_config(self):
         """Returns the default configuration for the test."""
+        from ...tests.load import load_test
+
         try:
             test_func = load_test(self.test_id)
         except LoadTestError as e:
