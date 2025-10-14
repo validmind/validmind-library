@@ -6,7 +6,6 @@ on:
   push:
     branches:
       - prod
-      - release/2.10.0-rc.1
 
 permissions:
   contents: read
