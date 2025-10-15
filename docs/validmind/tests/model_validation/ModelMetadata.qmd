@@ -18,7 +18,7 @@ toc-expand: 4
 
 <span class="decorator">@<span class="n">tasks(<span class="s">'regression'</span>, <span class="s">'time_series_forecasting'</span>)</span></span> </span>
 
-<span class="kw">def</span><span class="name">ModelMetadata</span>(<span class="param"><span class="n">model</span></span>):
+<span class="kw">def</span><span class="name">ModelMetadata</span>(<span class="param"><span class="n">model</span><span class="p">:</span><a href="/validmind/validmind/vm_models.qmd#vmmodel">validmind.vm_models.VMModel</a></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">pd</span>.<span class="n">DataFrame</span></span>:
 
 :::
 
