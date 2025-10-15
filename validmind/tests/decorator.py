@@ -242,12 +242,6 @@ def scorer(func_or_id: Union[Callable[..., Any], str, None] = None) -> Callable[
 
         func.inputs, func.params = _inspect_signature(func)
 
-        # ensure tags and tasks attributes exist, default to empty list if not present
-        if not hasattr(func, "__tags__"):
-            func.__tags__ = []
-        if not hasattr(func, "__tasks__"):
-            func.__tasks__ = []
-
         return func
 
     if callable(func_or_id):
