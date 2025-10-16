@@ -1,0 +1,12 @@
+---
+title: "[validmind](/validmind/validmind.qmd).plots"
+sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
+# module.qmd.jinja2
+---
+
+- [BoxPlot](plots/BoxPlot.qmd)
+- [CorrelationHeatmap](plots/CorrelationHeatmap.qmd)
+- [HistogramPlot](plots/HistogramPlot.qmd)
+- [ViolinPlot](plots/ViolinPlot.qmd)

@@ -1,0 +1,250 @@
+---
+title: "[validmind](/validmind/validmind.qmd).llm"
+sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
+# module.qmd.jinja2
+---
+
+<!-- docstring.jinja2 -->
+
+Entrypoint for LLM datasets.
+
+- [rag](llm/rag.qmd)
+
+<!-- class.qmd.jinja2 -->
+
+## <span class="prefix"></span> LLMAgentDataset
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">class</span><span class="name">LLMAgentDataset</span>(<span class="base">VMDataset</span>):
+
+:::
+
+<!-- docstring.jinja2 -->
+
+LLM Agent Dataset for DeepEval integration with ValidMind.
+
+This dataset class allows you to use all DeepEval tests and metrics within the ValidMind evaluation framework. It stores LLM interaction data in a format compatible with both frameworks.
+
+**Arguments**
+
+- `test_cases (List[LLMTestCase])`: List of DeepEval test cases
+- `goldens (List[Golden])`: List of DeepEval golden templates
+- `deepeval_dataset (EvaluationDataset)`: DeepEval dataset instance
+
+### LLMAgentDataset<span class="suffix"></span>
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="name">LLMAgentDataset</span>(<span class="params"><span class="n">input_id</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">test_cases</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">List</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">goldens</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">List</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">deepeval_dataset</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">Any</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>)
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Initialize LLMAgentDataset.
+
+**Arguments**
+
+- `input_id`: Identifier for the dataset
+- `test_cases`: List of DeepEval LLMTestCase objects
+- `goldens`: List of DeepEval Golden objects
+- `deepeval_dataset`: DeepEval EvaluationDataset instance
+- `**kwargs`: Additional arguments passed to VMDataset
+
+### add_golden<span class="suffix"></span>
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">add_golden</span>(<span class="param"><span class="bp">self</span><span class="muted">,</span></span><span class="param"><span class="n">golden</span></span>):
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Add a DeepEval golden to the dataset.
+
+**Arguments**
+
+- `golden`: DeepEval Golden instance
+
+### add_test_case<span class="suffix"></span>
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">add_test_case</span>(<span class="param"><span class="bp">self</span><span class="muted">,</span></span><span class="param"><span class="n">test_case</span></span>):
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Add a DeepEval test case to the dataset.
+
+**Arguments**
+
+- `test_case`: DeepEval LLMTestCase instance
+
+### convert_goldens_to_test_cases<span class="suffix"></span>
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">convert_goldens_to_test_cases</span>(<span class="param"><span class="bp">self</span><span class="muted">,</span></span><span class="param"><span class="n">llm_app_function</span></span>):
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Convert goldens to test cases by generating actual outputs.
+
+**Arguments**
+
+- `llm_app_function`: Function that takes input and returns LLM output
+
+### evaluate_with_deepeval<span class="suffix"></span>
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">evaluate_with_deepeval</span>(<span class="params"><span class="bp">self</span><span class="muted">,</span></span><span class="params"><span class="n">metrics</span><span class="p">:</span><span class="n">List</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span></span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Evaluate the dataset using DeepEval metrics.
+
+**Arguments**
+
+- `metrics`: List of DeepEval metric instances
+- `**kwargs`: Additional arguments passed to deepeval.evaluate()
+
+**Returns**
+
+- Evaluation results dictionary
+
+### from_deepeval_dataset<span class="suffix"></span>
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="decorators"><span class="decorator">@<span class="n">classmethod</span></span> </span>
+
+<span class="kw">def</span><span class="name">from_deepeval_dataset</span>(<span class="params"><span class="n">cls</span><span class="muted">,</span></span><span class="params"><span class="n">deepeval_dataset</span><span class="muted">,</span></span><span class="params"><span class="n">input_id</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s1">'llm_agent_dataset'</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/validmind/validmind/vm_models.qmd#llmagentdataset">validmind.vm_models.LLMAgentDataset</a></span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Create LLMAgentDataset from DeepEval EvaluationDataset.
+
+**Arguments**
+
+- `deepeval_dataset`: DeepEval EvaluationDataset instance
+- `input_id`: Dataset identifier
+- `**kwargs`: Additional arguments
+
+**Returns**
+
+- LLMAgentDataset instance
+
+### from_goldens<span class="suffix"></span>
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="decorators"><span class="decorator">@<span class="n">classmethod</span></span> </span>
+
+<span class="kw">def</span><span class="name">from_goldens</span>(<span class="params"><span class="n">cls</span><span class="muted">,</span></span><span class="params"><span class="n">goldens</span><span class="p">:</span><span class="n">List</span><span class="muted">,</span></span><span class="params"><span class="n">input_id</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s1">'llm_agent_dataset'</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/validmind/validmind/vm_models.qmd#llmagentdataset">validmind.vm_models.LLMAgentDataset</a></span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Create LLMAgentDataset from DeepEval goldens.
+
+**Arguments**
+
+- `goldens`: List of DeepEval Golden objects
+- `input_id`: Dataset identifier
+- `**kwargs`: Additional arguments
+
+**Returns**
+
+- LLMAgentDataset instance
+
+### from_test_cases<span class="suffix"></span>
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="decorators"><span class="decorator">@<span class="n">classmethod</span></span> </span>
+
+<span class="kw">def</span><span class="name">from_test_cases</span>(<span class="params"><span class="n">cls</span><span class="muted">,</span></span><span class="params"><span class="n">test_cases</span><span class="p">:</span><span class="n">List</span><span class="muted">,</span></span><span class="params"><span class="n">input_id</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s1">'llm_agent_dataset'</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/validmind/validmind/vm_models.qmd#llmagentdataset">validmind.vm_models.LLMAgentDataset</a></span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Create LLMAgentDataset from DeepEval test cases.
+
+**Arguments**
+
+- `test_cases`: List of DeepEval LLMTestCase objects
+- `input_id`: Dataset identifier
+- `**kwargs`: Additional arguments
+
+**Returns**
+
+- LLMAgentDataset instance
+
+### get_deepeval_dataset<span class="suffix"></span>
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">get_deepeval_dataset</span>(<span class="param"><span class="bp">self</span></span>):
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Get or create a DeepEval EvaluationDataset instance.
+
+**Returns**
+
+- DeepEval EvaluationDataset instance
+
+### to_deepeval_test_cases<span class="suffix"></span>
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">to_deepeval_test_cases</span>(<span class="param"><span class="bp">self</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">List</span></span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Convert dataset rows back to DeepEval test cases.
+
+**Returns**
+
+- List of DeepEval LLMTestCase objects

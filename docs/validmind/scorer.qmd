@@ -1,0 +1,110 @@
+---
+title: "[validmind](/validmind/validmind.qmd).scorer"
+sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
+# module.qmd.jinja2
+---
+
+## scorer<span class="suffix"></span>
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">scorer</span>(<span class="param"><span class="n">func_or_id</span><span class="p">:</span><span class="n">Union</span><span class="p">\[</span><span class="n">Callable</span><span class="p">\[</span><span class="n">...</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span><span class="p">, </span><span class="nb">str</span><span class="p">, </span><span class="n">None</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">Callable</span><span class="p">\[</span><span class="p">\[</span><a href="/validmind/validmind/vm_models.qmd#f">validmind.vm_models.F</a><span class="p">\]</span><span class="p">, </span><a href="/validmind/validmind/vm_models.qmd#f">validmind.vm_models.F</a><span class="p">\]</span></span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Decorator for creating and registering custom scorers
+
+This decorator registers the function it wraps as a scorer function within ValidMind under the provided ID. Once decorated, the function can be run using the `validmind.scorer.run_scorer` function.
+
+The scorer ID can be provided in three ways:
+
+1. Explicit ID: `@scorer("validmind.scorer.classification.BrierScore")`
+1. Auto-generated from path: `@scorer()` - automatically generates ID from file path
+1. Function name only: `@scorer` - uses function name with validmind.scorer prefix
+
+The function can take two different types of arguments:
+
+- Inputs: ValidMind model or dataset (or list of models/datasets). These arguments must use the following names: `model`, `models`, `dataset`, `datasets`.
+- Parameters: Any additional keyword arguments of any type (must have a default value) that can have any name.
+
+The function should return one of the following types:
+
+- Table: Either a list of dictionaries or a pandas DataFrame
+- Plot: Either a matplotlib figure or a plotly figure
+- Scalar: A single number (int or float)
+- Boolean: A single boolean value indicating whether the test passed or failed
+- List: A list of values (for row-level metrics) or a list of dictionaries with consistent keys
+- Any other type: The output will be stored as raw data for use by calling code
+
+When returning a list of dictionaries:
+
+- All dictionaries must have the same keys
+- The list length must match the number of rows in the dataset
+- Each dictionary key will become a separate column when using assign_scores
+- Column naming follows the pattern: {model_id}_{metric_name}_{dict_key}
+
+Note: Scorer outputs are not logged to the backend and are intended for use by other parts of the system (e.g., assign_scores method).
+
+The function may also include a docstring. This docstring will be used and logged as the scorer's description.
+
+**Arguments**
+
+- `func_or_id (Union[Callable[..., Any], str, None], optional)`: Either the function to decorate or the scorer ID. If None or empty string, the ID is auto-generated from the file path. Defaults to None.
+
+**Returns**
+
+- The decorated function.
+
+<!-- function.qmd.jinja2 -->
+
+## list_scorers<span class="suffix"></span>
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">list_scorers</span>(<span class="param"><span class="n">\*\*kwargs</span></span>):
+
+:::
+
+<!-- docstring.jinja2 -->
+
+List all scorers
+
+<!-- function.qmd.jinja2 -->
+
+## describe_scorer<span class="suffix"></span>
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">describe_scorer</span>(<span class="params"><span class="n">scorer_id</span><span class="p">:</span><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>):
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Describe a scorer
+
+<!-- function.qmd.jinja2 -->
+
+## run_scorer<span class="suffix"></span>
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="kw">def</span><span class="name">run_scorer</span>(<span class="params"><span class="n">scorer_id</span><span class="p">:</span><span class="nb">str</span><span class="muted">,</span></span><span class="params"><span class="n">\*\*kwargs</span></span>):
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Run a scorer

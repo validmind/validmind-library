@@ -1,0 +1,65 @@
+---
+title: "[validmind](/validmind/validmind.qmd).HistogramPlot"
+sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
+# module.qmd.jinja2
+---
+
+<!-- function.qmd.jinja2 -->
+
+## HistogramPlot<span class="suffix"></span>
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="decorators"><span class="decorator">@<span class="n">tags(<span class="s">'tabular_data'</span>, <span class="s">'visualization'</span>, <span class="s">'data_quality'</span>)</span></span>
+
+<span class="decorator">@<span class="n">tasks(<span class="s">'classification'</span>, <span class="s">'regression'</span>, <span class="s">'clustering'</span>)</span></span> </span>
+
+<span class="kw">def</span><span class="name">HistogramPlot</span>(<span class="params"><span class="n">dataset</span><span class="p">:</span><a href="/validmind/validmind/vm_models.qmd#vmdataset">validmind.vm_models.VMDataset</a><span class="muted">,</span></span><span class="params"><span class="n">columns</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">List</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">bins</span><span class="p">:</span><span class="n">Union</span><span class="p">\[</span><span class="nb">int</span><span class="p">, </span><span class="nb">str</span><span class="p">, </span><span class="n">List</span><span class="p">\]</span><span class="o">=</span><span class="kc">30</span><span class="muted">,</span></span><span class="params"><span class="n">color</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s1">'steelblue'</span><span class="muted">,</span></span><span class="params"><span class="n">opacity</span><span class="p">:</span><span class="nb">float</span><span class="o">=</span><span class="kc">0.7</span><span class="muted">,</span></span><span class="params"><span class="n">show_kde</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="muted">,</span></span><span class="params"><span class="n">normalize</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">log_scale</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="muted">,</span></span><span class="params"><span class="n">title_prefix</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s1">'Histogram of'</span><span class="muted">,</span></span><span class="params"><span class="n">width</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="kc">1200</span><span class="muted">,</span></span><span class="params"><span class="n">height</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="kc">800</span><span class="muted">,</span></span><span class="params"><span class="n">n_cols</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="kc">2</span><span class="muted">,</span></span><span class="params"><span class="n">vertical_spacing</span><span class="p">:</span><span class="nb">float</span><span class="o">=</span><span class="kc">0.15</span><span class="muted">,</span></span><span class="params"><span class="n">horizontal_spacing</span><span class="p">:</span><span class="nb">float</span><span class="o">=</span><span class="kc">0.1</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">go</span>.<span class="n">Figure</span></span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Generates customizable histogram plots for numerical features in a dataset using Plotly.
+
+### Purpose
+
+This test provides a flexible way to visualize the distribution of numerical features in a dataset. It allows for extensive customization of the histogram appearance and behavior through parameters, making it suitable for various exploratory data analysis tasks.
+
+### Test Mechanism
+
+The test creates histogram plots for specified numerical columns (or all numerical columns if none specified). It supports various customization options including:
+
+- Number of bins or bin edges
+- Color and opacity
+- Kernel density estimation overlay
+- Logarithmic scaling
+- Normalization options
+- Configurable subplot layout (columns and spacing)
+
+### Signs of High Risk
+
+- Highly skewed distributions that may indicate data quality issues
+- Unexpected bimodal or multimodal distributions
+- Presence of extreme outliers
+- Empty or sparse distributions
+
+### Strengths
+
+- Highly customizable visualization options
+- Interactive Plotly plots with zoom, pan, and hover capabilities
+- Supports both single and multiple column analysis
+- Provides insights into data distribution patterns
+- Can handle different data types and scales
+- Configurable subplot layout for better visualization
+
+### Limitations
+
+- Limited to numerical features only
+- Visual interpretation may be subjective
+- May not be suitable for high-dimensional datasets
+- Performance may degrade with very large datasets
