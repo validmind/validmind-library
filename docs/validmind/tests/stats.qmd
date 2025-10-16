@@ -1,0 +1,12 @@
+---
+title: "[validmind](/validmind/validmind.qmd).stats"
+sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
+# module.qmd.jinja2
+---
+
+- [CorrelationAnalysis](stats/CorrelationAnalysis.qmd)
+- [DescriptiveStats](stats/DescriptiveStats.qmd)
+- [NormalityTests](stats/NormalityTests.qmd)
+- [OutlierDetection](stats/OutlierDetection.qmd)
