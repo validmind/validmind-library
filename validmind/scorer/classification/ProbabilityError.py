@@ -14,7 +14,7 @@ from validmind.vm_models import VMDataset, VMModel
 @scorer()
 @tasks("classification")
 @tags("classification")
-def ProbabilityError(model: VMModel, dataset: VMDataset, **kwargs) -> List[float]:
+def ProbabilityError(model: VMModel, dataset: VMDataset) -> List[float]:
     """Calculates the probability error per row for a classification model.
 
     For binary classification tasks, this computes the absolute difference between

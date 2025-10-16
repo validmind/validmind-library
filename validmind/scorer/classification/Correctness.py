@@ -14,7 +14,7 @@ from validmind.vm_models import VMDataset, VMModel
 @scorer()
 @tasks("classification")
 @tags("classification")
-def Correctness(model: VMModel, dataset: VMDataset, **kwargs) -> List[int]:
+def Correctness(model: VMModel, dataset: VMDataset) -> List[int]:
     """Calculates the correctness per row for a classification model.
 
     For classification tasks, this returns 1 for correctly classified rows

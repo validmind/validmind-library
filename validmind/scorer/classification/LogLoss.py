@@ -14,9 +14,7 @@ from validmind.vm_models import VMDataset, VMModel
 @scorer()
 @tasks("classification")
 @tags("classification")
-def LogLoss(
-    model: VMModel, dataset: VMDataset, eps: float = 1e-15, **kwargs
-) -> List[float]:
+def LogLoss(model: VMModel, dataset: VMDataset, eps: float = 1e-15) -> List[float]:
     """Calculates the logarithmic loss per row for a classification model.
 
     Log loss measures the performance of a classification model where the prediction

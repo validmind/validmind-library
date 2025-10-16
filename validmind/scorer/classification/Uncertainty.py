@@ -14,7 +14,7 @@ from validmind.vm_models import VMDataset, VMModel
 @scorer()
 @tasks("classification")
 @tags("classification")
-def Uncertainty(model: VMModel, dataset: VMDataset, **kwargs) -> List[float]:
+def Uncertainty(model: VMModel, dataset: VMDataset) -> List[float]:
     """Calculates the prediction uncertainty per row for a classification model.
 
     Uncertainty is measured using the entropy of the predicted probability distribution.

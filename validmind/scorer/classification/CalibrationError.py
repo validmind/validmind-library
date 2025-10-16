@@ -15,7 +15,7 @@ from validmind.vm_models import VMDataset, VMModel
 @tasks("classification")
 @tags("classification")
 def CalibrationError(
-    model: VMModel, dataset: VMDataset, n_bins: int = 10, **kwargs
+    model: VMModel, dataset: VMDataset, n_bins: int = 10
 ) -> List[float]:
     """Calculates the calibration error per row for a classification model.
 
