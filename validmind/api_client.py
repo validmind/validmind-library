@@ -244,12 +244,7 @@ def init(
 
 def reload():
     """Reconnect to the ValidMind API and reload the project configuration."""
-
-    try:
-        _ping()
-    except Exception as e:
-        # Re-raise without external error reporting
-        raise e
+    _ping()
 
 
 async def aget_metadata(content_id: str) -> Dict[str, Any]:
