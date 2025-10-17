@@ -12,7 +12,7 @@ banking_test_dataset = pd.DataFrame([
         "category": "credit_risk"
     },
     {
-        "input": "Evaluate credit risk for a business loan of $250,000 with monthly revenue of $85,000 and existing debt of $45,000",
+        "input": "Evaluate credit risk for a business loan of $250,000 with monthly revenue of $85,000 and existing debt of $45,000 and credit score of 650",
         "expected_tools": ["credit_risk_analyzer"],
         "possible_outputs": ["MEDIUM RISK", "HIGH RISK", "business loan", "debt service coverage ratio", "1.8", "annual revenue", "$1,020,000", "risk score", "650"],
         "session_id": str(uuid.uuid4()),

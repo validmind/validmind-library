@@ -141,9 +141,7 @@ class LLMAgentDataset(VMDataset):
                 "retrieval_context": self._serialize_list_field(
                     getattr(test_case, "retrieval_context", None)
                 ),
-                "tools_called": self._serialize_tools_field(
-                    getattr(test_case, "tools_called", None)
-                ),
+                "tools_called": getattr(test_case, "tools_called", None),
                 "expected_tools": self._serialize_tools_field(
                     getattr(test_case, "expected_tools", None)
                 ),

@@ -226,3 +226,6 @@ my_tests/
 # Quarto docs
 docs/validmind.json
 *.html
+*.qmd
+# DeepEval
+*.deepeval/
