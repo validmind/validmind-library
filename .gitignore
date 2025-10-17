@@ -227,5 +227,6 @@ my_tests/
 docs/validmind.json
 *.html
 *.qmd
+
 # DeepEval
 *.deepeval/
