@@ -25,7 +25,6 @@ def ProbabilityError(model: VMModel, dataset: VMDataset) -> List[float]:
     Args:
         model: The classification model to evaluate
         dataset: The dataset containing true labels and predicted probabilities
-        **kwargs: Additional parameters (unused for compatibility)
 
     Returns:
         List[float]: Per-row probability errors as a list of float values

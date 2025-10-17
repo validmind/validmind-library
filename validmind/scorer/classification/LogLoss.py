@@ -25,7 +25,6 @@ def LogLoss(model: VMModel, dataset: VMDataset, eps: float = 1e-15) -> List[floa
         model: The classification model to evaluate
         dataset: The dataset containing true labels and predicted probabilities
         eps: Small value to avoid log(0), defaults to 1e-15
-        **kwargs: Additional parameters (unused for compatibility)
 
     Returns:
         List[float]: Per-row log loss values as a list of float values

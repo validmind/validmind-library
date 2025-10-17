@@ -24,7 +24,6 @@ def Correctness(model: VMModel, dataset: VMDataset) -> List[int]:
     Args:
         model: The classification model to evaluate
         dataset: The dataset containing true labels and predictions
-        **kwargs: Additional parameters (unused for compatibility)
 
     Returns:
         List[int]: Per-row correctness as a list of 1s and 0s
