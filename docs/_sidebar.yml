@@ -10,7 +10,7 @@ website:
         - text: "---"
         - text: "Python API"
         # Root level items from validmind.qmd
-        - text: "<span class='version'>`2.8.25`</span>"
+        - text: "<span class='version'>`2.10.0`</span>"
           file: validmind/validmind.qmd#version__
         - text: "init<span class='suffix'></span>"
           file: validmind/validmind.qmd#init
@@ -40,6 +40,8 @@ website:
           file: validmind/validmind.qmd#tasks
         - text: "test<span class='suffix'></span>"
           file: validmind/validmind.qmd#test
+        - text: "scorer_decorator<span class='suffix'></span>"
+          file: validmind/validmind.qmd#scorer_decorator
         - text: "log_text<span class='suffix'></span>"
           file: validmind/validmind.qmd#log_text
         - text: "experimental_agent<span class='suffix'></span>"
@@ -75,6 +77,13 @@ website:
                   file: validmind/validmind/datasets/credit_risk/lending_club.qmd
                 - text: "lending_club_bias"
                   file: validmind/validmind/datasets/credit_risk/lending_club_bias.qmd
+            - text: "llm"
+              file: validmind/validmind/datasets/llm.qmd
+              contents:
+                - text: "rag"
+                  file: validmind/validmind/datasets/llm/rag.qmd
+                - text: "rfp"
+                  file: validmind/validmind/datasets/llm/rag/rfp.qmd
             - text: "nlp"
               file: validmind/validmind/datasets/nlp.qmd
               contents:
@@ -91,6 +100,8 @@ website:
                   file: validmind/validmind/datasets/regression/lending_club.qmd
         - text: "errors"
           file: validmind/validmind/errors.qmd
+        - text: "scorer"
+          file: validmind/validmind/scorer.qmd
         - text: "test_suites"
           file: validmind/validmind/test_suites.qmd
           contents:
@@ -407,6 +418,17 @@ website:
                   file: validmind/validmind/tests/model_validation/statsmodels.qmd
                 - text: "statsutils"
                   file: validmind/validmind/tests/model_validation/statsmodels/statsutils.qmd
+            - text: "plots"
+              file: validmind/validmind/tests/plots.qmd
+              contents:
+                - text: "BoxPlot"
+                  file: validmind/validmind/tests/plots/BoxPlot.qmd
+                - text: "CorrelationHeatmap"
+                  file: validmind/validmind/tests/plots/CorrelationHeatmap.qmd
+                - text: "HistogramPlot"
+                  file: validmind/validmind/tests/plots/HistogramPlot.qmd
+                - text: "ViolinPlot"
+                  file: validmind/validmind/tests/plots/ViolinPlot.qmd
             - text: "prompt_validation"
               file: validmind/validmind/tests/prompt_validation.qmd
               contents:
@@ -426,6 +448,17 @@ website:
                   file: validmind/validmind/tests/prompt_validation/Specificity.qmd
                 - text: "ai_powered_test"
                   file: validmind/validmind/tests/prompt_validation/ai_powered_test.qmd
+            - text: "stats"
+              file: validmind/validmind/tests/stats.qmd
+              contents:
+                - text: "CorrelationAnalysis"
+                  file: validmind/validmind/tests/stats/CorrelationAnalysis.qmd
+                - text: "DescriptiveStats"
+                  file: validmind/validmind/tests/stats/DescriptiveStats.qmd
+                - text: "NormalityTests"
+                  file: validmind/validmind/tests/stats/NormalityTests.qmd
+                - text: "OutlierDetection"
+                  file: validmind/validmind/tests/stats/OutlierDetection.qmd
         - text: "unit_metrics"
           file: validmind/validmind/unit_metrics.qmd
         - text: "vm_models"

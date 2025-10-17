@@ -18,7 +18,7 @@ toc-expand: 4
 
 <span class="decorator">@<span class="n">tasks(<span class="s">'text_classification'</span>, <span class="s">'text_summarization'</span>)</span></span> </span>
 
-<span class="kw">def</span><span class="name">Robustness</span>(<span class="params"><span class="n">model</span><span class="muted">,</span></span><span class="params"><span class="n">dataset</span><span class="muted">,</span></span><span class="params"><span class="n">num_tests</span><span class="o">=</span><span class="kc">10</span><span class="muted">,</span></span><span class="params"><span class="n">judge_llm</span><span class="o">=</span><span class="kc">None</span></span>):
+<span class="kw">def</span><span class="name">Robustness</span>(<span class="params"><span class="n">model</span><span class="muted">,</span></span><span class="params"><span class="n">dataset</span><span class="muted">,</span></span><span class="params"><span class="n">num_tests</span><span class="o">=</span><span class="kc">10</span><span class="muted">,</span></span><span class="params"><span class="n">judge_llm</span><span class="o">=</span><span class="kc">None</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">Tuple</span><span class="p">\[</span><span class="n">List</span><span class="p">\[</span><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span><span class="p">\]</span><span class="p">, </span><span class="nb">bool</span><span class="p">, </span><a href="/validmind/validmind/vm_models.qmd#rawdata">validmind.vm_models.RawData</a><span class="p">\]</span></span>:
 
 :::
 
