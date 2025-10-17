@@ -789,11 +789,7 @@ class TextGenerationResult(Result):
         """Log the result to ValidMind.
 
         Args:
-            section_id (str): The section ID within the model document to insert the
-                test result.
             content_id (str): The content ID to log the result to.
-            position (int): The position (index) within the section to insert the test
-                result.
         """
         # Check description text for PII when available
         if self.description:
