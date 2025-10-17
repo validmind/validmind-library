@@ -9,6 +9,6 @@ sidebar: validmind-reference
 
 ::: {.signature}
 
-<span class="name">2.8.25</span>
+<span class="name">2.10.0</span>
 
 :::

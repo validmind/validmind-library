@@ -18,7 +18,7 @@ toc-expand: 4
 
 <span class="decorator">@<span class="n">tasks(<span class="s">'regression'</span>)</span></span> </span>
 
-<span class="kw">def</span><span class="name">TimeSeriesDescription</span>(<span class="param"><span class="n">dataset</span></span>):
+<span class="kw">def</span><span class="name">TimeSeriesDescription</span>(<span class="param"><span class="n">dataset</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">pd</span>.<span class="n">DataFrame</span></span>:
 
 :::
 

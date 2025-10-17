@@ -1,0 +1,56 @@
+---
+title: "[validmind](/validmind/validmind.qmd).ViolinPlot"
+sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
+# module.qmd.jinja2
+---
+
+<!-- function.qmd.jinja2 -->
+
+## ViolinPlot<span class="suffix"></span>
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="decorators"><span class="decorator">@<span class="n">tags(<span class="s">'tabular_data'</span>, <span class="s">'visualization'</span>, <span class="s">'distribution'</span>)</span></span>
+
+<span class="decorator">@<span class="n">tasks(<span class="s">'classification'</span>, <span class="s">'regression'</span>, <span class="s">'clustering'</span>)</span></span> </span>
+
+<span class="kw">def</span><span class="name">ViolinPlot</span>(<span class="params"><span class="n">dataset</span><span class="p">:</span><a href="/validmind/validmind/vm_models.qmd#vmdataset">validmind.vm_models.VMDataset</a><span class="muted">,</span></span><span class="params"><span class="n">columns</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">List</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">group_by</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">width</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="kc">800</span><span class="muted">,</span></span><span class="params"><span class="n">height</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="kc">600</span></span>)<span class="p"> → </span><span class="return-annotation"><a href="/validmind/validmind/vm_models.qmd#px">validmind.vm_models.px</a>.<a href="/validmind/validmind/vm_models.qmd#violin">validmind.vm_models.violin</a></span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Generates interactive violin plots for numerical features using Plotly.
+
+### Purpose
+
+This test creates violin plots to visualize the distribution of numerical features, showing both the probability density and summary statistics. Violin plots combine aspects of box plots and kernel density estimation for rich distribution visualization.
+
+### Test Mechanism
+
+The test creates violin plots for specified numerical columns, with optional grouping by categorical variables. Each violin shows the distribution shape, quartiles, and median values.
+
+### Signs of High Risk
+
+- Multimodal distributions that might indicate mixed populations
+- Highly skewed distributions suggesting data quality issues
+- Large differences in distribution shapes across groups
+- Unusual distribution patterns that contradict domain expectations
+
+### Strengths
+
+- Shows detailed distribution shape information
+- Interactive Plotly visualization with hover details
+- Effective for comparing distributions across groups
+- Combines density estimation with quartile information
+
+### Limitations
+
+- Limited to numerical features only
+- Requires sufficient data points for meaningful density estimation
+- May not be suitable for discrete variables
+- Can be misleading with very small sample sizes

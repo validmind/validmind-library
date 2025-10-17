@@ -18,7 +18,7 @@ toc-expand: 4
 
 <span class="decorator">@<span class="n">tasks(<span class="s">'regression'</span>, <span class="s">'time_series_forecasting'</span>)</span></span> </span>
 
-<span class="kw">def</span><span class="name">RegressionR2SquareComparison</span>(<span class="params"><span class="n">datasets</span><span class="muted">,</span></span><span class="params"><span class="n">models</span></span>):
+<span class="kw">def</span><span class="name">RegressionR2SquareComparison</span>(<span class="params"><span class="n">datasets</span><span class="p">:</span><span class="n">List</span><span class="p">\[</span><a href="/validmind/validmind/vm_models.qmd#vmdataset">validmind.vm_models.VMDataset</a><span class="p">\]</span><span class="muted">,</span></span><span class="params"><span class="n">models</span><span class="p">:</span><span class="n">List</span><span class="p">\[</span><a href="/validmind/validmind/vm_models.qmd#vmmodel">validmind.vm_models.VMModel</a><span class="p">\]</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">pd</span>.<span class="n">DataFrame</span></span>:
 
 :::
 

@@ -21,7 +21,7 @@ To initialize the ValidMind Library, paste the code snippet with the model ident
 import validmind as vm
 
 vm.init(
-  api_host = "https://api.dev.vm.validmind.ai/api/v1/tracking/tracking",
+  api_host = "https://app.prod.validmind.ai/api/v1/tracking/tracking",
   api_key = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
   api_secret = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
   project = "<project-identifier>"

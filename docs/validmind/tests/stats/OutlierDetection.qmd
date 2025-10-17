@@ -1,0 +1,57 @@
+---
+title: "[validmind](/validmind/validmind.qmd).OutlierDetection"
+sidebar: validmind-reference
+toc-depth: 4
+toc-expand: 4
+# module.qmd.jinja2
+---
+
+<!-- function.qmd.jinja2 -->
+
+## OutlierDetection<span class="suffix"></span>
+
+<!-- signatures.jinja2 -->
+
+::: {.signature}
+
+<span class="decorators"><span class="decorator">@<span class="n">tags(<span class="s">'tabular_data'</span>, <span class="s">'statistics'</span>, <span class="s">'outliers'</span>)</span></span>
+
+<span class="decorator">@<span class="n">tasks(<span class="s">'classification'</span>, <span class="s">'regression'</span>, <span class="s">'clustering'</span>)</span></span> </span>
+
+<span class="kw">def</span><span class="name">OutlierDetection</span>(<span class="params"><span class="n">dataset</span><span class="p">:</span><a href="/validmind/validmind/vm_models.qmd#vmdataset">validmind.vm_models.VMDataset</a><span class="muted">,</span></span><span class="params"><span class="n">columns</span><span class="p">:</span><span class="n">Optional</span><span class="p">\[</span><span class="n">List</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="p">\]</span><span class="o">=</span><span class="kc">None</span><span class="muted">,</span></span><span class="params"><span class="n">methods</span><span class="p">:</span><span class="n">List</span><span class="p">\[</span><span class="nb">str</span><span class="p">\]</span><span class="o">=</span><span class="p">\[</span><span class="s">'iqr'</span><span class="p">, </span><span class="s">'zscore'</span><span class="p">, </span><span class="s">'isolation_forest'</span><span class="p">\]</span><span class="muted">,</span></span><span class="params"><span class="n">iqr_threshold</span><span class="p">:</span><span class="nb">float</span><span class="o">=</span><span class="kc">1.5</span><span class="muted">,</span></span><span class="params"><span class="n">zscore_threshold</span><span class="p">:</span><span class="nb">float</span><span class="o">=</span><span class="kc">3.0</span><span class="muted">,</span></span><span class="params"><span class="n">contamination</span><span class="p">:</span><span class="nb">float</span><span class="o">=</span><span class="kc">0.1</span></span>)<span class="p"> → </span><span class="return-annotation"><span class="n">Dict</span><span class="p">\[</span><span class="nb">str</span><span class="p">, </span><span class="n">Any</span><span class="p">\]</span></span>:
+
+:::
+
+<!-- docstring.jinja2 -->
+
+Detects outliers in numerical features using multiple statistical methods.
+
+### Purpose
+
+This test identifies outliers in numerical features using various statistical methods including IQR, Z-score, and Isolation Forest. It provides comprehensive outlier detection to help identify data quality issues and potential anomalies.
+
+### Test Mechanism
+
+The test applies multiple outlier detection methods:
+
+- IQR method: Values beyond Q1 - 1.5*IQR or Q3 + 1.5*IQR
+- Z-score method: Values with |z-score| > threshold
+- Isolation Forest: ML-based anomaly detection
+
+### Signs of High Risk
+
+- High percentage of outliers indicating data quality issues
+- Inconsistent outlier detection across methods
+- Extreme outliers that significantly deviate from normal patterns
+
+### Strengths
+
+- Multiple detection methods for robust outlier identification
+- Customizable thresholds for different sensitivity levels
+- Clear summary of outlier patterns across features
+
+### Limitations
+
+- Limited to numerical features only
+- Some methods assume normal distributions
+- Threshold selection can be subjective
