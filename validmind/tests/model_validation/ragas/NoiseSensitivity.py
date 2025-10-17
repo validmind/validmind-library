@@ -153,7 +153,7 @@ def NoiseSensitivity(
 
     result_df = evaluate(
         Dataset.from_pandas(df),
-        metrics=[noise_sensitivity(focus=focus)],
+        metrics=[noise_sensitivity()],
         **get_ragas_config(judge_llm, judge_embeddings),
     ).to_pandas()
 
