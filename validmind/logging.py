@@ -7,14 +7,7 @@
 import logging
 import os
 import time
-from typing import Any, Awaitable, Callable, Dict, Optional, TypeVar
-
-import sentry_sdk
-from sentry_sdk.utils import event_from_exception, exc_info_from_error
-
-from .__version__ import __version__
-
-__dsn = "https://48f446843657444aa1e2c0d716ef864b@o1241367.ingest.sentry.io/4505239625465856"
+from typing import Any, Awaitable, Callable, Optional, TypeVar
 
 
 def _get_log_level() -> int:
@@ -53,45 +46,6 @@ def get_logger(
     logger.propagate = False
 
     return logger
-
-
-def init_sentry(server_config: Dict[str, Any]) -> None:
-    """Initialize Sentry SDK for sending logs back to ValidMind.
-
-    This will usually only be called by the API client module to initialize the
-    Sentry connection after the user calls `validmind.init()`. This is because the DSN
-    and other config options will be returned by the API.
-
-    Args:
-        server_config (Dict[str, Any]): The config dictionary returned by the API.
-            - send_logs (bool): Whether to send logs to Sentry (gets removed).
-            - dsn (str): The Sentry DSN.
-            ...: Other config options for Sentry.
-
-    Returns:
-        None.
-    """
-    if os.getenv("VM_NO_TELEMETRY", False):
-        return
-
-    if not server_config.get("send_logs", False):
-        return
-
-    config = {
-        "dsn": __dsn,
-        "traces_sample_rate": 1.0,
-        "release": f"validmind-python@{__version__}",
-        "in_app_include": ["validmind"],
-        "environment": "production",
-    }
-    config.update({k: v for k, v in server_config.items() if k != "send_logs"})
-
-    try:
-        sentry_sdk.init(**config)
-    except Exception as e:
-        logger = get_logger(__name__)
-        logger.info("Sentry failed to initialize - ignoring...")
-        logger.debug(f"Sentry error: {str(e)}")
 
 
 F = TypeVar("F", bound=Callable[..., Any])
@@ -216,16 +170,3 @@ def log_api_operation(
         return wrapped
 
     return decorator
-
-
-def send_single_error(error: Exception) -> None:
-    """Send a single error to Sentry.
-
-    Args:
-        error (Exception): The exception to send.
-    """
-    event, hint = event_from_exception(exc_info_from_error(error))
-    client = sentry_sdk.Client(__dsn, release=f"validmind-python@{__version__}")
-    client.capture_event(event, hint=hint)
-
-    time.sleep(0.25)  # wait for the event to be sent
