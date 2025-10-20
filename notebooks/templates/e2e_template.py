@@ -2,6 +2,8 @@ import nbformat
 import os
 import uuid
 import subprocess
+import json
+from typing import Tuple
 
 def ensure_ids(notebook):
     """Ensure every cell in the notebook has a unique id."""
@@ -16,7 +18,7 @@ def create_notebook():
     if not filename:
         print("Filename cannot be empty, file not created")
         return
-    
+
     if not filename.endswith(".ipynb"):
         filename += ".ipynb"
 
@@ -47,7 +49,7 @@ def create_notebook():
         with open(filepath, "w") as f:
             nbformat.write(notebook, f)
         print(f"Created '{filepath}'")
-        
+
         subprocess.run(["code", filepath], check=True)
     except Exception as e:
         print(f"Error creating or opening notebook: {e}")
@@ -106,7 +108,7 @@ def add_about(filepath):
     except Exception as e:
         print(f"Error reading notebooks: {e}")
         return
-    
+
     for cell in source_notebook.cells:
         original_id = cell.get("id", f"cell-{uuid.uuid4()}")
         new_id = f"{original_id}-{uuid.uuid4()}"
@@ -122,10 +124,92 @@ def add_about(filepath):
     except Exception as e:
         print(f"Error appending notebooks: {e}")
 
+def _remove_cells_by_id_prefix(nb: dict, prefix: str, cell_type: str = "markdown") -> Tuple[dict, int]:
+    """Remove notebook cells whose id starts with `prefix`.
+    Returns (possibly-updated-notebook, number_removed).
+    Handles nbformat v4+ (nb["cells"]) and older v3-style (nb["worksheets"][0]["cells"]).
+    """
+    removed = 0
+
+    # v4 path
+    if isinstance(nb, dict) and isinstance(nb.get("cells"), list):
+        new_cells = []
+        for c in nb["cells"]:
+            cid = str(c.get("id", "") or c.get("metadata", {}).get("id", ""))
+            if c.get("cell_type") == cell_type and cid.startswith(prefix):
+                removed += 1
+                continue
+            new_cells.append(c)
+        if removed:
+            nb = {**nb, "cells": new_cells}
+        return nb, removed
+
+    # v3 path (very old notebooks)
+    if isinstance(nb.get("worksheets"), list) and nb["worksheets"]:
+        ws = nb["worksheets"][0]
+        if isinstance(ws.get("cells"), list):
+            new_cells = []
+            for c in ws["cells"]:
+                cid = str(c.get("id", "") or c.get("metadata", {}).get("id", ""))
+                if c.get("cell_type") == cell_type and cid.startswith(prefix):
+                    removed += 1
+                    continue
+                new_cells.append(c)
+            if removed:
+                ws = {**ws, "cells": new_cells}
+                nb = {**nb, "worksheets": [ws] + nb["worksheets"][1:]}
+        return nb, removed
+
+    return nb, removed
+
+def _remove_cells_by_id_prefix(nb: dict, prefix: str, cell_type: str = "markdown") -> Tuple[dict, int]:
+    """Remove notebook cells whose id starts with `prefix`.
+    Returns (possibly-updated-notebook, number_removed).
+    Handles nbformat v4+ (nb["cells"]) and older v3-style (nb["worksheets"][0]["cells"]).
+    """
+    removed = 0
+
+    # v4 path
+    if isinstance(nb, dict) and isinstance(nb.get("cells"), list):
+        new_cells = []
+        for c in nb["cells"]:
+            cid = str(c.get("id", "") or c.get("metadata", {}).get("id", ""))
+            if c.get("cell_type") == cell_type and cid.startswith(prefix):
+                removed += 1
+                continue
+            new_cells.append(c)
+        if removed:
+            nb = {**nb, "cells": new_cells}
+        return nb, removed
+
+    # v3 path (very old notebooks)
+    if isinstance(nb.get("worksheets"), list) and nb["worksheets"]:
+        ws = nb["worksheets"][0]
+        if isinstance(ws.get("cells"), list):
+            new_cells = []
+            for c in ws["cells"]:
+                cid = str(c.get("id", "") or c.get("metadata", {}).get("id", ""))
+                if c.get("cell_type") == cell_type and cid.startswith(prefix):
+                    removed += 1
+                    continue
+                new_cells.append(c)
+            if removed:
+                ws = {**ws, "cells": new_cells}
+                nb = {**nb, "worksheets": [ws] + nb["worksheets"][1:]}
+        return nb, removed
+
+    return nb, removed
+
+
 def replace_variables(filepath):
-    """Replaces target variables in the open file based on user input."""
+    """Replaces target variables in the file based on user input.
+
+    If user types "SKIP" for {template}, the function removes any Jupyter Notebook
+    *markdown* cell whose `id` starts with "install-template" from the notebook
+    file and does NOT perform the {template} text replacement.
+    """
     try:
-        with open(filepath, "r") as file:
+        with open(filepath, "r", encoding="utf-8") as file:
             content = file.read()
 
         # Track if any replacements were made
@@ -133,8 +217,24 @@ def replace_variables(filepath):
 
         # Locate and replace {template}
         if "{template}" in content:
-            template_value = input("Enter a value to replace {template}: ").strip()
-            if not template_value:
+            prompt = (
+                "Enter a value to replace {template} or type SKIP to exclude the template selection instructions: "
+            )
+            template_value = input(prompt).strip()
+
+            if template_value.upper() == "SKIP":
+                # Remove markdown cells with id prefix 'install-template'
+                try:
+                    nb = json.loads(content)
+                    nb, removed = _remove_cells_by_id_prefix(nb, "install-template", cell_type="markdown")
+                    if removed:
+                        content = json.dumps(nb, ensure_ascii=False, indent=1)
+                        print(f"Skipped template selection; removed {removed} markdown cell(s) with id starting 'install-template'.")
+                    else:
+                        print("Skipped template selection; no matching markdown cells found.")
+                except json.JSONDecodeError:
+                    print("Skipped template selection; file content is not valid notebook JSON.")
+            elif not template_value:
                 print("No value entered for {template}, skipping replacement")
             else:
                 content = content.replace("{template}", template_value)
@@ -151,13 +251,17 @@ def replace_variables(filepath):
                 print(f"Use case: {use_case_value}")
                 replacements_made = True
 
-        with open(filepath, "w") as file:
+        with open(filepath, "w", encoding="utf-8") as file:
+            # Ensure trailing newline for cleaner diffs
+            if not content.endswith("\n"):
+                content += "\n"
             file.write(content)
 
         if replacements_made:
-            print(f"Replaced template and use case variables in '{filepath}'")
+            print(f"Replaced template and/or use case variables in '{filepath}'")
     except Exception as e:
         print(f"Error replacing variables in file: {e}")
+
 
 def add_install(filepath):
     """Appends the contents of 'install-initialize-validmind.ipynb' to the specified notebook if the user agrees."""
@@ -181,7 +285,7 @@ def add_install(filepath):
     except Exception as e:
         print(f"Error reading notebooks: {e}")
         return
-    
+
     for cell in source_notebook.cells:
         original_id = cell.get("id", f"cell-{uuid.uuid4()}")
         new_id = f"{original_id}-{uuid.uuid4()}"
@@ -221,7 +325,7 @@ def next_steps(filepath):
     except Exception as e:
         print(f"Error reading notebooks: {e}")
         return
-    
+
     for cell in source_notebook.cells:
         original_id = cell.get("id", f"cell-{uuid.uuid4()}")
         new_id = f"{original_id}-{uuid.uuid4()}"
@@ -259,7 +363,7 @@ def add_upgrade(filepath):
     except Exception as e:
         print(f"Error reading notebooks: {e}")
         return
-    
+
     for cell in source_notebook.cells:
         original_id = cell.get("id", f"cell-{uuid.uuid4()}")
         new_id = f"{original_id}-{uuid.uuid4()}"
