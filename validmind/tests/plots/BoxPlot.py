@@ -124,7 +124,7 @@ def _create_multiple_boxplots(
     dataset, columns, colors, show_outliers, title_prefix, width, height
 ):
     """Create multiple column box plots in subplot layout."""
-    n_cols = min(3, len(columns))
+    n_cols = min(2, len(columns))
     n_rows = (len(columns) + n_cols - 1) // n_cols
 
     subplot_titles = [f"{title_prefix} {col}" for col in columns]
@@ -132,8 +132,8 @@ def _create_multiple_boxplots(
         rows=n_rows,
         cols=n_cols,
         subplot_titles=subplot_titles,
-        vertical_spacing=0.1,
-        horizontal_spacing=0.1,
+        vertical_spacing=0.2,  # Increased vertical spacing between plots
+        horizontal_spacing=0.15,  # Increased horizontal spacing between plots
     )
 
     for idx, column in enumerate(columns):
@@ -185,8 +185,8 @@ def BoxPlot(
     dataset: VMDataset,
     columns: Optional[List[str]] = None,
     group_by: Optional[str] = None,
-    width: int = 1200,
-    height: int = 600,
+    width: int = 1800,
+    height: int = 1200,
     colors: Optional[List[str]] = None,
     show_outliers: bool = True,
     title_prefix: str = "Box Plot of",
