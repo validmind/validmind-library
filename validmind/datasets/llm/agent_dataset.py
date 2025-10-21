@@ -135,16 +135,10 @@ class LLMAgentDataset(VMDataset):
                 "input": test_case.input,
                 "actual_output": test_case.actual_output,
                 "expected_output": getattr(test_case, "expected_output", None),
-                "context": self._serialize_list_field(
-                    getattr(test_case, "context", None)
-                ),
-                "retrieval_context": self._serialize_list_field(
-                    getattr(test_case, "retrieval_context", None)
-                ),
+                "context": getattr(test_case, "context", None),
+                "retrieval_context": getattr(test_case, "retrieval_context", None),
                 "tools_called": getattr(test_case, "tools_called", None),
-                "expected_tools": self._serialize_tools_field(
-                    getattr(test_case, "expected_tools", None)
-                ),
+                "expected_tools": getattr(test_case, "expected_tools", None),
                 "type": "test_case",
             }
             data.append(row)
@@ -156,16 +150,10 @@ class LLMAgentDataset(VMDataset):
                 "input": golden.input,
                 "actual_output": getattr(golden, "actual_output", None),
                 "expected_output": getattr(golden, "expected_output", None),
-                "context": self._serialize_list_field(getattr(golden, "context", None)),
-                "retrieval_context": self._serialize_list_field(
-                    getattr(golden, "retrieval_context", None)
-                ),
-                "tools_called": self._serialize_tools_field(
-                    getattr(golden, "tools_called", None)
-                ),
-                "expected_tools": self._serialize_tools_field(
-                    getattr(golden, "expected_tools", None)
-                ),
+                "context": getattr(golden, "context", None),
+                "retrieval_context": getattr(golden, "retrieval_context", None),
+                "tools_called": getattr(golden, "tools_called", None),
+                "expected_tools": getattr(golden, "expected_tools", None),
                 "type": "golden",
             }
             data.append(row)
@@ -187,51 +175,6 @@ class LLMAgentDataset(VMDataset):
             ]
 
         return pd.DataFrame(data)
-
-    def _serialize_list_field(self, field: Optional[List[str]]) -> str:
-        """Serialize list field to string for DataFrame storage.
-
-        Args:
-            field (Optional[List[str]]): List of strings to serialize.
-
-        Returns:
-            str: Pipe-delimited string.
-        """
-        if field is None:
-            return ""
-        return "|".join(str(item) for item in field)
-
-    def _serialize_tools_field(self, tools: Optional[List]) -> str:
-        """Serialize tools list to string for DataFrame storage.
-
-        Args:
-            tools (Optional[List]): List of tool objects or names.
-
-        Returns:
-            str: Pipe-delimited string of tool names.
-        """
-        if tools is None:
-            return ""
-        tool_strs = []
-        for tool in tools:
-            if hasattr(tool, "name"):
-                tool_strs.append(tool.name)
-            else:
-                tool_strs.append(str(tool))
-        return "|".join(tool_strs)
-
-    def _deserialize_list_field(self, field_str: str) -> List[str]:
-        """Deserialize string back to list.
-
-        Args:
-            field_str (str): Pipe-delimited string.
-
-        Returns:
-            List[str]: List of string tokens.
-        """
-        if not field_str:
-            return []
-        return field_str.split("|")
 
     @classmethod
     def from_test_cases(
@@ -460,12 +403,8 @@ class LLMAgentDataset(VMDataset):
                         if pd.notna(row["actual_output"])
                         else "",
                         expected_output=expected_output_val,
-                        context=self._deserialize_list_field(context_val)
-                        if context_val
-                        else None,
-                        retrieval_context=self._deserialize_list_field(
-                            retrieval_context_val
-                        )
+                        context=context_val if context_val else None,
+                        retrieval_context=retrieval_context_val
                         if retrieval_context_val
                         else None,
                         # Note: tools_called deserialization would need more complex logic
