@@ -97,7 +97,7 @@ def GEval(
     evaluation_params = {
         LLMTestCaseParams.INPUT,
         LLMTestCaseParams.ACTUAL_OUTPUT,
-        LLMTestCaseParams.EXPECTED_OUTPUT
+        LLMTestCaseParams.EXPECTED_OUTPUT,
     }
 
     rubrics_list = []
@@ -114,7 +114,6 @@ def GEval(
         strict_mode=strict_mode,
         verbose_mode=False,
         threshold=threshold,
-
     )
 
     results: List[Dict[str, Any]] = []
