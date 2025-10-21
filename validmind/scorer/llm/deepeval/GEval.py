@@ -35,8 +35,8 @@ def GEval(
     metric_name: str,
     criteria: str,
     evaluation_steps: List[str] = [],
-    rubrics: List[Dict[str, Any]] = [],
-    strict_mode: bool = False,
+    rubric: List[Rubric] = None,
+    strict_mode: bool = True,
     threshold: float = 0.5,
 ) -> List[Dict[str, Any]]:
     """Detects evaluation criteria in LLM outputs using deepeval's GEval metric.
@@ -45,15 +45,23 @@ def GEval(
     (https://arxiv.org/pdf/2303.16634.pdf) to assess outputs against defined criteria and rubrics. The scorer processes each row
     in the dataset and returns evaluation scores and explanations.
 
+    The GEval metric requires the dataset to contain 'input', 'actual_output', and 'expected_output' columns. The 'input' column
+    should contain the prompts given to the LLM, 'actual_output' should contain the LLM's responses, and 'expected_output' should
+    contain the expected/reference responses.
+
     Args:
-        dataset (VMDataset): Dataset containing input prompts and LLM outputs to evaluate
-        metric_name (str): Name of the GEval metric to use for evaluation
-        criteria (str): Evaluation criteria to assess the outputs against
-        evaluation_steps (List[str], optional): Specific steps to follow during evaluation. Defaults to empty list.
-        rubrics (List[Dict[str, Any]], optional): List of rubric dictionaries defining evaluation criteria. Each rubric should
-            contain score and description. Defaults to empty list.
+        dataset (VMDataset): Dataset containing input prompts and LLM outputs to evaluate. Must have columns:
+            - input: Prompts given to the LLM
+            - actual_output: LLM's responses to evaluate
+            - expected_output: Expected/reference responses
+        metric_name (str): Name of the GEval metric to use for evaluation (e.g., "response_quality", "factual_accuracy")
+        criteria (str): Evaluation criteria to assess the outputs against. Should clearly specify what aspects to evaluate.
+        evaluation_steps (List[str], optional): Step-by-step instructions for evaluation. Each step should be a clear directive.
+            Defaults to empty list.
+        rubric (List[Rubric], optional): List of Rubric objects defining evaluation criteria. Each rubric should specify
+            scoring criteria and descriptions. Defaults to None.
         strict_mode (bool, optional): If True, enforces binary scoring (0 or 1). If False, allows fractional scores.
-            Defaults to False.
+            Defaults to True.
         threshold (float, optional): Minimum score threshold for considering an evaluation successful. Range 0.0-1.0.
             Defaults to 0.5.
 
@@ -61,20 +69,26 @@ def GEval(
         List[Dict[str, Any]]: List of evaluation results per dataset row. Each dictionary contains:
             - score (float): Evaluation score between 0.0 and 1.0 (or 0/1 if strict_mode=True)
             - reason (str): Detailed explanation of the evaluation and score assignment
+            - metric_name (str): Name of the metric used for evaluation
+            - criteria (str): Evaluation criteria used
+            - threshold (float): Score threshold used
 
     Raises:
-        ValueError: If required input, actual_output or expected_output columns are missing from dataset
+        ValueError: If required columns ('input', 'actual_output', 'expected_output') are missing from dataset
         MissingDependencyError: If the required deepeval package is not installed
 
     Example:
-        results = GEval(
-            dataset=my_dataset,
-            metric_name="response_quality",
-            criteria="Response should be clear, accurate and well-structured",
-            rubrics=[{"score": 1, "description": "Perfect response"},
-                    {"score": 0, "description": "Poor response"}],
-            strict_mode=True
-        )
+        >>> results = GEval(
+        ...     dataset=my_dataset,
+        ...     metric_name="response_quality",
+        ...     criteria="Response should be clear, accurate and well-structured",
+        ...     rubric=[
+        ...         Rubric(score=1, description="Perfect response meeting all criteria"),
+        ...         Rubric(score=0, description="Response fails to meet criteria")
+        ...     ],
+        ...     strict_mode=True,
+        ...     threshold=0.7
+        ... )
     """
 
     # Validate required columns exist in dataset
@@ -93,10 +107,6 @@ def GEval(
         )
 
     _, model = get_client_and_model()
-
-    rubrics_list = []
-    if rubrics:
-        rubrics_list = [Rubric(**rubric) for rubric in rubrics]
 
     results: List[Dict[str, Any]] = []
     LLMTestCaseParamsValues = [e.value for e in LLMTestCaseParams]
@@ -122,7 +132,7 @@ def GEval(
             evaluation_params=evaluation_params,
             model=model,
             evaluation_steps=evaluation_steps if evaluation_steps else None,
-            rubric=rubrics_list if rubrics_list else None,
+            rubric=rubric if rubric else None,
             strict_mode=strict_mode,
             verbose_mode=False,
             threshold=threshold,
