@@ -6462,9 +6462,10 @@ tests = ["pytest"]
 name = "pyarrow"
 version = "14.0.2"
 description = "Python library for Apache Arrow"
-optional = false
+optional = true
 python-versions = ">=3.8"
 groups = ["main"]
+markers = "extra == \"all\" or extra == \"llm\" or extra == \"nlp\" or extra == \"datasets\""
 files = [
     {file = "pyarrow-14.0.2-cp310-cp310-macosx_10_14_x86_64.whl", hash = "sha256:ba9fe808596c5dbd08b3aeffe901e5f81095baaa28e7d5118e01354c64f22807"},
     {file = "pyarrow-14.0.2-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:22a768987a16bb46220cef490c56c671993fbee8fd0475febac0b3e16b00a10e"},
@@ -10549,4 +10550,4 @@ xgboost = ["xgboost"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.9,<3.13"
-content-hash = "cc7c7c9bda40f63b4902a0fde16f3858c93dbc8a252ef9f968c551785adb1e50"
+content-hash = "a71d5d3474039cdc4a5e81fed3a212aac66e5cd69e9ffe9e73a3403cd287865b"
