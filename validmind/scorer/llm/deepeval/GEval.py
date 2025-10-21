@@ -94,36 +94,39 @@ def GEval(
 
     _, model = get_client_and_model()
 
-    evaluation_params = {
-        LLMTestCaseParams.INPUT,
-        LLMTestCaseParams.ACTUAL_OUTPUT,
-        LLMTestCaseParams.EXPECTED_OUTPUT,
-    }
-
     rubrics_list = []
     if rubrics:
         rubrics_list = [Rubric(**rubric) for rubric in rubrics]
 
-    metric = geval(
-        name=metric_name,
-        criteria=criteria,
-        evaluation_params=evaluation_params,
-        model=model,
-        evaluation_steps=evaluation_steps if evaluation_steps else None,
-        rubric=rubrics_list if rubrics_list else None,
-        strict_mode=strict_mode,
-        verbose_mode=False,
-        threshold=threshold,
-    )
-
     results: List[Dict[str, Any]] = []
+    LLMTestCaseParamsValues = [e.value for e in LLMTestCaseParams]
+    columns = dataset._df.columns.tolist()
+
     for _, row in dataset._df.iterrows():
+        test_case_dict = {
+            param: row[param]
+            for param in LLMTestCaseParamsValues
+            if param in columns and row[param] is not None
+        }
         test_case = LLMTestCase(
-            input=row["input"],
-            actual_output=row["actual_output"],
-            expected_output=row["expected_output"],
+            **{param: row[param] for param in test_case_dict.keys()}
         )
 
+        evaluation_params = []
+        for param in test_case_dict.keys():
+            evaluation_params.append(getattr(LLMTestCaseParams, param.upper()))
+
+        metric = geval(
+            name=metric_name,
+            criteria=criteria,
+            evaluation_params=evaluation_params,
+            model=model,
+            evaluation_steps=evaluation_steps if evaluation_steps else None,
+            rubric=rubrics_list if rubrics_list else None,
+            strict_mode=strict_mode,
+            verbose_mode=False,
+            threshold=threshold,
+        )
         result = metric.measure(test_case)
         metric_name = metric_name.replace(" ", "_")
         results.append(
