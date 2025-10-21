@@ -49,6 +49,7 @@ all = [
   "textblob (>=0.18.0.post0,<0.19.0)",
   "evaluate",
   "rouge (>=1)",
+  "pyarrow (<16)",
   "bert-score (>=0.3.13)",
   "arch",
   "shap (>=0.46.0)",
