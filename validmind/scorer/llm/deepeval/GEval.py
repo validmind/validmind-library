@@ -34,6 +34,7 @@ def GEval(
     dataset: VMDataset,
     metric_name: str,
     criteria: str,
+    evaluation_params: Dict[LLMTestCaseParams, str],
     evaluation_steps: List[str] = [],
     rubric: List[Rubric] = None,
     strict_mode: bool = True,
@@ -90,46 +91,38 @@ def GEval(
         ...     threshold=0.7
         ... )
     """
-
-    # Validate required columns exist in dataset
-    if "input" not in dataset._df.columns:
-        raise ValueError(
-            f"Input column 'input' not found in dataset. Available columns: {dataset._df.columns.tolist()}"
-        )
-
-    if "actual_output" not in dataset._df.columns:
-        raise ValueError(
-            f"Actual output column 'actual_output' not found in dataset. Available columns: {dataset._df.columns.tolist()}"
-        )
-    if "expected_output" not in dataset._df.columns:
-        raise ValueError(
-            f"Expected output column 'expected_output' not found in dataset. Available columns: {dataset._df.columns.tolist()}"
-        )
-
     _, model = get_client_and_model()
 
     results: List[Dict[str, Any]] = []
-    LLMTestCaseParamsValues = [e.value for e in LLMTestCaseParams]
-    columns = dataset._df.columns.tolist()
+    evaluation_params_dict = {
+        value: key.value for key, value in evaluation_params.items()
+    }
+    df = dataset._df.copy(deep=True)
+    # Check if all evaluation parameter columns exist in dataframe
+    missing_cols = [col for col in evaluation_params_dict.keys() if col not in df.columns]
+    if missing_cols:
+        raise ValueError(f"Required columns missing from dataset: {missing_cols}")
+    df = df.rename(columns=evaluation_params_dict)
+    columns = df.columns.tolist()
 
-    for _, row in dataset._df.iterrows():
+    for _, row in df.iterrows():
         test_case_dict = {
-            param: row[param]
-            for param in LLMTestCaseParamsValues
-            if param in columns and row[param] is not None
+            key: row[key.value]
+            for key in evaluation_params.keys()
+            if key.value in columns and row[key.value] is not None
         }
         test_case = LLMTestCase(
-            **{param: row[param] for param in test_case_dict.keys()}
+            **{key.value: row[key.value] for key in test_case_dict.keys()}
         )
 
-        evaluation_params = []
-        for param in test_case_dict.keys():
-            evaluation_params.append(getattr(LLMTestCaseParams, param.upper()))
+        # evaluation_params = []
+        # for param in test_case_dict.keys():
+        #     evaluation_params.append(getattr(LLMTestCaseParams, param.upper()))
 
         metric = geval(
             name=metric_name,
             criteria=criteria,
-            evaluation_params=evaluation_params,
+            evaluation_params=list(test_case_dict.keys()),
             model=model,
             evaluation_steps=evaluation_steps if evaluation_steps else None,
             rubric=rubric if rubric else None,
