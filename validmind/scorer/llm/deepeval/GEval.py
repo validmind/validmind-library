@@ -137,10 +137,14 @@ def GEval(
             verbose_mode=False,
             threshold=threshold,
         )
-        result = metric.measure(test_case)
+        metric.measure(test_case)
         metric_name = metric_name.replace(" ", "_")
         results.append(
-            {f"{metric_name}_score": result, f"{metric_name}_criteria": criteria}
+            {
+                f"{metric_name}_score": metric.score,
+                f"{metric_name}_reason": metric.reason,
+                f"{metric_name}_criteria": criteria,
+            }
         )
 
     return results
