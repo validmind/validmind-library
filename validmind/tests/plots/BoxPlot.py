@@ -93,7 +93,7 @@ def _create_single_boxplot(
     dataset, column, colors, show_outliers, title_prefix, width, height
 ):
     """Create single column box plot."""
-    data = dataset.df[column].dropna()
+    data = dataset._df[column].dropna()
     if len(data) == 0:
         raise SkipTestError(f"No data available for column {column}")
 
@@ -139,7 +139,7 @@ def _create_multiple_boxplots(
     for idx, column in enumerate(columns):
         row = (idx // n_cols) + 1
         col = (idx % n_cols) + 1
-        data = dataset.df[column].dropna()
+        data = dataset._df[column].dropna()
 
         if len(data) > 0:
             color = colors[idx % len(colors)]

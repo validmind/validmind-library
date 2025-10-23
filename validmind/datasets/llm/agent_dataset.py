@@ -127,54 +127,62 @@ class LLMAgentDataset(VMDataset):
             pandas.DataFrame: Tabular representation of test cases and goldens.
         """
         data = []
+        data.extend(self._process_test_cases())
+        data.extend(self._process_goldens())
 
-        # Process test cases
+        if not data:
+            data = [self._get_empty_row()]
+
+        return pd.DataFrame(data)
+
+    def _process_test_cases(self) -> List[Dict[str, Any]]:
+        """Process test cases into DataFrame rows."""
+        data = []
         for i, test_case in enumerate(self.test_cases):
             row = {
                 "id": f"test_case_{i}",
                 "input": test_case.input,
                 "actual_output": test_case.actual_output,
-                "expected_output": getattr(test_case, "expected_output", None),
-                "context": getattr(test_case, "context", None),
-                "retrieval_context": getattr(test_case, "retrieval_context", None),
-                "tools_called": getattr(test_case, "tools_called", None),
-                "expected_tools": getattr(test_case, "expected_tools", None),
-                "type": "test_case",
             }
+            self._add_optional_fields(row, test_case)
             data.append(row)
+        return data
 
-        # Process goldens
+    def _process_goldens(self) -> List[Dict[str, Any]]:
+        """Process goldens into DataFrame rows."""
+        data = []
         for i, golden in enumerate(self.goldens):
-            row = {
-                "id": f"golden_{i}",
-                "input": golden.input,
-                "actual_output": getattr(golden, "actual_output", None),
-                "expected_output": getattr(golden, "expected_output", None),
-                "context": getattr(golden, "context", None),
-                "retrieval_context": getattr(golden, "retrieval_context", None),
-                "tools_called": getattr(golden, "tools_called", None),
-                "expected_tools": getattr(golden, "expected_tools", None),
-                "type": "golden",
-            }
+            row = {"id": f"golden_{i}", "input": golden.input}
+            self._add_optional_fields(row, golden)
             data.append(row)
+        return data
 
-        if not data:
-            # Create empty DataFrame with expected columns
-            data = [
-                {
-                    "id": "",
-                    "input": "",
-                    "actual_output": "",
-                    "expected_output": "",
-                    "context": "",
-                    "retrieval_context": "",
-                    "tools_called": "",
-                    "expected_tools": "",
-                    "type": "",
-                }
-            ]
+    def _add_optional_fields(self, row: Dict[str, Any], obj: Any) -> None:
+        """Add optional fields to a row from an object."""
+        optional_fields = [
+            "expected_output",
+            "context",
+            "retrieval_context",
+            "tools_called",
+            "expected_tools",
+        ]
+        for field in optional_fields:
+            value = getattr(obj, field, None)
+            if value is not None:
+                row[field] = value
 
-        return pd.DataFrame(data)
+    def _get_empty_row(self) -> Dict[str, str]:
+        """Get an empty row with all expected columns."""
+        return {
+            "id": "",
+            "input": "",
+            "actual_output": "",
+            "expected_output": "",
+            "context": "",
+            "retrieval_context": "",
+            "tools_called": "",
+            "expected_tools": "",
+        }
 
     @classmethod
     def from_test_cases(

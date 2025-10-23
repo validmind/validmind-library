@@ -99,7 +99,9 @@ def GEval(
     }
     df = dataset._df.copy(deep=True)
     # Check if all evaluation parameter columns exist in dataframe
-    missing_cols = [col for col in evaluation_params_dict.keys() if col not in df.columns]
+    missing_cols = [
+        col for col in evaluation_params_dict.keys() if col not in df.columns
+    ]
     if missing_cols:
         raise ValueError(f"Required columns missing from dataset: {missing_cols}")
     df = df.rename(columns=evaluation_params_dict)
