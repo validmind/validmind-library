@@ -180,6 +180,12 @@ def load_test(
         # add inputs and params as attributes to the test function
         test_func.inputs, test_func.params = _inspect_signature(test_func)
 
+        # ensure tags and tasks attributes exist, default to empty list if not present
+        if not hasattr(test_func, "__tags__"):
+            test_func.__tags__ = []
+        if not hasattr(test_func, "__tasks__"):
+            test_func.__tasks__ = []
+
         test_store.register_test(test_id, test_func)
 
     return test_store.get_test(test_id)
