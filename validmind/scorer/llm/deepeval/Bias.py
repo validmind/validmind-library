@@ -12,12 +12,12 @@ from validmind.vm_models.dataset import VMDataset
 
 try:
     from deepeval import evaluate
-    from deepeval.metrics import AnswerRelevancyMetric
+    from deepeval.metrics import BiasMetric
     from deepeval.test_case import LLMTestCase
 except ImportError as e:
     if "deepeval" in str(e):
         raise MissingDependencyError(
-            "Missing required package `deepeval` for AnswerRelevancy. "
+            "Missing required package `deepeval` for Bias. "
             "Please run `pip install validmind[llm]` to use LLM tests",
             required_dependencies=["deepeval"],
             extra="llm",
@@ -28,30 +28,32 @@ except ImportError as e:
 
 # Create custom ValidMind tests for DeepEval metrics
 @scorer()
-@tags("llm", "AnswerRelevancy", "deepeval")
+@tags("llm", "Bias", "deepeval")
 @tasks("llm")
-def AnswerRelevancy(
+def Bias(
     dataset: VMDataset,
-    threshold: float = 0.8,
+    threshold: float = 0.5,
     input_column: str = "input",
     actual_output_column: str = "actual_output",
+    strict_mode: bool = False,
 ) -> List[Dict[str, Any]]:
-    """Calculates answer relevancy scores with explanations for LLM responses.
+    """Detects bias in LLM outputs using deepeval's BiasMetric.
 
-    This scorer evaluates how relevant an LLM's answer is to the given input question.
-    It returns a list of dictionaries, where each dictionary contains both the relevancy
-    score and the reasoning behind the score for each row in the dataset.
+    This scorer evaluates whether an LLM's output contains biased opinions (e.g.,
+    gender, racial, political). It returns a list of dictionaries per row with the
+    bias score and the reason behind the evaluation.
 
     Args:
-        dataset: The dataset containing input questions and LLM responses
-        threshold: The threshold for determining relevancy (default: 0.8)
-        input_column: Name of the column containing input questions (default: "input")
-        actual_output_column: Name of the column containing LLM responses (default: "actual_output")
+        dataset: The dataset containing input prompts and LLM outputs
+        threshold: Maximum passing threshold for bias (default: 0.5)
+        input_column: Column name for the input prompts (default: "input")
+        actual_output_column: Column name for the model outputs (default: "actual_output")
+        strict_mode: If True, enforces a binary score (0 for perfect, 1 otherwise)
 
     Returns:
-        List[Dict[str, Any]]: Per-row relevancy scores and reasons as a list of dictionaries.
+        List[Dict[str, Any]]: Per-row bias scores and reasons as a list of dictionaries.
         Each dictionary contains:
-        - "score": float - The relevancy score (0.0 to 1.0)
+        - "score": float - The bias score (0.0 to 1.0)
         - "reason": str - Explanation of why the score was assigned
 
     Raises:
@@ -71,18 +73,24 @@ def AnswerRelevancy(
 
     _, model = get_client_and_model()
 
-    metric = AnswerRelevancyMetric(
-        threshold=threshold, model=model, include_reason=True, verbose_mode=False
+    metric = BiasMetric(
+        threshold=threshold,
+        model=model,
+        include_reason=True,
+        strict_mode=strict_mode,
+        verbose_mode=False,
     )
-    results = []
-    for _, test_case in dataset.df.iterrows():
-        input = test_case[input_column]
-        actual_output = test_case[actual_output_column]
+
+    results: List[Dict[str, Any]] = []
+    for _, row in dataset.df.iterrows():
+        input_value = row[input_column]
+        actual_output_value = row[actual_output_column]
 
         test_case = LLMTestCase(
-            input=input,
-            actual_output=actual_output,
+            input=input_value,
+            actual_output=actual_output_value,
         )
+
         result = evaluate(test_cases=[test_case], metrics=[metric])
 
         # Extract score and reason from the metric result
@@ -90,7 +98,6 @@ def AnswerRelevancy(
         score = metric_data.score
         reason = getattr(metric_data, "reason", "No reason provided")
 
-        # Create dictionary with score and reason
         results.append({"score": score, "reason": reason})
 
     return results

@@ -1,12 +1,14 @@
 # Generating Quarto Markdown for the Python API
 
-This directory includes templates, macros, CSS, and Quarto Markdown output for generating the ValidMind Library (Python API) reference documentation for our docs site.
+This directory includes templates, macros, and CSS for generating the ValidMind Library (Python API) reference documentation for our docs site. 
 
 - `templates/` — Jinja2 templates and macros for generating Quarto Markdown
 - `validmind.css` — CSS for Python API reference styling
 - `_metadata.yml` — Quarto configuration file
-- `_sidebar.yml` — Generated sidebar navigation fragment for Quarto
-- `validmind.qmd`, `validmind/` — Generated API documentation matching the codebase and pdoc structure
+- `_sidebar.yml` — Generated sidebar navigation fragment for Quarto (NOT STORED IN THIS REPO)
+- `validmind.qmd`, `validmind/` — Generated API documentation matching the codebase and pdoc structure (NOT STORED IN THIS REPO)
+
+We no longer store the Quarto Markdown output in this repo, as it now gets generated on the fly when we build the docs site. You can still run `make quarto-docs` for debugging purposes. 
 
 ## Testing locally
 

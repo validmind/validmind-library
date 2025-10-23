@@ -4,6 +4,7 @@
 
 from typing import List, Optional
 
+import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
@@ -16,17 +17,29 @@ def _validate_inputs(
     dataset: VMDataset, columns: Optional[List[str]], group_by: Optional[str]
 ):
     """Validate inputs and return validated columns."""
+
+    # Get dtypes without loading data into memory
+    if not isinstance(columns, list):
+        columns = [columns]
+
+    columns_dtypes = dataset._df[columns].dtypes
+
+    columns_numeric = []
+    columns_numeric = columns_dtypes[
+        columns_dtypes.apply(lambda x: pd.api.types.is_numeric_dtype(x))
+    ].index.tolist()
+
     if columns is None:
-        columns = dataset.feature_columns_numeric
+        columns = columns_numeric
     else:
-        available_columns = set(dataset.feature_columns_numeric)
+        available_columns = set(columns_numeric)
         columns = [col for col in columns if col in available_columns]
 
     if not columns:
         raise SkipTestError("No numerical columns found for box plotting")
 
     if group_by is not None:
-        if group_by not in dataset.df.columns:
+        if group_by not in dataset._df.columns:
             raise SkipTestError(f"Group column '{group_by}' not found in dataset")
         if group_by in columns:
             columns.remove(group_by)

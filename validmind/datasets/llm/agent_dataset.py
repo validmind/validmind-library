@@ -9,7 +9,7 @@ This module provides an LLMAgentDataset class that inherits from VMDataset
 and enables the use of all DeepEval tests and metrics within the ValidMind library.
 """
 
-from typing import Any, Dict, List, Optional
+from typing import Any, Callable, Dict, List, Optional
 
 import pandas as pd
 
@@ -21,9 +21,8 @@ logger = get_logger(__name__)
 # Optional DeepEval imports with graceful fallback
 try:
     from deepeval import evaluate
-    from deepeval.dataset import EvaluationDataset, Golden
-    from deepeval.metrics import BaseMetric
-    from deepeval.test_case import LLMTestCase, ToolCall
+    from deepeval.dataset import EvaluationDataset
+    from deepeval.test_case import LLMTestCase
 
     DEEPEVAL_AVAILABLE = True
 except ImportError:
@@ -74,21 +73,21 @@ class LLMAgentDataset(VMDataset):
 
     def __init__(
         self,
-        input_id: str = None,
-        test_cases: Optional[List] = None,
-        goldens: Optional[List] = None,
+        input_id: Optional[str] = None,
+        test_cases: Optional[List[Any]] = None,
+        goldens: Optional[List[Any]] = None,
         deepeval_dataset: Optional[Any] = None,
-        **kwargs,
-    ):
+        **kwargs: Any,
+    ) -> None:
         """
         Initialize LLMAgentDataset.
 
         Args:
-            input_id: Identifier for the dataset
-            test_cases: List of DeepEval LLMTestCase objects
-            goldens: List of DeepEval Golden objects
-            deepeval_dataset: DeepEval EvaluationDataset instance
-            **kwargs: Additional arguments passed to VMDataset
+            input_id (Optional[str]): Identifier for the dataset.
+            test_cases (Optional[List[LLMTestCase]]): List of DeepEval LLMTestCase objects.
+            goldens (Optional[List[Golden]]): List of DeepEval Golden objects.
+            deepeval_dataset (Optional[EvaluationDataset]): DeepEval EvaluationDataset instance.
+            **kwargs (Any): Additional arguments passed to `VMDataset`.
         """
         if not DEEPEVAL_AVAILABLE:
             raise ImportError(
@@ -122,7 +121,11 @@ class LLMAgentDataset(VMDataset):
         )
 
     def _convert_to_dataframe(self) -> pd.DataFrame:
-        """Convert DeepEval test cases/goldens to pandas DataFrame."""
+        """Convert DeepEval test cases/goldens to pandas DataFrame.
+
+        Returns:
+            pandas.DataFrame: Tabular representation of test cases and goldens.
+        """
         data = []
 
         # Process test cases
@@ -138,9 +141,7 @@ class LLMAgentDataset(VMDataset):
                 "retrieval_context": self._serialize_list_field(
                     getattr(test_case, "retrieval_context", None)
                 ),
-                "tools_called": self._serialize_tools_field(
-                    getattr(test_case, "tools_called", None)
-                ),
+                "tools_called": getattr(test_case, "tools_called", None),
                 "expected_tools": self._serialize_tools_field(
                     getattr(test_case, "expected_tools", None)
                 ),
@@ -188,13 +189,27 @@ class LLMAgentDataset(VMDataset):
         return pd.DataFrame(data)
 
     def _serialize_list_field(self, field: Optional[List[str]]) -> str:
-        """Serialize list field to string for DataFrame storage."""
+        """Serialize list field to string for DataFrame storage.
+
+        Args:
+            field (Optional[List[str]]): List of strings to serialize.
+
+        Returns:
+            str: Pipe-delimited string.
+        """
         if field is None:
             return ""
         return "|".join(str(item) for item in field)
 
     def _serialize_tools_field(self, tools: Optional[List]) -> str:
-        """Serialize tools list to string for DataFrame storage."""
+        """Serialize tools list to string for DataFrame storage.
+
+        Args:
+            tools (Optional[List]): List of tool objects or names.
+
+        Returns:
+            str: Pipe-delimited string of tool names.
+        """
         if tools is None:
             return ""
         tool_strs = []
@@ -206,59 +221,66 @@ class LLMAgentDataset(VMDataset):
         return "|".join(tool_strs)
 
     def _deserialize_list_field(self, field_str: str) -> List[str]:
-        """Deserialize string back to list."""
+        """Deserialize string back to list.
+
+        Args:
+            field_str (str): Pipe-delimited string.
+
+        Returns:
+            List[str]: List of string tokens.
+        """
         if not field_str:
             return []
         return field_str.split("|")
 
     @classmethod
     def from_test_cases(
-        cls, test_cases: List, input_id: str = "llm_agent_dataset", **kwargs
+        cls, test_cases: List[Any], input_id: str = "llm_agent_dataset", **kwargs: Any
     ) -> "LLMAgentDataset":
         """
         Create LLMAgentDataset from DeepEval test cases.
 
         Args:
-            test_cases: List of DeepEval LLMTestCase objects
-            input_id: Dataset identifier
-            **kwargs: Additional arguments
+            test_cases (List[LLMTestCase]): List of DeepEval LLMTestCase objects.
+            input_id (str): Dataset identifier.
+            **kwargs (Any): Additional arguments passed through to constructor.
 
         Returns:
-            LLMAgentDataset instance
+            LLMAgentDataset: New dataset instance.
         """
         return cls(input_id=input_id, test_cases=test_cases, **kwargs)
 
     @classmethod
     def from_goldens(
-        cls, goldens: List, input_id: str = "llm_agent_dataset", **kwargs
+        cls, goldens: List[Any], input_id: str = "llm_agent_dataset", **kwargs: Any
     ) -> "LLMAgentDataset":
         """
         Create LLMAgentDataset from DeepEval goldens.
 
         Args:
-            goldens: List of DeepEval Golden objects
-            input_id: Dataset identifier
-            **kwargs: Additional arguments
+            goldens (List[Golden]): List of DeepEval Golden objects.
+            input_id (str): Dataset identifier.
+            **kwargs (Any): Additional arguments passed through to constructor.
 
         Returns:
-            LLMAgentDataset instance
+            LLMAgentDataset: New dataset instance.
         """
         return cls(input_id=input_id, goldens=goldens, **kwargs)
 
     @classmethod
     def from_deepeval_dataset(
-        cls, deepeval_dataset, input_id: str = "llm_agent_dataset", **kwargs
+        cls, deepeval_dataset: Any, input_id: str = "llm_agent_dataset", **kwargs: Any
     ) -> "LLMAgentDataset":
         """
         Create LLMAgentDataset from DeepEval EvaluationDataset.
 
         Args:
-            deepeval_dataset: DeepEval EvaluationDataset instance
-            input_id: Dataset identifier
-            **kwargs: Additional arguments
+            deepeval_dataset (EvaluationDataset): DeepEval EvaluationDataset instance.
+            input_id (str): Dataset identifier.
+            **kwargs (Any): Additional arguments passed through to constructor.
 
         Returns:
-            LLMAgentDataset instance
+            LLMAgentDataset: New dataset instance.
         """
         return cls(
             input_id=input_id,
@@ -268,12 +290,12 @@ class LLMAgentDataset(VMDataset):
             **kwargs,
         )
 
-    def add_test_case(self, test_case) -> None:
+    def add_test_case(self, test_case: Any) -> None:
         """
         Add a DeepEval test case to the dataset.
 
         Args:
-            test_case: DeepEval LLMTestCase instance
+            test_case (LLMTestCase): DeepEval LLMTestCase instance.
         """
         if not DEEPEVAL_AVAILABLE:
             raise ImportError("DeepEval is required to add test cases")
@@ -284,12 +306,12 @@ class LLMAgentDataset(VMDataset):
         self._df = df
         self.columns = df.columns.tolist()
 
-    def add_golden(self, golden) -> None:
+    def add_golden(self, golden: Any) -> None:
         """
         Add a DeepEval golden to the dataset.
 
         Args:
-            golden: DeepEval Golden instance
+            golden (Golden): DeepEval Golden instance.
         """
         if not DEEPEVAL_AVAILABLE:
             raise ImportError("DeepEval is required to add goldens")
@@ -300,12 +322,14 @@ class LLMAgentDataset(VMDataset):
         self._df = df
         self.columns = df.columns.tolist()
 
-    def convert_goldens_to_test_cases(self, llm_app_function) -> None:
+    def convert_goldens_to_test_cases(
+        self, llm_app_function: Callable[[str], Any]
+    ) -> None:
         """
         Convert goldens to test cases by generating actual outputs.
 
         Args:
-            llm_app_function: Function that takes input and returns LLM output
+            llm_app_function (Callable[[str], Any]): Function that takes input and returns LLM output.
         """
         if not DEEPEVAL_AVAILABLE:
             raise ImportError("DeepEval is required for conversion")
@@ -337,16 +361,18 @@ class LLMAgentDataset(VMDataset):
         self._df = df
         self.columns = df.columns.tolist()
 
-    def evaluate_with_deepeval(self, metrics: List, **kwargs) -> Dict[str, Any]:
+    def evaluate_with_deepeval(
+        self, metrics: List[Any], **kwargs: Any
+    ) -> Dict[str, Any]:
         """
         Evaluate the dataset using DeepEval metrics.
 
         Args:
-            metrics: List of DeepEval metric instances
-            **kwargs: Additional arguments passed to deepeval.evaluate()
+            metrics (List[Any]): List of DeepEval metric instances.
+            **kwargs (Any): Additional arguments passed to `deepeval.evaluate()`.
 
         Returns:
-            Evaluation results dictionary
+            Dict[str, Any]: Evaluation results dictionary.
         """
         if not DEEPEVAL_AVAILABLE:
             raise ImportError("DeepEval is required for evaluation")
@@ -367,12 +393,12 @@ class LLMAgentDataset(VMDataset):
             logger.error(f"DeepEval evaluation failed: {e}")
             raise
 
-    def get_deepeval_dataset(self):
+    def get_deepeval_dataset(self) -> Any:
         """
         Get or create a DeepEval EvaluationDataset instance.
 
         Returns:
-            DeepEval EvaluationDataset instance
+            EvaluationDataset: DeepEval EvaluationDataset instance.
         """
         if not DEEPEVAL_AVAILABLE:
             raise ImportError("DeepEval is required to get dataset")
@@ -388,12 +414,12 @@ class LLMAgentDataset(VMDataset):
 
         return self.deepeval_dataset
 
-    def to_deepeval_test_cases(self) -> List:
+    def to_deepeval_test_cases(self) -> List[Any]:
         """
         Convert dataset rows back to DeepEval test cases.
 
         Returns:
-            List of DeepEval LLMTestCase objects
+            List[LLMTestCase]: List of DeepEval LLMTestCase objects.
         """
         if not DEEPEVAL_AVAILABLE:
             raise ImportError("DeepEval is required for conversion")

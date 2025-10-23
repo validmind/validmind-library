@@ -14,7 +14,7 @@ from validmind.vm_models import VMDataset, VMModel
 @scorer()
 @tasks("classification")
 @tags("classification")
-def Confidence(model: VMModel, dataset: VMDataset, **kwargs) -> List[float]:
+def Confidence(model: VMModel, dataset: VMDataset) -> List[float]:
     """Calculates the prediction confidence per row for a classification model.
 
     For binary classification, confidence is calculated as the maximum probability
@@ -24,7 +24,6 @@ def Confidence(model: VMModel, dataset: VMDataset, **kwargs) -> List[float]:
     Args:
         model: The classification model to evaluate
         dataset: The dataset containing true labels and predicted probabilities
-        **kwargs: Additional parameters (unused for compatibility)
 
     Returns:
         List[float]: Per-row confidence scores as a list of float values
