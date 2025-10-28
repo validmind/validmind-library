@@ -1,6 +1,6 @@
 [project]
 name = "validmind"
-version = "2.10.1"
+version = "2.10.2"
 description = "ValidMind Library"
 readme = "README.pypi.md"
 requires-python = ">=3.9,<3.13"
@@ -19,6 +19,7 @@ dependencies = [
   "matplotlib",
   "mistune (>=3.0.2,<4.0.0)",
   "nest-asyncio (>=1.6.0,<2.0.0)",
+  "numpy (>=1.23,<2.0.0)",
   "openai (>=1)",
   "pandas (>=2.0.3,<3.0.0)",
   "plotly (>=5.0.0)",
@@ -74,6 +75,7 @@ nlp = [
   "evaluate",
   "rouge (>=1)",
   "bert-score (>=0.3.13)",
+  "pyarrow (<16)",
 ]
 pytorch = ["torch (>=2.0.0)"]
 stats = ["scipy", "statsmodels", "arch"]
