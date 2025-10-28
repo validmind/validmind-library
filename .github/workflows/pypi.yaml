@@ -1,11 +1,11 @@
-# This worklfow pushes the ValidMind Library package to PyPI
+# This workflow pushes the ValidMind Library package to PyPI when a tag is created
 
 name: Publish to PyPI
 
 on:
   push:
-    branches:
-      - prod
+    tags:
+      - 'v*.*.*'
 
 permissions:
   contents: read
