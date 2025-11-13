@@ -44,6 +44,9 @@ jobs:
 
       - uses: actions/checkout@v4
 
+      - name: Free Disk Space
+        run: ./disk_clean.sh
+
       - name: Install poetry
         run: pipx install poetry
 
