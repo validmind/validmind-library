@@ -5,7 +5,7 @@
 import json
 import os
 from concurrent.futures import ThreadPoolExecutor
-from typing import List, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 import tiktoken
 
@@ -76,6 +76,7 @@ def generate_description(
     title: Optional[str] = None,
     instructions: Optional[str] = None,
     additional_context: Optional[str] = None,
+    params: Optional[Dict[str, Any]] = None,
 ):
     """Generate the description for the test results."""
     from validmind.api_client import generate_test_result_description
@@ -126,6 +127,7 @@ def generate_description(
             ],
             "additional_context": additional_context,
             "instructions": instructions,
+            "params": params,
         }
     )["content"]
 
@@ -139,6 +141,7 @@ def background_generate_description(
     title: Optional[str] = None,
     instructions: Optional[str] = None,
     additional_context: Optional[str] = None,
+    params: Optional[Dict[str, Any]] = None,
 ):
     def wrapped():
         try:
@@ -152,6 +155,7 @@ def background_generate_description(
                     title=title,
                     instructions=instructions,
                     additional_context=additional_context,
+                    params=params,
                 ),
                 True,
             )
@@ -183,6 +187,7 @@ def get_result_description(
     title: Optional[str] = None,
     instructions: Optional[str] = None,
     additional_context: Optional[str] = None,
+    params: Optional[Dict[str, Any]] = None,
 ):
     """Get the metadata dictionary for a test or metric result.
 
@@ -206,6 +211,7 @@ def get_result_description(
         should_generate (bool): Whether to generate the description or not. Defaults to True.
         instructions (Optional[str]): Instructions for the LLM to generate the description.
         additional_context (Optional[str]): Additional context for the LLM to generate the description.
+        params (Optional[Dict[str, Any]]): Test parameters used to customize test behavior.
 
     Returns:
         str: The description to be logged with the test results.
@@ -234,6 +240,7 @@ def get_result_description(
             title=title,
             instructions=_instructions,
             additional_context=additional_context,
+            params=params,
         )
 
     else:

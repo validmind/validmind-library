@@ -23,14 +23,14 @@ def TooManyZeroValues(
     The 'TooManyZeroValues' test is utilized to identify numerical columns in the dataset that may present a quantity
     of zero values considered excessive. The aim is to detect situations where these may implicate data sparsity or a
     lack of variation, limiting their effectiveness within a machine learning model. The definition of 'too many' is
-    quantified as a percentage of total values, with a default set to 3%.
+    quantified as a percentage of total values, with a default set to 0.03%.
 
     ### Test Mechanism
 
     This test is conducted by looping through each column in the dataset and categorizing those that pertain to
     numerical data. On identifying a numerical column, the function computes the total quantity of zero values and
     their ratio to the total row count. Should the proportion exceed a pre-set threshold parameter, set by default at
-    0.03 or 3%, the column is considered to have failed the test. The results for each column are summarized and
+    0.03%, the column is considered to have failed the test. The results for each column are summarized and
     reported, indicating the count and percentage of zero values for each numerical column, alongside a status
     indicating whether the column has passed or failed the test.
 
