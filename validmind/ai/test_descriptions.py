@@ -121,9 +121,7 @@ def generate_description(
             "test_description": test_description,
             "title": title,
             "summary": _truncate_summary(summary, test_id),
-            "figures": [
-                figure._get_b64_url() for figure in ([] if tables else figures)
-            ],
+            "figures": [figure._get_b64_url() for figure in figures or []],
             "additional_context": additional_context,
             "instructions": instructions,
         }
