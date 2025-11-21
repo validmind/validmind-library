@@ -461,6 +461,7 @@ def run_test(  # noqa: C901
             title=title,
             instructions=instructions,
             additional_context=additional_context,
+            params=result.params,
         )
 
     if show:
