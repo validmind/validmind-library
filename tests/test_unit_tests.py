@@ -99,9 +99,7 @@ def _find_test_files():
             if file.startswith("test_") and file.endswith(".py"):
                 # Convert file path to module path
                 file_path = os.path.join(root, file)
-                module_path = os.path.relpath(file_path, "tests").replace("/", ".")[
-                    :-3
-                ]  # remove .py
+                module_path = os.path.relpath(file_path, "tests").replace(os.sep, ".")[:-3]  # remove .py
                 test_files.append(module_path)
     return test_files
 
