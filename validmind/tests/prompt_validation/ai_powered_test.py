@@ -29,6 +29,22 @@ def call_model(
     judge_embeddings=None,
 ):
     """Call LLM with the given prompts and return the response"""
+    import os
+
+    use_server_llm_only = os.getenv("VALIDMIND_USE_SERVER_LLM_ONLY", "0").lower() in [
+        "1",
+        "true",
+    ]
+
+    if use_server_llm_only:
+        raise ValueError(
+            "Local LLM calls are disabled (VALIDMIND_USE_SERVER_LLM_ONLY is enabled). "
+            "Prompt validation tests that require judge LLM currently need local OpenAI access. "
+            "Please either:\n"
+            "1. Disable server-only mode if you have OpenAI access, or\n"
+            "2. Contact ValidMind support to enable server-side judge LLM support for your account."
+        )
+
     if not is_configured():
         raise ValueError(
             "LLM is not configured. Please set an `OPENAI_API_KEY` environment variable "

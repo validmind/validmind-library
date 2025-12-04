@@ -195,6 +195,7 @@ def init(
     model: Optional[str] = None,
     monitoring: bool = False,
     generate_descriptions: Optional[bool] = None,
+    use_server_llm_only: Optional[bool] = None,
 ):
     """
     Initializes the API client instances and calls the /ping endpoint to ensure
@@ -211,6 +212,9 @@ def init(
         api_host (str, optional): The API host. Defaults to None.
         monitoring (bool): The ongoing monitoring flag. Defaults to False.
         generate_descriptions (bool): Whether to use GenAI to generate test result descriptions. Defaults to True.
+        use_server_llm_only (bool): If True, disables local LLM calls and routes all LLM requests through
+            the ValidMind server. This is useful when OpenAI access is blocked locally. Defaults to None,
+            which respects the `VALIDMIND_USE_SERVER_LLM_ONLY` environment variable.
     Raises:
         ValueError: If the API key and secret are not provided
     """
@@ -238,6 +242,9 @@ def init(
 
     if generate_descriptions is not None:
         os.environ["VALIDMIND_LLM_DESCRIPTIONS_ENABLED"] = str(generate_descriptions)
+
+    if use_server_llm_only is not None:
+        os.environ["VALIDMIND_USE_SERVER_LLM_ONLY"] = str(use_server_llm_only)
 
     reload()
 

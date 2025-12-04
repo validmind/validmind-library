@@ -49,8 +49,25 @@ def get_client_and_model():
 
     On first call, it will look in the environment for the API key endpoint, model etc.
     and store them in a global variable to avoid loading them up again.
+
+    If `VALIDMIND_USE_SERVER_LLM_ONLY` is set to True, this will raise an error
+    indicating that local LLM calls are disabled and server-side calls should be used instead.
     """
     global __client, __model
+
+    # Check if server-only mode is enabled
+    use_server_llm_only = os.getenv("VALIDMIND_USE_SERVER_LLM_ONLY", "0").lower() in [
+        "1",
+        "true",
+    ]
+
+    if use_server_llm_only:
+        raise ValueError(
+            "Local LLM calls are disabled. All LLM requests should be routed through "
+            "the ValidMind server. Test result descriptions already use server-side calls. "
+            "For prompt validation tests that require judge LLM, please ensure ValidMind AI "
+            "is enabled for your account and contact support if you need server-side judge LLM support."
+        )
 
     if __client and __model:
         return __client, __model
@@ -175,10 +192,39 @@ def set_judge_config(judge_llm, judge_embeddings):
 
 
 def is_configured():
+    """Check if LLM is configured for use.
+
+    If server-only mode is enabled, this will check if the ValidMind API
+    connection is available instead of checking local OpenAI configuration.
+    """
     global __ack
 
     if __ack:
         return True
+
+    # Check if server-only mode is enabled
+    use_server_llm_only = os.getenv("VALIDMIND_USE_SERVER_LLM_ONLY", "0").lower() in [
+        "1",
+        "true",
+    ]
+
+    if use_server_llm_only:
+        # In server-only mode, check if ValidMind API is connected
+        # by checking if we have API credentials
+        from ..api_client import _api_key, _api_secret
+
+        if _api_key and _api_secret:
+            __ack = True
+            logger.debug(
+                "Server-only LLM mode enabled - using ValidMind API for LLM calls"
+            )
+            return True
+        else:
+            logger.debug(
+                "Server-only LLM mode enabled but ValidMind API not configured"
+            )
+            __ack = False
+            return False
 
     try:
         client, model = get_client_and_model()
