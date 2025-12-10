@@ -12,7 +12,6 @@ from dataclasses import dataclass
 from io import BytesIO
 from typing import Union
 
-import ipywidgets as widgets
 import matplotlib
 import plotly.graph_objs as go
 
@@ -70,49 +69,6 @@ class Figure:
 
     def __repr__(self):
         return f"Figure(key={self.key}, ref_id={self.ref_id})"
-
-    def to_widget(self):
-        """
-        Returns the ipywidget compatible representation of the figure. Ideally
-        we would render images as-is, but Plotly FigureWidgets don't work well
-        on Google Colab when they are combined with ipywidgets.
-        """
-        if is_matplotlib_figure(self.figure):
-            tmpfile = BytesIO()
-            self.figure.savefig(tmpfile, format="png")
-            encoded = base64.b64encode(tmpfile.getvalue()).decode("utf-8")
-            return widgets.HTML(
-                value=f"""
-                <img style="width:100%; height: auto;" src="data:image/png;base64,{encoded}"/>
-                """
-            )
-
-        elif is_plotly_figure(self.figure):
-            # FigureWidget can be displayed as-is but not on Google Colab. In this case
-            # we just return the image representation of the figure.
-            if client_config.running_on_colab:
-                png_file = self.figure.to_image(format="png")
-                encoded = base64.b64encode(png_file).decode("utf-8")
-                return widgets.HTML(
-                    value=f"""
-                    <img style="width:100%; height: auto;" src="data:image/png;base64,{encoded}"/>
-                    """
-                )
-            else:
-                return self.figure
-
-        elif is_png_image(self.figure):
-            encoded = base64.b64encode(self.figure).decode("utf-8")
-            return widgets.HTML(
-                value=f"""
-                <img style="width:100%; height: auto;" src="data:image/png;base64,{encoded}"/>
-                """
-            )
-
-        else:
-            raise UnsupportedFigureError(
-                f"Figure type {type(self.figure)} not supported for plotting"
-            )
 
     def to_html(self):
         """

@@ -3,7 +3,6 @@ import unittest
 from unittest.mock import patch
 import pandas as pd
 import matplotlib.pyplot as plt
-from ipywidgets import HTML, VBox
 
 from validmind.vm_models.result import (
     TestResult,
@@ -74,8 +73,9 @@ class TestResultClasses(unittest.TestCase):
         self.assertEqual(error_result.error, error)
         self.assertEqual(error_result.message, "Test error message")
 
-        widget = error_result.to_widget()
-        self.assertIsInstance(widget, HTML)
+        html = error_result.to_html()
+        self.assertIsInstance(html, str)
+        self.assertIn("Test error message", html)
 
     def test_test_result_initialization(self):
         """Test TestResult initialization and basic methods"""
@@ -180,8 +180,9 @@ class TestResultClasses(unittest.TestCase):
         self.assertEqual(text_result.title, "Text Test")
         self.assertEqual(text_result.description, "Generated text")
 
-        widget = text_result.to_widget()
-        self.assertIsInstance(widget, VBox)
+        html = text_result.to_html()
+        self.assertIsInstance(html, str)
+        self.assertIn("Generated text", html)
 
     def test_validate_log_config(self):
         """Test validation of log configuration"""
@@ -290,26 +291,26 @@ class TestResultClasses(unittest.TestCase):
         self.assertEqual(test_result.metric, 100)
         self.assertEqual(test_result._get_metric_display_value(), 100)
 
-    def test_test_result_metric_values_widget_display(self):
-        """Test MetricValues display in TestResult widgets"""
+    def test_test_result_metric_values_html_display(self):
+        """Test MetricValues display in TestResult HTML"""
         # Test scalar metric display
-        test_result_scalar = TestResult(result_id="test_scalar_widget")
+        test_result_scalar = TestResult(result_id="test_scalar_html")
         test_result_scalar.set_metric(0.95)
 
-        widget_scalar = test_result_scalar.to_widget()
-        self.assertIsInstance(widget_scalar, HTML)
+        html_scalar = test_result_scalar.to_html()
+        self.assertIsInstance(html_scalar, str)
         # Check that the metric value appears in the HTML
-        self.assertIn("0.95", widget_scalar.value)
+        self.assertIn("0.95", html_scalar)
 
         # Test list metric display
-        test_result_list = TestResult(result_id="test_list_widget")
+        test_result_list = TestResult(result_id="test_list_html")
         test_result_list.set_metric([0.1, 0.2, 0.3])
 
-        widget_list = test_result_list.to_widget()
+        html_list = test_result_list.to_html()
         # Even with lists, when no tables/figures exist, it returns HTML
-        self.assertIsInstance(widget_list, HTML)
+        self.assertIsInstance(html_list, str)
         # Check that the list values appear in the HTML
-        self.assertIn("[0.1, 0.2, 0.3]", widget_list.value)
+        self.assertIn("[0.1, 0.2, 0.3]", html_list)
 
 
 if __name__ == "__main__":

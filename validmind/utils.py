@@ -536,7 +536,7 @@ def preview_test_config(config):
 
 
 def display(widget_or_html, syntax_highlighting=True, mathjax=True):
-    """Display widgets with extra goodies (syntax highlighting, MathJax, etc.)."""
+    """Display HTML content with extra goodies (syntax highlighting, MathJax, etc.)."""
     if hasattr(widget_or_html, "to_html"):
         html_content = widget_or_html.to_html()
         ipy_display(HTML(html_content))
@@ -547,7 +547,8 @@ def display(widget_or_html, syntax_highlighting=True, mathjax=True):
         syntax_highlighting = 'class="language-' in widget_or_html
         mathjax = "math/tex" in widget_or_html
     else:
-        ipy_display(widget_or_html)
+        # Fallback: convert to string representation
+        ipy_display(HTML(str(widget_or_html)))
 
     if syntax_highlighting:
         ipy_display(HTML(python_syntax_highlighting))

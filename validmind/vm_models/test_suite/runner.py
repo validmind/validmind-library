@@ -4,8 +4,6 @@
 
 import asyncio
 
-import ipywidgets as widgets
-
 from ...logging import get_logger
 from ...utils import is_notebook, run_async, run_async_check
 from ..html_progress import HTMLBox, HTMLLabel, HTMLProgressBar
@@ -24,10 +22,6 @@ class TestSuiteRunner:
     config: dict = None
 
     _test_configs: dict = None
-
-    pbar: widgets.IntProgress = None
-    pbar_description: widgets.Label = None
-    pbar_box: widgets.HBox = None
 
     # HTML-based progress components
     html_pbar: HTMLProgressBar = None
@@ -77,10 +71,6 @@ class TestSuiteRunner:
         self.html_pbar_box = HTMLBox([self.html_pbar_description, self.html_pbar])
         self.html_pbar.display()
 
-        self.pbar_description = widgets.Label(value="Running test suite...")
-        self.pbar = widgets.IntProgress(max=num_tasks, orientation="horizontal")
-        self.pbar_box = widgets.HBox([self.pbar_description, self.pbar])
-
     def _stop_progress_bar(self):
         if self.html_pbar:
             self.html_pbar.complete()
@@ -88,24 +78,17 @@ class TestSuiteRunner:
         if self.html_pbar_description:
             self.html_pbar_description.update("Test suite complete!")
 
-        self.pbar_description.value = "Test suite complete!"
-        self.pbar.close()
-
     def _update_progress_message(self, message: str):
-        """Updates both HTML and widget progress bar messages."""
+        """Updates HTML progress bar message."""
         if self.html_pbar:
             self.html_pbar.update(self.html_pbar.value, message)
         if self.html_pbar_description:
             self.html_pbar_description.update(message)
 
-        self.pbar_description.value = message
-
     def _increment_progress(self):
-        """Increments both HTML and widget progress bars."""
+        """Increments HTML progress bar."""
         if self.html_pbar:
             self.html_pbar.update(self.html_pbar.value + 1)
-
-        self.pbar.value += 1
 
     async def _log_test_result(self, test):
         """Logs a single test result to ValidMind."""
@@ -145,8 +128,6 @@ class TestSuiteRunner:
             progress_complete = False
             if self.html_pbar and self.html_pbar.value >= self.html_pbar.max_value:
                 progress_complete = True
-            elif self.pbar and self.pbar.value == self.pbar.max:
-                progress_complete = True
 
             if progress_complete:
                 completion_message = "Test suite complete!"
@@ -156,7 +137,6 @@ class TestSuiteRunner:
                 if self.html_pbar_description:
                     self.html_pbar_description.update(completion_message)
 
-                self.pbar_description.value = completion_message
                 done = True
 
             await asyncio.sleep(0.5)
@@ -171,8 +151,6 @@ class TestSuiteRunner:
             self.html_pbar.update(self.html_pbar.value, collecting_message)
         if self.html_pbar_description:
             self.html_pbar_description.update(collecting_message)
-
-        self.pbar_description.value = collecting_message
 
         summary = TestSuiteSummary(
             title=self.suite.title,
@@ -205,8 +183,6 @@ class TestSuiteRunner:
                 if self.html_pbar_description:
                     self.html_pbar_description.update(running_message)
 
-                self.pbar_description.value = running_message
-
                 test.run(
                     fail_fast=fail_fast,
                     config=self._test_configs.get(test.test_id, {}),
@@ -214,8 +190,6 @@ class TestSuiteRunner:
 
                 if self.html_pbar:
                     self.html_pbar.update(self.html_pbar.value + 1)
-
-                self.pbar.value += 1
 
         if send:
             run_async(self.log_results)

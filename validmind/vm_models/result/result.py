@@ -15,19 +15,12 @@ from uuid import uuid4
 import matplotlib
 import pandas as pd
 import plotly.graph_objs as go
-from ipywidgets import HTML, VBox
 
 from ... import api_client
 from ...ai.utils import DescriptionFuture
 from ...errors import InvalidParameterError
 from ...logging import get_logger, log_api_operation
-from ...utils import (
-    HumanReadableEncoder,
-    NumpyEncoder,
-    display,
-    run_async,
-    test_id_to_name,
-)
+from ...utils import HumanReadableEncoder, display, run_async, test_id_to_name
 from ..figure import Figure, create_figure
 from ..html_renderer import StatefulHTMLRenderer
 from ..input import VMInput
@@ -36,10 +29,7 @@ from .utils import (
     AI_REVISION_NAME,
     DEFAULT_REVISION_NAME,
     figures_to_html,
-    figures_to_widgets,
-    get_result_template,
     tables_to_html,
-    tables_to_widgets,
     update_metadata,
 )
 
@@ -138,8 +128,8 @@ class Result:
         """May be overridden by subclasses."""
         return self.__class__.__name__
 
-    def to_widget(self):
-        """Create an ipywidget representation of the result... Must be overridden by subclasses."""
+    def to_html(self):
+        """Generate HTML representation of the result. Must be overridden by subclasses."""
         raise NotImplementedError
 
     def log(self):
@@ -148,7 +138,10 @@ class Result:
 
     def show(self):
         """Display the result... May be overridden by subclasses."""
-        display(self.to_widget())
+        if hasattr(self, "to_html"):
+            display(self.to_html())
+        else:
+            display(str(self))
 
 
 @dataclass
@@ -161,9 +154,6 @@ class ErrorResult(Result):
 
     def __repr__(self) -> str:
         return f'ErrorResult(result_id="{self.result_id}")'
-
-    def to_widget(self):
-        return HTML(f"<h3 style='color: red;'>{self.message}</h3><p>{self.error}</p>")
 
     def to_html(self):
         """Generate HTML that persists in saved notebooks."""
@@ -395,40 +385,6 @@ class TestResult(Result):
             return
 
         self.figures.pop(index)
-
-    def to_widget(self):
-        metric_display_value = self._get_metric_display_value()
-        if (
-            (self.metric is not None or self.scorer is not None)
-            and not self.tables
-            and not self.figures
-        ):
-            return HTML(
-                f"<h3>{self.test_name}: <code>{metric_display_value}</code></h3>"
-            )
-
-        template_data = {
-            "test_name": self.test_name,
-            "passed_icon": "" if self.passed is None else "✅" if self.passed else "❌",
-            "description": self.description.replace("h3", "strong"),
-            "params": (
-                json.dumps(self.params, cls=NumpyEncoder, indent=2)
-                if self.params
-                else None
-            ),
-            "show_metric": self.metric is not None,
-            "metric": metric_display_value,
-        }
-        rendered = get_result_template().render(**template_data)
-
-        widgets = [HTML(rendered)]
-
-        if self.tables:
-            widgets.extend(tables_to_widgets(self.tables))
-        if self.figures:
-            widgets.extend(figures_to_widgets(self.figures))
-
-        return VBox(widgets)
 
     def to_html(self):
         """Generate HTML that persists in saved notebooks."""
@@ -779,22 +735,6 @@ class TextGenerationResult(Result):
     def test_name(self) -> str:
         """Get the test name, using custom title if available."""
         return self.title or test_id_to_name(self.result_id)
-
-    def to_widget(self):
-        template_data = {
-            "test_name": self.test_name,
-            "description": self.description.replace("h3", "strong"),
-            "params": (
-                json.dumps(self.params, cls=NumpyEncoder, indent=2)
-                if self.params
-                else None
-            ),
-        }
-        rendered = get_result_template().render(**template_data)
-
-        widgets = [HTML(rendered)]
-
-        return VBox(widgets)
 
     def to_html(self):
         """Generate HTML that persists in saved notebooks."""
