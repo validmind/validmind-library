@@ -388,16 +388,18 @@ class TestResult(Result):
 
     def to_html(self):
         """Generate HTML that persists in saved notebooks."""
-        if self.metric is not None and not self.tables and not self.figures:
+        metric_value = self._get_metric_display_value()
+
+        if metric_value is not None and not self.tables and not self.figures:
             return StatefulHTMLRenderer.render_result_header(
-                test_name=self.test_name, passed=self.passed, metric=self.metric
+                test_name=self.test_name, passed=self.passed, metric=metric_value
             )
 
         html_parts = [StatefulHTMLRenderer.get_base_css()]
 
         html_parts.append(
             StatefulHTMLRenderer.render_result_header(
-                test_name=self.test_name, passed=self.passed, metric=self.metric
+                test_name=self.test_name, passed=self.passed, metric=metric_value
             )
         )
 
