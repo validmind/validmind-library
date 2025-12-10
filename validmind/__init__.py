@@ -21,7 +21,7 @@ To initialize the ValidMind Library, paste the code snippet with the model ident
 import validmind as vm
 
 vm.init(
-  api_host = "https://api.dev.vm.validmind.ai/api/v1/tracking/tracking",
+  api_host = "https://app.prod.validmind.ai/api/v1/tracking/tracking",
   api_key = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
   api_secret = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
   project = "<project-identifier>"
@@ -32,16 +32,23 @@ After you have pasted the code snippet into your development source code and exe
 """
 import threading
 import warnings
+from importlib import metadata
 
-import pkg_resources
 from IPython.display import HTML, display
 
 # Ignore Numba warnings. We are not requiring this package directly
-from numba.core.errors import NumbaDeprecationWarning, NumbaPendingDeprecationWarning
+try:
+    from numba.core.errors import (
+        NumbaDeprecationWarning,
+        NumbaPendingDeprecationWarning,
+    )
 
-warnings.simplefilter("ignore", category=NumbaDeprecationWarning)
-warnings.simplefilter("ignore", category=NumbaPendingDeprecationWarning)
+    warnings.simplefilter("ignore", category=NumbaDeprecationWarning)
+    warnings.simplefilter("ignore", category=NumbaPendingDeprecationWarning)
+except ImportError:
+    ...
 
+from . import scorer
 from .__version__ import __version__  # noqa: E402
 from .api_client import init, log_metric, log_text, reload
 from .client import (  # noqa: E402
@@ -54,6 +61,7 @@ from .client import (  # noqa: E402
     run_test_suite,
 )
 from .experimental import agents as experimental_agent
+from .tests.decorator import scorer as scorer_decorator
 from .tests.decorator import tags, tasks, test
 from .tests.run import print_env
 from .utils import is_notebook, parse_version
@@ -81,7 +89,12 @@ def check_version():
     # get the installed vs running version of validmind
     # to make sure we are using the latest installed version
     # in case user has updated the package but forgot to restart the kernel
-    installed = pkg_resources.get_distribution("validmind").version
+    try:
+        installed = metadata.version("validmind")
+    except metadata.PackageNotFoundError:
+        # Package metadata not found, skip version check
+        return
+
     running = __version__
 
     if parse_version(installed) > parse_version(running):
@@ -117,6 +130,9 @@ __all__ = [  # noqa
     "tags",
     "tasks",
     "test",
+    "scorer_decorator",
+    # scorer module
+    "scorer",
     # raw data (for post-processing test results and building tests)
     "RawData",
     # submodules

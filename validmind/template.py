@@ -167,7 +167,7 @@ def preview_template_html(template: str) -> str:
 
     Args:
         template (dict): The template to preview.
-        
+
     Returns:
         HTML string representation of the template
     """
@@ -207,7 +207,9 @@ def _create_content_html(content: Dict[str, Any]) -> str:
         """
 
 
-def _create_sub_section_html(sub_sections: List[Dict[str, Any]], section_number: str) -> str:
+def _create_sub_section_html(
+    sub_sections: List[Dict[str, Any]], section_number: str
+) -> str:
     """Create HTML for sub-sections."""
     if not sub_sections:
         return "<p>Empty Section</p>"
@@ -217,7 +219,7 @@ def _create_sub_section_html(sub_sections: List[Dict[str, Any]], section_number:
 
     for i, section in enumerate(sub_sections):
         section_num = f"{section_number}.{i + 1}"
-        
+
         if section["sections"]:
             # Has sub-sections
             content_html = _create_sub_section_html(section["sections"], section_num)
@@ -230,7 +232,9 @@ def _create_sub_section_html(sub_sections: List[Dict[str, Any]], section_number:
             content_html = "<p>Empty Section</p>"
 
         accordion_items.append(content_html)
-        accordion_titles.append(f"{section_num}. {section['title']} ('{section['id']}')")
+        accordion_titles.append(
+            f"{section_num}. {section['title']} ('{section['id']}')"
+        )
 
     return StatefulHTMLRenderer.render_accordion(accordion_items, accordion_titles)
 
@@ -238,13 +242,13 @@ def _create_sub_section_html(sub_sections: List[Dict[str, Any]], section_number:
 def _create_section_html(tree: List[Dict[str, Any]]) -> str:
     """Create HTML representation of the section tree."""
     html_parts = [StatefulHTMLRenderer.get_base_css()]
-    
+
     accordion_items = []
     accordion_titles = []
-    
+
     for i, section in enumerate(tree):
         section_content_parts = []
-        
+
         # Add sub-sections if they exist
         if section.get("sections"):
             sub_section_html = _create_sub_section_html(section["sections"], str(i + 1))
@@ -252,7 +256,9 @@ def _create_section_html(tree: List[Dict[str, Any]]) -> str:
 
         # Add direct content blocks if they exist
         if section.get("contents"):
-            content_parts = [_create_content_html(content) for content in section["contents"]]
+            content_parts = [
+                _create_content_html(content) for content in section["contents"]
+            ]
             section_content_parts.extend(content_parts)
 
         # Combine all content for this section
@@ -265,9 +271,11 @@ def _create_section_html(tree: List[Dict[str, Any]]) -> str:
         accordion_titles.append(f"{i + 1}. {section['title']} ('{section['id']}')")
 
     if accordion_items:
-        main_accordion = StatefulHTMLRenderer.render_accordion(accordion_items, accordion_titles)
+        main_accordion = StatefulHTMLRenderer.render_accordion(
+            accordion_items, accordion_titles
+        )
         html_parts.append(main_accordion)
-    
+
     return f'<div class="vm-template-preview">{"".join(html_parts)}</div>'
 
 

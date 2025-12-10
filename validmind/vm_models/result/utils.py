@@ -5,15 +5,12 @@
 import os
 from typing import TYPE_CHECKING, Dict, List, Union
 
-import pandas as pd
 from ipywidgets import HTML, GridBox, Layout
 from jinja2 import Template
 
 from ... import api_client
 from ...logging import get_logger
-from ..dataset import VMDataset
 from ..figure import Figure
-from ..input import VMInput
 from ..html_renderer import StatefulHTMLRenderer
 
 if TYPE_CHECKING:
@@ -51,30 +48,6 @@ async def update_metadata(content_id: str, text: str, _json: Union[Dict, List] =
     logger.debug(f"Updating metadata for `{content_id}`")
 
     await api_client.alog_metadata(content_id, text, _json)
-
-
-def check_for_sensitive_data(data: pd.DataFrame, inputs: List[VMInput]):
-    """Check if the data contains sensitive information from input datasets."""
-    dataset_columns = {
-        col: len(input_obj.df)
-        for input_obj in inputs
-        if isinstance(input_obj, VMDataset)
-        for col in input_obj.columns
-    }
-
-    table_columns = {col: len(data) for col in data.columns}
-
-    offending_columns = [
-        col
-        for col in table_columns
-        if col in dataset_columns and table_columns[col] == dataset_columns[col]
-    ]
-
-    if offending_columns:
-        raise ValueError(
-            f"Raw input data found in table, pass `unsafe=True` "
-            f"or remove the offending columns: {offending_columns}"
-        )
 
 
 def tables_to_widgets(tables: List["ResultTable"]):
@@ -132,16 +105,15 @@ def tables_to_html(tables: List["ResultTable"]) -> str:
     """Convert a list of tables to HTML."""
     if not tables:
         return ""
-    
+
     html_parts = ["<h3>Tables</h3>"]
-    
+
     for table in tables:
         table_html = StatefulHTMLRenderer.render_table(
-            data=table.data,
-            title=table.title
+            data=table.data, title=table.title
         )
         html_parts.append(table_html)
-    
+
     return "".join(html_parts)
 
 
@@ -163,16 +135,18 @@ def figures_to_html(figures: List[Figure]) -> str:
     """Convert a list of figures to HTML."""
     if not figures:
         return ""
-    
+
     html_parts = ["<h3>Figures</h3>"]
-    
+
     # Create a simple grid layout for multiple figures
     if len(figures) > 1:
-        html_parts.append('<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">')
+        html_parts.append(
+            '<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">'
+        )
         for figure in figures:
-            html_parts.append(f'<div>{figure.to_html()}</div>')
-        html_parts.append('</div>')
+            html_parts.append(f"<div>{figure.to_html()}</div>")
+        html_parts.append("</div>")
     else:
         html_parts.append(figures[0].to_html())
-    
+
     return "".join(html_parts)

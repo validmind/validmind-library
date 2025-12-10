@@ -1,0 +1,225 @@
+# ValidMind Library Project Guidelines
+
+You are an expert in Python package development, data science, and machine learning model validation.
+
+## Key Principles
+
+- Write concise, technical responses with accurate Python examples.
+- Use object-oriented programming for core SDK classes and functional programming for utilities.
+- Prefer iteration and modularization over code duplication.
+- Use descriptive variable names with auxiliary verbs (e.g., `is_active`, `has_permission`).
+- Use lowercase with underscores for directories, files, and Python identifiers (snake_case, e.g., `test_suites/classifier.py`).
+- Organize code in logical modules with clear responsibilities.
+- Implement comprehensive type hints for function signatures.
+- Create detailed docstrings for classes and functions, following a consistent format.
+
+## Python Package Structure
+
+- Use a flat package structure for core functionality with submodules for specialized components.
+- Organize related functionality into subpackages (e.g., `vm_models/`, `test_suites/`).
+- Maintain a clean `__init__.py` file that exposes key public interfaces.
+- Separate implementation details from the public API.
+- Follow a modular architecture with clear dependencies between components.
+
+## Object-Oriented Design
+
+- Use classes for complex objects with behavior (e.g., `VMModel`, `VMDataset`, `TestSuite`).
+- Implement abstract base classes to define interfaces (e.g., `VMInput`).
+- Use dataclasses for simple data containers (e.g., `ModelAttributes`).
+- Implement special methods (`__repr__`, `__str__`, `__or__`) where appropriate.
+- Apply inheritance sparingly and with clear purpose.
+- Use composition over inheritance when possible.
+
+## Test Implementation Guidelines
+
+### Test Structure and Organization
+
+- Tests are organized in domain-specific directories under `validmind/tests/` (e.g., `model_validation/`, `data_validation/`).
+- Tests are implemented as standalone functions decorated with the `@test` decorator.
+- Each test file should be named in PascalCase (e.g., `FeaturesAUC.py`) and contain a single test function with the same name.
+- Follow a hierarchical namespace for test IDs: `validmind.[category].[subcategory].[TestName]`.
+- Group tests by functionality and model/data types they apply to.
+
+### Test Implementation
+
+- Create tests using the `@test` decorator to register the function with the ValidMind test registry.
+- Add descriptive tags using the `@tags` decorator to categorize tests (e.g., `@tags("feature_importance", "AUC", "visualization")`).
+- Specify applicable model tasks using the `@tasks` decorator (e.g., `@tasks("classification")`).
+- Tests should accept validated model and dataset objects as input parameters (`model`, `dataset`, `models`, or `datasets`).
+- Include customization parameters with default values for flexibility (e.g., `fontsize: int = 12`).
+- Return visualization objects (Plotly figures, Matplotlib plots) or structured data (Pandas DataFrames).
+- Add comprehensive docstrings explaining test purpose, mechanisms, risks, strengths, and limitations.
+
+### Test Naming Conventions
+
+- Use PascalCase for test names (e.g., `FeaturesAUC`, `RougeScore`, `ModelMetadata`).
+- Use descriptive, domain-specific names that clearly indicate what the test does.
+- Group related tests with consistent naming patterns (e.g., `*Score` for evaluation metrics).
+- Follow naming pattern: `[Domain][Metric/Visualization][Type]` (e.g., `TimeSeriesR2SquareBySegments`).
+- For specialized test categories, use subdirectories with consistent naming (e.g., `embeddings/CosineSimilarityComparison`).
+
+### Custom Test Development
+
+- Use the `@vm.test` decorator to create custom tests in notebooks or scripts: `@vm.test("namespace.TestName")`.
+- Custom tests should have a unique ID in the format `namespace.TestName` following hierarchical naming conventions.
+- Ensure custom tests handle ValidMind input objects correctly (e.g., `VMDataset`, `VMModel`).
+- Support parameter customization with default values: `def custom_test(dataset, model, param1="default")`.
+- Return appropriate output types: tables (pandas DataFrames), plots (matplotlib/plotly figures), images, or multiple outputs.
+- Document custom tests with comprehensive docstrings explaining their purpose, methodology, and result interpretation.
+- Save custom tests to files using the `.save()` method for reuse across projects.
+- Include necessary imports when saving custom tests.
+- Handle multiple output types within a single test function when appropriate.
+- Follow the same parameter and input validation patterns as built-in tests.
+
+## Error Handling and Validation
+
+- Create a comprehensive hierarchy of exception classes deriving from a base exception.
+- Implement descriptive error messages and context-specific error handling.
+- Use early validation and guard clauses to handle preconditions.
+- Use the `SkipTestError` exception when a test is not applicable to specific inputs.
+- Prioritize error handling and edge cases:
+  - Handle errors and edge cases at the beginning of functions.
+  - Use early returns for error conditions to avoid deeply nested if statements.
+  - Place the happy path last in the function for improved readability.
+  - Use proper error logging with different log levels.
+  - Create custom exceptions with descriptive names and messages.
+
+## Type Annotations and Documentation
+
+- Use type hints for all function signatures.
+- Document parameters, return types, and exceptions in docstrings.
+- Include examples in docstrings for complex functions.
+- Follow a consistent docstring format (Google style).
+- Document public APIs thoroughly, particularly client-facing functions.
+- For tests, include a comprehensive description of the test's purpose, methodology, and interpretation of results.
+
+## Dependencies
+
+- Numpy, Pandas, Polars for data manipulation
+- Scikit-learn, PyTorch, XGBoost, etc. for model compatibility
+- Plotly and Matplotlib for visualizations
+- Standard Python libraries for core functionality
+- Minimize dependencies where possible to avoid conflicts
+
+## Package-Specific Guidelines
+
+### ValidMind Object Initialization
+- Use factory functions (`vm.init_dataset`, `vm.init_model`) for creating core objects.
+- Always provide meaningful `input_id` values for tracking and documentation.
+- Initialize datasets with required parameters: `target_column`, `class_labels` when applicable.
+- Use `assign_predictions()` method to link model predictions with datasets: `vm_dataset.assign_predictions(model=vm_model)`.
+- Support multiple dataset types (training, validation, test) with clear identification.
+
+### Framework Integration
+- Implement a consistent interface for model and dataset objects across ML frameworks.
+- Support common ML frameworks and libraries through adapter classes (sklearn, pytorch, xgboost, etc.).
+- Provide clear validation and testing utilities via comprehensive test suites.
+- Handle framework-specific requirements and constraints gracefully.
+
+### Extensibility and Configuration
+- Allow for extensibility through custom test implementations using decorator patterns.
+- Support configuration-based test execution with preview capabilities.
+- Implement proper logging with different verbosity levels for debugging and monitoring.
+- Provide fallback mechanisms for configuration and parameter management.
+- Enable batch processing and comparison testing through input grids.
+
+## Testing
+
+- Write comprehensive unit tests for all functionality.
+- Implement integration tests for end-to-end workflows.
+- Use pytest for testing framework.
+- Create test fixtures for common testing scenarios.
+- Test edge cases and error conditions thoroughly.
+
+## Running Tests and TestSuites
+
+### Test Discovery and Exploration
+- Use `vm.tests.list_tests()` to discover available tests with optional filtering (e.g., `filter="sklearn"`, `task="classification"`, `tags=["model_performance"]`).
+- Always use `vm.tests.describe_test()` to understand test requirements before execution.
+- Explore available tasks and tags with `vm.tests.list_tasks_and_tags()` for proper test categorization.
+
+### Test Execution Patterns
+- Use `vm.tests.run_test()` to run individual tests with appropriate inputs.
+- Always call `.log()` on test results to add them to model documentation.
+- Use meaningful `input_id` values for tracking test inputs and results.
+- Use custom `result_id` parameters to differentiate multiple runs of the same test.
+- Configure tests with parameters through the `params` argument for customization.
+
+### Batch Test Execution
+- Use test suites to run multiple related tests together with `vm.run_documentation_tests()`.
+- Create configuration objects for batch test execution with proper input mapping.
+- Use `preview_test_config()` to validate configurations before execution.
+- Implement input grids for comparing multiple models or datasets: `input_grid={"dataset": [ds1, ds2], "model": [m1, m2]}`.
+
+### Error Handling in Test Execution
+- Wrap individual test execution in try-catch blocks when running tests in loops.
+- Continue execution on individual test failures to complete validation workflows.
+- Provide detailed error context and logging for debugging test issues.
+- Validate required inputs before test execution to prevent runtime errors.
+
+### Test Suite Organization
+- Organize tests into logical test suites for common validation scenarios.
+- Group tests by domain (data validation, model validation, comparison tests).
+- Use systematic naming for test configurations and result tracking.
+- Include version suffixes in test IDs when creating multiple versions of the same test.
+
+## Documentation and Examples
+
+### Notebook Organization and Structure
+- Organize notebooks by purpose: `/quickstart/` for getting started, `/tutorials/` for step-by-step guides, `/how_to/` for specific features, `/code_samples/` for end-to-end examples.
+- Include clear README files explaining directory purposes and notebook contents.
+- Use consistent template-based structure across notebooks for uniformity.
+- Organize content by domain (credit_risk, nlp_and_llm, time_series, etc.) when appropriate.
+
+### Notebook Environment Setup
+- Begin notebooks with proper environment setup: `%load_ext dotenv`, `%dotenv .env`, `%matplotlib inline`.
+- Initialize ValidMind with proper credentials and configuration: `vm.init(api_host="...", api_key="...", api_secret="...", model="...")`.
+- Set relevant environment variables for features like LLM descriptions.
+- Import required libraries consistently across notebooks.
+
+### Documentation Integration
+- Structure notebooks with clear sections and explanations for each step.
+- Document common usage patterns and testing workflows.
+- Include examples of both individual test execution and batch test suites.
+- Provide comprehensive API documentation with practical examples.
+- Include real-world examples that demonstrate end-to-end validation workflows.
+- Show examples of creating and running custom tests with proper decorator usage.
+
+### Result Documentation
+- Always call `.log()` on test results to integrate with model documentation.
+- Organize results by documentation sections for structured reporting.
+- Include both individual test results and comprehensive test suite outputs.
+- Demonstrate proper result interpretation and analysis techniques.
+
+## Performance Considerations
+
+- Optimize for memory efficiency when working with large datasets.
+- Implement lazy loading where appropriate.
+- Provide progress indicators for long-running operations.
+- Cache results when appropriate to avoid redundant computations.
+
+## Key Conventions
+
+1. Consistent naming:
+   - Use descriptive names for classes, functions, and variables.
+   - Follow snake_case for methods and variables, PascalCase for classes and test names.
+   - Use verb phrases for functions (e.g., `get_test_suite`, `init_model`).
+
+2. Module organization:
+   - Core functionality in the top-level module.
+   - Specialized components in submodules.
+   - Tests organized by domain and functionality.
+
+3. Error handling:
+   - Define specific exception classes in `errors.py`.
+   - Provide clear error messages.
+   - Include context in exception messages.
+   - Use `SkipTestError` for tests that cannot be applied to certain inputs.
+
+4. Documentation:
+   - Include comprehensive docstrings for all public APIs.
+   - Document parameters, return types, and exceptions.
+   - Provide examples for complex functions.
+   - For tests, document purpose, methodology, and result interpretation.
+
+This package is designed for data scientists and ML engineers to validate and document machine learning models, with a focus on simplicity, extensibility, and comprehensive validation features.

@@ -7,14 +7,7 @@
 import logging
 import os
 import time
-from typing import Any, Awaitable, Callable, Dict, Optional, TypeVar
-
-import sentry_sdk
-from sentry_sdk.utils import event_from_exception, exc_info_from_error
-
-from .__version__ import __version__
-
-__dsn = "https://48f446843657444aa1e2c0d716ef864b@o1241367.ingest.sentry.io/4505239625465856"
+from typing import Any, Awaitable, Callable, Optional, TypeVar
 
 
 def _get_log_level() -> int:
@@ -53,45 +46,6 @@ def get_logger(
     logger.propagate = False
 
     return logger
-
-
-def init_sentry(server_config: Dict[str, Any]) -> None:
-    """Initialize Sentry SDK for sending logs back to ValidMind.
-
-    This will usually only be called by the API client module to initialize the
-    Sentry connection after the user calls `validmind.init()`. This is because the DSN
-    and other config options will be returned by the API.
-
-    Args:
-        server_config (Dict[str, Any]): The config dictionary returned by the API.
-            - send_logs (bool): Whether to send logs to Sentry (gets removed).
-            - dsn (str): The Sentry DSN.
-            ...: Other config options for Sentry.
-
-    Returns:
-        None.
-    """
-    if os.getenv("VM_NO_TELEMETRY", False):
-        return
-
-    if not server_config.get("send_logs", False):
-        return
-
-    config = {
-        "dsn": __dsn,
-        "traces_sample_rate": 1.0,
-        "release": f"validmind-python@{__version__}",
-        "in_app_include": ["validmind"],
-        "environment": "production",
-    }
-    config.update({k: v for k, v in server_config.items() if k != "send_logs"})
-
-    try:
-        sentry_sdk.init(**config)
-    except Exception as e:
-        logger = get_logger(__name__)
-        logger.info("Sentry failed to initialize - ignoring...")
-        logger.debug(f"Sentry error: {str(e)}")
 
 
 F = TypeVar("F", bound=Callable[..., Any])
@@ -170,14 +124,49 @@ async def log_performance_async(
     return wrap
 
 
-def send_single_error(error: Exception) -> None:
-    """Send a single error to Sentry.
+def log_api_operation(
+    operation_name: Optional[str] = None,
+    logger: Optional[logging.Logger] = None,
+    extract_key: Optional[Callable] = None,
+    force: bool = False,
+) -> Callable[[F], F]:
+    """Decorator to log API operations like figure uploads.
 
     Args:
-        error (Exception): The exception to send.
-    """
-    event, hint = event_from_exception(exc_info_from_error(error))
-    client = sentry_sdk.Client(__dsn, release=f"validmind-python@{__version__}")
-    client.capture_event(event, hint=hint)
+        operation_name (str, optional): The name of the operation. Defaults to function name.
+        logger (logging.Logger, optional): The logger to use. Defaults to None.
+        extract_key (Callable, optional): Function to extract a key from args for logging.
+        force (bool, optional): Whether to force logging even if env var is off.
 
-    time.sleep(0.25)  # wait for the event to be sent
+    Returns:
+        Callable: The decorated function.
+    """
+
+    def decorator(func: F) -> F:
+        # check if log level is set to debug
+        if _get_log_level() != logging.DEBUG and not force:
+            return func
+
+        nonlocal logger
+        if logger is None:
+            logger = get_logger()
+
+        nonlocal operation_name
+        if operation_name is None:
+            operation_name = func.__name__
+
+        async def wrapped(*args: Any, **kwargs: Any) -> Any:
+            # Try to extract a meaningful identifier from the arguments
+            identifier = ""
+            if extract_key and args:
+                try:
+                    identifier = f": {extract_key(args[0])}"
+                except (AttributeError, IndexError):
+                    pass
+
+            logger.debug(f"{operation_name}{identifier}")
+            return await func(*args, **kwargs)
+
+        return wrapped
+
+    return decorator

@@ -22,9 +22,9 @@ from ipywidgets import HTML, Accordion
 
 from .client_config import client_config
 from .errors import MissingAPICredentialsError, MissingModelIdError, raise_api_error
-from .logging import get_logger, init_sentry, send_single_error
+from .logging import get_logger, log_api_operation
 from .utils import NumpyEncoder, is_html, md_to_html, run_async
-from .vm_models import Figure
+from .vm_models.figure import Figure
 
 logger = get_logger(__name__)
 
@@ -40,8 +40,6 @@ __api_session: Optional[aiohttp.ClientSession] = None
 @atexit.register
 def _close_session():
     """Closes the async client session at exit."""
-    global __api_session
-
     if __api_session and not __api_session.closed:
         try:
             loop = asyncio.get_event_loop()
@@ -85,7 +83,8 @@ def _get_session() -> aiohttp.ClientSession:
     if not __api_session or __api_session.closed:
         __api_session = aiohttp.ClientSession(
             headers=_get_api_headers(),
-            timeout=aiohttp.ClientTimeout(total=30),
+            timeout=aiohttp.ClientTimeout(total=int(os.getenv("VM_API_TIMEOUT", 30))),
+            trust_env=True,
         )
 
     return __api_session
@@ -167,7 +166,7 @@ def _ping() -> Dict[str, Any]:
 
     client_info = r.json()
 
-    init_sentry(client_info.get("sentry_config", {}))
+    # Sentry removed: no telemetry initialization
 
     # Only show this confirmation the first time we connect to the API
     ack_connected = not client_config.model
@@ -245,14 +244,7 @@ def init(
 
 def reload():
     """Reconnect to the ValidMind API and reload the project configuration."""
-
-    try:
-        _ping()
-    except Exception as e:
-        # if the api host is https, assume we're not in dev mode and send to sentry
-        if _api_host.startswith("https://"):
-            send_single_error(e)
-        raise e
+    _ping()
 
 
 async def aget_metadata(content_id: str) -> Dict[str, Any]:
@@ -304,6 +296,10 @@ async def alog_metadata(
         raise e
 
 
+@log_api_operation(
+    operation_name="Sending figure to ValidMind API",
+    extract_key=lambda figure: figure.key,
+)
 async def alog_figure(figure: Figure) -> Dict[str, Any]:
     """Logs a figure.
 
@@ -457,11 +453,11 @@ async def alog_metric(
     if value is None:
         raise ValueError("Must provide a value for the metric")
 
+    # Validate that value is a scalar (int or float)
     if not isinstance(value, (int, float)):
-        try:
-            value = float(value)
-        except (ValueError, TypeError):
-            raise ValueError("`value` must be a scalar (int or float)")
+        raise ValueError(
+            "Only scalar values (int or float) are allowed for logging metrics."
+        )
 
     if thresholds is not None and not isinstance(thresholds, dict):
         raise ValueError("`thresholds` must be a dictionary or None")
@@ -490,7 +486,7 @@ async def alog_metric(
 
 def log_metric(
     key: str,
-    value: float,
+    value: Union[int, float],
     inputs: Optional[List[str]] = None,
     params: Optional[Dict[str, Any]] = None,
     recorded_at: Optional[str] = None,
@@ -500,18 +496,19 @@ def log_metric(
     """Logs a unit metric.
 
     Unit metrics are key-value pairs where the key is the metric name and the value is
-    a scalar (int or float). These key-value pairs are associated with the currently
-    selected model (inventory model in the ValidMind Platform) and keys can be logged
-    to over time to create a history of the metric. On the ValidMind Platform, these metrics
-    will be used to create plots/visualizations for documentation and dashboards etc.
+    a scalar (int or float). These key-value pairs are associated
+    with the currently selected model (inventory model in the ValidMind Platform) and keys
+    can be logged to over time to create a history of the metric. On the ValidMind Platform,
+    these metrics will be used to create plots/visualizations for documentation and dashboards etc.
 
     Args:
         key (str): The metric key
-        value (Union[int, float]): The metric value
+        value (Union[int, float]): The metric value (scalar)
         inputs (List[str], optional): List of input IDs
         params (Dict[str, Any], optional): Parameters used to generate the metric
         recorded_at (str, optional): Timestamp when the metric was recorded
         thresholds (Dict[str, Any], optional): Thresholds for the metric
+        passed (bool, optional): Whether the metric passed validation thresholds
     """
     return run_async(
         alog_metric,
@@ -523,21 +520,6 @@ def log_metric(
         thresholds=thresholds,
         passed=passed,
     )
-
-
-def get_ai_key() -> Dict[str, Any]:
-    """Calls the API to get an API key for our LLM proxy."""
-    r = requests.get(
-        url=_get_url("ai/key"),
-        headers=_get_api_headers(),
-    )
-
-    if r.status_code != 200:
-        # TODO: improve error handling when there's no Open AI API or AI key available
-        # logger.error("Could not get AI key from ValidMind API")
-        raise_api_error(r.text)
-
-    return r.json()
 
 
 def generate_test_result_description(test_result_data: Dict[str, Any]) -> str:

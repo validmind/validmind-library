@@ -119,11 +119,7 @@ class Figure:
         Returns HTML representation that preserves state when notebook is saved.
         This is the preferred method for displaying figures in notebooks.
         """
-        metadata = {
-            "key": self.key,
-            "ref_id": self.ref_id,
-            "type": self._type
-        }
+        metadata = {"key": self.key, "ref_id": self.ref_id, "type": self._type}
 
         if is_matplotlib_figure(self.figure):
             tmpfile = BytesIO()

@@ -4,13 +4,25 @@
 
 from typing import Tuple
 
-import evaluate
 import pandas as pd
 import plotly.graph_objects as go
 
 from validmind import RawData, tags, tasks
+from validmind.errors import MissingDependencyError
 from validmind.tests.utils import validate_prediction
 from validmind.vm_models import VMDataset, VMModel
+
+try:
+    import evaluate
+except ImportError as e:
+    if "evaluate" in str(e):
+        raise MissingDependencyError(
+            "Missing required package `evaluate` for BleuScore. "
+            "Please run `pip install validmind[nlp]` to use NLP tests",
+            required_dependencies=["evaluate"],
+            extra="nlp",
+        ) from e
+    raise e
 
 
 @tags("nlp", "text_data", "visualization")
@@ -70,7 +82,6 @@ def BleuScore(
     # Ensure equal lengths and get truncated data if necessary
     y_true, y_pred = validate_prediction(y_true, y_pred)
 
-    # Load the BLEU evaluation metric
     bleu = evaluate.load("bleu")
 
     # Calculate BLEU scores

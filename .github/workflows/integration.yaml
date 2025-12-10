@@ -8,7 +8,6 @@ on:
     branches:
       - main
       - prod
-      - release-v1
     paths-ignore:
       - 'docs/**'
 
@@ -51,12 +50,6 @@ jobs:
       - name: Remove Build Environment
         run: rm -rf .venv
 
-      - name: Setup Virtual Environment
-        run: python -m venv sdist-venv
-
-      - name: Install Built Package
-        run: sdist-venv/bin/pip install --no-cache-dir "$(ls dist/validmind*.whl | head -n 1)[llm,huggingface]"
-
       - name: 'Setup Virtual Environment for [all]'
         run: python -m venv all-venv
 
@@ -65,13 +58,13 @@ jobs:
         run: all-venv/bin/pip install --no-cache-dir "$(ls dist/validmind*.whl | head -n 1)[all]"
 
       - name: Install Additional Dependencies
-        run: sdist-venv/bin/pip install nbformat papermill jupyter
+        run: all-venv/bin/pip install nbformat papermill jupyter
 
       - name: Create Jupyter Kernel
-        run: sdist-venv/bin/python -m ipykernel install --user --name sdist-venv
+        run: all-venv/bin/python -m ipykernel install --user --name all-venv
 
       - name: Integration Tests
-        run: sdist-venv/bin/python scripts/run_e2e_notebooks.py --kernel sdist-venv
+        run: all-venv/bin/python scripts/run_e2e_notebooks.py --kernel all-venv
         env:
           NOTEBOOK_RUNNER_DEFAULT_MODEL: ${{ secrets.NOTEBOOK_RUNNER_DEFAULT_PROJECT_ID }}
           NOTEBOOK_RUNNER_API_KEY: ${{ secrets.NOTEBOOK_RUNNER_API_KEY }}

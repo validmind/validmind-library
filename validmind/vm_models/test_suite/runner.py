@@ -9,7 +9,7 @@ from IPython.display import display
 
 from ...logging import get_logger
 from ...utils import is_notebook, run_async, run_async_check
-from ..html_progress import HTMLProgressBar, HTMLLabel, HTMLBox
+from ..html_progress import HTMLBox, HTMLLabel, HTMLProgressBar
 from .summary import TestSuiteSummary
 from .test_suite import TestSuite
 
@@ -29,7 +29,7 @@ class TestSuiteRunner:
     pbar: widgets.IntProgress = None
     pbar_description: widgets.Label = None
     pbar_box: widgets.HBox = None
-    
+
     # HTML-based progress components
     html_pbar: HTMLProgressBar = None
     html_pbar_description: HTMLLabel = None
@@ -73,12 +73,14 @@ class TestSuiteRunner:
 
         # Use HTML progress bar instead of ipywidgets
         self.html_pbar_description = HTMLLabel(value="Running test suite...")
-        self.html_pbar = HTMLProgressBar(max_value=num_tasks, description="Running test suite...")
+        self.html_pbar = HTMLProgressBar(
+            max_value=num_tasks, description="Running test suite..."
+        )
         self.html_pbar_box = HTMLBox([self.html_pbar_description, self.html_pbar])
 
         # Display the HTML components
         self.html_pbar.display()
-        
+
         # Keep the old widgets as fallback for compatibility
         self.pbar_description = widgets.Label(value="Running test suite...")
         self.pbar = widgets.IntProgress(max=num_tasks, orientation="horizontal")
@@ -91,7 +93,7 @@ class TestSuiteRunner:
             self.html_pbar.close()
         if self.html_pbar_description:
             self.html_pbar_description.update("Test suite complete!")
-        
+
         # Keep old widget updates for compatibility
         self.pbar_description.value = "Test suite complete!"
         self.pbar.close()
@@ -103,12 +105,14 @@ class TestSuiteRunner:
         collected. This method will log the results to ValidMind.
         """
         # Update HTML progress bar description
-        sending_message = f"Sending results of test suite '{self.suite.suite_id}' to ValidMind..."
+        sending_message = (
+            f"Sending results of test suite '{self.suite.suite_id}' to ValidMind..."
+        )
         if self.html_pbar:
             self.html_pbar.update(self.html_pbar.value, sending_message)
         if self.html_pbar_description:
             self.html_pbar_description.update(sending_message)
-            
+
         # Keep old widget updates for compatibility
         self.pbar_description.value = sending_message
 
@@ -116,27 +120,27 @@ class TestSuiteRunner:
         # TODO: use asyncio.gather here for better performance
         for test in tests:
             sending_test_message = f"Sending result to ValidMind: {test.test_id}..."
-            
+
             # Update HTML progress bar
             if self.html_pbar:
                 self.html_pbar.update(self.html_pbar.value, sending_test_message)
             if self.html_pbar_description:
                 self.html_pbar_description.update(sending_test_message)
-                
-            # Keep old widget updates for compatibility  
+
+            # Keep old widget updates for compatibility
             self.pbar_description.value = sending_test_message
 
             try:
                 await test.log_async()
             except Exception as e:
                 failure_message = "Failed to send result to ValidMind"
-                
+
                 # Update HTML progress bar
                 if self.html_pbar:
                     self.html_pbar.update(self.html_pbar.value, failure_message)
                 if self.html_pbar_description:
                     self.html_pbar_description.update(failure_message)
-                    
+
                 # Keep old widget updates for compatibility
                 self.pbar_description.value = failure_message
                 logger.error(f"Failed to log result: {test.result}")
@@ -146,7 +150,7 @@ class TestSuiteRunner:
             # Update HTML progress bar value
             if self.html_pbar:
                 self.html_pbar.update(self.html_pbar.value + 1)
-                
+
             # Keep old widget updates for compatibility
             self.pbar.value += 1
 
@@ -160,16 +164,16 @@ class TestSuiteRunner:
                 progress_complete = True
             elif self.pbar and self.pbar.value == self.pbar.max:
                 progress_complete = True
-                
+
             if progress_complete:
                 completion_message = "Test suite complete!"
-                
+
                 # Update HTML progress bar
                 if self.html_pbar:
                     self.html_pbar.update(self.html_pbar.max_value, completion_message)
                 if self.html_pbar_description:
                     self.html_pbar_description.update(completion_message)
-                    
+
                 # Keep old widget updates for compatibility
                 self.pbar_description.value = completion_message
                 done = True
@@ -181,13 +185,13 @@ class TestSuiteRunner:
             return logger.info("Test suite done...")
 
         collecting_message = "Collecting test results..."
-        
+
         # Update HTML progress bar
         if self.html_pbar:
             self.html_pbar.update(self.html_pbar.value, collecting_message)
         if self.html_pbar_description:
             self.html_pbar_description.update(collecting_message)
-            
+
         # Keep old widget updates for compatibility
         self.pbar_description.value = collecting_message
 
@@ -197,9 +201,10 @@ class TestSuiteRunner:
             sections=self.suite.sections,
             show_link=show_link,
         )
-        
+
         # Use HTML rendering by default for better state preservation
         from ...utils import display as vm_display
+
         vm_display(summary)
 
     def run(self, send: bool = True, fail_fast: bool = False):
@@ -216,25 +221,25 @@ class TestSuiteRunner:
         for section in self.suite.sections:
             for test in section.tests:
                 running_message = f"Running {test.name}"
-                
+
                 # Update HTML progress bar
                 if self.html_pbar:
                     self.html_pbar.update(self.html_pbar.value, running_message)
                 if self.html_pbar_description:
                     self.html_pbar_description.update(running_message)
-                    
+
                 # Keep old widget updates for compatibility
                 self.pbar_description.value = running_message
-                
+
                 test.run(
                     fail_fast=fail_fast,
                     config=self._test_configs.get(test.test_id, {}),
                 )
-                
+
                 # Update progress value
                 if self.html_pbar:
                     self.html_pbar.update(self.html_pbar.value + 1)
-                    
+
                 # Keep old widget updates for compatibility
                 self.pbar.value += 1
 

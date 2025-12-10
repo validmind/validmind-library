@@ -63,6 +63,32 @@ pip install validmind
     pip install rpy2
     ```
 
+## PII Detection
+
+The ValidMind Library includes optional PII detection capabilities using Microsoft Presidio to automatically detect sensitive data in test results and prevent accidental logging.
+
+**Installation:**
+
+```bash
+pip install validmind[pii-detection]
+```
+
+**Configure PII detection:**
+
+```bash
+# Enable PII detection for test results only
+export VALIDMIND_PII_DETECTION=test_results
+
+# Enable PII detection for test descriptions only
+export VALIDMIND_PII_DETECTION=test_descriptions
+
+# Enable PII detection for both test results and descriptions
+export VALIDMIND_PII_DETECTION=all
+
+# Disable PII detection (default)
+export VALIDMIND_PII_DETECTION=disabled
+```
+
 ## How to contribute
 
 ### Install dependencies
@@ -116,18 +142,6 @@ make version tag=patch
 ```
 
 The value of `tag` corresponds to one of the options provided by Poetry: <https://python-poetry.org/docs/cli/#version>
-
-## Generating API Reference Docs
-
-The [API reference documentation](https://docs.validmind.ai/validmind/validmind.html) you see in our docs site is generated in HTML format with `pdoc` with the following
-command:
-
-```bash
-# Generate HTML
-make docs
-```
-
-The resulting docs are written to `docs/pdoc/_build`.
 
 ## Generating summaries for test descriptions
 

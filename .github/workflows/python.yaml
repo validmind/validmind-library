@@ -44,6 +44,9 @@ jobs:
 
       - uses: actions/checkout@v4
 
+      - name: Free Disk Space
+        run: ./disk_clean.sh
+
       - name: Install poetry
         run: pipx install poetry
 
@@ -57,7 +60,7 @@ jobs:
         run: |
           poetry env use python3.9
           poetry run pip install pyarrow==17.0.0
-          poetry install -E huggingface -E llm
+          poetry install --all-extras
           poetry run pip install torch==2.0.1 --extra-index-url https://download.pytorch.org/whl/cpu
           poetry run pip install aequitas fairlearn vl-convert-python
 

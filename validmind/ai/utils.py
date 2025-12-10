@@ -3,9 +3,8 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 import os
-from urllib.parse import urljoin
 
-from openai import AzureOpenAI, Client, OpenAI
+from openai import AzureOpenAI, OpenAI
 
 from ..logging import get_logger
 from ..utils import md_to_html
@@ -36,13 +35,13 @@ class DescriptionFuture:
         self._future = future
 
     def get_description(self):
-        if isinstance(self._future, str):
+        if isinstance(self._future, tuple):
             description = self._future
         else:
             # This will block until the future is completed
             description = self._future.result()
 
-        return md_to_html(description, mathml=True)
+        return md_to_html(description[0], mathml=True), description[1]
 
 
 def get_client_and_model():
@@ -83,28 +82,9 @@ def get_client_and_model():
         logger.debug(f"Using Azure OpenAI {__model} for generating descriptions")
 
     else:
-        try:
-            # TODO: fix circular import
-            from ..api_client import get_ai_key, get_api_host
-
-            response = get_ai_key()
-            __client = Client(
-                base_url=(
-                    # TODO: improve this to be a bit more dynamic
-                    "http://localhost:4000/genai"
-                    if "localhost" in get_api_host()
-                    else urljoin(get_api_host(), "/genai")
-                ),
-                api_key=response["key"],
-            )
-            __model = "gpt-4o"  # TODO: backend should tell us which model to use
-            logger.debug(f"Using ValidMind {__model} for generating descriptions")
-        except Exception as e:
-            logger.debug(f"Failed to get API key: {e}")
-            raise ValueError(
-                "OPENAI_API_KEY, AZURE_OPENAI_KEY must be set, or your account "
-                "must be setup to use ValidMind's LLM in order to use LLM features"
-            )
+        raise ValueError(
+            "OPENAI_API_KEY, AZURE_OPENAI_KEY must be setup to use LLM features"
+        )
 
     return __client, __model
 

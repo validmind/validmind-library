@@ -27,8 +27,9 @@ from ..errors import LoadTestError, MissingDependencyError
 from ..html_templates.content_blocks import test_content_block_html
 from ..logging import get_logger
 from ..utils import display, format_dataframe, fuzzy_match, md_to_html, test_id_to_name
-from ..vm_models import VMDataset, VMModel
+from ..vm_models.dataset.dataset import VMDataset
 from ..vm_models.figure import Figure
+from ..vm_models.model import VMModel
 from ..vm_models.result import ResultTable
 from .__types__ import TestID
 from ._store import test_provider_store, test_store
@@ -178,6 +179,12 @@ def load_test(
 
         # add inputs and params as attributes to the test function
         test_func.inputs, test_func.params = _inspect_signature(test_func)
+
+        # ensure tags and tasks attributes exist, default to empty list if not present
+        if not hasattr(test_func, "__tags__"):
+            test_func.__tags__ = []
+        if not hasattr(test_func, "__tasks__"):
+            test_func.__tasks__ = []
 
         test_store.register_test(test_id, test_func)
 

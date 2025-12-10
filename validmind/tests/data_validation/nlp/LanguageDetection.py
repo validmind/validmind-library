@@ -6,9 +6,22 @@ from typing import Tuple
 
 import plotly.express as px
 import plotly.graph_objects as go
-from langdetect import LangDetectException, detect
 
 from validmind import RawData, tags, tasks
+from validmind.errors import MissingDependencyError
+
+try:
+    from langdetect import LangDetectException, detect
+except ImportError as e:
+    if "langdetect" in str(e):
+        raise MissingDependencyError(
+            "Missing required package `langdetect` for LanguageDetection. "
+            "Please run `pip install validmind[nlp]` to use NLP tests",
+            required_dependencies=["langdetect"],
+            extra="nlp",
+        ) from e
+
+    raise e
 
 
 @tags("nlp", "text_data", "visualization")

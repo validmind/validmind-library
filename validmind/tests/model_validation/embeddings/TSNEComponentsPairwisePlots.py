@@ -79,7 +79,7 @@ def TSNEComponentsPairwisePlots(
 
     # Prepare DataFrame for Plotly
     tsne_df = pd.DataFrame(
-        tsne_results, columns=[f"Component {i+1}" for i in range(n_components)]
+        tsne_results, columns=[f"Component {i + 1}" for i in range(n_components)]
     )
 
     # List to store each plot

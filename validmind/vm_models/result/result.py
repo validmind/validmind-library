@@ -7,7 +7,7 @@ Result objects for test results
 """
 import asyncio
 import json
-from abc import abstractmethod
+import os
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Union
 from uuid import uuid4
@@ -20,7 +20,7 @@ from ipywidgets import HTML, VBox
 from ... import api_client
 from ...ai.utils import DescriptionFuture
 from ...errors import InvalidParameterError
-from ...logging import get_logger
+from ...logging import get_logger, log_api_operation
 from ...utils import (
     HumanReadableEncoder,
     NumpyEncoder,
@@ -31,15 +31,15 @@ from ...utils import (
 from ..figure import Figure, create_figure
 from ..html_renderer import StatefulHTMLRenderer
 from ..input import VMInput
+from .pii_filter import PIIDetectionMode, get_pii_detection_mode, scan_df, scan_text
 from .utils import (
     AI_REVISION_NAME,
     DEFAULT_REVISION_NAME,
-    check_for_sensitive_data,
-    figures_to_widgets,
     figures_to_html,
+    figures_to_widgets,
     get_result_template,
-    tables_to_widgets,
     tables_to_html,
+    tables_to_widgets,
     update_metadata,
 )
 
@@ -138,12 +138,10 @@ class Result:
         """May be overridden by subclasses."""
         return self.__class__.__name__
 
-    @abstractmethod
     def to_widget(self):
         """Create an ipywidget representation of the result... Must be overridden by subclasses."""
         raise NotImplementedError
 
-    @abstractmethod
     def log(self):
         """Log the result... Must be overridden by subclasses."""
         raise NotImplementedError
@@ -191,6 +189,7 @@ class TestResult(Result):
     doc: Optional[str] = None
     description: Optional[Union[str, DescriptionFuture]] = None
     metric: Optional[Union[int, float]] = None
+    scorer: Optional[List[Union[int, float]]] = None
     tables: Optional[List[ResultTable]] = None
     raw_data: Optional[RawData] = None
     figures: Optional[List[Figure]] = None
@@ -201,6 +200,7 @@ class TestResult(Result):
     _was_description_generated: bool = False
     _unsafe: bool = False
     _client_config_cache: Optional[Any] = None
+    _is_scorer_result: bool = False
 
     def __post_init__(self):
         if self.ref_id is None:
@@ -234,8 +234,10 @@ class TestResult(Result):
             description = super().__getattribute__("description")
 
             if isinstance(description, DescriptionFuture):
-                self._was_description_generated = True
-                self.description = description.get_description()
+                (
+                    self.description,
+                    self._was_description_generated,
+                ) = description.get_description()
 
         return super().__getattribute__(name)
 
@@ -255,6 +257,67 @@ class TestResult(Result):
                 inputs[input_or_list.input_id] = input_or_list
 
         return list(inputs.values())
+
+    def set_metric(self, values: Union[int, float, List[Union[int, float]]]) -> None:
+        """Set the metric value.
+        Args:
+            values: The metric values to set. Can be int, float, or List[Union[int, float]].
+        """
+        if isinstance(values, list):
+            # Lists should be stored in scorer
+            self.scorer = values
+            self.metric = None  # Clear metric field when using scorer
+        else:
+            # Single values should be stored in metric
+            self.metric = values
+            self.scorer = None  # Clear scorer field when using metric
+
+    def _get_metric_display_value(
+        self,
+    ) -> Union[int, float, List[Union[int, float]], None]:
+        """Get the metric value for display purposes.
+        Returns:
+            The raw metric value, handling both metric and scorer fields.
+        """
+        # Check metric field first
+        if self.metric is not None:
+            return self.metric
+
+        # Check scorer field
+        if self.scorer is not None:
+            return self.scorer
+
+        return None
+
+    def _get_metric_serialized_value(
+        self,
+    ) -> Union[int, float, List[Union[int, float]], None]:
+        """Get the metric value for API serialization.
+        Returns:
+            The serialized metric value, handling both metric and scorer fields.
+        """
+        # Check metric field first
+        if self.metric is not None:
+            return self.metric
+
+        # Check scorer field
+        if self.scorer is not None:
+            return self.scorer
+
+        return None
+
+    def _get_metric_type(self) -> Optional[str]:
+        """Get the type of metric being stored.
+        Returns:
+            The metric type identifier or None if no metric is set.
+        """
+        if self.metric is not None:
+            return "unit_metric"
+
+        if self.scorer is not None:
+            return "scorer"
+
+        return None
 
     def add_table(
         self,
@@ -338,8 +401,15 @@ class TestResult(Result):
         self.figures.pop(index)
 
     def to_widget(self):
-        if self.metric is not None and not self.tables and not self.figures:
-            return HTML(f"<h3>{self.test_name}: <code>{self.metric}</code></h3>")
+        metric_display_value = self._get_metric_display_value()
+        if (
+            (self.metric is not None or self.scorer is not None)
+            and not self.tables
+            and not self.figures
+        ):
+            return HTML(
+                f"<h3>{self.test_name}: <code>{metric_display_value}</code></h3>"
+            )
 
         template_data = {
             "test_name": self.test_name,
@@ -351,7 +421,7 @@ class TestResult(Result):
                 else None
             ),
             "show_metric": self.metric is not None,
-            "metric": self.metric,
+            "metric": metric_display_value,
         }
         rendered = get_result_template().render(**template_data)
 
@@ -368,19 +438,17 @@ class TestResult(Result):
         """Generate HTML that persists in saved notebooks."""
         if self.metric is not None and not self.tables and not self.figures:
             return StatefulHTMLRenderer.render_result_header(
-                test_name=self.test_name,
-                passed=self.passed,
-                metric=self.metric
+                test_name=self.test_name, passed=self.passed, metric=self.metric
             )
 
         html_parts = [StatefulHTMLRenderer.get_base_css()]
-        
+
         # Add result header
-        html_parts.append(StatefulHTMLRenderer.render_result_header(
-            test_name=self.test_name,
-            passed=self.passed,
-            metric=self.metric
-        ))
+        html_parts.append(
+            StatefulHTMLRenderer.render_result_header(
+                test_name=self.test_name, passed=self.passed, metric=self.metric
+            )
+        )
 
         # Add description
         if self.description:
@@ -481,7 +549,7 @@ class TestResult(Result):
 
     def serialize(self):
         """Serialize the result for the API."""
-        return {
+        serialized = {
             "test_name": self.result_id,
             "title": self.title,
             "ref_id": self.ref_id,
@@ -492,6 +560,13 @@ class TestResult(Result):
             "metadata": self.metadata,
         }
 
+        # Add metric type information if available
+        metric_type = self._get_metric_type()
+        if metric_type:
+            serialized["metric_type"] = metric_type
+
+        return serialized
+
     async def log_async(
         self,
         section_id: str = None,
@@ -499,6 +574,10 @@ class TestResult(Result):
         position: int = None,
         config: Dict[str, bool] = None,
     ):
+        # Skip logging for scorers - they should not be saved to the backend
+        if self._is_scorer_result:
+            return
+
         tasks = []  # collect tasks to run in parallel (async)
 
         # Default empty dict if None
@@ -513,21 +592,50 @@ class TestResult(Result):
             )
         )
 
-        if self.metric is not None:
+        if self.metric is not None or self.scorer is not None:
             # metrics are logged as separate entities
+            metric_value = self._get_metric_serialized_value()
+            metric_type = self._get_metric_type()
+
+            # Use appropriate metric key based on type
+            metric_key = self.result_id
+            if metric_type == "scorer":
+                metric_key = f"{self.result_id}_scorer"
+
             tasks.append(
                 api_client.alog_metric(
-                    key=self.result_id,
-                    value=self.metric,
+                    key=metric_key,
+                    value=metric_value,
                     inputs=[input.input_id for input in self._get_flat_inputs()],
                     params=self.params,
                 )
             )
 
         if self.figures:
-            tasks.extend(
-                [api_client.alog_figure(figure) for figure in (self.figures or [])]
+            batch_size = min(
+                len(self.figures), int(os.getenv("VM_FIGURE_MAX_BATCH_SIZE", 20))
             )
+            figure_batches = [
+                self.figures[i : i + batch_size]
+                for i in range(0, len(self.figures), batch_size)
+            ]
+
+            async def upload_figures_in_batches():
+                for batch in figure_batches:
+
+                    @log_api_operation(
+                        operation_name=f"Uploading batch of {len(batch)} figures"
+                    )
+                    async def process_batch():
+                        batch_tasks = [
+                            api_client.alog_figure(figure) for figure in batch
+                        ]
+                        return await asyncio.gather(*batch_tasks)
+
+                    await process_batch()
+
+            tasks.append(upload_figures_in_batches())
+
         if self.description:
             revision_name = (
                 AI_REVISION_NAME
@@ -548,7 +656,7 @@ class TestResult(Result):
 
         return await asyncio.gather(*tasks)
 
-    def log(
+    def log(  # noqa: C901
         self,
         section_id: str = None,
         content_id: str = None,
@@ -579,9 +687,15 @@ class TestResult(Result):
 
         self.check_result_id_exist()
 
-        if not unsafe:
+        if not unsafe and get_pii_detection_mode() in [
+            PIIDetectionMode.TEST_RESULTS,
+            PIIDetectionMode.ALL,
+        ]:
             for table in self.tables or []:
-                check_for_sensitive_data(table.data, self._get_flat_inputs())
+                scan_df(table.data)
+
+            if self.description:
+                scan_text(self.description)
 
         if section_id:
             self._validate_section_id_for_block(section_id, position)
@@ -697,12 +811,13 @@ class TextGenerationResult(Result):
     def to_html(self):
         """Generate HTML that persists in saved notebooks."""
         html_parts = [StatefulHTMLRenderer.get_base_css()]
-        
+
         # Add result header
-        html_parts.append(StatefulHTMLRenderer.render_result_header(
-            test_name=self.test_name,
-            passed=None
-        ))
+        html_parts.append(
+            StatefulHTMLRenderer.render_result_header(
+                test_name=self.test_name, passed=None
+            )
+        )
 
         # Add description
         if self.description:
@@ -742,12 +857,24 @@ class TextGenerationResult(Result):
         """Log the result to ValidMind.
 
         Args:
-            section_id (str): The section ID within the model document to insert the
-                test result.
             content_id (str): The content ID to log the result to.
-            position (int): The position (index) within the section to insert the test
-                result.
         """
+        # Check description text for PII when available
+        if self.description:
+            try:
+                from .pii_filter import check_text_for_pii
+
+                check_text_for_pii(self.description, raise_on_detection=True)
+            except ImportError:
+                logger.debug(
+                    "PII detection not available - skipping PII check for description"
+                )
+            except ValueError:
+                # Re-raise PII detection errors
+                raise
+            except Exception as e:
+                logger.warning(f"PII detection failed for description: {e}")
+
         run_async(
             self.log_async,
             content_id=content_id,
