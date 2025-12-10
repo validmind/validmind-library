@@ -5,7 +5,6 @@
 import asyncio
 
 import ipywidgets as widgets
-from IPython.display import display
 
 from ...logging import get_logger
 from ...utils import is_notebook, run_async, run_async_check
@@ -98,61 +97,54 @@ class TestSuiteRunner:
         self.pbar_description.value = "Test suite complete!"
         self.pbar.close()
 
+    def _update_progress_message(self, message: str):
+        """Updates both HTML and widget progress bar messages."""
+        if self.html_pbar:
+            self.html_pbar.update(self.html_pbar.value, message)
+        if self.html_pbar_description:
+            self.html_pbar_description.update(message)
+
+        # Keep old widget updates for compatibility
+        self.pbar_description.value = message
+
+    def _increment_progress(self):
+        """Increments both HTML and widget progress bars."""
+        if self.html_pbar:
+            self.html_pbar.update(self.html_pbar.value + 1)
+
+        # Keep old widget updates for compatibility
+        self.pbar.value += 1
+
+    async def _log_test_result(self, test):
+        """Logs a single test result to ValidMind."""
+        sending_test_message = f"Sending result to ValidMind: {test.test_id}..."
+        self._update_progress_message(sending_test_message)
+
+        try:
+            await test.log_async()
+        except Exception:
+            failure_message = "Failed to send result to ValidMind"
+            self._update_progress_message(failure_message)
+            logger.error(f"Failed to log result: {test.result}")
+            raise
+
+        self._increment_progress()
+
     async def log_results(self):
         """Logs the results of the test suite to ValidMind.
 
         This method will be called after the test suite has been run and all results have been
         collected. This method will log the results to ValidMind.
         """
-        # Update HTML progress bar description
         sending_message = (
             f"Sending results of test suite '{self.suite.suite_id}' to ValidMind..."
         )
-        if self.html_pbar:
-            self.html_pbar.update(self.html_pbar.value, sending_message)
-        if self.html_pbar_description:
-            self.html_pbar_description.update(sending_message)
-
-        # Keep old widget updates for compatibility
-        self.pbar_description.value = sending_message
+        self._update_progress_message(sending_message)
 
         tests = [test for section in self.suite.sections for test in section.tests]
         # TODO: use asyncio.gather here for better performance
         for test in tests:
-            sending_test_message = f"Sending result to ValidMind: {test.test_id}..."
-
-            # Update HTML progress bar
-            if self.html_pbar:
-                self.html_pbar.update(self.html_pbar.value, sending_test_message)
-            if self.html_pbar_description:
-                self.html_pbar_description.update(sending_test_message)
-
-            # Keep old widget updates for compatibility
-            self.pbar_description.value = sending_test_message
-
-            try:
-                await test.log_async()
-            except Exception as e:
-                failure_message = "Failed to send result to ValidMind"
-
-                # Update HTML progress bar
-                if self.html_pbar:
-                    self.html_pbar.update(self.html_pbar.value, failure_message)
-                if self.html_pbar_description:
-                    self.html_pbar_description.update(failure_message)
-
-                # Keep old widget updates for compatibility
-                self.pbar_description.value = failure_message
-                logger.error(f"Failed to log result: {test.result}")
-
-                raise e
-
-            # Update HTML progress bar value
-            if self.html_pbar:
-                self.html_pbar.update(self.html_pbar.value + 1)
-
-            # Keep old widget updates for compatibility
-            self.pbar.value += 1
+            await self._log_test_result(test)
 
     async def _check_progress(self):
         done = False

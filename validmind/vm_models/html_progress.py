@@ -66,7 +66,7 @@ class HTMLProgressBar:
         )
         try:
             update_display(HTML(html_content), display_id=self._display_id)
-        except:
+        except Exception:
             pass  # Silently fail if update doesn't work
 
     def complete(self):
