@@ -1,8 +1,10 @@
 import asyncio
+import os
 import unittest
 from unittest.mock import patch
 import pandas as pd
 import matplotlib.pyplot as plt
+import plotly.graph_objects as go
 
 from validmind.vm_models.result import (
     TestResult,
@@ -311,6 +313,59 @@ class TestResultClasses(unittest.TestCase):
         self.assertIsInstance(html_list, str)
         # Check that the list values appear in the HTML
         self.assertIn("[0.1, 0.2, 0.3]", html_list)
+
+    def test_figure_interactive_toggle_plotly(self):
+        """Test that Plotly figures respect VALIDMIND_INTERACTIVE_FIGURES env var"""
+        plotly_fig = go.Figure(data=go.Scatter(x=[1, 2, 3], y=[4, 5, 6]))
+        figure = Figure(key="test_key", figure=plotly_fig, ref_id="test_ref")
+
+        # Test enabled values (including default behavior)
+        enabled_values = [None, "true", "True", "TRUE", "1", "yes", "Yes", "YES"]
+        for value in enabled_values:
+            if value is None:
+                # Test default behavior (env var not set)
+                env_backup = os.environ.pop("VALIDMIND_INTERACTIVE_FIGURES", None)
+                try:
+                    html = figure.to_html()
+                    self.assertIsInstance(html, str)
+                    self.assertIn("vm-plotly-data", html, "Default should include plotly data")
+                    self.assertIn("vm-plotly-test_key", html)
+                finally:
+                    if env_backup is not None:
+                        os.environ["VALIDMIND_INTERACTIVE_FIGURES"] = env_backup
+            else:
+                with patch.dict(os.environ, {"VALIDMIND_INTERACTIVE_FIGURES": value}, clear=False):
+                    html = figure.to_html()
+                    self.assertIsInstance(html, str)
+                    self.assertIn("vm-plotly-data", html, f"Should include plotly data for value: {value}")
+                    self.assertIn("vm-plotly-test_key", html)
+
+        # Test disabled values
+        disabled_values = ["false", "False", "FALSE", "0", "no", "No", "NO"]
+        for value in disabled_values:
+            with patch.dict(os.environ, {"VALIDMIND_INTERACTIVE_FIGURES": value}, clear=False):
+                html = figure.to_html()
+                self.assertIsInstance(html, str)
+                self.assertNotIn("vm-plotly-data", html, f"Should exclude plotly data for value: {value}")
+                self.assertNotIn("vm-plotly-test_key", html, f"Should exclude plotly container for value: {value}")
+                # Should still contain the static image
+                self.assertIn("data:image/png;base64", html)
+                self.assertIn("vm-img-test_key", html)
+
+    def test_figure_interactive_toggle_matplotlib_unaffected(self):
+        """Test that matplotlib figures are unaffected by the toggle"""
+        matplotlib_fig = plt.figure()
+        plt.plot([1, 2, 3])
+        figure = Figure(key="test_key", figure=matplotlib_fig, ref_id="test_ref")
+
+        # Test that matplotlib figures never include plotly data regardless of setting
+        # Only need to test once since behavior is identical for all values
+        with patch.dict(os.environ, {"VALIDMIND_INTERACTIVE_FIGURES": "true"}, clear=False):
+            html = figure.to_html()
+            self.assertIsInstance(html, str)
+            self.assertNotIn("vm-plotly-data", html)
+            self.assertIn("data:image/png;base64", html)
+            self.assertIn("vm-img-test_key", html)
 
 
 if __name__ == "__main__":

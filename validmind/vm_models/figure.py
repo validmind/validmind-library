@@ -8,6 +8,7 @@ Figure objects track the figure schema supported by the ValidMind API.
 
 import base64
 import json
+import os
 from dataclasses import dataclass
 from io import BytesIO
 from typing import Union
@@ -86,8 +87,13 @@ class Figure:
         elif is_plotly_figure(self.figure):
             png_file = self.figure.to_image(format="png")
             encoded = base64.b64encode(png_file).decode("utf-8")
-            # Add plotly-specific metadata
-            metadata["plotly_json"] = self.figure.to_json()
+            # Add plotly-specific metadata only if interactive figures are enabled
+            if os.getenv("VALIDMIND_INTERACTIVE_FIGURES", "true").lower() in (
+                "true",
+                "1",
+                "yes",
+            ):
+                metadata["plotly_json"] = self.figure.to_json()
             return StatefulHTMLRenderer.render_figure(encoded, self.key, metadata)
 
         elif is_png_image(self.figure):
