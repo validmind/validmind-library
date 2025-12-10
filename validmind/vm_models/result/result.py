@@ -279,11 +279,9 @@ class TestResult(Result):
         Returns:
             The raw metric value, handling both metric and scorer fields.
         """
-        # Check metric field first
         if self.metric is not None:
             return self.metric
 
-        # Check scorer field
         if self.scorer is not None:
             return self.scorer
 
@@ -296,11 +294,9 @@ class TestResult(Result):
         Returns:
             The serialized metric value, handling both metric and scorer fields.
         """
-        # Check metric field first
         if self.metric is not None:
             return self.metric
 
-        # Check scorer field
         if self.scorer is not None:
             return self.scorer
 
@@ -443,26 +439,21 @@ class TestResult(Result):
 
         html_parts = [StatefulHTMLRenderer.get_base_css()]
 
-        # Add result header
         html_parts.append(
             StatefulHTMLRenderer.render_result_header(
                 test_name=self.test_name, passed=self.passed, metric=self.metric
             )
         )
 
-        # Add description
         if self.description:
             html_parts.append(StatefulHTMLRenderer.render_description(self.description))
 
-        # Add parameters
         if self.params:
             html_parts.append(StatefulHTMLRenderer.render_parameters(self.params))
 
-        # Add tables
         if self.tables:
             html_parts.append(tables_to_html(self.tables))
 
-        # Add figures
         if self.figures:
             html_parts.append(figures_to_html(self.figures))
 
@@ -494,7 +485,6 @@ class TestResult(Result):
         # Iterate through all sections
         for section in client_config.documentation_template["sections"]:
             blocks = section.get("contents", [])
-            # Check each block in the section
             for block in blocks:
                 if (
                     block.get("content_type") == "test"
@@ -560,7 +550,6 @@ class TestResult(Result):
             "metadata": self.metadata,
         }
 
-        # Add metric type information if available
         metric_type = self._get_metric_type()
         if metric_type:
             serialized["metric_type"] = metric_type
@@ -597,7 +586,6 @@ class TestResult(Result):
             metric_value = self._get_metric_serialized_value()
             metric_type = self._get_metric_type()
 
-            # Use appropriate metric key based on type
             metric_key = self.result_id
             if metric_type == "scorer":
                 metric_key = f"{self.result_id}_scorer"
@@ -812,18 +800,15 @@ class TextGenerationResult(Result):
         """Generate HTML that persists in saved notebooks."""
         html_parts = [StatefulHTMLRenderer.get_base_css()]
 
-        # Add result header
         html_parts.append(
             StatefulHTMLRenderer.render_result_header(
                 test_name=self.test_name, passed=None
             )
         )
 
-        # Add description
         if self.description:
             html_parts.append(StatefulHTMLRenderer.render_description(self.description))
 
-        # Add parameters
         if self.params:
             html_parts.append(StatefulHTMLRenderer.render_parameters(self.params))
 
@@ -859,7 +844,6 @@ class TextGenerationResult(Result):
         Args:
             content_id (str): The content ID to log the result to.
         """
-        # Check description text for PII when available
         if self.description:
             try:
                 from .pii_filter import check_text_for_pii

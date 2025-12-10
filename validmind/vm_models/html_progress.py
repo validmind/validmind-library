@@ -53,7 +53,6 @@ class HTMLProgressBar:
             self.description = description
 
         if self._displayed:
-            # Always use fallback method for reliability
             self._update_fallback()
 
     def _update_fallback(self):
@@ -67,7 +66,7 @@ class HTMLProgressBar:
         try:
             update_display(HTML(html_content), display_id=self._display_id)
         except Exception:
-            pass  # Silently fail if update doesn't work
+            pass
 
     def complete(self):
         """Mark the progress bar as complete."""
@@ -76,7 +75,6 @@ class HTMLProgressBar:
     def close(self):
         """Close/hide the progress bar."""
         if self._displayed:
-            # Replace with final state HTML that preserves the completed state
             final_html = StatefulHTMLRenderer.render_progress_bar(
                 value=self.value,
                 max_value=self.max_value,
@@ -154,7 +152,6 @@ class HTMLBox:
     def display(self):
         """Display the box and its children."""
         if not self._displayed:
-            # Display each child first
             child_html_parts = []
             for child in self.children:
                 if hasattr(child, "display"):
@@ -164,7 +161,6 @@ class HTMLBox:
                 elif hasattr(child, "label_id"):
                     child_html_parts.append(f'<div id="{child.label_id}"></div>')
 
-            # Create container
             html_content = f"""
             <div class="vm-box" id="{self.box_id}" style="{self.layout_style}">
                 {''.join(child_html_parts)}

@@ -266,7 +266,6 @@ class StatefulHTMLRenderer:
         Returns:
             HTML string with formatted description
         """
-        # Replace h3 tags with strong tags for better nesting
         formatted_description = description.replace("<h3>", "<strong>").replace(
             "</h3>", "</strong>"
         )

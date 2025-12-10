@@ -88,7 +88,6 @@ class TestSuiteSectionSummary:
                 f'<div class="result">{md_to_html(self.description)}</div>'
             )
 
-        # Create accordion content
         accordion_items = []
         accordion_titles = []
 
@@ -224,15 +223,12 @@ class TestSuiteSummary:
         """Generate HTML representation of the complete test suite summary."""
         html_parts = [StatefulHTMLRenderer.get_base_css()]
 
-        # Add title
         title_html = f"""
         <h2>Test Suite Results: <i style="color: #DE257E">{self.title}</i></h2><hr>
         """
         html_parts.append(title_html)
 
-        # Add results link if needed
         if self.show_link:
-            # avoid circular import
             from ...api_client import get_api_host, get_api_model
 
             ui_host = (
@@ -247,16 +243,12 @@ class TestSuiteSummary:
             """
             html_parts.append(results_link_html)
 
-        # Add description
         html_parts.append(f'<div class="result">{md_to_html(self.description)}</div>')
 
-        # Add sections
         if len(self.sections) == 1:
-            # Single section - render tests directly
             section_summary = TestSuiteSectionSummary(tests=self.sections[0].tests)
             html_parts.append(section_summary.to_html())
         else:
-            # Multiple sections - create accordion
             section_items = []
             section_titles = []
 
