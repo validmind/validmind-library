@@ -2,6 +2,7 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+import uuid
 from typing import Any, Dict, List, Optional, Type
 
 from .html_templates.content_blocks import (
@@ -10,14 +11,14 @@ from .html_templates.content_blocks import (
 )
 from .logging import get_logger
 from .tests import LoadTestError, describe_test
-from .utils import display, is_notebook
+from .utils import display, is_notebook, test_id_to_name
 from .vm_models import TestSuite
 from .vm_models.html_renderer import StatefulHTMLRenderer
 
 logger = get_logger(__name__)
 
 CONTENT_TYPE_MAP = {
-    "test": "Threshold Test",
+    "test": "Test",
     "metric": "Metric",
     "unit_metric": "Unit Metric",
     "metadata_text": "Metadata Text",
@@ -57,6 +58,53 @@ def _convert_sections_to_section_tree(
     return sorted(section_tree, key=lambda x: x.get("order", 9999))
 
 
+def _render_test_accordion(content: str, title: str) -> str:
+    """Render a test block accordion with styling matching text blocks.
+
+    Args:
+        content: HTML content for the accordion item
+        title: Title for the accordion header
+
+    Returns:
+        HTML string with accordion matching text block styling
+    """
+    accordion_id = f"accordion-{uuid.uuid4().hex[:8]}"
+    item_id = f"{accordion_id}-item-0"
+
+    return f"""
+        <div class="vm-accordion" id="{accordion_id}">
+            <div class="vm-accordion-item">
+                <div class="vm-accordion-header"
+                     onclick="toggleAccordionItem('{item_id}')"
+                     style="cursor: pointer; padding: 6px; padding-left: 33px; font-size: 14px; font-weight: normal; background-color: #F0F0F0; border: 1px solid #ddd;">
+                    <span class="vm-accordion-toggle" id="{item_id}-toggle">▶</span>
+                    {title}
+                </div>
+                <div class="vm-accordion-content"
+                     id="{item_id}"
+                     style="display: none; padding: 15px; border: 1px solid #ddd; border-top: none; background-color: #fff;">
+                    {content}
+                </div>
+            </div>
+        </div>
+
+        <script>
+        function toggleAccordionItem(itemId) {{
+            const content = document.getElementById(itemId);
+            const toggle = document.getElementById(itemId + '-toggle');
+
+            if (content.style.display === 'none' || content.style.display === '') {{
+                content.style.display = 'block';
+                toggle.innerHTML = '▼';
+            }} else {{
+                content.style.display = 'none';
+                toggle.innerHTML = '▶';
+            }}
+        }}
+        </script>
+        """
+
+
 def _create_content_html(content: Dict[str, Any]) -> str:
     """Create HTML representation of a content block."""
     content_type = CONTENT_TYPE_MAP[content["content_type"]]
@@ -69,10 +117,19 @@ def _create_content_html(content: Dict[str, Any]) -> str:
 
     try:
         test_html = describe_test(test_id=content["content_id"], show=False)
+        test_name = test_id_to_name(content["content_id"])
+        # Wrap test/metric blocks in accordion with styling matching text blocks
+        return _render_test_accordion(
+            content=test_html,
+            title=f"{content_type}: {test_name} ('{content['content_id']}')",
+        )
     except LoadTestError:
-        return failed_content_block_html.format(test_id=content["content_id"])
-
-    return test_html
+        # Wrap failed test blocks in accordion for consistency
+        failed_html = failed_content_block_html.format(test_id=content["content_id"])
+        return _render_test_accordion(
+            content=failed_html,
+            title=f"{content_type}: Failed to load ('{content['content_id']}')",
+        )
 
 
 def _create_sub_section_html(
