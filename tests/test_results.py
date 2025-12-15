@@ -1,9 +1,10 @@
 import asyncio
+import os
 import unittest
 from unittest.mock import patch
 import pandas as pd
 import matplotlib.pyplot as plt
-from ipywidgets import HTML, VBox
+import plotly.graph_objects as go
 
 from validmind.vm_models.result import (
     TestResult,
@@ -74,8 +75,9 @@ class TestResultClasses(unittest.TestCase):
         self.assertEqual(error_result.error, error)
         self.assertEqual(error_result.message, "Test error message")
 
-        widget = error_result.to_widget()
-        self.assertIsInstance(widget, HTML)
+        html = error_result.to_html()
+        self.assertIsInstance(html, str)
+        self.assertIn("Test error message", html)
 
     def test_test_result_initialization(self):
         """Test TestResult initialization and basic methods"""
@@ -180,8 +182,9 @@ class TestResultClasses(unittest.TestCase):
         self.assertEqual(text_result.title, "Text Test")
         self.assertEqual(text_result.description, "Generated text")
 
-        widget = text_result.to_widget()
-        self.assertIsInstance(widget, VBox)
+        html = text_result.to_html()
+        self.assertIsInstance(html, str)
+        self.assertIn("Generated text", html)
 
     def test_validate_log_config(self):
         """Test validation of log configuration"""
@@ -290,26 +293,79 @@ class TestResultClasses(unittest.TestCase):
         self.assertEqual(test_result.metric, 100)
         self.assertEqual(test_result._get_metric_display_value(), 100)
 
-    def test_test_result_metric_values_widget_display(self):
-        """Test MetricValues display in TestResult widgets"""
+    def test_test_result_metric_values_html_display(self):
+        """Test MetricValues display in TestResult HTML"""
         # Test scalar metric display
-        test_result_scalar = TestResult(result_id="test_scalar_widget")
+        test_result_scalar = TestResult(result_id="test_scalar_html")
         test_result_scalar.set_metric(0.95)
 
-        widget_scalar = test_result_scalar.to_widget()
-        self.assertIsInstance(widget_scalar, HTML)
+        html_scalar = test_result_scalar.to_html()
+        self.assertIsInstance(html_scalar, str)
         # Check that the metric value appears in the HTML
-        self.assertIn("0.95", widget_scalar.value)
+        self.assertIn("0.95", html_scalar)
 
         # Test list metric display
-        test_result_list = TestResult(result_id="test_list_widget")
+        test_result_list = TestResult(result_id="test_list_html")
         test_result_list.set_metric([0.1, 0.2, 0.3])
 
-        widget_list = test_result_list.to_widget()
+        html_list = test_result_list.to_html()
         # Even with lists, when no tables/figures exist, it returns HTML
-        self.assertIsInstance(widget_list, HTML)
+        self.assertIsInstance(html_list, str)
         # Check that the list values appear in the HTML
-        self.assertIn("[0.1, 0.2, 0.3]", widget_list.value)
+        self.assertIn("[0.1, 0.2, 0.3]", html_list)
+
+    def test_figure_interactive_toggle_plotly(self):
+        """Test that Plotly figures respect VALIDMIND_INTERACTIVE_FIGURES env var"""
+        plotly_fig = go.Figure(data=go.Scatter(x=[1, 2, 3], y=[4, 5, 6]))
+        figure = Figure(key="test_key", figure=plotly_fig, ref_id="test_ref")
+
+        # Test enabled values (including default behavior)
+        enabled_values = [None, "true", "True", "TRUE", "1", "yes", "Yes", "YES"]
+        for value in enabled_values:
+            if value is None:
+                # Test default behavior (env var not set)
+                env_backup = os.environ.pop("VALIDMIND_INTERACTIVE_FIGURES", None)
+                try:
+                    html = figure.to_html()
+                    self.assertIsInstance(html, str)
+                    self.assertIn("vm-plotly-data", html, "Default should include plotly data")
+                    self.assertIn("vm-plotly-test_key", html)
+                finally:
+                    if env_backup is not None:
+                        os.environ["VALIDMIND_INTERACTIVE_FIGURES"] = env_backup
+            else:
+                with patch.dict(os.environ, {"VALIDMIND_INTERACTIVE_FIGURES": value}, clear=False):
+                    html = figure.to_html()
+                    self.assertIsInstance(html, str)
+                    self.assertIn("vm-plotly-data", html, f"Should include plotly data for value: {value}")
+                    self.assertIn("vm-plotly-test_key", html)
+
+        # Test disabled values
+        disabled_values = ["false", "False", "FALSE", "0", "no", "No", "NO"]
+        for value in disabled_values:
+            with patch.dict(os.environ, {"VALIDMIND_INTERACTIVE_FIGURES": value}, clear=False):
+                html = figure.to_html()
+                self.assertIsInstance(html, str)
+                self.assertNotIn("vm-plotly-data", html, f"Should exclude plotly data for value: {value}")
+                self.assertNotIn("vm-plotly-test_key", html, f"Should exclude plotly container for value: {value}")
+                # Should still contain the static image
+                self.assertIn("data:image/png;base64", html)
+                self.assertIn("vm-img-test_key", html)
+
+    def test_figure_interactive_toggle_matplotlib_unaffected(self):
+        """Test that matplotlib figures are unaffected by the toggle"""
+        matplotlib_fig = plt.figure()
+        plt.plot([1, 2, 3])
+        figure = Figure(key="test_key", figure=matplotlib_fig, ref_id="test_ref")
+
+        # Test that matplotlib figures never include plotly data regardless of setting
+        # Only need to test once since behavior is identical for all values
+        with patch.dict(os.environ, {"VALIDMIND_INTERACTIVE_FIGURES": "true"}, clear=False):
+            html = figure.to_html()
+            self.assertIsInstance(html, str)
+            self.assertNotIn("vm-plotly-data", html)
+            self.assertIn("data:image/png;base64", html)
+            self.assertIn("vm-img-test_key", html)
 
 
 if __name__ == "__main__":

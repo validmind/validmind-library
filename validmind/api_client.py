@@ -18,7 +18,6 @@ from urllib.parse import urlencode, urljoin
 import aiohttp
 import requests
 from aiohttp import FormData
-from ipywidgets import HTML, Accordion
 
 from .client_config import client_config
 from .errors import MissingAPICredentialsError, MissingModelIdError, raise_api_error
@@ -404,9 +403,7 @@ def log_input(input_id: str, type: str, metadata: Dict[str, Any]) -> Dict[str, A
     return run_async(alog_input, input_id, type, metadata)
 
 
-def log_text(
-    content_id: str, text: str, _json: Optional[Dict[str, Any]] = None
-) -> Dict[str, Any]:
+def log_text(content_id: str, text: str, _json: Optional[Dict[str, Any]] = None) -> str:
     """Logs free-form text to ValidMind API.
 
     Args:
@@ -419,7 +416,7 @@ def log_text(
         Exception: If the API call fails.
 
     Returns:
-        ipywidgets.Accordion: An accordion widget containing the logged text as HTML.
+        str: HTML string containing the logged text in an accordion format.
     """
     if not content_id or not isinstance(content_id, str):
         raise ValueError("`content_id` must be a non-empty string")
@@ -431,8 +428,10 @@ def log_text(
 
     log_text = run_async(alog_metadata, content_id, text, _json)
 
-    return Accordion(
-        children=[HTML(log_text["text"])],
+    from .vm_models.html_renderer import StatefulHTMLRenderer
+
+    return StatefulHTMLRenderer.render_accordion(
+        items=[log_text["text"]],
         titles=[f"Text Block: '{log_text['content_id']}'"],
     )
 

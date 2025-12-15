@@ -261,7 +261,7 @@ def WeakspotsDiagnosis(
         r1 = {k: [] for k in results_headers}
         r2 = {k: [] for k in results_headers}
 
-        for region, df_region in df_1.groupby("bin"):
+        for region, df_region in df_1.groupby("bin", observed=True):
             _compute_metrics(
                 results=r1,
                 metrics=metrics,

@@ -266,7 +266,7 @@ def OverfitDiagnosis(
         results_train = {k: [] for k in results_headers}
         results_test = {k: [] for k in results_headers}
 
-        for region, df_region in train_df.groupby("bin"):
+        for region, df_region in train_df.groupby("bin", observed=True):
             _compute_metrics(
                 results=results_train,
                 region=region,
