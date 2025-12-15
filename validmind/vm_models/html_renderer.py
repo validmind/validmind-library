@@ -52,22 +52,22 @@ class StatefulHTMLRenderer:
                  alt="ValidMind Figure {key}"/>"""
 
         if plotly_json:
-            # Prepare fallback image HTML for JavaScript (escape quotes, remove newlines)
-            img_html_escaped = img_html.replace("\n", "").replace("'", "\\'")
             plotly_cdn_url = StatefulHTMLRenderer.PLOTLY_CDN_URL
 
-            # Render interactive Plotly chart with static image fallback
+            # Render with static image visible by default, JavaScript upgrades to interactive
+            # This ensures the image shows even when scripts are blocked (e.g., Google Colab)
             return f"""
         <div class="vm-figure" data-key="{key}" id="figure-{key}">
-            <div id="vm-plotly-{key}" style="width:100%; max-width: 800px;"></div>
-            <noscript>{img_html}</noscript>
+            <div id="vm-plotly-{key}" style="width:100%; max-width: 800px; display: none;"></div>
+            <div id="vm-img-container-{key}">{img_html}</div>
             <script type="application/json" class="vm-metadata">{metadata_json}</script>
             <script type="application/json" class="vm-plotly-data">{plotly_json}</script>
             <script>
             (function() {{
-                var container = document.getElementById('vm-plotly-{key}');
-                var dataScript = container.parentElement.querySelector('.vm-plotly-data');
-                if (!dataScript) return;
+                var plotlyContainer = document.getElementById('vm-plotly-{key}');
+                var imgContainer = document.getElementById('vm-img-container-{key}');
+                var dataScript = plotlyContainer.parentElement.querySelector('.vm-plotly-data');
+                if (!dataScript || !plotlyContainer || !imgContainer) return;
 
                 function renderPlotly() {{
                     try {{
@@ -75,10 +75,12 @@ class StatefulHTMLRenderer:
                         var layout = plotData.layout || {{}};
                         layout.autosize = true;
                         Plotly.newPlot('vm-plotly-{key}', plotData.data, layout, {{responsive: true}});
+                        // Only hide image and show plotly after successful render
+                        imgContainer.style.display = 'none';
+                        plotlyContainer.style.display = 'block';
                     }} catch (e) {{
                         console.error('Failed to render Plotly chart:', e);
-                        // Show fallback image on error
-                        container.innerHTML = '{img_html_escaped}';
+                        // Keep showing the static image (already visible)
                     }}
                 }}
 
@@ -88,9 +90,7 @@ class StatefulHTMLRenderer:
                     var script = document.createElement('script');
                     script.src = '{plotly_cdn_url}';
                     script.onload = renderPlotly;
-                    script.onerror = function() {{
-                        container.innerHTML = '{img_html_escaped}';
-                    }};
+                    // On error, static image remains visible (no action needed)
                     document.head.appendChild(script);
                 }}
             }})();
