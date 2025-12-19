@@ -15,28 +15,21 @@ from uuid import uuid4
 import matplotlib
 import pandas as pd
 import plotly.graph_objs as go
-from ipywidgets import HTML, VBox
 
 from ... import api_client
 from ...ai.utils import DescriptionFuture
 from ...errors import InvalidParameterError
 from ...logging import get_logger, log_api_operation
-from ...utils import (
-    HumanReadableEncoder,
-    NumpyEncoder,
-    display,
-    run_async,
-    test_id_to_name,
-)
+from ...utils import HumanReadableEncoder, display, run_async, test_id_to_name
 from ..figure import Figure, create_figure
+from ..html_renderer import StatefulHTMLRenderer
 from ..input import VMInput
 from .pii_filter import PIIDetectionMode, get_pii_detection_mode, scan_df, scan_text
 from .utils import (
     AI_REVISION_NAME,
     DEFAULT_REVISION_NAME,
-    figures_to_widgets,
-    get_result_template,
-    tables_to_widgets,
+    figures_to_html,
+    tables_to_html,
     update_metadata,
 )
 
@@ -135,8 +128,8 @@ class Result:
         """May be overridden by subclasses."""
         return self.__class__.__name__
 
-    def to_widget(self):
-        """Create an ipywidget representation of the result... Must be overridden by subclasses."""
+    def to_html(self):
+        """Generate HTML representation of the result. Must be overridden by subclasses."""
         raise NotImplementedError
 
     def log(self):
@@ -145,7 +138,10 @@ class Result:
 
     def show(self):
         """Display the result... May be overridden by subclasses."""
-        display(self.to_widget())
+        if hasattr(self, "to_html"):
+            display(self.to_html())
+        else:
+            display(str(self))
 
 
 @dataclass
@@ -159,8 +155,15 @@ class ErrorResult(Result):
     def __repr__(self) -> str:
         return f'ErrorResult(result_id="{self.result_id}")'
 
-    def to_widget(self):
-        return HTML(f"<h3 style='color: red;'>{self.message}</h3><p>{self.error}</p>")
+    def to_html(self):
+        """Generate HTML that persists in saved notebooks."""
+        return f"""
+        {StatefulHTMLRenderer.get_base_css()}
+        <div class="vm-result">
+            <h3 style="color: red;">{self.message}</h3>
+            <p>{self.error}</p>
+        </div>
+        """
 
     async def log_async(self):
         pass
@@ -266,11 +269,9 @@ class TestResult(Result):
         Returns:
             The raw metric value, handling both metric and scorer fields.
         """
-        # Check metric field first
         if self.metric is not None:
             return self.metric
 
-        # Check scorer field
         if self.scorer is not None:
             return self.scorer
 
@@ -283,11 +284,9 @@ class TestResult(Result):
         Returns:
             The serialized metric value, handling both metric and scorer fields.
         """
-        # Check metric field first
         if self.metric is not None:
             return self.metric
 
-        # Check scorer field
         if self.scorer is not None:
             return self.scorer
 
@@ -387,39 +386,36 @@ class TestResult(Result):
 
         self.figures.pop(index)
 
-    def to_widget(self):
-        metric_display_value = self._get_metric_display_value()
-        if (
-            (self.metric is not None or self.scorer is not None)
-            and not self.tables
-            and not self.figures
-        ):
-            return HTML(
-                f"<h3>{self.test_name}: <code>{metric_display_value}</code></h3>"
+    def to_html(self):
+        """Generate HTML that persists in saved notebooks."""
+        metric_value = self._get_metric_display_value()
+
+        if metric_value is not None and not self.tables and not self.figures:
+            return StatefulHTMLRenderer.render_result_header(
+                test_name=self.test_name, passed=self.passed, metric=metric_value
             )
 
-        template_data = {
-            "test_name": self.test_name,
-            "passed_icon": "" if self.passed is None else "✅" if self.passed else "❌",
-            "description": self.description.replace("h3", "strong"),
-            "params": (
-                json.dumps(self.params, cls=NumpyEncoder, indent=2)
-                if self.params
-                else None
-            ),
-            "show_metric": self.metric is not None,
-            "metric": metric_display_value,
-        }
-        rendered = get_result_template().render(**template_data)
+        html_parts = [StatefulHTMLRenderer.get_base_css()]
 
-        widgets = [HTML(rendered)]
+        html_parts.append(
+            StatefulHTMLRenderer.render_result_header(
+                test_name=self.test_name, passed=self.passed, metric=metric_value
+            )
+        )
+
+        if self.description:
+            html_parts.append(StatefulHTMLRenderer.render_description(self.description))
+
+        if self.params:
+            html_parts.append(StatefulHTMLRenderer.render_parameters(self.params))
 
         if self.tables:
-            widgets.extend(tables_to_widgets(self.tables))
-        if self.figures:
-            widgets.extend(figures_to_widgets(self.figures))
+            html_parts.append(tables_to_html(self.tables))
 
-        return VBox(widgets)
+        if self.figures:
+            html_parts.append(figures_to_html(self.figures))
+
+        return f'<div class="vm-result">{"".join(html_parts)}</div>'
 
     @classmethod
     def _get_client_config(cls):
@@ -447,7 +443,6 @@ class TestResult(Result):
         # Iterate through all sections
         for section in client_config.documentation_template["sections"]:
             blocks = section.get("contents", [])
-            # Check each block in the section
             for block in blocks:
                 if (
                     block.get("content_type") == "test"
@@ -513,7 +508,6 @@ class TestResult(Result):
             "metadata": self.metadata,
         }
 
-        # Add metric type information if available
         metric_type = self._get_metric_type()
         if metric_type:
             serialized["metric_type"] = metric_type
@@ -550,7 +544,6 @@ class TestResult(Result):
             metric_value = self._get_metric_serialized_value()
             metric_type = self._get_metric_type()
 
-            # Use appropriate metric key based on type
             metric_key = self.result_id
             if metric_type == "scorer":
                 metric_key = f"{self.result_id}_scorer"
@@ -745,21 +738,23 @@ class TextGenerationResult(Result):
         """Get the test name, using custom title if available."""
         return self.title or test_id_to_name(self.result_id)
 
-    def to_widget(self):
-        template_data = {
-            "test_name": self.test_name,
-            "description": self.description.replace("h3", "strong"),
-            "params": (
-                json.dumps(self.params, cls=NumpyEncoder, indent=2)
-                if self.params
-                else None
-            ),
-        }
-        rendered = get_result_template().render(**template_data)
+    def to_html(self):
+        """Generate HTML that persists in saved notebooks."""
+        html_parts = [StatefulHTMLRenderer.get_base_css()]
 
-        widgets = [HTML(rendered)]
+        html_parts.append(
+            StatefulHTMLRenderer.render_result_header(
+                test_name=self.test_name, passed=None
+            )
+        )
 
-        return VBox(widgets)
+        if self.description:
+            html_parts.append(StatefulHTMLRenderer.render_description(self.description))
+
+        if self.params:
+            html_parts.append(StatefulHTMLRenderer.render_parameters(self.params))
+
+        return f'<div class="vm-result">{"".join(html_parts)}</div>'
 
     def serialize(self):
         """Serialize the result for the API."""
@@ -789,13 +784,8 @@ class TextGenerationResult(Result):
         """Log the result to ValidMind.
 
         Args:
-            section_id (str): The section ID within the model document to insert the
-                test result.
             content_id (str): The content ID to log the result to.
-            position (int): The position (index) within the section to insert the test
-                result.
         """
-        # Check description text for PII when available
         if self.description:
             try:
                 from .pii_filter import check_text_for_pii

@@ -14,7 +14,7 @@ from validmind.vm_models import VMDataset, VMModel
 @scorer()
 @tasks("classification")
 @tags("classification")
-def AbsoluteError(model: VMModel, dataset: VMDataset, **kwargs) -> List[float]:
+def AbsoluteError(model: VMModel, dataset: VMDataset) -> List[float]:
     """Calculates the absolute error per row for a classification model.
 
     For classification tasks, this computes the absolute difference between
@@ -25,7 +25,6 @@ def AbsoluteError(model: VMModel, dataset: VMDataset, **kwargs) -> List[float]:
     Args:
         model: The classification model to evaluate
         dataset: The dataset containing true labels and predictions
-        **kwargs: Additional parameters (unused for compatibility)
 
     Returns:
         List[float]: Per-row absolute errors as a list of float values

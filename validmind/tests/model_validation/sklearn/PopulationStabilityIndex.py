@@ -48,7 +48,7 @@ def calculate_psi(score_initial, score_new, num_bins=10, mode="fixed"):
     # Bucketize the initial population and count the sample inside each bucket
     bins_initial = pd.cut(score_initial, bins=bins, labels=range(1, num_bins + 1))
     df_initial = pd.DataFrame({"initial": score_initial, "bin": bins_initial})
-    grp_initial = df_initial.groupby("bin").count()
+    grp_initial = df_initial.groupby("bin", observed=True).count()
     grp_initial["percent_initial"] = grp_initial["initial"] / sum(
         grp_initial["initial"]
     )
@@ -56,7 +56,7 @@ def calculate_psi(score_initial, score_new, num_bins=10, mode="fixed"):
     # Bucketize the new population and count the sample inside each bucket
     bins_new = pd.cut(score_new, bins=bins, labels=range(1, num_bins + 1))
     df_new = pd.DataFrame({"new": score_new, "bin": bins_new})
-    grp_new = df_new.groupby("bin").count()
+    grp_new = df_new.groupby("bin", observed=True).count()
     grp_new["percent_new"] = grp_new["new"] / sum(grp_new["new"])
 
     # Compare the bins to calculate PSI

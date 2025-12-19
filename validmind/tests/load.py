@@ -21,7 +21,6 @@ from typing import (
 from uuid import uuid4
 
 import pandas as pd
-from ipywidgets import HTML, Accordion
 
 from ..errors import LoadTestError, MissingDependencyError
 from ..html_templates.content_blocks import test_content_block_html
@@ -381,7 +380,7 @@ def list_tests(
 
 def describe_test(
     test_id: Optional[TestID] = None, raw: bool = False, show: bool = True
-) -> Union[str, HTML, Dict[str, Any]]:
+) -> Union[str, Dict[str, Any]]:
     """Get or show details about the test
 
     This function can be used to see test details including the test name, description,
@@ -433,9 +432,10 @@ def describe_test(
     if not show:
         return html
 
-    display(
-        Accordion(
-            children=[HTML(html)],
-            titles=[f"Test: {details['Name']} ('{test_id}')"],
-        )
+    from ..vm_models.html_renderer import StatefulHTMLRenderer
+
+    accordion_html = StatefulHTMLRenderer.render_accordion(
+        items=[html],
+        titles=[f"Test: {details['Name']} ('{test_id}')"],
     )
+    display(accordion_html)

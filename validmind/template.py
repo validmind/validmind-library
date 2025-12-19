@@ -2,9 +2,8 @@
 # See the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from typing import Any, Dict, List, Optional, Type, Union
-
-from ipywidgets import HTML, Accordion, VBox, Widget
+import uuid
+from typing import Any, Dict, List, Optional, Type
 
 from .html_templates.content_blocks import (
     failed_content_block_html,
@@ -12,13 +11,14 @@ from .html_templates.content_blocks import (
 )
 from .logging import get_logger
 from .tests import LoadTestError, describe_test
-from .utils import display, is_notebook
+from .utils import display, is_notebook, test_id_to_name
 from .vm_models import TestSuite
+from .vm_models.html_renderer import StatefulHTMLRenderer
 
 logger = get_logger(__name__)
 
 CONTENT_TYPE_MAP = {
-    "test": "Threshold Test",
+    "test": "Test",
     "metric": "Metric",
     "unit_metric": "Unit Metric",
     "metadata_text": "Metadata Text",
@@ -58,92 +58,136 @@ def _convert_sections_to_section_tree(
     return sorted(section_tree, key=lambda x: x.get("order", 9999))
 
 
-def _create_content_widget(content: Dict[str, Any]) -> Widget:
+def _render_test_accordion(content: str, title: str) -> str:
+    """Render a test block accordion with styling matching text blocks.
+
+    Args:
+        content: HTML content for the accordion item
+        title: Title for the accordion header
+
+    Returns:
+        HTML string with accordion matching text block styling
+    """
+    accordion_id = f"accordion-{uuid.uuid4().hex[:8]}"
+    item_id = f"{accordion_id}-item-0"
+
+    return f"""
+        <div class="vm-accordion" id="{accordion_id}">
+            <div class="vm-accordion-item">
+                <div class="vm-accordion-header"
+                     onclick="toggleAccordionItem('{item_id}')"
+                     style="cursor: pointer; padding: 6px; padding-left: 33px; font-size: 14px; font-weight: normal; background-color: #F0F0F0; border: 1px solid #ddd;">
+                    <span class="vm-accordion-toggle" id="{item_id}-toggle">▶</span>
+                    {title}
+                </div>
+                <div class="vm-accordion-content"
+                     id="{item_id}"
+                     style="display: none; padding: 15px; border: 1px solid #ddd; border-top: none; background-color: #fff;">
+                    {content}
+                </div>
+            </div>
+        </div>
+
+        <script>
+        function toggleAccordionItem(itemId) {{
+            const content = document.getElementById(itemId);
+            const toggle = document.getElementById(itemId + '-toggle');
+
+            if (content.style.display === 'none' || content.style.display === '') {{
+                content.style.display = 'block';
+                toggle.innerHTML = '▼';
+            }} else {{
+                content.style.display = 'none';
+                toggle.innerHTML = '▶';
+            }}
+        }}
+        </script>
+        """
+
+
+def _create_content_html(content: Dict[str, Any]) -> str:
+    """Create HTML representation of a content block."""
     content_type = CONTENT_TYPE_MAP[content["content_type"]]
 
     if content["content_type"] not in ["metric", "test"]:
-        return HTML(
-            non_test_content_block_html.format(
-                content_id=content["content_id"],
-                content_type=content_type,
-            )
+        return non_test_content_block_html.format(
+            content_id=content["content_id"],
+            content_type=content_type,
         )
 
     try:
         test_html = describe_test(test_id=content["content_id"], show=False)
+        test_name = test_id_to_name(content["content_id"])
+        # Wrap test/metric blocks in accordion with styling matching text blocks
+        return _render_test_accordion(
+            content=test_html,
+            title=f"{content_type}: {test_name} ('{content['content_id']}')",
+        )
     except LoadTestError:
-        return HTML(failed_content_block_html.format(test_id=content["content_id"]))
-
-    return Accordion(
-        children=[HTML(test_html)],
-        titles=[f"{content_type} Block: '{content['content_id']}'"],
-    )
-
-
-def _create_sub_section_widget(
-    sub_sections: List[Dict[str, Any]], section_number: str
-) -> Union[HTML, Accordion]:
-    if not sub_sections:
-        return HTML("<p>Empty Section</p>")
-
-    accordion = Accordion()
-
-    for i, section in enumerate(sub_sections):
-        if section["sections"]:
-            accordion.children = (
-                *accordion.children,
-                _create_sub_section_widget(
-                    section["sections"], section_number=f"{section_number}.{i + 1}"
-                ),
-            )
-        elif contents := section.get("contents", []):
-            contents_widget = VBox(
-                [_create_content_widget(content) for content in contents]
-            )
-
-            accordion.children = (
-                *accordion.children,
-                contents_widget,
-            )
-        else:
-            accordion.children = (
-                *accordion.children,
-                HTML("<p>Empty Section</p>"),
-            )
-
-        accordion.set_title(
-            i, f"{section_number}.{i + 1}. {section['title']} ('{section['id']}')"
+        # Wrap failed test blocks in accordion for consistency
+        failed_html = failed_content_block_html.format(test_id=content["content_id"])
+        return _render_test_accordion(
+            content=failed_html,
+            title=f"{content_type}: Failed to load ('{content['content_id']}')",
         )
 
-    return accordion
+
+def _create_sub_section_html(
+    sub_sections: List[Dict[str, Any]], section_number: str
+) -> str:
+    """Create HTML representation of a subsection."""
+    if not sub_sections:
+        return "<p>Empty Section</p>"
+
+    accordion_items = []
+    accordion_titles = []
+
+    for i, section in enumerate(sub_sections):
+        section_content = ""
+        if section["sections"]:
+            section_content = _create_sub_section_html(
+                section["sections"], section_number=f"{section_number}.{i + 1}"
+            )
+        elif contents := section.get("contents", []):
+            content_htmls = [_create_content_html(content) for content in contents]
+            section_content = "".join(content_htmls)
+        else:
+            section_content = "<p>Empty Section</p>"
+
+        accordion_items.append(section_content)
+        accordion_titles.append(
+            f"{section_number}.{i + 1}. {section['title']} ('{section['id']}')"
+        )
+
+    return StatefulHTMLRenderer.render_accordion(accordion_items, accordion_titles)
 
 
-def _create_section_widget(tree: List[Dict[str, Any]]) -> Accordion:
-    widget = Accordion()
+def _create_section_html(tree: List[Dict[str, Any]]) -> str:
+    """Create HTML representation of sections."""
+    accordion_items = []
+    accordion_titles = []
+
     for i, section in enumerate(tree):
-        sub_widget = None
+        section_content = ""
         if section.get("sections"):
-            sub_widget = _create_sub_section_widget(section["sections"], i + 1)
+            section_content = _create_sub_section_html(section["sections"], str(i + 1))
 
         if section.get("contents"):
-            contents_widget = VBox(
-                [_create_content_widget(content) for content in section["contents"]]
+            contents_html = "".join(
+                [_create_content_html(content) for content in section["contents"]]
             )
-            if sub_widget:
-                sub_widget.children = (
-                    *sub_widget.children,
-                    contents_widget,
-                )
+            if section_content:
+                section_content = section_content + contents_html
             else:
-                sub_widget = contents_widget
+                section_content = contents_html
 
-        if not sub_widget:
-            sub_widget = HTML("<p>Empty Section</p>")
+        if not section_content:
+            section_content = "<p>Empty Section</p>"
 
-        widget.children = (*widget.children, sub_widget)
-        widget.set_title(i, f"{i + 1}. {section['title']} ('{section['id']}')")
+        accordion_items.append(section_content)
+        accordion_titles.append(f"{i + 1}. {section['title']} ('{section['id']}')")
 
-    return widget
+    return StatefulHTMLRenderer.render_accordion(accordion_items, accordion_titles)
 
 
 def preview_template(template: str) -> None:
@@ -156,9 +200,11 @@ def preview_template(template: str) -> None:
         logger.warning("preview_template() only works in Jupyter Notebook")
         return
 
-    display(
-        _create_section_widget(_convert_sections_to_section_tree(template["sections"]))
+    html_content = StatefulHTMLRenderer.get_base_css()
+    html_content += _create_section_html(
+        _convert_sections_to_section_tree(template["sections"])
     )
+    display(html_content)
 
 
 def _get_section_tests(section: Dict[str, Any]) -> List[str]:

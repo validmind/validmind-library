@@ -14,7 +14,7 @@ from validmind.vm_models import VMDataset, VMModel
 @scorer()
 @tasks("classification")
 @tags("classification")
-def BrierScore(model: VMModel, dataset: VMDataset, **kwargs) -> List[float]:
+def BrierScore(model: VMModel, dataset: VMDataset) -> List[float]:
     """Calculates the Brier score per row for a classification model.
 
     The Brier score is a proper score function that measures the accuracy of
@@ -25,7 +25,6 @@ def BrierScore(model: VMModel, dataset: VMDataset, **kwargs) -> List[float]:
     Args:
         model: The classification model to evaluate
         dataset: The dataset containing true labels and predicted probabilities
-        **kwargs: Additional parameters (unused for compatibility)
 
     Returns:
         List[float]: Per-row Brier scores as a list of float values

@@ -8,17 +8,18 @@ Figure objects track the figure schema supported by the ValidMind API.
 
 import base64
 import json
+import os
 from dataclasses import dataclass
 from io import BytesIO
 from typing import Union
 
-import ipywidgets as widgets
 import matplotlib
 import plotly.graph_objs as go
 
 from ..client_config import client_config
 from ..errors import UnsupportedFigureError
 from ..utils import get_full_typename
+from .html_renderer import StatefulHTMLRenderer
 
 
 def is_matplotlib_figure(figure) -> bool:
@@ -70,43 +71,34 @@ class Figure:
     def __repr__(self):
         return f"Figure(key={self.key}, ref_id={self.ref_id})"
 
-    def to_widget(self):
+    def to_html(self):
         """
-        Returns the ipywidget compatible representation of the figure. Ideally
-        we would render images as-is, but Plotly FigureWidgets don't work well
-        on Google Colab when they are combined with ipywidgets.
+        Returns HTML representation that preserves state when notebook is saved.
+        This is the preferred method for displaying figures in notebooks.
         """
+        metadata = {"key": self.key, "ref_id": self.ref_id, "type": self._type}
+
         if is_matplotlib_figure(self.figure):
             tmpfile = BytesIO()
             self.figure.savefig(tmpfile, format="png")
             encoded = base64.b64encode(tmpfile.getvalue()).decode("utf-8")
-            return widgets.HTML(
-                value=f"""
-                <img style="width:100%; height: auto;" src="data:image/png;base64,{encoded}"/>
-                """
-            )
+            return StatefulHTMLRenderer.render_figure(encoded, self.key, metadata)
 
         elif is_plotly_figure(self.figure):
-            # FigureWidget can be displayed as-is but not on Google Colab. In this case
-            # we just return the image representation of the figure.
-            if client_config.running_on_colab:
-                png_file = self.figure.to_image(format="png")
-                encoded = base64.b64encode(png_file).decode("utf-8")
-                return widgets.HTML(
-                    value=f"""
-                    <img style="width:100%; height: auto;" src="data:image/png;base64,{encoded}"/>
-                    """
-                )
-            else:
-                return self.figure
+            png_file = self.figure.to_image(format="png")
+            encoded = base64.b64encode(png_file).decode("utf-8")
+            # Add plotly-specific metadata only if interactive figures are enabled
+            if os.getenv("VALIDMIND_INTERACTIVE_FIGURES", "true").lower() in (
+                "true",
+                "1",
+                "yes",
+            ):
+                metadata["plotly_json"] = self.figure.to_json()
+            return StatefulHTMLRenderer.render_figure(encoded, self.key, metadata)
 
         elif is_png_image(self.figure):
             encoded = base64.b64encode(self.figure).decode("utf-8")
-            return widgets.HTML(
-                value=f"""
-                <img style="width:100%; height: auto;" src="data:image/png;base64,{encoded}"/>
-                """
-            )
+            return StatefulHTMLRenderer.render_figure(encoded, self.key, metadata)
 
         else:
             raise UnsupportedFigureError(

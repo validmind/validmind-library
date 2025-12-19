@@ -407,10 +407,12 @@ def fraud_detection_system(
         risk_score += 30
         risk_factors.append("High-value transaction (>$10k)")
         recommendations.append("Require additional verification")
-
-    if transaction_amount > 1000:
+    elif transaction_amount > 1000:
         risk_score += 15
         risk_factors.append("Medium-value transaction (>$1k)")
+    else:
+        risk_score += 5
+        risk_factors.append("Low-value transaction (<$1k)")
 
     # Location-based risk
     high_risk_locations = ["Nigeria", "Russia", "North Korea", "Iran", "Cuba"]
