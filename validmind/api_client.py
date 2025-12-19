@@ -18,11 +18,10 @@ from urllib.parse import urlencode, urljoin
 import aiohttp
 import requests
 from aiohttp import FormData
-from ipywidgets import HTML, Accordion
 
 from .client_config import client_config
 from .errors import MissingAPICredentialsError, MissingModelIdError, raise_api_error
-from .logging import get_logger, init_sentry, log_api_operation, send_single_error
+from .logging import get_logger, log_api_operation
 from .utils import NumpyEncoder, is_html, md_to_html, run_async
 from .vm_models.figure import Figure
 
@@ -166,7 +165,7 @@ def _ping() -> Dict[str, Any]:
 
     client_info = r.json()
 
-    init_sentry(client_info.get("sentry_config", {}))
+    # Sentry removed: no telemetry initialization
 
     # Only show this confirmation the first time we connect to the API
     ack_connected = not client_config.model
@@ -244,14 +243,7 @@ def init(
 
 def reload():
     """Reconnect to the ValidMind API and reload the project configuration."""
-
-    try:
-        _ping()
-    except Exception as e:
-        # if the api host is https, assume we're not in dev mode and send to sentry
-        if _api_host.startswith("https://"):
-            send_single_error(e)
-        raise e
+    _ping()
 
 
 async def aget_metadata(content_id: str) -> Dict[str, Any]:
@@ -411,9 +403,7 @@ def log_input(input_id: str, type: str, metadata: Dict[str, Any]) -> Dict[str, A
     return run_async(alog_input, input_id, type, metadata)
 
 
-def log_text(
-    content_id: str, text: str, _json: Optional[Dict[str, Any]] = None
-) -> Dict[str, Any]:
+def log_text(content_id: str, text: str, _json: Optional[Dict[str, Any]] = None) -> str:
     """Logs free-form text to ValidMind API.
 
     Args:
@@ -426,7 +416,7 @@ def log_text(
         Exception: If the API call fails.
 
     Returns:
-        ipywidgets.Accordion: An accordion widget containing the logged text as HTML.
+        str: HTML string containing the logged text in an accordion format.
     """
     if not content_id or not isinstance(content_id, str):
         raise ValueError("`content_id` must be a non-empty string")
@@ -438,8 +428,10 @@ def log_text(
 
     log_text = run_async(alog_metadata, content_id, text, _json)
 
-    return Accordion(
-        children=[HTML(log_text["text"])],
+    from .vm_models.html_renderer import StatefulHTMLRenderer
+
+    return StatefulHTMLRenderer.render_accordion(
+        items=[log_text["text"]],
         titles=[f"Text Block: '{log_text['content_id']}'"],
     )
 

@@ -26,6 +26,7 @@ from IPython.display import HTML
 from IPython.display import display as ipy_display
 from matplotlib.axes._axes import _log as matplotlib_axes_logger
 from numpy import ndarray
+from packaging.version import Version
 from sklearn.exceptions import UndefinedMetricWarning
 from tabulate import tabulate
 
@@ -73,7 +74,9 @@ def parse_version(version: str) -> tuple[int, ...]:
     Returns:
         tuple[int, ...]: A tuple of major, minor, patch integers.
     """
-    return tuple(int(x) for x in version.split(".")[:3])
+    v = Version(version)
+
+    return (v.major, v.minor, v.micro)
 
 
 def is_notebook() -> bool:
@@ -533,14 +536,19 @@ def preview_test_config(config):
 
 
 def display(widget_or_html, syntax_highlighting=True, mathjax=True):
-    """Display widgets with extra goodies (syntax highlighting, MathJax, etc.)."""
-    if isinstance(widget_or_html, str):
+    """Display HTML content with extra goodies (syntax highlighting, MathJax, etc.)."""
+    if hasattr(widget_or_html, "to_html"):
+        html_content = widget_or_html.to_html()
+        ipy_display(HTML(html_content))
+        syntax_highlighting = 'class="language-' in html_content
+        mathjax = "math/tex" in html_content
+    elif isinstance(widget_or_html, str):
         ipy_display(HTML(widget_or_html))
-        # if html we can auto-detect if we actually need syntax highlighting or MathJax
         syntax_highlighting = 'class="language-' in widget_or_html
         mathjax = "math/tex" in widget_or_html
     else:
-        ipy_display(widget_or_html)
+        # Fallback: convert to string representation
+        ipy_display(HTML(str(widget_or_html)))
 
     if syntax_highlighting:
         ipy_display(HTML(python_syntax_highlighting))

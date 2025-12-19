@@ -17,7 +17,7 @@ from validmind.vm_models import VMDataset
 @tasks("classification")
 @tags("classification", "outlier", "anomaly")
 def OutlierScore(
-    dataset: VMDataset, contamination: float = 0.1, **kwargs
+    dataset: VMDataset, contamination: float = 0.1
 ) -> List[Dict[str, Any]]:
     """Calculates outlier scores and isolation paths for a classification model.
 
@@ -29,7 +29,6 @@ def OutlierScore(
     Args:
         dataset: The dataset containing feature data
         contamination: Expected proportion of outliers, defaults to 0.1
-        **kwargs: Additional parameters (unused for compatibility)
 
     Returns:
         List[Dict[str, Any]]: Per-row outlier metrics as a list of dictionaries.

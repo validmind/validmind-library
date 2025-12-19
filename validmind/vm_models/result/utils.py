@@ -5,12 +5,12 @@
 import os
 from typing import TYPE_CHECKING, Dict, List, Union
 
-from ipywidgets import HTML, GridBox, Layout
 from jinja2 import Template
 
 from ... import api_client
 from ...logging import get_logger
 from ..figure import Figure
+from ..html_renderer import StatefulHTMLRenderer
 
 if TYPE_CHECKING:
     from .result import ResultTable
@@ -49,66 +49,38 @@ async def update_metadata(content_id: str, text: str, _json: Union[Dict, List] =
     await api_client.alog_metadata(content_id, text, _json)
 
 
-def tables_to_widgets(tables: List["ResultTable"]):
-    """Convert a list of tables to ipywidgets."""
-    widgets = [
-        HTML("<h3>Tables</h3>"),
-    ]
+def tables_to_html(tables: List["ResultTable"]) -> str:
+    """Convert a list of tables to HTML."""
+    if not tables:
+        return ""
+
+    html_parts = ["<h3>Tables</h3>"]
 
     for table in tables:
-        html = ""
-        if table.title:
-            html += f"<h4>{table.title}</h4>"
-
-        html += (
-            table.data.reset_index(drop=True)
-            .style.format(precision=4)
-            .hide(axis="index")
-            .set_table_styles(
-                [
-                    {
-                        "selector": "",
-                        "props": [("width", "100%")],
-                    },
-                    {
-                        "selector": "th",
-                        "props": [("text-align", "left")],
-                    },
-                    {
-                        "selector": "tbody tr:nth-child(even)",
-                        "props": [("background-color", "#FFFFFF")],
-                    },
-                    {
-                        "selector": "tbody tr:nth-child(odd)",
-                        "props": [("background-color", "#F5F5F5")],
-                    },
-                    {
-                        "selector": "td, th",
-                        "props": [
-                            ("padding-left", "5px"),
-                            ("padding-right", "5px"),
-                        ],
-                    },
-                ]
-            )
-            .set_properties(**{"text-align": "left"})
-            .to_html(escape=False)
+        table_html = StatefulHTMLRenderer.render_table(
+            data=table.data, title=table.title
         )
+        html_parts.append(table_html)
 
-        widgets.append(HTML(html))
-
-    return widgets
+    return "".join(html_parts)
 
 
-def figures_to_widgets(figures: List[Figure]) -> list:
-    """Convert a list of figures to ipywidgets."""
-    num_columns = 2 if len(figures) > 1 else 1
+def figures_to_html(figures: List[Figure]) -> str:
+    """Convert a list of figures to HTML."""
+    if not figures:
+        return ""
 
-    plot_widgets = GridBox(
-        [figure.to_widget() for figure in figures],
-        layout=Layout(
-            grid_template_columns=f"repeat({num_columns}, 1fr)",
-        ),
-    )
+    html_parts = ["<h3>Figures</h3>"]
 
-    return [HTML("<h3>Figures</h3>"), plot_widgets]
+    # Create a simple grid layout for multiple figures
+    if len(figures) > 1:
+        html_parts.append(
+            '<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">'
+        )
+        for figure in figures:
+            html_parts.append(f"<div>{figure.to_html()}</div>")
+        html_parts.append("</div>")
+    else:
+        html_parts.append(figures[0].to_html())
+
+    return "".join(html_parts)

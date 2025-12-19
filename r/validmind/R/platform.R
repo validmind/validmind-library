@@ -18,7 +18,7 @@
 #'    api_secret="<your_api_secret_here>",
 #'    model="<your_model_id_here>",
 #'    python_version=python_version,
-#'    api_host="https://api.dev.vm.validmind.ai/api/v1/tracking"
+#'    api_host="https://app.prod.validmind.ai/api/v1/tracking"
 #'  )
 #'}
 #'
