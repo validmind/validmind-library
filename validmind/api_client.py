@@ -365,6 +365,35 @@ async def alog_test_result(
         raise e
 
 
+def log_test_result(
+    result: Dict[str, Any],
+    section_id: str = None,
+    position: int = None,
+    unsafe: bool = False,
+    config: Dict[str, bool] = None,
+) -> Dict[str, Any]:
+    """Logs test results information.
+
+    Args:
+        result (dict): A dictionary representing the test result.
+        section_id (str, optional): The section ID add a test driven block to the documentation.
+        position (int): The position in the section to add the test driven block.
+        unsafe (bool): If True, log the result even if it contains sensitive data.
+        config (Dict[str, bool]): Configuration options for displaying the test result.
+
+    Returns:
+        dict: The response from the API.
+    """
+    return run_async(
+        alog_test_result,
+        result=result,
+        section_id=section_id,
+        position=position,
+        unsafe=unsafe,
+        config=config,
+    )
+
+
 async def alog_input(
     input_id: str, type: str, metadata: Dict[str, Any]
 ) -> Dict[str, Any]:
