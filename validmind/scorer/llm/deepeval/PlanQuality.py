@@ -13,7 +13,7 @@ from validmind.vm_models.dataset import VMDataset
 try:
     from deepeval import evaluate
     from deepeval.metrics import PlanQualityMetric
-    from deepeval.test_case import LLMTestCase
+    from deepeval.test_case import LLMTestCase, ToolCall
 except ImportError as e:
     if "deepeval" in str(e):
         raise MissingDependencyError(
@@ -90,10 +90,17 @@ def PlanQuality(
         input_value = row[input_column]
         actual_output_value = row.get(actual_output_column, "")
         tools_called_value = row.get(tools_called_column, [])
+        if not isinstance(tools_called_value, list) or not all(
+            isinstance(tool, ToolCall) for tool in tools_called_value
+        ):
+            from validmind.scorer.llm.deepeval import _convert_to_tool_call_list
+
+            tools_called_value = _convert_to_tool_call_list(tools_called_value)
         test_case = LLMTestCase(
             input=input_value,
             actual_output=actual_output_value,
             tools_called=tools_called_value,
+            _trace_dict=row.get(agent_output_column, {}),
         )
 
         result = evaluate(test_cases=[test_case], metrics=[metric])

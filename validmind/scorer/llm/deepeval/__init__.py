@@ -13,7 +13,6 @@ from .AnswerRelevancy import AnswerRelevancy
 from .ArgumentCorrectness import ArgumentCorrectness
 from .PlanAdherence import PlanAdherence
 from .PlanQuality import PlanQuality
-from .StepEfficiency import StepEfficiency
 from .ToolCorrectness import ToolCorrectness
 
 __all__ = [
@@ -21,7 +20,6 @@ __all__ = [
     "ArgumentCorrectness",
     "PlanAdherence",
     "PlanQuality",
-    "StepEfficiency",
     "ToolCorrectness",
     "_extract_tool_responses",
     "_extract_tool_calls_from_message",
@@ -140,12 +138,23 @@ def _convert_to_tool_call_list(tools: Any) -> List[ToolCall]:
 
     Args:
         tools: List of tools in ToolCall, dict, or str format.
+            If already a list of ToolCall objects, returns them as-is.
 
     Returns:
         List of ToolCall objects.
     """
+    if ToolCall is None:
+        raise ImportError(
+            "deepeval.test_case.ToolCall is not available. "
+            "Please install deepeval: pip install deepeval"
+        )
+
     if not isinstance(tools, list):
         tools = []
+
+    # If the input is already a list of ToolCall objects, return it directly
+    if tools and all(isinstance(tool, ToolCall) for tool in tools):
+        return tools
 
     tool_call_list = []
     for tool in tools:

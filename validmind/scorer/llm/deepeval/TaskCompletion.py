@@ -197,6 +197,7 @@ def TaskCompletion(
             input=input_value,
             actual_output=actual_output_value,
             tools_called=all_tool_calls,
+            _trace_dict=row.get(agent_output_column, {}),
         )
 
         result = evaluate(test_cases=[test_case], metrics=[metric])

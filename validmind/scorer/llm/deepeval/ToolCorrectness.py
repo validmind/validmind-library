@@ -119,6 +119,7 @@ def ToolCorrectness(
             expected_tools=expected_tools_list,
             tools_called=tools_called_list,
             actual_output=actual_output_value,
+            _trace_dict=row.get(agent_output_column, {}),
         )
 
         result = evaluate(test_cases=[test_case], metrics=[metric])
