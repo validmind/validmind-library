@@ -477,7 +477,7 @@ class VMDataset(VMInput):
             metrics (Union[str, List[str]]): Single metric ID or list of metric IDs.
                 Can be either:
                 - Short name (e.g., "BrierScore", "LogLoss")
-                - Full metric ID (e.g., "validmind.scorer.classification.BrierScore")
+                - Full metric ID (e.g., "validmind.scorers.classification.BrierScore")
             **kwargs: Additional parameters passed to the row metrics.
 
         Examples:
@@ -520,11 +520,11 @@ class VMDataset(VMInput):
         """Compute and add a single metric's scores as dataset columns."""
         # Import scorer module
         try:
-            from validmind.scorer import run_scorer
+            from validmind.scorers import run_scorer
         except ImportError as e:
             raise ImportError(
                 f"Failed to import scorer module: {e}. "
-                "Make sure validmind.scorer is available."
+                "Make sure validmind.scorers is available."
             ) from e
 
         # Normalize metric ID and name
@@ -768,12 +768,12 @@ class VMDataset(VMInput):
             str: Full metric ID
         """
         # If already a full ID, return as-is
-        if metric.startswith("validmind.scorer."):
+        if metric.startswith("validmind.scorers."):
             return metric
 
         # Try to find the metric by short name
         try:
-            from validmind.scorer import list_scorers
+            from validmind.scorers import list_scorers
             from validmind.tests._store import scorer_store
 
             # Get built-in scorers
@@ -797,11 +797,11 @@ class VMDataset(VMInput):
             suggestions = [m for m in available_metrics if metric.lower() in m.lower()]
             if suggestions:
                 raise ValueError(
-                    f"Metric '{metric}' not found in scorer. Did you mean one of: {suggestions[:5]}"
+                    f"Metric '{metric}' not found in scorers. Did you mean one of: {suggestions[:5]}"
                 )
             else:
                 raise ValueError(
-                    f"Metric '{metric}' not found in scorer. Available metrics: {available_metrics[:10]}..."
+                    f"Metric '{metric}' not found in scorers. Available metrics: {available_metrics[:10]}..."
                 )
 
         except ImportError as e:

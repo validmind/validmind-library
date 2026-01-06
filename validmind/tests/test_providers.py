@@ -163,7 +163,7 @@ class ValidMindTestProvider:
             os.path.join(os.path.dirname(__file__), "..", "unit_metrics")
         )
         self.scorers_provider = LocalTestProvider(
-            os.path.join(os.path.dirname(__file__), "..", "scorer")
+            os.path.join(os.path.dirname(__file__), "..", "scorers")
         )
         self.test_provider = LocalTestProvider(os.path.dirname(__file__))
 
@@ -183,7 +183,7 @@ class ValidMindTestProvider:
             return self.unit_metrics_provider.load_test(
                 test_id.replace("unit_metrics.", "")
             )
-        elif test_id.startswith("scorer."):
-            return self.scorers_provider.load_test(test_id.replace("scorer.", ""))
+        elif test_id.startswith("scorers."):
+            return self.scorers_provider.load_test(test_id.replace("scorers.", ""))
         else:
             return self.test_provider.load_test(test_id)

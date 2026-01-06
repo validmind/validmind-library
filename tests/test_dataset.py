@@ -534,7 +534,7 @@ class TestTabularDataset(TestCase):
         vm_dataset.assign_predictions(model=vm_model)
 
         # Test assign_scores with single metric
-        vm_dataset.assign_scores(model = vm_model, metrics = "validmind.scorer.classification.LogLoss")
+        vm_dataset.assign_scores(model = vm_model, metrics = "validmind.scorers.classification.LogLoss")
 
         # Check that the metric column was added
         expected_column = f"{vm_model.input_id}_LogLoss"
@@ -566,7 +566,7 @@ class TestTabularDataset(TestCase):
         vm_dataset.assign_predictions(model=vm_model)
 
         # Test assign_scores with multiple metrics
-        metrics = ["validmind.scorer.classification.LogLoss", "validmind.scorer.classification.BrierScore", "validmind.scorer.classification.Confidence"]
+        metrics = ["validmind.scorers.classification.LogLoss", "validmind.scorers.classification.BrierScore", "validmind.scorers.classification.Confidence"]
         metrics_column_name = [metric.split(".")[-1] for metric in metrics]
 
         vm_dataset.assign_scores(model = vm_model, metrics = metrics)
@@ -602,7 +602,7 @@ class TestTabularDataset(TestCase):
         vm_dataset.assign_predictions(model=vm_model)
 
         # Test assign_scores with parameters
-        vm_dataset.assign_scores(model = vm_model, metrics = "validmind.scorer.classification.LogLoss")
+        vm_dataset.assign_scores(model = vm_model, metrics = "validmind.scorers.classification.LogLoss")
 
         # Check that the metric column was added
         expected_column = f"{vm_model.input_id}_LogLoss"
@@ -630,7 +630,7 @@ class TestTabularDataset(TestCase):
         vm_dataset.assign_predictions(model=vm_model)
 
         # Test assign_scores with full metric ID
-        full_metric_id = "validmind.scorer.classification.LogLoss"
+        full_metric_id = "validmind.scorers.classification.LogLoss"
         vm_dataset.assign_scores(model = vm_model, metrics = full_metric_id)
 
         # Check that the metric column was added with correct name
@@ -659,7 +659,7 @@ class TestTabularDataset(TestCase):
         vm_dataset.assign_predictions(model=vm_model)
 
         # Test assign_scores with available row metrics (using classification metrics for testing)
-        vm_dataset.assign_scores(model=vm_model, metrics=["validmind.scorer.classification.LogLoss", "validmind.scorer.classification.BrierScore"])
+        vm_dataset.assign_scores(model=vm_model, metrics=["validmind.scorers.classification.LogLoss", "validmind.scorers.classification.BrierScore"])
 
         # Check that both metric columns were added
         expected_columns = ["reg_model_LogLoss", "reg_model_BrierScore"]
@@ -695,7 +695,7 @@ class TestTabularDataset(TestCase):
         vm_dataset.assign_predictions(model=vm_model)
 
         # Should work and create column without prefix
-        vm_dataset.assign_scores(model = vm_model, metrics = "validmind.scorer.classification.LogLoss")
+        vm_dataset.assign_scores(model = vm_model, metrics = "validmind.scorers.classification.LogLoss")
 
         # Check that the metric column was added without prefix
         expected_column = "LogLoss"  # No model prefix
@@ -745,7 +745,7 @@ class TestTabularDataset(TestCase):
         # Don't assign predictions - test that assign_scores raises error
         # (row metrics require predictions to be available)
         with self.assertRaises(ValueError) as context:
-            vm_dataset.assign_scores(model = vm_model, metrics = "validmind.scorer.classification.LogLoss")
+            vm_dataset.assign_scores(model = vm_model, metrics = "validmind.scorers.classification.LogLoss")
 
         self.assertIn("No prediction column found", str(context.exception))
 
@@ -767,7 +767,7 @@ class TestTabularDataset(TestCase):
         vm_dataset.assign_predictions(model=vm_model)
 
         # Test multiple metrics to verify naming convention
-        metrics = ["validmind.scorer.classification.LogLoss", "validmind.scorer.classification.BrierScore", "validmind.scorer.classification.Confidence"]
+        metrics = ["validmind.scorers.classification.LogLoss", "validmind.scorers.classification.BrierScore", "validmind.scorers.classification.Confidence"]
         metrics_column_name = [metric.split(".")[-1] for metric in metrics]
         vm_dataset.assign_scores(model = vm_model, metrics = metrics)
 
@@ -800,8 +800,8 @@ class TestTabularDataset(TestCase):
         vm_dataset.assign_predictions(model=vm_rf_model)
 
         # Assign scores for both models
-        vm_dataset.assign_scores(model = vm_lr_model, metrics = "validmind.scorer.classification.LogLoss")
-        vm_dataset.assign_scores(model = vm_rf_model, metrics = "validmind.scorer.classification.LogLoss")
+        vm_dataset.assign_scores(model = vm_lr_model, metrics = "validmind.scorers.classification.LogLoss")
+        vm_dataset.assign_scores(model = vm_rf_model, metrics = "validmind.scorers.classification.LogLoss")
 
         # Check that both metric columns exist with correct names
         lr_column = "lr_model_LogLoss"
@@ -903,7 +903,7 @@ class TestTabularDataset(TestCase):
         vm_dataset.assign_predictions(model=vm_model)
 
         # Scenario 1: Model with input_id (should have prefix)
-        vm_dataset.assign_scores(model = vm_model, metrics = "validmind.scorer.classification.LogLoss")
+        vm_dataset.assign_scores(model = vm_model, metrics = "validmind.scorers.classification.LogLoss")
         self.assertTrue("test_model_LogLoss" in vm_dataset.df.columns)
 
         # Scenario 2: Model without input_id (should not have prefix)
@@ -911,7 +911,7 @@ class TestTabularDataset(TestCase):
         vm_model_no_id.input_id = None
         # Assign predictions for this model too
         vm_dataset.assign_predictions(model=vm_model_no_id)
-        vm_dataset.assign_scores(model = vm_model_no_id, metrics = "validmind.scorer.classification.BrierScore")
+        vm_dataset.assign_scores(model = vm_model_no_id, metrics = "validmind.scorers.classification.BrierScore")
         self.assertTrue("BrierScore" in vm_dataset.df.columns)
 
         # Scenario 3: No model (should not have prefix)
