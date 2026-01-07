@@ -14,7 +14,6 @@ Run this script to generate the bundled dataset file:
 
 import os
 
-import pandas as pd
 from sklearn.datasets import fetch_california_housing
 
 # Get the directory paths
@@ -62,4 +61,4 @@ if __name__ == "__main__":
 
     print(f"✓ Successfully saved {len(df)} rows and {len(df.columns)} columns")
     print(f"  File size: {os.path.getsize(output_file) / 1024:.2f} KB")
-    print(f"\nDataset is ready to be bundled with the repository!")
+    print("\nDataset is ready to be bundled with the repository!")
