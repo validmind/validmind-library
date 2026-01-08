@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Unit tests for the @scorer decorator functionality (merged).
+Unit tests for the @scorer decorator functionality.
 
 This module includes two kinds of tests:
 1) Integration tests that exercise the real ValidMind imports (skipped if imports fail)
@@ -40,16 +40,16 @@ class TestScorerDecorator(unittest.TestCase):
 
     def test_scorer_with_explicit_id(self):
         """Test @scorer decorator with explicit ID."""
-        @scorer("validmind.scorer.test.ExplicitScorer")
+        @scorer("validmind.scorers.test.ExplicitScorer")
         def explicit_scorer(model, dataset):
             """A scorer with explicit ID."""
             return [1.0, 2.0, 3.0]
 
         # Check that the scorer is registered
-        registered_scorer = scorer_store.get_scorer("validmind.scorer.test.ExplicitScorer")
+        registered_scorer = scorer_store.get_scorer("validmind.scorers.test.ExplicitScorer")
         self.assertIsNotNone(registered_scorer)
         self.assertEqual(registered_scorer, explicit_scorer)
-        self.assertEqual(explicit_scorer.scorer_id, "validmind.scorer.test.ExplicitScorer")
+        self.assertEqual(explicit_scorer.scorer_id, "validmind.scorers.test.ExplicitScorer")
 
     def test_scorer_with_empty_parentheses(self):
         """Test @scorer() decorator with empty parentheses."""
@@ -89,43 +89,43 @@ class TestScorerDecorator(unittest.TestCase):
 
     def test_scorer_separation_from_tests(self):
         """Test that scorers are stored separately from regular tests."""
-        @scorer("validmind.scorer.test.SeparationTest")
+        @scorer("validmind.scorers.test.SeparationTest")
         def separation_scorer(model, dataset):
             """A scorer for separation testing."""
             return list([1.0])
 
         # Check that scorer is in scorer store
-        scorer_in_store = scorer_store.get_scorer("validmind.scorer.test.SeparationTest")
+        scorer_in_store = scorer_store.get_scorer("validmind.scorers.test.SeparationTest")
         self.assertIsNotNone(scorer_in_store)
         self.assertEqual(scorer_in_store, separation_scorer)
 
         # Check that scorer is NOT in regular test store
-        test_in_store = test_store.get_test("validmind.scorer.test.SeparationTest")
+        test_in_store = test_store.get_test("validmind.scorers.test.SeparationTest")
         self.assertIsNone(test_in_store)
 
     def test_scorer_with_tags_and_tasks(self):
         """Test that @scorer decorator works with @tags and @tasks decorators."""
-        @scorer("validmind.scorer.test.TaggedScorer")
-        @tags("test", "scorer", "tagged")
+        @scorer("validmind.scorers.test.TaggedScorer")
+        @tags("test", "score", "tagged")
         @tasks("classification")
         def tagged_scorer(model, dataset):
             """A scorer with tags and tasks."""
             return list([1.0])
 
         # Check that the scorer is registered
-        registered_scorer = scorer_store.get_scorer("validmind.scorer.test.TaggedScorer")
+        registered_scorer = scorer_store.get_scorer("validmind.scorers.test.TaggedScorer")
         self.assertIsNotNone(registered_scorer)
 
         # Check that tags and tasks are preserved
         self.assertTrue(hasattr(tagged_scorer, '__tags__'))
-        self.assertEqual(tagged_scorer.__tags__, ["test", "scorer", "tagged"])
+        self.assertEqual(tagged_scorer.__tags__, ["test", "score", "tagged"])
 
         self.assertTrue(hasattr(tagged_scorer, '__tasks__'))
         self.assertEqual(tagged_scorer.__tasks__, ["classification"])
 
     def test_scorer_save_functionality(self):
         """Test that the save functionality is available."""
-        @scorer("validmind.scorer.test.SaveTest")
+        @scorer("validmind.scorers.test.SaveTest")
         def save_test_scorer(model, dataset):
             """A scorer for testing save functionality."""
             return list([1.0])
@@ -136,44 +136,44 @@ class TestScorerDecorator(unittest.TestCase):
 
     def test_multiple_scorers_registration(self):
         """Test that multiple scorers can be registered without conflicts."""
-        @scorer("validmind.scorer.test.Multiple1")
+        @scorer("validmind.scorers.test.Multiple1")
         def scorer1(model, dataset):
             return list([1.0])
 
-        @scorer("validmind.scorer.test.Multiple2")
+        @scorer("validmind.scorers.test.Multiple2")
         def scorer2(model, dataset):
             return list([2.0])
 
-        @scorer("validmind.scorer.test.Multiple3")
+        @scorer("validmind.scorers.test.Multiple3")
         def scorer3(model, dataset):
             return list([3.0])
 
         # Check that all scorers are registered
-        self.assertIsNotNone(scorer_store.get_scorer("validmind.scorer.test.Multiple1"))
-        self.assertIsNotNone(scorer_store.get_scorer("validmind.scorer.test.Multiple2"))
-        self.assertIsNotNone(scorer_store.get_scorer("validmind.scorer.test.Multiple3"))
+        self.assertIsNotNone(scorer_store.get_scorer("validmind.scorers.test.Multiple1"))
+        self.assertIsNotNone(scorer_store.get_scorer("validmind.scorers.test.Multiple2"))
+        self.assertIsNotNone(scorer_store.get_scorer("validmind.scorers.test.Multiple3"))
 
         # Check that they are different functions
         self.assertNotEqual(
-            scorer_store.get_scorer("validmind.scorer.test.Multiple1"),
-            scorer_store.get_scorer("validmind.scorer.test.Multiple2")
+            scorer_store.get_scorer("validmind.scorers.test.Multiple1"),
+            scorer_store.get_scorer("validmind.scorers.test.Multiple2")
         )
 
     def test_scorer_with_parameters(self):
         """Test that scorers can have parameters."""
-        @scorer("validmind.scorer.test.ParameterScorer")
+        @scorer("validmind.scorers.test.ParameterScorer")
         def parameter_scorer(model, dataset, threshold: float = 0.5, multiplier: int = 2):
             """A scorer with parameters."""
             return list([threshold * multiplier])
 
         # Check that the scorer is registered
-        registered_scorer = scorer_store.get_scorer("validmind.scorer.test.ParameterScorer")
+        registered_scorer = scorer_store.get_scorer("validmind.scorers.test.ParameterScorer")
         self.assertIsNotNone(registered_scorer)
         self.assertEqual(registered_scorer, parameter_scorer)
 
     def test_scorer_docstring_preservation(self):
         """Test that docstrings are preserved."""
-        @scorer("validmind.scorer.test.DocstringTest")
+        @scorer("validmind.scorers.test.DocstringTest")
         def docstring_scorer(model, dataset):
             """This is a test docstring for the scorer."""
             return list([1.0])
@@ -199,15 +199,15 @@ class TestScorerIdGeneration(unittest.TestCase):
     def test_generate_id_from_path_classification(self, mock_abspath, mock_relpath, mock_getfile):
         """Test ID generation for classification scorer."""
         # Mock the file path
-        mock_getfile.return_value = "/path/to/validmind/scorer/classification/BrierScore.py"
-        mock_abspath.return_value = "/path/to/validmind/scorer"
+        mock_getfile.return_value = "/path/to/validmind/scorers/classification/BrierScore.py"
+        mock_abspath.return_value = "/path/to/validmind/scorers"
         mock_relpath.return_value = "classification/BrierScore.py"
 
         def mock_function():
             pass
 
         scorer_id = _generate_scorer_id_from_path(mock_function)
-        expected_id = "validmind.scorer.classification.BrierScore"
+        expected_id = "validmind.scorers.classification.BrierScore"
         self.assertEqual(scorer_id, expected_id)
 
     @patch('validmind.tests.decorator.inspect.getfile')
@@ -216,15 +216,15 @@ class TestScorerIdGeneration(unittest.TestCase):
     def test_generate_id_from_path_llm(self, mock_abspath, mock_relpath, mock_getfile):
         """Test ID generation for LLM scorer."""
         # Mock the file path
-        mock_getfile.return_value = "/path/to/validmind/scorer/llm/deepeval/AnswerRelevancy.py"
-        mock_abspath.return_value = "/path/to/validmind/scorer"
+        mock_getfile.return_value = "/path/to/validmind/scorers/llm/deepeval/AnswerRelevancy.py"
+        mock_abspath.return_value = "/path/to/validmind/scorers"
         mock_relpath.return_value = "llm/deepeval/AnswerRelevancy.py"
 
         def mock_function():
             pass
 
         scorer_id = _generate_scorer_id_from_path(mock_function)
-        expected_id = "validmind.scorer.llm.deepeval.AnswerRelevancy"
+        expected_id = "validmind.scorers.llm.deepeval.AnswerRelevancy"
         self.assertEqual(scorer_id, expected_id)
 
     @patch('validmind.tests.decorator.inspect.getfile')
@@ -233,15 +233,15 @@ class TestScorerIdGeneration(unittest.TestCase):
     def test_generate_id_from_path_root_scorer(self, mock_abspath, mock_relpath, mock_getfile):
         """Test ID generation for scorer in root scorer directory."""
         # Mock the file path
-        mock_getfile.return_value = "/path/to/validmind/scorer/MyScorer.py"
-        mock_abspath.return_value = "/path/to/validmind/scorer"
+        mock_getfile.return_value = "/path/to/validmind/scorers/MyScorer.py"
+        mock_abspath.return_value = "/path/to/validmind/scorers"
         mock_relpath.return_value = "MyScorer.py"
 
         def mock_function():
             pass
 
         scorer_id = _generate_scorer_id_from_path(mock_function)
-        expected_id = "validmind.scorer.MyScorer"
+        expected_id = "validmind.scorers.MyScorer"
         self.assertEqual(scorer_id, expected_id)
 
     @patch('validmind.tests.decorator.inspect.getfile')
@@ -254,7 +254,7 @@ class TestScorerIdGeneration(unittest.TestCase):
             pass
 
         scorer_id = _generate_scorer_id_from_path(mock_function)
-        expected_id = "validmind.scorer.mock_function"
+        expected_id = "validmind.scorers.mock_function"
         self.assertEqual(scorer_id, expected_id)
 
     @patch('validmind.tests.decorator.inspect.getfile')
@@ -264,14 +264,14 @@ class TestScorerIdGeneration(unittest.TestCase):
         """Test ID generation fallback when relative path calculation fails."""
         # Mock getfile to return a path outside the scorer directory
         mock_getfile.return_value = "/path/to/some/other/directory/MyScorer.py"
-        mock_abspath.return_value = "/path/to/validmind/scorer"
+        mock_abspath.return_value = "/path/to/validmind/scorers"
         mock_relpath.side_effect = ValueError("Path not under scorer directory")
 
         def mock_function():
             pass
 
         scorer_id = _generate_scorer_id_from_path(mock_function)
-        expected_id = "validmind.scorer.mock_function"
+        expected_id = "validmind.scorers.mock_function"
         self.assertEqual(scorer_id, expected_id)
 
 
@@ -299,16 +299,16 @@ class TestScorerIntegration(unittest.TestCase):
 
     def test_scorer_registration_and_retrieval(self):
         """Test complete registration and retrieval cycle."""
-        @scorer("validmind.scorer.test.IntegrationTest")
+        @scorer("validmind.scorers.test.IntegrationTest")
         def integration_scorer(model, dataset):
             """Integration test scorer."""
             return list([1.0, 2.0, 3.0])
 
         # Test registration
-        self.assertIsNotNone(scorer_store.get_scorer("validmind.scorer.test.IntegrationTest"))
+        self.assertIsNotNone(scorer_store.get_scorer("validmind.scorers.test.IntegrationTest"))
 
         # Test retrieval
-        retrieved_scorer = scorer_store.get_scorer("validmind.scorer.test.IntegrationTest")
+        retrieved_scorer = scorer_store.get_scorer("validmind.scorers.test.IntegrationTest")
         self.assertEqual(retrieved_scorer, integration_scorer)
 
         # Test that it's callable
@@ -316,7 +316,7 @@ class TestScorerIntegration(unittest.TestCase):
 
     def test_scorer_with_mock_model_and_dataset(self):
         """Test scorer execution with mock model and dataset."""
-        @scorer("validmind.scorer.test.MockExecution")
+        @scorer("validmind.scorers.test.MockExecution")
         def mock_execution_scorer(model, dataset):
             """Scorer for mock execution testing."""
             return list([1.0, 2.0, 3.0])
@@ -378,11 +378,11 @@ def _mock_scorer(func_or_id: Union[Callable[..., Any], str, None] = None) -> Cal
 
     def _decorator(func: Callable[..., Any]) -> Callable[..., Any]:
         if func_or_id is None or func_or_id == "":
-            scorer_id = f"validmind.scorer.{func.__name__}"
+            scorer_id = f"validmind.scorers.{func.__name__}"
         elif isinstance(func_or_id, str):
             scorer_id = func_or_id
         else:
-            scorer_id = f"validmind.scorer.{func.__name__}"
+            scorer_id = f"validmind.scorers.{func.__name__}"
 
         _mock_scorer_store.register_scorer(scorer_id, func)
         func.scorer_id = scorer_id
@@ -406,18 +406,18 @@ class TestScorerDecoratorEdgeCases(unittest.TestCase):
         @_mock_scorer("")
         def empty_string_scorer(model, dataset):
             return _MockList([1.0])
-        self.assertEqual(empty_string_scorer.scorer_id, "validmind.scorer.empty_string_scorer")
-        self.assertIsNotNone(_mock_scorer_store.get_scorer("validmind.scorer.empty_string_scorer"))
+        self.assertEqual(empty_string_scorer.scorer_id, "validmind.scorers.empty_string_scorer")
+        self.assertIsNotNone(_mock_scorer_store.get_scorer("validmind.scorers.empty_string_scorer"))
 
     def test_scorer_with_none_id(self):
         @_mock_scorer(None)
         def none_id_scorer(model, dataset):
             return _MockList([1.0])
-        self.assertEqual(none_id_scorer.scorer_id, "validmind.scorer.none_id_scorer")
-        self.assertIsNotNone(_mock_scorer_store.get_scorer("validmind.scorer.none_id_scorer"))
+        self.assertEqual(none_id_scorer.scorer_id, "validmind.scorers.none_id_scorer")
+        self.assertIsNotNone(_mock_scorer_store.get_scorer("validmind.scorers.none_id_scorer"))
 
     def test_scorer_with_complex_parameters(self):
-        @_mock_scorer("validmind.scorer.test.ComplexParams")
+        @_mock_scorer("validmind.scorers.test.ComplexParams")
         def complex_params_scorer(
             model,
             dataset,
@@ -432,13 +432,13 @@ class TestScorerDecoratorEdgeCases(unittest.TestCase):
                 config = {"key": "value"}
             return _MockList([threshold, float(enabled), len(categories)])
 
-        self.assertIsNotNone(_mock_scorer_store.get_scorer("validmind.scorer.test.ComplexParams"))
+        self.assertIsNotNone(_mock_scorer_store.get_scorer("validmind.scorers.test.ComplexParams"))
 
     def test_scorer_with_no_parameters(self):
-        @_mock_scorer("validmind.scorer.test.NoParams")
+        @_mock_scorer("validmind.scorers.test.NoParams")
         def no_params_scorer(model, dataset):
             return _MockList([1.0])
-        self.assertIsNotNone(_mock_scorer_store.get_scorer("validmind.scorer.test.NoParams"))
+        self.assertIsNotNone(_mock_scorer_store.get_scorer("validmind.scorers.test.NoParams"))
 
 
 if __name__ == '__main__':

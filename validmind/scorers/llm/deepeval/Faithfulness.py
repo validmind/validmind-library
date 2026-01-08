@@ -12,12 +12,12 @@ from validmind.vm_models.dataset import VMDataset
 
 try:
     from deepeval import evaluate
-    from deepeval.metrics import ContextualRecallMetric
+    from deepeval.metrics import FaithfulnessMetric
     from deepeval.test_case import LLMTestCase
 except ImportError as e:
     if "deepeval" in str(e):
         raise MissingDependencyError(
-            "Missing required package `deepeval` for ContextualRecall. "
+            "Missing required package `deepeval` for Faithfulness. "
             "Please run `pip install validmind[llm]` to use LLM tests",
             required_dependencies=["deepeval"],
             extra="llm",
@@ -28,26 +28,26 @@ except ImportError as e:
 
 # Create custom ValidMind tests for DeepEval metrics
 @scorer()
-@tags("llm", "ContextualRecall", "deepeval")
+@tags("llm", "Faithfulness", "deepeval", "rag")
 @tasks("llm")
-def ContextualRecall(
+def Faithfulness(
     dataset: VMDataset,
     threshold: float = 0.5,
     input_column: str = "input",
-    expected_output_column: str = "expected_output",
+    actual_output_column: str = "actual_output",
     retrieval_context_column: str = "retrieval_context",
     strict_mode: bool = False,
 ) -> List[Dict[str, Any]]:
-    """Evaluates RAG retriever coverage using deepeval's ContextualRecallMetric.
+    """Evaluates RAG generator faithfulness using deepeval's FaithfulnessMetric.
 
-    The metric extracts statements from the expected output and checks how many are
-    attributable to the retrieved context. Returns per-row score and reason.
+    The metric extracts claims from the actual output and checks how many are
+    supported by the retrieved context. Returns per-row score and reason.
 
     Args:
-        dataset: Dataset containing query, expected_output, and retrieval_context
+        dataset: Dataset containing query, actual_output, and retrieval_context
         threshold: Minimum passing threshold (default: 0.5)
         input_column: Column name for the query-only input (default: "input")
-        expected_output_column: Column for the reference output (default: "expected_output")
+        actual_output_column: Column for the generator output (default: "actual_output")
         retrieval_context_column: Column with ranked retrieved nodes list (default: "retrieval_context")
         strict_mode: If True, enforces a binary score (0 for perfect, 1 otherwise)
 
@@ -60,7 +60,7 @@ def ContextualRecall(
 
     # Validate required columns exist in dataset
     missing_columns: List[str] = []
-    for col in [input_column, expected_output_column, retrieval_context_column]:
+    for col in [input_column, actual_output_column, retrieval_context_column]:
         if col not in dataset.df.columns:
             missing_columns.append(col)
     if missing_columns:
@@ -71,7 +71,7 @@ def ContextualRecall(
 
     _, model = get_client_and_model()
 
-    metric = ContextualRecallMetric(
+    metric = FaithfulnessMetric(
         threshold=threshold,
         model=model,
         include_reason=True,
@@ -82,7 +82,7 @@ def ContextualRecall(
     results: List[Dict[str, Any]] = []
     for _, row in dataset.df.iterrows():
         input_value = row[input_column]
-        expected_output_value = row[expected_output_column]
+        actual_output_value = row[actual_output_column]
         retrieval_context_value = (
             [row[retrieval_context_column]]
             if not isinstance(row[retrieval_context_column], list)
@@ -97,7 +97,7 @@ def ContextualRecall(
 
         test_case = LLMTestCase(
             input=input_value,
-            expected_output=expected_output_value,
+            actual_output=actual_output_value,
             retrieval_context=retrieval_context_value,
         )
 

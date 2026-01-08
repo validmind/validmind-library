@@ -230,3 +230,6 @@ docs/validmind.json
 
 # DeepEval
 *.deepeval/
+
+# Python cache
+__pycache__/

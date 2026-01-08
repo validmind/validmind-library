@@ -48,7 +48,7 @@ try:
 except ImportError:
     ...
 
-from . import scorer
+from . import scorers as scorer
 from .__version__ import __version__  # noqa: E402
 from .api_client import init, log_metric, log_test_result, log_text, reload
 from .client import (  # noqa: E402

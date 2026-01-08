@@ -13,7 +13,7 @@ def list_scorers(**kwargs):
     vm_provider = test_provider_store.get_test_provider("validmind")
     vm_scorers_provider = vm_provider.scorers_provider
 
-    prefix = "validmind.scorer."
+    prefix = "validmind.scorers."
 
     return [
         f"{prefix}{test_id}" for test_id in vm_scorers_provider.list_tests(**kwargs)

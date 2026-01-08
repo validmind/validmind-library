@@ -103,6 +103,18 @@ class LLMAgentDataset(VMDataset):
         # Convert to pandas DataFrame for VMDataset compatibility
         df = self._convert_to_dataframe()
 
+        # Build extra_columns only for columns that exist in the DataFrame
+        possible_extra_columns = [
+            "actual_output",
+            "context",
+            "retrieval_context",
+            "tools_called",
+            "expected_tools",
+        ]
+        extra_columns = {
+            col: col for col in possible_extra_columns if col in df.columns
+        }
+
         # Initialize VMDataset with the converted data
         super().__init__(
             raw_dataset=df.values,
@@ -110,13 +122,7 @@ class LLMAgentDataset(VMDataset):
             columns=df.columns.tolist(),
             text_column="input",  # The input text for LLM
             target_column="expected_output",  # Expected response
-            extra_columns={
-                "actual_output": "actual_output",
-                "context": "context",
-                "retrieval_context": "retrieval_context",
-                "tools_called": "tools_called",
-                "expected_tools": "expected_tools",
-            },
+            extra_columns=extra_columns if extra_columns else None,
             **kwargs,
         )
 

@@ -12,12 +12,12 @@ from validmind.vm_models.dataset import VMDataset
 
 try:
     from deepeval import evaluate
-    from deepeval.metrics import ContextualRelevancyMetric
+    from deepeval.metrics import ContextualRecallMetric
     from deepeval.test_case import LLMTestCase
 except ImportError as e:
     if "deepeval" in str(e):
         raise MissingDependencyError(
-            "Missing required package `deepeval` for ContextualRelevancyMetric. "
+            "Missing required package `deepeval` for ContextualRecall. "
             "Please run `pip install validmind[llm]` to use LLM tests",
             required_dependencies=["deepeval"],
             extra="llm",
@@ -28,9 +28,9 @@ except ImportError as e:
 
 # Create custom ValidMind tests for DeepEval metrics
 @scorer()
-@tags("llm", "ContextualRelevancy", "deepeval")
+@tags("llm", "ContextualRecall", "deepeval", "rag")
 @tasks("llm")
-def ContextualRelevancy(
+def ContextualRecall(
     dataset: VMDataset,
     threshold: float = 0.5,
     input_column: str = "input",
@@ -38,10 +38,10 @@ def ContextualRelevancy(
     retrieval_context_column: str = "retrieval_context",
     strict_mode: bool = False,
 ) -> List[Dict[str, Any]]:
-    """Evaluates RAG retriever relevancy using deepeval's ContextualRelevancyMetric.
+    """Evaluates RAG retriever coverage using deepeval's ContextualRecallMetric.
 
-    This metric checks whether statements in the retrieved context are relevant to the
-    query-only input. Returns per-row score and reason.
+    The metric extracts statements from the expected output and checks how many are
+    attributable to the retrieved context. Returns per-row score and reason.
 
     Args:
         dataset: Dataset containing query, expected_output, and retrieval_context
@@ -58,7 +58,7 @@ def ContextualRelevancy(
         ValueError: If required columns are missing
     """
 
-    # Validate required columns
+    # Validate required columns exist in dataset
     missing_columns: List[str] = []
     for col in [input_column, expected_output_column, retrieval_context_column]:
         if col not in dataset.df.columns:
@@ -71,7 +71,7 @@ def ContextualRelevancy(
 
     _, model = get_client_and_model()
 
-    metric = ContextualRelevancyMetric(
+    metric = ContextualRecallMetric(
         threshold=threshold,
         model=model,
         include_reason=True,
