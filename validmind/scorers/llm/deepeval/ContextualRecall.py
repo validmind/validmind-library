@@ -28,7 +28,7 @@ except ImportError as e:
 
 # Create custom ValidMind tests for DeepEval metrics
 @scorer()
-@tags("llm", "ContextualRecall", "deepeval")
+@tags("llm", "ContextualRecall", "deepeval", "rag")
 @tasks("llm")
 def ContextualRecall(
     dataset: VMDataset,
