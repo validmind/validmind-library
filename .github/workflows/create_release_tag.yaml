@@ -1,0 +1,62 @@
+name: Create Release Tag
+
+permissions:
+  contents: write
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to release (e.g., 1.2.3)"
+        required: true
+        type: string
+
+jobs:
+  create-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Main Branch
+        uses: actions/checkout@v4
+        with:
+          ref: "main"
+          fetch-depth: 0
+
+      - name: Install poetry
+        run: pipx install poetry
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "poetry"
+
+      - name: Get Current Version
+        id: get_version
+        run: |
+          echo "CURRENT_VERSION=$(poetry version -s)" >> $GITHUB_ENV
+
+      - name: Validate Version Match
+        run: |
+          if [ "${{ github.event.inputs.version }}" != "${{ env.CURRENT_VERSION }}" ]; then
+            echo "Error: Input version (${{ github.event.inputs.version }}) does not match pyproject.toml version (${{ env.CURRENT_VERSION }})"
+            echo "Please update the version in pyproject.toml first by running: poetry version ${{ github.event.inputs.version }}"
+            exit 1
+          fi
+
+      - name: Setup Git Config
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+
+      - name: Create and Push Tag
+        run: |
+          git tag -a "v${{ github.event.inputs.version }}" -m "Release version ${{ github.event.inputs.version }}"
+          git push origin "v${{ github.event.inputs.version }}"
+
+      - name: Create GitHub Release
+        run: |
+          gh release create "v${{ github.event.inputs.version }}" \
+            --title "v${{ github.event.inputs.version }}" \
+            --generate-notes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
