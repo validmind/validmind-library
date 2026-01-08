@@ -26,44 +26,8 @@ except ImportError as e:
     raise e
 
 
-# def _extract_plan_value(
-#     row: Any,
-#     has_plan_column: bool,
-#     has_agent_output: bool,
-#     plan_column: str,
-#     agent_output_column: str,
-# ) -> str:
-#     """Extract plan value from row."""
-#     plan_value: Optional[str] = None
-#     if has_plan_column:
-#         plan_value = row.get(plan_column)
-#     elif has_agent_output:
-#         agent_output = row.get(agent_output_column, {})
-#         if isinstance(agent_output, dict):
-#             plan_value = agent_output.get("plan") or agent_output.get("reasoning")
-#     return plan_value or ""
-
-
-# def _extract_execution_steps_value(
-#     row: Any,
-#     has_execution_steps_column: bool,
-#     has_agent_output: bool,
-#     execution_steps_column: str,
-#     agent_output_column: str,
-# ) -> str:
-#     """Extract execution steps value from row."""
-#     execution_steps_value: Optional[str] = None
-#     if has_execution_steps_column:
-#         execution_steps_value = row.get(execution_steps_column)
-#     elif has_agent_output:
-#         agent_output = row.get(agent_output_column, {})
-#         if isinstance(agent_output, dict):
-#             execution_steps_value = agent_output.get("execution_steps") or agent_output.get("steps")
-#     return execution_steps_value or ""
-
-
 @scorer()
-@tags("llm", "PlanAdherence", "deepeval", "agent_evaluation", "reasoning_layer")
+@tags("llm", "PlanAdherence", "deepeval", "agent_evaluation", "reasoning_layer", "agentic")
 @tasks("llm")
 def PlanAdherence(
     dataset: VMDataset,

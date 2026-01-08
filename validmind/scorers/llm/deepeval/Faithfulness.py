@@ -28,7 +28,7 @@ except ImportError as e:
 
 # Create custom ValidMind tests for DeepEval metrics
 @scorer()
-@tags("llm", "Faithfulness", "deepeval")
+@tags("llm", "Faithfulness", "deepeval", "rag")
 @tasks("llm")
 def Faithfulness(
     dataset: VMDataset,

@@ -133,7 +133,7 @@ def extract_tool_calls_from_agent_output(
 
 # Create custom ValidMind tests for DeepEval metrics
 @scorer()
-@tags("llm", "TaskCompletion", "deepeval")
+@tags("llm", "TaskCompletion", "deepeval", "agentic")
 @tasks("llm")
 def TaskCompletion(
     dataset: VMDataset,

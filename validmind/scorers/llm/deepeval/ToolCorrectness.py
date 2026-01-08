@@ -27,7 +27,9 @@ except ImportError as e:
 
 
 @scorer()
-@tags("llm", "ToolCorrectness", "deepeval", "agent_evaluation", "action_layer")
+@tags(
+    "llm", "ToolCorrectness", "deepeval", "agent_evaluation", "action_layer", "agentic"
+)
 @tasks("llm")
 def ToolCorrectness(
     dataset: VMDataset,

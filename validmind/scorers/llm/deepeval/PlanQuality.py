@@ -27,7 +27,7 @@ except ImportError as e:
 
 
 @scorer()
-@tags("llm", "deepeval", "agent_evaluation", "reasoning_layer")
+@tags("llm", "deepeval", "agent_evaluation", "reasoning_layer", "agentic")
 @tasks("llm")
 def PlanQuality(
     dataset: VMDataset,
