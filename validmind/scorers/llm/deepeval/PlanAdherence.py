@@ -1,5 +1,5 @@
 # Copyright © 2023-2024 ValidMind Inc. All rights reserved.
-# See the LICENSE file in the root of this repository for details.
+# Refer to the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 from typing import Any, Dict, List
@@ -27,7 +27,9 @@ except ImportError as e:
 
 
 @scorer()
-@tags("llm", "PlanAdherence", "deepeval", "agent_evaluation", "reasoning_layer", "agentic")
+@tags(
+    "llm", "PlanAdherence", "deepeval", "agent_evaluation", "reasoning_layer", "agentic"
+)
 @tasks("llm")
 def PlanAdherence(
     dataset: VMDataset,
