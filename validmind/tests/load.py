@@ -239,9 +239,6 @@ def _list_test_ids() -> List[str]:
             ]
             test_ids_set.update(scorer_ids)
 
-    # Add custom scorers from scorer_store
-    from ._store import scorer_store
-
     test_ids_set.update(scorer_store.scorers.keys())
 
     return sorted(list(test_ids_set))
