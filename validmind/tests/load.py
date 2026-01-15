@@ -127,6 +127,64 @@ def _inspect_signature(
     return inputs, params
 
 
+def _get_test_function_from_provider(test_id: str, namespace: str) -> Callable[..., Any]:
+    """Load a test function from the appropriate provider or scorer store.
+
+    Args:
+        test_id: The full test ID
+        namespace: The namespace extracted from the test ID
+
+    Returns:
+        The loaded test function
+
+    Raises:
+        LoadTestError: If the test cannot be loaded
+    """
+    # Handle custom scorers from scorer_store first (before checking providers)
+    custom_scorer = scorer_store.get_scorer(test_id)
+    if custom_scorer is not None:
+        return custom_scorer
+
+    if not test_provider_store.has_test_provider(namespace):
+        raise LoadTestError(
+            f"No test provider found for namespace: {namespace}"
+        )
+
+    provider = test_provider_store.get_test_provider(namespace)
+
+    try:
+        return provider.load_test(test_id.split(".", 1)[1])
+    except Exception as e:
+        raise LoadTestError(
+            f"Unable to load test '{test_id}' from {namespace} test provider",
+            original_error=e,
+        ) from e
+
+
+def _configure_test_function(test_func: Callable[..., Any], test_id: str) -> None:
+    """Configure a test function with required attributes.
+
+    Args:
+        test_func: The test function to configure
+        test_id: The test ID to assign to the function
+    """
+    # add test_id as an attribute to the test function
+    test_func.test_id = test_id
+
+    # fallback to using func name if no docstring is found
+    if not inspect.getdoc(test_func):
+        test_func.__doc__ = f"{test_func.__name__} ({test_id})"
+
+    # add inputs and params as attributes to the test function
+    test_func.inputs, test_func.params = _inspect_signature(test_func)
+
+    # ensure tags and tasks attributes exist, default to empty list if not present
+    if not hasattr(test_func, "__tags__"):
+        test_func.__tags__ = []
+    if not hasattr(test_func, "__tasks__"):
+        test_func.__tasks__ = []
+
+
 def load_test(
     test_id: str, test_func: Optional[Callable[..., Any]] = None, reload: bool = False
 ) -> Callable[..., Any]:
@@ -147,9 +205,6 @@ def load_test(
     test_id = test_id.split(":", 1)[0]
     namespace = test_id.split(".", 1)[0]
 
-    # # Import scorer_store for checking custom scorers
-    # from ._store import scorer_store
-
     # if not already loaded, load it from appropriate provider
     if test_id not in test_store.tests or reload:
         if test_id.startswith("validmind.composite_metric"):
@@ -157,41 +212,9 @@ def load_test(
             pass
 
         if not test_func:
-            # Handle custom scorers from scorer_store first (before checking providers)
-            custom_scorer = scorer_store.get_scorer(test_id)
-            if custom_scorer is not None:
-                test_func = custom_scorer
-            elif not test_provider_store.has_test_provider(namespace):
-                raise LoadTestError(
-                    f"No test provider found for namespace: {namespace}"
-                )
-            else:
-                provider = test_provider_store.get_test_provider(namespace)
+            test_func = _get_test_function_from_provider(test_id, namespace)
 
-                try:
-                    test_func = provider.load_test(test_id.split(".", 1)[1])
-                except Exception as e:
-                    raise LoadTestError(
-                        f"Unable to load test '{test_id}' from {namespace} test provider",
-                        original_error=e,
-                    ) from e
-
-        # add test_id as an attribute to the test function
-        test_func.test_id = test_id
-
-        # fallback to using func name if no docstring is found
-        if not inspect.getdoc(test_func):
-            test_func.__doc__ = f"{test_func.__name__} ({test_id})"
-
-        # add inputs and params as attributes to the test function
-        test_func.inputs, test_func.params = _inspect_signature(test_func)
-
-        # ensure tags and tasks attributes exist, default to empty list if not present
-        if not hasattr(test_func, "__tags__"):
-            test_func.__tags__ = []
-        if not hasattr(test_func, "__tasks__"):
-            test_func.__tasks__ = []
-
+        _configure_test_function(test_func, test_id)
         test_store.register_test(test_id, test_func)
 
     return test_store.get_test(test_id)

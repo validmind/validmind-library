@@ -27,7 +27,9 @@ except ImportError as e:
 
 
 @scorer()
-@tags("llm", "PlanAdherence", "deepeval", "agent_evaluation", "reasoning_layer", "agentic")
+@tags(
+    "llm", "PlanAdherence", "deepeval", "agent_evaluation", "reasoning_layer", "agentic"
+)
 @tasks("llm")
 def PlanAdherence(
     dataset: VMDataset,
