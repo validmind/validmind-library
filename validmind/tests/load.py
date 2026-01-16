@@ -31,7 +31,7 @@ from ..vm_models.figure import Figure
 from ..vm_models.model import VMModel
 from ..vm_models.result import ResultTable
 from .__types__ import TestID
-from ._store import test_provider_store, test_store
+from ._store import scorer_store, test_provider_store, test_store
 
 logger = get_logger(__name__)
 
@@ -127,6 +127,64 @@ def _inspect_signature(
     return inputs, params
 
 
+def _get_test_function_from_provider(test_id: str, namespace: str) -> Callable[..., Any]:
+    """Load a test function from the appropriate provider or scorer store.
+
+    Args:
+        test_id: The full test ID
+        namespace: The namespace extracted from the test ID
+
+    Returns:
+        The loaded test function
+
+    Raises:
+        LoadTestError: If the test cannot be loaded
+    """
+    # Handle custom scorers from scorer_store first (before checking providers)
+    custom_scorer = scorer_store.get_scorer(test_id)
+    if custom_scorer is not None:
+        return custom_scorer
+
+    if not test_provider_store.has_test_provider(namespace):
+        raise LoadTestError(
+            f"No test provider found for namespace: {namespace}"
+        )
+
+    provider = test_provider_store.get_test_provider(namespace)
+
+    try:
+        return provider.load_test(test_id.split(".", 1)[1])
+    except Exception as e:
+        raise LoadTestError(
+            f"Unable to load test '{test_id}' from {namespace} test provider",
+            original_error=e,
+        ) from e
+
+
+def _configure_test_function(test_func: Callable[..., Any], test_id: str) -> None:
+    """Configure a test function with required attributes.
+
+    Args:
+        test_func: The test function to configure
+        test_id: The test ID to assign to the function
+    """
+    # add test_id as an attribute to the test function
+    test_func.test_id = test_id
+
+    # fallback to using func name if no docstring is found
+    if not inspect.getdoc(test_func):
+        test_func.__doc__ = f"{test_func.__name__} ({test_id})"
+
+    # add inputs and params as attributes to the test function
+    test_func.inputs, test_func.params = _inspect_signature(test_func)
+
+    # ensure tags and tasks attributes exist, default to empty list if not present
+    if not hasattr(test_func, "__tags__"):
+        test_func.__tags__ = []
+    if not hasattr(test_func, "__tasks__"):
+        test_func.__tasks__ = []
+
+
 def load_test(
     test_id: str, test_func: Optional[Callable[..., Any]] = None, reload: bool = False
 ) -> Callable[..., Any]:
@@ -154,52 +212,36 @@ def load_test(
             pass
 
         if not test_func:
-            if not test_provider_store.has_test_provider(namespace):
-                raise LoadTestError(
-                    f"No test provider found for namespace: {namespace}"
-                )
+            test_func = _get_test_function_from_provider(test_id, namespace)
 
-            provider = test_provider_store.get_test_provider(namespace)
-
-            try:
-                test_func = provider.load_test(test_id.split(".", 1)[1])
-            except Exception as e:
-                raise LoadTestError(
-                    f"Unable to load test '{test_id}' from {namespace} test provider",
-                    original_error=e,
-                ) from e
-
-        # add test_id as an attribute to the test function
-        test_func.test_id = test_id
-
-        # fallback to using func name if no docstring is found
-        if not inspect.getdoc(test_func):
-            test_func.__doc__ = f"{test_func.__name__} ({test_id})"
-
-        # add inputs and params as attributes to the test function
-        test_func.inputs, test_func.params = _inspect_signature(test_func)
-
-        # ensure tags and tasks attributes exist, default to empty list if not present
-        if not hasattr(test_func, "__tags__"):
-            test_func.__tags__ = []
-        if not hasattr(test_func, "__tasks__"):
-            test_func.__tasks__ = []
-
+        _configure_test_function(test_func, test_id)
         test_store.register_test(test_id, test_func)
 
     return test_store.get_test(test_id)
 
 
 def _list_test_ids() -> List[str]:
-    """List all available test IDs"""
-    test_ids = []
+    """List all available test IDs, including scorers"""
+    test_ids_set = set()
 
     for namespace, test_provider in test_provider_store.test_providers.items():
-        test_ids.extend(
+        test_ids_set.update(
             [f"{namespace}.{test_id}" for test_id in sorted(test_provider.list_tests())]
         )
 
-    return test_ids
+    # Add built-in scorers from validmind provider
+    if test_provider_store.has_test_provider("validmind"):
+        vm_provider = test_provider_store.get_test_provider("validmind")
+        if hasattr(vm_provider, "scorers_provider"):
+            scorer_ids = [
+                f"validmind.scorers.{scorer_id}"
+                for scorer_id in sorted(vm_provider.scorers_provider.list_tests())
+            ]
+            test_ids_set.update(scorer_ids)
+
+    test_ids_set.update(scorer_store.scorers.keys())
+
+    return sorted(list(test_ids_set))
 
 
 def _load_tests(test_ids: List[str]) -> Dict[str, Callable[..., Any]]:
