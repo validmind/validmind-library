@@ -1,5 +1,5 @@
-# Copyright © 2023-2024 ValidMind Inc. All rights reserved.
-# See the LICENSE file in the root of this repository for details.
+# Copyright © 2023-2026 ValidMind Inc. All rights reserved.
+# Refer to the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 import warnings
