@@ -452,11 +452,6 @@ def add_upgrade(filepath):
     except Exception as e:
         print(f"Error appending notebooks: {e}")
 
-import os
-import uuid
-import nbformat
-
-
 def add_copyright(filepath: str) -> None:
     """Append the contents of '_copyright.ipynb' to the specified notebook."""
     source_notebook_path = os.path.join(os.path.dirname(__file__), "_copyright.ipynb")
