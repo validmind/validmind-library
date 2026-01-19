@@ -18,6 +18,8 @@ The template generation script/notebook draws from the following mini-templates,
 - [`_upgrade-validmind.ipynb`](_upgrade-validmind.ipynb): Instructions for comparing & upgrading versions of the ValidMind Library.
 - [`_copyright.ipynb`](_copyright.ipynb): Copyright and licensing info — mandatory at the bottom of every notebook owned by ValidMind.
 
+Mini-templates are not meant to stand alone, and follow the filename convention of `_filename.ipynb`.
+
 ## Add table of contents
 
 For lengthy notebooks, we recommend that you add a table of contents with the [**Simplified table of contents for Jupyter Notebooks extension**](https://github.com/validbeck/jupyter-notebook-toc/tree/main/installation).
