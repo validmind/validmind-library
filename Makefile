@@ -81,8 +81,6 @@ copyright:
 
 verify-copyright:
 	poetry run python scripts/verify_copyright.py
-
-verify-nb-copyright:
 	poetry run python scripts/verify_notebook_copyright.py
 
 verify-exposed-credentials:

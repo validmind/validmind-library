@@ -122,7 +122,7 @@ def main() -> int:
 
     if errors:
         print("\n".join(errors))
-        print("\nPlease fix the errors above by running `make copyright-notebooks`")
+        print("\nPlease fix the errors above by running `make copyright`")
         return 1
 
     return 0
