@@ -5,7 +5,7 @@ sync_copyright.py
 - Scans notebooks under repo_root/notebooks by default
 - Only processes .ipynb files whose *filename does NOT* start with "_"
 - Looks for a markdown cell containing: <!-- VALIDMIND COPYRIGHT -->
-- If missing, appends the canonical copyright cell from repo_root/_copyright.ipynb
+- If missing, appends the canonical copyright cell from repo_root/notebook/templates/_copyright.ipynb
 - If present but different, replaces it with the canonical content
 
 Usage examples:
@@ -13,7 +13,7 @@ Usage examples:
   python scripts/sync_copyright.py --dry-run
   python scripts/sync_copyright.py --check
   python scripts/sync_copyright.py --root path/to/other/notebooks
-  python scripts/sync_copyright.py --copyright path/to/_copyright.ipynb
+  python scripts/sync_copyright.py --copyright path/to/notebook/templates/_copyright.ipynb
 """
 
 from __future__ import annotations
@@ -31,9 +31,10 @@ MARKER = "<!-- VALIDMIND COPYRIGHT -->"
 # Assumes:
 # repo/
 #   notebooks/
+#     templates/
+#       _copyright.ipynb
 #   scripts/
 #     sync_copyright.py
-#   _copyright.ipynb
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -166,8 +167,8 @@ def main() -> int:
     p.add_argument(
         "--copyright",
         type=Path,
-        default=REPO_ROOT / "_copyright.ipynb",
-        help="Notebook containing the canonical copyright cell (default: repo_root/_copyright.ipynb)",
+        default=REPO_ROOT / "notebooks" / "templates" / "_copyright.ipynb",
+        help="Notebook containing the canonical copyright cell (default: repo_root/notebooks/templates/_copyright.ipynb)",
     )
     p.add_argument(
         "--exclude-dirs",
