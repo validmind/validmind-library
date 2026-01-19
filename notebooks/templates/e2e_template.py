@@ -88,8 +88,8 @@ def set_title(filepath):
         print(f"Error updating notebook: {e}")
 
 def add_about(filepath):
-    """Appends the contents of 'about-validmind.ipynb' to the specified notebook if the user agrees."""
-    source_notebook_path = os.path.join(os.path.dirname(__file__), "about-validmind.ipynb")
+    """Appends the contents of '_about-validmind.ipynb' to the specified notebook if the user agrees."""
+    source_notebook_path = os.path.join(os.path.dirname(__file__), "_about-validmind.ipynb")
 
     if not os.path.exists(source_notebook_path):
         print(f"Source notebook '{source_notebook_path}' does not exist")
@@ -97,7 +97,7 @@ def add_about(filepath):
 
     user_input = input("Do you want to include information about ValidMind? (yes/no): ").strip().lower()
     if user_input not in ("yes", "y"):
-        print("Skipping appending 'about-validmind.ipynb'")
+        print("Skipping appending '_about-validmind.ipynb'")
         return
 
     try:
@@ -121,7 +121,7 @@ def add_about(filepath):
     try:
         with open(filepath, "w") as target_file:
             nbformat.write(target_notebook, target_file)
-        print(f"'about-validmind.ipynb' appended to '{filepath}'")
+        print(f"'_about-validmind.ipynb' appended to '{filepath}'")
     except Exception as e:
         print(f"Error appending notebooks: {e}")
 
@@ -337,8 +337,8 @@ def replace_variables(
         print_func(f"Error replacing variables in file: {e}")
 
 def add_install(filepath):
-    """Appends the contents of 'install-initialize-validmind.ipynb' to the specified notebook if the user agrees."""
-    source_notebook_path = os.path.join(os.path.dirname(__file__), "install-initialize-validmind.ipynb")
+    """Appends the contents of '_install-initialize-validmind.ipynb' to the specified notebook if the user agrees."""
+    source_notebook_path = os.path.join(os.path.dirname(__file__), "_install-initialize-validmind.ipynb")
 
     if not os.path.exists(source_notebook_path):
         print(f"Source notebook '{source_notebook_path}' does not exist")
@@ -346,7 +346,7 @@ def add_install(filepath):
 
     user_input = input("Do you want to include installation and initialization instructions? (yes/no): ").strip().lower()
     if user_input not in ("yes", "y"):
-        print("Skipping appending 'install-initialize-validmind.ipynb'")
+        print("Skipping appending '_install-initialize-validmind.ipynb'")
         return
 
     try:
@@ -370,15 +370,15 @@ def add_install(filepath):
     try:
         with open(filepath, "w") as target_file:
             nbformat.write(target_notebook, target_file)
-        print(f"'install-initialize-validmind.ipynb' appended to '{filepath}'")
+        print(f"'_install-initialize-validmind.ipynb' appended to '{filepath}'")
     except Exception as e:
         print(f"Error appending notebooks: {e}")
 
     replace_variables(filepath)
 
 def next_steps(filepath):
-    """Appends the contents of 'next-steps.ipynb' to the specified notebook if the user agrees."""
-    source_notebook_path = os.path.join(os.path.dirname(__file__), "next-steps.ipynb")
+    """Appends the contents of '_next-steps.ipynb' to the specified notebook if the user agrees."""
+    source_notebook_path = os.path.join(os.path.dirname(__file__), "_next-steps.ipynb")
 
     if not os.path.exists(source_notebook_path):
         print(f"Source notebook '{source_notebook_path}' does not exist")
@@ -386,7 +386,7 @@ def next_steps(filepath):
 
     user_input = input("Do you want to include next steps? (yes/no): ").strip().lower()
     if user_input not in ("yes", "y"):
-        print("Skipping appending 'next-steps.ipynb'")
+        print("Skipping appending '_next-steps.ipynb'")
         return
 
     try:
@@ -410,13 +410,13 @@ def next_steps(filepath):
     try:
         with open(filepath, "w") as target_file:
             nbformat.write(target_notebook, target_file)
-        print(f"'next-steps.ipynb' appended to '{filepath}'")
+        print(f"'_next-steps.ipynb' appended to '{filepath}'")
     except Exception as e:
         print(f"Error appending notebooks: {e}")
 
 def add_upgrade(filepath):
-    """Appends the contents of 'upgrade-validmind.ipynb' to the specified notebook if the user agrees."""
-    source_notebook_path = os.path.join(os.path.dirname(__file__), "upgrade-validmind.ipynb")
+    """Appends the contents of '_upgrade-validmind.ipynb' to the specified notebook if the user agrees."""
+    source_notebook_path = os.path.join(os.path.dirname(__file__), "_upgrade-validmind.ipynb")
 
     if not os.path.exists(source_notebook_path):
         print(f"Source notebook '{source_notebook_path}' does not exist")
@@ -424,7 +424,7 @@ def add_upgrade(filepath):
 
     user_input = input("Do you want to include information about upgrading ValidMind? (yes/no): ").strip().lower()
     if user_input not in ("yes", "y"):
-        print("Skipping appending 'upgrade-validmind.ipynb'")
+        print("Skipping appending '_upgrade-validmind.ipynb'")
         return
 
     try:
@@ -448,7 +448,7 @@ def add_upgrade(filepath):
     try:
         with open(filepath, "w") as target_file:
             nbformat.write(target_notebook, target_file)
-        print(f"'upgrade-validmind.ipynb' appended to '{filepath}'")
+        print(f"'_upgrade-validmind.ipynb' appended to '{filepath}'")
     except Exception as e:
         print(f"Error appending notebooks: {e}")
 
