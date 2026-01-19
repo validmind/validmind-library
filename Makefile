@@ -78,6 +78,9 @@ generate-test-id-types:
 copyright:
 	poetry run python scripts/copyright_files.py
 
+copyright-nb:
+	poetry run python scripts/copyright_notebooks.py
+
 verify-copyright:
 	poetry run python scripts/verify_copyright.py
 
