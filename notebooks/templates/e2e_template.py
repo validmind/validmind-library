@@ -508,3 +508,4 @@ if __name__ == "__main__":
         add_install(filepath)
         next_steps(filepath)
         add_upgrade(filepath)
+        add_copyright(filepath)
