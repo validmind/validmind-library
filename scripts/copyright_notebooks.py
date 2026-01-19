@@ -121,7 +121,7 @@ def process_notebook(
     # ---------- Missing cell ----------
     if idx is None:
         if check_only:
-            return Result(nb_path, "would-append", "marker not found")
+            return Result(nb_path, "would-append", "Copyright marker not found")
 
         if not dry_run:
             nb.cells.append(_new_copyright_cell(canonical_source))
@@ -130,7 +130,7 @@ def process_notebook(
             except Exception as e:
                 return Result(nb_path, "error", f"failed to write: {e}")
 
-        return Result(nb_path, "appended" if not dry_run else "would-append", "marker not found")
+        return Result(nb_path, "appended" if not dry_run else "would-append", "Copyright marker not found")
 
     # ---------- Existing cell ----------
     cell = nb.cells[idx]
@@ -204,7 +204,7 @@ def main() -> int:
         if result.status not in {"unchanged"}:
             print(f"{result.status:12} {result.path} ({result.detail})")
 
-    print("\nSummary:")
+    print("\nNotebook summary:")
     for k in sorted(counts):
         print(f"  {k:12}: {counts[k]}")
 
