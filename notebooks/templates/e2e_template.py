@@ -452,6 +452,50 @@ def add_upgrade(filepath):
     except Exception as e:
         print(f"Error appending notebooks: {e}")
 
+import os
+import uuid
+import nbformat
+
+
+def add_copyright(filepath: str) -> None:
+    """Append the contents of '_copyright.ipynb' to the specified notebook."""
+    source_notebook_path = os.path.join(os.path.dirname(__file__), "_copyright.ipynb")
+
+    if not os.path.exists(source_notebook_path):
+        print(f"Source notebook '{source_notebook_path}' does not exist")
+        return
+
+    try:
+        with open(filepath, "r", encoding="utf-8") as target_file:
+            target_notebook = nbformat.read(target_file, as_version=4)
+
+        with open(source_notebook_path, "r", encoding="utf-8") as source_file:
+            source_notebook = nbformat.read(source_file, as_version=4)
+    except Exception as e:
+        print(f"Error reading notebooks: {e}")
+        return
+
+    # Make sure every appended cell has a unique ID.
+    for cell in source_notebook.cells:
+        original_id = cell.get("id") or f"cell-{uuid.uuid4()}"
+        cell["id"] = f"{original_id}-{uuid.uuid4()}"
+
+    target_notebook.cells.extend(source_notebook.cells)
+
+    # If you have a helper that enforces IDs, keep it.
+    try:
+        target_notebook = ensure_ids(target_notebook)  # type: ignore[name-defined]
+    except NameError:
+        pass
+
+    try:
+        with open(filepath, "w", encoding="utf-8") as target_file:
+            nbformat.write(target_notebook, target_file)
+        print(f"'_copyright.ipynb' appended to '{filepath}'")
+    except Exception as e:
+        print(f"Error appending notebooks: {e}")
+
+
 if __name__ == "__main__":
 
     script_dir = os.path.dirname(os.path.abspath(__file__))
