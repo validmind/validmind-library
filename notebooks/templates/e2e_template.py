@@ -17,51 +17,142 @@ def ensure_ids(notebook):
 
 def detect_editor():
     """Detect the currently running editor from environment variables and process info."""
-    # First check TERM_PROGRAM which is most reliable for distinguishing Cursor from VS Code
-    term_program = os.environ.get("TERM_PROGRAM", "")
-    if "cursor" in term_program.lower():
-        return "cursor"
-    elif "vscode" in term_program.lower():
-        return "code"
+    # Walk up the process tree FIRST (most reliable for distinguishing Cursor from VS Code in terminal)
+    vscode_found = False
     
-    # Check for Cursor-specific environment variables
-    if os.environ.get("CURSOR_PATH"):
-        return "cursor"
-    
-    # Check the parent process to see what's actually running
     try:
-        # Get parent process ID
-        ppid = os.getppid()
         if platform.system() == "Darwin":  # macOS
-            # Use ps to get the parent process name
-            result = subprocess.run(
-                ["ps", "-p", str(ppid), "-o", "comm="],
-                capture_output=True,
-                text=True,
-                timeout=1
-            )
-            process_name = result.stdout.strip().lower()
-            if "cursor" in process_name:
-                return "cursor"
-            elif "code" in process_name or "vscode" in process_name:
+            current_pid = os.getpid()
+            for _ in range(20):  # Check up to 20 levels up
+                # Get info for this specific PID
+                result = subprocess.run(
+                    ["ps", "-p", str(current_pid), "-o", "ppid=,comm="],
+                    capture_output=True,
+                    text=True,
+                    timeout=1
+                )
+                
+                if result.returncode != 0:
+                    break
+                    
+                output = result.stdout.strip()
+                if not output:
+                    break
+                
+                parts = output.split(None, 1)
+                if len(parts) < 2:
+                    break
+                
+                ppid = int(parts[0])
+                comm = parts[1].lower()
+                
+                # Check for Cursor first (it's more specific)
+                if "cursor" in comm:
+                    return "cursor"
+                elif "code" in comm or "vscode" in comm:
+                    # Found code/vscode, but keep looking for Cursor
+                    vscode_found = True
+                
+                current_pid = ppid
+                if ppid <= 1:  # Reached init/launchd
+                    break
+            
+            # If we found vscode but not cursor, return code
+            if vscode_found:
                 return "code"
+                
         elif platform.system() == "Linux":
-            # Check /proc on Linux
+            # Walk up the process tree on Linux using /proc
+            current_pid = os.getpid()
+            for _ in range(20):  # Check up to 20 levels up
+                try:
+                    # Read process name
+                    with open(f"/proc/{current_pid}/comm", "r") as f:
+                        process_name = f.read().strip().lower()
+                        if "cursor" in process_name:
+                            return "cursor"
+                        elif "code" in process_name or "vscode" in process_name:
+                            vscode_found = True
+                    
+                    # Get parent PID from stat file
+                    with open(f"/proc/{current_pid}/stat", "r") as f:
+                        stat = f.read().split()
+                        current_pid = int(stat[3])  # ppid is 4th field
+                    
+                    if current_pid <= 1:
+                        break
+                except:
+                    break
+            
+            if vscode_found:
+                return "code"
+                
+        elif platform.system() == "Windows":
+            # Windows process tree detection using wmic or PowerShell
             try:
-                with open(f"/proc/{ppid}/comm", "r") as f:
-                    process_name = f.read().strip().lower()
-                    if "cursor" in process_name:
+                current_pid = os.getpid()
+                for _ in range(20):
+                    # Use wmic to get parent process info
+                    result = subprocess.run(
+                        ["wmic", "process", "where", f"ProcessId={current_pid}", 
+                         "get", "ParentProcessId,Name", "/format:list"],
+                        capture_output=True,
+                        text=True,
+                        timeout=2
+                    )
+                    
+                    if result.returncode != 0:
+                        break
+                    
+                    # Parse wmic output
+                    name = ""
+                    ppid = None
+                    for line in result.stdout.split("\n"):
+                        if "Name=" in line:
+                            name = line.split("=", 1)[1].strip().lower()
+                        elif "ParentProcessId=" in line:
+                            ppid_str = line.split("=", 1)[1].strip()
+                            if ppid_str:
+                                ppid = int(ppid_str)
+                    
+                    if not name or ppid is None:
+                        break
+                    
+                    # Check for Cursor or VS Code
+                    if "cursor" in name:
                         return "cursor"
-                    elif "code" in process_name or "vscode" in process_name:
-                        return "code"
+                    elif "code" in name or "vscode" in name:
+                        vscode_found = True
+                    
+                    current_pid = ppid
+                    if ppid <= 0:
+                        break
+                
+                if vscode_found:
+                    return "code"
             except:
                 pass
     except:
         pass
     
-    # Check other VS Code environment variables (will catch VS Code but not distinguish from Cursor)
+    # Check TERM_PROGRAM (but this is less reliable for Cursor terminal)
+    term_program = os.environ.get("TERM_PROGRAM", "")
+    if "cursor" in term_program.lower():
+        return "cursor"
+    
+    # Check for Cursor-specific environment variables
+    if os.environ.get("CURSOR_PATH"):
+        return "cursor"
+    
+    # Check other VS Code environment variables
     if os.environ.get("VSCODE_PID") or os.environ.get("VSCODE_IPC_HOOK") or os.environ.get("VSCODE_CWD"):
-        return "code"
+        # Try to find cursor in the path
+        vscode_ipc = os.environ.get("VSCODE_IPC_HOOK", "")
+        if "cursor" in vscode_ipc.lower():
+            return "cursor"
+        # Only return code if TERM_PROGRAM confirms it's vscode (not cursor)
+        if term_program.lower() == "vscode":
+            return "code"
     
     # Check for Jupyter
     if os.environ.get("JUPYTER_SERVER_ROOT"):
@@ -588,6 +679,112 @@ if __name__ == "__main__":
 
     script_dir = os.path.dirname(os.path.abspath(__file__))
     os.chdir(script_dir)
+    
+    # Debug: show detected editor and relevant environment variables
+    print("=== Debug Info ===")
+    print(f"TERM_PROGRAM: {os.environ.get('TERM_PROGRAM', 'not set')}")
+    print(f"CURSOR_PATH: {os.environ.get('CURSOR_PATH', 'not set')}")
+    print(f"VSCODE_IPC_HOOK: {os.environ.get('VSCODE_IPC_HOOK', 'not set')}")
+    
+    # Show process tree
+    system = platform.system()
+    try:
+        print("\nProcess tree:")
+        current_pid = os.getpid()
+        
+        if system == "Darwin":  # macOS
+            for i in range(20):
+                result = subprocess.run(
+                    ["ps", "-p", str(current_pid), "-o", "ppid=,comm="],
+                    capture_output=True,
+                    text=True,
+                    timeout=1
+                )
+                
+                if result.returncode != 0:
+                    print(f"  {i}: (process not found)")
+                    break
+                    
+                output = result.stdout.strip()
+                if not output:
+                    break
+                
+                parts = output.split(None, 1)
+                if len(parts) < 2:
+                    break
+                
+                ppid = int(parts[0])
+                comm = parts[1]
+                
+                print(f"  {i}: {comm} (PID: {current_pid}, Parent: {ppid})")
+                
+                current_pid = ppid
+                if ppid <= 1:
+                    print(f"  Reached init/launchd")
+                    break
+                    
+        elif system == "Linux":
+            for i in range(20):
+                try:
+                    with open(f"/proc/{current_pid}/comm", "r") as f:
+                        comm = f.read().strip()
+                    
+                    with open(f"/proc/{current_pid}/stat", "r") as f:
+                        stat = f.read().split()
+                        ppid = int(stat[3])
+                    
+                    print(f"  {i}: {comm} (PID: {current_pid}, Parent: {ppid})")
+                    
+                    current_pid = ppid
+                    if ppid <= 1:
+                        print(f"  Reached init")
+                        break
+                except:
+                    print(f"  {i}: (could not read process)")
+                    break
+                    
+        elif system == "Windows":
+            for i in range(20):
+                result = subprocess.run(
+                    ["wmic", "process", "where", f"ProcessId={current_pid}", 
+                     "get", "ParentProcessId,Name", "/format:list"],
+                    capture_output=True,
+                    text=True,
+                    timeout=2
+                )
+                
+                if result.returncode != 0:
+                    print(f"  {i}: (process not found)")
+                    break
+                
+                name = ""
+                ppid = None
+                for line in result.stdout.split("\n"):
+                    if "Name=" in line:
+                        name = line.split("=", 1)[1].strip()
+                    elif "ParentProcessId=" in line:
+                        ppid_str = line.split("=", 1)[1].strip()
+                        if ppid_str:
+                            ppid = int(ppid_str)
+                
+                if not name or ppid is None:
+                    break
+                
+                print(f"  {i}: {name} (PID: {current_pid}, Parent: {ppid})")
+                
+                current_pid = ppid
+                if ppid <= 0:
+                    print(f"  Reached system process")
+                    break
+        else:
+            print(f"  Process tree inspection not supported on {system}")
+            
+    except Exception as e:
+        print(f"Could not get process tree: {e}")
+    
+    detected = detect_editor()
+    print(f"\nDetected editor: {detected or 'none'}")
+    print("==================\n")
 
     filepath = create_notebook()
     if filepath:
