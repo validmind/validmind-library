@@ -12,10 +12,13 @@ make notebook
 
 The template generation script/notebook draws from the following mini-templates, should you need to revise them or grab the information from them manually:
 
-- [`about-validmind.ipynb`](about-validmind.ipynb): Conceptual overview of ValidMind & prerequisites.
-- [`install-initialize-validmind.ipynb`](install-initialize-validmind.ipynb): ValidMind Library installation & initialization instructions.
-- [`next-steps.ipynb`](next-steps.ipynb): Directions to review the generated documentation within the ValidMind Platform & additional learning resources.
-- [`upgrade-validmind.ipynb`](upgrade-validmind.ipynb): Instructions for comparing & upgrading versions of the ValidMind Library.
+- [`_about-validmind.ipynb`](_about-validmind.ipynb): Conceptual overview of ValidMind & prerequisites.
+- [`_install-initialize-validmind.ipynb`](_install-initialize-validmind.ipynb): ValidMind Library installation & initialization instructions.
+- [`_next-steps.ipynb`](_next-steps.ipynb): Directions to review the generated documentation within the ValidMind Platform & additional learning resources.
+- [`_upgrade-validmind.ipynb`](_upgrade-validmind.ipynb): Instructions for comparing & upgrading versions of the ValidMind Library.
+- [`_copyright.ipynb`](_copyright.ipynb): Copyright and licensing info — mandatory at the bottom of every notebook owned by ValidMind.
+
+Mini-templates are not meant to stand alone, and follow the filename convention of `_filename.ipynb`.
 
 ## Add table of contents
 

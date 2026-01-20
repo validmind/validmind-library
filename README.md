@@ -161,7 +161,7 @@ poetry run python scripts/add_test_description.py review validmind/tests/ongoing
 
 ## Adding a copyright header
 
-When adding new Python files to the project, you can add the ValidMind copyright header to any files that
+When adding new Python or stand-alone Jupyter Notebook files to the project, you can add the ValidMind copyright header to any files that
 are missing it by running:
 
 ```bash
