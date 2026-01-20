@@ -127,9 +127,7 @@ def _inspect_signature(
     return inputs, params
 
 
-def _get_test_function_from_provider(
-    test_id: str, namespace: str
-) -> Callable[..., Any]:
+def _get_test_function_from_provider(test_id: str, namespace: str) -> Callable[..., Any]:
     """Load a test function from the appropriate provider or scorer store.
 
     Args:
@@ -148,7 +146,9 @@ def _get_test_function_from_provider(
         return custom_scorer
 
     if not test_provider_store.has_test_provider(namespace):
-        raise LoadTestError(f"No test provider found for namespace: {namespace}")
+        raise LoadTestError(
+            f"No test provider found for namespace: {namespace}"
+        )
 
     provider = test_provider_store.get_test_provider(namespace)
 
