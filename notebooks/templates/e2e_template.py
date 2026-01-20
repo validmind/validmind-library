@@ -51,7 +51,7 @@ def create_notebook():
             nbformat.write(notebook, f)
         print(f"Created '{filepath}'")
 
-        subprocess.run(["code", filepath], check=True)
+        subprocess.run(["cursor", filepath], check=True)
     except Exception as e:
         print(f"Error creating or opening notebook: {e}")
 
