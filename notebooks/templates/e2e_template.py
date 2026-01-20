@@ -16,32 +16,56 @@ def ensure_ids(notebook):
     return notebook
 
 def detect_editor():
-    """Detect the currently running editor from environment variables."""
-    # Check common environment variables set by IDEs
-    env_checks = [
-        ("CURSOR_PATH", "cursor"),
-        ("VSCODE_PID", "code"),
-        ("VSCODE_IPC_HOOK", "code"),
-        ("VSCODE_CWD", "code"),
-        ("TERM_PROGRAM", {
-            "cursor": "cursor",
-            "vscode": "code",
-            "Apple_Terminal": None,
-            "iTerm.app": None,
-        }),
-        ("JUPYTER_SERVER_ROOT", "jupyter"),
-    ]
-
-    for env_var, editor in env_checks:
-        value = os.environ.get(env_var)
-        if value:
-            if isinstance(editor, dict):
-                # For TERM_PROGRAM, map the value to the command
-                for term_value, cmd in editor.items():
-                    if term_value.lower() in value.lower():
-                        return cmd
-            else:
-                return editor
+    """Detect the currently running editor from environment variables and process info."""
+    # First check TERM_PROGRAM which is most reliable for distinguishing Cursor from VS Code
+    term_program = os.environ.get("TERM_PROGRAM", "")
+    if "cursor" in term_program.lower():
+        return "cursor"
+    elif "vscode" in term_program.lower():
+        return "code"
+    
+    # Check for Cursor-specific environment variables
+    if os.environ.get("CURSOR_PATH"):
+        return "cursor"
+    
+    # Check the parent process to see what's actually running
+    try:
+        # Get parent process ID
+        ppid = os.getppid()
+        if platform.system() == "Darwin":  # macOS
+            # Use ps to get the parent process name
+            result = subprocess.run(
+                ["ps", "-p", str(ppid), "-o", "comm="],
+                capture_output=True,
+                text=True,
+                timeout=1
+            )
+            process_name = result.stdout.strip().lower()
+            if "cursor" in process_name:
+                return "cursor"
+            elif "code" in process_name or "vscode" in process_name:
+                return "code"
+        elif platform.system() == "Linux":
+            # Check /proc on Linux
+            try:
+                with open(f"/proc/{ppid}/comm", "r") as f:
+                    process_name = f.read().strip().lower()
+                    if "cursor" in process_name:
+                        return "cursor"
+                    elif "code" in process_name or "vscode" in process_name:
+                        return "code"
+            except:
+                pass
+    except:
+        pass
+    
+    # Check other VS Code environment variables (will catch VS Code but not distinguish from Cursor)
+    if os.environ.get("VSCODE_PID") or os.environ.get("VSCODE_IPC_HOOK") or os.environ.get("VSCODE_CWD"):
+        return "code"
+    
+    # Check for Jupyter
+    if os.environ.get("JUPYTER_SERVER_ROOT"):
+        return "jupyter"
 
     return None
 
