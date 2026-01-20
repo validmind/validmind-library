@@ -4,6 +4,8 @@ import os
 import uuid
 import subprocess
 import json
+import sys
+import platform
 from typing import Callable, Dict, Iterable, Optional, Set, Tuple
 
 def ensure_ids(notebook):
@@ -13,8 +15,75 @@ def ensure_ids(notebook):
             cell["id"] = str(uuid.uuid4())
     return notebook
 
+def detect_editor():
+    """Detect the currently running editor from environment variables."""
+    # Check common environment variables set by IDEs
+    env_checks = [
+        ("CURSOR_PATH", "cursor"),
+        ("VSCODE_PID", "code"),
+        ("VSCODE_IPC_HOOK", "code"),
+        ("VSCODE_CWD", "code"),
+        ("TERM_PROGRAM", {
+            "cursor": "cursor",
+            "vscode": "code",
+            "Apple_Terminal": None,
+            "iTerm.app": None,
+        }),
+        ("JUPYTER_SERVER_ROOT", "jupyter"),
+    ]
+
+    for env_var, editor in env_checks:
+        value = os.environ.get(env_var)
+        if value:
+            if isinstance(editor, dict):
+                # For TERM_PROGRAM, map the value to the command
+                for term_value, cmd in editor.items():
+                    if term_value.lower() in value.lower():
+                        return cmd
+            else:
+                return editor
+
+    return None
+
+def open_in(filepath):
+    """Try to open a file in the current editor or system default application."""
+    # Try to detect the current editor first
+    detected_editor = detect_editor()
+
+    # Build the list of commands, prioritizing the detected editor
+    ide_commands = ["cursor", "code", "jupyter", "jupyter-lab", "jupyter-notebook"]
+
+    if detected_editor and detected_editor in ide_commands:
+        # Move detected editor to the front of the list
+        ide_commands.remove(detected_editor)
+        ide_commands.insert(0, detected_editor)
+
+    # Try each command
+    for cmd in ide_commands:
+        try:
+            subprocess.run([cmd, filepath], check=True, capture_output=True, timeout=2)
+            detected_msg = " (detected)" if cmd == detected_editor else ""
+            print(f"Opened in {cmd}{detected_msg}")
+            return
+        except (subprocess.CalledProcessError, FileNotFoundError, subprocess.TimeoutExpired):
+            continue
+
+    # Fallback to system default application
+    try:
+        system = platform.system()
+        if system == "Darwin":  # macOS
+            subprocess.run(["open", filepath], check=True)
+        elif system == "Windows":
+            subprocess.run(["start", filepath], shell=True, check=True)
+        elif system == "Linux":
+            subprocess.run(["xdg-open", filepath], check=True)
+        print(f"Opened with system default application")
+    except Exception as e:
+        print(f"Could not automatically open file. Please open manually: {filepath}")
+        print(f"Error: {e}")
+
 def create_notebook():
-    """Creates a new Jupyter Notebook file by asking the user for a filename and opens it in VS Code."""
+    """Creates a new Jupyter Notebook file by asking the user for a filename and opens it."""
     filename = input("Enter the name for the new notebook (without .ipynb extension): ").strip()
     if not filename:
         print("Filename cannot be empty, file not created")
@@ -51,7 +120,7 @@ def create_notebook():
             nbformat.write(notebook, f)
         print(f"Created '{filepath}'")
 
-        subprocess.run(["cursor", filepath], check=True)
+        open_in(filepath)
     except Exception as e:
         print(f"Error creating or opening notebook: {e}")
 
