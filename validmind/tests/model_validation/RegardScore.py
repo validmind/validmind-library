@@ -78,14 +78,25 @@ def RegardScore(
     # Ensure equal lengths and get truncated data if necessary
     y_true, y_pred = validate_prediction(y_true, y_pred)
 
+    # Convert numpy arrays to lists of Python strings for the regard tool
+    # The regard tool expects a list of strings, not a numpy array or numpy string scalars
+    y_true = [str(item) for item in y_true]
+    y_pred = [str(item) for item in y_pred]
+
     regard_tool = evaluate.load("regard", module_type="measurement")
 
     # Function to calculate regard scores
+    # Process texts one at a time to avoid issues with the regard tool's internal processing
     def compute_regard_scores(texts):
-        scores = regard_tool.compute(data=texts)["regard"]
-        regard_dicts = [
-            dict((x["label"], x["score"]) for x in sublist) for sublist in scores
-        ]
+        regard_dicts = []
+        for text in texts:
+            # Ensure text is a Python string
+            text_str = str(text) if not isinstance(text, str) else text
+            result = regard_tool.compute(data=[text_str])
+            # Extract the regard scores for this text
+            regard_scores = result["regard"][0]  # Get first (and only) result
+            regard_dict = {x["label"]: x["score"] for x in regard_scores}
+            regard_dicts.append(regard_dict)
         return regard_dicts
 
     # Calculate regard scores for true and predicted texts

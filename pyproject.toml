@@ -14,7 +14,7 @@ authors = [
 ]
 dependencies = [
   "aiohttp[speedups]",
-  "ipywidgets",
+  "ipywidgets==8.1.7",
   "kaleido (>=0.2.1,!=0.2.1.post1,<1.0.0)",
   "matplotlib",
   "mistune (>=3.0.2,<4.0.0)",
@@ -23,15 +23,15 @@ dependencies = [
   "openai (>=1)",
   "pandas (>=2.0.3,<3.0.0)",
   "plotly (>=5.0.0,<6.0.0)",
-  "polars",
-  "python-dotenv",
-  "scikit-learn",
-  "seaborn",
+  "polars==1.32.3",
+  "python-dotenv==1.1.1",
+  "scikit-learn (>=0.9.0,<1.7.1)",
+  "seaborn==0.13.2",
   "tabulate (>=0.9.0,<0.10.0)",
-  "tiktoken",
-  "tqdm",
-  "anywidget",
-  "beautifulsoup4",
+  "tiktoken==0.11.0",
+  "tqdm==4.67.1",
+  "anywidget==0.9.18",
+  "beautifulsoup4==4.13.4",
 ]
 
 [project.optional-dependencies]
@@ -39,19 +39,19 @@ all = [
   "torch (>=2.0.0)",
   "xgboost (>=1.5.2,<3)",
   "transformers (>=4.32.0,<5.0.0)",
-  "pycocoevalcap",
+  "pycocoevalcap==1.2",
   "ragas (>=0.2.3,<=0.2.7)",
   "sentencepiece (>=0.2.0,<0.3.0)",
   "langchain-openai (>=0.1.8)",
-  "scipy",
-  "statsmodels",
-  "langdetect",
+  "scipy==1.13.1",
+  "statsmodels==0.14.5",
+  "langdetect==1.0.9",
   "nltk (>=3.8.1,<4.0.0)",
   "textblob (>=0.18.0.post0,<0.19.0)",
-  "evaluate",
+  "evaluate==0.4.3",
   "rouge (>=1)",
   "bert-score (>=0.3.13)",
-  "arch",
+  "arch==7.2.0",
   "shap (>=0.46.0)",
   "scorecardpy (>=0.1.9.6,<0.2.0)",
 ]
@@ -62,23 +62,23 @@ huggingface = [
 llm = [
   "torch (>=2.0.0)",
   "transformers (>=4.32.0,<5.0.0)",
-  "pycocoevalcap",
+  "pycocoevalcap==1.2",
   "ragas (>=0.2.3,<=0.2.7)",
   "sentencepiece (>=0.2.0,<0.3.0)",
   "langchain-openai (>=0.1.8)",
   "deepeval (>=3.7.0)",
 ]
 nlp = [
-  "langdetect",
+  "langdetect==1.0.9",
   "nltk (>=3.8.1,<4.0.0)",
   "textblob (>=0.18.0.post0,<0.19.0)",
-  "evaluate",
+  "evaluate==0.4.3",
   "rouge (>=1)",
   "bert-score (>=0.3.13)",
   "pyarrow (<16)",
 ]
 pytorch = ["torch (>=2.0.0)"]
-stats = ["scipy", "statsmodels", "arch"]
+stats = ["scipy==1.13.1", "statsmodels==0.14.5", "arch==7.2.0"]
 xgboost = ["xgboost (>=1.5.2,<3)"]
 explainability = ["shap (>=0.46.0)"]
 credit_risk = ["scorecardpy (>=0.1.9.6,<0.2.0)"]
