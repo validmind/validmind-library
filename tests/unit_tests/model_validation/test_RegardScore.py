@@ -100,10 +100,22 @@ class TestRegardScore(unittest.TestCase):
 
     def test_figures_properties(self):
         """Test if figures have expected properties."""
-        _, *figures, _ = RegardScore(self.vm_dataset, self.vm_model)
+        result_df, *figures, _ = RegardScore(self.vm_dataset, self.vm_model)
 
-        # Check if we have the expected number of figures (16 figures: histogram and bar chart for different catergories)
-        self.assertEqual(len(figures), 16)
+        # Calculate expected number of figures based on actual categories
+        # Each category gets 2 figures (histogram + bar chart) for both true and predicted texts
+        # Get unique categories from the result dataframe
+        categories = result_df["Category"].unique()
+        num_categories = len(categories)
+        # Expected: 2 figures per category (histogram + bar) for true text + 2 figures per category for predicted text
+        expected_num_figures = num_categories * 2 * 2
+
+        # Check if we have the expected number of figures
+        self.assertEqual(
+            len(figures),
+            expected_num_figures,
+            msg=f"Expected {expected_num_figures} figures (2 per category for true and predicted, {num_categories} categories), but got {len(figures)}",
+        )
 
         for fig in figures:
             # Check if figure has exactly one trace

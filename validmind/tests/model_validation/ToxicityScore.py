@@ -72,15 +72,46 @@ def ToxicityScore(
     y_pred = dataset.y_pred(model)
     input_text = dataset.df[dataset.text_column]
 
+    # Convert to lists of Python strings to avoid issues with numpy string types
+    y_true = [str(item) for item in y_true]
+    y_pred = [str(item) for item in y_pred]
+    input_text = [str(item) for item in input_text]
+
     # Load the toxicity evaluation metric
     toxicity = evaluate.load("toxicity")
 
     # Function to calculate toxicity scores
+    # Workaround for evaluate library (v0.4.3) bug: use the classifier directly
+    # instead of the compute() method which has internal processing issues
     def compute_toxicity_scores(texts):
         scores = []
+        toxic_label = "hate"  # Default toxic label used by the toxicity tool
+
         for text in texts:
-            score = toxicity.compute(predictions=[text])
-            scores.append(score["toxicity"])
+            # Ensure text is a Python string (handle numpy string types)
+            text_str = str(text) if not isinstance(text, str) else text
+
+            # Use the classifier directly to bypass the bug in compute() method
+            classifier_result = toxicity.toxic_classifier(text_str)
+
+            # Extract the toxicity score for the toxic label
+            # The result is a list of lists, where each inner list contains label-score dicts
+            if isinstance(classifier_result, list) and len(classifier_result) > 0:
+                labels_scores = classifier_result[0]  # Get first (and only) result
+                # Find the score for the toxic label
+                toxicity_score = next(
+                    (
+                        item["score"]
+                        for item in labels_scores
+                        if item["label"] == toxic_label
+                    ),
+                    0.0,
+                )
+                scores.append(toxicity_score)
+            else:
+                # Fallback if format is unexpected
+                scores.append(0.0)
+
         return scores
 
     # Calculate toxicity scores for input, true, and predicted texts

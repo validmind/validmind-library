@@ -70,8 +70,40 @@ def Toxicity(dataset) -> Tuple[plt.Figure, RawData]:
 
     text_inputs = dataset.df[dataset.text_column].tolist()
 
+    # Convert to list of Python strings to avoid issues with numpy string types
+    text_inputs = [str(item) for item in text_inputs]
+
     toxicity = evaluate.load("toxicity")
-    toxicity_scores = toxicity.compute(predictions=text_inputs)["toxicity"]
+
+    # Workaround for evaluate library (v0.4.3) bug: use the classifier directly
+    # instead of the compute() method which has internal processing issues
+    toxicity_scores = []
+    toxic_label = "hate"  # Default toxic label used by the toxicity tool
+
+    for text in text_inputs:
+        # Ensure text is a Python string (handle numpy string types)
+        text_str = str(text) if not isinstance(text, str) else text
+
+        # Use the classifier directly to bypass the bug in compute() method
+        classifier_result = toxicity.toxic_classifier(text_str)
+
+        # Extract the toxicity score for the toxic label
+        # The result is a list of lists, where each inner list contains label-score dicts
+        if isinstance(classifier_result, list) and len(classifier_result) > 0:
+            labels_scores = classifier_result[0]  # Get first (and only) result
+            # Find the score for the toxic label
+            toxicity_score = next(
+                (
+                    item["score"]
+                    for item in labels_scores
+                    if item["label"] == toxic_label
+                ),
+                0.0,
+            )
+            toxicity_scores.append(toxicity_score)
+        else:
+            # Fallback if format is unexpected
+            toxicity_scores.append(0.0)
 
     fig = plt.figure()
     ax = sns.kdeplot(

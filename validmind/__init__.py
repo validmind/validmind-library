@@ -48,7 +48,9 @@ try:
 except ImportError:
     ...
 
-from . import scorers as scorer
+from . import scorers
+
+# from . import scorers as scorer  # Keep alias for backward compatibility
 from .__version__ import __version__  # noqa: E402
 from .api_client import init, log_metric, log_test_result, log_text, reload
 from .client import (  # noqa: E402
@@ -132,7 +134,8 @@ __all__ = [  # noqa
     "test",
     "scorer_decorator",
     # scorer module
-    "scorer",
+    # "scorer",
+    "scorers",  # Expose scorers module for direct access
     # raw data (for post-processing test results and building tests)
     "RawData",
     # submodules
