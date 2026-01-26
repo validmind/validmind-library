@@ -86,17 +86,29 @@ def RegardScore(
     regard_tool = evaluate.load("regard", module_type="measurement")
 
     # Function to calculate regard scores
-    # Process texts one at a time to avoid issues with the regard tool's internal processing
+    # Workaround for evaluate library (v0.4.3) bug: use the classifier directly
+    # instead of the compute() method which has internal processing issues
     def compute_regard_scores(texts):
         regard_dicts = []
         for text in texts:
-            # Ensure text is a Python string
+            # Ensure text is a Python string (handle numpy string types)
             text_str = str(text) if not isinstance(text, str) else text
-            result = regard_tool.compute(data=[text_str])
-            # Extract the regard scores for this text
-            regard_scores = result["regard"][0]  # Get first (and only) result
-            regard_dict = {x["label"]: x["score"] for x in regard_scores}
-            regard_dicts.append(regard_dict)
+
+            # Use the classifier directly to bypass the bug in compute() method
+            classifier_result = regard_tool.regard_classifier(text_str)
+
+            # Extract the regard scores
+            # The result is a list of lists, where each inner list contains label-score dicts
+            if isinstance(classifier_result, list) and len(classifier_result) > 0:
+                regard_scores = classifier_result[0]  # Get first (and only) result
+                regard_dict = {x["label"]: x["score"] for x in regard_scores}
+                regard_dicts.append(regard_dict)
+            else:
+                # Fallback if format is unexpected - create empty dict with default categories
+                regard_dicts.append(
+                    {"positive": 0.0, "negative": 0.0, "neutral": 0.0, "other": 0.0}
+                )
+
         return regard_dicts
 
     # Calculate regard scores for true and predicted texts
