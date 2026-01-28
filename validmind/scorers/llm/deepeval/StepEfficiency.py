@@ -44,6 +44,11 @@ def StepEfficiency(
     in completing the given task. It analyzes the agent's full execution trace
     to assess the efficiency of the execution steps.
 
+    Note: StepEfficiencyMetric requires a complete execution trace with step-by-step
+    actions. If the trace structure is incomplete or doesn't contain sufficient
+    execution steps, the evaluation may fail and return a score of 0.0 with an
+    explanatory reason.
+
     Args:
         dataset: Dataset containing the agent input and execution trace
         threshold: Minimum passing threshold (default: 0.5)
@@ -55,6 +60,8 @@ def StepEfficiency(
 
     Returns:
         List[Dict[str, Any]] with keys "score" and "reason" for each row.
+        If evaluation fails due to incomplete trace structure, returns score 0.0
+        with an explanatory reason message.
 
     Raises:
         ValueError: If required columns are missing
@@ -94,17 +101,57 @@ def StepEfficiency(
             from validmind.scorers.llm.deepeval import _convert_to_tool_call_list
 
             tools_called_value = _convert_to_tool_call_list(tools_called_value)
+        
+        trace_dict = row.get(agent_output_column, {})
+        
+        # StepEfficiencyMetric requires a properly structured trace
+        # Ensure trace_dict has the necessary structure
+        if not isinstance(trace_dict, dict):
+            trace_dict = {}
+        
+        # Ensure trace_dict has 'input' and 'output' for task extraction
+        if "input" not in trace_dict:
+            trace_dict["input"] = input_value
+        if "output" not in trace_dict:
+            trace_dict["output"] = actual_output_value
+        
         test_case = LLMTestCase(
             input=input_value,
             actual_output=actual_output_value,
             tools_called=tools_called_value,
-            _trace_dict=row.get(agent_output_column, {}),
+            _trace_dict=trace_dict,
         )
 
-        result = evaluate(test_cases=[test_case], metrics=[metric])
-        metric_data = result.test_results[0].metrics_data[0]
-        score = metric_data.score
-        reason = getattr(metric_data, "reason", "No reason provided")
-        results.append({"score": score, "reason": reason})
+        try:
+            result = evaluate(test_cases=[test_case], metrics=[metric])
+            metric_data = result.test_results[0].metrics_data[0]
+            score = metric_data.score
+            reason = getattr(metric_data, "reason", "No reason provided")
+            results.append({"score": score, "reason": reason})
+        except (UnboundLocalError, AttributeError, KeyError) as e:
+            # StepEfficiencyMetric may fail if trace structure is incomplete
+            # This can happen if the trace doesn't contain the required execution steps
+            error_msg = str(e)
+            if "prompt" in error_msg or "referenced before assignment" in error_msg:
+                results.append({
+                    "score": 0.0,
+                    "reason": (
+                        f"StepEfficiency evaluation failed: The agent trace may not contain "
+                        f"sufficient execution steps for analysis. StepEfficiencyMetric requires "
+                        f"a complete execution trace with step-by-step actions. "
+                        f"Original error: {error_msg}"
+                    )
+                })
+            else:
+                raise
+        except Exception as e:
+            # Handle other potential errors gracefully
+            results.append({
+                "score": 0.0,
+                "reason": (
+                    f"StepEfficiency evaluation failed: {str(e)}. "
+                    f"This metric requires a properly structured agent execution trace."
+                )
+            })
 
     return results
