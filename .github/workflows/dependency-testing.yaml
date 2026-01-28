@@ -61,19 +61,16 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y build-essential libomp-dev
 
-      - name: Install build tooling (Poetry and uv)
+      - name: Install build tooling (build and uv)
         run: |
           python -m pip install --upgrade pip
-          curl -sSL https://install.python-poetry.org | python3 - --yes
-          echo "$HOME/.local/bin" >> $GITHUB_PATH
-          echo "$HOME/.poetry/bin" >> $GITHUB_PATH
+          python -m pip install --upgrade build
           curl -LsSf https://astral.sh/uv/install.sh | sh
           echo "$HOME/.cargo/bin" >> $GITHUB_PATH
 
       - name: Build wheel and sdist
         run: |
-          poetry --version
-          poetry build
+          python -m build
 
       - name: Install and test via pip artifacts (${{ matrix.deps-type }})
         run: |
@@ -118,10 +115,9 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y build-essential libomp-dev
 
-      - name: Install Poetry
+      - name: Install pip tooling
         run: |
           python -m pip install --upgrade pip
-          pip install poetry
 
       - name: Test pip freeze environments
         env:
@@ -136,7 +132,7 @@ jobs:
           fi
           python -m pip install --upgrade pip
           pip install -r "$FREEZE_FILE"
-          poetry install --no-deps
+          python -m pip install . --no-deps
           python -m tests.test_unit_tests | cat
 
   report-status:
