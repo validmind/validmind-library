@@ -219,6 +219,7 @@ TestID = Union[
         "validmind.scorers.llm.deepeval.Hallucination",
         "validmind.scorers.llm.deepeval.PlanAdherence",
         "validmind.scorers.llm.deepeval.PlanQuality",
+        "validmind.scorers.llm.deepeval.StepEfficiency",
         "validmind.scorers.llm.deepeval.Summarization",
         "validmind.scorers.llm.deepeval.TaskCompletion",
         "validmind.scorers.llm.deepeval.ToolCorrectness",

@@ -101,20 +101,20 @@ def StepEfficiency(
             from validmind.scorers.llm.deepeval import _convert_to_tool_call_list
 
             tools_called_value = _convert_to_tool_call_list(tools_called_value)
-        
+
         trace_dict = row.get(agent_output_column, {})
-        
+
         # StepEfficiencyMetric requires a properly structured trace
         # Ensure trace_dict has the necessary structure
         if not isinstance(trace_dict, dict):
             trace_dict = {}
-        
+
         # Ensure trace_dict has 'input' and 'output' for task extraction
         if "input" not in trace_dict:
             trace_dict["input"] = input_value
         if "output" not in trace_dict:
             trace_dict["output"] = actual_output_value
-        
+
         test_case = LLMTestCase(
             input=input_value,
             actual_output=actual_output_value,
@@ -133,25 +133,29 @@ def StepEfficiency(
             # This can happen if the trace doesn't contain the required execution steps
             error_msg = str(e)
             if "prompt" in error_msg or "referenced before assignment" in error_msg:
-                results.append({
-                    "score": 0.0,
-                    "reason": (
-                        f"StepEfficiency evaluation failed: The agent trace may not contain "
-                        f"sufficient execution steps for analysis. StepEfficiencyMetric requires "
-                        f"a complete execution trace with step-by-step actions. "
-                        f"Original error: {error_msg}"
-                    )
-                })
+                results.append(
+                    {
+                        "score": 0.0,
+                        "reason": (
+                            f"StepEfficiency evaluation failed: The agent trace may not contain "
+                            f"sufficient execution steps for analysis. StepEfficiencyMetric requires "
+                            f"a complete execution trace with step-by-step actions. "
+                            f"Original error: {error_msg}"
+                        ),
+                    }
+                )
             else:
                 raise
         except Exception as e:
             # Handle other potential errors gracefully
-            results.append({
-                "score": 0.0,
-                "reason": (
-                    f"StepEfficiency evaluation failed: {str(e)}. "
-                    f"This metric requires a properly structured agent execution trace."
-                )
-            })
+            results.append(
+                {
+                    "score": 0.0,
+                    "reason": (
+                        f"StepEfficiency evaluation failed: {str(e)}. "
+                        f"This metric requires a properly structured agent execution trace."
+                    ),
+                }
+            )
 
     return results
