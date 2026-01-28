@@ -26,6 +26,84 @@ except ImportError as e:
     raise e
 
 
+def _validate_columns(
+    dataset: VMDataset,
+    input_column: str,
+    actual_output_column: str,
+) -> None:
+    """Raise ValueError if required columns are missing from the dataset."""
+    missing_columns: List[str] = []
+    if input_column not in dataset._df.columns:
+        missing_columns.append(input_column)
+    if actual_output_column not in dataset._df.columns:
+        missing_columns.append(actual_output_column)
+    if missing_columns:
+        raise ValueError(
+            f"Required columns {missing_columns} not found in dataset. "
+            f"Available columns: {dataset._df.columns.tolist()}"
+        )
+
+
+def _normalize_tools_called(tools_called_value: Any) -> List[Any]:
+    """Convert tools_called to a list of ToolCall if needed."""
+    if isinstance(tools_called_value, list) and all(
+        isinstance(tool, ToolCall) for tool in tools_called_value
+    ):
+        return tools_called_value
+    from validmind.scorers.llm.deepeval import _convert_to_tool_call_list
+
+    return _convert_to_tool_call_list(tools_called_value)
+
+
+def _build_trace_dict(
+    trace_dict: Any,
+    input_value: Any,
+    actual_output_value: Any,
+) -> Dict[str, Any]:
+    """Ensure trace_dict is a dict with 'input' and 'output' for task extraction."""
+    if not isinstance(trace_dict, dict):
+        trace_dict = {}
+    if "input" not in trace_dict:
+        trace_dict = {**trace_dict, "input": input_value}
+    if "output" not in trace_dict:
+        trace_dict = {**trace_dict, "output": actual_output_value}
+    return trace_dict
+
+
+def _evaluate_single_case(
+    test_case: LLMTestCase,
+    metric: StepEfficiencyMetric,
+) -> Dict[str, Any]:
+    """Run StepEfficiencyMetric on one test case; return score/reason or error result."""
+    try:
+        result = evaluate(test_cases=[test_case], metrics=[metric])
+        metric_data = result.test_results[0].metrics_data[0]
+        score = metric_data.score
+        reason = getattr(metric_data, "reason", "No reason provided")
+        return {"score": score, "reason": reason}
+    except (UnboundLocalError, AttributeError, KeyError) as e:
+        error_msg = str(e)
+        if "prompt" in error_msg or "referenced before assignment" in error_msg:
+            return {
+                "score": 0.0,
+                "reason": (
+                    f"StepEfficiency evaluation failed: The agent trace may not contain "
+                    f"sufficient execution steps for analysis. StepEfficiencyMetric requires "
+                    f"a complete execution trace with step-by-step actions. "
+                    f"Original error: {error_msg}"
+                ),
+            }
+        raise
+    except Exception as e:
+        return {
+            "score": 0.0,
+            "reason": (
+                f"StepEfficiency evaluation failed: {str(e)}. "
+                f"This metric requires a properly structured agent execution trace."
+            ),
+        }
+
+
 @scorer()
 @tags("llm", "deepeval", "agent_evaluation", "action_layer", "agentic")
 @tasks("llm")
@@ -66,22 +144,9 @@ def StepEfficiency(
     Raises:
         ValueError: If required columns are missing
     """
-    # Validate required columns exist in dataset
-    missing_columns: List[str] = []
-    if input_column not in dataset._df.columns:
-        missing_columns.append(input_column)
-
-    if actual_output_column not in dataset._df.columns:
-        missing_columns.append(actual_output_column)
-
-    if missing_columns:
-        raise ValueError(
-            f"Required columns {missing_columns} not found in dataset. "
-            f"Available columns: {dataset._df.columns.tolist()}"
-        )
+    _validate_columns(dataset, input_column, actual_output_column)
 
     _, model = get_client_and_model()
-
     metric = StepEfficiencyMetric(
         threshold=threshold,
         model=model,
@@ -94,68 +159,18 @@ def StepEfficiency(
     for _, row in dataset._df.iterrows():
         input_value = row[input_column]
         actual_output_value = row[actual_output_column]
-        tools_called_value = row.get(tools_called_column, [])
-        if not isinstance(tools_called_value, list) or not all(
-            isinstance(tool, ToolCall) for tool in tools_called_value
-        ):
-            from validmind.scorers.llm.deepeval import _convert_to_tool_call_list
-
-            tools_called_value = _convert_to_tool_call_list(tools_called_value)
-
-        trace_dict = row.get(agent_output_column, {})
-
-        # StepEfficiencyMetric requires a properly structured trace
-        # Ensure trace_dict has the necessary structure
-        if not isinstance(trace_dict, dict):
-            trace_dict = {}
-
-        # Ensure trace_dict has 'input' and 'output' for task extraction
-        if "input" not in trace_dict:
-            trace_dict["input"] = input_value
-        if "output" not in trace_dict:
-            trace_dict["output"] = actual_output_value
-
+        tools_called_value = _normalize_tools_called(row.get(tools_called_column, []))
+        trace_dict = _build_trace_dict(
+            row.get(agent_output_column, {}),
+            input_value,
+            actual_output_value,
+        )
         test_case = LLMTestCase(
             input=input_value,
             actual_output=actual_output_value,
             tools_called=tools_called_value,
             _trace_dict=trace_dict,
         )
-
-        try:
-            result = evaluate(test_cases=[test_case], metrics=[metric])
-            metric_data = result.test_results[0].metrics_data[0]
-            score = metric_data.score
-            reason = getattr(metric_data, "reason", "No reason provided")
-            results.append({"score": score, "reason": reason})
-        except (UnboundLocalError, AttributeError, KeyError) as e:
-            # StepEfficiencyMetric may fail if trace structure is incomplete
-            # This can happen if the trace doesn't contain the required execution steps
-            error_msg = str(e)
-            if "prompt" in error_msg or "referenced before assignment" in error_msg:
-                results.append(
-                    {
-                        "score": 0.0,
-                        "reason": (
-                            f"StepEfficiency evaluation failed: The agent trace may not contain "
-                            f"sufficient execution steps for analysis. StepEfficiencyMetric requires "
-                            f"a complete execution trace with step-by-step actions. "
-                            f"Original error: {error_msg}"
-                        ),
-                    }
-                )
-            else:
-                raise
-        except Exception as e:
-            # Handle other potential errors gracefully
-            results.append(
-                {
-                    "score": 0.0,
-                    "reason": (
-                        f"StepEfficiency evaluation failed: {str(e)}. "
-                        f"This metric requires a properly structured agent execution trace."
-                    ),
-                }
-            )
+        results.append(_evaluate_single_case(test_case, metric))
 
     return results
