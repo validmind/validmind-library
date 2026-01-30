@@ -13,6 +13,7 @@ from .AnswerRelevancy import AnswerRelevancy
 from .ArgumentCorrectness import ArgumentCorrectness
 from .PlanAdherence import PlanAdherence
 from .PlanQuality import PlanQuality
+from .StepEfficiency import StepEfficiency
 from .ToolCorrectness import ToolCorrectness
 
 __all__ = [
@@ -20,6 +21,7 @@ __all__ = [
     "ArgumentCorrectness",
     "PlanAdherence",
     "PlanQuality",
+    "StepEfficiency",
     "ToolCorrectness",
     "_extract_tool_responses",
     "_extract_tool_calls_from_message",

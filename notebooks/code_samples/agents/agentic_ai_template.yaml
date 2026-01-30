@@ -1,0 +1,339 @@
+- id: executive_summary
+  title: Executive Summary
+  guidelines:
+    - Provide a high-level overview of the agentic AI system, including its
+      purpose, scope, and intended use cases.
+    - Summarize the key features that make the system agentic, such as autonomy,
+      reasoning, memory, adaptability, and goal-directed behavior.
+    - Highlight the strategic benefits for the organization, such as efficiency,
+      scalability, cost-effectiveness, and decision-making support.
+    - Outline the system’s testing and validation strategy at a glance,
+      emphasizing safety, reliability, and regulatory compliance.
+    - Identify major risks, limitations, and safeguards, giving stakeholders a
+      concise understanding of governance and monitoring plans.
+    - Present the deployment vision, including expected stakeholders,
+      operational environments, and integration with existing workflows.
+  index_only: true
+- id: conceptual_soundness
+  title: Conceptual Soundness
+  index_only: true
+  sections:
+    - id: model_overview
+      title: Model Overview
+      guidelines:
+        - Provide a concise explanation of the system’s purpose, including how
+          the agentic AI framework enables autonomous decision-making,
+          reasoning, and action-taking.
+        - Describe the high-level design of the agent(s), their core objectives,
+          and how they interact with their environment and users.
+        - Explain the conceptual differences between this agentic system and
+          traditional AI/ML models, focusing on autonomy, adaptability, and
+          emergent behavior.
+        - Highlight the role of agency, memory, feedback loops, and
+          goal-directedness in the system’s operation.
+        - Summarize the overall vision for how the system is intended to be
+          applied in real-world contexts, along with high-level testing goals.
+      parent_section: conceptual_soundness
+    - id: model_selection
+      title: Model Selection
+      guidelines:
+        - Describe the agentic AI paradigm, reasoning algorithms, or frameworks
+          chosen (e.g., reinforcement learning, planning, LLM-based
+          orchestration) and why they are suitable for the use case.
+        - Explain how the selected approach supports autonomy, adaptability, and
+          safe delegation of decision-making to the agent.
+        - Compare alternative paradigms (e.g., rule-based agents, purely
+          supervised ML models) and clarify why they were less appropriate.
+        - Discuss any hybrid approaches (e.g., combining symbolic reasoning with
+          generative models) and the rationale for customization.
+        - Identify potential risks and trade-offs of the chosen approach,
+          including known failure modes, and describe how these will be tested
+          and validated.
+      parent_section: conceptual_soundness
+      contents:
+        - content_id: model_selection
+          content_type: text
+    - id: purpose_and_scope
+      title: Purpose and Scope
+      guidelines:
+        - Clearly define the primary goals of the agentic AI system, including
+          decision-making domains and problem boundaries.
+        - Specify intended users, stakeholders, and environments where the agent
+          will operate.
+        - Identify the scope of autonomy granted to the agent (e.g., advisory
+          role, execution authority, or fully autonomous operation).
+        - Clarify the operational limits and scenarios where human oversight,
+          intervention, or escalation is required.
+        - Define measurable testing objectives that validate the agent’s
+          performance within its declared scope.
+      parent_section: conceptual_soundness
+    - id: architecture_at_glance
+      title: Architecture at Glance
+      guidelines:
+        - Provide a high-level diagram or description of the system
+          architecture, including agents, memory, reasoning modules, and
+          communication channels.
+        - Explain how the architecture supports perception, reasoning, planning,
+          and action loops.
+        - Highlight integration points with external systems, APIs, or data
+          sources.
+        - Describe the flow of information and control, showing how decisions
+          are formed, validated, and executed.
+        - Summarize testing hooks or checkpoints across components to enable
+          unit, integration, and system-level evaluation.
+      parent_section: conceptual_soundness
+    - id: assumptions_and_limitations
+      title: Assumptions and Limitations
+      guidelines:
+        - List the explicit assumptions about the environment, data, and user
+          behavior that underpin the system’s design.
+        - Identify constraints in agent reasoning, knowledge scope, or autonomy
+          that may affect performance.
+        - Discuss limitations in generalizability across contexts, domains, or
+          environments.
+        - Describe how uncertainty, incomplete information, or conflicting
+          objectives are handled.
+        - Explain how assumptions and limitations are validated through stress
+          tests, adversarial scenarios, and edge-case evaluations.
+      parent_section: conceptual_soundness
+    - id: regulatory_requirements
+      title: Regulatory Requirements
+      guidelines:
+        - Identify relevant laws, regulations, and standards applicable to
+          autonomous decision-making systems in the financial or operational
+          domain.
+        - Explain how the system addresses compliance needs such as
+          auditability, explainability, fairness, and accountability.
+        - Clarify how human oversight and control are integrated to meet
+          regulatory expectations for autonomous AI.
+        - Highlight any specific documentation, logging, or reporting features
+          built into the system for compliance purposes.
+        - Describe testing procedures to validate regulatory compliance,
+          including audit trail verification and explainability checks.
+      parent_section: conceptual_soundness
+- id: data_preparation
+  title: Data Evaluation
+  index_only: true
+  sections:
+    - id: data_description
+      title: Data Description
+      guidelines:
+        - Provide an overview of data sources used by the agent(s), including
+          structured, unstructured, streaming, or interaction-derived data.
+        - Describe how contextual, environmental, or feedback data is
+          incorporated into the agent’s reasoning processes.
+        - Explain how memory structures (short-term, long-term, episodic) depend
+          on or interact with data inputs.
+        - Detail preprocessing or feature engineering tailored to enable
+          reasoning, planning, or adaptation.
+        - Include validation procedures to confirm data relevance,
+          representativeness, and adequacy for agent training and testing.
+      parent_section: data_preparation
+    - id: data_quality
+      title: Data Quality
+      guidelines:
+        - Define quality requirements for agent inputs, including accuracy,
+          timeliness, and consistency of real-world data streams.
+        - Describe methods for detecting and handling incomplete, noisy, or
+          adversarial data.
+        - Explain quality control for interaction data (e.g., user prompts,
+          feedback) that may shape agent behavior.
+        - Highlight processes for maintaining integrity of memory stores and
+          preventing drift due to poor input quality.
+        - Include testing protocols for validating data pipelines,
+          stress-testing with edge cases, and detecting bias leakage.
+      parent_section: data_preparation
+      contents: []
+- id: model_evaluation
+  title: Model Evaluation
+  index_only: true
+  sections:
+    - id: model_description
+      title: Model Description
+      guidelines:
+        - Provide a clear description of the agent’s architecture, reasoning
+          cycle, and interaction model.
+        - Explain the roles of planning, memory, and feedback in enabling
+          autonomy and adaptability.
+        - Detail how subcomponents (e.g., LLMs, planners, evaluators) integrate
+          to achieve end-to-end functionality.
+        - Clarify how emergent behaviors are monitored and managed.
+        - Specify test coverage for each component, including unit tests,
+          integration tests, and system-level tests.
+      parent_section: model_evaluation
+    - id: evaluation_methodology
+      title: Evaluation Methodology
+      guidelines:
+        - Describe the evaluation framework for testing autonomy, adaptability,
+          and goal alignment.
+        - Specify metrics for reasoning quality, task success, efficiency, and
+          safety.
+        - Explain simulation, sandboxing, or staged deployment approaches used
+          for testing.
+        - Include stress-testing for unexpected inputs, adversarial prompts, or
+          dynamic environments.
+        - Define reproducibility and benchmarking protocols to validate results
+          consistently across test cycles.
+      parent_section: model_evaluation
+    - id: prompt_evaluation
+      title: Prompt Evaluation
+      guidelines:
+        - Describe how the system’s responses to prompts are evaluated for
+          relevance, accuracy, and safety.
+        - Explain methods for detecting prompt injection, manipulation, or
+          adversarial use.
+        - Detail how evaluation ensures robustness against ambiguous,
+          conflicting, or incomplete instructions.
+        - Clarify criteria for determining when escalation to human oversight is
+          required.
+        - Define testing strategies for prompt templates, prompt chaining, and
+          stress scenarios.
+      contents:
+        - content_type: test
+          content_id: validmind.prompt_validation.Clarity
+        - content_type: test
+          content_id: validmind.prompt_validation.Conciseness
+        - content_type: test
+          content_id: validmind.prompt_validation.Delimitation
+        - content_type: test
+          content_id: validmind.prompt_validation.NegativeInstruction
+        - content_type: test
+          content_id: validmind.prompt_validation.Specificity
+      parent_section: model_evaluation
+    - id: agent_evaluation
+      title: Agent Evaluation
+      guidelines:
+        - Provide methods for assessing the agent’s ability to reason, plan, and
+          act autonomously.
+        - Define success metrics such as goal completion rate, adaptability to
+          change, and alignment with human intent.
+        - Explain how unintended or emergent behaviors are identified and
+          evaluated.
+        - Include testing for multi-agent interactions, collaboration, or
+          conflict resolution.
+        - Describe adversarial and edge-case testing to validate resilience of
+          autonomous decision-making.
+      contents:
+        - content_type: test
+          content_id: my_custom_tests.banking_accuracy_test
+        - content_type: test
+          content_id: my_custom_tests.BankingToolCallAccuracy
+      parent_section: model_evaluation
+    - id: output_quality
+      title: Output Quality
+      guidelines:
+        - Define quality standards for agent outputs (e.g., recommendations,
+          actions, reports).
+        - Evaluate outputs for consistency, accuracy, and contextual
+          appropriateness.
+        - Assess outputs for fairness, non-discrimination, and alignment with
+          ethical principles.
+        - Include processes for handling uncertainty or probabilistic reasoning
+          in outputs.
+        - Develop automated test suites to benchmark output quality against gold
+          standards or domain experts.
+      contents:
+        - content_type: test
+          content_id: validmind.model_validation.ragas.Faithfulness
+        - content_type: test
+          content_id: validmind.model_validation.ragas.ResponseRelevancy
+        - content_type: test
+          content_id: validmind.model_validation.ragas.ContextRecall
+      parent_section: model_evaluation
+    - id: Safety
+      title: Safety
+      guidelines:
+        - Describe built-in safety mechanisms to prevent harmful or unintended
+          actions by the agent.
+        - Explain escalation protocols for high-risk decisions requiring human
+          oversight.
+        - Detail adversarial robustness testing and red-teaming efforts to
+          uncover vulnerabilities.
+        - Clarify methods for ensuring alignment with ethical, legal, and
+          organizational safety standards.
+        - Include continuous validation tests for safety boundaries under
+          evolving data and environment conditions.
+      contents:
+        - content_type: test
+          content_id: validmind.model_validation.ragas.AspectCritic
+        - content_type: test
+          content_id: validmind.prompt_validation.Bias
+        - content_type: test
+          content_id: validmind.data_validation.nlp.Toxicity
+      parent_section: model_evaluation
+    - id: reliability_resilience_and_degraded_modes
+      title: Reliability, Resilience and Degraded Modes
+      guidelines:
+        - Explain strategies to ensure continuity of service during system or
+          environment disruptions.
+        - Describe fallback behaviors, degraded modes, or safe defaults when
+          full autonomy is not possible.
+        - Detail resilience mechanisms for handling network, data, or
+          computational failures.
+        - Provide monitoring methods for detecting and recovering from system
+          instability or drift.
+        - Define test scenarios simulating degraded conditions to validate
+          graceful failure and recovery.
+      parent_section: model_evaluation
+    - id: c46a7162-5fcd-4d2f-87e2-084afae70ee9
+      title: Actor specific Results
+      parent_section: model_evaluation
+      contents: []
+      sections:
+        - id: e78c8564-5af1-4ecc-b200-f131a629a01c
+          title: Credit Risk Analyzer
+          parent_section: c46a7162-5fcd-4d2f-87e2-084afae70ee9
+          contents: []
+        - id: df36a0c3-be44-4e16-a59a-cb635eac3ff3
+          title: Customer Account Manager
+          parent_section: c46a7162-5fcd-4d2f-87e2-084afae70ee9
+          contents: []
+        - id: 67d25cc5-2569-4727-aae1-6c5b2f84e238
+          title: Fraud Detection System
+          parent_section: c46a7162-5fcd-4d2f-87e2-084afae70ee9
+          contents: []
+    - id: cost_and_performance_management
+      title: Cost and Performance Management
+      guidelines:
+        - Provide metrics for computational efficiency, resource utilization,
+          and scalability of the system.
+        - Explain trade-offs between autonomy, performance, and resource
+          consumption.
+        - Detail monitoring of infrastructure costs, particularly in multi-agent
+          or large-scale deployments.
+        - Describe optimization strategies for balancing responsiveness with
+          efficiency.
+        - Include load testing, latency measurement, and profiling to validate
+          scalability and cost-effectiveness.
+      parent_section: model_evaluation
+- id: observability_and_monitoring
+  title: Observability and Monitoring
+  index_only: true
+  sections:
+    - id: monitoring_plan
+      title: Monitoring Plan
+      guidelines:
+        - Describe monitoring practices for reasoning quality, autonomy
+          boundaries, and safety compliance.
+        - Define triggers or alerts for deviations in agent behavior, output
+          quality, or ethical alignment.
+        - Explain feedback mechanisms for continuous improvement, retraining, or
+          realignment.
+        - Detail governance processes overseeing the monitoring, including human
+          review cycles.
+        - Specify testing protocols for validating monitoring tools, anomaly
+          detection, and alert reliability.
+      parent_section: observability_and_monitoring
+    - id: remediation_plan
+      title: Remediation Plan
+      guidelines:
+        - Provide steps for addressing performance degradation, misalignment, or
+          unsafe behaviors.
+        - Define escalation protocols and roles for intervention when agent
+          behavior breaches acceptable limits.
+        - Describe rollback strategies to revert to prior safe versions or modes.
+        - Explain retraining or recalibration processes when monitoring
+          identifies issues.
+        - Include regular scenario-based testing to validate the effectiveness
+          of remediation and recovery procedures.
+      parent_section: observability_and_monitoring
