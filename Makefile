@@ -95,5 +95,5 @@ check: copyright format lint test verify-copyright verify-exposed-credentials en
 .PHONY: docs quarto-docs
 
 notebook:
-	@python notebooks/templates/e2e_template.py
+	poetry run python notebooks/templates/e2e_template.py
 	git status | grep -v 'notebooks/templates'
