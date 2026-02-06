@@ -199,11 +199,13 @@ def open_in(filepath):
 
 def create_notebook():
     """Creates a new Jupyter Notebook file by asking the user for a filename and opens it."""
-    filename = input("Enter the name for the new notebook (without .ipynb extension): ").strip()
-    if not filename:
+    raw = input("Enter the name for the new notebook (without .ipynb extension): ").strip()
+    if not raw:
         print("Filename cannot be empty, file not created")
         return
 
+    # Normalize: replace spaces with underscores, enforce lowercase
+    filename = raw.replace(" ", "_").lower()
     if not filename.endswith(".ipynb"):
         filename += ".ipynb"
 
