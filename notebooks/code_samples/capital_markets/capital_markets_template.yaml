@@ -1,0 +1,223 @@
+- id: model_metadata
+  title: Model Metadata and Stakeholders
+  index_only: true
+  sections:
+    - id: metadata
+      title: Metadata
+      parent_section: model_metadata
+      guidelines:
+        - Provide detailed metadata to uniquely identify the model, ensuring
+          that each entry is traceable and consistent with internal records.
+        - Specify the platform to enable validation and governance teams to
+          understand technical dependencies.
+        - Metadata should be aligned with enterprise systems (e.g., Model Risk
+          Management System).
+        - Be specific about versioning and any platform customizations.
+    - id: stakeholders
+      title: Stakeholders
+      parent_section: model_metadata
+      guidelines:
+        - List all individuals responsible for the development, use, and
+          oversight of the model.
+        - Ensure clarity in responsibilities to avoid overlap and gaps in
+          accountability.
+        - Include specific roles, such as "Data Scientist," "Validation Lead,"
+          or "Business Analyst," and describe their responsibilities relative to
+          the model.
+- id: business_context
+  title: Business Context and Purpose
+  index_only: true
+  sections:
+    - id: business_problem
+      title: Business Problem and Objectives
+      parent_section: business_context
+      guidelines:
+        - Clearly describe the problem the model addresses and its alignment
+          with business goals.
+        - Include specific use cases, outputs, and highlight regulatory
+          expectations to demonstrate compliance.
+        - Specify compliance requirements, such as IFRS, Basel III or SR11-7, as
+          applicable.
+    - id: products_and_risks
+      title: Products and Risks
+      parent_section: business_context
+      guidelines:
+        - Detail how the model impacts products or processes and specify
+          associated risks (e.g., market, credit, or operational risks).
+        - Provide a description of business impacts and compliance with
+          applicable regulations.
+- id: model_design
+  title: Model Methodology and Design
+  index_only: true
+  sections:
+    - id: theoretical_foundations
+      title: Theoretical Foundations
+      parent_section: model_design
+      guidelines:
+        - Explain the methodology, assumptions, and logic underlying the model.
+        - Clearly document how key risks (e.g., credit default or liquidity) are
+          addressed within the model.
+        - Highlight any simplifications or approximations and their implications.
+    - id: architecture
+      title: Model Architecture
+      parent_section: model_design
+      guidelines:
+        - Use diagrams to illustrate the model's structure and data flow.
+        - Include visual flowcharts detailing how inputs are transformed into
+          outputs.
+        - Highlight dependencies affecting validation or performance.
+    - id: selection
+      title: Model Selection and Justification
+      parent_section: model_design
+      guidelines:
+        - Document the decision-making process, including comparisons to
+          alternative approaches.
+        - Provide rationale for model selection using performance metrics like
+          R-squared or RMSE.
+        - Highlight reasons for rejecting alternatives.
+- id: model_data
+  title: Model Data
+  index_only: true
+  sections:
+    - id: input_data
+      title: Input Data
+      parent_section: model_data
+      guidelines:
+        - Detail the provenance and quality of input data, including
+          preprocessing steps like imputation or outlier detection.
+        - Highlight known issues, such as stale data or incomplete time series.
+        - Suggest standard tests, e.g., null value checks, distribution
+          matching, or correlation analysis.
+    - id: dataset_characteristics
+      title: Development Dataset
+      parent_section: model_data
+      guidelines:
+        - Summarize dataset characteristics like size, representativeness, and
+          scope.
+        - Include validation metrics such as sampling error or coverage ratios.
+    - id: outputs
+      title: Outputs
+      parent_section: model_data
+      guidelines:
+        - Define outputs, their usage, and storage mechanisms.
+        - Highlight data formats (e.g., APIs, flat files) and ensure outputs are
+          validated for consistency and accuracy.
+- id: model_testing
+  title: Model Testing
+  index_only: true
+  sections:
+    - id: diagnostic_testing
+      title: Diagnostic Testing
+      parent_section: model_testing
+      guidelines:
+        - Provide details of diagnostic tests performed to ensure model
+          performance and identify anomalies.
+        - Include standard diagnostic tests such as - Residual analysis to check
+          model predictions. - Comparison of predicted versus actual outcomes
+          for validity.
+        - Summarize findings and highlight any performance gaps.
+    - id: sensitivity_stress_testing
+      title: Sensitivity and Stress Testing
+      parent_section: model_testing
+      guidelines:
+        - Sensitivity Testing. Describe how changes in input variables affect
+          model outputs.
+        - Stress Testing. Document model performance under extreme conditions or
+          assumptions.
+        - Use tests to measure how minor changes in key parameters affect
+          results.
+        - Simulate scenarios like extreme economic downturns to evaluate
+          robustness.
+    - id: performance_testing
+      title: Performance Testing
+      parent_section: model_testing
+      guidelines:
+        - Provide details of performance metrics such as RMSE, AUC, or
+          precision/recall.
+        - Benchmark comparisons. Compare performance with industry standards or
+          alternative models.
+        - Include visual aids like ROC curves or confusion matrices to
+          illustrate performance.
+    - id: back_testing
+      title: Back-Testing
+      parent_section: model_testing
+      guidelines:
+        - Highlight alignment of predictions with observed outcomes through
+          historical analysis.
+        - Test model predictions against historical data outcomes.
+        - Document discrepancies and propose remediation steps.
+- id: implementation
+  title: Model Implementation
+  index_only: true
+  sections:
+    - id: production_environment
+      title: Production Environment
+      parent_section: implementation
+      guidelines:
+        - Describe the implementation environment, such as cloud platforms like
+          AWS or GCP.
+        - Highlight integration points, such as database connectors or REST
+          APIs, ensuring consistency with design specifications.
+    - id: implementation_testing
+      title: Implementation Testing
+      parent_section: implementation
+      guidelines:
+        - Document verification steps, including parallel runs against legacy
+          systems and end-to-end pipeline testing.
+- id: limitations_adjustments
+  title: Assumptions, Limitations, and Adjustments
+  index_only: true
+  sections:
+    - id: assumptions
+      title: Assumptions
+      parent_section: limitations_adjustments
+      guidelines:
+        - List assumptions critical to model functionality and provide
+          justifications.
+        - Include potential impact analyses if assumptions fail.
+    - id: limitations
+      title: Limitations
+      parent_section: limitations_adjustments
+      guidelines:
+        - Highlight known limitations and mitigation strategies.
+        - Discuss implications for model performance or reliability.
+    - id: adjustments
+      title: Adjustments
+      parent_section: limitations_adjustments
+      guidelines:
+        - Document overrides and their justification, including governance
+          processes.
+- id: monitoring_controls_documentation
+  title: Model Monitoring and Controls
+  index_only: true
+  sections:
+    - id: ongoing
+      title: Ongoing Model Monitoring
+      parent_section: monitoring_controls_documentation
+      guidelines:
+        - Outline a monitoring plan, including performance metrics, monitoring
+          frequency, and escalation thresholds.
+        - Include drift analysis of input data distributions and stability
+          metrics for output consistency.
+    - id: governance
+      title: Governance
+      parent_section: monitoring_controls_documentation
+      guidelines:
+        - Define access controls, version management, and governance frameworks.
+        - Highlight periodic audits and role-based access controls.
+- id: documentation_references
+  title: Documentation References
+  index_only: true
+  sections:
+    - id: supporting_documents
+      title: Supporting Documents
+      parent_section: documentation_references
+      guidelines:
+        - Provide references to related documentation, such as validation
+          reports.
+        - Maintain a change log for systematic traceability.
+    - id: appendices
+      title: Appendices
+      parent_section: documentation_references
+      guidelines:
+        - Use appendices for supplementary data, testing results, and glossaries.

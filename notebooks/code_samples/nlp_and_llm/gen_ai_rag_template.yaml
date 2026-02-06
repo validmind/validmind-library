@@ -1,0 +1,534 @@
+- id: conceptual_soundness
+  title: Conceptual Soundness
+  index_only: true
+  sections:
+    - id: model_overview
+      title: Model Overview
+      guidelines:
+        - Provide a clear and concise description of the model's main concept,
+          explaining the underlying financial theory or economic rationale.
+        - Justify the choice of the model, algorithm, or approach, relating it
+          to the financial institution's needs, objectives, and any relevant
+          industry standards.
+        - Discuss any alternative models or approaches considered during the
+          model development process, and explain why they were not selected.
+        - Describe any key assumptions made in the model and their potential
+          implications on the model's results and performance.
+        - Explain how the model's structure and design contribute to its
+          robustness, stability, and reliability in a financial context.
+      parent_section: conceptual_soundness
+      contents:
+        - content_id: model_overview
+          content_type: text
+    - id: intended_use_business_use_case
+      title: Intended Use and Business Use Case
+      index_only: true
+      condensed: true
+      parent_section: conceptual_soundness
+      sections:
+        - id: intended_use
+          title: Intended Use
+          parent_section: intended_use_business_use_case
+          guidelines:
+            - Clearly describe the specific business use case(s) for which the
+              model is designed, including the intended users and the financial
+              institution's objectives.
+            - Explain how the model fits into the overall business strategy and
+              decision-making processes of the financial institution.
+        - id: regulatory_requirements
+          title: Regulatory Requirements
+          parent_section: intended_use_business_use_case
+          guidelines:
+            - Detail any specific risks, regulatory requirements, or other
+              considerations associated with the model's intended use, and how
+              they have been addressed in the model development process.
+        - id: model_limitations
+          title: Model Limitations
+          parent_section: intended_use_business_use_case
+          guidelines:
+            - Discuss the model's intended scope, including any limitations,
+              boundaries, or exclusions in its applicability.
+            - Describe any potential external factors, such as economic or
+              market conditions, that could impact the model's performance, and
+              how they have been considered in the model development process.
+    - id: model_selection
+      title: Model Selection
+      guidelines:
+        - Provide a detailed description of the selected model, including its
+          algorithm, mathematical foundations, and key features that make it
+          suitable for the intended use case.
+        - Explain the rationale behind choosing the specific model, and how it
+          addresses the financial institution's objectives, regulatory
+          requirements, and risk management needs.
+        - Compare the selected model with alternative models or approaches that
+          were considered during the model development process, highlighting
+          their strengths and weaknesses, and explaining why the chosen model is
+          the most appropriate.
+        - Describe any model customizations or adaptations made to better align
+          it with the financial institution's needs, and discuss the potential
+          impact of these changes on the model's performance.
+        - Explain any potential limitations or drawbacks of the selected model
+          in the context of the intended use case, and how they have been
+          mitigated or addressed during the model development process.
+      parent_section: conceptual_soundness
+- id: data_preparation
+  title: Data Preparation
+  index_only: true
+  sections:
+    - id: data_description
+      title: Data description
+      guidelines:
+        - Provide a comprehensive overview of the data sources used in the
+          model, including internal and external sources, and specify the data's
+          time period, frequency, and granularity.
+        - Describe the main variables and features used in the model, including
+          both input and output variables, and explain their relevance to the
+          model's purpose and intended use case.
+        - Detail any data transformations, preprocessing, or feature engineering
+          performed on the raw data to prepare it for model input, and explain
+          the rationale for these transformations.
+        - Address any data quality concerns, such as missing values, outliers,
+          or inconsistencies, and describe the methods used to handle these
+          issues.
+        - Discuss any potential biases, dependencies, or limitations in the data
+          that could impact the model's performance, and explain how they have
+          been considered or mitigated during the data preparation process.
+      contents:
+        - content_id: text_data_quality
+          content_type: text
+          options:
+            default_text: |
+              # Text Data Quality Metrics and Tests
+        - content_type: test
+          content_id: validmind.data_validation.Duplicates
+        - content_type: test
+          content_id: validmind.data_validation.nlp.StopWords
+        - content_type: test
+          content_id: validmind.data_validation.nlp.Punctuations
+        - content_type: test
+          content_id: validmind.data_validation.nlp.CommonWords
+        - content_type: test
+          content_id: validmind.data_validation.nlp.LanguageDetection
+        - content_type: test
+          content_id: validmind.data_validation.nlp.Toxicity
+        - content_type: test
+          content_id: validmind.data_validation.nlp.PolarityAndSubjectivity
+        - content_type: test
+          content_id: validmind.data_validation.nlp.Sentiment
+      parent_section: data_preparation
+    - id: feature_selection
+      title: Feature Selection and Engineering
+      guidelines:
+        - Describe the process used to select the most relevant features for the
+          model, including any feature selection techniques or criteria applied,
+          such as correlation analysis, mutual information, or forward/backward
+          selection.
+        - Explain the rationale behind including or excluding specific features,
+          and discuss their importance and contribution to the model's
+          performance and intended use case.
+        - Detail any feature engineering techniques applied to create new
+          features or transform existing ones, such as dimensionality reduction,
+          aggregation, or interaction terms, and explain their relevance and
+          purpose in the context of the model.
+        - Describe any data normalization or scaling techniques used to
+          standardize the input features, and explain the rationale for their
+          application in the model.
+        - Discuss potential multicollinearity, redundancy, or other issues among
+          the selected features, and describe the methods used to address these
+          concerns during the feature selection and engineering process.
+      parent_section: data_preparation
+      contents:
+        - content_id: feature_selection
+          content_type: text
+- id: model_development
+  title: Model Development
+  index_only: true
+  sections:
+    - id: model_training
+      title: Model Training
+      guidelines:
+        - Describe the model training process, including the algorithm used, any
+          hyperparameters or settings, and the optimization techniques employed
+          to minimize the loss function or maximize the objective function.
+        - Detail the model validation and selection process, including the use
+          of cross-validation, holdout samples, or other techniques to assess
+          the model's performance and prevent overfitting.
+        - Provide a summary of the training results, including performance
+          metrics such as accuracy, precision, recall, F1 score, or other
+          relevant measures, depending on the model's intended use case.
+        - Discuss any challenges, issues, or trade-offs encountered during the
+          model training process, such as overfitting, underfitting, or class
+          imbalance, and explain how they were addressed or mitigated.
+        - Describe any tuning or optimization steps performed to improve the
+          model's performance, such as hyperparameter tuning, feature selection,
+          or other adjustments, and explain the rationale for these changes.
+      parent_section: model_development
+      contents:
+        - content_id: model_training
+          content_type: text
+    - id: prompt_validation
+      title: Prompt Validation
+      guidelines:
+        - Provide documentation of the prompt used for the model. Describe the
+          type of prompting used (e.g. few-shot, zero-shot, chain-of-thought
+          etc.). Explain how the prompt was constructed and how it was
+          validated.
+      parent_section: model_development
+      contents:
+        - content_type: test
+          content_id: validmind.prompt_validation.Bias
+          options:
+            title: Bias
+        - content_type: test
+          content_id: validmind.prompt_validation.Clarity
+          options:
+            title: Clarity
+        - content_type: test
+          content_id: validmind.prompt_validation.Conciseness
+          options:
+            title: Conciseness
+        - content_type: test
+          content_id: validmind.prompt_validation.Delimitation
+          options:
+            title: Delimitation
+        - content_type: test
+          content_id: validmind.prompt_validation.NegativeInstruction
+          options:
+            title: Negative Instruction
+        - content_type: test
+          content_id: validmind.prompt_validation.Specificity
+          options:
+            title: Specificity
+    - id: model_evaluation
+      title: Model Evaluation
+      parent_section: model_development
+      guidelines:
+        - Describe the process used to evaluate the model's performance on a
+          test or validation dataset that was not used during training, to
+          assess its generalizability and robustness.
+        - Present the key performance metrics for the model evaluation, such as
+          accuracy, precision, recall, F1 score, AUC-ROC, mean squared error, or
+          other relevant measures, depending on the model's intended use case.
+        - Provide graphical representations of the model's performance, such as
+          confusion matrices, ROC curves, or residual plots, to help visualize
+          its effectiveness and identify any areas for improvement.
+        - Discuss the model's performance in the context of its intended use
+          case, and compare it to any benchmarks, industry standards, or
+          alternative models, as appropriate.
+        - Identify any limitations, weaknesses, or areas for improvement in the
+          model's performance, and discuss potential strategies for addressing
+          these concerns in future iterations or updates.
+      sections:
+        - id: embedding_model
+          title: Embedding Model
+          parent_section: model_evaluation
+          guidelines:
+            - Embedding model guidelines
+          contents:
+            - content_type: test
+              content_id: validmind.model_validation.embeddings.StabilityAnalysisRandomNoise
+            - content_type: test
+              content_id: validmind.model_validation.embeddings.StabilityAnalysisSynonyms
+            - content_type: test
+              content_id: validmind.model_validation.embeddings.StabilityAnalysisTranslation
+            - content_type: test
+              content_id: validmind.model_validation.embeddings.CosineSimilarityHeatmap
+            - content_type: test
+              content_id: validmind.model_validation.embeddings.CosineSimilarityDistribution
+            - content_type: test
+              content_id: validmind.model_validation.embeddings.PCAComponentsPairwisePlots
+        - id: retrieval_model
+          title: Retrieval model
+          parent_section: model_evaluation
+          guidelines:
+            - Retrieval model guideline
+          contents:
+            - content_type: test
+              content_id: validmind.model_validation.ragas.ContextRecall
+            - content_type: test
+              content_id: validmind.model_validation.ragas.ContextEntityRecall
+            - content_type: test
+              content_id: validmind.model_validation.ragas.ContextPrecision
+            - content_type: test
+              content_id: validmind.model_validation.ragas.ContextPrecisionWithoutReference
+        - id: rag_model
+          title: RAG model
+          parent_section: model_evaluation
+          guidelines:
+            - RAG model guideline
+          contents:
+            - content_type: test
+              content_id: validmind.model_validation.ragas.SemanticSimilarity
+            - content_type: test
+              content_id: validmind.model_validation.ragas.Faithfulness
+            - content_type: test
+              content_id: validmind.model_validation.ragas.ResponseRelevancy
+            - content_type: test
+              content_id: validmind.model_validation.ragas.AnswerCorrectness
+            - content_type: test
+              content_id: validmind.model_validation.TokenDisparity
+            - content_type: test
+              content_id: validmind.model_validation.BleuScore
+            - content_type: test
+              content_id: validmind.model_validation.RougeScore
+            - content_type: test
+              content_id: validmind.model_validation.MeteorScore
+            - content_type: test
+              content_id: validmind.model_validation.ragas.AspectCritic
+            - content_type: test
+              content_id: validmind.model_validation.ToxicityScore
+            - content_type: test
+              content_id: validmind.model_validation.RegardScore
+- id: monitoring_governance
+  title: Monitoring and Governance
+  index_only: true
+  sections:
+    - id: monitoring_plan
+      title: Monitoring Plan
+      guidelines:
+        - Describe the plan for ongoing monitoring of the model's performance,
+          including the frequency of evaluations, the performance metrics to be
+          assessed, and any thresholds or triggers for action.
+        - Explain the process for identifying and addressing any changes in the
+          model's performance or the underlying data that may require model
+          updates, recalibration, or retraining.
+        - Detail the procedures for model validation and backtesting, to ensure
+          the model remains accurate, reliable, and compliant with regulatory
+          requirements and industry standards.
+        - Discuss the governance framework in place to oversee the model's use,
+          including the roles and responsibilities of various stakeholders, such
+          as model developers, validators, and risk managers.
+        - Describe the model's documentation and version control procedures, to
+          ensure that changes, updates, and improvements are properly tracked
+          and recorded.
+      contents:
+        - content_id: monitoring_plan
+          content_type: text
+          options:
+            default_text: >
+              To ensure the ongoing effectiveness of the model, it will be
+              monitored on a regular basis. The monitoring plan includes the
+              following steps:
+
+
+              1. **Performance Metrics Monitoring:** The key performance metrics
+              such as Accuracy, Precision, Recall, F1 Score, and ROC-AUC will be
+
+              tracked on a regular basis. These metrics will be computed for
+              both the training, validation and test datasets to identify any
+              signs of
+
+              overfitting or underperformance.
+
+              2. **Data Drift Monitoring:** Over time, the distribution of the
+              input data may change, a phenomenon known as data drift. This
+              could
+
+              impact the model's performance. We will monitor the distributions
+              of the input features and the target variable to detect any
+              significant
+
+              changes that may require retraining of the model.
+
+              3. **Outcome Monitoring:** The actual outcomes (whether a customer
+              exited the bank or not) will be compared with the model's
+              predictions
+
+              to assess the model's performance in a real-world setting.
+
+              4. **Feature Importance Monitoring:** The importance of different
+              features for the model's predictions will be tracked. If there are
+
+              significant shifts in feature importance, this could indicate
+              changes in the underlying patterns in the data.
+
+              5. **Periodic Model Retraining:** Depending on the findings from
+              the above monitoring activities, the model may need to be
+              retrained
+
+              periodically. This will be done using the most recent data to
+              ensure that the model stays up-to-date with the latest patterns
+              and trends.
+
+
+              In terms of governance, a clear process will be put in place for
+              managing these monitoring activities. This will include clear
+              roles
+
+              and responsibilities, documentation of the monitoring results, and
+              a process for deciding when and how to take action based on the
+
+              monitoring results (for example, when to retrain the model). Any
+              major decisions about the model (such as changes to the model or
+              its
+
+              features) will be made in a transparent and accountable manner,
+              with appropriate documentation and sign-off.
+      parent_section: monitoring_governance
+    - id: monitoring_implementation
+      title: Monitoring Implementation
+      guidelines:
+        - Describe the tools, systems, or platforms used to implement the
+          monitoring plan, including any relevant software, data pipelines, or
+          reporting tools.
+        - Detail the process for collecting and storing the data needed for
+          ongoing monitoring, including any data preprocessing, cleaning, or
+          transformation steps required.
+        - Explain the procedures for analyzing the model's performance metrics
+          and generating monitoring reports, including any statistical tests or
+          visualizations used to assess the model's performance and stability.
+        - Discuss the escalation process and communication channels for
+          reporting any significant deviations in the model's performance, as
+          well as the decision-making process for determining appropriate
+          actions, such as model updates or recalibration.
+        - Describe any training or educational programs in place to ensure that
+          relevant stakeholders, such as model developers, validators, and risk
+          managers, are equipped to understand, interpret, and act on the
+          monitoring results.
+      parent_section: monitoring_governance
+      contents:
+        - content_id: monitoring_implementation
+          content_type: text
+          options:
+            default_text: >
+              Implementing the monitoring plan requires a systematic approach
+              with clear steps and procedures. Here are the steps for
+              implementing
+
+              the monitoring plan:
+
+
+              1. **Establish Baseline Metrics:** At the outset, we'll establish
+              baseline performance metrics for the model. These will serve as
+
+              reference points for future comparison.
+
+              2. **Automate Metric Calculation:** Performance metrics such as
+              Accuracy, Precision, Recall, F1 Score, and ROC-AUC will be
+              automatically
+
+              calculated and recorded for both the training and validation
+              datasets after each run of the model.
+
+              3. **Set Up Data Drift Monitors:** We'll set up automated
+              monitoring of the distributions of the input features and the
+              target
+
+              variable. Any significant changes in these distributions will
+              trigger alerts.
+
+              4. **Implement Outcome Monitoring:** We'll compare the model's
+              predictions with the actual outcomes on a regular basis.
+              Discrepancies
+
+              will be investigated to understand the root cause.
+
+              5. **Track Feature Importance:** We'll keep a record of feature
+              importance as indicated by the model. Any significant shifts in
+
+              feature importance over time will be thoroughly reviewed.
+
+              6. **Establish Retraining Protocols:** Based on the findings from
+              the above monitoring activities, we'll establish clear protocols
+
+              for when and how the model should be retrained. This may include
+              criteria for triggering a retraining, procedures for carrying out
+
+              the retraining, and protocols for testing and validating the
+              retrained model before it is put back into service.
+
+              7. **Document and Review:** All monitoring activities and their
+              results will be documented in a transparent and accessible manner.
+
+              These documents will be reviewed regularly by a designated team or
+              individual to ensure that any issues are promptly identified and
+              addressed.
+
+
+              By implementing this monitoring plan, we can ensure that the model
+              continues to perform well and that any issues are quickly
+
+              identified and addressed. The ultimate aim is to ensure that the
+              model continues to provide accurate and reliable predictions that
+
+              can support the bank's decision-making processes.
+    - id: governance_plan
+      title: Governance Plan
+      guidelines:
+        - Describe the overall governance framework and processes established to
+          ensure proper oversight and management of the model, including the
+          roles and responsibilities of key stakeholders such as model
+          developers, validators, and risk managers.
+        - Detail the policies and procedures for model risk management,
+          including model risk identification, assessment, and mitigation
+          strategies.
+        - Explain the model approval process, including any internal or external
+          reviews, audits, or regulatory assessments that must be completed
+          before the model is put into production.
+        - Discuss the procedures for ongoing model maintenance, updates, and
+          improvements, including the documentation and version control
+          processes to track and record changes to the model.
+        - Describe the contingency plans in place to manage potential model
+          failures or performance issues, such as fallback models, alternative
+          data sources, or manual processes, and explain the criteria for
+          activating these contingency measures.
+      parent_section: monitoring_governance
+      contents:
+        - content_id: governance_plan
+          content_type: text
+          options:
+            default_text: >
+              Effective governance of the model is crucial to ensure its
+              reliability, security, and compliance with regulatory
+              requirements.
+
+              Here is the plan for model governance:
+
+
+              1. **Roles and Responsibilities:** Clear roles and
+              responsibilities will be assigned for model development,
+              validation, deployment,
+
+              monitoring, and retraining. This will include a model owner, who
+              will have overall responsibility for the model, as well as others
+
+              responsible for specific tasks.
+
+              2. **Model Documentation:** Comprehensive documentation will be
+              maintained for the model, including details of its development,
+
+              validation, and performance, as well as any changes made to the
+              model or its inputs over time. This documentation will be updated
+
+              regularly and will be accessible to all relevant stakeholders.
+
+              3. **Change Control:** Any changes to the model or its inputs will
+              be subject to a strict change control process, including
+
+              documentation of the proposed change, review and approval by a
+              designated authority, testing and validation of the change, and a
+
+              post-implementation review.
+
+              4. **Security and Access Control:** Measures will be put in place
+              to ensure the security of the model and its data, including
+
+              access controls, data encryption, and regular security audits.
+
+              5. **Regulatory Compliance:** The model will be designed and
+              operated in compliance with all relevant regulatory requirements,
+
+              and its compliance will be regularly reviewed and confirmed.
+
+              6. **Auditability:** The model and its operations will be
+              auditable, with clear and accessible records that can be reviewed
+              by
+
+              internal or external auditors.
+
+              7. **Training and Awareness:** All individuals involved in the
+              development, operation, and oversight of the model will receive
+
+              appropriate training and will be kept aware of their
+              responsibilities, the model's performance, and any relevant
+              developments or issues.

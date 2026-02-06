@@ -199,11 +199,13 @@ def open_in(filepath):
 
 def create_notebook():
     """Creates a new Jupyter Notebook file by asking the user for a filename and opens it."""
-    filename = input("Enter the name for the new notebook (without .ipynb extension): ").strip()
-    if not filename:
+    raw = input("Enter the name for the new notebook (without .ipynb extension): ").strip()
+    if not raw:
         print("Filename cannot be empty, file not created")
         return
 
+    # Normalize: replace spaces with underscores, enforce lowercase
+    filename = raw.replace(" ", "_").lower()
     if not filename.endswith(".ipynb"):
         filename += ".ipynb"
 
@@ -473,41 +475,6 @@ def replace_variables(
                 replacements_made = True
             else:
                 print_func("No value entered for {template}, skipping replacement")
-
-        # Handle {use-case}
-        if "{use-case}" in content or use_case_value is not None:
-            uc = use_case_value
-            if uc is None:
-                uc = input_func(
-                    "Enter a value to replace {use-case} or type SKIP to exclude the template selection: "
-                ).strip()
-            else:
-                uc = uc.strip()
-
-            if uc.upper() == "SKIP":
-                # Remove markdown cells whose id starts with 'install-usecase'
-                try:
-                    nb = json.loads(content)
-                    usecase_rules = {"install-usecase": {"markdown"}}
-                    nb, removed = _remove_cells_by_prefix_rules(nb, usecase_rules)
-                    if removed:
-                        content = json.dumps(nb, ensure_ascii=False, indent=1)
-                        print_func(
-                            "Skipped use-case selection; removed "
-                            f"{removed} cell(s) matching prefixes ['install-usecase']."
-                        )
-                    else:
-                        print_func("Skipped use-case selection; no matching cells found.")
-                except json.JSONDecodeError:
-                    print_func(
-                        "Skipped use-case selection, but file is not valid notebook JSON; no cells removed."
-                    )
-            elif uc:
-                content = content.replace("{use-case}", uc)
-                print_func(f"Use case: {uc}")
-                replacements_made = True
-            else:
-                print_func("No value entered for {use-case}, skipping replacement")
 
         with open(filepath, "w", encoding="utf-8") as f:
             if not content.endswith("\n"):
