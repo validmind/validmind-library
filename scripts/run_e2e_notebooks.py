@@ -9,8 +9,8 @@ Notebooks Tested:
  - notebooks/quickstart/quickstart_model_documentation.ipynb
  - notebooks/use_cases/time_series/quickstart_time_series_full_suite.ipynb
  - notebooks/use_cases/regression/quickstart_regression_full_suite.ipynb
- - notebooks/how_to/integrate_external_test_providers.ipynb
- - notebooks/how_to/implement_custom_tests.ipynb
+ - notebooks/how_to/tests/custom_tests/integrate_external_test_providers.ipynb
+ - notebooks/how_to/tests/custom_tests/implement_custom_tests.ipynb
 
 To add more notebooks to the list, simply add the path to the `NOTEBOOKS_TO_RUN` list.
 This will use the default project id for the notebook. If you want to use a different
@@ -42,10 +42,10 @@ NOTEBOOKS_TO_RUN = [
     "notebooks/quickstart/quickstart_model_documentation.ipynb",
     "notebooks/use_cases/time_series/quickstart_time_series_high_code.ipynb",
     "notebooks/use_cases/regression/quickstart_regression_full_suite.ipynb",
-    "notebooks/how_to/run_unit_metrics.ipynb",
-    "notebooks/how_to/integrate_external_test_providers.ipynb",
-    "notebooks/how_to/implement_custom_tests.ipynb",
-    "notebooks/how_to/explore_tests.ipynb",
+    "notebooks/how_to/metrics/run_unit_metrics.ipynb",
+    "notebooks/how_to/tests/custom_tests/integrate_external_test_providers.ipynb",
+    "notebooks/how_to/tests/custom_tests/implement_custom_tests.ipynb",
+    "notebooks/how_to/tests/explore_tests/explore_tests.ipynb",
 ]
 
 DATA_TEMPLATE_NOTEBOOKS = [
