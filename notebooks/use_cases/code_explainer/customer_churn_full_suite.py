@@ -7,7 +7,7 @@ Quickstart for model documentation
 
 Welcome! Let's get you started with the basic process of documenting models with ValidMind.
 
-You will learn how to initialize the ValidMind Library, load a sample dataset to train a simple classification model, 
+You will learn how to initialize the ValidMind Library, load a sample dataset to train a simple classification model,
 and then run a ValidMind test suite to quickly generate documentation about the data and model.
 
 This script uses the Bank Customer Churn Prediction sample dataset from Kaggle to train the classification model.
@@ -162,8 +162,8 @@ vm_train_ds = vm.init_dataset(
 )
 
 vm_test_ds = vm.init_dataset(
-    dataset=test_df, 
-    input_id="test_dataset", 
+    dataset=test_df,
+    input_id="test_dataset",
     target_column=customer_churn.target_column
 )
 

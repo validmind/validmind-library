@@ -279,8 +279,8 @@ def _handle_recommend_product(customer):
 
 def _handle_get_info(customer, customer_id):
     """Handle get info action."""
-    credit_tier = ('Excellent' if customer['credit_score'] >= 750 else 
-                   'Good' if customer['credit_score'] >= 700 else 
+    credit_tier = ('Excellent' if customer['credit_score'] >= 750 else
+                   'Good' if customer['credit_score'] >= 700 else
                    'Fair' if customer['credit_score'] >= 650 else 'Poor')
 
     return f"""CUSTOMER ACCOUNT INFORMATION
