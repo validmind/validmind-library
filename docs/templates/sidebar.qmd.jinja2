@@ -45,7 +45,7 @@ website:
         - text: "{{ module_name }}"
           file: validmind/validmind/{{ module_name }}.qmd
           contents:
-            {% for item in qmd_files | get_child_files(module_name) %}
+            {% for item in qmd_files | get_child_files(module_name, full_data) %}
             {% if item.contents is defined %}
             {% set cleaned_item_path = item.file | replace('<span class="prefix"></span> ', '') | replace('<span class="suffix"></span>', '') %}
             - text: "{{ item.text | replace('<span class=\"', '<span class=\'') | replace('\"></span>', '\'></span>') }}"

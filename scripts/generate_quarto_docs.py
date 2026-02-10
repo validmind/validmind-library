@@ -14,6 +14,30 @@ import inspect
 # Add at module level
 _alias_cache = {}  # Cache for resolved aliases
 
+
+def _has_test_decorators(module_data: Dict[str, Any]) -> bool:
+    """Check if module has any member with @tags or @tasks decorator."""
+    for member in module_data.get('members', {}).values():
+        for dec in member.get('decorators', []):
+            func_name = dec.get('value', {}).get('function', {}).get('name', '')
+            if func_name in ('tags', 'tasks'):
+                return True
+    return False
+
+
+def _should_filter_module(name: str, module_data: Optional[Dict[str, Any]] = None) -> bool:
+    """Check if a module should be filtered from sidebar.
+
+    Filter out if BOTH conditions are true:
+    - Name starts with lowercase, AND
+    - Has no @tags/@tasks decorated functions
+    """
+    is_lowercase = name and name[0].islower()
+    has_decorators = module_data and _has_test_decorators(module_data)
+
+    return is_lowercase and not has_decorators
+
+
 def resolve_alias(member: Dict[str, Any], data: Dict[str, Any]) -> Dict[str, Any]:
     """Resolve an alias to its target member."""
     if member.get('kind') == 'alias' and member.get('target_path'):
@@ -384,6 +408,7 @@ def process_module(module: Dict[str, Any], path: List[str], env: Environment, fu
         )
         # Removed the underscores from the filename as Quarto treats files with underscores differently
         version_path = os.path.join('docs/validmind', 'version.qmd')
+        ensure_dir('docs/validmind')
         with open(version_path, 'w') as f:
             f.write(version_output)
         written_qmd_files['version.qmd'] = version_path
@@ -519,7 +544,8 @@ def get_inherited_members(base: Dict[str, Any], full_data: Dict[str, Any]) -> Li
     
     return members
 
-def get_child_files(files_dict: Dict[str, str], module_name: str) -> List[Dict[str, Any]]:
+def get_child_files(files_dict: Dict[str, str], module_name: str,
+                    full_data: Dict[str, Any] = None) -> List[Dict[str, Any]]:
     """Get all child QMD files for a given module."""
     prefix = f'docs/validmind/{module_name}/'
     directory_structure = {}
@@ -551,8 +577,28 @@ def get_child_files(files_dict: Dict[str, str], module_name: str) -> List[Dict[s
                 if 'contents' not in directory_structure[dir_name]:
                     directory_structure[dir_name]['contents'] = []
                 
+                file_stem = Path(parts[-1]).stem
+                
+                # Lookup module data for decorator check
+                module_data = None
+                if full_data:
+                    try:
+                        # Navigate: validmind.{path_parts} to find module
+                        # e.g., tests.model_validation.statsmodels.statsutils
+                        path_parts = rel_path.replace('.qmd', '').split('/')
+                        current = full_data.get('validmind', {})
+                        for part in path_parts[1:]:  # Skip 'validmind'
+                            current = current.get('members', {}).get(part, {})
+                        module_data = current
+                    except (KeyError, AttributeError):
+                        pass
+                
+                # Skip internal helper modules (lowercase AND no decorators)
+                if _should_filter_module(file_stem, module_data):
+                    continue
+                
                 directory_structure[dir_name]['contents'].append({
-                    'text': Path(parts[-1]).stem,
+                    'text': file_stem,
                     'file': f'validmind/{rel_path}'  # Add validmind/ prefix
                 })
     
