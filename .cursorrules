@@ -166,7 +166,7 @@ You are an expert in Python package development, data science, and machine learn
 ## Documentation and Examples
 
 ### Notebook Organization and Structure
-- Organize notebooks by purpose: `/quickstart/` for getting started, `/tutorials/` for step-by-step guides, `/how_to/` for specific features, `/code_samples/` for end-to-end examples.
+- Organize notebooks by purpose: `/quickstart/` for quick guides to get started with ValidMind, `/tutorials/` for high-level courses covering usage for specific roles or concepts (e.g., model development), `/how_to/` for learning specific ValidMind features (e.g., how to run tests), `/use_cases/` for end-to-end use cases such as documenting or validating specific kinds of models, `/code_sharing/` for sharing notebooks or documenting code internally.
 - Include clear README files explaining directory purposes and notebook contents.
 - Use consistent template-based structure across notebooks for uniformity.
 - Organize content by domain (credit_risk, nlp_and_llm, time_series, etc.) when appropriate.
