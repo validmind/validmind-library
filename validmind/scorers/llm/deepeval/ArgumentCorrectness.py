@@ -40,10 +40,7 @@ def ArgumentCorrectness(
     dataset: VMDataset,
     threshold: float = 0.7,
     input_column: str = "input",
-    tools_called_column: str = "tools_called",
-    agent_output_column: str = "agent_output",
-    actual_output_column: str = "actual_output",
-    strict_mode: bool = False,
+    actual_tools_called_column: str = "tools_called",
 ) -> List[Dict[str, Any]]:
     """Evaluates agent argument correctness using deepeval's ArgumentCorrectnessMetric.
 
@@ -55,8 +52,15 @@ def ArgumentCorrectness(
     evaluates argument correctness based on the input context rather than comparing
     against expected values.
 
+    When ``model`` is provided, the agent is run per row inside deepeval's evals_iterator
+    so the metric receives trace data. Without ``model``, the dataset-only path uses
+    pre-computed columns.
+
     Args:
         dataset: Dataset containing the agent input and tool calls
+        model: Optional ValidMind model (agent) with predict_fn. When provided, the
+            agent is run per row inside deepeval's evals_iterator so the metric
+            receives trace data.
         threshold: Minimum passing threshold (default: 0.7)
         input_column: Column name for the task input (default: "input")
         tools_called_column: Column name for tools called (default: "tools_called")
@@ -69,57 +73,38 @@ def ArgumentCorrectness(
     Raises:
         ValueError: If required columns are missing
     """
-    # Validate required columns exist in dataset
+    from validmind.scorers.llm.deepeval import _convert_to_tool_call_list
+
     missing_columns: List[str] = []
     if input_column not in dataset._df.columns:
         missing_columns.append(input_column)
-
+    if actual_tools_called_column not in dataset._df.columns:
+        missing_columns.append(actual_tools_called_column)
     if missing_columns:
         raise ValueError(
-            f"Required columns {missing_columns} not found in dataset. "
+            f"ToolCorrectness with model requires columns {missing_columns}. "
             f"Available columns: {dataset._df.columns.tolist()}"
         )
 
-    _, model = get_client_and_model()
-
-    metric = ArgumentCorrectnessMetric(
-        threshold=threshold,
-        model=model,
-        include_reason=True,
-        strict_mode=strict_mode,
-        verbose_mode=False,
-    )
-
-    # Import helper functions to avoid circular import
-    from validmind.scorers.llm.deepeval import (
-        _convert_to_tool_call_list,
-        extract_tool_calls_from_agent_output,
-    )
-
+    _, llm_model = get_client_and_model()
     results: List[Dict[str, Any]] = []
+
     for _, row in dataset._df.iterrows():
-        input_value = row[input_column]
+        actual_tools_value = row.get(actual_tools_called_column, [])
+        actual_tools_list = _convert_to_tool_call_list(actual_tools_value)
 
-        # Extract tools called
-        if tools_called_column in dataset._df.columns:
-            tools_called_value = row.get(tools_called_column, [])
-        else:
-            agent_output = row.get(agent_output_column, {})
-            tools_called_value = extract_tool_calls_from_agent_output(agent_output)
-        tools_called_list = _convert_to_tool_call_list(tools_called_value)
-
-        actual_output_value = row.get(actual_output_column, "")
+        metric = ArgumentCorrectnessMetric(
+            threshold=threshold,
+            model=llm_model,
+        )
 
         test_case = LLMTestCase(
-            input=input_value,
-            tools_called=tools_called_list,
-            actual_output=actual_output_value,
+            input=row[input_column],
+            tools_called=actual_tools_list,
         )
 
         result = evaluate(test_cases=[test_case], metrics=[metric])
         metric_data = result.test_results[0].metrics_data[0]
         score = metric_data.score
-        reason = getattr(metric_data, "reason", "No reason provided")
-        results.append({"score": score, "reason": reason})
-
+        results.append({"score": score, "reason": metric_data.reason})
     return results

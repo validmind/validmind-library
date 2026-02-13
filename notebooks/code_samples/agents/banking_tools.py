@@ -1,6 +1,7 @@
 from typing import Optional
 from datetime import datetime
 from langchain.tools import tool
+from deepeval.tracing import observe
 
 
 def _score_dti_ratio(dti_ratio: float) -> int:
@@ -79,6 +80,7 @@ def _get_credit_description(credit_score: int) -> str:
 
 # Credit Risk Analyzer Tool
 @tool
+@observe(type="tool")
 def credit_risk_analyzer(
     customer_income: float,
     customer_debt: float,
@@ -308,6 +310,7 @@ def _handle_get_info(customer, customer_id):
 
 # Customer Account Manager Tool
 @tool
+@observe(type="tool")
 def customer_account_manager(
     account_type: str,
     customer_id: str,
@@ -362,6 +365,7 @@ def customer_account_manager(
 
 # Fraud Detection System Tool
 @tool
+@observe(type="tool")
 def fraud_detection_system(
     transaction_id: str,
     customer_id: str,

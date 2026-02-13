@@ -35,99 +35,81 @@ def ToolCorrectness(
     dataset: VMDataset,
     threshold: float = 0.7,
     input_column: str = "input",
-    expected_tools_column: str = "expected_tools",
-    tools_called_column: str = "tools_called",
-    agent_output_column: str = "agent_output",
-    actual_output_column: str = "actual_output",
+    expected_tools_called_column: str = "expected_tools",
+    actual_tools_called_column: str = "tools_called",
 ) -> List[Dict[str, Any]]:
-    """Evaluate tool-use correctness for LLM agents using deepeval's ToolCorrectnessMetric.
+    """
+    Evaluate the correctness of tool usage in LLM agent tasks using DeepEval's ToolCorrectnessMetric.
 
-    This metric assesses whether the agent called the expected tools in a task, and whether
-    argument and response information matches the ground truth expectations.
-    The metric compares the tools the agent actually called to the list of expected tools
-    on a per-row basis.
+    This scorer checks if the agent invoked the expected tools for each task instance. It compares
+    the list of tools the agent actually called to the reference (expected) tool calls on a per-row basis.
+    The metric is suitable for scenarios where LLM agents use tools or external functions in their responses.
+
+    If a `model` is supplied, it is used to predict/trace agent tool usage on the fly; otherwise, tool call columns
+    must be prepopulated in the dataset.
 
     Args:
-        dataset: VMDataset containing the agent input, expected tool calls, and actual tool calls.
-        threshold: Minimum passing threshold (default: 0.7).
-        input_column: Column containing the task input for evaluation.
-        expected_tools_column: Column specifying the expected tools (ToolCall/str/dict or list).
-        tools_called_column: Column holding the tools actually called by the agent.
-            If missing, will be populated by parsing agent_output_column.
-        agent_output_column: Column containing agent output with tool-calling trace (default: "agent_output").
-        actual_output_column: Column specifying the ground-truth output string (optional).
+        dataset (VMDataset): Dataset containing task inputs, expected tool calls, and actual tool calls.
+        threshold (float, optional): Passing threshold for tool match (default: 0.7).
+        input_column (str, optional): Name of the column containing the LLM input prompt (default: "input").
+        expected_tools_called_column (str, optional): Column with reference/expected tool calls.
+        actual_tools_called_column (str, optional): Column with agent's actual tool calls.
 
     Returns:
-        List of dicts (one per row) containing:
-          - "score": Tool correctness score between 0 and 1.
-          - "reason": ToolCorrectnessMetric's reason or explanation.
+        List[Dict[str, Any]]: List of dicts, one per dataset row, with:
+            - "score" (float): Tool correctness score in [0,1]. 1.0 means all expected tools were called.
+            - "reason" (str): Explanation or diagnostic from the DeepEval metric.
 
     Raises:
-        ValueError: If required columns are missing from dataset.
+        ValueError: If any required columns are missing from the provided dataset.
 
     Example:
-        results = ToolCorrectness(dataset=my_data)
-        results[0]["score"]  # 1.0 if tools called correctly, else <1.0
+        >>> results = ToolCorrectness(dataset=my_data)
+        >>> print(results[0]["score"])  # 1.0 if tools match, <1.0 if not
 
     Risks & Limitations:
-        - Works best if dataset includes high-quality tool call signals & references.
-        - Comparison logic may be limited for atypically formatted tool call traces.
+        - Designed for table-formatted datasets with expected/actual tool call annotations.
+        - Requires unambiguous tool call information for accurate evaluation.
+        - May not fully support edge case tool calling formats or custom tracing logic.
+
     """
-    # Validate required columns exist in dataset
+    from validmind.scorers.llm.deepeval import _convert_to_tool_call_list
+
     missing_columns: List[str] = []
     if input_column not in dataset._df.columns:
         missing_columns.append(input_column)
-    if expected_tools_column not in dataset._df.columns:
-        missing_columns.append(expected_tools_column)
-
+    if expected_tools_called_column not in dataset._df.columns:
+        missing_columns.append(expected_tools_called_column)
+    if actual_tools_called_column not in dataset._df.columns:
+        missing_columns.append(actual_tools_called_column)
     if missing_columns:
         raise ValueError(
-            f"Required columns {missing_columns} not found in dataset. "
+            f"ToolCorrectness with model requires columns {missing_columns}. "
             f"Available columns: {dataset._df.columns.tolist()}"
         )
 
-        # Import helper functions to avoid circular import
-    from validmind.scorers.llm.deepeval import (
-        _convert_to_tool_call_list,
-        extract_tool_calls_from_agent_output,
-    )
-
-    _, model = get_client_and_model()
-
-    metric = ToolCorrectnessMetric(
-        threshold=threshold,
-        model=model,
-    )
-
+    _, llm_model = get_client_and_model()
     results: List[Dict[str, Any]] = []
+
     for _, row in dataset._df.iterrows():
-        input_value = row[input_column]
-        expected_tools_value = row.get(expected_tools_column, [])
-
-        # Extract tools called
-        if tools_called_column in dataset._df.columns:
-            tools_called_value = row.get(tools_called_column, [])
-        else:
-            agent_output = row.get(agent_output_column, {})
-            tools_called_value = extract_tool_calls_from_agent_output(agent_output)
-
+        expected_tools_value = row.get(expected_tools_called_column, [])
         expected_tools_list = _convert_to_tool_call_list(expected_tools_value)
-        tools_called_list = _convert_to_tool_call_list(tools_called_value)
+        actual_tools_value = row.get(actual_tools_called_column, [])
+        actual_tools_list = _convert_to_tool_call_list(actual_tools_value)
 
-        actual_output_value = row.get(actual_output_column, "")
+        metric = ToolCorrectnessMetric(
+            threshold=threshold,
+            model=llm_model,
+        )
 
         test_case = LLMTestCase(
-            input=input_value,
+            input=row[input_column],
             expected_tools=expected_tools_list,
-            tools_called=tools_called_list,
-            actual_output=actual_output_value,
-            _trace_dict=row.get(agent_output_column, {}),
+            tools_called=actual_tools_list,
         )
 
         result = evaluate(test_cases=[test_case], metrics=[metric])
         metric_data = result.test_results[0].metrics_data[0]
         score = metric_data.score
-        reason = getattr(metric_data, "reason", "No reason provided")
-        results.append({"score": score, "reason": reason})
-
+        results.append({"score": score, "reason": metric_data.reason})
     return results
