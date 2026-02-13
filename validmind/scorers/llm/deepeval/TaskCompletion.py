@@ -62,39 +62,42 @@ def TaskCompletion(
         ValueError: If required columns are missing
     """
     # Trace-based path: run agent inside evals_iterator so metric sees the trace
-    if model is not None and getattr(model, "predict_fn", None) is not None:
-        try:
-            from deepeval.dataset import EvaluationDataset, Golden
-        except ImportError:
-            raise MissingDependencyError(
-                "TaskCompletion with model requires deepeval.dataset.EvaluationDataset and Golden. "
-                "Please ensure deepeval is up to date: pip install -U deepeval",
-                required_dependencies=["deepeval"],
-                extra="llm",
-            ) from None
+    if model is None or not hasattr(model, "predict_fn") or model.predict_fn is None:
+        raise ValueError(
+            "TaskCompletion requires a `model` with a callable `predict_fn` for trace-based evaluation."
+        )
+    try:
+        from deepeval.dataset import EvaluationDataset, Golden
+    except ImportError:
+        raise MissingDependencyError(
+            "TaskCompletion with model requires deepeval.dataset.EvaluationDataset and Golden. "
+            "Please ensure deepeval is up to date: pip install -U deepeval",
+            required_dependencies=["deepeval"],
+            extra="llm",
+        ) from None
 
-        _, llm_model = get_client_and_model()
-        results: List[Dict[str, Any]] = []
+    _, llm_model = get_client_and_model()
+    results: List[Dict[str, Any]] = []
 
-        for _, row in dataset._df.iterrows():
-            golden = Golden(input=row[input_column])
-            eval_dataset = EvaluationDataset(goldens=[golden])
-            metric = TaskCompletionMetric(
-                threshold=threshold,
-                model=llm_model,
-                include_reason=True,
-                strict_mode=strict_mode,
-                verbose_mode=False,
+    for _, row in dataset._df.iterrows():
+        golden = Golden(input=row[input_column])
+        eval_dataset = EvaluationDataset(goldens=[golden])
+        metric = TaskCompletionMetric(
+            threshold=threshold,
+            model=llm_model,
+            include_reason=True,
+            strict_mode=strict_mode,
+            verbose_mode=False,
+        )
+        for golden in eval_dataset.evals_iterator(metrics=[metric]):
+            model.predict_fn(
+                {
+                    "input": golden.input,
+                    "session_id": str(uuid.uuid4()),
+                }
             )
-            for golden in eval_dataset.evals_iterator(metrics=[metric]):
-                model.predict_fn(
-                    {
-                        "input": golden.input,
-                        "session_id": str(uuid.uuid4()),
-                    }
-                )
-            score = metric.score
-            reason = getattr(metric, "reason", "No reason provided")
-            results.append({"score": score, "reason": reason})
+        score = metric.score
+        reason = getattr(metric, "reason", "No reason provided")
+        results.append({"score": score, "reason": reason})
 
-        return results
+    return results

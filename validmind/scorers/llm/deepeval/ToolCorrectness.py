@@ -111,5 +111,6 @@ def ToolCorrectness(
         result = evaluate(test_cases=[test_case], metrics=[metric])
         metric_data = result.test_results[0].metrics_data[0]
         score = metric_data.score
-        results.append({"score": score, "reason": metric_data.reason})
+        reason = getattr(metric_data, "reason", "No reason provided")
+        results.append({"score": score, "reason": reason})
     return results
