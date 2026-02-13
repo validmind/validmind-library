@@ -5,9 +5,9 @@ Our [Jupyter Notebook](https://jupyter.org/) code samples are designed to showca
 Sample notebooks are organized into the following folders:
 
 * `notebooks/quickstart` — Quick guides to get you started with ValidMind
-* `notebooks/tutorials` — Get step-by-step instructions and learn about ValidMind concepts in depth
-* `notebooks/how_to` — Learn how to use specific ValidMind features, for example how to list all test suites
-* `notebooks/code_samples` — Showcase end-to-end functionality for documenting or validating models
+* `notebooks/tutorials` — High-level courses covering usage of ValidMind for specific roles or concepts, such as model development
+* `notebooks/how_to` — Learn how to use specific ValidMind features, for example how to run tests
+* `notebooks/use_cases` — Demo end-to-end use cases for ValidMind, such as documenting or validating specific kinds of models
 * `notebooks/code_sharing` — Share your own notebooks or document code internally
 
 ## Getting started

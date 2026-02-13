@@ -1,0 +1,142 @@
+# Copyright © 2023-2026 ValidMind Inc. All rights reserved.
+# Refer to the LICENSE file in the root of this repository for details.
+# SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
+
+- id: code_overview
+  title: Codebase Overview
+  guidelines:
+    - Describe the overall structure of the source code repository.
+    - Identify main modules, folders, and scripts.
+    - Highlight entry points for training, inference, and evaluation.
+    - State the main programming languages and frameworks used.
+  contents:
+    - content_type: text
+      content_id: code_structure_summary
+- id: model_overview
+  title: Model Overview
+  guidelines:
+    - Describe the overall structure of the source code repository.
+    - Identify main modules, folders, and scripts.
+    - Highlight entry points for training, inference, and evaluation.
+    - State the main programming languages and frameworks used.
+  contents:
+    - content_type: text
+      content_id: model_overview
+- id: environment_setup
+  title: Environment and Dependencies
+  guidelines:
+    - List Python packages and system dependencies (OS, compilers, etc.).
+    - Reference environment files (requirements.txt, environment.yml,
+      Dockerfile).
+    - Include setup instructions using Conda, virtualenv, or containers.
+  contents:
+    - content_type: text
+      content_id: setup_instructions
+- id: data_interface
+  title: Data Ingestion and Preprocessing
+  guidelines:
+    - Specify data input formats and sources.
+    - Document ingestion, validation, and transformation logic.
+    - Explain how raw data is preprocessed and features are generated.
+  contents:
+    - content_type: text
+      content_id: data_handling_notes
+- id: model_implementation
+  title: Model Implementation Details
+  guidelines:
+    - Describe the core model code structure (classes, functions).
+    - Link code to theoretical models or equations when applicable.
+    - Note custom components like loss functions or feature selectors.
+  contents:
+    - content_type: text
+      content_id: model_code_description
+- id: training_pipeline
+  title: Model Training Pipeline
+  guidelines:
+    - Explain the training process, optimization strategy, and hyperparameters.
+    - Describe logging, checkpointing, and early stopping mechanisms.
+    - Include references to training config files or tuning logic.
+  contents:
+    - content_type: text
+      content_id: training_logic_details
+- id: evaluation_pipeline
+  title: Evaluation and Validation Code
+  guidelines:
+    - Describe how validation is implemented and metrics are calculated.
+    - Include plots and diagnostic tools (e.g., ROC, SHAP, confusion matrix).
+    - State how outputs are logged and persisted.
+  contents:
+    - content_type: text
+      content_id: evaluation_logic_notes
+- id: inference_pipeline
+  title: Inference and Scoring Logic
+  guidelines:
+    - Detail how the trained model is loaded and used for predictions.
+    - Explain I/O formats and APIs for serving or batch scoring.
+    - Include any preprocessing/postprocessing logic required.
+  contents:
+    - content_type: text
+      content_id: inference_mechanism
+- id: configuration_management
+  title: Configuration and Parameters
+  guidelines:
+    - Describe configuration management (files, CLI args, env vars).
+    - Highlight default parameters and override mechanisms.
+    - Reference versioning practices for config files.
+  contents:
+    - content_type: text
+      content_id: config_control_notes
+- id: testing_and_validation
+  title: Unit and Integration Testing
+  guidelines:
+    - List unit and integration tests and what they cover.
+    - Mention testing frameworks and coverage tools used.
+    - Explain testing strategy for production-readiness.
+  contents:
+    - content_type: text
+      content_id: test_strategy_overview
+- id: logging
+  title: Logging and Monitoring Hooks
+  guidelines:
+    - Describe logging configuration and structure.
+    - Highlight real-time monitoring or observability integrations.
+    - List key events, metrics, or alerts tracked.
+  contents:
+    - content_type: text
+      content_id: logging_notes
+- id: version_control
+  title: Code and Model Versioning
+  guidelines:
+    - Describe Git usage, branching, tagging, and commit standards.
+    - Include model artifact versioning practices (e.g., DVC, MLflow).
+    - Reference any automation in CI/CD.
+  contents:
+    - content_type: text
+      content_id: version_tracking_description
+- id: security_and_compliance
+  title: Security and Access Control
+  guidelines:
+    - Document access controls for source code and data.
+    - Include any encryption, PII handling, or compliance measures.
+    - Mention secure deployment practices.
+  contents:
+    - content_type: text
+      content_id: security_policies_notes
+- id: execution_examples
+  title: Example Runs and Scripts
+  guidelines:
+    - Provide working script examples (e.g., `train.py`, `predict.py`).
+    - Include CLI usage instructions or sample notebooks.
+    - Link to demo datasets or test scenarios.
+  contents:
+    - content_type: text
+      content_id: runnable_examples
+- id: known_issues_and_todos
+  title: Known Issues and Future Improvements
+  guidelines:
+    - List current limitations or technical debt.
+    - Outline proposed enhancements or refactors.
+    - Reference relevant tickets, GitHub issues, or roadmap items.
+  contents:
+    - content_type: text
+      content_id: issues_and_improvements_log
