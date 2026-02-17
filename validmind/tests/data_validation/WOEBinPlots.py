@@ -15,14 +15,12 @@ from validmind.errors import MissingDependencyError
 try:
     import scorecardpy as sc
 except ImportError as e:
-    if "scorecardpy" in str(e):
-        raise MissingDependencyError(
-            "Missing required package `scorecardpy` for WOEBinPlots. "
-            "Please run `pip install validmind[credit_risk]` to use these tests",
-            required_dependencies=["scorecardpy"],
-            extra="credit_risk",
-        ) from e
-    raise e
+    raise MissingDependencyError(
+        "Missing required package `scorecardpy` for WOEBinPlots. "
+        "Please run `pip install validmind[credit_risk]` to use these tests",
+        required_dependencies=["scorecardpy"],
+        extra="credit_risk",
+    ) from e
 from plotly.subplots import make_subplots
 
 from validmind import RawData, tags, tasks
