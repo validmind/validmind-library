@@ -20,14 +20,12 @@ from validmind.errors import MissingDependencyError
 try:
     import scorecardpy as sc
 except ImportError as e:
-    if "scorecardpy" in str(e):
-        raise MissingDependencyError(
-            "Missing required package `scorecardpy` for credit risk demos. "
-            "Please run `pip install validmind[credit_risk]` or `pip install scorecardpy`.",
-            required_dependencies=["scorecardpy"],
-            extra="credit_risk",
-        ) from e
-    raise e
+    raise MissingDependencyError(
+        "Missing required package `scorecardpy` for credit risk demos. "
+        "Please run `pip install validmind[credit_risk]` or `pip install scorecardpy`.",
+        required_dependencies=["scorecardpy"],
+        extra="credit_risk",
+    ) from e
 
 current_path = os.path.dirname(os.path.abspath(__file__))
 dataset_path = os.path.join(current_path, "datasets")

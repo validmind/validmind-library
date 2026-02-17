@@ -1,10 +1,16 @@
 import unittest
 import pandas as pd
 import validmind as vm
-from validmind.errors import SkipTestError
-from validmind.tests.data_validation.WOEBinTable import WOEBinTable, RawData
+from validmind.errors import MissingDependencyError, SkipTestError
+from validmind import RawData
+
+try:
+    from validmind.tests.data_validation.WOEBinTable import WOEBinTable
+except MissingDependencyError:
+    WOEBinTable = None
 
 
+@unittest.skipIf(WOEBinTable is None, "scorecardpy is not installed")
 class TestWOEBinTable(unittest.TestCase):
     def setUp(self):
         # Create a sample dataset with categorical and numeric features and binary target
