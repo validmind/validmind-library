@@ -53,8 +53,7 @@ all = [
   "bert-score (>=0.3.13)",
   "arch",
   "shap (>=0.46.0)",
-  "scorecardpy (>=0.1.9.6,<0.2.0)",
-  "setuptools",
+  "scorecardpy==0.1.9.6",
 ]
 huggingface = [
   "transformers (>=4.32.0,<5.0.0)",
@@ -82,7 +81,7 @@ pytorch = ["torch (>=2.0.0)"]
 stats = ["scipy", "statsmodels", "arch"]
 xgboost = ["xgboost (>=1.5.2,<3)"]
 explainability = ["shap (>=0.46.0)"]
-credit_risk = ["scorecardpy (>=0.1.9.6,<0.2.0)", "setuptools"]
+credit_risk = ["scorecardpy==0.1.9.6"]
 datasets = ["datasets (>=2.10.0,<3.0.0)"]
 pii-detection = ["presidio-analyzer", "presidio-structured"]
 

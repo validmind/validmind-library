@@ -8005,14 +8005,14 @@ test = ["Cython", "array-api-strict (>=2.3.1)", "asv", "gmpy2", "hypothesis (>=6
 
 [[package]]
 name = "scorecardpy"
-version = "0.1.9.7"
+version = "0.1.9.6"
 description = "Credit Risk Scorecard"
 optional = true
 python-versions = "*"
 groups = ["main"]
 markers = "extra == \"all\" or extra == \"credit-risk\""
 files = [
-    {file = "scorecardpy-0.1.9.7.tar.gz", hash = "sha256:a81c7e6f3bf5f10a87b61af73b25f1fc8bc5acbadf5d9e38c3addb02df128d03"},
+    {file = "scorecardpy-0.1.9.6.tar.gz", hash = "sha256:53b339100199276c55270a43bad9fb9fc23fcd285bcf9ba3caf7b585c7adea97"},
 ]
 
 [package.dependencies]
@@ -8219,7 +8219,7 @@ files = [
     {file = "setuptools-80.9.0-py3-none-any.whl", hash = "sha256:062d34222ad13e0cc312a4c02d73f059e86a4acbfbdea8f8f76b28c99f306922"},
     {file = "setuptools-80.9.0.tar.gz", hash = "sha256:f36b47402ecde768dbfafc46e8e4207b4360c654f1f3bb84475f0a28628fb19c"},
 ]
-markers = {main = "platform_system == \"Linux\" and platform_machine == \"x86_64\" and (extra == \"all\" or extra == \"llm\" or extra == \"pytorch\" or extra == \"nlp\" or extra == \"credit-risk\" or extra == \"pii-detection\") or python_version == \"3.12\" and (extra == \"all\" or extra == \"credit-risk\" or extra == \"llm\" or extra == \"pii-detection\" or extra == \"pytorch\" or extra == \"nlp\") or extra == \"all\" or extra == \"credit-risk\" or extra == \"llm\" or extra == \"pii-detection\""}
+markers = {main = "platform_system == \"Linux\" and platform_machine == \"x86_64\" and (extra == \"all\" or extra == \"llm\" or extra == \"pytorch\" or extra == \"nlp\" or extra == \"pii-detection\") or python_version == \"3.12\" and (extra == \"llm\" or extra == \"pii-detection\" or extra == \"all\" or extra == \"pytorch\" or extra == \"nlp\") or extra == \"llm\" or extra == \"pii-detection\""}
 
 [package.extras]
 check = ["pytest-checkdocs (>=2.4)", "pytest-ruff (>=0.2.1) ; sys_platform != \"cygwin\"", "ruff (>=0.8.0) ; sys_platform != \"cygwin\""]
@@ -10334,8 +10334,8 @@ files = [
 cffi = ["cffi (>=1.17) ; python_version >= \"3.13\" and platform_python_implementation != \"PyPy\""]
 
 [extras]
-all = ["arch", "bert-score", "evaluate", "langchain-openai", "langdetect", "nltk", "pycocoevalcap", "ragas", "rouge", "scipy", "scorecardpy", "sentencepiece", "setuptools", "shap", "statsmodels", "textblob", "torch", "transformers", "xgboost"]
-credit-risk = ["scorecardpy", "setuptools"]
+all = ["arch", "bert-score", "evaluate", "langchain-openai", "langdetect", "nltk", "pycocoevalcap", "ragas", "rouge", "scipy", "scorecardpy", "sentencepiece", "shap", "statsmodels", "textblob", "torch", "transformers", "xgboost"]
+credit-risk = ["scorecardpy"]
 datasets = ["datasets"]
 explainability = ["shap"]
 huggingface = ["sentencepiece", "transformers"]
@@ -10349,4 +10349,4 @@ xgboost = ["xgboost"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.9,<3.13"
-content-hash = "cc505f32f8b8739ef9213d6e641b4fe17bcbe5d6d1fc3ab623fd4016a3a3a429"
+content-hash = "ed3612700d61dbd64bf4850986c5cc7fd527d82ffd448cd00a2d02a00356cc3a"
