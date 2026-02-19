@@ -44,7 +44,7 @@ all = [
   "sentencepiece (>=0.2.0,<0.3.0)",
   "langchain-openai (>=0.1.8)",
   "scipy",
-  "statsmodels",
+  "statsmodels (>=0.14.2,<0.15.0)",
   "langdetect",
   "nltk (>=3.8.1,<4.0.0)",
   "textblob (>=0.18.0.post0,<0.19.0)",
@@ -78,7 +78,7 @@ nlp = [
   "pyarrow (<16)",
 ]
 pytorch = ["torch (>=2.0.0)"]
-stats = ["scipy", "statsmodels", "arch"]
+stats = ["scipy", "statsmodels (>=0.14.2,<0.15.0)", "arch"]
 xgboost = ["xgboost (>=1.5.2,<3)"]
 explainability = ["shap (>=0.46.0)"]
 credit_risk = ["scorecardpy==0.1.9.6"]
