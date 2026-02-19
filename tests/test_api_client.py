@@ -19,7 +19,6 @@ from validmind.errors import (
     MissingModelIdError,
     APIRequestError,
 )
-from validmind.utils import md_to_html
 from validmind.vm_models.figure import Figure
 
 
@@ -91,10 +90,10 @@ class TestAPIClient(unittest.TestCase):
             },
         )
 
-    @patch("validmind.api_client.logger.warning")
+    @patch("validmind.api_client.logger.error")
     @patch("requests.get")
     def test_init_warns_when_model_document_is_missing(
-        self, mock_requests_get, mock_logger_warning
+        self, mock_requests_get, mock_logger_error
     ):
         mock_data = {
             "project": {"name": "test_project", "cuid": os.environ["VM_API_MODEL"]}
@@ -104,14 +103,14 @@ class TestAPIClient(unittest.TestCase):
 
         api_client.init()
 
-        mock_logger_warning.assert_called_once_with(
+        mock_logger_error.assert_called_once_with(
             "Not providing `model_document` to `vm.init()` is deprecated and will become required in a future release."
         )
 
-    @patch("validmind.api_client.logger.warning")
+    @patch("validmind.api_client.logger.error")
     @patch("requests.get")
     def test_init_no_warning_when_model_document_is_passed(
-        self, mock_requests_get, mock_logger_warning
+        self, mock_requests_get, mock_logger_error
     ):
         mock_data = {
             "project": {"name": "test_project", "cuid": os.environ["VM_API_MODEL"]}
@@ -121,7 +120,7 @@ class TestAPIClient(unittest.TestCase):
 
         api_client.init(model_document="model_documentation")
 
-        mock_logger_warning.assert_not_called()
+        mock_logger_error.assert_not_called()
         mock_requests_get.assert_called_once_with(
             url=f"{os.environ['VM_API_HOST']}/ping",
             headers={
