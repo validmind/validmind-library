@@ -118,7 +118,7 @@ class TestAPIClient(unittest.TestCase):
         mock_response = Mock(status_code=200, json=Mock(return_value=mock_data))
         mock_requests_get.return_value = mock_response
 
-        api_client.init(model_document="model_documentation")
+        api_client.init(model_document="documentation")
 
         mock_logger_error.assert_not_called()
         mock_requests_get.assert_called_once_with(
@@ -128,7 +128,7 @@ class TestAPIClient(unittest.TestCase):
                 "X-API-SECRET": os.environ["VM_API_SECRET"],
                 "X-MODEL-CUID": os.environ["VM_API_MODEL"],
                 "X-MONITORING": "False",
-                "X-DOCUMENT-TYPE": "model_documentation",
+                "X-DOCUMENT-TYPE": "documentation",
             },
         )
 
