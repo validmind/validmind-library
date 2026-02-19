@@ -31,6 +31,7 @@ _api_key = os.getenv("VM_API_KEY")
 _api_secret = os.getenv("VM_API_SECRET")
 _api_host = os.getenv("VM_API_HOST")
 _model_cuid = os.getenv("VM_API_MODEL")
+_model_document = None
 _monitoring = False
 
 __api_session: Optional[aiohttp.ClientSession] = None
@@ -67,12 +68,15 @@ def get_api_model() -> Optional[str]:
 
 
 def _get_api_headers() -> Dict[str, str]:
-    return {
+    headers = {
         "X-API-KEY": _api_key,
         "X-API-SECRET": _api_secret,
         "X-MODEL-CUID": _model_cuid,
         "X-MONITORING": str(_monitoring),
     }
+    if _model_document:
+        headers["X-DOCUMENT-TYPE"] = _model_document
+    return headers
 
 
 def _get_session() -> aiohttp.ClientSession:
@@ -194,6 +198,7 @@ def init(
     model: Optional[str] = None,
     monitoring: bool = False,
     generate_descriptions: Optional[bool] = None,
+    model_document: Optional[str] = None,
 ):
     """
     Initializes the API client instances and calls the /ping endpoint to ensure
@@ -209,11 +214,12 @@ def init(
         api_secret (str, optional): The API secret. Defaults to None.
         api_host (str, optional): The API host. Defaults to None.
         monitoring (bool): The ongoing monitoring flag. Defaults to False.
-        generate_descriptions (bool): Whether to use GenAI to generate test result descriptions. Defaults to True.
+        generate_descriptions (bool, optional): Whether to use GenAI to generate test result descriptions. Defaults to True.
+        model_document (str, optional): The name of the document. Omitting this argument is deprecated.
     Raises:
         ValueError: If the API key and secret are not provided
     """
-    global _api_key, _api_secret, _api_host, _model_cuid, _monitoring
+    global _api_key, _api_secret, _api_host, _model_cuid, _monitoring, _model_document
 
     if api_key == "...":
         # special case to detect when running a notebook placeholder (...)
@@ -238,6 +244,12 @@ def init(
     if generate_descriptions is not None:
         os.environ["VALIDMIND_LLM_DESCRIPTIONS_ENABLED"] = str(generate_descriptions)
 
+    if model_document is None:
+        logger.error(
+            "Not providing `model_document` to `vm.init()` is deprecated and will become required in a future release."
+        )
+
+    _model_document = model_document
     reload()
 
 

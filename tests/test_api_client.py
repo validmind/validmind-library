@@ -91,6 +91,48 @@ class TestAPIClient(unittest.TestCase):
             },
         )
 
+    @patch("validmind.api_client.logger.warning")
+    @patch("requests.get")
+    def test_init_warns_when_model_document_is_missing(
+        self, mock_requests_get, mock_logger_warning
+    ):
+        mock_data = {
+            "project": {"name": "test_project", "cuid": os.environ["VM_API_MODEL"]}
+        }
+        mock_response = Mock(status_code=200, json=Mock(return_value=mock_data))
+        mock_requests_get.return_value = mock_response
+
+        api_client.init()
+
+        mock_logger_warning.assert_called_once_with(
+            "Not providing `model_document` to `vm.init()` is deprecated and will become required in a future release."
+        )
+
+    @patch("validmind.api_client.logger.warning")
+    @patch("requests.get")
+    def test_init_no_warning_when_model_document_is_passed(
+        self, mock_requests_get, mock_logger_warning
+    ):
+        mock_data = {
+            "project": {"name": "test_project", "cuid": os.environ["VM_API_MODEL"]}
+        }
+        mock_response = Mock(status_code=200, json=Mock(return_value=mock_data))
+        mock_requests_get.return_value = mock_response
+
+        api_client.init(model_document="model_documentation")
+
+        mock_logger_warning.assert_not_called()
+        mock_requests_get.assert_called_once_with(
+            url=f"{os.environ['VM_API_HOST']}/ping",
+            headers={
+                "X-API-KEY": os.environ["VM_API_KEY"],
+                "X-API-SECRET": os.environ["VM_API_SECRET"],
+                "X-MODEL-CUID": os.environ["VM_API_MODEL"],
+                "X-MONITORING": "False",
+                "X-DOCUMENT-TYPE": "model_documentation",
+            },
+        )
+
     def test_get_api_host(self):
         host = api_client.get_api_host()
         self.assertEqual(host, "your_api_host")
