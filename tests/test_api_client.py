@@ -92,7 +92,7 @@ class TestAPIClient(unittest.TestCase):
 
     @patch("validmind.api_client.logger.error")
     @patch("requests.get")
-    def test_init_warns_when_model_document_is_missing(
+    def test_init_warns_when_document_is_missing(
         self, mock_requests_get, mock_logger_error
     ):
         mock_data = {
@@ -104,12 +104,12 @@ class TestAPIClient(unittest.TestCase):
         api_client.init()
 
         mock_logger_error.assert_called_once_with(
-            "Not providing `model_document` to `vm.init()` is deprecated and will become required in a future release."
+            "Not providing `document` to `vm.init()` is deprecated and will become required in a future release."
         )
 
     @patch("validmind.api_client.logger.error")
     @patch("requests.get")
-    def test_init_no_warning_when_model_document_is_passed(
+    def test_init_no_warning_when_document_is_passed(
         self, mock_requests_get, mock_logger_error
     ):
         mock_data = {
@@ -118,7 +118,7 @@ class TestAPIClient(unittest.TestCase):
         mock_response = Mock(status_code=200, json=Mock(return_value=mock_data))
         mock_requests_get.return_value = mock_response
 
-        api_client.init(model_document="documentation")
+        api_client.init(document="documentation")
 
         mock_logger_error.assert_not_called()
         mock_requests_get.assert_called_once_with(

@@ -198,7 +198,7 @@ def init(
     model: Optional[str] = None,
     monitoring: bool = False,
     generate_descriptions: Optional[bool] = None,
-    model_document: Optional[str] = None,
+    document: Optional[str] = None,
 ):
     """
     Initializes the API client instances and calls the /ping endpoint to ensure
@@ -215,7 +215,7 @@ def init(
         api_host (str, optional): The API host. Defaults to None.
         monitoring (bool): The ongoing monitoring flag. Defaults to False.
         generate_descriptions (bool, optional): Whether to use GenAI to generate test result descriptions. Defaults to True.
-        model_document (str, optional): The name of the document. Omitting this argument is deprecated.
+        document (str, optional): The name of the document. Omitting this argument is deprecated.
     Raises:
         ValueError: If the API key and secret are not provided
     """
@@ -244,12 +244,12 @@ def init(
     if generate_descriptions is not None:
         os.environ["VALIDMIND_LLM_DESCRIPTIONS_ENABLED"] = str(generate_descriptions)
 
-    if model_document is None:
+    if document is None:
         logger.error(
-            "Not providing `model_document` to `vm.init()` is deprecated and will become required in a future release."
+            "Not providing `document` to `vm.init()` is deprecated and will become required in a future release."
         )
 
-    _model_document = model_document
+    _model_document = document
     reload()
 
 
