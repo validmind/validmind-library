@@ -246,7 +246,7 @@ def init(
 
     if document is None:
         logger.error(
-            "Not providing `document` to `vm.init()` is deprecated and will become required in a future release."
+            "Future releases will require `document` as one of the options you must provide to `vm.init()`."
         )
 
     _model_document = document

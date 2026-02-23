@@ -104,7 +104,7 @@ class TestAPIClient(unittest.TestCase):
         api_client.init()
 
         mock_logger_error.assert_called_once_with(
-            "Not providing `document` to `vm.init()` is deprecated and will become required in a future release."
+            "Future releases will require `document` as one of the options you must provide to `vm.init()`."
         )
 
     @patch("validmind.api_client.logger.error")
