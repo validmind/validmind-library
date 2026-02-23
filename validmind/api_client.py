@@ -31,7 +31,7 @@ _api_key = os.getenv("VM_API_KEY")
 _api_secret = os.getenv("VM_API_SECRET")
 _api_host = os.getenv("VM_API_HOST")
 _model_cuid = os.getenv("VM_API_MODEL")
-_model_document = None
+_document = None
 _monitoring = False
 
 __api_session: Optional[aiohttp.ClientSession] = None
@@ -74,8 +74,8 @@ def _get_api_headers() -> Dict[str, str]:
         "X-MODEL-CUID": _model_cuid,
         "X-MONITORING": str(_monitoring),
     }
-    if _model_document:
-        headers["X-DOCUMENT-TYPE"] = _model_document
+    if _document:
+        headers["X-DOCUMENT-TYPE"] = _document
     return headers
 
 
@@ -219,7 +219,7 @@ def init(
     Raises:
         ValueError: If the API key and secret are not provided
     """
-    global _api_key, _api_secret, _api_host, _model_cuid, _monitoring, _model_document
+    global _api_key, _api_secret, _api_host, _model_cuid, _monitoring, _document
 
     if api_key == "...":
         # special case to detect when running a notebook placeholder (...)
@@ -249,7 +249,7 @@ def init(
             "Future releases will require `document` as one of the options you must provide to `vm.init()`."
         )
 
-    _model_document = document
+    _document = document
     reload()
 
 
