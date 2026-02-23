@@ -104,7 +104,8 @@ class TestAPIClient(unittest.TestCase):
         api_client.init()
 
         mock_logger_error.assert_called_once_with(
-            "Future releases will require `document` as one of the options you must provide to `vm.init()`."
+            "Future releases will require `document` as one of the options you must provide to `vm.init()`. "
+            "To learn more, refer to https://docs.validmind.ai/developer/validmind-library.html"
         )
 
     @patch("validmind.api_client.logger.error")

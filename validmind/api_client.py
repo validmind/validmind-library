@@ -246,7 +246,8 @@ def init(
 
     if document is None:
         logger.error(
-            "Future releases will require `document` as one of the options you must provide to `vm.init()`."
+            "Future releases will require `document` as one of the options you must provide to `vm.init()`. "
+            "To learn more, refer to https://docs.validmind.ai/developer/validmind-library.html"
         )
 
     _document = document
