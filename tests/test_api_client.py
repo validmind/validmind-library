@@ -14,6 +14,7 @@ os.environ["VM_API_HOST"] = "your_api_host"
 os.environ["VM_API_MODEL"] = "your_model"
 
 import validmind.api_client as api_client
+from validmind.__version__ import __version__
 from validmind.errors import (
     MissingAPICredentialsError,
     MissingModelIdError,
@@ -87,6 +88,7 @@ class TestAPIClient(unittest.TestCase):
                 "X-API-SECRET": os.environ["VM_API_SECRET"],
                 "X-MODEL-CUID": os.environ["VM_API_MODEL"],
                 "X-MONITORING": "False",
+                "X-LIBRARY-VERSION": __version__,
             },
         )
 
@@ -129,6 +131,7 @@ class TestAPIClient(unittest.TestCase):
                 "X-API-SECRET": os.environ["VM_API_SECRET"],
                 "X-MODEL-CUID": os.environ["VM_API_MODEL"],
                 "X-MONITORING": "False",
+                "X-LIBRARY-VERSION": __version__,
                 "X-DOCUMENT-TYPE": "documentation",
             },
         )
@@ -184,6 +187,7 @@ class TestAPIClient(unittest.TestCase):
                 "X-API-SECRET": os.environ["VM_API_SECRET"],
                 "X-MODEL-CUID": os.environ["VM_API_MODEL"],
                 "X-MONITORING": "False",
+                "X-LIBRARY-VERSION": __version__,
             },
         )
 
