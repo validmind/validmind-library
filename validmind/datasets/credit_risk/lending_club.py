@@ -514,7 +514,7 @@ def get_demo_test_config(
         "inputs": {
             "dataset": "raw_dataset",
         },
-        "params": {"min_threshold": 1},
+        "params": {"min_percentage_threshold": 1},
     }
     default_config["validmind.data_validation.ClassImbalance:raw_data"] = {
         "inputs": {
@@ -582,7 +582,7 @@ def get_demo_test_config(
         "inputs": {
             "dataset": "preprocess_dataset",
         },
-        "params": {"min_threshold": 1},
+        "params": {"min_percentage_threshold": 1},
     }
     default_config[
         "validmind.data_validation.TabularNumericalHistograms:preprocessed_data"
