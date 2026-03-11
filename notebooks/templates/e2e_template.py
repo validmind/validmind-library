@@ -14,7 +14,13 @@ DOCUMENT_TYPES = {
     "3": "monitoring",
 }
 
+INSTALL_CHOICE = {
+    "1": "install_only",
+    "2": "install_and_initialize",
+}
+
 _selected_document: Optional[str] = None
+_selected_install: Optional[str] = None
 
 def ensure_ids(notebook):
     """Ensure every cell in the notebook has a unique id."""
@@ -540,6 +546,41 @@ def replace_variables(
 
     except Exception as e:
         print_func(f"Error replacing variables in file: {e}")
+
+def select_install():
+    """Requests the user to select an installation type template used by add_install.
+
+    Stores the selection in the module-level `_selected_install` variable for
+    downstream functions to reference.
+
+    Returns:
+        The selected install choice string, or None if the selection was invalid.
+    """
+    global _selected_install
+
+    prompt = (
+        "\nSelect an installation option:\n"
+        "  1. Installation Only\n"
+        "  2. Both Install & Initialize (you will be asked to later provide\n"
+        "     a document template, or skip template information)\n"
+        "Enter 1 or 2: "
+    )
+
+    choice = input(prompt).strip()
+
+    if choice not in INSTALL_CHOICE:
+        print(f"Invalid selection: '{choice}'. Please enter 1 or 2.")
+        _selected_install = None
+        return None
+
+    _selected_install = INSTALL_CHOICE[choice]
+    labels = {
+        "install_only": "Installation Only",
+        "install_and_initialize": "Both Install & Initialize",
+    }
+    print(f"Selected: {labels[_selected_install]}")
+    return _selected_install
+
 
 def add_install(filepath):
     """Appends an install/initialize notebook based on the document type selected via select_document()."""
