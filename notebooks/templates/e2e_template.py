@@ -582,29 +582,13 @@ def select_install():
     return _selected_install
 
 
-def add_install(filepath):
-    """Appends an install/initialize notebook based on the document type selected via select_document()."""
-    install_files = {
-        "development": "install-validmind/_install-initialize-with-development.ipynb",
-        "validation": "install-validmind/_install-initialize-with-validation.ipynb",
-        "monitoring": "install-validmind/_install-initialize-with-monitoring.ipynb",
-    }
-
-    if _selected_document is None:
-        print("No document type selected. Run select_document() first.")
-        return
-
-    relative_path = install_files[_selected_document]
+def _append_notebook(filepath, relative_path):
+    """Helper to append a source notebook's cells to the target notebook."""
     source_notebook_path = os.path.join(os.path.dirname(__file__), relative_path)
 
     if not os.path.exists(source_notebook_path):
         print(f"Source notebook '{source_notebook_path}' does not exist")
-        return
-
-    user_input = input("Do you want to include installation and initialization instructions? (yes/no): ").strip().lower()
-    if user_input not in ("yes", "y"):
-        print(f"Skipping appending '{relative_path}'")
-        return
+        return False
 
     try:
         with open(filepath, "r") as target_file:
@@ -614,7 +598,7 @@ def add_install(filepath):
             source_notebook = nbformat.read(source_file, as_version=4)
     except Exception as e:
         print(f"Error reading notebooks: {e}")
-        return
+        return False
 
     for cell in source_notebook.cells:
         original_id = cell.get("id", f"cell-{uuid.uuid4()}")
@@ -630,7 +614,34 @@ def add_install(filepath):
         print(f"'{relative_path}' appended to '{filepath}'")
     except Exception as e:
         print(f"Error appending notebooks: {e}")
+        return False
 
+    return True
+
+
+def add_install(filepath):
+    """Appends install notebook(s) based on the install choice and document type selections."""
+    if _selected_install is None:
+        print("No install choice selected. Run select_install() first.")
+        return
+
+    if _selected_install == "install_only":
+        relative_path = "install-validmind/_install-only.ipynb"
+        _append_notebook(filepath, relative_path)
+        return
+
+    install_files = {
+        "development": "install-validmind/_install-initialize-with-development.ipynb",
+        "validation": "install-validmind/_install-initialize-with-validation.ipynb",
+        "monitoring": "install-validmind/_install-initialize-with-monitoring.ipynb",
+    }
+
+    if _selected_document is None:
+        print("No document type selected. Run select_document() first.")
+        return
+
+    relative_path = install_files[_selected_document]
+    _append_notebook(filepath, relative_path)
     replace_variables(filepath)
 
 def next_steps(filepath):
