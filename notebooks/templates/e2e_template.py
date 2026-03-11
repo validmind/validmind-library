@@ -324,7 +324,7 @@ def add_about(filepath):
     about_files = {
         "development": "about-validmind/_about-validmind-developers.ipynb",
         "validation": "about-validmind/_about-validmind-validators.ipynb",
-        "monitoring": "about-validmind/_about-validmind-developers.ipynb",
+        "monitoring": "about-validmind/_about-validmind-monitoring.ipynb",
     }
 
     if _selected_document is None:
