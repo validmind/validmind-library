@@ -298,15 +298,14 @@ def select_document():
     """
     global _selected_document
 
-    prompt = (
+    print(
         "\nSelect a role/document type to apply to the notebook:\n"
         "  1. Developer / Development\n"
         "  2. Validator / Validation\n"
-        "  3. Developer / Monitoring\n"
-        "Enter 1, 2, or 3: "
+        "  3. Developer / Monitoring"
     )
 
-    choice = input(prompt).strip()
+    choice = input("Enter 1, 2, or 3: ").strip()
 
     if choice not in DOCUMENT_TYPES:
         print(f"Invalid selection: '{choice}'. Please enter 1, 2, or 3.")
@@ -558,15 +557,14 @@ def select_install():
     """
     global _selected_install
 
-    prompt = (
+    print(
         "\nSelect an installation option:\n"
         "  1. Installation Only\n"
         "  2. Both Install & Initialize (you will be asked to later provide\n"
-        "     a document template, or skip template information)\n"
-        "Enter 1 or 2: "
+        "     a document template, or skip template information)"
     )
 
-    choice = input(prompt).strip()
+    choice = input("Enter 1 or 2: ").strip()
 
     if choice not in INSTALL_CHOICE:
         print(f"Invalid selection: '{choice}'. Please enter 1 or 2.")
