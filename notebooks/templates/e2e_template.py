@@ -8,6 +8,14 @@ import sys
 import platform
 from typing import Callable, Dict, Iterable, Optional, Set, Tuple
 
+DOCUMENT_TYPES = {
+    "1": "development",
+    "2": "validation",
+    "3": "monitoring",
+}
+
+_selected_document: Optional[str] = None
+
 def ensure_ids(notebook):
     """Ensure every cell in the notebook has a unique id."""
     for cell in notebook.cells:
@@ -272,6 +280,41 @@ def set_title(filepath):
         print(f"Set title for '{filepath}': '{title}'")
     except Exception as e:
         print(f"Error updating notebook: {e}")
+
+def select_document(filepath):
+    """Requests the user to select a role/document type for template application used by add_about, add_install, and next_steps.
+
+    Stores the selection in the module-level `_selected_document` variable for
+    downstream functions to reference.
+
+    Returns:
+        The selected document type string, or None if the selection was invalid.
+    """
+    global _selected_document
+
+    prompt = (
+        "\nSelect a role/document type to apply to the notebook:\n"
+        "  1. Developer / Development\n"
+        "  2. Validator / Validation\n"
+        "  3. Developer / Monitoring\n"
+        "Enter 1, 2, or 3: "
+    )
+
+    choice = input(prompt).strip()
+
+    if choice not in DOCUMENT_TYPES:
+        print(f"Invalid selection: '{choice}'. Please enter 1, 2, or 3.")
+        _selected_document = None
+        return None
+
+    _selected_document = DOCUMENT_TYPES[choice]
+    labels = {
+        "development": "Developer / Development",
+        "validation": "Validator / Validation",
+        "monitoring": "Developer / Monitoring",
+    }
+    print(f"Selected: {labels[_selected_document]}")
+    return _selected_document
 
 def add_about(filepath):
     """Appends the contents of '_about-validmind.ipynb' to the specified notebook if the user agrees."""
@@ -650,6 +693,7 @@ if __name__ == "__main__":
     filepath = create_notebook()
     if filepath:
         set_title(filepath)
+        select_document(filepath)
         add_about(filepath)
         add_install(filepath)
         next_steps(filepath)
