@@ -315,9 +315,9 @@ def add_about(filepath):
 
 # Prefix -> allowed cell types to remove (None/empty => any type)
 DEFAULT_SKIP_PREFIX_RULES: Dict[str, Optional[Iterable[str]]] = {
-    "install-template": {"markdown"},
-    "install-preview": {"markdown"},
-    "install-preview-template": {"code"},
+    "apply-template": {"markdown"},
+    "preview-template": {"markdown"},
+    "template-code": {"code"},
 }
 
 
