@@ -542,8 +542,19 @@ def replace_variables(
         print_func(f"Error replacing variables in file: {e}")
 
 def add_install(filepath):
-    """Appends the contents of '_install-initialize-validmind.ipynb' to the specified notebook if the user agrees."""
-    source_notebook_path = os.path.join(os.path.dirname(__file__), "_install-initialize-validmind.ipynb")
+    """Appends an install/initialize notebook based on the document type selected via select_document()."""
+    install_files = {
+        "development": "install-validmind/_install-initialize-with-development.ipynb",
+        "validation": "install-validmind/_install-initialize-with-validation.ipynb",
+        "monitoring": "install-validmind/_install-initialize-with-monitoring.ipynb",
+    }
+
+    if _selected_document is None:
+        print("No document type selected. Run select_document() first.")
+        return
+
+    relative_path = install_files[_selected_document]
+    source_notebook_path = os.path.join(os.path.dirname(__file__), relative_path)
 
     if not os.path.exists(source_notebook_path):
         print(f"Source notebook '{source_notebook_path}' does not exist")
@@ -551,7 +562,7 @@ def add_install(filepath):
 
     user_input = input("Do you want to include installation and initialization instructions? (yes/no): ").strip().lower()
     if user_input not in ("yes", "y"):
-        print("Skipping appending '_install-initialize-validmind.ipynb'")
+        print(f"Skipping appending '{relative_path}'")
         return
 
     try:
@@ -575,7 +586,7 @@ def add_install(filepath):
     try:
         with open(filepath, "w") as target_file:
             nbformat.write(target_notebook, target_file)
-        print(f"'_install-initialize-validmind.ipynb' appended to '{filepath}'")
+        print(f"'{relative_path}' appended to '{filepath}'")
     except Exception as e:
         print(f"Error appending notebooks: {e}")
 
