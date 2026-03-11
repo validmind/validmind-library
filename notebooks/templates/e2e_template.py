@@ -298,18 +298,11 @@ def select_document():
     """
     global _selected_document
 
-    print(
-        "\nSelect a role/document type to apply to the notebook:\n"
-        "  1. Developer / Development\n"
-        "  2. Validator / Validation\n"
-        "  3. Developer / Monitoring"
-    )
-
     choice = input(
         "Select a role/document type — "
-        "[1: Developer/Development], "
-        "[2: Validator/Validation], "
-        "[3: Developer/Monitoring]: "
+        "1: Developer/Development, "
+        "2: Validator/Validation, "
+        "3: Developer/Monitoring: "
     ).strip()
 
     if choice not in DOCUMENT_TYPES:
@@ -562,17 +555,10 @@ def select_install():
     """
     global _selected_install
 
-    print(
-        "\nSelect an installation option:\n"
-        "  1. Installation Only\n"
-        "  2. Both Install & Initialize (you will be asked to later provide\n"
-        "     a document template, or skip template information)"
-    )
-
     choice = input(
         "Select an installation option — "
-        "[1: Installation Only], "
-        "[2: Both Install & Initialize]: "
+        "1: Installation Only, "
+        "2: Both Install & Initialize: "
     ).strip()
 
     if choice not in INSTALL_CHOICE:
