@@ -305,7 +305,12 @@ def select_document():
         "  3. Developer / Monitoring"
     )
 
-    choice = input("Enter 1, 2, or 3: ").strip()
+    choice = input(
+        "Select a role/document type — "
+        "(1: Developer/Development), "
+        "(2: Validator/Validation), "
+        "(3: Developer/Monitoring): "
+    ).strip()
 
     if choice not in DOCUMENT_TYPES:
         print(f"Invalid selection: '{choice}'. Please enter 1, 2, or 3.")
@@ -564,7 +569,11 @@ def select_install():
         "     a document template, or skip template information)"
     )
 
-    choice = input("Enter 1 or 2: ").strip()
+    choice = input(
+        "Select an installation option — "
+        "(1: Installation Only), "
+        "(2: Both Install & Initialize): "
+    ).strip()
 
     if choice not in INSTALL_CHOICE:
         print(f"Invalid selection: '{choice}'. Please enter 1 or 2.")
