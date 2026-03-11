@@ -758,6 +758,7 @@ if __name__ == "__main__":
         set_title(filepath)
         select_document()
         add_about(filepath)
+        select_install()
         add_install(filepath)
         next_steps(filepath)
         add_upgrade(filepath)
