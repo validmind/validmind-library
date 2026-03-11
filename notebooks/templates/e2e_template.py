@@ -281,7 +281,7 @@ def set_title(filepath):
     except Exception as e:
         print(f"Error updating notebook: {e}")
 
-def select_document(filepath):
+def select_document():
     """Requests the user to select a role/document type for template application used by add_about, add_install, and next_steps.
 
     Stores the selection in the module-level `_selected_document` variable for
@@ -317,8 +317,19 @@ def select_document(filepath):
     return _selected_document
 
 def add_about(filepath):
-    """Appends the contents of '_about-validmind.ipynb' to the specified notebook if the user agrees."""
-    source_notebook_path = os.path.join(os.path.dirname(__file__), "_about-validmind.ipynb")
+    """Appends an about-validmind notebook based on the document type selected via select_document()."""
+    about_files = {
+        "development": "about-validmind/_about-validmind-developers.ipynb",
+        "validation": "about-validmind/_about-validmind-validators.ipynb",
+        "monitoring": "about-validmind/_about-validmind-developers.ipynb",
+    }
+
+    if _selected_document is None:
+        print("No document type selected. Run select_document() first.")
+        return
+
+    relative_path = about_files[_selected_document]
+    source_notebook_path = os.path.join(os.path.dirname(__file__), relative_path)
 
     if not os.path.exists(source_notebook_path):
         print(f"Source notebook '{source_notebook_path}' does not exist")
@@ -326,7 +337,7 @@ def add_about(filepath):
 
     user_input = input("Do you want to include information about ValidMind? (yes/no): ").strip().lower()
     if user_input not in ("yes", "y"):
-        print("Skipping appending '_about-validmind.ipynb'")
+        print(f"Skipping appending '{relative_path}'")
         return
 
     try:
@@ -350,7 +361,7 @@ def add_about(filepath):
     try:
         with open(filepath, "w") as target_file:
             nbformat.write(target_notebook, target_file)
-        print(f"'_about-validmind.ipynb' appended to '{filepath}'")
+        print(f"'{relative_path}' appended to '{filepath}'")
     except Exception as e:
         print(f"Error appending notebooks: {e}")
 
@@ -693,7 +704,7 @@ if __name__ == "__main__":
     filepath = create_notebook()
     if filepath:
         set_title(filepath)
-        select_document(filepath)
+        select_document()
         add_about(filepath)
         add_install(filepath)
         next_steps(filepath)
