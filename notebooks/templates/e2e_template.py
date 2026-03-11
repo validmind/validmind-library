@@ -645,42 +645,25 @@ def add_install(filepath):
     replace_variables(filepath)
 
 def next_steps(filepath):
-    """Appends the contents of '_next-steps.ipynb' to the specified notebook if the user agrees."""
-    source_notebook_path = os.path.join(os.path.dirname(__file__), "_next-steps.ipynb")
+    """Appends a next-steps notebook based on the document type selected via select_document()."""
+    next_steps_files = {
+        "development": "next-steps/_next-steps-development.ipynb",
+        "validation": "next-steps/_next-steps-validation.ipynb",
+        "monitoring": "next-steps/_next-steps-monitoring.ipynb",
+    }
 
-    if not os.path.exists(source_notebook_path):
-        print(f"Source notebook '{source_notebook_path}' does not exist")
+    if _selected_document is None:
+        print("No document type selected. Run select_document() first.")
         return
+
+    relative_path = next_steps_files[_selected_document]
 
     user_input = input("Do you want to include next steps? (yes/no): ").strip().lower()
     if user_input not in ("yes", "y"):
-        print("Skipping appending '_next-steps.ipynb'")
+        print(f"Skipping appending '{relative_path}'")
         return
 
-    try:
-        with open(filepath, "r") as target_file:
-            target_notebook = nbformat.read(target_file, as_version=4)
-
-        with open(source_notebook_path, "r") as source_file:
-            source_notebook = nbformat.read(source_file, as_version=4)
-    except Exception as e:
-        print(f"Error reading notebooks: {e}")
-        return
-
-    for cell in source_notebook.cells:
-        original_id = cell.get("id", f"cell-{uuid.uuid4()}")
-        new_id = f"{original_id}-{uuid.uuid4()}"
-        cell["id"] = new_id
-
-    target_notebook.cells.extend(source_notebook.cells)
-    target_notebook = ensure_ids(target_notebook)
-
-    try:
-        with open(filepath, "w") as target_file:
-            nbformat.write(target_notebook, target_file)
-        print(f"'_next-steps.ipynb' appended to '{filepath}'")
-    except Exception as e:
-        print(f"Error appending notebooks: {e}")
+    _append_notebook(filepath, relative_path)
 
 def add_upgrade(filepath):
     """Appends the contents of '_upgrade-validmind.ipynb' to the specified notebook if the user agrees."""
