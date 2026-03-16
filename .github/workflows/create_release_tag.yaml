@@ -15,6 +15,7 @@ jobs:
         with:
           ref: "main"
           fetch-depth: 0
+          token: ${{ secrets.LIBRARY_RELEASE_PAT }}
 
       - name: Install poetry
         run: pipx install poetry
@@ -56,4 +57,4 @@ jobs:
             --title "${{ steps.get_version.outputs.TAG }}" \
             --generate-notes
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.LIBRARY_RELEASE_PAT }}

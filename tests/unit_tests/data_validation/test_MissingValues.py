@@ -61,7 +61,7 @@ class TestMissingValues(unittest.TestCase):
         self.assertEqual(some_missing["Percentage of Missing Values (%)"], 20.0)
         self.assertEqual(all_missing["Percentage of Missing Values (%)"], 100.0)
 
-        # Check Pass/Fail status (with default min_threshold=1)
+        # Check Pass/Fail status (with default min_percentage_threshold=1.0)
         self.assertEqual(no_missing["Pass/Fail"], "Pass")
         self.assertEqual(some_missing["Pass/Fail"], "Fail")
         self.assertEqual(all_missing["Pass/Fail"], "Fail")
@@ -71,7 +71,9 @@ class TestMissingValues(unittest.TestCase):
 
     def test_threshold_parameter(self):
         # Test with higher threshold that allows some missing values
-        summary, passed, raw_data = MissingValues(self.vm_dataset, min_threshold=25)
+        summary, passed, raw_data = MissingValues(
+            self.vm_dataset, min_percentage_threshold=25
+        )
 
         # Get results
         some_missing = next(s for s in summary if s["Column"] == "some_missing")

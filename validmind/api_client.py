@@ -19,6 +19,7 @@ import aiohttp
 import requests
 from aiohttp import FormData
 
+from .__version__ import __version__
 from .client_config import client_config
 from .errors import MissingAPICredentialsError, MissingModelIdError, raise_api_error
 from .logging import get_logger, log_api_operation
@@ -73,6 +74,7 @@ def _get_api_headers() -> Dict[str, str]:
         "X-API-SECRET": _api_secret,
         "X-MODEL-CUID": _model_cuid,
         "X-MONITORING": str(_monitoring),
+        "X-LIBRARY-VERSION": __version__,
     }
     if _document:
         headers["X-DOCUMENT-TYPE"] = _document
