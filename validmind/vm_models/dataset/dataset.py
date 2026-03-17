@@ -885,6 +885,21 @@ class VMDataset(VMInput):
         else:
             return as_df(self._df[columns]).copy()
 
+    def get_numeric_columns(self) -> List[str]:
+        """
+        Returns the names of all columns in the dataset that have numeric dtype.
+
+        Unlike feature_columns_numeric, this includes every column in the dataset
+        (target, extra columns, prediction columns, etc.) that is numeric.
+
+        Returns:
+            List[str]: The names of all numeric columns in the dataset.
+        """
+        dtypes = self._df.dtypes
+        return dtypes[
+            dtypes.apply(lambda x: pd.api.types.is_numeric_dtype(x))
+        ].index.tolist()
+
     @property
     def x(self) -> np.ndarray:
         """
