@@ -1,5 +1,5 @@
 #!/bin/bash
 
 make format
-poetry run python scripts/copyright_files.py
+make copyright
 git add -u
