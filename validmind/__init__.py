@@ -24,7 +24,7 @@ vm.init(
   api_host = "https://app.prod.validmind.ai/api/v1/tracking/tracking",
   api_key = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
   api_secret = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-  project = "<project-identifier>"
+  model = "<model-identifier>"
 )
 ```
 

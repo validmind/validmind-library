@@ -1,14 +1,7 @@
-FILE_PATH = "validmind/tests/__types__.py"
+from pathlib import Path
 
-# in case something is wrong with the existing __types__.py file, set to empty before running rest of script
-empty_src = """
-from typing import Literal, Union
-
-TestID = Union[Literal["test_id"], str]
-"""
-
-with open(FILE_PATH, "w") as f:
-    f.write(empty_src)
+FILE_PATH = Path("validmind/tests/__types__.py")
+COPYRIGHT_PATH = Path("scripts/copyright.txt")
 
 from validmind.tests import list_tests
 
@@ -17,9 +10,9 @@ test_ids = list_tests(pretty=False)
 tests_str = "\n".join([f'        "{test_id}",' for test_id in test_ids])
 tests_str = tests_str.rstrip("\n")
 
-source = f'''# Copyright © 2023-2024 ValidMind Inc. All rights reserved.
-# See the LICENSE file in the root of this repository for details.
-# SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
+copyright_header = COPYRIGHT_PATH.read_text().strip()
+
+source = f'''{copyright_header}
 
 """Literal types for test IDs.
 
@@ -37,7 +30,7 @@ TestID = Union[
 ]
 '''
 
-with open(FILE_PATH, "w") as f:
-    f.write(source)
+if not FILE_PATH.exists() or FILE_PATH.read_text() != source:
+    FILE_PATH.write_text(source)
 
 print(f"Generated test ID literals and saved in {FILE_PATH}")

@@ -15,9 +15,9 @@ INVALID_CREDENTIALS_JSON_RESPONSE = {
     "description": "Invalid API credentials",
 }
 
-INVALID_PROJECT_JSON_RESPONSE = {
-    "code": "invalid_project",
-    "description": "Invalid project",
+INVALID_MODEL_JSON_RESPONSE = {
+    "code": "invalid_model",
+    "description": "Invalid model",
 }
 
 SUCCESSFUL_PING_JSON_RESPONSE = {
@@ -89,29 +89,31 @@ class TestFrameworkInit(unittest.TestCase):
     )
     def test_all_args_ok_bad_credentials(self, mock_get):
         with self.assertRaises(Exception) as err:
-            vm.init(api_key="bad_api_key", api_secret="bad_api_secret", project="test")
+            vm.init(api_key="bad_api_key", api_secret="bad_api_secret", model="test")
 
         self.assertIn("invalid_credentials", str(err.exception))
 
     @mock.patch(
         "requests.get",
-        return_value=MockResponse(INVALID_PROJECT_JSON_RESPONSE, 401),
+        return_value=MockResponse(INVALID_MODEL_JSON_RESPONSE, 401),
     )
-    def test_all_args_ok_bad_project(self, mock_get):
+    def test_all_args_ok_bad_model(self, mock_get):
         with self.assertRaises(Exception) as err:
-            vm.init(api_key="api_key", api_secret="api_secret", project="bad_project")
+            vm.init(api_key="api_key", api_secret="api_secret", model="bad_model")
 
-        self.assertIn("invalid_project", str(err.exception))
+        self.assertIn("invalid_model", str(err.exception))
 
     @mock.patch(
         "requests.get",
         return_value=MockResponse(SUCCESSFUL_PING_JSON_RESPONSE, 200),
     )
     def test_all_args_ok(self, mock_get):
-        client_ok = vm.init(
-            api_key="api_key", api_secret="api_secret", project="project"
-        )
+        client_ok = vm.init(api_key="api_key", api_secret="api_secret", model="model")
         self.assertIsNone(client_ok)
+
+    def test_project_argument_is_rejected(self):
+        with self.assertRaises(TypeError):
+            vm.init(project="test")
 
 
 if __name__ == "__main__":

@@ -193,7 +193,6 @@ def _ping() -> Dict[str, Any]:
 
 
 def init(
-    project: Optional[str] = None,
     api_key: Optional[str] = None,
     api_secret: Optional[str] = None,
     api_host: Optional[str] = None,
@@ -210,7 +209,6 @@ def init(
     retrieve them from the environment variables `VM_API_KEY` and `VM_API_SECRET`.
 
     Args:
-        project (str, optional): The project CUID. Alias for model. Defaults to None. [DEPRECATED]
         model (str, optional): The model CUID. Defaults to None.
         api_key (str, optional): The API key. Defaults to None.
         api_secret (str, optional): The API secret. Defaults to None.
@@ -226,9 +224,9 @@ def init(
     if api_key == "...":
         # special case to detect when running a notebook placeholder (...)
         # will override with environment variables for easier local development
-        api_host = api_key = api_secret = project = model = None
+        api_host = api_key = api_secret = model = None
 
-    _model_cuid = project or model or os.getenv("VM_API_MODEL")
+    _model_cuid = model or os.getenv("VM_API_MODEL")
     if _model_cuid is None:
         raise MissingModelIdError()
 
