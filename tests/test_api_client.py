@@ -73,7 +73,7 @@ class TestAPIClient(unittest.TestCase):
     @patch("requests.get")
     def test_init_successful(self, mock_requests_get):
         mock_data = {
-            "project": {"name": "test_project", "cuid": os.environ["VM_API_MODEL"]}
+            "model": {"name": "test_model", "cuid": os.environ["VM_API_MODEL"]}
         }
         mock_response = Mock(status_code=200, json=Mock(return_value=mock_data))
         mock_requests_get.return_value = mock_response
@@ -98,7 +98,7 @@ class TestAPIClient(unittest.TestCase):
         self, mock_requests_get, mock_logger_error
     ):
         mock_data = {
-            "project": {"name": "test_project", "cuid": os.environ["VM_API_MODEL"]}
+            "model": {"name": "test_model", "cuid": os.environ["VM_API_MODEL"]}
         }
         mock_response = Mock(status_code=200, json=Mock(return_value=mock_data))
         mock_requests_get.return_value = mock_response
@@ -116,7 +116,7 @@ class TestAPIClient(unittest.TestCase):
         self, mock_requests_get, mock_logger_error
     ):
         mock_data = {
-            "project": {"name": "test_project", "cuid": os.environ["VM_API_MODEL"]}
+            "model": {"name": "test_model", "cuid": os.environ["VM_API_MODEL"]}
         }
         mock_response = Mock(status_code=200, json=Mock(return_value=mock_data))
         mock_requests_get.return_value = mock_response
@@ -148,11 +148,11 @@ class TestAPIClient(unittest.TestCase):
     def test_init_missing_model_id(self, mock_requests_get):
         mock_requests_get.return_value = Mock()
 
-        project = os.environ.pop("VM_API_MODEL")
+        model = os.environ.pop("VM_API_MODEL")
         with self.assertRaises(MissingModelIdError):
             api_client.init(model=None)
 
-        os.environ["VM_API_MODEL"] = project
+        os.environ["VM_API_MODEL"] = model
 
         mock_requests_get.assert_not_called()
 
