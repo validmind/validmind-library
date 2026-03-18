@@ -584,10 +584,10 @@ def get_child_files(files_dict: Dict[str, str], module_name: str,
                 if full_data:
                     try:
                         # Navigate: validmind.{path_parts} to find module
-                        # e.g., tests.model_validation.statsmodels.statsutils
+                        # Example: tests.model_validation.statsmodels.statsutils
                         path_parts = rel_path.replace('.qmd', '').split('/')
                         current = full_data.get('validmind', {})
-                        for part in path_parts[1:]:  # Skip 'validmind'
+                        for part in path_parts[1:]:
                             current = current.get('members', {}).get(part, {})
                         module_data = current
                     except (KeyError, AttributeError):
