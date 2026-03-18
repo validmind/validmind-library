@@ -593,9 +593,14 @@ def get_child_files(files_dict: Dict[str, str], module_name: str,
                     except (KeyError, AttributeError):
                         pass
 
+                # Check if this is a package-level doc (has child .qmd files)
+                child_prefix = f'docs/{rel_path.replace(".qmd", "/")}'
+                is_package = any(p.startswith(child_prefix) for p in files_dict.values())
+
                 # Skip internal helper modules within tests/ (lowercase AND no decorators)
+                # But preserve package-level docs that have children
                 is_in_tests = rel_path.startswith('validmind/tests/')
-                if is_in_tests and _should_filter_module(file_stem, module_data):
+                if is_in_tests and not is_package and _should_filter_module(file_stem, module_data):
                     continue
 
                 directory_structure[dir_name]['contents'].append({
