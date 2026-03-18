@@ -1,0 +1,60 @@
+name: Create Release Tag
+
+permissions:
+  contents: write
+
+on:
+  workflow_dispatch:
+
+jobs:
+  create-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Main Branch
+        uses: actions/checkout@v4
+        with:
+          ref: "main"
+          fetch-depth: 0
+          token: ${{ secrets.LIBRARY_RELEASE_PAT }}
+
+      - name: Install poetry
+        run: pipx install poetry
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "poetry"
+
+      - name: Get Version from pyproject.toml
+        id: get_version
+        run: |
+          VERSION=$(poetry version -s)
+          echo "VERSION=${VERSION}" >> $GITHUB_OUTPUT
+          echo "TAG=v${VERSION}" >> $GITHUB_OUTPUT
+
+      - name: Check if Tag Already Exists
+        id: check_tag
+        run: |
+          if git rev-parse "refs/tags/${{ steps.get_version.outputs.TAG }}" >/dev/null 2>&1; then
+            echo "Tag ${{ steps.get_version.outputs.TAG }} already exists. Bump version in pyproject.toml and retry."
+            exit 1
+          fi
+
+      - name: Setup Git Config
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+
+      - name: Create and Push Tag
+        run: |
+          git tag -a "${{ steps.get_version.outputs.TAG }}" -m "Release version ${{ steps.get_version.outputs.VERSION }}"
+          git push origin "${{ steps.get_version.outputs.TAG }}"
+
+      - name: Create GitHub Release
+        run: |
+          gh release create "${{ steps.get_version.outputs.TAG }}" \
+            --title "${{ steps.get_version.outputs.TAG }}" \
+            --generate-notes
+        env:
+          GITHUB_TOKEN: ${{ secrets.LIBRARY_RELEASE_PAT }}

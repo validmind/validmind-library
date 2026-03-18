@@ -2,11 +2,16 @@ import unittest
 import pandas as pd
 import validmind as vm
 import plotly.graph_objs as go
-from validmind.errors import SkipTestError
-from validmind.tests.data_validation.WOEBinPlots import WOEBinPlots
+from validmind.errors import MissingDependencyError, SkipTestError
 from validmind import RawData
 
+try:
+    from validmind.tests.data_validation.WOEBinPlots import WOEBinPlots
+except MissingDependencyError:
+    WOEBinPlots = None
 
+
+@unittest.skipIf(WOEBinPlots is None, "scorecardpy is not installed")
 class TestWOEBinPlots(unittest.TestCase):
     def setUp(self):
         # Create a sample dataset with categorical features and binary target

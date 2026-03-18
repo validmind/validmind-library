@@ -14,12 +14,12 @@ os.environ["VM_API_HOST"] = "your_api_host"
 os.environ["VM_API_MODEL"] = "your_model"
 
 import validmind.api_client as api_client
+from validmind.__version__ import __version__
 from validmind.errors import (
     MissingAPICredentialsError,
     MissingModelIdError,
     APIRequestError,
 )
-from validmind.utils import md_to_html
 from validmind.vm_models.figure import Figure
 
 
@@ -73,7 +73,7 @@ class TestAPIClient(unittest.TestCase):
     @patch("requests.get")
     def test_init_successful(self, mock_requests_get):
         mock_data = {
-            "project": {"name": "test_project", "cuid": os.environ["VM_API_MODEL"]}
+            "model": {"name": "test_model", "cuid": os.environ["VM_API_MODEL"]}
         }
         mock_response = Mock(status_code=200, json=Mock(return_value=mock_data))
         mock_requests_get.return_value = mock_response
@@ -88,6 +88,51 @@ class TestAPIClient(unittest.TestCase):
                 "X-API-SECRET": os.environ["VM_API_SECRET"],
                 "X-MODEL-CUID": os.environ["VM_API_MODEL"],
                 "X-MONITORING": "False",
+                "X-LIBRARY-VERSION": __version__,
+            },
+        )
+
+    @patch("validmind.api_client.logger.error")
+    @patch("requests.get")
+    def test_init_warns_when_document_is_missing(
+        self, mock_requests_get, mock_logger_error
+    ):
+        mock_data = {
+            "model": {"name": "test_model", "cuid": os.environ["VM_API_MODEL"]}
+        }
+        mock_response = Mock(status_code=200, json=Mock(return_value=mock_data))
+        mock_requests_get.return_value = mock_response
+
+        api_client.init()
+
+        mock_logger_error.assert_called_once_with(
+            "Future releases will require `document` as one of the options you must provide to `vm.init()`. "
+            "To learn more, refer to https://docs.validmind.ai/developer/validmind-library.html"
+        )
+
+    @patch("validmind.api_client.logger.error")
+    @patch("requests.get")
+    def test_init_no_warning_when_document_is_passed(
+        self, mock_requests_get, mock_logger_error
+    ):
+        mock_data = {
+            "model": {"name": "test_model", "cuid": os.environ["VM_API_MODEL"]}
+        }
+        mock_response = Mock(status_code=200, json=Mock(return_value=mock_data))
+        mock_requests_get.return_value = mock_response
+
+        api_client.init(document="documentation")
+
+        mock_logger_error.assert_not_called()
+        mock_requests_get.assert_called_once_with(
+            url=f"{os.environ['VM_API_HOST']}/ping",
+            headers={
+                "X-API-KEY": os.environ["VM_API_KEY"],
+                "X-API-SECRET": os.environ["VM_API_SECRET"],
+                "X-MODEL-CUID": os.environ["VM_API_MODEL"],
+                "X-MONITORING": "False",
+                "X-LIBRARY-VERSION": __version__,
+                "X-DOCUMENT-TYPE": "documentation",
             },
         )
 
@@ -103,11 +148,11 @@ class TestAPIClient(unittest.TestCase):
     def test_init_missing_model_id(self, mock_requests_get):
         mock_requests_get.return_value = Mock()
 
-        project = os.environ.pop("VM_API_MODEL")
+        model = os.environ.pop("VM_API_MODEL")
         with self.assertRaises(MissingModelIdError):
             api_client.init(model=None)
 
-        os.environ["VM_API_MODEL"] = project
+        os.environ["VM_API_MODEL"] = model
 
         mock_requests_get.assert_not_called()
 
@@ -142,6 +187,7 @@ class TestAPIClient(unittest.TestCase):
                 "X-API-SECRET": os.environ["VM_API_SECRET"],
                 "X-MODEL-CUID": os.environ["VM_API_MODEL"],
                 "X-MONITORING": "False",
+                "X-LIBRARY-VERSION": __version__,
             },
         )
 

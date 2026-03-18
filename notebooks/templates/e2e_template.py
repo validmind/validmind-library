@@ -8,6 +8,20 @@ import sys
 import platform
 from typing import Callable, Dict, Iterable, Optional, Set, Tuple
 
+DOCUMENT_TYPES = {
+    "1": "development",
+    "2": "validation",
+    "3": "monitoring",
+}
+
+INSTALL_CHOICE = {
+    "1": "install_only",
+    "2": "install_and_initialize",
+}
+
+_selected_document: Optional[str] = None
+_selected_install: Optional[str] = None
+
 def ensure_ids(notebook):
     """Ensure every cell in the notebook has a unique id."""
     for cell in notebook.cells:
@@ -273,9 +287,52 @@ def set_title(filepath):
     except Exception as e:
         print(f"Error updating notebook: {e}")
 
+def select_document():
+    """Requests the user to select a role/document type for template application used by add_about, add_install, and next_steps.
+
+    Stores the selection in the module-level `_selected_document` variable for
+    downstream functions to reference.
+
+    Returns:
+        The selected document type string, or None if the selection was invalid.
+    """
+    global _selected_document
+
+    choice = input(
+        "Select a role/document type — "
+        "[1: Developer/Development], "
+        "[2: Validator/Validation], "
+        "[3: Developer/Monitoring:] "
+    ).strip()
+
+    if choice not in DOCUMENT_TYPES:
+        print(f"Invalid selection: '{choice}'. Please enter 1, 2, or 3.")
+        _selected_document = None
+        return None
+
+    _selected_document = DOCUMENT_TYPES[choice]
+    labels = {
+        "development": "Developer / Development",
+        "validation": "Validator / Validation",
+        "monitoring": "Developer / Monitoring",
+    }
+    print(f"Selected: {labels[_selected_document]}")
+    return _selected_document
+
 def add_about(filepath):
-    """Appends the contents of '_about-validmind.ipynb' to the specified notebook if the user agrees."""
-    source_notebook_path = os.path.join(os.path.dirname(__file__), "_about-validmind.ipynb")
+    """Appends an about-validmind notebook based on the document type selected via select_document()."""
+    about_files = {
+        "development": "about-validmind/_about-validmind-developers.ipynb",
+        "validation": "about-validmind/_about-validmind-validators.ipynb",
+        "monitoring": "about-validmind/_about-validmind-monitoring.ipynb",
+    }
+
+    if _selected_document is None:
+        print("No document type selected. Run select_document() first.")
+        return
+
+    relative_path = about_files[_selected_document]
+    source_notebook_path = os.path.join(os.path.dirname(__file__), relative_path)
 
     if not os.path.exists(source_notebook_path):
         print(f"Source notebook '{source_notebook_path}' does not exist")
@@ -283,7 +340,7 @@ def add_about(filepath):
 
     user_input = input("Do you want to include information about ValidMind? (yes/no): ").strip().lower()
     if user_input not in ("yes", "y"):
-        print("Skipping appending '_about-validmind.ipynb'")
+        print(f"Skipping appending '{relative_path}'")
         return
 
     try:
@@ -307,7 +364,7 @@ def add_about(filepath):
     try:
         with open(filepath, "w") as target_file:
             nbformat.write(target_notebook, target_file)
-        print(f"'_about-validmind.ipynb' appended to '{filepath}'")
+        print(f"'{relative_path}' appended to '{filepath}'")
     except Exception as e:
         print(f"Error appending notebooks: {e}")
 
@@ -315,9 +372,9 @@ def add_about(filepath):
 
 # Prefix -> allowed cell types to remove (None/empty => any type)
 DEFAULT_SKIP_PREFIX_RULES: Dict[str, Optional[Iterable[str]]] = {
-    "install-template": {"markdown"},
-    "install-preview": {"markdown"},
-    "install-preview-template": {"code"},
+    "apply-template": {"markdown"},
+    "preview-template": {"markdown"},
+    "template-code": {"code"},
 }
 
 
@@ -487,18 +544,44 @@ def replace_variables(
     except Exception as e:
         print_func(f"Error replacing variables in file: {e}")
 
-def add_install(filepath):
-    """Appends the contents of '_install-initialize-validmind.ipynb' to the specified notebook if the user agrees."""
-    source_notebook_path = os.path.join(os.path.dirname(__file__), "_install-initialize-validmind.ipynb")
+def select_install():
+    """Requests the user to select an installation type template used by add_install.
+
+    Stores the selection in the module-level `_selected_install` variable for
+    downstream functions to reference.
+
+    Returns:
+        The selected install choice string, or None if the selection was invalid.
+    """
+    global _selected_install
+
+    choice = input(
+        "Select an installation option — "
+        "[1: Installation Only], "
+        "[2: Both Install & Initialize:] "
+    ).strip()
+
+    if choice not in INSTALL_CHOICE:
+        print(f"Invalid selection: '{choice}'. Please enter 1 or 2.")
+        _selected_install = None
+        return None
+
+    _selected_install = INSTALL_CHOICE[choice]
+    labels = {
+        "install_only": "Installation Only",
+        "install_and_initialize": "Both Install & Initialize",
+    }
+    print(f"Selected: {labels[_selected_install]}")
+    return _selected_install
+
+
+def _append_notebook(filepath, relative_path):
+    """Helper to append a source notebook's cells to the target notebook."""
+    source_notebook_path = os.path.join(os.path.dirname(__file__), relative_path)
 
     if not os.path.exists(source_notebook_path):
         print(f"Source notebook '{source_notebook_path}' does not exist")
-        return
-
-    user_input = input("Do you want to include installation and initialization instructions? (yes/no): ").strip().lower()
-    if user_input not in ("yes", "y"):
-        print("Skipping appending '_install-initialize-validmind.ipynb'")
-        return
+        return False
 
     try:
         with open(filepath, "r") as target_file:
@@ -508,7 +591,7 @@ def add_install(filepath):
             source_notebook = nbformat.read(source_file, as_version=4)
     except Exception as e:
         print(f"Error reading notebooks: {e}")
-        return
+        return False
 
     for cell in source_notebook.cells:
         original_id = cell.get("id", f"cell-{uuid.uuid4()}")
@@ -521,49 +604,59 @@ def add_install(filepath):
     try:
         with open(filepath, "w") as target_file:
             nbformat.write(target_notebook, target_file)
-        print(f"'_install-initialize-validmind.ipynb' appended to '{filepath}'")
+        print(f"'{relative_path}' appended to '{filepath}'")
     except Exception as e:
         print(f"Error appending notebooks: {e}")
+        return False
 
+    return True
+
+
+def add_install(filepath):
+    """Appends install notebook(s) based on the install choice and document type selections."""
+    if _selected_install is None:
+        print("No install choice selected. Run select_install() first.")
+        return
+
+    if _selected_install == "install_only":
+        relative_path = "install-validmind/_install-only.ipynb"
+        _append_notebook(filepath, relative_path)
+        return
+
+    install_files = {
+        "development": "install-validmind/_install-initialize-with-development.ipynb",
+        "validation": "install-validmind/_install-initialize-with-validation.ipynb",
+        "monitoring": "install-validmind/_install-initialize-with-monitoring.ipynb",
+    }
+
+    if _selected_document is None:
+        print("No document type selected. Run select_document() first.")
+        return
+
+    relative_path = install_files[_selected_document]
+    _append_notebook(filepath, relative_path)
     replace_variables(filepath)
 
 def next_steps(filepath):
-    """Appends the contents of '_next-steps.ipynb' to the specified notebook if the user agrees."""
-    source_notebook_path = os.path.join(os.path.dirname(__file__), "_next-steps.ipynb")
+    """Appends a next-steps notebook based on the document type selected via select_document()."""
+    next_steps_files = {
+        "development": "next-steps/_next-steps-development.ipynb",
+        "validation": "next-steps/_next-steps-validation.ipynb",
+        "monitoring": "next-steps/_next-steps-monitoring.ipynb",
+    }
 
-    if not os.path.exists(source_notebook_path):
-        print(f"Source notebook '{source_notebook_path}' does not exist")
+    if _selected_document is None:
+        print("No document type selected. Run select_document() first.")
         return
+
+    relative_path = next_steps_files[_selected_document]
 
     user_input = input("Do you want to include next steps? (yes/no): ").strip().lower()
     if user_input not in ("yes", "y"):
-        print("Skipping appending '_next-steps.ipynb'")
+        print(f"Skipping appending '{relative_path}'")
         return
 
-    try:
-        with open(filepath, "r") as target_file:
-            target_notebook = nbformat.read(target_file, as_version=4)
-
-        with open(source_notebook_path, "r") as source_file:
-            source_notebook = nbformat.read(source_file, as_version=4)
-    except Exception as e:
-        print(f"Error reading notebooks: {e}")
-        return
-
-    for cell in source_notebook.cells:
-        original_id = cell.get("id", f"cell-{uuid.uuid4()}")
-        new_id = f"{original_id}-{uuid.uuid4()}"
-        cell["id"] = new_id
-
-    target_notebook.cells.extend(source_notebook.cells)
-    target_notebook = ensure_ids(target_notebook)
-
-    try:
-        with open(filepath, "w") as target_file:
-            nbformat.write(target_notebook, target_file)
-        print(f"'_next-steps.ipynb' appended to '{filepath}'")
-    except Exception as e:
-        print(f"Error appending notebooks: {e}")
+    _append_notebook(filepath, relative_path)
 
 def add_upgrade(filepath):
     """Appends the contents of '_upgrade-validmind.ipynb' to the specified notebook if the user agrees."""
@@ -650,7 +743,9 @@ if __name__ == "__main__":
     filepath = create_notebook()
     if filepath:
         set_title(filepath)
+        select_document()
         add_about(filepath)
+        select_install()
         add_install(filepath)
         next_steps(filepath)
         add_upgrade(filepath)

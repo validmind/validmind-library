@@ -7,10 +7,10 @@ Note: This script is meant to be run from the root of the repo
 
 Notebooks Tested:
  - notebooks/quickstart/quickstart_model_documentation.ipynb
- - notebooks/code_samples/time_series/quickstart_time_series_full_suite.ipynb
- - notebooks/code_samples/regression/quickstart_regression_full_suite.ipynb
- - notebooks/code_samples/custom_tests/external_test_providers.ipynb
- - notebooks/code_samples/custom_tests/implement_custom_tests.ipynb
+ - notebooks/use_cases/time_series/quickstart_time_series_full_suite.ipynb
+ - notebooks/use_cases/regression/quickstart_regression_full_suite.ipynb
+ - notebooks/how_to/tests/custom_tests/integrate_external_test_providers.ipynb
+ - notebooks/how_to/tests/custom_tests/implement_custom_tests.ipynb
 
 To add more notebooks to the list, simply add the path to the `NOTEBOOKS_TO_RUN` list.
 This will use the default project id for the notebook. If you want to use a different
@@ -40,33 +40,33 @@ DEFAULT_MODEL_CUID = os.getenv(
 
 NOTEBOOKS_TO_RUN = [
     "notebooks/quickstart/quickstart_model_documentation.ipynb",
-    "notebooks/code_samples/time_series/quickstart_time_series_high_code.ipynb",
-    "notebooks/code_samples/regression/quickstart_regression_full_suite.ipynb",
-    "notebooks/how_to/run_unit_metrics.ipynb",
-    "notebooks/code_samples/custom_tests/integrate_external_test_providers.ipynb",
-    "notebooks/code_samples/custom_tests/implement_custom_tests.ipynb",
-    "notebooks/how_to/explore_tests.ipynb",
+    "notebooks/use_cases/time_series/quickstart_time_series_high_code.ipynb",
+    "notebooks/use_cases/regression/quickstart_regression_full_suite.ipynb",
+    "notebooks/how_to/metrics/run_unit_metrics.ipynb",
+    "notebooks/how_to/tests/custom_tests/integrate_external_test_providers.ipynb",
+    "notebooks/how_to/tests/custom_tests/implement_custom_tests.ipynb",
+    "notebooks/how_to/tests/explore_tests/explore_tests.ipynb",
 ]
 
 DATA_TEMPLATE_NOTEBOOKS = [
     {
         # [Demo] Foundation Model - Text Summarization
-        "path": "notebooks/code_samples/nlp_and_llm/llm_summarization_demo.ipynb",
+        "path": "notebooks/use_cases/nlp_and_llm/llm_summarization_demo.ipynb",
         "model": "cm4lr52wy00ck0jpbw6kqhyjl",
     },
     {
         # [Demo] Hugging Face - Text Summarization
-        "path": "notebooks/code_samples/nlp_and_llm/hugging_face_summarization_demo.ipynb",
+        "path": "notebooks/use_cases/nlp_and_llm/hugging_face_summarization_demo.ipynb",
         "model": "cm4lr52ut00c60jpbe2fxt8ss",
     },
     {
         # [Demo] Foundation Model - Text Sentiment Analysis
-        "path": "notebooks/code_samples/nlp_and_llm/llm_summarization_demo.ipynb",
+        "path": "notebooks/use_cases/nlp_and_llm/llm_summarization_demo.ipynb",
         "model": "cm4lr52ss00br0jpbtgxxe8w8",
     },
     {
         # [Demo] Hugging Face - Text Sentiment Analysis
-        "path": "notebooks/code_samples/nlp_and_llm/hugging_face_summarization_demo.ipynb",
+        "path": "notebooks/use_cases/nlp_and_llm/hugging_face_summarization_demo.ipynb",
         "model": "cm4lr52qo00bc0jpbm0vmxxhy",
     },
     {
@@ -76,12 +76,12 @@ DATA_TEMPLATE_NOTEBOOKS = [
     },
     {
         # [Demo] Credit Risk Model
-        "path": "notebooks/code_samples/credit_risk/application_scorecard_demo.ipynb",
+        "path": "notebooks/use_cases/credit_risk/application_scorecard_demo.ipynb",
         "model": "cm4lr52j9009w0jpb4gr7z5o0",
     },
     {
         # [Demo] Interest Rate Time Series Forecasting Model
-        "path": "notebooks/code_samples/time_series/quickstart_time_series_full_suite.ipynb",
+        "path": "notebooks/use_cases/time_series/quickstart_time_series_full_suite.ipynb",
         "model": "cm4lr52od00ar0jpb9dyra8v8",
     },
 ]

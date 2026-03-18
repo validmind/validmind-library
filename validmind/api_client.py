@@ -19,6 +19,7 @@ import aiohttp
 import requests
 from aiohttp import FormData
 
+from .__version__ import __version__
 from .client_config import client_config
 from .errors import MissingAPICredentialsError, MissingModelIdError, raise_api_error
 from .logging import get_logger, log_api_operation
@@ -31,6 +32,7 @@ _api_key = os.getenv("VM_API_KEY")
 _api_secret = os.getenv("VM_API_SECRET")
 _api_host = os.getenv("VM_API_HOST")
 _model_cuid = os.getenv("VM_API_MODEL")
+_document = None
 _monitoring = False
 
 __api_session: Optional[aiohttp.ClientSession] = None
@@ -67,12 +69,16 @@ def get_api_model() -> Optional[str]:
 
 
 def _get_api_headers() -> Dict[str, str]:
-    return {
+    headers = {
         "X-API-KEY": _api_key,
         "X-API-SECRET": _api_secret,
         "X-MODEL-CUID": _model_cuid,
         "X-MONITORING": str(_monitoring),
+        "X-LIBRARY-VERSION": __version__,
     }
+    if _document:
+        headers["X-DOCUMENT-TYPE"] = _document
+    return headers
 
 
 def _get_session() -> aiohttp.ClientSession:
@@ -187,13 +193,13 @@ def _ping() -> Dict[str, Any]:
 
 
 def init(
-    project: Optional[str] = None,
     api_key: Optional[str] = None,
     api_secret: Optional[str] = None,
     api_host: Optional[str] = None,
     model: Optional[str] = None,
     monitoring: bool = False,
     generate_descriptions: Optional[bool] = None,
+    document: Optional[str] = None,
 ):
     """
     Initializes the API client instances and calls the /ping endpoint to ensure
@@ -203,24 +209,24 @@ def init(
     retrieve them from the environment variables `VM_API_KEY` and `VM_API_SECRET`.
 
     Args:
-        project (str, optional): The project CUID. Alias for model. Defaults to None. [DEPRECATED]
         model (str, optional): The model CUID. Defaults to None.
         api_key (str, optional): The API key. Defaults to None.
         api_secret (str, optional): The API secret. Defaults to None.
         api_host (str, optional): The API host. Defaults to None.
         monitoring (bool): The ongoing monitoring flag. Defaults to False.
-        generate_descriptions (bool): Whether to use GenAI to generate test result descriptions. Defaults to True.
+        generate_descriptions (bool, optional): Whether to use GenAI to generate test result descriptions. Defaults to True.
+        document (str, optional): The name of the document. Omitting this argument is deprecated.
     Raises:
         ValueError: If the API key and secret are not provided
     """
-    global _api_key, _api_secret, _api_host, _model_cuid, _monitoring
+    global _api_key, _api_secret, _api_host, _model_cuid, _monitoring, _document
 
     if api_key == "...":
         # special case to detect when running a notebook placeholder (...)
         # will override with environment variables for easier local development
-        api_host = api_key = api_secret = project = model = None
+        api_host = api_key = api_secret = model = None
 
-    _model_cuid = project or model or os.getenv("VM_API_MODEL")
+    _model_cuid = model or os.getenv("VM_API_MODEL")
     if _model_cuid is None:
         raise MissingModelIdError()
 
@@ -238,6 +244,13 @@ def init(
     if generate_descriptions is not None:
         os.environ["VALIDMIND_LLM_DESCRIPTIONS_ENABLED"] = str(generate_descriptions)
 
+    if document is None:
+        logger.error(
+            "Future releases will require `document` as one of the options you must provide to `vm.init()`. "
+            "To learn more, refer to https://docs.validmind.ai/developer/validmind-library.html"
+        )
+
+    _document = document
     reload()
 
 
