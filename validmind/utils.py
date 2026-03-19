@@ -564,6 +564,10 @@ def md_to_html(md: str, mathml=False) -> str:
         plugins=["math", "table", "strikethrough", "footnotes"]
     )(md)
 
+    # Wrap <table> elements in <figure class="table"> for CKEditor compatibility
+    html = re.sub(r"<table>", '<figure class="table"><table>', html)
+    html = re.sub(r"</table>", "</table></figure>", html)
+
     if not mathml:
         return html
 
