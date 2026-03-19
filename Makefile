@@ -67,9 +67,10 @@ version:
 	@:$(call check_defined, tag, new semver version tag to use on pyproject.toml)
 	@poetry version $(tag)
 	@echo "__version__ = \"$$(poetry version -s)\"" > validmind/__version__.py
+	@sed -i '' 's/^Version: .*/Version: '"$$(poetry version -s)"'/' r/validmind/DESCRIPTION
 	@echo "Version updated to $$(poetry version -s)"
-	@echo "Commiting changes to pyproject.toml and __version__.py with message: $$(poetry version -s)"
-	@git add pyproject.toml validmind/__version__.py
+	@echo "Commiting changes to pyproject.toml, __version__.py and r/validmind/DESCRIPTION with message: $$(poetry version -s)"
+	@git add pyproject.toml validmind/__version__.py r/validmind/DESCRIPTION
 	@git commit -m "$$(poetry version -s)"
 
 generate-test-id-types:

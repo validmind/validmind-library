@@ -98,11 +98,10 @@ class RModel(VMModel):
         Instead, there is a global predict() method that returns the predicted
         values according to the model type.
         """
-        # Use the predict method on the loaded model (assuming the model's name in R is 'model')
         predicted_probs = self.r.predict(
             self.model, newdata=new_data_r, type="response"
         )
-        return predicted_probs
+        return np.array(predicted_probs)
 
     def r_xgb_predict(self, new_data_r):
         """
@@ -114,7 +113,7 @@ class RModel(VMModel):
         predicted_probs = self.r.predict(
             self.model, newdata=new_data_r, type="response"
         )
-        return predicted_probs
+        return np.array(predicted_probs)
 
     def predict_proba(self, new_data):
         """
@@ -127,24 +126,30 @@ class RModel(VMModel):
         Converts the predicted probabilities to classes
         """
         try:
+            from rpy2.robjects import conversion, default_converter
             from rpy2.robjects import pandas2ri
         except ImportError:
             raise MissingRExtrasError()
 
-        # Activate the pandas conversion for rpy2
-        pandas2ri.activate()
-
         new_data_class = get_full_class_name(new_data)
 
         if new_data_class == "numpy.ndarray":
-            # We need to reconstruct the DataFrame from the ndarray using the column names
-            new_data = pd.DataFrame(new_data, columns=self.test_ds.feature_columns)
+            # Reconstruct a DataFrame from the ndarray using column names
+            # from the model's training data
+            try:
+                model_terms = list(self.r.attr(self.model.rx2["terms"], "term.labels"))
+                new_data = pd.DataFrame(new_data, columns=model_terms)
+            except Exception:
+                # Fallback: use generic column names
+                new_data = pd.DataFrame(new_data)
         elif new_data_class != "pandas.core.frame.DataFrame":
             raise ValueError(
                 f"new_data must be a DataFrame or ndarray. Got {new_data_class}"
             )
 
-        new_data_r = pandas2ri.py2rpy(new_data)
+        # Use context manager for pandas conversion (activate/deactivate is deprecated)
+        with conversion.localconverter(default_converter + pandas2ri.converter):
+            new_data_r = conversion.get_conversion().py2rpy(new_data)
 
         if self.__model_class() == "xgb.Booster":
             predicted_probs = self.r_xgb_predict(new_data_r)

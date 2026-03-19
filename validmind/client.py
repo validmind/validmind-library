@@ -321,6 +321,14 @@ def init_r_model(
         input_id=input_id,
     )
 
+    metadata = get_model_info(vm_model)
+    log_input(
+        input_id=input_id,
+        type="model",
+        metadata=metadata,
+    )
+    input_registry.add(key=input_id, obj=vm_model)
+
     return vm_model
 
 

@@ -190,20 +190,37 @@ def _create_section_html(tree: List[Dict[str, Any]]) -> str:
     return StatefulHTMLRenderer.render_accordion(accordion_items, accordion_titles)
 
 
+def _print_section_tree(sections: List[Dict[str, Any]], indent: int = 0) -> None:
+    """Print a plain-text representation of the template section tree."""
+    prefix = "  " * indent
+    for i, section in enumerate(sections):
+        number = f"{i + 1}." if indent == 0 else ""
+        print(f"{prefix}{number} {section['title']} ('{section['id']}')")
+
+        for content in section.get("contents", []):
+            content_type = CONTENT_TYPE_MAP.get(
+                content["content_type"], content["content_type"]
+            )
+            print(f"{prefix}  - [{content_type}] {content['content_id']}")
+
+        if section.get("sections"):
+            _print_section_tree(section["sections"], indent + 1)
+
+
 def preview_template(template: str) -> None:
-    """Preview a template in Jupyter Notebook.
+    """Preview a template in Jupyter Notebook or plain text.
 
     Args:
         template (dict): The template to preview.
     """
+    section_tree = _convert_sections_to_section_tree(template["sections"])
+
     if not is_notebook():
-        logger.warning("preview_template() only works in Jupyter Notebook")
+        _print_section_tree(section_tree)
         return
 
     html_content = StatefulHTMLRenderer.get_base_css()
-    html_content += _create_section_html(
-        _convert_sections_to_section_tree(template["sections"])
-    )
+    html_content += _create_section_html(section_tree)
     display(html_content)
 
 
