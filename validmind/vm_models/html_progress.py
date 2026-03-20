@@ -10,6 +10,7 @@ import uuid
 
 from IPython.display import HTML, display, update_display
 
+from ..utils import is_notebook
 from .html_renderer import StatefulHTMLRenderer
 
 
@@ -33,6 +34,10 @@ class HTMLProgressBar:
     def display(self):
         """Display the progress bar."""
         if not self._displayed:
+            if not is_notebook():
+                self._displayed = True
+                return
+
             html_content = StatefulHTMLRenderer.render_live_progress_bar(
                 max_value=self.max_value,
                 description=self.description,
@@ -57,6 +62,9 @@ class HTMLProgressBar:
 
     def _update_fallback(self):
         """Fallback method to update progress bar by replacing the entire HTML."""
+        if not is_notebook():
+            return
+
         html_content = StatefulHTMLRenderer.render_progress_bar(
             value=self.value,
             max_value=self.max_value,
@@ -74,7 +82,7 @@ class HTMLProgressBar:
 
     def close(self):
         """Close/hide the progress bar."""
-        if self._displayed:
+        if self._displayed and is_notebook():
             final_html = StatefulHTMLRenderer.render_progress_bar(
                 value=self.value,
                 max_value=self.max_value,
@@ -101,13 +109,17 @@ class HTMLLabel:
     def display(self):
         """Display the label."""
         if not self._displayed:
+            self._displayed = True
+
+            if not is_notebook():
+                return
+
             html_content = f"""
             <div class="vm-label" id="{self.label_id}" style="font-weight: bold; margin: 5px 0;">
                 {self.value}
             </div>
             """
             display(HTML(html_content), display_id=self._display_id)
-            self._displayed = True
 
     def update(self, value: str):
         """Update the label text.
@@ -117,7 +129,7 @@ class HTMLLabel:
         """
         self.value = value
 
-        if self._displayed:
+        if self._displayed and is_notebook():
             update_script = f"""
             <script>
             var labelElement = document.getElementById('{self.label_id}');
@@ -152,10 +164,17 @@ class HTMLBox:
     def display(self):
         """Display the box and its children."""
         if not self._displayed:
-            child_html_parts = []
+            self._displayed = True
+
             for child in self.children:
                 if hasattr(child, "display"):
                     child.display()
+
+            if not is_notebook():
+                return
+
+            child_html_parts = []
+            for child in self.children:
                 if hasattr(child, "bar_id"):
                     child_html_parts.append(f'<div id="{child.bar_id}"></div>')
                 elif hasattr(child, "label_id"):
@@ -167,4 +186,3 @@ class HTMLBox:
             </div>
             """
             display(HTML(html_content), display_id=self._display_id)
-            self._displayed = True

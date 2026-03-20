@@ -37,8 +37,11 @@ class TestTestsModule(TestCase):
 
     def test_list_tasks_and_tags(self):
         tasks_and_tags = list_tasks_and_tags()
-        self.assertIsInstance(tasks_and_tags, pd.io.formats.style.Styler)
-        df = tasks_and_tags.data
+        # Returns a Styler in notebooks, plain DataFrame otherwise
+        if isinstance(tasks_and_tags, pd.io.formats.style.Styler):
+            df = tasks_and_tags.data
+        else:
+            df = tasks_and_tags
         self.assertTrue(len(df) > 0)
         self.assertTrue(all(isinstance(task, str) for task in df["Task"]))
         self.assertTrue(all(isinstance(tag, str) for tag in df["Tags"]))
@@ -51,8 +54,11 @@ class TestTestsModule(TestCase):
 
     def test_list_tests_pretty(self):
         tests = list_tests(pretty=True)
-        self.assertIsInstance(tests, pd.io.formats.style.Styler)
-        df = tests.data
+        # Returns a Styler in notebooks, plain DataFrame otherwise
+        if isinstance(tests, pd.io.formats.style.Styler):
+            df = tests.data
+        else:
+            df = tests
         self.assertTrue(len(df) > 0)
         # check has the columns: ID, Name, Description, Required Inputs, Params
         self.assertTrue("ID" in df.columns)
