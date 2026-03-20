@@ -42,6 +42,12 @@ Or you can install the package from source. Ensure you are in the `r/validmind` 
 devtools::install()
 ```
 
+For local development, you can skip `devtools` entirely and install directly from the repo path:
+
+```r
+install.packages("/path/to/validmind-library/r/validmind", repos = NULL, type = "source")
+```
+
 ## QuickStart
 
 You can connect to your ValidMind profile by providing the appropriate credentials:

@@ -18,9 +18,14 @@ We will:
 
 ## Setting up
 
+Set `python_version` to the path of the Python binary that has `validmind` installed.
+To find it, run `which python` in your terminal with the environment activated.
+
 ```{r setup, include=FALSE}
 library(reticulate)
 
+# Replace with the path to your Python binary, e.g.:
+# python_version <- "/Users/you/project/.venv/bin/python"
 python_version <- "<path_to_python_version>"
 use_python(python_version)
 

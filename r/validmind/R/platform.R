@@ -31,8 +31,12 @@ vm <- function(api_key, api_secret, model, python_version,
                document = NULL) {
   use_python(python_version)
 
-  # Set R_HOME so rpy2 (used by init_r_model) can find the R installation
+  # Set environment variables BEFORE Python initializes (required for rpy2 compatibility)
+  # R_HOME: so rpy2 can find the R installation
+  # RPY2_CFFI_MODE: use ABI mode so rpy2 attaches to the existing R session
+  #   started by reticulate rather than trying to start a new one
   Sys.setenv(R_HOME = R.home())
+  Sys.setenv(RPY2_CFFI_MODE = "ABI")
 
   vm <- import("validmind")
 
