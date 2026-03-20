@@ -50,11 +50,11 @@ Replace the placeholder values below with your own credentials:
 
 ```{r}
 vm_r <- vm(
+  api_host = "https://app.prod.validmind.ai/api/v1/tracking",
   api_key = "<your_api_key_here>",
   api_secret = "<your_api_secret_here>",
   model = "<your_model_id_here>",
   python_version = python_version,
-  api_host = "https://app.prod.validmind.ai/api/v1/tracking",
   document = "validation-report"
 )
 ```
