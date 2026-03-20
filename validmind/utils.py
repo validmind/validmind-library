@@ -359,6 +359,9 @@ def format_number(number):
 
 def format_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     """Format a pandas DataFrame for display purposes."""
+    if not is_notebook():
+        return df
+
     df = df.style.set_properties(**{"text-align": "left"}).hide(axis="index")
     return df.set_table_styles([dict(selector="th", props=[("text-align", "left")])])
 

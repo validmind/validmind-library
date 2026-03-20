@@ -285,21 +285,13 @@ vm_r$tests$run_test(
 
 ### Run feature importance tests
 
-```{r}
-fi_tests <- vm_r$tests$list_tests(
-  tags = list("feature_importance"),
-  task = "classification",
-  pretty = FALSE
-)
+Note: `PermutationFeatureImportance` and `SHAPGlobalImportance` are not supported for R models.
 
-for (test in fi_tests) {
-  test_with_id <- paste0(test, ":xgboost_champion")
-  cat(paste0("Running: ", test_with_id, "\n"))
-  vm_r$tests$run_test(
-    test_with_id,
-    inputs = list(dataset = vm_test_ds, model = vm_xgboost)
-  )$log()
-}
+```{r}
+vm_r$tests$run_test(
+  "validmind.model_validation.FeaturesAUC:xgboost_champion",
+  inputs = list(dataset = vm_test_ds, model = vm_xgboost)
+)$log()
 ```
 
 ## Next steps

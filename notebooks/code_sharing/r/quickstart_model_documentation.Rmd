@@ -21,7 +21,7 @@ We will:
 ```{r setup, include=FALSE}
 library(reticulate)
 
-python_version <- "/Users/andres/code/validmind-library/.venv/bin/python"
+python_version <- "<path_to_python_version>"
 use_python(python_version)
 
 library(validmind)
