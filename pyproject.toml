@@ -3,7 +3,7 @@ name = "validmind"
 version = "2.12.3"
 description = "ValidMind Library"
 readme = "README.pypi.md"
-requires-python = ">=3.9,<3.13"
+requires-python = ">=3.9,<3.15"
 license = { file = "LICENSE" }
 authors = [
   { name = "Andres Rodriguez", email = "andres@validmind.ai" },
@@ -19,7 +19,8 @@ dependencies = [
   "matplotlib",
   "mistune (>=3.0.2,<4.0.0)",
   "nest-asyncio (>=1.6.0,<2.0.0)",
-  "numpy (>=1.23,<2.0.0)",
+  "numpy (>=1.23,<2.0.0) ; python_version < '3.14'",
+  "numpy (>=2.3,<3.0.0) ; python_version >= '3.14'",
   "openai (>=1)",
   "pandas (>=2.0.3,<3.0.0)",
   "plotly (>=6.0.0)",
@@ -41,6 +42,8 @@ all = [
   "transformers (>=4.32.0,<5.0.0)",
   "pycocoevalcap",
   "ragas (>=0.2.3,<=0.2.7)",
+  "langchain (>=0.2.0,<0.4.0)",
+  "langchain-community (>=0.2.0,<0.4.0)",
   "sentencepiece (>=0.2.0,<0.3.0)",
   "langchain-openai (>=0.1.8)",
   "scipy",
@@ -48,12 +51,18 @@ all = [
   "langdetect",
   "nltk (>=3.8.1,<4.0.0)",
   "textblob (>=0.18.0.post0,<0.19.0)",
+  "datasets (>=2.10.0,<3.0.0) ; python_version < '3.14'",
+  "datasets (>=4.4,<5.0.0) ; python_version >= '3.14'",
   "evaluate",
   "rouge (>=1)",
   "bert-score (>=0.3.13)",
-  "arch",
+  "pyarrow (<16) ; python_version < '3.13'",
+  "pyarrow (>=20,<21) ; python_version == '3.13'",
+  "pyarrow (>=22,<23) ; python_version >= '3.14'",
+  "arch (>=7.0.0)",
   "shap (>=0.46.0)",
   "scorecardpy==0.1.9.6",
+  "setuptools (<82)",
 ]
 huggingface = [
   "transformers (>=4.32.0,<5.0.0)",
@@ -64,26 +73,48 @@ llm = [
   "transformers (>=4.32.0,<5.0.0)",
   "pycocoevalcap",
   "ragas (>=0.2.3,<=0.2.7)",
+  "langchain (>=0.2.0,<0.4.0)",
+  "langchain-community (>=0.2.0,<0.4.0)",
+  "datasets (>=2.10.0,<3.0.0) ; python_version < '3.14'",
+  "datasets (>=4.4,<5.0.0) ; python_version >= '3.14'",
   "sentencepiece (>=0.2.0,<0.3.0)",
   "langchain-openai (>=0.1.8)",
-  "deepeval (>=3.7.0)",
+  "pyarrow (<16) ; python_version < '3.13'",
+  "pyarrow (>=20,<21) ; python_version == '3.13'",
+  "pyarrow (>=22,<23) ; python_version >= '3.14'",
+  "deepeval (>=3.7.0,<=3.7.5)",
 ]
 nlp = [
   "langdetect",
   "nltk (>=3.8.1,<4.0.0)",
   "textblob (>=0.18.0.post0,<0.19.0)",
+  "datasets (>=2.10.0,<3.0.0) ; python_version < '3.14'",
+  "datasets (>=4.4,<5.0.0) ; python_version >= '3.14'",
+  "transformers (>=4.32.0,<5.0.0)",
   "evaluate",
   "rouge (>=1)",
   "bert-score (>=0.3.13)",
-  "pyarrow (<16)",
+  "pyarrow (<16) ; python_version < '3.13'",
+  "pyarrow (>=20,<21) ; python_version == '3.13'",
+  "pyarrow (>=22,<23) ; python_version >= '3.14'",
 ]
 pytorch = ["torch (>=2.0.0)"]
-stats = ["scipy", "statsmodels (>=0.14.2,<0.15.0)", "arch"]
+stats = ["scipy", "statsmodels (>=0.14.2,<0.15.0)", "arch (>=7.0.0)"]
 xgboost = ["xgboost (>=1.5.2,<3)"]
 explainability = ["shap (>=0.46.0)"]
-credit_risk = ["scorecardpy==0.1.9.6"]
-datasets = ["datasets (>=2.10.0,<3.0.0)"]
-pii-detection = ["presidio-analyzer", "presidio-structured"]
+credit_risk = ["scorecardpy==0.1.9.6", "setuptools (<82)"]
+datasets = [
+  "datasets (>=2.10.0,<3.0.0) ; python_version < '3.14'",
+  "datasets (>=4.4,<5.0.0) ; python_version >= '3.14'",
+  "pyarrow (<16) ; python_version < '3.13'",
+  "pyarrow (>=20,<21) ; python_version == '3.13'",
+  "pyarrow (>=22,<23) ; python_version >= '3.14'",
+]
+pii-detection = [
+  "presidio-analyzer ; python_version < '3.14'",
+  "presidio-analyzer (<2.2.360) ; python_version >= '3.14'",
+  "presidio-structured",
+]
 
 [tool.poetry.group.dev.dependencies]
 black = "^22.1.0"
