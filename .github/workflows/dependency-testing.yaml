@@ -42,7 +42,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['3.9', '3.10', '3.11', '3.12']
+        python-version: ['3.9', '3.10', '3.11', '3.12', '3.13', '3.14']
         deps-type: ['max', 'default']
 
     steps:
@@ -88,7 +88,7 @@ jobs:
           else
             # Generate latest-compatible constraints (max)
             OUT=constraints-max.txt
-            uv pip compile pyproject.toml --all-extras --no-emit-index-url --no-annotate --output-file "$OUT" --upgrade
+            uv pip compile pyproject.toml -p "${{ matrix.python-version }}" --all-extras --no-emit-index-url --no-annotate --no-strip-markers --output-file "$OUT" --upgrade
             # Install constraints then the wheel without reinstalling deps
             pip install -r "$OUT"
             WHEEL=$(ls dist/*.whl | head -n 1)
