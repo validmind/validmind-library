@@ -48,22 +48,49 @@ For local development, you can skip `devtools` entirely and install directly fro
 install.packages("/path/to/validmind-library/r/validmind", repos = NULL, type = "source")
 ```
 
+## Configuring the Python path
+
+The R package needs to know which Python binary to use (the one with `validmind` installed). It reads the `VALIDMIND_PYTHON` environment variable, falling back to the system Python if not set.
+
+### Option 1: `.env` file in the repo (recommended for local dev with Poetry)
+
+If the project uses Poetry with in-project virtualenvs (`.venv/` inside the repo), add to the repo's `.env` file:
+
+```
+VALIDMIND_PYTHON=.venv/bin/python
+```
+
+Relative paths are resolved against the working directory automatically.
+
+### Option 2: `.Renviron` file (works with RStudio and R CLI)
+
+Create or edit `~/.Renviron` or `<project>/.Renviron`:
+
+```
+VALIDMIND_PYTHON=/path/to/your/.venv/bin/python
+```
+
+R reads this file automatically on startup.
+
+### No configuration needed in Docker / CI
+
+When `VALIDMIND_PYTHON` is not set, the package falls back to `Sys.which("python")`, which resolves to the system Python — correct for environments where `validmind` is installed globally.
+
 ## QuickStart
 
-You can connect to your ValidMind profile by providing the appropriate credentials:
+Connect to your ValidMind profile:
 
 ```r
 vm_r <- vm(
+  api_host="https://api.prod.validmind.ai/api/v1/tracking",
   api_key="<your_api_key_here>",
   api_secret="<your_api_secret_here>",
   model="<your_model_id_here>",
-  python_version="<path_to_your_python_version_here>",
-  api_host="https://api.prod.validmind.ai/api/v1/tracking",
   document="documentation"
 )
 ```
 
-The `document` parameter specifies which document type to associate with the session (e.g. `"documentation"` for model development or `"validation-report"` for model validation).
+The `python_version` parameter is no longer required — it defaults to `VALIDMIND_PYTHON` or the system Python. The `document` parameter specifies which document type to associate with the session (e.g. `"documentation"` or `"validation-report"`).
 
 ### Quickstart notebooks
 

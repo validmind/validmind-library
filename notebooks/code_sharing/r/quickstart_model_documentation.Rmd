@@ -18,15 +18,17 @@ We will:
 
 ## Setting up
 
-Set `python_version` to the path of the Python binary that has `validmind` installed.
-To find it, run `which python` in your terminal with the environment activated.
+The Python path is auto-configured via the `VALIDMIND_PYTHON` environment variable.
+If not set, it falls back to the system Python. See the R package README for
+how to configure this for your environment.
 
 ```{r setup, include=FALSE}
 library(reticulate)
 
-# Replace with the path to your Python binary, e.g.:
-# python_version <- "/Users/you/project/.venv/bin/python"
-python_version <- "<path_to_python_version>"
+python_version <- Sys.getenv("VALIDMIND_PYTHON", Sys.which("python"))
+if (nchar(python_version) > 0 && !startsWith(python_version, "/")) {
+  python_version <- file.path(getwd(), python_version)
+}
 use_python(python_version)
 
 library(validmind)
@@ -53,7 +55,6 @@ vm_r <- vm(
   api_key = "<your_api_key_here>",
   api_secret = "<your_api_secret_here>",
   model = "<your_model_id_here>",
-  python_version = python_version,
   document = "documentation"
 )
 ```

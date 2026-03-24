@@ -3,7 +3,8 @@
 #' @param api_key The ValidMind API key
 #' @param api_secret The ValidMind API secret
 #' @param model The ValidMind model
-#' @param python_version The Python Version to use
+#' @param python_version The path to the Python binary to use. Defaults to
+#'   the VALIDMIND_PYTHON environment variable, or the system Python.
 #' @param api_host The ValidMind host, defaulting to local
 #' @param document The document type to associate with this session
 #'   (e.g. "documentation", "validation-report"). Defaults to NULL.
@@ -16,19 +17,23 @@
 #' @examples
 #'\dontrun{
 #' vm_r <- vm(
+#'    api_host="https://app.prod.validmind.ai/api/v1/tracking",
 #'    api_key="<your_api_key_here>",
 #'    api_secret="<your_api_secret_here>",
 #'    model="<your_model_id_here>",
-#'    python_version=python_version,
-#'    api_host="https://app.prod.validmind.ai/api/v1/tracking",
 #'    document="documentation"
 #'  )
 #'}
 #'
 #' @export
-vm <- function(api_key, api_secret, model, python_version,
+vm <- function(api_key, api_secret, model,
+               python_version = Sys.getenv("VALIDMIND_PYTHON", Sys.which("python")),
                api_host = "http://localhost:3000/api/v1/tracking",
                document = NULL) {
+  # Resolve relative paths (e.g. ".venv/bin/python") against the working directory
+  if (nchar(python_version) > 0 && !startsWith(python_version, "/")) {
+    python_version <- file.path(getwd(), python_version)
+  }
   use_python(python_version)
 
   # Set environment variables BEFORE Python initializes (required for rpy2 compatibility)
