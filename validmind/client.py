@@ -295,8 +295,10 @@ def init_r_model(
     """
     try:
         import rpy2.robjects as robjects
-    except ImportError:
-        raise MissingRExtrasError()
+    except Exception as e:
+        raise MissingRExtrasError(
+            f"`rpy2` is required to use R models. Import failed: {e}"
+        )
 
     r = robjects.r
     loaded_objects = r.load(model_path)

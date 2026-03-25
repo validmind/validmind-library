@@ -34,7 +34,7 @@ vm <- function(api_key, api_secret, model,
   if (nchar(python_version) > 0 && !startsWith(python_version, "/")) {
     python_version <- file.path(getwd(), python_version)
   }
-  use_python(python_version)
+  use_python(python_version, required = TRUE)
 
   # Set environment variables BEFORE Python initializes (required for rpy2 compatibility)
   # R_HOME: so rpy2 can find the R installation

@@ -52,25 +52,23 @@ install.packages("/path/to/validmind-library/r/validmind", repos = NULL, type = 
 
 The R package needs to know which Python binary to use (the one with `validmind` installed). It reads the `VALIDMIND_PYTHON` environment variable, falling back to the system Python if not set.
 
-### Option 1: `.env` file in the repo (recommended for local dev with Poetry)
+### Option 1: `.Renviron` file (recommended)
+
+Create a `.Renviron` file in the project root (or `~/.Renviron` for a global setting):
+
+```
+VALIDMIND_PYTHON=.venv/bin/python
+```
+
+R reads this file automatically on startup, before any code runs. Relative paths are resolved against the working directory.
+
+### Option 2: `.env` file in the repo
 
 If the project uses Poetry with in-project virtualenvs (`.venv/` inside the repo), add to the repo's `.env` file:
 
 ```
 VALIDMIND_PYTHON=.venv/bin/python
 ```
-
-Relative paths are resolved against the working directory automatically.
-
-### Option 2: `.Renviron` file (works with RStudio and R CLI)
-
-Create or edit `~/.Renviron` or `<project>/.Renviron`:
-
-```
-VALIDMIND_PYTHON=/path/to/your/.venv/bin/python
-```
-
-R reads this file automatically on startup.
 
 ### No configuration needed in Docker / CI
 
