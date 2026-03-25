@@ -37,7 +37,6 @@ library(caTools)
 library(knitr)
 
 knitr::opts_chunk$set(warning = FALSE, message = FALSE)
-
 ```
 
 ## Initialize the ValidMind Library

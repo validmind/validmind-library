@@ -37,7 +37,6 @@ library(caTools)
 library(knitr)
 
 knitr::opts_chunk$set(warning = FALSE, message = FALSE)
-
 ```
 
 ## Initialize the ValidMind Library
@@ -209,7 +208,7 @@ py_print(vm_utils$preview_test_config(test_config))
 Run the full documentation test suite and upload results to the ValidMind Platform:
 
 ```{r}
-py_print(full_suite <- vm_r$run_documentation_tests(config = test_config))
+full_suite <- vm_r$run_documentation_tests(config = test_config)
 ```
 
 ## Next steps

@@ -380,55 +380,24 @@ display_report <- function(processed_results) {
   return(all_widgets)
 }
 
-#' Run a Python expression and display its output in R
+#' Run a Python expression and display its print() output in R
 #'
-#' Captures Python print() and logging output during execution and displays
-#' it with \code{cat()}. Use this in R Jupyter notebooks where Python output
-#' is not displayed automatically.
+#' Wraps a Python call with \code{reticulate::py_capture_output()} and
+#' displays the result with \code{cat()}. Useful in R Jupyter notebooks
+#' where Python print() output is not displayed automatically.
 #'
-#' @param expr A Python expression to evaluate (e.g. \code{vm_r$preview_template()})
+#' Note: Python logging output (e.g. from \code{run_documentation_tests})
+#' is not captured due to reticulate limitations.
 #'
-#' @importFrom reticulate py_run_string
+#' @param expr A Python expression to evaluate
+#'
+#' @importFrom reticulate py_capture_output
 #'
 #' @export
 py_print <- function(expr) {
-  # Redirect stdout, stderr, and ValidMind logging to a StringIO buffer
-  py_run_string("
-import sys, io, logging
-_py_print_buf = io.StringIO()
-_py_print_old_stdout = sys.stdout
-_py_print_old_stderr = sys.stderr
-sys.stdout = _py_print_buf
-sys.stderr = _py_print_buf
-
-# Add handler to the validmind logger (propagate=False so root handler won't see it)
-_py_print_log_handler = logging.StreamHandler(_py_print_buf)
-_py_print_log_handler.setFormatter(
-    logging.Formatter('%(asctime)s - %(levelname)s(%(name)s): %(message)s')
-)
-_py_print_vm_logger = logging.getLogger('validmind')
-_py_print_vm_logger.addHandler(_py_print_log_handler)
-")
-
-  result <- tryCatch(
-    eval(substitute(expr), envir = parent.frame()),
-    error = function(e) e
-  )
-
-  # Restore and read captured output
-  captured <- py_run_string("
-_py_print_vm_logger.removeHandler(_py_print_log_handler)
-sys.stdout = _py_print_old_stdout
-sys.stderr = _py_print_old_stderr
-_py_print_result = _py_print_buf.getvalue()
-_py_print_buf.close()
-")
-
-  output <- captured[["_py_print_result"]]
-  if (nchar(output) > 0) cat(output)
-
-  if (inherits(result, "error")) stop(result$message)
-  invisible(result)
+  output <- py_capture_output(eval(substitute(expr), envir = parent.frame()))
+  if (nchar(output) > 0) cat(output, "\n")
+  invisible(output)
 }
 
 #' Save an R model to a temporary file
