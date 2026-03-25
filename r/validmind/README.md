@@ -190,3 +190,39 @@ pip install -U numba
 ```
 
 And restart the R session.
+
+## Publishing to CRAN
+
+### 1. Update version
+
+The R package version is kept in sync with the Python package. Running `make version tag=patch` from the repo root updates both `pyproject.toml` and `r/validmind/DESCRIPTION`.
+
+### 2. Regenerate documentation
+
+```bash
+cd r/validmind
+Rscript -e 'roxygen2::roxygenise()'
+```
+
+This updates the `man/` Rd files and `NAMESPACE` from the roxygen comments in `R/platform.R`.
+
+### 3. Build and check
+
+```bash
+cd r/validmind
+R CMD build .
+R CMD check --as-cran validmind_*.tar.gz
+```
+
+Fix all ERRORs and WARNINGs before submitting. NOTEs are generally acceptable.
+
+### 4. Submit
+
+Upload the `.tar.gz` at https://cran.r-project.org/submit.html
+
+### 5. After submission
+
+- CRAN sends a confirmation email — click the link to confirm
+- CRAN runs automated checks on Windows and Linux — fix any issues they flag
+- A CRAN volunteer manually reviews — this can take days to weeks
+- They may email back with requests for changes before accepting
