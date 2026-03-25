@@ -382,19 +382,32 @@ display_report <- function(processed_results) {
 
 #' Run a Python expression and display its output in R
 #'
-#' Wraps a Python call with \code{reticulate::py_capture_output()} and prints
-#' the result with \code{cat()}. Use this in R Jupyter notebooks where Python
-#' print/logging output is not displayed automatically.
+#' Captures Python print() and logging output during execution and displays
+#' it with \code{cat()}. Use this in R Jupyter notebooks where Python output
+#' is not displayed automatically.
 #'
 #' @param expr A Python expression to evaluate (e.g. \code{vm_r$preview_template()})
 #'
-#' @importFrom reticulate py_capture_output
+#' @importFrom reticulate py_capture_output py_run_string
 #'
 #' @export
 py_print <- function(expr) {
-  # Use non-standard evaluation so py_capture_output can intercept
-  # stdout/stderr during execution, not after
+  # Redirect Python logging to stdout so py_capture_output can intercept it
+  py_run_string("
+import sys, logging
+_py_print_handler = logging.StreamHandler(sys.stdout)
+_py_print_handler.setFormatter(logging.Formatter('%(message)s'))
+logging.getLogger().addHandler(_py_print_handler)
+")
+
   output <- py_capture_output(eval(substitute(expr), envir = parent.frame()))
+
+  # Remove the temporary handler
+  py_run_string("
+logging.getLogger().removeHandler(_py_print_handler)
+del _py_print_handler
+")
+
   if (nchar(output) > 0) cat(output, "\n")
   invisible(output)
 }
