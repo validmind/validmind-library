@@ -380,44 +380,21 @@ display_report <- function(processed_results) {
   return(all_widgets)
 }
 
-#' Redirect Python stdout/stderr to R output
+#' Run a Python expression and display its output in R
 #'
-#' Call this once in your setup chunk to make Python print() and logging
-#' output visible in R Jupyter notebooks. This is not needed in terminal
-#' R sessions where Python output is already displayed.
+#' Wraps a Python call with \code{reticulate::py_capture_output()} and prints
+#' the result with \code{cat()}. Use this in R Jupyter notebooks where Python
+#' print/logging output is not displayed automatically.
 #'
-#' @importFrom reticulate py_run_string
+#' @param expr A Python expression to evaluate (e.g. \code{vm_r$preview_template()})
+#'
+#' @importFrom reticulate py_capture_output
 #'
 #' @export
-enable_py_output <- function() {
-  py_run_string("
-import sys
-
-class _ROutputRedirect:
-    def __init__(self, original):
-        self._original = original
-
-    def write(self, text):
-        if text and text.strip():
-            try:
-                from rpytools.output import write_stdout
-                write_stdout(text + '\\n')
-            except Exception:
-                self._original.write(text)
-                self._original.flush()
-        return len(text) if text else 0
-
-    def flush(self):
-        try:
-            self._original.flush()
-        except Exception:
-            pass
-
-if not isinstance(sys.stdout, _ROutputRedirect):
-    sys.stdout = _ROutputRedirect(sys.stdout)
-    sys.stderr = _ROutputRedirect(sys.stderr)
-")
-  invisible(NULL)
+py_print <- function(expr) {
+  output <- py_capture_output(expr)
+  if (nchar(output) > 0) cat(output, "\n")
+  invisible(output)
 }
 
 #' Save an R model to a temporary file

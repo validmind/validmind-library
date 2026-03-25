@@ -38,8 +38,6 @@ library(knitr)
 
 knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 
-# Make Python print/logging output visible in R Jupyter notebooks
-enable_py_output()
 ```
 
 ## Initialize the ValidMind Library
@@ -68,7 +66,7 @@ vm_r <- vm(
 Verify the connection and see the validation report structure:
 
 ```{r}
-vm_r$preview_template()
+py_print(vm_r$preview_template())
 ```
 
 ## Identify available tests
