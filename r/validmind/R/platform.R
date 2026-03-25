@@ -388,28 +388,42 @@ display_report <- function(processed_results) {
 #'
 #' @param expr A Python expression to evaluate (e.g. \code{vm_r$preview_template()})
 #'
-#' @importFrom reticulate py_capture_output py_run_string
+#' @importFrom reticulate py_run_string
 #'
 #' @export
 py_print <- function(expr) {
-  # Redirect Python logging to stdout so py_capture_output can intercept it
+  # Redirect stdout, stderr, and logging to a StringIO buffer
   py_run_string("
-import sys, logging
-_py_print_handler = logging.StreamHandler(sys.stdout)
-_py_print_handler.setFormatter(logging.Formatter('%(message)s'))
-logging.getLogger().addHandler(_py_print_handler)
+import sys, io, logging
+_py_print_buf = io.StringIO()
+_py_print_old_stdout = sys.stdout
+_py_print_old_stderr = sys.stderr
+sys.stdout = _py_print_buf
+sys.stderr = _py_print_buf
+_py_print_log_handler = logging.StreamHandler(_py_print_buf)
+_py_print_log_handler.setFormatter(logging.Formatter('%(message)s'))
+logging.getLogger().addHandler(_py_print_log_handler)
 ")
 
-  output <- py_capture_output(eval(substitute(expr), envir = parent.frame()))
+  result <- tryCatch(
+    eval(substitute(expr), envir = parent.frame()),
+    error = function(e) e
+  )
 
-  # Remove the temporary handler
-  py_run_string("
-logging.getLogger().removeHandler(_py_print_handler)
-del _py_print_handler
+  # Restore and read captured output
+  captured <- py_run_string("
+logging.getLogger().removeHandler(_py_print_log_handler)
+sys.stdout = _py_print_old_stdout
+sys.stderr = _py_print_old_stderr
+_py_print_result = _py_print_buf.getvalue()
+_py_print_buf.close()
 ")
 
-  if (nchar(output) > 0) cat(output, "\n")
-  invisible(output)
+  output <- captured[["_py_print_result"]]
+  if (nchar(output) > 0) cat(output)
+
+  if (inherits(result, "error")) stop(result$message)
+  invisible(result)
 }
 
 #' Save an R model to a temporary file
