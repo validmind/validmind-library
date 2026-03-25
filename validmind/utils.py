@@ -359,6 +359,9 @@ def format_number(number):
 
 def format_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     """Format a pandas DataFrame for display purposes."""
+    if not is_notebook():
+        return df
+
     df = df.style.set_properties(**{"text-align": "left"}).hide(axis="index")
     return df.set_table_styles([dict(selector="th", props=[("text-align", "left")])])
 
@@ -509,7 +512,7 @@ def get_dataset_info(dataset):
 
 
 def preview_test_config(config):
-    """Preview test configuration in a collapsible HTML section.
+    """Preview test configuration in a collapsible HTML section or plain text.
 
     Args:
         config (dict): Test configuration dictionary.
@@ -519,6 +522,10 @@ def preview_test_config(config):
         formatted_json = json.dumps(serialize(config), indent=4)
     except TypeError as e:
         logger.error(f"JSON serialization failed: {e}")
+        return
+
+    if not is_notebook():
+        print(formatted_json)
         return
 
     collapsible_html = f"""
@@ -537,6 +544,9 @@ def preview_test_config(config):
 
 def display(widget_or_html, syntax_highlighting=True, mathjax=True):
     """Display HTML content with extra goodies (syntax highlighting, MathJax, etc.)."""
+    if not is_notebook():
+        return
+
     if hasattr(widget_or_html, "to_html"):
         html_content = widget_or_html.to_html()
         ipy_display(HTML(html_content))

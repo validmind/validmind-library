@@ -282,33 +282,23 @@ def init_r_model(
     """
     Initialize a VM Model from an R model.
 
-    LogisticRegression and LinearRegression models are converted to sklearn models by extracting
-    the coefficients and intercept from the R model. XGB models are loaded using the xgboost
-    since xgb models saved in .json or .bin format can be loaded directly with either Python or R.
+    The model must first be saved to an .RData file using the R package's
+    ``save_model()`` function. This function then uses rpy2 to load the model
+    into Python for testing and validation.
 
     Args:
-        model_path (str): The path to the R model saved as an RDS or XGB file.
+        model_path (str): The path to the R model saved as an .RData file.
         input_id (str): The input ID for the model. Defaults to "model".
 
     Returns:
         VMModel: A VM Model instance.
     """
-
-    # TODO: proper check for supported models
-    #
-    # if model.get("method") not in R_MODEL_METHODS:
-    #     raise UnsupportedRModelError(
-    #         "R model method must be one of {}. Got {}".format(
-    #             R_MODEL_METHODS, model.get("method")
-    #         )
-    #     )
-
-    # first we need to load the model using rpy2
-    # since rpy2 is an extra we need to conditionally import it
     try:
         import rpy2.robjects as robjects
-    except ImportError:
-        raise MissingRExtrasError()
+    except Exception as e:
+        raise MissingRExtrasError(
+            f"`rpy2` is required to use R models. Import failed: {e}"
+        )
 
     r = robjects.r
     loaded_objects = r.load(model_path)
@@ -320,6 +310,14 @@ def init_r_model(
         model=model,
         input_id=input_id,
     )
+
+    metadata = get_model_info(vm_model)
+    log_input(
+        input_id=input_id,
+        type="model",
+        metadata=metadata,
+    )
+    input_registry.add(key=input_id, obj=vm_model)
 
     return vm_model
 

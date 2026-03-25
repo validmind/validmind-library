@@ -1,0 +1,227 @@
+---
+title: "Quickstart for Model Documentation (R)"
+author: "ValidMind"
+date: "2026-03-18"
+output: html_document
+---
+
+# Quickstart for Model Documentation
+
+Learn the basics of using ValidMind to document models as part of a model development workflow using R. This notebook uses the ValidMind R package (a `reticulate` wrapper around the Python library) to generate a draft of documentation for a binary classification model.
+
+We will:
+
+1. Import a sample dataset and preprocess it
+2. Split the datasets and initialize them for use with ValidMind
+3. Train a logistic regression (GLM) model and initialize it for use with testing
+4. Run the full suite of documentation tests, sending results to the ValidMind Platform
+
+## Setting up
+
+The Python path is auto-configured via the `VALIDMIND_PYTHON` environment variable.
+If not set, it falls back to the system Python. For local development, create a
+`.Renviron` file in the project root with `VALIDMIND_PYTHON=.venv/bin/python`.
+
+```{r setup, include=FALSE}
+library(reticulate)
+
+python_version <- Sys.getenv("VALIDMIND_PYTHON", Sys.which("python"))
+if (nchar(python_version) > 0 && !startsWith(python_version, "/")) {
+  python_version <- file.path(getwd(), python_version)
+}
+use_python(python_version, required = TRUE)
+
+library(validmind)
+library(dplyr)
+library(caTools)
+library(knitr)
+
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+```
+
+## Initialize the ValidMind Library
+
+Log in to the [ValidMind Platform](https://app.prod.validmind.ai) and register a model:
+
+1. Navigate to **Inventory** and click **+ Register Model**.
+2. Under **Documents > Development**, select the `Binary classification` template.
+3. Go to **Getting Started**, select `Development` from the **DOCUMENT** drop-down, and copy the code snippet.
+
+Replace the placeholder values below with your own credentials:
+
+```{r}
+vm_r <- vm(
+  api_host = "https://app.prod.validmind.ai/api/v1/tracking",
+  api_key = "<your_api_key_here>",
+  api_secret = "<your_api_secret_here>",
+  model = "<your_model_id_here>",
+  document = "documentation"
+)
+```
+
+## Preview the documentation template
+
+Verify the connection and see the documentation structure:
+
+```{r}
+vm_r$preview_template()
+```
+
+## Load the demo dataset
+
+We use the Bank Customer Churn dataset for this demonstration:
+
+```{r}
+customer_churn <- reticulate::import(
+  "validmind.datasets.classification.customer_churn"
+)
+
+cat(sprintf(
+  paste0(
+    "Loaded demo dataset with:\n\n\t- Target column: '%s'",
+    "\n\t- Class labels: %s\n"
+  ),
+  customer_churn$target_column,
+  paste(
+    names(customer_churn$class_labels),
+    customer_churn$class_labels,
+    sep = ": ", collapse = ", "
+  )
+))
+
+data <- customer_churn$load_data()
+head(data)
+```
+
+## Initialize the raw dataset
+
+Before running tests, initialize a ValidMind dataset object for the raw data:
+
+```{r}
+vm_raw_dataset <- vm_r$init_dataset(
+  dataset = data,
+  input_id = "raw_dataset",
+  target_column = customer_churn$target_column,
+  class_labels = customer_churn$class_labels
+)
+```
+
+## Preprocess the raw dataset
+
+Handle categorical variables using one-hot encoding and remove unnecessary columns:
+
+```{r}
+# load_data() already drops RowNumber, CustomerId, Surname
+# One-hot encode categorical variables
+geo_dummies <- model.matrix(~ Geography - 1, data = data)
+gender_dummies <- model.matrix(~ Gender - 1, data = data)
+data_processed <- data %>% select(-Geography, -Gender)
+data_processed <- cbind(data_processed, geo_dummies, gender_dummies)
+```
+
+### Split the dataset
+
+Split into training (60%), validation (20%), and test (20%) sets:
+
+```{r}
+set.seed(42)
+
+# First split: 80% train+validation, 20% test
+target_col <- customer_churn$target_column
+split1 <- sample.split(data_processed[[target_col]], SplitRatio = 0.8)
+train_val_data <- subset(data_processed, split1 == TRUE)
+test_data <- subset(data_processed, split1 == FALSE)
+
+# Second split: 75% train, 25% validation (of the 80% = 60/20 overall)
+split2 <- sample.split(train_val_data[[target_col]], SplitRatio = 0.75)
+train_data <- subset(train_val_data, split2 == TRUE)
+validation_data <- subset(train_val_data, split2 == FALSE)
+```
+
+## Train a logistic regression model
+
+Train a GLM with a binomial family (logistic regression):
+
+```{r}
+formula <- as.formula(paste(target_col, "~ ."))
+model <- glm(formula, data = train_data, family = binomial)
+summary(model)
+```
+
+## Initialize the ValidMind datasets
+
+```{r}
+vm_train_ds <- vm_r$init_dataset(
+  dataset = train_data,
+  input_id = "train_dataset",
+  target_column = customer_churn$target_column
+)
+
+vm_test_ds <- vm_r$init_dataset(
+  dataset = test_data,
+  input_id = "test_dataset",
+  target_column = customer_churn$target_column
+)
+```
+
+## Initialize a model object
+
+Save the R model and initialize it with ValidMind:
+
+```{r}
+model_path <- save_model(model)
+
+vm_model <- vm_r$init_r_model(
+  model_path = model_path,
+  input_id = "model"
+)
+```
+
+### Assign predictions
+
+Link model predictions to the training and testing datasets:
+
+```{r}
+vm_train_ds$assign_predictions(model = vm_model)
+vm_test_ds$assign_predictions(model = vm_model)
+```
+
+## Run the full suite of tests
+
+Build the test configuration that maps each test to its required inputs:
+
+```{r}
+# Import the test config helper from the Python customer_churn module
+customer_churn <- reticulate::import(
+  "validmind.datasets.classification.customer_churn"
+)
+test_config <- customer_churn$get_demo_test_config()
+```
+
+Preview the test configuration:
+
+```{r}
+vm_utils <- reticulate::import("validmind.utils")
+vm_utils$preview_test_config(test_config)
+```
+
+Run the full documentation test suite and upload results to the ValidMind Platform:
+
+```{r}
+full_suite <- vm_r$run_documentation_tests(config = test_config)
+```
+
+## Next steps
+
+Head to the [ValidMind Platform](https://app.prod.validmind.ai) to view the generated documentation:
+
+1. Navigate to **Inventory** and select your model.
+2. Click **Development** under Documents to see the full draft of your model documentation.
+
+From there, you can make qualitative edits, collaborate with validators, and submit for approval.
+
+---
+
+*Copyright 2023-2026 ValidMind Inc. All rights reserved.*
+*Refer to [LICENSE](https://github.com/validmind/validmind-library/blob/main/LICENSE) for details.*
+*SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial*
