@@ -392,7 +392,9 @@ display_report <- function(processed_results) {
 #'
 #' @export
 py_print <- function(expr) {
-  output <- py_capture_output(expr)
+  # Use non-standard evaluation so py_capture_output can intercept
+  # stdout/stderr during execution, not after
+  output <- py_capture_output(eval(substitute(expr), envir = parent.frame()))
   if (nchar(output) > 0) cat(output, "\n")
   invisible(output)
 }
