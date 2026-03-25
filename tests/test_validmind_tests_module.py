@@ -7,6 +7,7 @@ from unittest import TestCase
 from typing import Callable, List
 
 import pandas as pd
+from pandas.io.formats.style import Styler
 
 from validmind.tests import (
     list_tags,
@@ -38,7 +39,7 @@ class TestTestsModule(TestCase):
     def test_list_tasks_and_tags(self):
         tasks_and_tags = list_tasks_and_tags()
         # Returns a Styler in notebooks, plain DataFrame otherwise
-        if isinstance(tasks_and_tags, pd.io.formats.style.Styler):
+        if isinstance(tasks_and_tags, Styler):
             df = tasks_and_tags.data
         else:
             df = tasks_and_tags
@@ -55,7 +56,7 @@ class TestTestsModule(TestCase):
     def test_list_tests_pretty(self):
         tests = list_tests(pretty=True)
         # Returns a Styler in notebooks, plain DataFrame otherwise
-        if isinstance(tests, pd.io.formats.style.Styler):
+        if isinstance(tests, Styler):
             df = tests.data
         else:
             df = tests
