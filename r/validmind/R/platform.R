@@ -380,6 +380,26 @@ display_report <- function(processed_results) {
   return(all_widgets)
 }
 
+#' Run a Python expression and display its print() output in R
+#'
+#' Wraps a Python call with \code{reticulate::py_capture_output()} and
+#' displays the result with \code{cat()}. Useful in R Jupyter notebooks
+#' where Python print() output is not displayed automatically.
+#'
+#' Note: Python logging output (e.g. from \code{run_documentation_tests})
+#' is not captured due to reticulate limitations.
+#'
+#' @param expr A Python expression to evaluate
+#'
+#' @importFrom reticulate py_capture_output
+#'
+#' @export
+py_print <- function(expr) {
+  output <- py_capture_output(eval(substitute(expr), envir = parent.frame()))
+  if (nchar(output) > 0) cat(output, "\n")
+  invisible(output)
+}
+
 #' Save an R model to a temporary file
 #'
 #' This function saves a given R model object to a randomly named `.RData` file

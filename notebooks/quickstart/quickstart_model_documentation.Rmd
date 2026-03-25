@@ -64,7 +64,7 @@ vm_r <- vm(
 Verify the connection and see the documentation structure:
 
 ```{r}
-vm_r$preview_template()
+py_print(vm_r$preview_template())
 ```
 
 ## Load the demo dataset
@@ -202,7 +202,7 @@ Preview the test configuration:
 
 ```{r}
 vm_utils <- reticulate::import("validmind.utils")
-vm_utils$preview_test_config(test_config)
+py_print(vm_utils$preview_test_config(test_config))
 ```
 
 Run the full documentation test suite and upload results to the ValidMind Platform:

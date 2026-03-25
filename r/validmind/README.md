@@ -105,7 +105,7 @@ Since the R package returns the full Python `validmind` module, you can call any
 
 ```r
 # Preview the documentation template
-vm_r$preview_template()
+py_print(vm_r$preview_template())
 
 # Initialize datasets
 vm_dataset <- vm_r$init_dataset(dataset=df, input_id="my_dataset", target_column="target")
@@ -127,6 +127,23 @@ vm_r$tests$run_test("validmind.data_validation.ClassImbalance", inputs=list(data
 vm_r$tests$list_tests(tags=list("data_quality"), task="classification")
 vm_r$tests$list_tasks_and_tags()
 ```
+
+### Python output in R Jupyter notebooks
+
+When running R notebooks in Jupyter (via IRkernel), Python `print()` output is not
+displayed automatically due to a reticulate limitation. Use the `py_print()` helper
+to capture and display output from Python functions:
+
+```r
+# These produce print() output — wrap with py_print()
+py_print(vm_r$preview_template())
+py_print(vm_utils$preview_test_config(test_config))
+```
+
+Note: Python logging output (e.g. progress from `run_documentation_tests()` or
+`assign_predictions()`) cannot be captured this way. These functions run silently
+in R Jupyter — check the ValidMind Platform for results. This is not an issue in
+terminal R sessions where all Python output is displayed normally.
 
 ## Troubleshooting
 
@@ -173,3 +190,39 @@ pip install -U numba
 ```
 
 And restart the R session.
+
+## Publishing to CRAN
+
+### 1. Update version
+
+The R package version is kept in sync with the Python package. Running `make version tag=patch` from the repo root updates both `pyproject.toml` and `r/validmind/DESCRIPTION`.
+
+### 2. Regenerate documentation
+
+```bash
+cd r/validmind
+Rscript -e 'roxygen2::roxygenise()'
+```
+
+This updates the `man/` Rd files and `NAMESPACE` from the roxygen comments in `R/platform.R`.
+
+### 3. Build and check
+
+```bash
+cd r/validmind
+R CMD build .
+R CMD check --as-cran validmind_*.tar.gz
+```
+
+Fix all ERRORs and WARNINGs before submitting. NOTEs are generally acceptable.
+
+### 4. Submit
+
+Upload the `.tar.gz` at https://cran.r-project.org/submit.html
+
+### 5. After submission
+
+- CRAN sends a confirmation email — click the link to confirm
+- CRAN runs automated checks on Windows and Linux — fix any issues they flag
+- A CRAN volunteer manually reviews — this can take days to weeks
+- They may email back with requests for changes before accepting

@@ -65,7 +65,7 @@ vm_r <- vm(
 Verify the connection and see the validation report structure:
 
 ```{r}
-vm_r$preview_template()
+py_print(vm_r$preview_template())
 ```
 
 ## Identify available tests
