@@ -392,7 +392,7 @@ display_report <- function(processed_results) {
 #'
 #' @export
 py_print <- function(expr) {
-  # Redirect stdout, stderr, and logging to a StringIO buffer
+  # Redirect stdout, stderr, and ValidMind logging to a StringIO buffer
   py_run_string("
 import sys, io, logging
 _py_print_buf = io.StringIO()
@@ -400,9 +400,14 @@ _py_print_old_stdout = sys.stdout
 _py_print_old_stderr = sys.stderr
 sys.stdout = _py_print_buf
 sys.stderr = _py_print_buf
+
+# Add handler to the validmind logger (propagate=False so root handler won't see it)
 _py_print_log_handler = logging.StreamHandler(_py_print_buf)
-_py_print_log_handler.setFormatter(logging.Formatter('%(message)s'))
-logging.getLogger().addHandler(_py_print_log_handler)
+_py_print_log_handler.setFormatter(
+    logging.Formatter('%(asctime)s - %(levelname)s(%(name)s): %(message)s')
+)
+_py_print_vm_logger = logging.getLogger('validmind')
+_py_print_vm_logger.addHandler(_py_print_log_handler)
 ")
 
   result <- tryCatch(
@@ -412,7 +417,7 @@ logging.getLogger().addHandler(_py_print_log_handler)
 
   # Restore and read captured output
   captured <- py_run_string("
-logging.getLogger().removeHandler(_py_print_log_handler)
+_py_print_vm_logger.removeHandler(_py_print_log_handler)
 sys.stdout = _py_print_old_stdout
 sys.stderr = _py_print_old_stderr
 _py_print_result = _py_print_buf.getvalue()
