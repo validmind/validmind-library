@@ -37,6 +37,9 @@ library(caTools)
 library(knitr)
 
 knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+
+# Make Python print/logging output visible in R Jupyter notebooks
+enable_py_output()
 ```
 
 ## Initialize the ValidMind Library

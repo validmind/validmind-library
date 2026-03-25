@@ -380,6 +380,46 @@ display_report <- function(processed_results) {
   return(all_widgets)
 }
 
+#' Redirect Python stdout/stderr to R output
+#'
+#' Call this once in your setup chunk to make Python print() and logging
+#' output visible in R Jupyter notebooks. This is not needed in terminal
+#' R sessions where Python output is already displayed.
+#'
+#' @importFrom reticulate py_run_string
+#'
+#' @export
+enable_py_output <- function() {
+  py_run_string("
+import sys
+
+class _ROutputRedirect:
+    def __init__(self, original):
+        self._original = original
+
+    def write(self, text):
+        if text and text.strip():
+            try:
+                from rpytools.output import write_stdout
+                write_stdout(text + '\\n')
+            except Exception:
+                self._original.write(text)
+                self._original.flush()
+        return len(text) if text else 0
+
+    def flush(self):
+        try:
+            self._original.flush()
+        except Exception:
+            pass
+
+if not isinstance(sys.stdout, _ROutputRedirect):
+    sys.stdout = _ROutputRedirect(sys.stdout)
+    sys.stderr = _ROutputRedirect(sys.stderr)
+")
+  invisible(NULL)
+}
+
 #' Save an R model to a temporary file
 #'
 #' This function saves a given R model object to a randomly named `.RData` file
