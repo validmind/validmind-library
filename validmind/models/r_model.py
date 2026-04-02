@@ -126,8 +126,7 @@ class RModel(VMModel):
         Converts the predicted probabilities to classes
         """
         try:
-            from rpy2.robjects import conversion, default_converter
-            from rpy2.robjects import pandas2ri
+            from rpy2.robjects import conversion, default_converter, pandas2ri
         except ImportError:
             raise MissingRExtrasError()
 

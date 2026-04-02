@@ -468,10 +468,10 @@ def _validate_log_text_context(
         raise ValueError("`context` must include `content_ids` when provided")
     if not isinstance(content_ids, list) or not content_ids:
         raise ValueError("`context['content_ids']` must be a non-empty list")
-    if any(not isinstance(content_id, str) or not content_id for content_id in content_ids):
-        raise ValueError(
-            "`context['content_ids']` must contain only non-empty strings"
-        )
+    if any(
+        not isinstance(content_id, str) or not content_id for content_id in content_ids
+    ):
+        raise ValueError("`context['content_ids']` must contain only non-empty strings")
 
     return {"content_ids": content_ids}
 
@@ -488,6 +488,63 @@ def generate_qualitative_text(text_generation_data: Dict[str, Any]) -> Dict[str,
         raise_api_error(r.text)
 
     return r.json()
+
+
+def _normalize_logged_text(text: str, field_name: str) -> str:
+    """Validate text content and convert Markdown to HTML when needed."""
+    if not isinstance(text, str) or not text:
+        raise ValueError(f"`{field_name}` must be a non-empty string")
+
+    if not is_html(text):
+        return md_to_html(text, mathml=True)
+
+    return text
+
+
+def _validate_manual_log_text_args(
+    text: str, prompt: Optional[str], context: Optional[Dict[str, Any]]
+) -> str:
+    """Validate manual log_text arguments."""
+    if prompt is not None:
+        raise ValueError("`prompt` is only supported when `text` is omitted")
+    if context is not None:
+        raise ValueError("`context` is only supported when `text` is omitted")
+
+    return _normalize_logged_text(text, "text")
+
+
+def _build_log_text_generation_request(
+    content_id: str,
+    prompt: Optional[str],
+    context: Optional[Dict[str, Any]],
+) -> Dict[str, Any]:
+    """Build the request payload for AI-assisted text generation."""
+    request_data = {
+        "content_id": content_id,
+        "generate": True,
+    }
+
+    if prompt is not None:
+        if not isinstance(prompt, str) or not prompt:
+            raise ValueError("`prompt` must be a non-empty string")
+        request_data["prompt"] = prompt
+
+    validated_context = _validate_log_text_context(context)
+    if validated_context is not None:
+        request_data["context"] = validated_context
+
+    return request_data
+
+
+def _generate_log_text(
+    content_id: str,
+    prompt: Optional[str],
+    context: Optional[Dict[str, Any]],
+) -> str:
+    """Generate text for log_text and normalize it to HTML."""
+    request_data = _build_log_text_generation_request(content_id, prompt, context)
+    generated_text = generate_qualitative_text(request_data)["content"]
+    return _normalize_logged_text(generated_text, "generated text")
 
 
 def log_text(
@@ -522,34 +579,9 @@ def log_text(
         raise ValueError("`content_id` must be a non-empty string")
 
     if text is not None:
-        if not isinstance(text, str) or not text:
-            raise ValueError("`text` must be a non-empty string")
-        if prompt is not None:
-            raise ValueError("`prompt` is only supported when `text` is omitted")
-        if context is not None:
-            raise ValueError("`context` is only supported when `text` is omitted")
-
-        if not is_html(text):
-            text = md_to_html(text, mathml=True)
+        text = _validate_manual_log_text_args(text, prompt, context)
     else:
-        validated_context = _validate_log_text_context(context)
-        request_data = {
-            "content_id": content_id,
-            "generate": True,
-        }
-        if prompt is not None:
-            if not isinstance(prompt, str) or not prompt:
-                raise ValueError("`prompt` must be a non-empty string")
-            request_data["prompt"] = prompt
-        if validated_context is not None:
-            request_data["context"] = validated_context
-
-        text = generate_qualitative_text(request_data)["content"]
-
-        if not text or not isinstance(text, str):
-            raise ValueError("Generated text must be a non-empty string")
-        if not is_html(text):
-            text = md_to_html(text, mathml=True)
+        text = _generate_log_text(content_id, prompt, context)
 
     log_text = run_async(alog_metadata, content_id, text, _json)
 

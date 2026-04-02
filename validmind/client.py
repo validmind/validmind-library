@@ -433,9 +433,7 @@ def preview_template() -> None:
     _preview_template(client_config.documentation_template)
 
 
-def get_content_ids(
-    section_ids: Optional[Union[str, List[str]]] = None
-) -> List[str]:
+def get_content_ids(section_ids: Optional[Union[str, List[str]]] = None) -> List[str]:
     """Get content IDs for one or more documentation template sections.
 
     Args:

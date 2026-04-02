@@ -253,9 +253,13 @@ def get_template_content_ids(
     """
     sections = [section_ids] if isinstance(section_ids, str) else section_ids
     section_trees = (
-        _convert_sections_to_section_tree(template["sections"], start_section_id=s)
-        for s in sections
-    ) if sections else [_convert_sections_to_section_tree(template["sections"])]
+        (
+            _convert_sections_to_section_tree(template["sections"], start_section_id=s)
+            for s in sections
+        )
+        if sections
+        else [_convert_sections_to_section_tree(template["sections"])]
+    )
 
     content_ids = []
     for section_tree in section_trees:
