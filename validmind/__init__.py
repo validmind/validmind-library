@@ -52,6 +52,7 @@ from . import scorers as scorer
 from .__version__ import __version__  # noqa: E402
 from .api_client import init, log_metric, log_test_result, log_text, reload
 from .client import (  # noqa: E402
+    get_content_ids,
     get_test_suite,
     init_dataset,
     init_model,
@@ -117,6 +118,7 @@ __all__ = [  # noqa
     "init_model",
     "init_r_model",
     "get_test_suite",
+    "get_content_ids",
     "log_metric",
     "preview_template",
     "print_env",

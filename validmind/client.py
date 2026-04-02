@@ -31,7 +31,7 @@ from .input_registry import input_registry
 from .logging import get_logger
 from .models.metadata import MetadataModel
 from .models.r_model import RModel
-from .template import get_template_test_suite
+from .template import get_template_content_ids, get_template_test_suite
 from .template import preview_template as _preview_template
 from .test_suites import get_by_id as get_test_suite_by_id
 from .utils import get_dataset_info, get_model_info
@@ -431,6 +431,26 @@ def preview_template() -> None:
         )
 
     _preview_template(client_config.documentation_template)
+
+
+def get_content_ids(
+    section_ids: Optional[Union[str, List[str]]] = None
+) -> List[str]:
+    """Get content IDs for one or more documentation template sections.
+
+    Args:
+        section_ids: Section ID or list of section IDs. If omitted, all content
+            IDs in the current documentation template are returned.
+
+    Returns:
+        A list of content IDs in template order.
+    """
+    if client_config.documentation_template is None:
+        raise MissingDocumentationTemplate(
+            "No documentation template found. Please run `vm.init()`"
+        )
+
+    return get_template_content_ids(client_config.documentation_template, section_ids)
 
 
 def run_documentation_tests(

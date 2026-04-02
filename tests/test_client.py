@@ -12,6 +12,7 @@ import sklearn
 
 import validmind
 from validmind import (
+    get_content_ids,
     init_dataset,
     init_model,
     get_test_suite,
@@ -161,6 +162,44 @@ class TestGetTestSuite(TestCase):
         for _, config in default_config.items():
             self.assertIn("inputs", config)
             self.assertIn("params", config)
+
+
+class TestGetContentIds(TestCase):
+    @mock.patch(
+        "validmind.client_config.client_config.documentation_template",
+        MockedConfig.documentation_template,
+    )
+    def test_get_all_content_ids(self):
+        content_ids = get_content_ids()
+        self.assertEqual(
+            content_ids,
+            [
+                "validmind.data_validation.ClassImbalance",
+                "validmind.data_validation.DatasetSplit",
+            ],
+        )
+
+    @mock.patch(
+        "validmind.client_config.client_config.documentation_template",
+        MockedConfig.documentation_template,
+    )
+    def test_get_content_ids_for_single_section(self):
+        content_ids = get_content_ids("test_section_1")
+        self.assertEqual(content_ids, ["validmind.data_validation.ClassImbalance"])
+
+    @mock.patch(
+        "validmind.client_config.client_config.documentation_template",
+        MockedConfig.documentation_template,
+    )
+    def test_get_content_ids_for_multiple_sections(self):
+        content_ids = get_content_ids(["test_section_1", "test_section_2"])
+        self.assertEqual(
+            content_ids,
+            [
+                "validmind.data_validation.ClassImbalance",
+                "validmind.data_validation.DatasetSplit",
+            ],
+        )
 
 
 # TODO: Fix this test

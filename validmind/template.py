@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 import uuid
-from typing import Any, Dict, List, Optional, Type
+from typing import Any, Dict, List, Optional, Type, Union
 
 from .html_templates.content_blocks import (
     failed_content_block_html,
@@ -222,6 +222,49 @@ def preview_template(template: str) -> None:
     html_content = StatefulHTMLRenderer.get_base_css()
     html_content += _create_section_html(section_tree)
     display(html_content)
+
+
+def _get_section_content_ids(section: Dict[str, Any]) -> List[str]:
+    """Get all content IDs in a section and its subsections."""
+    content_ids = [
+        content["content_id"]
+        for content in section.get("contents", [])
+        if content.get("content_id")
+    ]
+
+    for sub_section in section.get("sections", []):
+        content_ids.extend(_get_section_content_ids(sub_section))
+
+    return content_ids
+
+
+def get_template_content_ids(
+    template: Dict[str, Any], section_ids: Optional[Union[str, List[str]]] = None
+) -> List[str]:
+    """Get content IDs for one or more template sections.
+
+    Args:
+        template: A valid flat template.
+        section_ids: Section ID or list of section IDs. If omitted, all content
+            IDs in the template are returned.
+
+    Returns:
+        A list of content IDs, preserving template order.
+    """
+    sections = [section_ids] if isinstance(section_ids, str) else section_ids
+    section_trees = (
+        _convert_sections_to_section_tree(template["sections"], start_section_id=s)
+        for s in sections
+    ) if sections else [_convert_sections_to_section_tree(template["sections"])]
+
+    content_ids = []
+    for section_tree in section_trees:
+        for section_node in section_tree:
+            for content_id in _get_section_content_ids(section_node):
+                if content_id not in content_ids:
+                    content_ids.append(content_id)
+
+    return content_ids
 
 
 def _get_section_tests(section: Dict[str, Any]) -> List[str]:
