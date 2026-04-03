@@ -693,11 +693,14 @@ class TextGenerationResult(Result):
 
     name: str = "Text Generation Result"
     ref_id: str = None
+    content_id: Optional[str] = None
     title: Optional[str] = None
     doc: Optional[str] = None
     description: Optional[Union[str, DescriptionFuture]] = None
     params: Optional[Dict[str, Any]] = None
     metadata: Optional[Dict[str, Any]] = None
+    prompt: Optional[str] = None
+    context: Optional[Dict[str, Any]] = None
     _was_description_generated: bool = False
 
     def __post_init__(self):
@@ -770,11 +773,13 @@ class TextGenerationResult(Result):
         self,
         content_id: str = None,
     ):
-        return await asyncio.gather(
-            update_metadata(
-                content_id=f"{content_id}",
-                text=self.description,
-            )
+        resolved_content_id = content_id or self.content_id
+        if not resolved_content_id or not isinstance(resolved_content_id, str):
+            raise ValueError("`content_id` must be provided to log generated text")
+
+        return await api_client.alog_text(
+            content_id=resolved_content_id,
+            text=self.description,
         )
 
     def log(

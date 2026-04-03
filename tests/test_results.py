@@ -186,6 +186,34 @@ class TestResultClasses(unittest.TestCase):
         self.assertIsInstance(html, str)
         self.assertIn("Generated text", html)
 
+    @patch("validmind.vm_models.result.result.api_client.alog_text")
+    async def test_text_generation_result_log_async(self, mock_log_text):
+        """Test async logging of TextGenerationResult through alog_text"""
+        text_result = TextGenerationResult(
+            result_id="text_1",
+            content_id="dataset_summary_text",
+            description="Generated text",
+        )
+
+        await text_result.log_async()
+
+        mock_log_text.assert_called_once_with(
+            content_id="dataset_summary_text",
+            text="Generated text",
+        )
+
+    async def test_text_generation_result_log_async_requires_content_id(self):
+        """Test TextGenerationResult requires a content_id when logging"""
+        text_result = TextGenerationResult(
+            result_id="text_1",
+            description="Generated text",
+        )
+
+        with self.assertRaisesRegex(
+            ValueError, "`content_id` must be provided to log generated text"
+        ):
+            await text_result.log_async()
+
     def test_validate_log_config(self):
         """Test validation of log configuration"""
         test_result = TestResult(result_id="test_1")

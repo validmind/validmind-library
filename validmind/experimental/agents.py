@@ -54,10 +54,13 @@ def run_task(
 
     # Create a test result with the generated text
     result = TextGenerationResult(
+        content_id=input.get("content_id"),
         result_type=f"{task}",
         description=generated_text,
         title=f"Text Generation: {task}",
         doc=f"Generated {task}",
+        prompt=input.get("prompt"),
+        context=input.get("context"),
     )
     if show:
         result.show()

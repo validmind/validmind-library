@@ -17,6 +17,7 @@ try:
 except Exception:
     torch = None  # type: ignore  # noqa: F401
 
+from . import api_client
 from .api_client import log_input as log_input
 from .client_config import client_config
 from .errors import (
@@ -43,6 +44,7 @@ from .vm_models.model import (
     get_model_class,
     is_model_metadata,
 )
+from .vm_models.result import TextGenerationResult
 
 pd.option_context("format.precision", 2)
 
@@ -449,6 +451,41 @@ def get_content_ids(section_ids: Optional[Union[str, List[str]]] = None) -> List
         )
 
     return get_template_content_ids(client_config.documentation_template, section_ids)
+
+
+def run_text_generation(
+    content_id: str,
+    prompt: Optional[str] = None,
+    context: Optional[Dict[str, Any]] = None,
+    show: bool = True,
+) -> TextGenerationResult:
+    """Generate qualitative text and return a loggable result object.
+
+    Args:
+        content_id: Content ID to generate text for.
+        prompt: Custom prompt for text generation.
+        context: Optional context object for text generation.
+        show: Whether to display the generated result.
+
+    Returns:
+        A TextGenerationResult containing the generated text.
+    """
+    description = api_client._generate_log_text(content_id, prompt, context)
+    result = TextGenerationResult(
+        result_id=content_id,
+        result_type="qualitative_text_generation",
+        content_id=content_id,
+        title=f"Text Generation: {content_id}",
+        doc="Generated qualitative text",
+        description=description,
+        prompt=prompt,
+        context=context,
+    )
+
+    if show:
+        result.show()
+
+    return result
 
 
 def run_documentation_tests(

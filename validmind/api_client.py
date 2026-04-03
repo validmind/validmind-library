@@ -547,6 +547,35 @@ def _generate_log_text(
     return _normalize_logged_text(generated_text, "generated text")
 
 
+def _render_logged_text(logged_text: Dict[str, Any]) -> str:
+    """Render logged text as notebook-friendly HTML."""
+    from .vm_models.html_renderer import StatefulHTMLRenderer
+
+    return StatefulHTMLRenderer.render_accordion(
+        items=[logged_text["text"]],
+        titles=[f"Text Block: '{logged_text['content_id']}'"],
+    )
+
+
+async def alog_text(
+    content_id: str,
+    text: Optional[str] = None,
+    prompt: Optional[str] = None,
+    context: Optional[Dict[str, Any]] = None,
+    _json: Optional[Dict[str, Any]] = None,
+) -> Dict[str, Any]:
+    """Async variant of ``log_text`` that logs or generates text."""
+    if not content_id or not isinstance(content_id, str):
+        raise ValueError("`content_id` must be a non-empty string")
+
+    if text is not None:
+        text = _validate_manual_log_text_args(text, prompt, context)
+    else:
+        text = _generate_log_text(content_id, prompt, context)
+
+    return await alog_metadata(content_id, text, _json)
+
+
 def log_text(
     content_id: str,
     text: Optional[str] = None,
@@ -575,22 +604,15 @@ def log_text(
     Returns:
         str: HTML string containing the logged text in an accordion format.
     """
-    if not content_id or not isinstance(content_id, str):
-        raise ValueError("`content_id` must be a non-empty string")
-
-    if text is not None:
-        text = _validate_manual_log_text_args(text, prompt, context)
-    else:
-        text = _generate_log_text(content_id, prompt, context)
-
-    log_text = run_async(alog_metadata, content_id, text, _json)
-
-    from .vm_models.html_renderer import StatefulHTMLRenderer
-
-    return StatefulHTMLRenderer.render_accordion(
-        items=[log_text["text"]],
-        titles=[f"Text Block: '{log_text['content_id']}'"],
+    logged_text = run_async(
+        alog_text,
+        content_id=content_id,
+        text=text,
+        prompt=prompt,
+        context=context,
+        _json=_json,
     )
+    return _render_logged_text(logged_text)
 
 
 async def alog_metric(

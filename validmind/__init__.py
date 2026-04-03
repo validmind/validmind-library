@@ -60,6 +60,7 @@ from .client import (  # noqa: E402
     preview_template,
     run_documentation_tests,
     run_test_suite,
+    run_text_generation,
 )
 from .experimental import agents as experimental_agent
 from .tests.decorator import scorer as scorer_decorator
@@ -123,6 +124,7 @@ __all__ = [  # noqa
     "preview_template",
     "print_env",
     "reload",
+    "run_text_generation",
     "run_documentation_tests",
     # log metric function (for direct/bulk/retroactive logging of metrics)
     # test suite functions (less common)

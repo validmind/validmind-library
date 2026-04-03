@@ -16,9 +16,11 @@ from validmind import (
     init_dataset,
     init_model,
     get_test_suite,
+    run_text_generation,
     run_documentation_tests,
 )
 from validmind.errors import UnsupportedModelError
+from validmind.vm_models.result import TextGenerationResult
 
 
 @dataclass
@@ -116,7 +118,7 @@ class TestInitModel(TestCase):
             "key": "value",
             "foo": "bar",
         }
-        with self.assertRaises(UnsupportedModelError) as context:
+        with self.assertRaises(UnsupportedModelError):
             init_model(attributes=metadata, __log=False)
 
     def test_init_model_metadata_dict(self):
@@ -199,6 +201,31 @@ class TestGetContentIds(TestCase):
                 "validmind.data_validation.ClassImbalance",
                 "validmind.data_validation.DatasetSplit",
             ],
+        )
+
+
+class TestRunTextGeneration(TestCase):
+    @mock.patch(
+        "validmind.client.api_client._generate_log_text",
+        return_value="<p>Generated text</p>",
+    )
+    def test_run_text_generation(self, mock_generate_text):
+        result = run_text_generation(
+            content_id="dataset_summary_text",
+            prompt="Summarize the dataset.",
+            context={"content_ids": ["train_dataset"]},
+            show=False,
+        )
+
+        self.assertIsInstance(result, TextGenerationResult)
+        self.assertEqual(result.content_id, "dataset_summary_text")
+        self.assertEqual(result.prompt, "Summarize the dataset.")
+        self.assertEqual(result.context, {"content_ids": ["train_dataset"]})
+        self.assertEqual(result.description, "<p>Generated text</p>")
+        mock_generate_text.assert_called_once_with(
+            "dataset_summary_text",
+            "Summarize the dataset.",
+            {"content_ids": ["train_dataset"]},
         )
 
 
