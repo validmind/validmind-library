@@ -181,6 +181,8 @@ class TestResultClasses(unittest.TestCase):
         self.assertEqual(text_result.name, "Text Generation Result")
         self.assertEqual(text_result.title, "Text Test")
         self.assertEqual(text_result.description, "Generated text")
+        self.assertIsNone(text_result.doc)
+        self.assertIsNone(text_result.test_name)
 
         html = text_result.to_html()
         self.assertIsInstance(html, str)

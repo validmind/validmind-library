@@ -6,6 +6,7 @@
 Client interface for all data and model validation functions
 """
 
+import time
 from typing import Any, Callable, Dict, List, Optional, Union
 
 import numpy as np
@@ -35,6 +36,7 @@ from .models.r_model import RModel
 from .template import get_template_content_ids, get_template_test_suite
 from .template import preview_template as _preview_template
 from .test_suites import get_by_id as get_test_suite_by_id
+from .tests.run import _get_run_metadata
 from .utils import get_dataset_info, get_model_info
 from .vm_models import TestSuite, TestSuiteRunner
 from .vm_models.dataset import DataFrameDataset, PolarsDataset, TorchDataset, VMDataset
@@ -470,14 +472,16 @@ def run_text_generation(
     Returns:
         A TextGenerationResult containing the generated text.
     """
+    start_time = time.perf_counter()
     description = api_client._generate_log_text(content_id, prompt, context)
+    metadata = _get_run_metadata(duration_seconds=time.perf_counter() - start_time)
     result = TextGenerationResult(
         result_id=content_id,
         result_type="qualitative_text_generation",
         content_id=content_id,
         title=f"Text Generation: {content_id}",
-        doc="Generated qualitative text",
         description=description,
+        metadata=metadata,
         prompt=prompt,
         context=context,
     )

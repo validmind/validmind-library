@@ -222,6 +222,9 @@ class TestRunTextGeneration(TestCase):
         self.assertEqual(result.prompt, "Summarize the dataset.")
         self.assertEqual(result.context, {"content_ids": ["train_dataset"]})
         self.assertEqual(result.description, "<p>Generated text</p>")
+        self.assertIn("validmind", result.metadata)
+        self.assertIn("timestamp", result.metadata)
+        self.assertIn("duration_seconds", result.metadata)
         mock_generate_text.assert_called_once_with(
             "dataset_summary_text",
             "Summarize the dataset.",

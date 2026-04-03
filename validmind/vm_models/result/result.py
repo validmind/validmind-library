@@ -737,17 +737,18 @@ class TextGenerationResult(Result):
         return super().__getattribute__(name)
 
     @property
-    def test_name(self) -> str:
-        """Get the test name, using custom title if available."""
-        return self.title or test_id_to_name(self.result_id)
+    def test_name(self) -> None:
+        """Text generation results do not expose a test-style name."""
+        return None
 
     def to_html(self):
         """Generate HTML that persists in saved notebooks."""
         html_parts = [StatefulHTMLRenderer.get_base_css()]
+        display_title = self.title or ""
 
         html_parts.append(
             StatefulHTMLRenderer.render_result_header(
-                test_name=self.test_name, passed=None
+                test_name=display_title, passed=None
             )
         )
 
