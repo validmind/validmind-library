@@ -278,6 +278,7 @@ async def alog_metadata(
     content_id: str,
     text: Optional[str] = None,
     _json: Optional[Dict[str, Any]] = None,
+    section_id: Optional[str] = None,
 ) -> Dict[str, Any]:
     """Logs free-form metadata to ValidMind API.
 
@@ -285,6 +286,8 @@ async def alog_metadata(
         content_id (str): Unique content identifier for the metadata.
         text (str, optional): Free-form text to assign to the metadata. Defaults to None.
         _json (dict, optional): Free-form key-value pairs to assign to the metadata. Defaults to None.
+        section_id (str, optional): Section ID to append the text block to when the
+            content ID does not already exist.
 
     Raises:
         Exception: If the API call fails.
@@ -298,9 +301,14 @@ async def alog_metadata(
     if _json is not None:
         metadata_dict["json"] = _json
 
+    request_params = {}
+    if section_id:
+        request_params["section_id"] = section_id
+
     try:
         return await _post(
             "log_metadata",
+            params=request_params,
             data=json.dumps(metadata_dict, cls=NumpyEncoder, allow_nan=False),
         )
     except Exception as e:
@@ -517,6 +525,7 @@ def _build_log_text_generation_request(
     content_id: str,
     prompt: Optional[str],
     context: Optional[Dict[str, Any]],
+    section_id: Optional[str] = None,
 ) -> Dict[str, Any]:
     """Build the request payload for AI-assisted text generation."""
     request_data = {
@@ -529,6 +538,11 @@ def _build_log_text_generation_request(
             raise ValueError("`prompt` must be a non-empty string")
         request_data["prompt"] = prompt
 
+    if section_id is not None:
+        if not isinstance(section_id, str) or not section_id:
+            raise ValueError("`section_id` must be a non-empty string")
+        request_data["section_id"] = section_id
+
     validated_context = _validate_log_text_context(context)
     if validated_context is not None:
         request_data["context"] = validated_context
@@ -540,9 +554,15 @@ def _generate_log_text(
     content_id: str,
     prompt: Optional[str],
     context: Optional[Dict[str, Any]],
+    section_id: Optional[str] = None,
 ) -> str:
     """Generate text for log_text and normalize it to HTML."""
-    request_data = _build_log_text_generation_request(content_id, prompt, context)
+    request_data = _build_log_text_generation_request(
+        content_id,
+        prompt,
+        context,
+        section_id=section_id,
+    )
     generated_text = generate_qualitative_text(request_data)["content"]
     return _normalize_logged_text(generated_text, "generated text")
 
@@ -563,6 +583,7 @@ async def alog_text(
     prompt: Optional[str] = None,
     context: Optional[Dict[str, Any]] = None,
     _json: Optional[Dict[str, Any]] = None,
+    section_id: Optional[str] = None,
 ) -> Dict[str, Any]:
     """Async variant of ``log_text`` that logs or generates text."""
     if not content_id or not isinstance(content_id, str):
@@ -571,9 +592,14 @@ async def alog_text(
     if text is not None:
         text = _validate_manual_log_text_args(text, prompt, context)
     else:
-        text = _generate_log_text(content_id, prompt, context)
+        text = _generate_log_text(
+            content_id,
+            prompt,
+            context,
+            section_id=section_id,
+        )
 
-    return await alog_metadata(content_id, text, _json)
+    return await alog_metadata(content_id, text, _json, section_id=section_id)
 
 
 def log_text(
@@ -582,6 +608,7 @@ def log_text(
     prompt: Optional[str] = None,
     context: Optional[Dict[str, Any]] = None,
     _json: Optional[Dict[str, Any]] = None,
+    section_id: Optional[str] = None,
 ) -> str:
     """Logs or generates free-form text to ValidMind API.
 
@@ -596,6 +623,8 @@ def log_text(
             generation. When omitted, the full document is used as context.
             Currently only supports `{"content_ids": [<content_id>, ...]}`.
         _json (dict, optional): Additional metadata to associate with the text. Defaults to None.
+        section_id (str, optional): Section ID to append the text block to when the
+            content ID does not already exist.
 
     Raises:
         ValueError: If arguments are invalid or use incompatible combinations.
@@ -611,6 +640,7 @@ def log_text(
         prompt=prompt,
         context=context,
         _json=_json,
+        section_id=section_id,
     )
     return _render_logged_text(logged_text)
 

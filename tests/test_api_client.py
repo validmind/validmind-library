@@ -227,6 +227,27 @@ class TestAPIClient(unittest.TestCase):
         )
 
     @patch("aiohttp.ClientSession.post")
+    def test_log_metadata_with_section_id(self, mock_post: MagicMock):
+        mock_post.return_value = MockAsyncResponse(200, json={"cuid": "abc1234"})
+
+        self.run_async(
+            api_client.alog_metadata,
+            "1234",
+            text="Some Text",
+            section_id="intended_use",
+        )
+
+        mock_post.assert_called_with(
+            f"{os.environ['VM_API_HOST']}/log_metadata?section_id=intended_use",
+            data=json.dumps(
+                {
+                    "content_id": "1234",
+                    "text": "Some Text",
+                }
+            ),
+        )
+
+    @patch("aiohttp.ClientSession.post")
     def test_log_test_result(self, mock_post):
         result = {
             "test_name": "test_name",
@@ -295,6 +316,55 @@ class TestAPIClient(unittest.TestCase):
                     "text": md_to_html(
                         "## Generated Summary\nGenerated content.", mathml=True
                     ),
+                }
+            ),
+        )
+
+    @patch("requests.post")
+    @patch("aiohttp.ClientSession.post")
+    def test_log_text_logs_metadata_with_section_id(
+        self, mock_aiohttp_post, mock_requests_post
+    ):
+        mock_requests_post.return_value = Mock(status_code=200)
+        mock_requests_post.return_value.json.return_value = {
+            "content": "Generated content."
+        }
+        mock_aiohttp_post.return_value = MockAsyncResponse(
+            200,
+            json={
+                "content_id": "dataset_summary_text",
+                "text": "Generated content.",
+            },
+        )
+
+        api_client.log_text(
+            content_id="dataset_summary_text",
+            prompt="Summarize the dataset.",
+            section_id="intended_use",
+        )
+
+        mock_requests_post.assert_called_once_with(
+            url=f"{os.environ['VM_API_HOST']}/ai/generate/qualitative_text_generation",
+            headers={
+                "X-API-KEY": os.environ["VM_API_KEY"],
+                "X-API-SECRET": os.environ["VM_API_SECRET"],
+                "X-MODEL-CUID": os.environ["VM_API_MODEL"],
+                "X-MONITORING": "False",
+                "X-LIBRARY-VERSION": __version__,
+            },
+            json={
+                "content_id": "dataset_summary_text",
+                "generate": True,
+                "prompt": "Summarize the dataset.",
+                "section_id": "intended_use",
+            },
+        )
+        mock_aiohttp_post.assert_called_once_with(
+            f"{os.environ['VM_API_HOST']}/log_metadata?section_id=intended_use",
+            data=json.dumps(
+                {
+                    "content_id": "dataset_summary_text",
+                    "text": "Generated content.",
                 }
             ),
         )
