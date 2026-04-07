@@ -65,7 +65,9 @@ def run_task(
         title=f"Text Generation: {task}",
         metadata=_get_run_metadata(duration_seconds=time.perf_counter() - start_time),
         prompt=input.get("prompt"),
+        section_id=input.get("section_id"),
         context=input.get("context"),
+        _was_description_generated=True,
     )
     if show:
         result.show()

@@ -13,6 +13,10 @@ from validmind.vm_models.result import (
     ResultTable,
     RawData,
 )
+from validmind.vm_models.result.utils import (
+    AI_REVISION_NAME,
+    DEFAULT_REVISION_NAME,
+)
 
 from validmind.vm_models.figure import Figure
 from validmind.errors import InvalidParameterError
@@ -196,13 +200,113 @@ class TestResultClasses(unittest.TestCase):
             content_id="dataset_summary_text",
             description="Generated text",
         )
+        text_result._client_config_cache = type(
+            "MockConfig",
+            (),
+            {
+                "documentation_template": {
+                    "sections": [
+                        {
+                            "id": "data_description",
+                            "contents": [
+                                {
+                                    "content_id": "dataset_summary_text",
+                                    "content_type": "text",
+                                }
+                            ],
+                        }
+                    ]
+                }
+            },
+        )()
 
         await text_result.log_async()
 
         mock_log_text.assert_called_once_with(
-            content_id="dataset_summary_text",
+            content_id=f"dataset_summary_text::{DEFAULT_REVISION_NAME}",
             text="Generated text",
+            section_id=None,
         )
+
+    @patch("validmind.vm_models.result.result.api_client.alog_text")
+    async def test_text_generation_result_log_async_with_section_id(self, mock_log_text):
+        """Test async logging of TextGenerationResult forwards section_id"""
+        text_result = TextGenerationResult(
+            result_id="text_1",
+            content_id="intended_use_text",
+            description="Generated text",
+            section_id="intended_use",
+        )
+        text_result._client_config_cache = type(
+            "MockConfig",
+            (),
+            {"documentation_template": {"sections": [{"id": "intended_use"}]}},
+        )()
+
+        await text_result.log_async()
+
+        mock_log_text.assert_called_once_with(
+            content_id=f"intended_use_text::{DEFAULT_REVISION_NAME}",
+            text="Generated text",
+            section_id="intended_use",
+        )
+
+    @patch("validmind.vm_models.result.result.api_client.alog_text")
+    async def test_text_generation_result_log_async_uses_ai_revision_name(
+        self, mock_log_text
+    ):
+        """Test generated text logs with the AI revision name"""
+        text_result = TextGenerationResult(
+            result_id="text_1",
+            content_id="dataset_summary_text",
+            description="Generated text",
+            _was_description_generated=True,
+        )
+        text_result._client_config_cache = type(
+            "MockConfig",
+            (),
+            {
+                "documentation_template": {
+                    "sections": [
+                        {
+                            "id": "data_description",
+                            "contents": [
+                                {
+                                    "content_id": "dataset_summary_text",
+                                    "content_type": "text",
+                                }
+                            ],
+                        }
+                    ]
+                }
+            },
+        )()
+
+        await text_result.log_async()
+
+        mock_log_text.assert_called_once_with(
+            content_id=f"dataset_summary_text::{AI_REVISION_NAME}",
+            text="Generated text",
+            section_id=None,
+        )
+
+    async def test_text_generation_result_log_async_requires_section_id_for_new_block(self):
+        """Test new generated text requires a section_id for placement"""
+        text_result = TextGenerationResult(
+            result_id="text_1",
+            content_id="model_overview_text",
+            description="Generated text",
+        )
+        text_result._client_config_cache = type(
+            "MockConfig",
+            (),
+            {"documentation_template": {"sections": [{"id": "existing_section"}]}},
+        )()
+
+        with self.assertRaisesRegex(
+            ValueError, "New generated content requires `section_id` for placement"
+        ):
+            await text_result.log_async()
 
     async def test_text_generation_result_log_async_requires_content_id(self):
         """Test TextGenerationResult requires a content_id when logging"""
@@ -251,14 +355,16 @@ class TestResultClasses(unittest.TestCase):
         )
         await test_result.log_async(content_id="custom_content_id")
         mock_update_metadata.assert_called_with(
-            content_id="custom_content_id::default", text="Test description"
+            content_id=f"custom_content_id::{DEFAULT_REVISION_NAME}",
+            text="Test description",
         )
 
         # Test case 2: Without content_id
         mock_update_metadata.reset_mock()
         await test_result.log_async()
         mock_update_metadata.assert_called_with(
-            content_id="test_description:test_1::default", text="Test description"
+            content_id=f"test_description:test_1::{DEFAULT_REVISION_NAME}",
+            text="Test description",
         )
 
         # Test case 3: With AI generated description
@@ -266,7 +372,8 @@ class TestResultClasses(unittest.TestCase):
         mock_update_metadata.reset_mock()
         await test_result.log_async()
         mock_update_metadata.assert_called_with(
-            content_id="test_description:test_1::ai", text="Test description"
+            content_id=f"test_description:test_1::{AI_REVISION_NAME}",
+            text="Test description",
         )
 
     def test_test_result_metric_values_integration(self):

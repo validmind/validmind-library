@@ -458,6 +458,7 @@ def get_content_ids(section_ids: Optional[Union[str, List[str]]] = None) -> List
 def run_text_generation(
     content_id: str,
     prompt: Optional[str] = None,
+    section_id: Optional[str] = None,
     context: Optional[Dict[str, Any]] = None,
     show: bool = True,
 ) -> TextGenerationResult:
@@ -466,6 +467,8 @@ def run_text_generation(
     Args:
         content_id: Content ID to generate text for.
         prompt: Custom prompt for text generation.
+        section_id: Optional section ID used to guide generation for new content
+            and later placement during logging.
         context: Optional context object for text generation.
         show: Whether to display the generated result.
 
@@ -473,7 +476,9 @@ def run_text_generation(
         A TextGenerationResult containing the generated text.
     """
     start_time = time.perf_counter()
-    description = api_client._generate_log_text(content_id, prompt, context)
+    description = api_client._generate_log_text(
+        content_id, prompt, context, section_id=section_id
+    )
     metadata = _get_run_metadata(duration_seconds=time.perf_counter() - start_time)
     result = TextGenerationResult(
         result_id=content_id,
@@ -483,7 +488,9 @@ def run_text_generation(
         description=description,
         metadata=metadata,
         prompt=prompt,
+        section_id=section_id,
         context=context,
+        _was_description_generated=True,
     )
 
     if show:

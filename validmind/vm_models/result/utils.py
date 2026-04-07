@@ -24,6 +24,19 @@ logger = get_logger(__name__)
 _result_template = None
 
 
+def get_revision_name(is_generated: bool) -> str:
+    """Return the standard revision name for a result description."""
+    return AI_REVISION_NAME if is_generated else DEFAULT_REVISION_NAME
+
+
+def with_revision_name(content_id: str, revision_name: str) -> str:
+    """Append a revision name to a content ID when not already present."""
+    if "::" in content_id:
+        return content_id
+
+    return f"{content_id}::{revision_name}"
+
+
 def get_result_template():
     """Get the Jinja2 HTML template for rendering test results."""
     global _result_template

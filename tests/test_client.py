@@ -213,6 +213,7 @@ class TestRunTextGeneration(TestCase):
         result = run_text_generation(
             content_id="dataset_summary_text",
             prompt="Summarize the dataset.",
+            section_id="data_description",
             context={"content_ids": ["train_dataset"]},
             show=False,
         )
@@ -220,8 +221,10 @@ class TestRunTextGeneration(TestCase):
         self.assertIsInstance(result, TextGenerationResult)
         self.assertEqual(result.content_id, "dataset_summary_text")
         self.assertEqual(result.prompt, "Summarize the dataset.")
+        self.assertEqual(result.section_id, "data_description")
         self.assertEqual(result.context, {"content_ids": ["train_dataset"]})
         self.assertEqual(result.description, "<p>Generated text</p>")
+        self.assertTrue(result._was_description_generated)
         self.assertIn("validmind", result.metadata)
         self.assertIn("timestamp", result.metadata)
         self.assertIn("duration_seconds", result.metadata)
@@ -229,6 +232,7 @@ class TestRunTextGeneration(TestCase):
             "dataset_summary_text",
             "Summarize the dataset.",
             {"content_ids": ["train_dataset"]},
+            section_id="data_description",
         )
 
 
