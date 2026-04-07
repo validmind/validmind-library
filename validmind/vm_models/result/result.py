@@ -26,8 +26,6 @@ from ..html_renderer import StatefulHTMLRenderer
 from ..input import VMInput
 from .pii_filter import PIIDetectionMode, get_pii_detection_mode, scan_df, scan_text
 from .utils import (
-    AI_REVISION_NAME,
-    DEFAULT_REVISION_NAME,
     figures_to_html,
     get_revision_name,
     tables_to_html,
