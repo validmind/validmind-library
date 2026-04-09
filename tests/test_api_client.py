@@ -364,7 +364,7 @@ class TestAPIClient(unittest.TestCase):
             data=json.dumps(
                 {
                     "content_id": "dataset_summary_text",
-                    "text": "Generated content.",
+                    "text": md_to_html("Generated content.", mathml=True),
                 }
             ),
         )
