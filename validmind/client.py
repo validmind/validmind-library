@@ -37,9 +37,11 @@ from .template import get_template_content_ids, get_template_test_suite
 from .template import preview_template as _preview_template
 from .test_suites import get_by_id as get_test_suite_by_id
 from .tests.run import _get_run_metadata
+from .utils import display as vm_display
 from .utils import get_dataset_info, get_model_info
 from .vm_models import TestSuite, TestSuiteRunner
 from .vm_models.dataset import DataFrameDataset, PolarsDataset, TorchDataset, VMDataset
+from .vm_models.html_progress import HTMLLabel, HTMLProgressBar
 from .vm_models.model import (
     ModelAttributes,
     VMModel,
@@ -47,6 +49,7 @@ from .vm_models.model import (
     is_model_metadata,
 )
 from .vm_models.result import TextGenerationResult
+from .vm_models.text_generation_summary import DocumentationTextSummary
 
 pd.option_context("format.precision", 2)
 
@@ -518,17 +521,60 @@ def generate_documentation_text(
         A dictionary mapping content IDs to generated and logged results.
     """
     results = {}
+    num_tasks = len(config) * 2
+    html_pbar = None
+    html_pbar_description = None
+    template = client_config.documentation_template or {}
 
-    for content_id, spec in config.items():
-        result = run_text_generation(
-            content_id=content_id,
-            prompt=spec.get("prompt"),
-            section_id=spec.get("section_id"),
-            context=spec.get("context"),
-            show=False,
+    if num_tasks:
+        html_pbar_description = HTMLLabel(value="Generating documentation text...")
+        html_pbar = HTMLProgressBar(
+            max_value=num_tasks,
+            description="Generating documentation text...",
         )
-        result.log()
-        results[content_id] = result
+        html_pbar.display()
+
+    def _update_progress_message(message: str) -> None:
+        if html_pbar:
+            html_pbar.update(html_pbar.value, message)
+        if html_pbar_description:
+            html_pbar_description.update(message)
+
+    def _increment_progress() -> None:
+        if html_pbar:
+            html_pbar.update(html_pbar.value + 1)
+
+    try:
+        for content_id, spec in config.items():
+            progress_message = f"Sending result to ValidMind: {content_id}..."
+            _update_progress_message(progress_message)
+            result = run_text_generation(
+                content_id=content_id,
+                prompt=spec.get("prompt"),
+                section_id=spec.get("section_id"),
+                context=spec.get("context"),
+                show=False,
+            )
+            _increment_progress()
+
+            result.log()
+            _increment_progress()
+            results[content_id] = result
+    finally:
+        if html_pbar:
+            html_pbar.update(num_tasks, "Documentation text generation complete!")
+            html_pbar.close()
+        if html_pbar_description:
+            html_pbar_description.update("Documentation text generation complete!")
+
+    if results:
+        summary = DocumentationTextSummary(
+            title=template.get("template_name", "Documentation Text"),
+            description=template.get("description", ""),
+            results=results,
+            template_sections=template.get("sections"),
+        )
+        vm_display(summary)
 
     return results
 

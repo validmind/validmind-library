@@ -12,6 +12,7 @@ import sklearn
 
 import validmind
 from validmind import (
+    generate_documentation_text,
     get_content_ids,
     init_dataset,
     init_model,
@@ -234,6 +235,103 @@ class TestRunTextGeneration(TestCase):
             {"content_ids": ["train_dataset"]},
             section_id="data_description",
         )
+
+
+class TestGenerateDocumentationText(TestCase):
+    @mock.patch(
+        "validmind.client_config.client_config.documentation_template",
+        MockedConfig.documentation_template,
+    )
+    @mock.patch("validmind.client.vm_display")
+    @mock.patch("validmind.client.DocumentationTextSummary")
+    @mock.patch("validmind.client.HTMLLabel")
+    @mock.patch("validmind.client.HTMLProgressBar")
+    @mock.patch("validmind.client.run_text_generation")
+    def test_generate_documentation_text(
+        self,
+        mock_run_text_generation,
+        mock_progress_bar,
+        mock_label,
+        mock_summary,
+        mock_display,
+    ):
+        first_result = mock.Mock()
+        second_result = mock.Mock()
+        mock_run_text_generation.side_effect = [first_result, second_result]
+
+        progress_instance = mock_progress_bar.return_value
+        progress_instance.value = 0
+        progress_instance.update.side_effect = (
+            lambda value, description=None: setattr(progress_instance, "value", value)
+        )
+
+        config = {
+            "monitoring_plan": {
+                "prompt": "Write the monitoring plan.",
+                "section_id": "monitoring",
+                "context": {"content_ids": ["model_summary"]},
+            },
+            "governance_plan": {
+                "prompt": "Write the governance plan.",
+            },
+        }
+
+        results = generate_documentation_text(config)
+
+        self.assertEqual(
+            results,
+            {
+                "monitoring_plan": first_result,
+                "governance_plan": second_result,
+            },
+        )
+        self.assertEqual(mock_run_text_generation.call_count, 2)
+        mock_run_text_generation.assert_has_calls(
+            [
+                mock.call(
+                    content_id="monitoring_plan",
+                    prompt="Write the monitoring plan.",
+                    section_id="monitoring",
+                    context={"content_ids": ["model_summary"]},
+                    show=False,
+                ),
+                mock.call(
+                    content_id="governance_plan",
+                    prompt="Write the governance plan.",
+                    section_id=None,
+                    context=None,
+                    show=False,
+                ),
+            ]
+        )
+        first_result.log.assert_called_once_with()
+        second_result.log.assert_called_once_with()
+        mock_label.assert_called_once_with(value="Generating documentation text...")
+        mock_progress_bar.assert_called_once_with(
+            max_value=4,
+            description="Generating documentation text...",
+        )
+        progress_instance.display.assert_called_once_with()
+        progress_instance.close.assert_called_once_with()
+        mock_label.return_value.update.assert_any_call(
+            "Sending result to ValidMind: monitoring_plan..."
+        )
+        mock_label.return_value.update.assert_any_call(
+            "Sending result to ValidMind: governance_plan..."
+        )
+        mock_label.return_value.update.assert_any_call(
+            "Documentation text generation complete!"
+        )
+        mock_summary.assert_called_once_with(
+            title="Binary classification",
+            description="Template for binary classification models.",
+            results={
+                "monitoring_plan": first_result,
+                "governance_plan": second_result,
+            },
+            template_sections=MockedConfig.documentation_template["sections"],
+        )
+        mock_display.assert_called_once_with(mock_summary.return_value)
 
 
 # TODO: Fix this test
