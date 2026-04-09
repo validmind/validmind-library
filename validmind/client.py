@@ -499,6 +499,40 @@ def run_text_generation(
     return result
 
 
+def generate_documentation_text(
+    config: Dict[str, Dict[str, Any]],
+) -> Dict[str, TextGenerationResult]:
+    """Generate and log document text blocks from a configuration dictionary.
+
+    The config is keyed by target content ID. Each value may contain:
+        - `section_id` (optional): Section to append the content block to when it
+          does not already exist in the template.
+        - `prompt` (optional): Prompt override for generation.
+        - `context` (optional): Context object passed to `run_text_generation()`,
+          e.g. `{"content_ids": [...]}`.
+
+    Args:
+        config: Mapping of content IDs to generation settings.
+
+    Returns:
+        A dictionary mapping content IDs to generated and logged results.
+    """
+    results = {}
+
+    for content_id, spec in config.items():
+        result = run_text_generation(
+            content_id=content_id,
+            prompt=spec.get("prompt"),
+            section_id=spec.get("section_id"),
+            context=spec.get("context"),
+            show=False,
+        )
+        result.log()
+        results[content_id] = result
+
+    return results
+
+
 def run_documentation_tests(
     section: Optional[str] = None,
     send: bool = True,
