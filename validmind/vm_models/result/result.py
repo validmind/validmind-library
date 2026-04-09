@@ -26,11 +26,11 @@ from ..html_renderer import StatefulHTMLRenderer
 from ..input import VMInput
 from .pii_filter import PIIDetectionMode, get_pii_detection_mode, scan_df, scan_text
 from .utils import (
+    AI_REVISION_NAME,
+    DEFAULT_REVISION_NAME,
     figures_to_html,
-    get_revision_name,
     tables_to_html,
     update_metadata,
-    with_revision_name,
 )
 
 logger = get_logger(__name__)
@@ -583,13 +583,18 @@ class TestResult(Result):
             tasks.append(upload_figures_in_batches())
 
         if self.description:
-            revision_name = get_revision_name(self._was_description_generated)
+            revision_name = (
+                AI_REVISION_NAME
+                if self._was_description_generated
+                else DEFAULT_REVISION_NAME
+            )
 
             tasks.append(
                 update_metadata(
-                    content_id=with_revision_name(
-                        content_id or f"test_description:{self.result_id}",
-                        revision_name,
+                    content_id=(
+                        f"{content_id}::{revision_name}"
+                        if content_id
+                        else f"test_description:{self.result_id}::{revision_name}"
                     ),
                     text=self.description,
                 )
@@ -822,10 +827,20 @@ class TextGenerationResult(Result):
                 "New generated content requires `section_id` for placement"
             )
 
-        revision_name = get_revision_name(self._was_description_generated)
+        revision_name = (
+            AI_REVISION_NAME
+            if self._was_description_generated
+            else DEFAULT_REVISION_NAME
+        )
+
+        resolved_content_id = (
+            resolved_content_id
+            if "::" in resolved_content_id
+            else f"{resolved_content_id}::{revision_name}"
+        )
 
         return await api_client.alog_text(
-            content_id=with_revision_name(resolved_content_id, revision_name),
+            content_id=resolved_content_id,
             text=self.description,
             section_id=resolved_section_id,
         )

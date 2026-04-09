@@ -355,16 +355,14 @@ class TestResultClasses(unittest.TestCase):
         )
         await test_result.log_async(content_id="custom_content_id")
         mock_update_metadata.assert_called_with(
-            content_id=f"custom_content_id::{DEFAULT_REVISION_NAME}",
-            text="Test description",
+            content_id="custom_content_id::default", text="Test description"
         )
 
         # Test case 2: Without content_id
         mock_update_metadata.reset_mock()
         await test_result.log_async()
         mock_update_metadata.assert_called_with(
-            content_id=f"test_description:test_1::{DEFAULT_REVISION_NAME}",
-            text="Test description",
+            content_id="test_description:test_1::default", text="Test description"
         )
 
         # Test case 3: With AI generated description
@@ -372,8 +370,7 @@ class TestResultClasses(unittest.TestCase):
         mock_update_metadata.reset_mock()
         await test_result.log_async()
         mock_update_metadata.assert_called_with(
-            content_id=f"test_description:test_1::{AI_REVISION_NAME}",
-            text="Test description",
+            content_id="test_description:test_1::ai", text="Test description"
         )
 
     def test_test_result_metric_values_integration(self):
