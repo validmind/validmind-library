@@ -52,6 +52,8 @@ from . import scorers as scorer
 from .__version__ import __version__  # noqa: E402
 from .api_client import init, log_metric, log_test_result, log_text, reload
 from .client import (  # noqa: E402
+    generate_documentation_text,
+    get_content_ids,
     get_test_suite,
     init_dataset,
     init_model,
@@ -59,6 +61,7 @@ from .client import (  # noqa: E402
     preview_template,
     run_documentation_tests,
     run_test_suite,
+    run_text_generation,
 )
 from .experimental import agents as experimental_agent
 from .tests.decorator import scorer as scorer_decorator
@@ -116,11 +119,14 @@ __all__ = [  # noqa
     "init_dataset",
     "init_model",
     "init_r_model",
+    "generate_documentation_text",
     "get_test_suite",
+    "get_content_ids",
     "log_metric",
     "preview_template",
     "print_env",
     "reload",
+    "run_text_generation",
     "run_documentation_tests",
     # log metric function (for direct/bulk/retroactive logging of metrics)
     # test suite functions (less common)

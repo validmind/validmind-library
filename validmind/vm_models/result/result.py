@@ -693,16 +693,60 @@ class TextGenerationResult(Result):
 
     name: str = "Text Generation Result"
     ref_id: str = None
+    content_id: Optional[str] = None
     title: Optional[str] = None
     doc: Optional[str] = None
     description: Optional[Union[str, DescriptionFuture]] = None
     params: Optional[Dict[str, Any]] = None
     metadata: Optional[Dict[str, Any]] = None
+    prompt: Optional[str] = None
+    section_id: Optional[str] = None
+    context: Optional[Dict[str, Any]] = None
     _was_description_generated: bool = False
+    _client_config_cache: Optional[Any] = None
 
     def __post_init__(self):
         if self.ref_id is None:
             self.ref_id = str(uuid4())
+
+    @classmethod
+    def _get_client_config(cls):
+        """Get the client config, loading it if not cached."""
+        if cls._client_config_cache is None:
+            api_client.reload()
+            cls._client_config_cache = api_client.client_config
+
+            if cls._client_config_cache is None:
+                raise ValueError(
+                    "Failed to load client config: api_client.client_config is None"
+                )
+
+            if not hasattr(cls._client_config_cache, "documentation_template"):
+                raise ValueError(
+                    "Invalid client config: missing documentation_template"
+                )
+
+        return cls._client_config_cache
+
+    def _validate_section_id_exists(self, section_id: str):
+        """Validate the section_id exists on the template before logging."""
+        client_config = self._get_client_config()
+        for section in client_config.documentation_template["sections"]:
+            if section["id"] == section_id:
+                return
+
+        raise ValueError(
+            f"Section with id {section_id} not found in the model's document"
+        )
+
+    def _content_block_exists(self, content_id: str) -> bool:
+        """Check whether a content block already exists in the template."""
+        client_config = self._get_client_config()
+        for section in client_config.documentation_template["sections"]:
+            for block in section.get("contents", []):
+                if block.get("content_id") == content_id:
+                    return True
+        return False
 
     def __repr__(self) -> str:
         attrs = [
@@ -734,17 +778,18 @@ class TextGenerationResult(Result):
         return super().__getattribute__(name)
 
     @property
-    def test_name(self) -> str:
-        """Get the test name, using custom title if available."""
-        return self.title or test_id_to_name(self.result_id)
+    def test_name(self) -> None:
+        """Text generation results do not expose a test-style name."""
+        return None
 
     def to_html(self):
         """Generate HTML that persists in saved notebooks."""
         html_parts = [StatefulHTMLRenderer.get_base_css()]
+        display_title = self.title or ""
 
         html_parts.append(
             StatefulHTMLRenderer.render_result_header(
-                test_name=self.test_name, passed=None
+                test_name=display_title, passed=None
             )
         )
 
@@ -770,11 +815,34 @@ class TextGenerationResult(Result):
         self,
         content_id: str = None,
     ):
-        return await asyncio.gather(
-            update_metadata(
-                content_id=f"{content_id}",
-                text=self.description,
+        resolved_content_id = content_id or self.content_id
+        if not resolved_content_id or not isinstance(resolved_content_id, str):
+            raise ValueError("`content_id` must be provided to log generated text")
+
+        resolved_section_id = self.section_id
+        if resolved_section_id is not None:
+            self._validate_section_id_exists(resolved_section_id)
+        elif not self._content_block_exists(resolved_content_id):
+            raise ValueError(
+                "New generated content requires `section_id` for placement"
             )
+
+        revision_name = (
+            AI_REVISION_NAME
+            if self._was_description_generated
+            else DEFAULT_REVISION_NAME
+        )
+
+        resolved_content_id = (
+            resolved_content_id
+            if "::" in resolved_content_id
+            else f"{resolved_content_id}::{revision_name}"
+        )
+
+        return await api_client.alog_text(
+            content_id=resolved_content_id,
+            text=self.description,
+            section_id=resolved_section_id,
         )
 
     def log(

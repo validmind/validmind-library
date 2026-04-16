@@ -6,6 +6,7 @@
 Client interface for all data and model validation functions
 """
 
+import time
 from typing import Any, Callable, Dict, List, Optional, Union
 
 import numpy as np
@@ -17,6 +18,7 @@ try:
 except Exception:
     torch = None  # type: ignore  # noqa: F401
 
+from . import api_client
 from .api_client import log_input as log_input
 from .client_config import client_config
 from .errors import (
@@ -31,18 +33,23 @@ from .input_registry import input_registry
 from .logging import get_logger
 from .models.metadata import MetadataModel
 from .models.r_model import RModel
-from .template import get_template_test_suite
+from .template import get_template_content_ids, get_template_test_suite
 from .template import preview_template as _preview_template
 from .test_suites import get_by_id as get_test_suite_by_id
+from .tests.run import _get_run_metadata
+from .utils import display as vm_display
 from .utils import get_dataset_info, get_model_info
 from .vm_models import TestSuite, TestSuiteRunner
 from .vm_models.dataset import DataFrameDataset, PolarsDataset, TorchDataset, VMDataset
+from .vm_models.html_progress import HTMLLabel, HTMLProgressBar
 from .vm_models.model import (
     ModelAttributes,
     VMModel,
     get_model_class,
     is_model_metadata,
 )
+from .vm_models.result import TextGenerationResult
+from .vm_models.text_generation_summary import DocumentationTextSummary
 
 pd.option_context("format.precision", 2)
 
@@ -431,6 +438,145 @@ def preview_template() -> None:
         )
 
     _preview_template(client_config.documentation_template)
+
+
+def get_content_ids(section_ids: Optional[Union[str, List[str]]] = None) -> List[str]:
+    """Get content IDs for one or more documentation template sections.
+
+    Args:
+        section_ids: Section ID or list of section IDs. If omitted, all content
+            IDs in the current documentation template are returned.
+
+    Returns:
+        A list of content IDs in template order.
+    """
+    if client_config.documentation_template is None:
+        raise MissingDocumentationTemplate(
+            "No documentation template found. Please run `vm.init()`"
+        )
+
+    return get_template_content_ids(client_config.documentation_template, section_ids)
+
+
+def run_text_generation(
+    content_id: str,
+    prompt: Optional[str] = None,
+    section_id: Optional[str] = None,
+    context: Optional[Dict[str, Any]] = None,
+    show: bool = True,
+) -> TextGenerationResult:
+    """Generate qualitative text and return a loggable result object.
+
+    Args:
+        content_id: Content ID to generate text for.
+        prompt: Custom prompt for text generation.
+        section_id: Optional section ID used to guide generation for new content
+            and later placement during logging.
+        context: Optional context object for text generation.
+        show: Whether to display the generated result.
+
+    Returns:
+        A TextGenerationResult containing the generated text.
+    """
+    start_time = time.perf_counter()
+    description = api_client._generate_log_text(
+        content_id, prompt, context, section_id=section_id
+    )
+    metadata = _get_run_metadata(duration_seconds=time.perf_counter() - start_time)
+    result = TextGenerationResult(
+        result_id=content_id,
+        result_type="qualitative_text_generation",
+        content_id=content_id,
+        title=f"Text Generation: {content_id}",
+        description=description,
+        metadata=metadata,
+        prompt=prompt,
+        section_id=section_id,
+        context=context,
+        _was_description_generated=True,
+    )
+
+    if show:
+        result.show()
+
+    return result
+
+
+def generate_documentation_text(
+    config: Dict[str, Dict[str, Any]],
+) -> Dict[str, TextGenerationResult]:
+    """Generate and log document text blocks from a configuration dictionary.
+
+    The config is keyed by target content ID. Each value may contain:
+        - `section_id` (optional): Section to append the content block to when it
+          does not already exist in the template.
+        - `prompt` (optional): Prompt override for generation.
+        - `context` (optional): Context object passed to `run_text_generation()`,
+          e.g. `{"content_ids": [...]}`.
+
+    Args:
+        config: Mapping of content IDs to generation settings.
+
+    Returns:
+        A dictionary mapping content IDs to generated and logged results.
+    """
+    results = {}
+    num_tasks = len(config) * 2
+    html_pbar = None
+    html_pbar_description = None
+    template = client_config.documentation_template or {}
+
+    if num_tasks:
+        html_pbar_description = HTMLLabel(value="Generating documentation text...")
+        html_pbar = HTMLProgressBar(
+            max_value=num_tasks,
+            description="Generating documentation text...",
+        )
+        html_pbar.display()
+
+    def _update_progress_message(message: str) -> None:
+        if html_pbar:
+            html_pbar.update(html_pbar.value, message)
+        if html_pbar_description:
+            html_pbar_description.update(message)
+
+    def _increment_progress() -> None:
+        if html_pbar:
+            html_pbar.update(html_pbar.value + 1)
+
+    try:
+        for content_id, spec in config.items():
+            progress_message = f"Sending result to ValidMind: {content_id}..."
+            _update_progress_message(progress_message)
+            result = run_text_generation(
+                content_id=content_id,
+                prompt=spec.get("prompt"),
+                section_id=spec.get("section_id"),
+                context=spec.get("context"),
+                show=False,
+            )
+            _increment_progress()
+
+            result.log()
+            _increment_progress()
+            results[content_id] = result
+    finally:
+        if html_pbar:
+            html_pbar.update(num_tasks, "Documentation text generation complete!")
+            html_pbar.close()
+        if html_pbar_description:
+            html_pbar_description.update("Documentation text generation complete!")
+
+    if results:
+        summary = DocumentationTextSummary(
+            title=template.get("template_name", "Documentation Text"),
+            description=template.get("description", ""),
+            results=results,
+            template_sections=template.get("sections"),
+        )
+        vm_display(summary)
+
+    return results
 
 
 def run_documentation_tests(

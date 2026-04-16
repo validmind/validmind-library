@@ -278,6 +278,7 @@ async def alog_metadata(
     content_id: str,
     text: Optional[str] = None,
     _json: Optional[Dict[str, Any]] = None,
+    section_id: Optional[str] = None,
 ) -> Dict[str, Any]:
     """Logs free-form metadata to ValidMind API.
 
@@ -285,6 +286,8 @@ async def alog_metadata(
         content_id (str): Unique content identifier for the metadata.
         text (str, optional): Free-form text to assign to the metadata. Defaults to None.
         _json (dict, optional): Free-form key-value pairs to assign to the metadata. Defaults to None.
+        section_id (str, optional): Section ID to append the text block to when the
+            content ID does not already exist.
 
     Raises:
         Exception: If the API call fails.
@@ -298,9 +301,14 @@ async def alog_metadata(
     if _json is not None:
         metadata_dict["json"] = _json
 
+    request_params = {}
+    if section_id:
+        request_params["section_id"] = section_id
+
     try:
         return await _post(
             "log_metadata",
+            params=request_params,
             data=json.dumps(metadata_dict, cls=NumpyEncoder, allow_nan=False),
         )
     except Exception as e:
@@ -445,37 +453,196 @@ def log_input(input_id: str, type: str, metadata: Dict[str, Any]) -> Dict[str, A
     return run_async(alog_input, input_id, type, metadata)
 
 
-def log_text(content_id: str, text: str, _json: Optional[Dict[str, Any]] = None) -> str:
-    """Logs free-form text to ValidMind API.
+def _validate_log_text_context(
+    context: Optional[Dict[str, Any]],
+) -> Optional[Dict[str, List[str]]]:
+    """Validate supported AI generation context for ``log_text``."""
+    if context is None:
+        return None
+
+    if not isinstance(context, dict):
+        raise ValueError("`context` must be a dictionary or None")
+
+    allowed_keys = {"content_ids"}
+    unknown_keys = set(context.keys()) - allowed_keys
+    if unknown_keys:
+        raise ValueError(
+            "Unsupported `context` keys: "
+            f"{', '.join(sorted(unknown_keys))}. Only `content_ids` is supported."
+        )
+
+    content_ids = context.get("content_ids")
+    if content_ids is None:
+        raise ValueError("`context` must include `content_ids` when provided")
+    if not isinstance(content_ids, list) or not content_ids:
+        raise ValueError("`context['content_ids']` must be a non-empty list")
+    if any(
+        not isinstance(content_id, str) or not content_id for content_id in content_ids
+    ):
+        raise ValueError("`context['content_ids']` must contain only non-empty strings")
+
+    return {"content_ids": content_ids}
+
+
+def generate_qualitative_text(text_generation_data: Dict[str, Any]) -> Dict[str, Any]:
+    """Generate qualitative text using the ValidMind AI API."""
+    r = requests.post(
+        url=_get_url("ai/generate/qualitative_text_generation"),
+        headers=_get_api_headers(),
+        json=text_generation_data,
+    )
+
+    if r.status_code != 200:
+        raise_api_error(r.text)
+
+    return r.json()
+
+
+def _normalize_logged_text(text: str, field_name: str) -> str:
+    """Validate text content and convert Markdown to HTML when needed."""
+    if not isinstance(text, str) or not text:
+        raise ValueError(f"`{field_name}` must be a non-empty string")
+
+    if not is_html(text):
+        return md_to_html(text, mathml=True)
+
+    return text
+
+
+def _validate_manual_log_text_args(
+    text: str, prompt: Optional[str], context: Optional[Dict[str, Any]]
+) -> str:
+    """Validate manual log_text arguments."""
+    if prompt is not None:
+        raise ValueError("`prompt` is only supported when `text` is omitted")
+    if context is not None:
+        raise ValueError("`context` is only supported when `text` is omitted")
+
+    return _normalize_logged_text(text, "text")
+
+
+def _build_log_text_generation_request(
+    content_id: str,
+    prompt: Optional[str],
+    context: Optional[Dict[str, Any]],
+    section_id: Optional[str] = None,
+) -> Dict[str, Any]:
+    """Build the request payload for AI-assisted text generation."""
+    request_data = {
+        "content_id": content_id,
+        "generate": True,
+    }
+
+    if prompt is not None:
+        if not isinstance(prompt, str) or not prompt:
+            raise ValueError("`prompt` must be a non-empty string")
+        request_data["prompt"] = prompt
+
+    if section_id is not None:
+        if not isinstance(section_id, str) or not section_id:
+            raise ValueError("`section_id` must be a non-empty string")
+        request_data["section_id"] = section_id
+
+    validated_context = _validate_log_text_context(context)
+    if validated_context is not None:
+        request_data["context"] = validated_context
+
+    return request_data
+
+
+def _generate_log_text(
+    content_id: str,
+    prompt: Optional[str],
+    context: Optional[Dict[str, Any]],
+    section_id: Optional[str] = None,
+) -> str:
+    """Generate text for log_text and normalize it to HTML."""
+    request_data = _build_log_text_generation_request(
+        content_id,
+        prompt,
+        context,
+        section_id=section_id,
+    )
+    generated_text = generate_qualitative_text(request_data)["content"]
+    return _normalize_logged_text(generated_text, "generated text")
+
+
+def _render_logged_text(logged_text: Dict[str, Any]) -> str:
+    """Render logged text as notebook-friendly HTML."""
+    from .vm_models.html_renderer import StatefulHTMLRenderer
+
+    return StatefulHTMLRenderer.render_accordion(
+        items=[logged_text["text"]],
+        titles=[f"Text Block: '{logged_text['content_id']}'"],
+    )
+
+
+async def alog_text(
+    content_id: str,
+    text: Optional[str] = None,
+    prompt: Optional[str] = None,
+    context: Optional[Dict[str, Any]] = None,
+    _json: Optional[Dict[str, Any]] = None,
+    section_id: Optional[str] = None,
+) -> Dict[str, Any]:
+    """Async variant of ``log_text`` that logs or generates text."""
+    if not content_id or not isinstance(content_id, str):
+        raise ValueError("`content_id` must be a non-empty string")
+
+    if text is not None:
+        text = _validate_manual_log_text_args(text, prompt, context)
+    else:
+        text = _generate_log_text(
+            content_id,
+            prompt,
+            context,
+            section_id=section_id,
+        )
+
+    return await alog_metadata(content_id, text, _json, section_id=section_id)
+
+
+def log_text(
+    content_id: str,
+    text: Optional[str] = None,
+    prompt: Optional[str] = None,
+    context: Optional[Dict[str, Any]] = None,
+    _json: Optional[Dict[str, Any]] = None,
+    section_id: Optional[str] = None,
+) -> str:
+    """Logs or generates free-form text to ValidMind API.
 
     Args:
         content_id (str): Unique content identifier for the text.
-        text (str): The text to log. Will be converted to HTML with MathML support.
+        text (str, optional): The text to log. Will be converted to HTML with
+            MathML support when Markdown is provided. If omitted, text is
+            generated using the qualitative text generation backend.
+        prompt (str, optional): Custom prompt used for AI-assisted text
+            generation. Only supported when `text` is omitted.
+        context (dict, optional): Context object for AI-assisted text
+            generation. When omitted, the full document is used as context.
+            Currently only supports `{"content_ids": [<content_id>, ...]}`.
         _json (dict, optional): Additional metadata to associate with the text. Defaults to None.
+        section_id (str, optional): Section ID to append the text block to when the
+            content ID does not already exist.
 
     Raises:
-        ValueError: If content_id or text are empty or not strings.
+        ValueError: If arguments are invalid or use incompatible combinations.
         Exception: If the API call fails.
 
     Returns:
         str: HTML string containing the logged text in an accordion format.
     """
-    if not content_id or not isinstance(content_id, str):
-        raise ValueError("`content_id` must be a non-empty string")
-    if not text or not isinstance(text, str):
-        raise ValueError("`text` must be a non-empty string")
-
-    if not is_html(text):
-        text = md_to_html(text, mathml=True)
-
-    log_text = run_async(alog_metadata, content_id, text, _json)
-
-    from .vm_models.html_renderer import StatefulHTMLRenderer
-
-    return StatefulHTMLRenderer.render_accordion(
-        items=[log_text["text"]],
-        titles=[f"Text Block: '{log_text['content_id']}'"],
+    logged_text = run_async(
+        alog_text,
+        content_id=content_id,
+        text=text,
+        prompt=prompt,
+        context=context,
+        _json=_json,
+        section_id=section_id,
     )
+    return _render_logged_text(logged_text)
 
 
 async def alog_metric(

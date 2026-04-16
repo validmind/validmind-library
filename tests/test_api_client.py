@@ -16,10 +16,11 @@ os.environ["VM_API_MODEL"] = "your_model"
 import validmind.api_client as api_client
 from validmind.__version__ import __version__
 from validmind.errors import (
+    APIRequestError,
     MissingAPICredentialsError,
     MissingModelIdError,
-    APIRequestError,
 )
+from validmind.utils import md_to_html
 from validmind.vm_models.figure import Figure
 
 
@@ -226,6 +227,27 @@ class TestAPIClient(unittest.TestCase):
         )
 
     @patch("aiohttp.ClientSession.post")
+    def test_log_metadata_with_section_id(self, mock_post: MagicMock):
+        mock_post.return_value = MockAsyncResponse(200, json={"cuid": "abc1234"})
+
+        self.run_async(
+            api_client.alog_metadata,
+            "1234",
+            text="Some Text",
+            section_id="intended_use",
+        )
+
+        mock_post.assert_called_with(
+            f"{os.environ['VM_API_HOST']}/log_metadata?section_id=intended_use",
+            data=json.dumps(
+                {
+                    "content_id": "1234",
+                    "text": "Some Text",
+                }
+            ),
+        )
+
+    @patch("aiohttp.ClientSession.post")
     def test_log_test_result(self, mock_post):
         result = {
             "test_name": "test_name",
@@ -244,6 +266,128 @@ class TestAPIClient(unittest.TestCase):
         url = f"{os.environ['VM_API_HOST']}/log_test_results"
 
         mock_post.assert_called_with(url, data=json.dumps(result))
+
+    @patch("requests.post")
+    @patch("aiohttp.ClientSession.post")
+    def test_log_text_generates_text_and_logs_metadata(
+        self, mock_aiohttp_post, mock_requests_post
+    ):
+        mock_requests_post.return_value = Mock(status_code=200)
+        mock_requests_post.return_value.json.return_value = {
+            "content": "## Generated Summary\nGenerated content."
+        }
+        mock_aiohttp_post.return_value = MockAsyncResponse(
+            200,
+            json={
+                "content_id": "dataset_summary_text",
+                "text": md_to_html("## Generated Summary\nGenerated content.", mathml=True),
+            },
+        )
+
+        api_client.log_text(
+            content_id="dataset_summary_text",
+            prompt="Summarize the dataset.",
+            context={"content_ids": ["train_dataset", "target_description_text"]},
+        )
+
+        mock_requests_post.assert_called_once_with(
+            url=f"{os.environ['VM_API_HOST']}/ai/generate/qualitative_text_generation",
+            headers={
+                "X-API-KEY": os.environ["VM_API_KEY"],
+                "X-API-SECRET": os.environ["VM_API_SECRET"],
+                "X-MODEL-CUID": os.environ["VM_API_MODEL"],
+                "X-MONITORING": "False",
+                "X-LIBRARY-VERSION": __version__,
+            },
+            json={
+                "content_id": "dataset_summary_text",
+                "generate": True,
+                "prompt": "Summarize the dataset.",
+                "context": {
+                    "content_ids": ["train_dataset", "target_description_text"]
+                },
+            },
+        )
+        mock_aiohttp_post.assert_called_once_with(
+            f"{os.environ['VM_API_HOST']}/log_metadata",
+            data=json.dumps(
+                {
+                    "content_id": "dataset_summary_text",
+                    "text": md_to_html(
+                        "## Generated Summary\nGenerated content.", mathml=True
+                    ),
+                }
+            ),
+        )
+
+    @patch("requests.post")
+    @patch("aiohttp.ClientSession.post")
+    def test_log_text_logs_metadata_with_section_id(
+        self, mock_aiohttp_post, mock_requests_post
+    ):
+        mock_requests_post.return_value = Mock(status_code=200)
+        mock_requests_post.return_value.json.return_value = {
+            "content": "Generated content."
+        }
+        mock_aiohttp_post.return_value = MockAsyncResponse(
+            200,
+            json={
+                "content_id": "dataset_summary_text",
+                "text": "Generated content.",
+            },
+        )
+
+        api_client.log_text(
+            content_id="dataset_summary_text",
+            prompt="Summarize the dataset.",
+            section_id="intended_use",
+        )
+
+        mock_requests_post.assert_called_once_with(
+            url=f"{os.environ['VM_API_HOST']}/ai/generate/qualitative_text_generation",
+            headers={
+                "X-API-KEY": os.environ["VM_API_KEY"],
+                "X-API-SECRET": os.environ["VM_API_SECRET"],
+                "X-MODEL-CUID": os.environ["VM_API_MODEL"],
+                "X-MONITORING": "False",
+                "X-LIBRARY-VERSION": __version__,
+            },
+            json={
+                "content_id": "dataset_summary_text",
+                "generate": True,
+                "prompt": "Summarize the dataset.",
+                "section_id": "intended_use",
+            },
+        )
+        mock_aiohttp_post.assert_called_once_with(
+            f"{os.environ['VM_API_HOST']}/log_metadata?section_id=intended_use",
+            data=json.dumps(
+                {
+                    "content_id": "dataset_summary_text",
+                    "text": md_to_html("Generated content.", mathml=True),
+                }
+            ),
+        )
+
+    def test_log_text_rejects_prompt_when_text_is_provided(self):
+        with self.assertRaisesRegex(
+            ValueError, "`prompt` is only supported when `text` is omitted"
+        ):
+            api_client.log_text(
+                content_id="dataset_summary_text",
+                text="Hello world",
+                prompt="Ignore the provided text.",
+            )
+
+    def test_log_text_rejects_invalid_context(self):
+        with self.assertRaisesRegex(
+            ValueError,
+            "`context\\['content_ids'\\]` must contain only non-empty strings",
+        ):
+            api_client.log_text(
+                content_id="dataset_summary_text",
+                context={"content_ids": ["valid", ""]},
+            )
 
 
 if __name__ == "__main__":
