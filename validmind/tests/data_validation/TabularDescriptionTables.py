@@ -177,7 +177,7 @@ def get_summary_statistics_datetime(dataset, datetime_fields):
 
 def get_categorical_columns(dataset):
     categorical_columns = dataset.df.select_dtypes(
-        include=["object", "category"]
+        include=["object", "category", "bool"]
     ).columns.tolist()
     return categorical_columns
 
