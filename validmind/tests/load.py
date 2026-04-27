@@ -21,6 +21,7 @@ from typing import (
 from uuid import uuid4
 
 import pandas as pd
+from pandas.io.formats.style import Styler
 
 from ..errors import LoadTestError, MissingDependencyError
 from ..html_templates.content_blocks import test_content_block_html
@@ -49,7 +50,7 @@ except ImportError:
 FIGURE_TYPES = tuple(
     item for item in (Figure, MatplotlibFigure, PlotlyFigure) if inspect.isclass(item)
 )
-TABLE_TYPES = (pd.DataFrame, ResultTable)
+TABLE_TYPES = (pd.DataFrame, Styler, ResultTable)
 GENERIC_TABLE_TYPES = (list, dict)
 
 
@@ -450,7 +451,7 @@ def describe_test(
     html = test_content_block_html.format(
         test_id=test_id,
         uuid=str(uuid4()),
-        title=f'{details["Name"]}',
+        title=f"{details['Name']}",
         description=md_to_html(details["Description"].strip()),
         required_inputs=", ".join(details["Required Inputs"] or ["None"]),
         params_table="\n".join(
