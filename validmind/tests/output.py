@@ -8,6 +8,7 @@ from uuid import uuid4
 
 import numpy as np
 import pandas as pd
+from pandas.io.formats.style import Styler
 
 from validmind.utils import is_html, md_to_html
 from validmind.vm_models.figure import (
@@ -78,7 +79,43 @@ class FigureOutputHandler(OutputHandler):
 
 class TableOutputHandler(OutputHandler):
     def can_handle(self, item: Any) -> bool:
-        return isinstance(item, (list, pd.DataFrame, dict, ResultTable, tuple))
+        return isinstance(item, (list, pd.DataFrame, Styler, dict, ResultTable, tuple))
+
+    def _convert_styler(self, styler: Styler) -> pd.DataFrame:
+        """Convert a pandas Styler to a DataFrame with portable cell styles."""
+        styler._compute()
+
+        df = styler.data.copy(deep=True).astype(object)
+        display_funcs = getattr(styler, "_display_funcs", {})
+
+        style_key_map = {
+            "background": "bgcolor",
+            "background-color": "bgcolor",
+            "color": "color",
+            "font-weight": "fontWeight",
+            "text-align": "textAlign",
+        }
+
+        for (row_idx, col_idx), styles in styler.ctx.items():
+            cell_styles = {}
+
+            for css_property, css_value in styles:
+                style_key = style_key_map.get(css_property.lower())
+                if style_key and css_value:
+                    cell_styles[style_key] = css_value
+
+            if not cell_styles:
+                continue
+
+            value = df.iat[row_idx, col_idx]
+            formatter = display_funcs.get((row_idx, col_idx))
+
+            if formatter:
+                value = formatter(value)
+
+            df.iat[row_idx, col_idx] = {"value": value, **cell_styles}
+
+        return df
 
     def _convert_simple_type(self, data: Any) -> pd.DataFrame:
         """Convert a simple data type to a DataFrame."""
@@ -111,6 +148,8 @@ class TableOutputHandler(OutputHandler):
         # Handle special cases by type
         if isinstance(table_data, pd.DataFrame):
             return table_data
+        elif isinstance(table_data, Styler):
+            return self._convert_styler(table_data)
         elif isinstance(table_data, (dict, str, type(None))):
             return self._convert_simple_type(table_data)
         elif isinstance(table_data, tuple):
@@ -126,7 +165,13 @@ class TableOutputHandler(OutputHandler):
     def process(
         self,
         item: Union[
-            List[Dict[str, Any]], pd.DataFrame, Dict[str, Any], ResultTable, str, tuple
+            List[Dict[str, Any]],
+            pd.DataFrame,
+            Styler,
+            Dict[str, Any],
+            ResultTable,
+            str,
+            tuple,
         ],
         result: TestResult,
     ) -> None:
