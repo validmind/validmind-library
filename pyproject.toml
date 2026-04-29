@@ -3,7 +3,7 @@ name = "validmind"
 version = "2.13.0"
 description = "ValidMind Library"
 readme = "README.pypi.md"
-requires-python = ">=3.9,<3.15"
+requires-python = ">=3.10,<3.15"
 license = { file = "LICENSE" }
 authors = [
   { name = "Andres Rodriguez", email = "andres@validmind.ai" },
