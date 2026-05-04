@@ -21,7 +21,12 @@ from aiohttp import FormData
 
 from .__version__ import __version__
 from .client_config import client_config
-from .errors import MissingAPICredentialsError, MissingModelIdError, raise_api_error
+from .errors import (
+    MissingAPICredentialsError,
+    MissingModelIdError,
+    ValidMindAuthError,
+    raise_api_error,
+)
 from .logging import get_logger, log_api_operation
 from .utils import NumpyEncoder, is_html, md_to_html, run_async
 from .vm_models.figure import Figure
@@ -34,8 +39,28 @@ _api_host = os.getenv("VM_API_HOST")
 _model_cuid = os.getenv("VM_API_MODEL")
 _document = None
 _monitoring = False
+_auth_mode = "api_key"
+_access_token: Optional[str] = None
+_oidc_login_context: Optional[Dict[str, str]] = None
 
 __api_session: Optional[aiohttp.ClientSession] = None
+
+
+def _invalidate_async_session() -> None:
+    """Drop the aiohttp session so the next request picks up new headers."""
+    global __api_session
+    sess = __api_session
+    __api_session = None
+    if sess is None or sess.closed:
+        return
+    try:
+        loop = asyncio.get_running_loop()
+        loop.create_task(sess.close())
+    except RuntimeError:
+        try:
+            asyncio.run(sess.close())
+        except RuntimeError:
+            pass
 
 
 @atexit.register
@@ -70,14 +95,21 @@ def get_api_model() -> Optional[str]:
 
 def _get_api_headers() -> Dict[str, str]:
     headers = {
-        "X-API-KEY": _api_key,
-        "X-API-SECRET": _api_secret,
         "X-MODEL-CUID": _model_cuid,
         "X-MONITORING": str(_monitoring),
         "X-LIBRARY-VERSION": __version__,
     }
     if _document:
         headers["X-DOCUMENT-TYPE"] = _document
+    if _auth_mode == "oidc":
+        if not _access_token:
+            raise ValidMindAuthError(
+                "OAuth access token is missing. Run vm.init() again with issuer and client_id."
+            )
+        headers["Authorization"] = f"Bearer {_access_token}"
+    else:
+        headers["X-API-KEY"] = _api_key
+        headers["X-API-SECRET"] = _api_secret
     return headers
 
 
@@ -192,14 +224,61 @@ def _ping() -> Dict[str, Any]:
         )
 
 
+def _obtain_oidc_tokens(
+    issuer: str,
+    client_id: str,
+    scope: str,
+    audience: Optional[str] = None,
+) -> Dict[str, Any]:
+    """Return a credentials entry dict with access_token, expires_at, refresh_token, etc."""
+    from .credentials_store import (
+        delete_cached_entry,
+        get_cached_entry,
+        is_expired,
+        normalize_client_id,
+        normalize_issuer,
+        upsert_cached_entry,
+    )
+    from .oidc_device import run_device_flow, try_refresh_cached_tokens
+
+    norm_issuer = normalize_issuer(issuer)
+    norm_client_id = normalize_client_id(client_id)
+    cached = get_cached_entry(norm_issuer, norm_client_id, audience=audience)
+    if cached and not is_expired(cached):
+        return cached
+    if cached and cached.get("refresh_token"):
+        try:
+            new_tokens = try_refresh_cached_tokens(
+                norm_issuer,
+                norm_client_id,
+                cached["refresh_token"],
+                scope,
+                audience=audience,
+            )
+            upsert_cached_entry(
+                norm_issuer, norm_client_id, new_tokens, audience=audience
+            )
+            return new_tokens
+        except ValidMindAuthError:
+            delete_cached_entry(norm_issuer, norm_client_id, audience=audience)
+    tokens = run_device_flow(norm_issuer, norm_client_id, scope, audience=audience)
+    upsert_cached_entry(norm_issuer, norm_client_id, tokens, audience=audience)
+    return tokens
+
+
 def init(
     api_key: Optional[str] = None,
     api_secret: Optional[str] = None,
     api_host: Optional[str] = None,
+    api_url: Optional[str] = None,
     model: Optional[str] = None,
     monitoring: bool = False,
     generate_descriptions: Optional[bool] = None,
     document: Optional[str] = None,
+    issuer: Optional[str] = None,
+    client_id: Optional[str] = None,
+    scope: Optional[str] = None,
+    audience: Optional[str] = None,
 ):
     """
     Initializes the API client instances and calls the /ping endpoint to ensure
@@ -208,36 +287,70 @@ def init(
     If the API key and secret are not provided, the client will attempt to
     retrieve them from the environment variables `VM_API_KEY` and `VM_API_SECRET`.
 
+    Alternatively, pass ``issuer`` and ``client_id`` to authenticate via the OIDC
+    device authorization flow (RFC 8628). Tokens are cached under
+    ``~/.validmind/credentials.json``. Do not combine API keys with OIDC parameters.
+
     Args:
         model (str, optional): The model CUID. Defaults to None.
         api_key (str, optional): The API key. Defaults to None.
         api_secret (str, optional): The API secret. Defaults to None.
-        api_host (str, optional): The API host. Defaults to None.
+        api_host (str, optional): The API host (tracking base URL). Defaults to None.
+        api_url (str, optional): Alias for ``api_host``.
         monitoring (bool): The ongoing monitoring flag. Defaults to False.
         generate_descriptions (bool, optional): Whether to use GenAI to generate test result descriptions. Defaults to True.
         document (str, optional): The name of the document. Omitting this argument is deprecated.
+        issuer (str, optional): OIDC issuer URL (e.g. Entra tenant ``.../v2.0``).
+        client_id (str, optional): OAuth public client id for device flow.
+        scope (str, optional): OAuth scopes (default ``openid profile email``).
+        audience (str, optional): Resource / API identifier for the access token
+            (e.g. Auth0 API Identifier). Use the same value the ValidMind backend
+            expects as ``api_audience`` so the provider can issue RS256 API tokens.
+            Can be set via env ``VM_OIDC_AUDIENCE``.
+
     Raises:
-        ValueError: If the API key and secret are not provided
+        MissingAPICredentialsError: If neither API keys nor OIDC parameters can be resolved.
+        MissingModelIdError: If model id is missing.
+        ValidMindAuthError: If OIDC configuration conflicts or login fails.
     """
     global _api_key, _api_secret, _api_host, _model_cuid, _monitoring, _document
+    global _auth_mode, _access_token, _oidc_login_context
 
     if api_key == "...":
         # special case to detect when running a notebook placeholder (...)
         # will override with environment variables for easier local development
-        api_host = api_key = api_secret = model = None
+        api_host = (
+            api_url
+        ) = api_key = api_secret = model = issuer = client_id = audience = None
 
     _model_cuid = model or os.getenv("VM_API_MODEL")
     if _model_cuid is None:
         raise MissingModelIdError()
 
-    _api_key = api_key or os.getenv("VM_API_KEY")
-    _api_secret = api_secret or os.getenv("VM_API_SECRET")
-    if _api_key is None or _api_secret is None:
-        raise MissingAPICredentialsError()
-
-    _api_host = api_host or os.getenv(
-        "VM_API_HOST", "http://localhost:5000/api/v1/tracking/"
+    resolved_host = (
+        api_url
+        or api_host
+        or os.getenv("VM_API_HOST", "http://localhost:5000/api/v1/tracking/")
     )
+
+    env_key = api_key if api_key is not None else os.getenv("VM_API_KEY")
+    env_secret = api_secret if api_secret is not None else os.getenv("VM_API_SECRET")
+    has_api_creds = (
+        env_key is not None
+        and env_secret is not None
+        and env_key != ""
+        and env_secret != ""
+    )
+    has_oidc = bool(issuer and client_id)
+    if has_oidc and has_api_creds:
+        raise ValidMindAuthError(
+            "Provide either API credentials (api_key and api_secret) or OIDC "
+            "(issuer and client_id), not both."
+        )
+    if issuer and not client_id:
+        raise ValidMindAuthError("client_id is required when issuer is set.")
+    if client_id and not issuer:
+        raise ValidMindAuthError("issuer is required when client_id is set.")
 
     _monitoring = monitoring
 
@@ -251,6 +364,41 @@ def init(
         )
 
     _document = document
+
+    if has_oidc:
+        _auth_mode = "oidc"
+        _api_key = None
+        _api_secret = None
+        _api_host = resolved_host
+        scope_val = scope or "openid profile email"
+        from .credentials_store import normalize_audience
+
+        oidc_audience_val = normalize_audience(
+            audience if audience is not None else os.getenv("VM_OIDC_AUDIENCE")
+        )
+        oidc_audience_opt = oidc_audience_val or None
+        entry = _obtain_oidc_tokens(
+            issuer, client_id, scope_val, audience=oidc_audience_opt
+        )
+        _access_token = entry["access_token"]
+        _oidc_login_context = {
+            "issuer": entry["issuer"],
+            "client_id": entry["client_id"],
+            "scope": scope_val,
+            "audience": entry.get("audience") or oidc_audience_val,
+        }
+        _invalidate_async_session()
+    else:
+        if env_key is None or env_secret is None:
+            raise MissingAPICredentialsError()
+        _auth_mode = "api_key"
+        _access_token = None
+        _oidc_login_context = None
+        _api_key = env_key
+        _api_secret = env_secret
+        _api_host = resolved_host
+        _invalidate_async_session()
+
     reload()
 
 

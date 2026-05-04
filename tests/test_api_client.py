@@ -19,6 +19,7 @@ from validmind.errors import (
     APIRequestError,
     MissingAPICredentialsError,
     MissingModelIdError,
+    ValidMindAuthError,
 )
 from validmind.utils import md_to_html
 from validmind.vm_models.figure import Figure
@@ -388,6 +389,121 @@ class TestAPIClient(unittest.TestCase):
                 content_id="dataset_summary_text",
                 context={"content_ids": ["valid", ""]},
             )
+
+
+class TestAPIClientOIDC(unittest.TestCase):
+    """OIDC device-flow authentication via vm.init()."""
+
+    def tearDown(self):
+        with patch("validmind.api_client._ping"):
+            api_client.init(
+                api_key=os.environ["VM_API_KEY"],
+                api_secret=os.environ["VM_API_SECRET"],
+                api_host=os.environ["VM_API_HOST"],
+                model=os.environ["VM_API_MODEL"],
+                document="documentation",
+            )
+
+    @patch("validmind.api_client.reload")
+    def test_init_rejects_api_key_with_oidc(self, mock_reload):
+        with self.assertRaises(ValidMindAuthError):
+            api_client.init(
+                api_key="x",
+                api_secret="y",
+                model="m",
+                api_host="http://h/",
+                issuer="https://issuer/",
+                client_id="cid",
+            )
+        mock_reload.assert_not_called()
+
+    @patch("validmind.api_client.reload")
+    def test_init_requires_client_id_with_issuer(self, mock_reload):
+        with self.assertRaises(ValidMindAuthError):
+            api_client.init(
+                model="m",
+                api_host="http://h/",
+                issuer="https://issuer/",
+            )
+        mock_reload.assert_not_called()
+
+    @patch("validmind.api_client._ping")
+    @patch("validmind.api_client._obtain_oidc_tokens")
+    def test_init_oidc_uses_bearer_headers(self, mock_obtain, mock_ping):
+        mock_obtain.return_value = {
+            "issuer": "https://issuer/",
+            "client_id": "cid",
+            "access_token": "tok",
+            "expires_at": "2099-01-01T00:00:00+00:00",
+            "refresh_token": None,
+            "id_token": None,
+        }
+        api_client.init(
+            model="model-cuid",
+            api_host="http://localhost/track/",
+            api_key="",
+            api_secret="",
+            issuer="https://issuer/",
+            client_id="cid",
+            document="documentation",
+        )
+        headers = api_client._get_api_headers()
+        self.assertEqual(headers["Authorization"], "Bearer tok")
+        self.assertNotIn("X-API-KEY", headers)
+
+    @patch("validmind.api_client._ping")
+    @patch("validmind.api_client._obtain_oidc_tokens")
+    def test_init_oidc_passes_audience(self, mock_obtain, mock_ping):
+        mock_obtain.return_value = {
+            "issuer": "https://issuer/",
+            "client_id": "cid",
+            "access_token": "tok",
+            "expires_at": "2099-01-01T00:00:00+00:00",
+            "refresh_token": None,
+            "id_token": None,
+            "audience": "https://api.example.com",
+        }
+        api_client.init(
+            model="model-cuid",
+            api_host="http://localhost/track/",
+            api_key="",
+            api_secret="",
+            issuer="https://issuer/",
+            client_id="cid",
+            audience="https://api.example.com",
+            document="documentation",
+        )
+        mock_obtain.assert_called_once()
+        _args, kwargs = mock_obtain.call_args
+        self.assertEqual(
+            kwargs.get("audience"),
+            "https://api.example.com",
+        )
+        ctx = api_client._oidc_login_context
+        assert ctx is not None
+        self.assertEqual(ctx["audience"], "https://api.example.com")
+
+    @patch("validmind.api_client._ping")
+    @patch("validmind.api_client._obtain_oidc_tokens")
+    def test_api_url_alias_sets_host(self, mock_obtain, mock_ping):
+        mock_obtain.return_value = {
+            "issuer": "https://issuer/",
+            "client_id": "cid",
+            "access_token": "tok",
+            "expires_at": "2099-01-01T00:00:00+00:00",
+            "refresh_token": None,
+            "id_token": None,
+        }
+        api_client.init(
+            model="model-cuid",
+            api_url="http://localhost/from-api-url/",
+            api_key="",
+            api_secret="",
+            issuer="https://issuer/",
+            client_id="cid",
+            document="documentation",
+        )
+        self.assertEqual(api_client.get_api_host(), "http://localhost/from-api-url/")
 
 
 if __name__ == "__main__":
