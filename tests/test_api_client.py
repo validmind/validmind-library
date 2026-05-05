@@ -453,6 +453,52 @@ class TestAPIClientOIDC(unittest.TestCase):
 
     @patch("validmind.api_client._ping")
     @patch("validmind.api_client._obtain_oidc_tokens")
+    def test_init_entra_oidc_uses_id_token(self, mock_obtain, mock_ping):
+        mock_obtain.return_value = {
+            "issuer": "https://login.microsoftonline.com/tenant-id/v2.0",
+            "client_id": "cid",
+            "access_token": "access-token",
+            "expires_at": "2099-01-01T00:00:00+00:00",
+            "refresh_token": None,
+            "id_token": "id-token",
+        }
+        api_client.init(
+            model="model-cuid",
+            api_host="http://localhost/track/",
+            api_key="",
+            api_secret="",
+            issuer="https://login.microsoftonline.com/tenant-id/v2.0",
+            client_id="cid",
+            document="documentation",
+        )
+        headers = api_client._get_api_headers()
+        self.assertEqual(headers["Authorization"], "Bearer id-token")
+
+    @patch("validmind.api_client._ping")
+    @patch("validmind.api_client._obtain_oidc_tokens")
+    def test_init_non_entra_oidc_prefers_access_token(self, mock_obtain, mock_ping):
+        mock_obtain.return_value = {
+            "issuer": "https://issuer.example.com/",
+            "client_id": "cid",
+            "access_token": "access-token",
+            "expires_at": "2099-01-01T00:00:00+00:00",
+            "refresh_token": None,
+            "id_token": "id-token",
+        }
+        api_client.init(
+            model="model-cuid",
+            api_host="http://localhost/track/",
+            api_key="",
+            api_secret="",
+            issuer="https://issuer.example.com/",
+            client_id="cid",
+            document="documentation",
+        )
+        headers = api_client._get_api_headers()
+        self.assertEqual(headers["Authorization"], "Bearer access-token")
+
+    @patch("validmind.api_client._ping")
+    @patch("validmind.api_client._obtain_oidc_tokens")
     def test_init_oidc_passes_audience(self, mock_obtain, mock_ping):
         mock_obtain.return_value = {
             "issuer": "https://issuer/",

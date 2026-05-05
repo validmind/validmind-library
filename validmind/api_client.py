@@ -266,6 +266,16 @@ def _obtain_oidc_tokens(
     return tokens
 
 
+def _is_entra_issuer(issuer: str) -> bool:
+    return "login.microsoftonline.com" in issuer.lower()
+
+
+def _select_oidc_bearer_token(entry: Dict[str, Any]) -> str:
+    if _is_entra_issuer(entry.get("issuer", "")) and entry.get("id_token"):
+        return entry["id_token"]
+    return entry["access_token"]
+
+
 def init(
     api_key: Optional[str] = None,
     api_secret: Optional[str] = None,
@@ -380,7 +390,7 @@ def init(
         entry = _obtain_oidc_tokens(
             issuer, client_id, scope_val, audience=oidc_audience_opt
         )
-        _access_token = entry["access_token"]
+        _access_token = _select_oidc_bearer_token(entry)
         _oidc_login_context = {
             "issuer": entry["issuer"],
             "client_id": entry["client_id"],
