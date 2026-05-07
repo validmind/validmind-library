@@ -86,7 +86,10 @@ The <b>features</b> used in the mortality model are:
 ```{r setup, include=FALSE}
 library(reticulate)
 
-python_version <- "<path_to_python_version>"
+python_version <- Sys.getenv("VALIDMIND_PYTHON", Sys.which("python"))
+if (nchar(python_version) > 0 && !startsWith(python_version, "/")) {
+  python_version <- file.path(getwd(), python_version)
+}
 use_python(python_version)
 
 library(magrittr) # needs to be run every time you start R and want to use %>%
@@ -156,11 +159,10 @@ initialize the ValidMind Library when run:
 
 ```{r}
 vm_r <- vm(
+  api_host="https://app.prod.validmind.ai/api/v1/tracking",
   api_key="<your_api_key_here>",
   api_secret="<your_api_secret_here>",
-  model="<your_project_id_here>",
-  python_version=python_version,
-  api_host="https://app.prod.validmind.ai/api/v1/tracking"
+  model="<your_model_id_here>"
 )
 ```
 

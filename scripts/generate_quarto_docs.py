@@ -14,25 +14,49 @@ import inspect
 # Add at module level
 _alias_cache = {}  # Cache for resolved aliases
 
+
+def _has_test_decorators(module_data: Dict[str, Any]) -> bool:
+    """Check if module has any member with @tags or @tasks decorator."""
+    for member in module_data.get('members', {}).values():
+        for dec in member.get('decorators', []):
+            func_name = dec.get('value', {}).get('function', {}).get('name', '')
+            if func_name in ('tags', 'tasks'):
+                return True
+    return False
+
+
+def _should_filter_module(name: str, module_data: Optional[Dict[str, Any]] = None) -> bool:
+    """Check if a module should be filtered from sidebar.
+
+    Filter out if BOTH conditions are true:
+    - Name starts with lowercase, AND
+    - Has no @tags/@tasks decorated functions
+    """
+    is_lowercase = name and name[0].islower()
+    has_decorators = module_data and _has_test_decorators(module_data)
+
+    return is_lowercase and not has_decorators
+
+
 def resolve_alias(member: Dict[str, Any], data: Dict[str, Any]) -> Dict[str, Any]:
     """Resolve an alias to its target member."""
     if member.get('kind') == 'alias' and member.get('target_path'):
         target_path = member['target_path']
-        
+
         # Check cache first
         if target_path in _alias_cache:
             return _alias_cache[target_path]
-            
+
         path_parts = target_path.split('.')
         # Skip resolution if it's not in our codebase
         if path_parts[0] != 'validmind':
             return member
-        
+
         # Skip known modules that aren't in the documentation
         if len(path_parts) > 1 and path_parts[1] in ['ai', 'internal']:
             # Silently return the member without warning for expected missing paths
             return member
-                        
+
         current = data[path_parts[0]]  # Start at validmind
         for part in path_parts[1:]:
             if part in current.get('members', {}):
@@ -49,10 +73,10 @@ def resolve_alias(member: Dict[str, Any], data: Dict[str, Any]) -> Dict[str, Any
                         # Cache the result if found
                         _alias_cache[target_path] = found_class
                         return found_class
-                
+
                 print(f"Warning: Could not resolve alias path {target_path}, part '{part}' not found")
                 return member
-                
+
 
         # Cache the result
         _alias_cache[target_path] = current
@@ -77,11 +101,11 @@ def sort_members(members, is_errors_module=False):
     """Sort members by kind and name."""
     if isinstance(members, dict):
         members = members.values()
-    
+
     def get_sort_key(member):
         name = str(member.get('name', ''))
         kind = member.get('kind', '')
-        
+
         if is_errors_module and kind == 'class':
             # Base errors first
             if name == 'BaseError':
@@ -109,46 +133,46 @@ def sort_members(members, is_errors_module=False):
                 return ('1', name.lower())
             else:
                 return ('2', name.lower())
-    
+
     return sorted(members, key=get_sort_key)
 
 def is_public(member: Dict[str, Any], module: Dict[str, Any], full_data: Dict[str, Any], is_root: bool = False) -> bool:
     """Check if a member should be included in public documentation."""
     name = member.get('name', '')
     path = member.get('path', '')
-    
+
     # Skip private members except __init__ and __post_init__
     if name.startswith('_') and name not in {'__init__', '__post_init__'}:
         return False
-    
+
     # Specifically exclude SkipTestError and logger/get_logger from test modules
     if name in {'SkipTestError', 'logger'} and 'tests' in path:
         return False
-    
+
     if name == 'get_logger' and path.startswith('validmind.tests'):
         return False
-    
+
     # Check if the member is an alias that's imported from another module
     if member.get('kind') == 'alias' and member.get('target_path'):
         # If the module has __all__, only include aliases listed there
         if module and '__all__' in module.get('members', {}):
             module_all = get_all_members(module.get('members', {}))
             return name in module_all
-        
+
         # Otherwise, skip aliases (imported functions) unless at root level
         if not is_root:
             return False
-    
+
     # At root level, only show items from __all__
     if is_root:
         root_all = get_all_members(full_data['validmind'].get('members', {}))
         return name in root_all
-    
+
     # If module has __all__, only include members listed there
     if module and '__all__' in module.get('members', {}):
         module_all = get_all_members(module.get('members', {}))
         return name in module_all
-    
+
     return True
 
 def ensure_dir(path):
@@ -157,7 +181,7 @@ def ensure_dir(path):
 
 def clean_anchor_text(heading: str) -> str:
     """Safely clean heading text for anchor generation.
-    
+
     Handles:
     - <span class="muted">()</span>
     - <span class='muted'>class</span>
@@ -168,7 +192,7 @@ def clean_anchor_text(heading: str) -> str:
         # Remove the HTML span for class
         class_name = re.sub(r'<span class=["\']muted["\']>class</span>\s*', '', heading)
         return 'class-' + class_name.strip().lower()
-    
+
     # For other headings, remove any HTML spans
     cleaned = re.sub(r'<span class=["\']muted["\']>\(\)</span>', '', heading)
     cleaned = re.sub(r'<span class=["\']muted["\']>[^<]*</span>', '', cleaned)
@@ -177,31 +201,31 @@ def clean_anchor_text(heading: str) -> str:
 def collect_documented_items(module: Dict[str, Any], path: List[str], full_data: Dict[str, Any], is_root: bool = False) -> Dict[str, List[Dict[str, str]]]:
     """Collect all documented items from a module and its submodules."""
     result = {}
-    
+
     # Skip if no members
     if not module.get('members'):
         return result
-    
+
     # Determine if this is the root module
     is_root = module.get('name') == 'validmind' or is_root
-    
+
     # Build the current file path
     file_path = '/'.join(path)
     module_name = module.get('name', 'root')
-    
+
     # For root module, parse validmind.qmd to get headings
     if is_root:
         module_items = []
         qmd_filename = f"{path[-1]}.qmd"
         qmd_path = written_qmd_files.get(qmd_filename)
-        
+
         if qmd_path and os.path.exists(qmd_path):
             with open(qmd_path, 'r') as f:
                 content = f.read()
-            
+
             # Track current class for nesting methods
             current_class = None
-            
+
             # Parse headings - only update the heading level checks
             for line in content.split('\n'):
                 if line.startswith('## '):  # Main function/class level
@@ -211,11 +235,11 @@ def collect_documented_items(module: Dict[str, Any], path: List[str], full_data:
                         'text': heading,
                         'file': f"validmind/validmind.qmd#{anchor}"
                     }
-                    
+
                     # Detect class by presence of class span or prefix span
                     is_class = '<span class="muted">class</span>' in heading or '<span class=\'muted\'>class</span>' in heading
                     prefix_class = '<span class="prefix"></span>' in heading
-                    
+
                     if is_class or prefix_class:
                         item['contents'] = []
                         current_class = item
@@ -228,22 +252,22 @@ def collect_documented_items(module: Dict[str, Any], path: List[str], full_data:
                         'file': f"validmind/validmind.qmd#{anchor}"
                     }
                     current_class['contents'].append(method_item)
-            
+
             # Clean up empty contents lists
             for item in module_items:
                 if 'contents' in item and not item['contents']:
                     del item['contents']
-            
+
             if module_items:
                 result['root'] = module_items
-    
+
     # Process submodules
     for member in sort_members(module['members'], module.get('name') == 'errors'):
         if member['kind'] == 'module' and is_public(member, module, full_data, is_root):
             submodule_path = path + [member['name']]
             submodule_items = collect_documented_items(member, submodule_path, full_data, False)
             result.update(submodule_items)
-            
+
             # Also check for nested modules in the submodule
             if member.get('members'):
                 for submember in sort_members(member['members'], member.get('name') == 'errors'):
@@ -251,7 +275,7 @@ def collect_documented_items(module: Dict[str, Any], path: List[str], full_data:
                         subsubmodule_path = submodule_path + [submember['name']]
                         subsubmodule_items = collect_documented_items(submember, subsubmodule_path, full_data, False)
                         result.update(subsubmodule_items)
-    
+
     return result
 
 # Add at module level
@@ -261,11 +285,11 @@ def find_class_in_all_modules(class_name: str, data: Dict[str, Any]) -> Optional
     """Recursively search for a class in all modules of the data structure."""
     if not isinstance(data, dict):
         return None
-        
+
     # Check if this is the class we're looking for
     if data.get('kind') == 'class' and data.get('name') == class_name:
         return data
-        
+
     # Special handling for common test suite classes
     if class_name.endswith(('Suite', 'Performance', 'Metrics', 'Diagnosis', 'Validation', 'Description')):
         # These are likely test suite classes, check specifically in test_suites module if available
@@ -273,33 +297,33 @@ def find_class_in_all_modules(class_name: str, data: Dict[str, Any]) -> Optional
             test_suites = data['validmind']['members']['test_suites']
             if class_name in test_suites.get('members', {}):
                 return test_suites['members'][class_name]
-    
+
     # Check members if this is a module
     if 'members' in data:
         for member_name, member in data['members'].items():
             # Direct match in members
             if member_name == class_name and member.get('kind') == 'class':
                 return member
-                
+
             # Recursive search in this member
             result = find_class_in_all_modules(class_name, member)
             if result:
                 return result
-                
+
     return None
 
 def process_module(module: Dict[str, Any], path: List[str], env: Environment, full_data: Dict[str, Any]):
     """Process a module and its submodules."""
     # Parse docstrings first
     parse_docstrings(module)
-    
+
     module_dir = os.path.join('docs', *path[:-1])
     ensure_dir(module_dir)
-    
+
     # Extract __all__ list if present (preserving order)
     if module.get('members') and '__all__' in module.get('members', {}):
         module['all_list'] = get_all_list(module['members'])
-    
+
     # Special handling for test_suites module
     is_test_suites = path and path[-1] == "test_suites"
     if is_test_suites:
@@ -308,7 +332,7 @@ def process_module(module: Dict[str, Any], path: List[str], env: Environment, fu
             if member.get('kind') == 'alias' and member.get('target_path'):
                 # Try to resolve and cache the target now
                 resolve_alias(member, full_data)
-    
+
     # Enhanced debugging for vm_models
     if path and path[-1] == 'vm_models':
         # Handle special case for vm_models module
@@ -317,33 +341,33 @@ def process_module(module: Dict[str, Any], path: List[str], env: Environment, fu
         for name, member in module.get('members', {}).items():
             if name == 'result' and member.get('kind') == 'module':
                 result_module = member
-                
+
                 # Copy ResultTable and TestResult to vm_models members if needed
                 if 'ResultTable' in member.get('members', {}):
                     module['members']['ResultTable'] = member['members']['ResultTable']
-                
+
                 if 'TestResult' in member.get('members', {}):
                     module['members']['TestResult'] = member['members']['TestResult']
                 break
-        
+
         if not result_module:
             # Fallback: try to find the classes directly in the full data structure
             result_table = find_class_in_all_modules('ResultTable', full_data)
             if result_table:
                 module['members']['ResultTable'] = result_table
-                
+
             test_result = find_class_in_all_modules('TestResult', full_data)
             if test_result:
                 module['members']['TestResult'] = test_result
-    
+
     # Check if this is a test module
     is_test_module = 'tests' in path
-    
+
     # Get appropriate template based on module name
     if path[-1] == 'errors':
         # Use the specialized errors template for the errors module
         template = env.get_template('errors.qmd.jinja2')
-        
+
         # Render with the errors template
         output = template.render(
             module=module,
@@ -354,7 +378,7 @@ def process_module(module: Dict[str, Any], path: List[str], env: Environment, fu
     else:
         # Use the standard module template for all other modules
         template = env.get_template('module.qmd.jinja2')
-        
+
         # Generate module documentation
         output = template.render(
             module=module,
@@ -363,18 +387,18 @@ def process_module(module: Dict[str, Any], path: List[str], env: Environment, fu
             resolve_alias=resolve_alias,
             is_test_module=is_test_module  # Pass this flag to template
         )
-    
+
     # Write output
     filename = f"{path[-1]}.qmd"
     output_path = os.path.join(module_dir, filename)
     with open(output_path, 'w') as f:
         f.write(output)
-    
+
     # Track with full relative path as key
     rel_path = os.path.join(*path[1:], filename) if len(path) > 1 else filename
     full_path = os.path.join("docs", os.path.relpath(output_path, "docs"))
     written_qmd_files[rel_path] = full_path
-    
+
     # Generate version.qmd for root module
     if module.get('name') == 'validmind' and module.get('members', {}).get('__version__'):
         version_template = env.get_template('version.qmd.jinja2')
@@ -384,10 +408,11 @@ def process_module(module: Dict[str, Any], path: List[str], env: Environment, fu
         )
         # Removed the underscores from the filename as Quarto treats files with underscores differently
         version_path = os.path.join('docs/validmind', 'version.qmd')
+        ensure_dir('docs/validmind')
         with open(version_path, 'w') as f:
             f.write(version_output)
         written_qmd_files['version.qmd'] = version_path
-    
+
     # Process submodules
     members = module.get('members', {})
     for name, member in members.items():
@@ -400,7 +425,7 @@ def lint_markdown_files(output_dir: str):
     for path in Path(output_dir).rglob('*.qmd'):
         with open(path) as f:
             content = f.read()
-        
+
         # Split content into front matter and body
         parts = content.split('---', 2)
         if len(parts) >= 3:
@@ -420,7 +445,7 @@ def lint_markdown_files(output_dir: str):
                 "number": False,
                 "normalize_whitespace": True
             })
-            
+
         with open(path, 'w') as f:
             f.write(formatted)
 
@@ -434,7 +459,7 @@ def parse_docstrings(data: Dict[str, Any]):
                 original = data['docstring']
             else:
                 original = str(data['docstring'])
-            
+
             try:
                 # Pre-process all docstrings to normalize newlines
                 sections = original.split('\n\n')
@@ -443,9 +468,9 @@ def parse_docstrings(data: Dict[str, Any]):
                     sections[0] = ' '.join(sections[0].split('\n'))
                 # Keep other sections as-is
                 original = '\n\n'.join(sections)
-                
+
                 parsed = parse(original, style=Style.GOOGLE)
-                
+
                 data['docstring'] = {
                     'value': original,
                     'parsed': parsed
@@ -454,7 +479,7 @@ def parse_docstrings(data: Dict[str, Any]):
                 print(f"\nParsing failed for {data.get('name', 'unknown')}:")
                 print(f"Error: {str(e)}")
                 print(f"Original:\n{original}")
-        
+
         if 'members' in data:
             for member in data['members'].values():
                 parse_docstrings(member)
@@ -469,35 +494,35 @@ def get_inherited_members(base: Dict[str, Any], full_data: Dict[str, Any]) -> Li
                 base_members = get_inherited_members(base_item['name'], full_data)
                 all_members.extend(base_members)
         return all_members
-    
+
     # Get the base class name
     base_name = base if isinstance(base, str) else base.get('name', '')
     if not base_name:
         return []
-    
+
     # Handle built-in exceptions
     if base_name == 'Exception' or base_name.startswith('builtins.'):
         return [
             {'name': 'with_traceback', 'kind': 'builtin', 'base': 'builtins.BaseException'},
             {'name': 'add_note', 'kind': 'builtin', 'base': 'builtins.BaseException'}
         ]
-    
+
     # Look for the base class in the errors module
     errors_module = full_data.get('validmind', {}).get('members', {}).get('errors', {}).get('members', {})
     base_class = errors_module.get(base_name)
-    
+
     if not base_class:
         return []
-    
+
     # Return the base class and its description method if it exists
     members = [{'name': base_name, 'kind': 'class', 'base': base_name}]
-    
+
     # Add all public methods
     for name, member in base_class.get('members', {}).items():
         # Skip private methods (including __init__)
         if name.startswith('_'):
             continue
-        
+
         if member['kind'] in ('function', 'method', 'property'):
             # Add the method to the list of inherited members
             method_info = {
@@ -508,29 +533,30 @@ def get_inherited_members(base: Dict[str, Any], full_data: Dict[str, Any]) -> Li
                 'returns': member.get('returns', None),       # Include return type
                 'docstring': member.get('docstring', {}).get('value', ''),
             }
-            
+
             members.append(method_info)
-    
+
     # Add built-in methods from Exception
     members.extend([
         {'name': 'with_traceback', 'kind': 'builtin', 'base': 'builtins.BaseException'},
         {'name': 'add_note', 'kind': 'builtin', 'base': 'builtins.BaseException'}
     ])
-    
+
     return members
 
-def get_child_files(files_dict: Dict[str, str], module_name: str) -> List[Dict[str, Any]]:
+def get_child_files(files_dict: Dict[str, str], module_name: str,
+                    full_data: Dict[str, Any] = None) -> List[Dict[str, Any]]:
     """Get all child QMD files for a given module."""
     prefix = f'docs/validmind/{module_name}/'
     directory_structure = {}
-    
+
     # First pass: organize files by directory
     for filename, path in files_dict.items():
         if path.startswith(prefix) and path != f'docs/validmind/{module_name}.qmd':
             # Remove the prefix to get the relative path
             rel_path = path.replace('docs/', '')
             parts = Path(rel_path).parts[2:]  # Skip 'validmind' and module_name
-            
+
             # Handle directory-level QMD and its children
             if len(parts) == 1:  # Direct child
                 dir_name = Path(parts[0]).stem
@@ -546,21 +572,47 @@ def get_child_files(files_dict: Dict[str, str], module_name: str) -> List[Dict[s
                         'text': dir_name,
                         'file': f'validmind/validmind/{module_name}/{dir_name}.qmd'  # Add validmind/ prefix
                     }
-                
+
                 # Add to contents if it's a child file
                 if 'contents' not in directory_structure[dir_name]:
                     directory_structure[dir_name]['contents'] = []
-                
+
+                file_stem = Path(parts[-1]).stem
+
+                # Lookup module data for decorator check
+                module_data = None
+                if full_data:
+                    try:
+                        # Navigate: validmind.{path_parts} to find module
+                        # Example: tests.model_validation.statsmodels.statsutils
+                        path_parts = rel_path.replace('.qmd', '').split('/')
+                        current = full_data.get('validmind', {})
+                        for part in path_parts[1:]:
+                            current = current.get('members', {}).get(part, {})
+                        module_data = current
+                    except (KeyError, AttributeError):
+                        pass
+
+                # Check if this is a package-level doc (has child .qmd files)
+                child_prefix = f'docs/{rel_path.replace(".qmd", "/")}'
+                is_package = any(p.startswith(child_prefix) for p in files_dict.values())
+
+                # Skip internal helper modules within tests/ (lowercase AND no decorators)
+                # But preserve package-level docs that have children
+                is_in_tests = rel_path.startswith('validmind/tests/')
+                if is_in_tests and not is_package and _should_filter_module(file_stem, module_data):
+                    continue
+
                 directory_structure[dir_name]['contents'].append({
-                    'text': Path(parts[-1]).stem,
+                    'text': file_stem,
                     'file': f'validmind/{rel_path}'  # Add validmind/ prefix
                 })
-    
+
     # Sort children within each directory
     for dir_info in directory_structure.values():
         if 'contents' in dir_info:
             dir_info['contents'].sort(key=lambda x: x['text'])
-    
+
     # Return sorted list of directories
     return sorted(directory_structure.values(), key=lambda x: x['text'])
 
@@ -585,14 +637,14 @@ def generate_docs(json_path: str, template_dir: str, output_dir: str):
     # Load JSON data
     with open(json_path) as f:
         data = json.load(f)
-    
+
     # Set up Jinja environment
     env = Environment(
         loader=FileSystemLoader(template_dir),
         trim_blocks=True,
         lstrip_blocks=True
     )
-    
+
     # Add custom filters and globals
     env.filters['sort_members'] = sort_members
     env.filters['has_subfiles'] = has_subfiles
@@ -602,17 +654,17 @@ def generate_docs(json_path: str, template_dir: str, output_dir: str):
     env.globals['get_all_members'] = get_all_members
     env.globals['get_all_list'] = get_all_list
     env.globals['get_inherited_members'] = get_inherited_members
-    
+
     # Start processing from root module
     if 'validmind' in data:
         # First pass: Generate module documentation
         process_module(data['validmind'], ['validmind'], env, data)
-        
+
         qmd_files = find_qmd_files(output_dir)
-        
+
         # Add to template context
         env.globals['qmd_files'] = qmd_files
-        
+
         # Second pass: Collect all documented items
         documented_items = collect_documented_items(
             module=data['validmind'],
@@ -620,7 +672,7 @@ def generate_docs(json_path: str, template_dir: str, output_dir: str):
             full_data=data,
             is_root=True
         )
-        
+
         # Generate sidebar with collected items
         sidebar_template = env.get_template('sidebar.qmd.jinja2')
         sidebar_output = sidebar_template.render(
@@ -630,12 +682,12 @@ def generate_docs(json_path: str, template_dir: str, output_dir: str):
             resolve_alias=resolve_alias,
             documented_items=documented_items
         )
-        
+
         # Write sidebar
         sidebar_path = os.path.join(output_dir, '_sidebar.yml')
         with open(sidebar_path, 'w') as f:
             f.write(sidebar_output)
-            
+
         # Clean up markdown formatting
         lint_markdown_files(output_dir)
     else:
@@ -651,7 +703,7 @@ def parse_docstring(docstring):
         processed_lines = []
         in_args = False
         current_param = []
-        
+
         for line in lines:
             line = line.strip()
             # Check if we're in the Args section
@@ -659,7 +711,7 @@ def parse_docstring(docstring):
                 in_args = True
                 processed_lines.append(line)
                 continue
-                
+
             if in_args and line:
                 # Fix mangled parameter lines like "optional): The test suite name..."
                 if line.startswith('optional)'):
@@ -672,7 +724,7 @@ def parse_docstring(docstring):
                 processed_lines.append(line)
             else:
                 processed_lines.append(line)
-                
+
         processed_docstring = '\n'.join(processed_lines)
         return parse(processed_docstring, style=Style.GOOGLE)
     except Exception as e:

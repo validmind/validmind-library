@@ -13,6 +13,7 @@ import warnings
 from datetime import date, datetime, time
 from platform import python_version
 from typing import Any, Awaitable, Callable, Dict, List, Optional, TypeVar
+from uuid import uuid4
 
 import matplotlib.pylab as pylab
 import mistune
@@ -359,6 +360,9 @@ def format_number(number):
 
 def format_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     """Format a pandas DataFrame for display purposes."""
+    if not is_notebook():
+        return df
+
     df = df.style.set_properties(**{"text-align": "left"}).hide(axis="index")
     return df.set_table_styles([dict(selector="th", props=[("text-align", "left")])])
 
@@ -509,7 +513,7 @@ def get_dataset_info(dataset):
 
 
 def preview_test_config(config):
-    """Preview test configuration in a collapsible HTML section.
+    """Preview test configuration in a collapsible HTML section or plain text.
 
     Args:
         config (dict): Test configuration dictionary.
@@ -521,15 +525,23 @@ def preview_test_config(config):
         logger.error(f"JSON serialization failed: {e}")
         return
 
+    if not is_notebook():
+        print(formatted_json)
+        return
+
+    unique_suffix = uuid4().hex
+    content_id = f"collapsibleContent-{unique_suffix}"
+    function_name = f"toggleOutput_{unique_suffix}"
+
     collapsible_html = f"""
     <script>
-    function toggleOutput() {{
-        var content = document.getElementById("collapsibleContent");
+    function {function_name}() {{
+        var content = document.getElementById("{content_id}");
         content.style.display = content.style.display === "none" ? "block" : "none";
     }}
     </script>
-    <button onclick="toggleOutput()">Preview Config</button>
-    <div id="collapsibleContent" style="display:none;"><pre>{formatted_json}</pre></div>
+    <button onclick="{function_name}()">Preview Config</button>
+    <div id="{content_id}" style="display:none;"><pre>{formatted_json}</pre></div>
     """
 
     ipy_display(HTML(collapsible_html))
@@ -537,6 +549,9 @@ def preview_test_config(config):
 
 def display(widget_or_html, syntax_highlighting=True, mathjax=True):
     """Display HTML content with extra goodies (syntax highlighting, MathJax, etc.)."""
+    if not is_notebook():
+        return
+
     if hasattr(widget_or_html, "to_html"):
         html_content = widget_or_html.to_html()
         ipy_display(HTML(html_content))

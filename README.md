@@ -118,20 +118,70 @@ You can install the `transformers`, `torch` and `openai` dependencies using the 
 poetry install --extras llm
 ```
 
-### Installing R dependencies
+### Setting up R support
 
-If you want to use the R support that is provided by the ValidMind Library, you must have R installed on your machine. You can download R from <https://cran.r-project.org/>. On a Mac, you can install R using Homebrew:
+#### 1. Install R
+
+You can download R from <https://cran.r-project.org/>. On macOS, the easiest way is via Homebrew:
 
 ```bash
 brew install r
 ```
 
-Once you have R installed, install the `r-support` extra to install the necessary dependencies for R by running:
+#### 2. Install Python dependencies
+
+Install `rpy2` so the Python library can interface with R models. On macOS, you may need to build from source to match your R version:
 
 ```bash
-poetry install
+# Try the standard install first
 pip install rpy2
+
+# If you get R library loading errors, rebuild against your installed R:
+R_HOME=$(Rscript -e 'cat(R.home())') pip install --no-binary :all: --force-reinstall rpy2
 ```
+
+#### 3. Install R packages
+
+Open R (type `R` in your terminal) and install the required packages:
+
+```r
+install.packages(c("reticulate", "dplyr", "caTools", "knitr", "glue", "plotly", "htmltools", "rmarkdown", "DT", "base64enc"))
+```
+
+Then install the ValidMind R package from source:
+
+```r
+install.packages("r/validmind", repos = NULL, type = "source")
+```
+
+#### 4. Set up VS Code / Cursor for R
+
+No RStudio required. Install the **R extension** (`REditorSupport.r`) in VS Code or Cursor:
+
+1. Open Extensions (`Cmd+Shift+X`) and search for "R"
+2. Install the **R** extension by REditorSupport
+3. Optionally install the `languageserver` R package for autocomplete: `install.packages("languageserver")`
+
+With the extension installed:
+- Open `.Rmd` files and run chunks with `Cmd+Shift+Enter`
+- Render full documents with `Cmd+Shift+K`
+- Use the R terminal panel for interactive sessions
+
+Alternatively, you can run R notebooks as Jupyter notebooks by installing the R kernel:
+
+```r
+install.packages("IRkernel")
+IRkernel::installspec()
+```
+
+Then create/open `.ipynb` files in VS Code and select the R kernel.
+
+#### 5. Run the quickstart notebooks
+
+Launch R from the repository root (so dataset paths resolve correctly) and run through the notebooks in `notebooks/code_sharing/r/`:
+
+- `quickstart_model_documentation.Rmd` — model documentation workflow
+- `quickstart_model_validation.Rmd` — model validation workflow
 
 ### Versioning
 

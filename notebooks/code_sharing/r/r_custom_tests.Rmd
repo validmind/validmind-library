@@ -109,15 +109,11 @@ Get your code snippet:
 Next, replace this placeholder with your own code snippet:
 
 ```{r}
-# Find the path to your Python runtime by running `python -V` in your terminal
-# python_version <- "<path_to_python_version>"
-
 vm_r <- vm(
   api_host = "https://api.prod.validmind.ai/api/v1/tracking",
   api_key = "...",
   api_secret = "...",
-  model = "...",
-  python_version = python_version
+  model = "..."
 )
 ```
 

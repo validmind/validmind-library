@@ -1,0 +1,121 @@
+{
+  "model_overview": {
+    "section_id": "model_overview",
+    "context": {
+      "content_ids": [
+        "validmind.data_validation.DatasetDescription",
+        "validmind.model_validation.sklearn.ClassifierPerformance:in_sample",
+        "validmind.model_validation.sklearn.ClassifierPerformance:out_of_sample"
+      ]
+    }
+  },
+  "intended_use": {
+    "section_id": "intended_use"
+  },
+  "regulatory_requirements": {
+    "section_id": "regulatory_requirements",
+    "prompt": "Write a comprehensive paragraphs describing the regulatory requirements for this model, assuming SR 11-7 is the primary regulatory framework."
+  },
+  "model_limitations": {
+    "section_id": "model_limitations",
+    "context": {
+      "content_ids": [
+        "validmind.model_validation.sklearn.TrainingTestDegradation",
+        "validmind.model_validation.sklearn.MinimumAccuracy",
+        "validmind.model_validation.sklearn.MinimumF1Score",
+        "validmind.model_validation.sklearn.MinimumROCAUCScore"
+      ]
+    }
+  },
+  "model_selection": {
+    "section_id": "model_selection",
+    "context": {
+      "content_ids": [
+        "validmind.model_validation.ModelMetadata",
+        "validmind.model_validation.sklearn.ClassifierPerformance:in_sample",
+        "validmind.model_validation.sklearn.ClassifierPerformance:out_of_sample"
+      ]
+    }
+  },
+  "dataset_summary_text": {
+    "context": {
+      "content_ids": [
+        "validmind.data_validation.DatasetDescription"
+      ]
+    }
+  },
+  "data_quality_tests_text": {
+    "context": {
+      "content_ids": [
+        "validmind.data_validation.ClassImbalance",
+        "validmind.data_validation.Duplicates",
+        "validmind.data_validation.HighCardinality",
+        "validmind.data_validation.MissingValues",
+        "validmind.data_validation.Skewness",
+        "validmind.data_validation.UniqueRows",
+        "validmind.data_validation.TooManyZeroValues",
+        "validmind.data_validation.IQROutliersTable",
+        "validmind.data_validation.IQROutliersBarPlot"
+      ]
+    }
+  },
+  "feature_selection": {
+    "context": {
+      "content_ids": [
+        "validmind.data_validation.PearsonCorrelationMatrix",
+        "validmind.data_validation.HighPearsonCorrelation"
+      ]
+    }
+  },
+  "model_validation_tests_text": {
+    "context": {
+      "content_ids": [
+        "validmind.model_validation.sklearn.ConfusionMatrix",
+        "validmind.model_validation.sklearn.ClassifierPerformance:in_sample",
+        "validmind.model_validation.sklearn.ClassifierPerformance:out_of_sample",
+        "validmind.model_validation.sklearn.PrecisionRecallCurve",
+        "validmind.model_validation.sklearn.ROCCurve",
+        "validmind.model_validation.sklearn.MinimumAccuracy",
+        "validmind.model_validation.sklearn.MinimumF1Score",
+        "validmind.model_validation.sklearn.MinimumROCAUCScore"
+      ]
+    }
+  },
+  "validmind.model_validation.sklearn.SHAPGlobalImportance_global_importance_text": {
+    "context": {
+      "content_ids": [
+        "validmind.model_validation.sklearn.SHAPGlobalImportance"
+      ]
+    }
+  },
+  "model_weak_spots_description": {
+    "context": {
+      "content_ids": [
+        "validmind.model_validation.sklearn.WeakspotsDiagnosis"
+      ]
+    }
+  },
+  "model_overfit_regions_description": {
+    "context": {
+      "content_ids": [
+        "validmind.model_validation.sklearn.OverfitDiagnosis"
+      ]
+    }
+  },
+  "model_robustness_description": {
+    "context": {
+      "content_ids": [
+        "validmind.model_validation.sklearn.RobustnessDiagnosis"
+      ]
+    }
+  },
+  "monitoring_plan": {
+    "prompt": "Write two comprehensive paragraphs for the monitoring plan section."
+  },
+  "monitoring_implementation": {
+    "prompt": "Write two comprehensive paragraphs for the monitoring implementation section."
+  },
+  "governance_plan": {
+    "prompt": "Write two comprehensive paragraphs for the governance plan section."
+  }
+}

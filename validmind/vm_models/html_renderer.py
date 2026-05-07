@@ -20,6 +20,26 @@ class StatefulHTMLRenderer:
     PLOTLY_CDN_URL = "https://cdn.plot.ly/plotly-2.27.0.min.js"
 
     @staticmethod
+    def _get_progress_css() -> str:
+        """Get the CSS styles required for progress bars."""
+        return """
+        .vm-progress-container {
+            margin: 10px 0;
+        }
+
+        .vm-progress-description {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .vm-progress-text {
+            margin-top: 5px;
+            font-size: 0.9em;
+            color: #666;
+        }
+        """
+
+    @staticmethod
     def render_figure(
         figure_data: str, key: str, metadata: Optional[Dict[str, Any]] = None
     ) -> str:
@@ -226,6 +246,7 @@ class StatefulHTMLRenderer:
         percentage = (value / max_value * 100) if max_value > 0 else 0
 
         return f"""
+        <style>{StatefulHTMLRenderer._get_progress_css()}</style>
         <div class="vm-progress-container" id="{bar_id}">
             <div class="vm-progress-description">{description}</div>
             <div class="vm-progress-bar"
@@ -258,6 +279,7 @@ class StatefulHTMLRenderer:
             bar_id = f"progress-{uuid.uuid4().hex[:8]}"
 
         return f"""
+        <style>{StatefulHTMLRenderer._get_progress_css()}</style>
         <div class="vm-progress-container" id="{bar_id}">
             <div class="vm-progress-description" id="{bar_id}-description">{description}</div>
             <div class="vm-progress-bar"
@@ -418,20 +440,7 @@ class StatefulHTMLRenderer:
             background-color: #e9ecef !important;
         }
 
-        .vm-progress-container {
-            margin: 10px 0;
-        }
-
-        .vm-progress-description {
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        .vm-progress-text {
-            margin-top: 5px;
-            font-size: 0.9em;
-            color: #666;
-        }
+        {StatefulHTMLRenderer._get_progress_css()}
 
         .vm-result-header h3 {
             margin: 10px 0;

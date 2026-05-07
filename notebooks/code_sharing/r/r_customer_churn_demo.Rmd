@@ -24,7 +24,10 @@ We will train a sample model and demonstrate the following documentation functio
 ```{r setup, include=FALSE}
 library(reticulate)
 
-python_version <- "<path_to_python_version>"
+python_version <- Sys.getenv("VALIDMIND_PYTHON", Sys.which("python"))
+if (nchar(python_version) > 0 && !startsWith(python_version, "/")) {
+  python_version <- file.path(getwd(), python_version)
+}
 use_python(python_version)
 
 library(validmind)
@@ -64,11 +67,10 @@ The code snippet can be copied and pasted directly in the cell below to initiali
 
 ```{r}
 vm_r <- vm(
+  api_host="https://app.prod.validmind.ai/api/v1/tracking",
   api_key="<your_api_key_here>",
   api_secret="<your_api_secret_here>",
-  model="<your_model_id_here>",
-  python_version=python_version,
-  api_host="https://app.prod.validmind.ai/api/v1/tracking"
+  model="<your_model_id_here>"
 )
 ```
 

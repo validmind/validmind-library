@@ -2,7 +2,9 @@
 # Refer to the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+import json
 import os
+from typing import Any, Dict
 
 import pandas as pd
 from sklearn.model_selection import train_test_split
@@ -17,6 +19,7 @@ from . import (
 
 current_path = os.path.dirname(os.path.abspath(__file__))
 dataset_path = os.path.join(current_path, "datasets")
+config_path = os.path.join(current_path, "config.json")
 
 drop_columns = ["RowNumber", "CustomerId", "Surname"]
 boolean_columns = ["Gender"]
@@ -58,6 +61,35 @@ def preprocess(df):
     train_df, validation_df = train_test_split(train_val_df, test_size=0.25)
 
     return train_df, validation_df, test_df
+
+
+def get_demo_text_config() -> Dict[str, Dict[str, Any]]:
+    """Return text generation config for the customer churn demo.
+
+    The config is keyed by target `content_id`. Each entry describes how
+    `vm.run_text_generation()` should populate that block.
+
+    Supported fields per content ID:
+        - `section_id` (optional): Only needed when the content block does not
+          already exist in the template and should be appended to a section.
+        - `prompt` (optional): Per-block prompt override for generation.
+        - `context` (optional): Context object passed through to
+          `vm.run_text_generation()`. When present, it follows the same shape
+          expected by the library, e.g. `{"content_ids": [...]}`.
+
+    Returns:
+        Dict[str, Dict[str, Any]]: A previewable text-generation configuration
+        dictionary for the customer churn documentation demo.
+    """
+    with open(config_path, encoding="utf-8") as config_file:
+        config = json.load(config_file)
+
+    for _, spec in config.items():
+        context = spec.get("context")
+        if context is not None:
+            context.setdefault("content_ids", [])
+
+    return config
 
 
 def get_demo_test_config(test_suite=None):

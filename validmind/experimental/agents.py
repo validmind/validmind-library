@@ -6,9 +6,12 @@
 Agent interface for all text generation tasks
 """
 
+import time
+
 import requests
 
 from validmind.api_client import _get_api_headers, _get_url, raise_api_error
+from validmind.tests.run import _get_run_metadata
 from validmind.utils import is_html, md_to_html
 from validmind.vm_models.result import TextGenerationResult
 
@@ -35,6 +38,8 @@ def run_task(
         ValueError: If an unsupported task is provided
         requests.exceptions.RequestException: If the API request fails
     """
+    start_time = time.perf_counter()
+
     if task == "code_explainer" or task == "qualitative_text_generation":
         r = requests.post(
             url=_get_url(f"ai/generate/{task}"),
@@ -54,10 +59,15 @@ def run_task(
 
     # Create a test result with the generated text
     result = TextGenerationResult(
+        content_id=input.get("content_id"),
         result_type=f"{task}",
         description=generated_text,
         title=f"Text Generation: {task}",
-        doc=f"Generated {task}",
+        metadata=_get_run_metadata(duration_seconds=time.perf_counter() - start_time),
+        prompt=input.get("prompt"),
+        section_id=input.get("section_id"),
+        context=input.get("context"),
+        _was_description_generated=True,
     )
     if show:
         result.show()
