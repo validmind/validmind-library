@@ -57,7 +57,7 @@ Log in to the [ValidMind Platform](https://app.prod.validmind.ai) and register a
 
 #### Apply documentation template
 
-Once you've registered your model, let's select a documentation template. A template predefines sections for your model documentation and provides a general outline to follow, making the documentation process much easier.
+Once you've registered your model, let's select a documentation template. A template predefines sections for your documentation and provides a general outline to follow, making the documentation process much easier.
 
 1. In the left sidebar that appears for your model, click **Documents** and select **Development**.
 
