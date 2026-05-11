@@ -1,20 +1,20 @@
 ---
-title: "Quickstart for Model Documentation (R)"
+title: "Quickstart for documentation (R)"
 author: "ValidMind"
 date: "2026-03-18"
 output: html_document
 ---
 
-# Quickstart for Model Documentation
+# Quickstart for documentation
 
-Learn the basics of using ValidMind to document models as part of a model development workflow using R. This notebook uses the ValidMind R package (a `reticulate` wrapper around the Python library) to generate a draft of documentation for a binary classification model.
+Learn the basics of using ValidMind to document records as part of a development workflow with R. Using the ValidMind R package (a `reticulate` wrapper around the Python library), you'll generate a draft of documentation using ValidMind tests for a binary classification model.
 
-We will:
+To document our model with the ValidMind Library, we'll:
 
 1. Import a sample dataset and preprocess it
 2. Split the datasets and initialize them for use with ValidMind
-3. Train a logistic regression (GLM) model and initialize it for use with testing
-4. Run the full suite of documentation tests, sending results to the ValidMind Platform
+3. Initialize a model object for use with testing
+4. Run a full suite of tests as defined by our documentation template, which will send the results of those tests to the ValidMind Platform
 
 ## Setting up
 
