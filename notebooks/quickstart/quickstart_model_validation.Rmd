@@ -41,12 +41,42 @@ knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 
 ## Initialize the ValidMind Library
 
-Log in to the [ValidMind Platform](https://app.prod.validmind.ai) and register a model:
+In a usual model lifecycle, a champion model will have been independently registered in your model inventory and submitted to you for validation by your model development team as part of the effective challenge process.
 
-1. Navigate to **Inventory** and click **+ Register Model**.
-2. Assign yourself as a **Validator** (remove yourself from Owner and Developer roles).
-3. Under **Documents > Validation**, select the `Generic Validation Report` template.
-4. Go to **Getting Started**, select `Validation` from the **DOCUMENT** drop-down, and copy the code snippet.
+For this exercise, log in to the [ValidMind Platform](https://app.prod.validmind.ai) and register a sample model to circumvent the need for an existing model:
+
+### Register a model
+
+1. In the left sidebar, select **Inventory**.
+2. Under the **RECORD TYPE** drop-down, select `Model` and click **+ Register Model**.
+3. Enter the model details and click **Next >** to continue to assignment of inventory record stakeholders.
+4. Select your own name under the **RECORD OWNER** drop-down — we'll adjust these permissions next for validation.
+5. Click **Register Model** to add the model to your inventory.
+
+### Assign validator credentials
+
+On the model details page that appears after registration, swap your role from owner/developer to validator so that test results are logged under the validator role:
+
+1. Remove yourself as an owner:
+   - Click on the **OWNERS** tile.
+   - Click the **x** next to your name to remove yourself from that role.
+   - Click **Save** to apply your changes.
+2. Remove yourself as a developer:
+   - Click on the **DEVELOPERS** tile.
+   - Click the **x** next to your name to remove yourself from that role.
+   - Click **Save** to apply your changes.
+3. Add yourself as a validator:
+   - Click on the **VALIDATORS** tile.
+   - Select your name from the drop-down menu.
+   - Click **Save** to apply your changes.
+
+### Apply validation report template
+
+A template predefines sections for your report and provides a general outline to follow:
+
+1. In the model's left sidebar, click **Documents** and select **Validation**.
+2. Under **TEMPLATE**, select `Generic Validation Report`.
+3. Click **Use Template** to apply the template.
 
 Replace the placeholder values below with your own credentials:
 

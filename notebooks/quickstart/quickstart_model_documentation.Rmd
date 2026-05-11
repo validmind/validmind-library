@@ -39,15 +39,33 @@ library(knitr)
 knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 ```
 
-## Initialize the ValidMind Library
+### Initialize the ValidMind Library
 
-Log in to the [ValidMind Platform](https://app.prod.validmind.ai) and register a model:
+Log in to the [ValidMind Platform](https://app.prod.validmind.ai) and register a sample model:
 
-1. Navigate to **Inventory** and click **+ Register Model**.
-2. Under **Documents > Development**, select the `Binary classification` template.
-3. Go to **Getting Started**, select `Development` from the **DOCUMENT** drop-down, and copy the code snippet.
+#### Register sample model
 
-Replace the placeholder values below with your own credentials:
+1. In the left sidebar, select **Inventory**.
+2. Under the **RECORD TYPE** drop-down, select `Model` and click **+ Register Model**.
+3. Enter the model details and click **Next >** to continue to assignment of inventory record stakeholders.
+4. Select your own name under the **RECORD OWNER** drop-down.
+5. Click **Register Model** to add the model to your inventory.
+
+#### Apply documentation template
+
+A template predefines sections for your model documentation and provides a general outline to follow:
+
+1. In the model's left sidebar, click **Documents** and select **Development**.
+2. Under **TEMPLATE**, select `Binary classification`.
+3. Click **Use Template** to apply the template.
+
+#### Get your code snippet
+
+Initialize the ValidMind Library with the *code snippet* unique to each model per document, ensuring your test results are uploaded to the correct model and automatically populated in the right document in the ValidMind Platform when you run this notebook.
+
+1. On the left sidebar that appears for your model, select **Getting Started** and select `Development` from the **DOCUMENT** drop-down menu.
+2. Click **Copy snippet to clipboard**. Paste the snippet into an editor and make note of the credentials.
+3. Next, replace the placeholder values below with your own credentials:
 
 ```{r}
 vm_r <- vm(
