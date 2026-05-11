@@ -180,8 +180,8 @@ Then create/open `.ipynb` files in VS Code and select the R kernel.
 
 Launch R from the repository root (so dataset paths resolve correctly) and run through the notebooks in `notebooks/code_sharing/r/`:
 
-- `quickstart_model_documentation.Rmd` — model documentation workflow
-- `quickstart_model_validation.Rmd` — model validation workflow
+- `quickstart_documentation.Rmd` — model documentation workflow
+- `quickstart_validation.Rmd` — model validation workflow
 
 ### Versioning
 
