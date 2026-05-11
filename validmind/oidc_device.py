@@ -7,6 +7,7 @@
 from __future__ import annotations
 
 import time
+from html import escape
 from typing import Any, Dict, Optional, Tuple
 
 import requests
@@ -25,13 +26,87 @@ _DEFAULT_TIMEOUT = 30.0
 _config_cache: Dict[str, Dict[str, Any]] = {}
 
 
-def _print_device_authorization_prompt(verification_uri: str, user_code: str) -> None:
+def _get_device_authorization_qr_payload(
+    verification_uri: str, verification_uri_complete: Optional[str]
+) -> str:
+    """Return the URL to encode in the device-flow QR code."""
+    return verification_uri_complete or verification_uri
+
+
+def _can_display_html() -> bool:
+    try:
+        from IPython import get_ipython
+    except Exception:
+        return False
+
+    shell = get_ipython()
+    if shell is None:
+        return False
+    return shell.__class__.__name__ != "TerminalInteractiveShell"
+
+
+def _display_device_authorization_qr(
+    verification_uri: str,
+    user_code: str,
+    verification_uri_complete: Optional[str] = None,
+) -> bool:
+    """Display a QR code for device-flow authorization in notebook environments."""
+    if not _can_display_html():
+        return False
+
+    try:
+        import segno
+        from IPython.display import HTML, display
+    except Exception:
+        return False
+
+    qr_payload = _get_device_authorization_qr_payload(
+        verification_uri, verification_uri_complete
+    )
+    try:
+        qr_data_uri = segno.make(qr_payload, error="m").svg_data_uri(
+            scale=5,
+            dark="#000000",
+            light="#ffffff",
+        )
+    except Exception:
+        return False
+
+    helper_text = (
+        "Scan this QR code to open the login page with the device code pre-filled."
+        if verification_uri_complete
+        else "Scan this QR code to open the login page, then enter the device code."
+    )
+    html = f"""
+    <div style="background:#ffffff;border:1px solid #d0d7de;border-radius:8px;padding:16px;max-width:360px;font-family:Arial,sans-serif;color:#24292f;">
+      <div style="font-weight:600;margin-bottom:8px;color:#24292f;">Sign in to ValidMind</div>
+      <div style="background:#ffffff;padding:12px;display:inline-block;border-radius:4px;">
+        <img src="{escape(qr_data_uri, quote=True)}" alt="Device login QR code" style="width:220px;height:220px;display:block;" />
+      </div>
+      <div style="font-size:13px;color:#57606a;margin:8px 0;">{escape(helper_text)}</div>
+      <div style="font-size:13px;color:#24292f;">URL: <a href="{escape(qr_payload, quote=True)}" target="_blank" rel="noopener noreferrer" style="color:#0969da;">{escape(verification_uri)}</a></div>
+      <div style="font-size:13px;color:#24292f;">Code: <strong style="letter-spacing:0.08em;">{escape(user_code)}</strong></div>
+    </div>
+    """
+    display(HTML(html))
+    return True
+
+
+def _print_device_authorization_prompt(
+    verification_uri: str,
+    user_code: str,
+    verification_uri_complete: Optional[str] = None,
+) -> None:
     """Print RFC 8628 verification instructions for interactive login.
 
     ``verification_uri`` and ``user_code`` are intended for human-readable display;
     they are not authentication secrets (see RFC 8628 § 3.3). The ``device_code``
     binding must remain confidential and is never written here.
     """
+    _display_device_authorization_qr(
+        verification_uri, user_code, verification_uri_complete
+    )
+
     msg = (
         f"Visit: {verification_uri}\n"
         f"Code:  {user_code}\n"
@@ -277,7 +352,9 @@ def run_device_flow(
             }
         )
     else:
-        _print_device_authorization_prompt(verification_uri, user_code)
+        _print_device_authorization_prompt(
+            verification_uri, user_code, dev.get("verification_uri_complete")
+        )
 
     interval = float(dev.get("interval", 5))
     expires_in = float(dev.get("expires_in", 900))

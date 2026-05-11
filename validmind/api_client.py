@@ -297,22 +297,28 @@ def init(
     If the API key and secret are not provided, the client will attempt to
     retrieve them from the environment variables `VM_API_KEY` and `VM_API_SECRET`.
 
-    Alternatively, pass ``issuer`` and ``client_id`` to authenticate via the OIDC
-    device authorization flow (RFC 8628). Tokens are cached under
-    ``~/.validmind/credentials.json``. Do not combine API keys with OIDC parameters.
+    Alternatively, pass ``issuer`` and ``client_id`` or set their ``VM_OIDC_*``
+    environment variables to authenticate via the OIDC device authorization flow
+    (RFC 8628). Tokens are cached under ``~/.validmind/credentials.json``. Do not
+    combine API keys with OIDC parameters.
 
     Args:
         model (str, optional): The model CUID. Defaults to None.
         api_key (str, optional): The API key. Defaults to None.
         api_secret (str, optional): The API secret. Defaults to None.
-        api_host (str, optional): The API host (tracking base URL). Defaults to None.
-        api_url (str, optional): Alias for ``api_host``.
+        api_host (str, optional): The API host (tracking base URL). Defaults to
+            env ``VM_API_HOST`` or ``VM_API_URL``.
+        api_url (str, optional): Alias for ``api_host``. Defaults to env
+            ``VM_API_URL`` or ``VM_API_HOST``.
         monitoring (bool): The ongoing monitoring flag. Defaults to False.
         generate_descriptions (bool, optional): Whether to use GenAI to generate test result descriptions. Defaults to True.
         document (str, optional): The name of the document. Omitting this argument is deprecated.
         issuer (str, optional): OIDC issuer URL (e.g. Entra tenant ``.../v2.0``).
-        client_id (str, optional): OAuth public client id for device flow.
+            Can be set via env ``VM_OIDC_ISSUER``.
+        client_id (str, optional): OAuth public client id for device flow. Can be
+            set via env ``VM_OIDC_CLIENT_ID``.
         scope (str, optional): OAuth scopes (default ``openid profile email``).
+            Can be set via env ``VM_OIDC_SCOPE``.
         audience (str, optional): Resource / API identifier for the access token
             (e.g. Auth0 API Identifier). Use the same value the ValidMind backend
             expects as ``api_audience`` so the provider can issue RS256 API tokens.
@@ -340,8 +346,14 @@ def init(
     resolved_host = (
         api_url
         or api_host
+        or os.getenv("VM_API_URL")
         or os.getenv("VM_API_HOST", "http://localhost:5000/api/v1/tracking/")
     )
+    oidc_issuer = issuer if issuer is not None else os.getenv("VM_OIDC_ISSUER")
+    oidc_client_id = (
+        client_id if client_id is not None else os.getenv("VM_OIDC_CLIENT_ID")
+    )
+    oidc_scope = scope if scope is not None else os.getenv("VM_OIDC_SCOPE")
 
     env_key = api_key if api_key is not None else os.getenv("VM_API_KEY")
     env_secret = api_secret if api_secret is not None else os.getenv("VM_API_SECRET")
@@ -351,15 +363,15 @@ def init(
         and env_key != ""
         and env_secret != ""
     )
-    has_oidc = bool(issuer and client_id)
+    has_oidc = bool(oidc_issuer and oidc_client_id)
     if has_oidc and has_api_creds:
         raise ValidMindAuthError(
             "Provide either API credentials (api_key and api_secret) or OIDC "
             "(issuer and client_id), not both."
         )
-    if issuer and not client_id:
+    if oidc_issuer and not oidc_client_id:
         raise ValidMindAuthError("client_id is required when issuer is set.")
-    if client_id and not issuer:
+    if oidc_client_id and not oidc_issuer:
         raise ValidMindAuthError("issuer is required when client_id is set.")
 
     _monitoring = monitoring
@@ -380,7 +392,7 @@ def init(
         _api_key = None
         _api_secret = None
         _api_host = resolved_host
-        scope_val = scope or "openid profile email"
+        scope_val = oidc_scope or "openid profile email"
         from .credentials_store import normalize_audience
 
         oidc_audience_val = normalize_audience(
@@ -388,7 +400,7 @@ def init(
         )
         oidc_audience_opt = oidc_audience_val or None
         entry = _obtain_oidc_tokens(
-            issuer, client_id, scope_val, audience=oidc_audience_opt
+            oidc_issuer, oidc_client_id, scope_val, audience=oidc_audience_opt
         )
         _access_token = _select_oidc_bearer_token(entry)
         _oidc_login_context = {

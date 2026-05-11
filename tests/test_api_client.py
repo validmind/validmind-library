@@ -531,6 +531,76 @@ class TestAPIClientOIDC(unittest.TestCase):
 
     @patch("validmind.api_client._ping")
     @patch("validmind.api_client._obtain_oidc_tokens")
+    def test_init_oidc_uses_env_config(self, mock_obtain, mock_ping):
+        mock_obtain.return_value = {
+            "issuer": "https://env-issuer/",
+            "client_id": "env-cid",
+            "access_token": "tok",
+            "expires_at": "2099-01-01T00:00:00+00:00",
+            "refresh_token": None,
+            "id_token": None,
+            "audience": "https://api.example.com",
+        }
+
+        with patch.dict(
+            os.environ,
+            {
+                "VM_API_KEY": "",
+                "VM_API_SECRET": "",
+                "VM_API_HOST": "http://localhost/from-env-host/",
+                "VM_OIDC_ISSUER": "https://env-issuer/",
+                "VM_OIDC_CLIENT_ID": "env-cid",
+                "VM_OIDC_SCOPE": "openid profile email offline_access",
+                "VM_OIDC_AUDIENCE": "https://api.example.com",
+            },
+        ):
+            api_client.init(model="model-cuid", document="documentation")
+
+        mock_obtain.assert_called_once_with(
+            "https://env-issuer/",
+            "env-cid",
+            "openid profile email offline_access",
+            audience="https://api.example.com",
+        )
+        self.assertEqual(api_client.get_api_host(), "http://localhost/from-env-host/")
+        ctx = api_client._oidc_login_context
+        assert ctx is not None
+        self.assertEqual(ctx["issuer"], "https://env-issuer/")
+        self.assertEqual(ctx["client_id"], "env-cid")
+        self.assertEqual(ctx["scope"], "openid profile email offline_access")
+        self.assertEqual(ctx["audience"], "https://api.example.com")
+
+    @patch("validmind.api_client._ping")
+    @patch("validmind.api_client._obtain_oidc_tokens")
+    def test_init_oidc_uses_env_api_url_alias(self, mock_obtain, mock_ping):
+        mock_obtain.return_value = {
+            "issuer": "https://env-issuer/",
+            "client_id": "env-cid",
+            "access_token": "tok",
+            "expires_at": "2099-01-01T00:00:00+00:00",
+            "refresh_token": None,
+            "id_token": None,
+        }
+
+        with patch.dict(
+            os.environ,
+            {
+                "VM_API_KEY": "",
+                "VM_API_SECRET": "",
+                "VM_API_HOST": "",
+                "VM_API_URL": "http://localhost/from-env-api-url/",
+                "VM_OIDC_ISSUER": "https://env-issuer/",
+                "VM_OIDC_CLIENT_ID": "env-cid",
+            },
+        ):
+            api_client.init(model="model-cuid", document="documentation")
+
+        self.assertEqual(
+            api_client.get_api_host(), "http://localhost/from-env-api-url/"
+        )
+
+    @patch("validmind.api_client._ping")
+    @patch("validmind.api_client._obtain_oidc_tokens")
     def test_api_url_alias_sets_host(self, mock_obtain, mock_ping):
         mock_obtain.return_value = {
             "issuer": "https://issuer/",
