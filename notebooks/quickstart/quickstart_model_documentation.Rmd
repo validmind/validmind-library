@@ -41,22 +41,28 @@ knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 
 ### Initialize the ValidMind Library
 
-Log in to the [ValidMind Platform](https://app.prod.validmind.ai) and register a sample model:
-
 #### Register sample model
 
+Log in to the [ValidMind Platform](https://app.prod.validmind.ai) and register a sample model:
+
 1. In the left sidebar, select **Inventory**.
-2. Under the **RECORD TYPE** drop-down, select `Model` and click **+ Register Model**.
+
+2. Under the **RECORD TYPE** drop-down, select `Model` and click **+ Register Model**. (Learn more: [Register records in the inventory](https://docs.validmind.ai/guide/inventory/register-records-in-inventory.html))
+
 3. Enter the model details and click **Next >** to continue to assignment of inventory record stakeholders.
+
 4. Select your own name under the **RECORD OWNER** drop-down.
+
 5. Click **Register Model** to add the model to your inventory.
 
 #### Apply documentation template
 
-A template predefines sections for your model documentation and provides a general outline to follow:
+Once you've registered your model, let's select a documentation template. A template predefines sections for your model documentation and provides a general outline to follow, making the documentation process much easier.
 
-1. In the model's left sidebar, click **Documents** and select **Development**.
+1. In the left sidebar that appears for your model, click **Documents** and select **Development**.
+
 2. Under **TEMPLATE**, select `Binary classification`.
+
 3. Click **Use Template** to apply the template.
 
 #### Get your code snippet
@@ -64,7 +70,9 @@ A template predefines sections for your model documentation and provides a gener
 Initialize the ValidMind Library with the *code snippet* unique to each model per document, ensuring your test results are uploaded to the correct model and automatically populated in the right document in the ValidMind Platform when you run this notebook.
 
 1. On the left sidebar that appears for your model, select **Getting Started** and select `Development` from the **DOCUMENT** drop-down menu.
+
 2. Click **Copy snippet to clipboard**. Paste the snippet into an editor and make note of the credentials.
+
 3. Next, replace the placeholder values below with your own credentials:
 
 ```{r}
