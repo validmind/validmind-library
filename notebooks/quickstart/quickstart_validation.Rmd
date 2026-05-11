@@ -59,7 +59,7 @@ For this exercise, log in to the [ValidMind Platform](https://app.prod.validmind
 
 #### Assign validator credentials
 
-In order to log tests as a validator instead of as a developer, on the model details page that appears after you've successfully registered your sample model:
+In order to log tests as a validator instead of as a developer, on the details page that appears after you've successfully registered your sample model:
 
 1. Remove yourself as an owner:
 
