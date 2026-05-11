@@ -1,20 +1,20 @@
 ---
-title: "Quickstart for Model Validation (R)"
+title: "Quickstart for validation (R)"
 author: "ValidMind"
 date: "2026-03-18"
 output: html_document
 ---
 
-# Quickstart for Model Validation
+# Quickstart for validation
 
-Learn the basics of using ValidMind to validate models as part of a model validation workflow using R. This notebook uses the ValidMind R package (a `reticulate` wrapper around the Python library) to generate a draft of a validation report for a binary classification model.
+Learn the basics of using ValidMind to validate records as part of a validation workflow with R. Using the ValidMind R package (a `reticulate` wrapper around the Python library), you'll generate a draft of a validation report using ValidMind tests for a binary classification model.
 
-We will:
+To validate our model with the ValidMind Library, we'll:
 
-1. Import a sample dataset and preprocess it, then initialize datasets for use with ValidMind
+1. Import a sample dataset and preprocess it, then split the datasets and initialize them for use with ValidMind
 2. Independently verify data quality tests performed on datasets by model development
-3. Train a champion model for evaluation
-4. Run model evaluation tests with the ValidMind Library
+3. Import a champion model for evaluation
+4. Run model evaluation tests with the ValidMind Library, which will send the results of those tests to the ValidMind Platform
 
 ## Setting up
 
