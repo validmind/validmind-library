@@ -43,7 +43,7 @@ knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 
 #### Register sample model
 
-Log in to the [ValidMind Platform](https://app.prod.validmind.ai) and register a sample model:
+Log in to the [ValidMind Platform](https://app.prod.validmind.ai) and register a sample record (model):
 
 1. In the left sidebar, select **Inventory**.
 

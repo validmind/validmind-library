@@ -43,9 +43,9 @@ knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 
 #### Register sample model
 
-In a usual model lifecycle, a champion model will have been independently registered in your model inventory and submitted to you for validation by your development team as part of the effective challenge process.
+In a usual lifecycle, a champion will have been independently registered in your inventory and submitted to you for validation by your development team as part of the effective challenge process.
 
-For this exercise, log in to the [ValidMind Platform](https://app.prod.validmind.ai) and register a sample model to circumvent the need for an existing model:
+For this exercise, log in to the [ValidMind Platform](https://app.prod.validmind.ai) and register a sample record (model) to circumvent the need for an existing model:
 
 1. In the left sidebar, select **Inventory**.
 
