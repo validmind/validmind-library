@@ -96,7 +96,8 @@ vm.init(
   api_host = "{api_host}",
   api_key = "{api_key}",
   api_secret = "{api_secret}",
-  model = "{model}"
+  model = "{model}",
+  document = "documentation"
 )
 
 
