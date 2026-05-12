@@ -3,11 +3,16 @@ import numpy as np
 import pandas as pd
 import validmind as vm
 import plotly.graph_objects as go
-from xgboost import XGBClassifier
 from sklearn.model_selection import train_test_split
 from validmind.tests.model_validation.sklearn.ROCCurve import ROCCurve
 
+try:
+    from xgboost import XGBClassifier
+except ImportError:
+    XGBClassifier = None  # type: ignore[misc,assignment]
 
+
+@unittest.skipUnless(XGBClassifier is not None, "xgboost optional extra required")
 class TestROCCurve(unittest.TestCase):
     def setUp(self):
         # Create binary classification test dataset

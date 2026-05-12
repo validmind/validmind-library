@@ -119,7 +119,7 @@ class TestTabularDataset(TestCase):
 
         # Verify original data is categorical
         self.assertTrue(
-            pd.api.types.is_categorical_dtype(test_df["col1"]),
+            isinstance(test_df["col1"].dtype, pd.CategoricalDtype),
             "Original DataFrame should have categorical dtype",
         )
 
@@ -127,7 +127,7 @@ class TestTabularDataset(TestCase):
         dataset = DataFrameDataset(raw_dataset=test_df, input_id="test_dataset")
 
         self.assertTrue(
-            pd.api.types.is_categorical_dtype(dataset.df["col1"]),
+            isinstance(dataset.df["col1"].dtype, pd.CategoricalDtype),
             "DataFrameDataset should preserve categorical dtype",
         )
 

@@ -3285,7 +3285,7 @@ files = [
     {file = "importlib_metadata-8.7.1-py3-none-any.whl", hash = "sha256:5a1f80bf1daa489495071efbb095d75a634cf28a8bc299581244063b53176151"},
     {file = "importlib_metadata-8.7.1.tar.gz", hash = "sha256:49fef1ae6440c182052f407c8d34a68f72efc36db9ca90dc0113398f2fdde8bb"},
 ]
-markers = {main = "extra == \"llm\" or python_version == \"3.9\" and platform_system == \"Linux\" and platform_machine == \"x86_64\" and (extra == \"llm\" or extra == \"all\" or extra == \"pytorch\" or extra == \"nlp\")"}
+markers = {main = "extra == \"llm\" or python_version == \"3.9\""}
 
 [package.dependencies]
 zipp = ">=3.20"
@@ -10866,6 +10866,21 @@ cryptography = ">=2.0"
 jeepney = ">=0.6"
 
 [[package]]
+name = "segno"
+version = "1.6.6"
+description = "QR Code and Micro QR Code generator for Python"
+optional = false
+python-versions = ">=3.5"
+groups = ["main"]
+files = [
+    {file = "segno-1.6.6-py3-none-any.whl", hash = "sha256:28c7d081ed0cf935e0411293a465efd4d500704072cdb039778a2ab8736190c7"},
+    {file = "segno-1.6.6.tar.gz", hash = "sha256:e60933afc4b52137d323a4434c8340e0ce1e58cec71439e46680d4db188f11b3"},
+]
+
+[package.dependencies]
+importlib-metadata = {version = ">=3.6.0", markers = "python_version < \"3.10\""}
+
+[[package]]
 name = "send2trash"
 version = "2.1.0"
 description = "Send file to trash natively under Mac OS X, Windows and Linux"
@@ -14124,4 +14139,4 @@ xgboost = ["xgboost"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.9,<3.15"
-content-hash = "b596dabeb3fce78d4634ed1da7ef7fc1936a8cb225877e0ac2f34c2c04260bb4"
+content-hash = "eebef98aebd43218f28a7f0d29f8a184a9bf6cce47a9f896ad4fb2416dd28bc6"
