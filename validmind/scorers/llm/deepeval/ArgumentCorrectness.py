@@ -82,7 +82,7 @@ def ArgumentCorrectness(
         missing_columns.append(actual_tools_called_column)
     if missing_columns:
         raise ValueError(
-            f"ToolCorrectness with model requires columns {missing_columns}. "
+            f"ArgumentCorrectness with model requires columns {missing_columns}. "
             f"Available columns: {dataset._df.columns.tolist()}"
         )
 
