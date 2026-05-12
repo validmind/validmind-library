@@ -276,7 +276,7 @@ model <- glm(formula, data = train_data, family = binomial)
 summary(model)
 ```
 
-## Initialize the model object
+## Initialize the ValidMind model
 
 Save the R model and initialize it with ValidMind:
 

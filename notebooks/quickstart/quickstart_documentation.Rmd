@@ -190,7 +190,7 @@ vm_test_ds <- vm_r$init_dataset(
 )
 ```
 
-## Initialize a model object
+## Initialize the ValidMind model
 
 Save the R model and initialize it with ValidMind:
 
