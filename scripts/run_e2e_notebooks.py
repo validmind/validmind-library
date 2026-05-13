@@ -92,6 +92,77 @@ import os
 os.environ["VALIDMIND_LLM_DESCRIPTIONS_ENABLED"] = "0"
 os.environ["VALIDMIND_PII_DETECTION"] = "{pii_detection_mode}"
 import validmind as vm
+import hashlib
+import requests
+
+
+def _debug_secret(name, value):
+  if value is None:
+    return name + "=not set"
+  return "%s=set length=%s sha256=%s" % (
+    name,
+    len(value),
+    hashlib.sha256(value.encode("utf-8")).hexdigest(),
+  )
+
+
+def _debug_vm_ping():
+  api_host = "{api_host}"
+  ping_url = api_host.rstrip("/") + "/ping"
+  headers = dict(
+    [
+      ("X-API-KEY", "{api_key}"),
+      ("X-API-SECRET", "{api_secret}"),
+      ("X-MODEL-CUID", "{model}"),
+      ("X-MONITORING", "False"),
+      ("X-DOCUMENT-TYPE", "documentation"),
+    ]
+  )
+
+  print("ValidMind API debug: GET " + ping_url)
+  print("ValidMind API debug: GITHUB_ACTIONS=" + str(os.getenv("GITHUB_ACTIONS")))
+  print("ValidMind API debug: api_host=" + api_host)
+  print("ValidMind API debug: model={model}")
+  print("ValidMind API debug: " + _debug_secret("api_key", headers["X-API-KEY"]))
+  print("ValidMind API debug: " + _debug_secret("api_secret", headers["X-API-SECRET"]))
+
+  try:
+    response = requests.get(ping_url, headers=headers, timeout=30)
+  except Exception as exc:
+    print("ValidMind API debug: request failed: " + repr(exc))
+    return
+
+  print("ValidMind API debug: status_code=" + str(response.status_code))
+  print("ValidMind API debug: final_url=" + response.url)
+  print("ValidMind API debug: elapsed_seconds=%.3f" % response.elapsed.total_seconds())
+  print("ValidMind API debug: reason=" + str(response.reason))
+  print(
+    "ValidMind API debug: response_headers="
+    + repr(
+      dict(
+        [
+          (key, response.headers.get(key))
+          for key in [
+            "content-type",
+            "content-length",
+            "server",
+            "date",
+            "via",
+            "x-request-id",
+            "x-amzn-requestid",
+            "x-amzn-trace-id",
+            "cf-ray",
+          ]
+          if response.headers.get(key) is not None
+        ]
+      )
+    )
+  )
+  print("ValidMind API debug: body_preview=" + repr(response.text[:1000]))
+
+
+if os.getenv("GITHUB_ACTIONS") == "true":
+  _debug_vm_ping()
 
 vm.init(
   api_host = "{api_host}",
