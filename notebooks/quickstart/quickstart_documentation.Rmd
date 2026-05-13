@@ -13,7 +13,7 @@ To document our model with the ValidMind Library, we'll:
 
 1. Import a sample dataset and preprocess it
 2. Split the datasets and initialize them for use with ValidMind
-3. Initialize a model object for use with testing
+3. Initialize a ValidMind model object for use with testing
 4. Run a full suite of tests as defined by our documentation template, which will send the results of those tests to the ValidMind Platform
 
 ## Setting up
