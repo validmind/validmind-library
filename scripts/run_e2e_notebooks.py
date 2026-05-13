@@ -26,6 +26,7 @@ This uses the dev environment for now... In the future, we may want to change th
 
 import os
 import re
+import hashlib
 
 import click
 import dotenv
@@ -256,6 +257,8 @@ def write_modified_notebook_for_debug(notebook_path):
     with open(notebook_path, "r") as f:
         nb = nbformat.read(f, as_version=4)
 
+    nb["cells"].insert(0, nbformat.v4.new_markdown_cell(get_debug_notebook_summary()))
+
     for cell in nb["cells"]:
         if cell["cell_type"] != "code":
             continue
@@ -277,6 +280,31 @@ def write_modified_notebook_for_debug(notebook_path):
         nbformat.write(nb, f)
 
     return debug_notebook_path
+
+
+def get_debug_notebook_summary():
+    return "\n".join(
+        [
+            "# Modified Notebook Debug Info",
+            "",
+            "This notebook is a pre-execution copy created by `scripts/run_e2e_notebooks.py`.",
+            "",
+            "## Environment",
+            f"- `NOTEBOOK_RUNNER_API_HOST`: {os.getenv('NOTEBOOK_RUNNER_API_HOST')}",
+            f"- `NOTEBOOK_RUNNER_DEFAULT_MODEL`: {os.getenv('NOTEBOOK_RUNNER_DEFAULT_MODEL')}",
+            get_secret_debug_summary("NOTEBOOK_RUNNER_API_KEY"),
+            get_secret_debug_summary("NOTEBOOK_RUNNER_API_SECRET"),
+        ]
+    )
+
+
+def get_secret_debug_summary(env_var_name):
+    value = os.getenv(env_var_name)
+    if value is None:
+        return f"- `{env_var_name}`: not set"
+
+    fingerprint = hashlib.sha256(value.encode("utf-8")).hexdigest()
+    return f"- `{env_var_name}`: set, length={len(value)}, sha256={fingerprint}"
 
 
 def backup_notebook(notebook_path):
