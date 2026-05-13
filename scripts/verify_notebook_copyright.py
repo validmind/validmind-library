@@ -10,7 +10,7 @@ This script verifies that all notebooks under a directory have the
 ValidMind copyright cell.
 
 How to use:
-    poetry run python scripts/verify_notebook_copyright.py
+    uv run python scripts/verify_notebook_copyright.py
 
 Notes:
 - Checks for a markdown cell containing: <!-- VALIDMIND COPYRIGHT -->
@@ -68,7 +68,7 @@ def main() -> int:
     repo_root = Path(os.getcwd()).resolve()
 
     # Align with the existing script style:
-    # - default paths rooted at cwd (repo root when run via poetry/make)
+    # - default paths rooted at cwd (repo root when run via uv/make)
     notebooks_dir = repo_root / "notebooks"
     copyright_nb_path = repo_root / "notebooks" / "templates" / "_copyright.ipynb"
 
