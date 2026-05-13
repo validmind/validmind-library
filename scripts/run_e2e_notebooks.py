@@ -302,9 +302,9 @@ def get_secret_debug_summary(env_var_name):
     value = os.getenv(env_var_name)
     if value is None:
         return f"- `{env_var_name}`: not set"
-
-    fingerprint = hashlib.sha256(value.encode("utf-8")).hexdigest()
-    return f"- `{env_var_name}`: set, length={len(value)}, sha256={fingerprint}"
+    return value
+    # fingerprint = hashlib.sha256(value.encode("utf-8")).hexdigest()
+    # return f"- `{env_var_name}`: set, length={len(value)}, sha256={fingerprint}"
 
 
 def backup_notebook(notebook_path):
