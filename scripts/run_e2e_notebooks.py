@@ -264,7 +264,10 @@ def main(
             click.echo(f" -------- Finished executing {notebook_path} ---------- \n")
         except Exception as e:
             click.echo(f"Error running {notebook_path}: {e}")
-            os.remove(notebook_path.replace(".ipynb", ".out.ipynb"))
+            click.echo(
+                "Preserving output notebook for debugging: "
+                f"{notebook_path.replace('.ipynb', '.out.ipynb')}"
+            )
             restore_notebook(notebook_path)
             raise e
 

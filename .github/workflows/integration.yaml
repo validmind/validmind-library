@@ -71,12 +71,14 @@ jobs:
           NOTEBOOK_RUNNER_API_HOST: 'https://api.dev.vm.validmind.ai/api/v1/tracking'
           VALIDMIND_LLM_DESCRIPTIONS_ENABLED: 0
 
-      - name: Upload Modified Notebooks
+      - name: Upload Notebook Debug Artifacts
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: modified-notebooks
-          path: notebooks/**/*.modified.ipynb
+          name: notebook-debug-artifacts
+          path: |
+            notebooks/**/*.modified.ipynb
+            notebooks/**/*.out.ipynb
           if-no-files-found: ignore
 
       - name: Failure Notification
