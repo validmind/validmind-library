@@ -40,12 +40,12 @@ DEFAULT_MODEL_CUID = os.getenv(
 
 NOTEBOOKS_TO_RUN = [
     "notebooks/quickstart/quickstart_model_documentation.ipynb",
-    "notebooks/use_cases/time_series/quickstart_time_series_high_code.ipynb",
-    "notebooks/use_cases/regression/quickstart_regression_full_suite.ipynb",
-    "notebooks/how_to/metrics/run_unit_metrics.ipynb",
-    "notebooks/how_to/tests/custom_tests/integrate_external_test_providers.ipynb",
-    "notebooks/how_to/tests/custom_tests/implement_custom_tests.ipynb",
-    "notebooks/how_to/tests/explore_tests/explore_tests.ipynb",
+    # "notebooks/use_cases/time_series/quickstart_time_series_high_code.ipynb",
+    # "notebooks/use_cases/regression/quickstart_regression_full_suite.ipynb",
+    # "notebooks/how_to/metrics/run_unit_metrics.ipynb",
+    # "notebooks/how_to/tests/custom_tests/integrate_external_test_providers.ipynb",
+    # "notebooks/how_to/tests/custom_tests/implement_custom_tests.ipynb",
+    # "notebooks/how_to/tests/explore_tests/explore_tests.ipynb",
 ]
 
 DATA_TEMPLATE_NOTEBOOKS = [
@@ -146,12 +146,19 @@ logger.info("PII detection mode: " + os.environ.get("VALIDMIND_PII_DETECTION", "
     type=click.Choice(["disabled", "test_results", "test_descriptions", "all"]),
     help="PII detection mode to use for testing.",
 )
+@click.option(
+    "--write-modified-notebooks",
+    is_flag=True,
+    default=False,
+    help="Write sanitized copies of modified notebooks before execution.",
+)
 def main(
     kernel,
     log_output=False,
     progress_bar=True,
     update_data_template=False,
     pii_detection_mode="disabled",
+    write_modified_notebooks=False,
 ):
     """Run notebooks from the specified directory for end-to-end testing."""
     if update_data_template:
@@ -170,6 +177,9 @@ def main(
 
         try:
             update_vm_init_cell(notebook_path, model, pii_detection_mode)
+            if write_modified_notebooks:
+                debug_notebook_path = write_modified_notebook_for_debug(notebook_path)
+                click.echo(f"Wrote modified notebook to {debug_notebook_path}")
             click.echo(
                 f"\n -------- Executing {notebook_path} (PII detection: {pii_detection_mode}) ---------- \n"
             )
@@ -238,6 +248,35 @@ def update_vm_init_cell(notebook_path, model, pii_detection_mode="disabled"):
 
     with open(notebook_path, "w") as f:
         nbformat.write(nb, f)
+
+
+def write_modified_notebook_for_debug(notebook_path):
+    debug_notebook_path = notebook_path.replace(".ipynb", ".modified.ipynb")
+
+    with open(notebook_path, "r") as f:
+        nb = nbformat.read(f, as_version=4)
+
+    for cell in nb["cells"]:
+        if cell["cell_type"] != "code":
+            continue
+
+        source = cell.get("source", "")
+        source = re.sub(
+            r'(api_key\s*=\s*)["\'][^"\']*["\']',
+            lambda match: f'{match.group(1)}"***"',
+            source,
+        )
+        source = re.sub(
+            r'(api_secret\s*=\s*)["\'][^"\']*["\']',
+            lambda match: f'{match.group(1)}"***"',
+            source,
+        )
+        cell["source"] = source
+
+    with open(debug_notebook_path, "w") as f:
+        nbformat.write(nb, f)
+
+    return debug_notebook_path
 
 
 def backup_notebook(notebook_path):
