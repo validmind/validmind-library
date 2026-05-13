@@ -67,6 +67,8 @@ pip install validmind
 
 The ValidMind Library includes optional PII detection capabilities using Microsoft Presidio to automatically detect sensitive data in test results and prevent accidental logging.
 
+For an extended guide, refer to our how-to notebook: **[Enable PPI detection](notebooks/how_to/tests/run_tests/configure_tests/enable_pii_detection.ipynb)**
+
 **Installation:**
 
 ```bash
