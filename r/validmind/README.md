@@ -64,7 +64,7 @@ R reads this file automatically on startup, before any code runs. Relative paths
 
 ### Option 2: `.env` file in the repo
 
-If the project uses Poetry with in-project virtualenvs (`.venv/` inside the repo), add to the repo's `.env` file:
+If the project uses `uv` (default in-repo virtualenv at `.venv/`), add to the repo's `.env` file:
 
 ```
 VALIDMIND_PYTHON=.venv/bin/python
