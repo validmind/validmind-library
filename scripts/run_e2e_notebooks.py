@@ -76,7 +76,7 @@ DATA_TEMPLATE_NOTEBOOKS = [
     },
     {
         # [Demo] Credit Risk Model
-        "path": "notebooks/use_cases/credit_risk/application_scorecard_demo.ipynb",
+        "path": "notebooks/use_cases/credit_risk/application_scorecard_full_suite.ipynb",
         "model": "cm4lr52j9009w0jpb4gr7z5o0",
     },
     {
