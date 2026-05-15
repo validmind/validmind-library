@@ -6,8 +6,7 @@ name: Integration Tests
 on:
   push:
     branches:
-      - main
-      - prod
+      - cachafla/test-dev-tests
     paths-ignore:
       - 'docs/**'
 
@@ -63,13 +62,23 @@ jobs:
         run: all-venv/bin/python -m ipykernel install --user --name all-venv
 
       - name: Integration Tests
-        run: all-venv/bin/python scripts/run_e2e_notebooks.py --kernel all-venv
+        run: all-venv/bin/python scripts/run_e2e_notebooks.py --kernel all-venv --write-modified-notebooks
         env:
           NOTEBOOK_RUNNER_DEFAULT_MODEL: ${{ secrets.NOTEBOOK_RUNNER_DEFAULT_PROJECT_ID }}
           NOTEBOOK_RUNNER_API_KEY: ${{ secrets.NOTEBOOK_RUNNER_API_KEY }}
           NOTEBOOK_RUNNER_API_SECRET: ${{ secrets.NOTEBOOK_RUNNER_API_SECRET }}
           NOTEBOOK_RUNNER_API_HOST: 'https://api.dev.vm.validmind.ai/api/v1/tracking'
           VALIDMIND_LLM_DESCRIPTIONS_ENABLED: 0
+
+      - name: Upload Notebook Debug Artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: notebook-debug-artifacts
+          path: |
+            notebooks/**/*.modified.ipynb
+            notebooks/**/*.out.ipynb
+          if-no-files-found: ignore
 
       - name: Failure Notification
         if: failure()

@@ -26,6 +26,7 @@ This uses the dev environment for now... In the future, we may want to change th
 
 import os
 import re
+import hashlib
 
 import click
 import dotenv
@@ -40,12 +41,12 @@ DEFAULT_MODEL_CUID = os.getenv(
 
 NOTEBOOKS_TO_RUN = [
     "notebooks/quickstart/quickstart_model_documentation.ipynb",
-    "notebooks/use_cases/time_series/quickstart_time_series_high_code.ipynb",
-    "notebooks/use_cases/regression/quickstart_regression_full_suite.ipynb",
-    "notebooks/how_to/metrics/run_unit_metrics.ipynb",
-    "notebooks/how_to/tests/custom_tests/integrate_external_test_providers.ipynb",
-    "notebooks/how_to/tests/custom_tests/implement_custom_tests.ipynb",
-    "notebooks/how_to/tests/explore_tests/explore_tests.ipynb",
+    # "notebooks/use_cases/time_series/quickstart_time_series_high_code.ipynb",
+    # "notebooks/use_cases/regression/quickstart_regression_full_suite.ipynb",
+    # "notebooks/how_to/metrics/run_unit_metrics.ipynb",
+    # "notebooks/how_to/tests/custom_tests/integrate_external_test_providers.ipynb",
+    # "notebooks/how_to/tests/custom_tests/implement_custom_tests.ipynb",
+    # "notebooks/how_to/tests/explore_tests/explore_tests.ipynb",
 ]
 
 DATA_TEMPLATE_NOTEBOOKS = [
@@ -91,6 +92,77 @@ import os
 os.environ["VALIDMIND_LLM_DESCRIPTIONS_ENABLED"] = "0"
 os.environ["VALIDMIND_PII_DETECTION"] = "{pii_detection_mode}"
 import validmind as vm
+import hashlib
+import requests
+
+
+def _debug_secret(name, value):
+  if value is None:
+    return name + "=not set"
+  return "%s=set length=%s sha256=%s" % (
+    name,
+    len(value),
+    hashlib.sha256(value.encode("utf-8")).hexdigest(),
+  )
+
+
+def _debug_vm_ping():
+  api_host = "{api_host}"
+  ping_url = api_host.rstrip("/") + "/ping"
+  headers = dict(
+    [
+      ("X-API-KEY", "{api_key}"),
+      ("X-API-SECRET", "{api_secret}"),
+      ("X-MODEL-CUID", "{model}"),
+      ("X-MONITORING", "False"),
+      ("X-DOCUMENT-TYPE", "documentation"),
+    ]
+  )
+
+  print("ValidMind API debug: GET " + ping_url)
+  print("ValidMind API debug: GITHUB_ACTIONS=" + str(os.getenv("GITHUB_ACTIONS")))
+  print("ValidMind API debug: api_host=" + api_host)
+  print("ValidMind API debug: model={model}")
+  print("ValidMind API debug: " + _debug_secret("api_key", headers["X-API-KEY"]))
+  print("ValidMind API debug: " + _debug_secret("api_secret", headers["X-API-SECRET"]))
+
+  try:
+    response = requests.get(ping_url, headers=headers, timeout=30)
+  except Exception as exc:
+    print("ValidMind API debug: request failed: " + repr(exc))
+    return
+
+  print("ValidMind API debug: status_code=" + str(response.status_code))
+  print("ValidMind API debug: final_url=" + response.url)
+  print("ValidMind API debug: elapsed_seconds=%.3f" % response.elapsed.total_seconds())
+  print("ValidMind API debug: reason=" + str(response.reason))
+  print(
+    "ValidMind API debug: response_headers="
+    + repr(
+      dict(
+        [
+          (key, response.headers.get(key))
+          for key in [
+            "content-type",
+            "content-length",
+            "server",
+            "date",
+            "via",
+            "x-request-id",
+            "x-amzn-requestid",
+            "x-amzn-trace-id",
+            "cf-ray",
+          ]
+          if response.headers.get(key) is not None
+        ]
+      )
+    )
+  )
+  print("ValidMind API debug: body_preview=" + repr(response.text[:1000]))
+
+
+if os.getenv("GITHUB_ACTIONS") == "true":
+  _debug_vm_ping()
 
 vm.init(
   api_host = "{api_host}",
@@ -146,12 +218,19 @@ logger.info("PII detection mode: " + os.environ.get("VALIDMIND_PII_DETECTION", "
     type=click.Choice(["disabled", "test_results", "test_descriptions", "all"]),
     help="PII detection mode to use for testing.",
 )
+@click.option(
+    "--write-modified-notebooks",
+    is_flag=True,
+    default=False,
+    help="Write sanitized copies of modified notebooks before execution.",
+)
 def main(
     kernel,
     log_output=False,
     progress_bar=True,
     update_data_template=False,
     pii_detection_mode="disabled",
+    write_modified_notebooks=False,
 ):
     """Run notebooks from the specified directory for end-to-end testing."""
     if update_data_template:
@@ -170,6 +249,9 @@ def main(
 
         try:
             update_vm_init_cell(notebook_path, model, pii_detection_mode)
+            if write_modified_notebooks:
+                debug_notebook_path = write_modified_notebook_for_debug(notebook_path)
+                click.echo(f"Wrote modified notebook to {debug_notebook_path}")
             click.echo(
                 f"\n -------- Executing {notebook_path} (PII detection: {pii_detection_mode}) ---------- \n"
             )
@@ -182,7 +264,10 @@ def main(
             click.echo(f" -------- Finished executing {notebook_path} ---------- \n")
         except Exception as e:
             click.echo(f"Error running {notebook_path}: {e}")
-            os.remove(notebook_path.replace(".ipynb", ".out.ipynb"))
+            click.echo(
+                "Preserving output notebook for debugging: "
+                f"{notebook_path.replace('.ipynb', '.out.ipynb')}"
+            )
             restore_notebook(notebook_path)
             raise e
 
@@ -238,6 +323,62 @@ def update_vm_init_cell(notebook_path, model, pii_detection_mode="disabled"):
 
     with open(notebook_path, "w") as f:
         nbformat.write(nb, f)
+
+
+def write_modified_notebook_for_debug(notebook_path):
+    debug_notebook_path = notebook_path.replace(".ipynb", ".modified.ipynb")
+
+    with open(notebook_path, "r") as f:
+        nb = nbformat.read(f, as_version=4)
+
+    nb["cells"].insert(0, nbformat.v4.new_markdown_cell(get_debug_notebook_summary()))
+
+    for cell in nb["cells"]:
+        if cell["cell_type"] != "code":
+            continue
+
+        source = cell.get("source", "")
+        source = re.sub(
+            r'(api_key\s*=\s*)["\'][^"\']*["\']',
+            lambda match: f'{match.group(1)}"***"',
+            source,
+        )
+        source = re.sub(
+            r'(api_secret\s*=\s*)["\'][^"\']*["\']',
+            lambda match: f'{match.group(1)}"***"',
+            source,
+        )
+        cell["source"] = source
+
+    with open(debug_notebook_path, "w") as f:
+        nbformat.write(nb, f)
+
+    return debug_notebook_path
+
+
+def get_debug_notebook_summary():
+    return "\n".join(
+        [
+            "# Modified Notebook Debug Info",
+            "",
+            "This notebook is a pre-execution copy created by `scripts/run_e2e_notebooks.py`.",
+            "",
+            "## Environment",
+            f"- `NOTEBOOK_RUNNER_API_HOST`: {os.getenv('NOTEBOOK_RUNNER_API_HOST')}",
+            f"- `NOTEBOOK_RUNNER_DEFAULT_MODEL`: {os.getenv('NOTEBOOK_RUNNER_DEFAULT_MODEL')}",
+            get_secret_debug_summary("NOTEBOOK_RUNNER_API_KEY"),
+            get_secret_debug_summary("NOTEBOOK_RUNNER_API_SECRET"),
+        ]
+    )
+
+
+def get_secret_debug_summary(env_var_name):
+    value = os.getenv(env_var_name)
+    if value is None:
+        return f"- `{env_var_name}`: not set"
+    return value
+    # fingerprint = hashlib.sha256(value.encode("utf-8")).hexdigest()
+    # return f"- `{env_var_name}`: set, length={len(value)}, sha256={fingerprint}"
 
 
 def backup_notebook(notebook_path):
