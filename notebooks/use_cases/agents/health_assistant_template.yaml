@@ -1,0 +1,275 @@
+- id: executive_summary
+  title: Executive Summary
+  guidelines:
+    - Summarize the health assistant agent, its intended use, and the primary
+      business or operational value it is expected to provide.
+    - Highlight the most important conclusions from the documentation, including
+      the main evaluation outcomes, key risks, and any notable limitations or
+      controls.
+  index_only: true
+  contents:
+    - content_type: text
+      content_id: agent_summary
+    - content_type: text
+      content_id: key_conclusions
+  index: "1"
+- id: conceptual_soundness
+  title: Conceptual Soundness
+  index_only: true
+  sections:
+    - id: agent_overview
+      title: Agent Overview
+      guidelines:
+        - Describe the agent at a high level, including its core capabilities,
+          interaction pattern, and any important components such as retrieval,
+          tools, or orchestration logic.
+        - Explain how the agent is expected to operate from user request through
+          response generation, including any relevant dependencies or supporting
+          systems.
+      parent_section: conceptual_soundness
+      index_only: true
+      contents:
+        - content_type: text
+          content_id: fce8cf39-8206-45ee-9d8b-8e6849cc98ff
+        - content_type: text
+          content_id: 0471c0ea-25f0-46de-9267-feaadcd8f816
+      index: "2.1"
+    - id: purpose_scope
+      title: Purpose and Scope
+      guidelines:
+        - Define the intended use of the health assistant, including target
+          users, supported tasks, and the business or operational context in
+          which it is meant to be used.
+        - Clarify what is in scope and out of scope for the agent, including any
+          restrictions on use cases, decision authority, or reliance on human
+          review.
+      parent_section: conceptual_soundness
+      index_only: true
+      contents:
+        - content_type: text
+          content_id: 792997d0-a5e0-49ea-aca9-13958ffa32e5
+        - content_type: text
+          content_id: 0f2c59db-ba76-42d5-9154-10b45168f53e
+      index: "2.2"
+    - id: assumptions_limitations
+      title: Assumptions and Limitations
+      guidelines:
+        - Document the main assumptions underlying the agent design, available
+          data, tool behavior, and expected operating environment.
+        - Describe known limitations, failure modes, or boundary conditions that
+          users and reviewers should understand when interpreting the agent's
+          outputs.
+      parent_section: conceptual_soundness
+      index_only: true
+      contents:
+        - content_type: text
+          content_id: b3677903-cac6-4382-bee9-0e0a4fb5b0c7
+        - content_type: text
+          content_id: 40af70c2-04fb-4ebb-b15d-157f478f67bd
+      index: "2.3"
+    - id: regulatory_requirements
+      title: Regulatory Requirements
+      guidelines:
+        - Identify the regulatory, compliance, privacy, or policy requirements
+          relevant to the health assistant use case and describe how they apply
+          to the agent.
+        - Explain any controls, review processes, disclaimers, or governance
+          expectations that are needed to support compliant use of the agent.
+      parent_section: conceptual_soundness
+      index_only: true
+      contents:
+        - content_type: text
+          content_id: af6d0667-8d58-456e-9118-ab9599e2eeed
+        - content_type: text
+          content_id: cb2ccf6f-8928-4696-9e58-cd31ff64252e
+      index: "2.4"
+  index: "2"
+- id: data_description
+  title: Data Description
+  index_only: true
+  sections:
+    - id: data_sources
+      title: Data Sources
+      guidelines:
+        - Describe the main data sources used to construct, support, or evaluate
+          the health assistant, including whether they are synthetic, curated,
+          retrieved from documentation, or derived from other systems.
+        - Explain the provenance, purpose, and constraints of those sources,
+          including any important assumptions about freshness, coverage, or
+          reliability.
+      parent_section: data_description
+      index_only: true
+      contents:
+        - content_type: text
+          content_id: 435d08e7-e1bd-4839-b45e-f74fdd04c881
+        - content_type: text
+          content_id: 62f13e06-0ab7-4384-89d8-acc3c35d5a2e
+      index: "3.1"
+    - id: agent_traces
+      title: Agent Traces
+      guidelines:
+        - Describe the structure of the agent trace records used in the
+          evaluation workflow, including the main fields such as user input,
+          response, context, tool usage, and metadata.
+        - Explain how the traces were assembled and what kinds of scenarios they
+          are intended to represent, including both expected behaviors and
+          failure-mode examples.
+      parent_section: data_description
+      index_only: true
+      contents:
+        - content_type: text
+          content_id: abc754af-3f6e-4c13-aea7-5e21a9a5f064
+        - content_type: text
+          content_id: 92bfd3af-bd38-4342-8389-114cf4e9dfca
+      index: "3.2"
+  index: "3"
+- id: agent_evaluation
+  title: Agent Evaluation
+  index_only: true
+  sections:
+    - id: evaluation_dataset
+      title: Evaluation Dataset
+      guidelines:
+        - Describe the dataset used for agent evaluation, including its size,
+          composition, scenario coverage, and whether it contains synthetic,
+          curated, or production-derived traces.
+        - Explain why the dataset is appropriate for evaluating the health
+          assistant and note any important gaps, biases, or constraints in the
+          evaluation set.
+      parent_section: agent_evaluation
+      index_only: true
+      contents:
+        - content_type: test
+          content_id: custom_tests.AgentEvaluationDatasetOverview
+        - content_type: test
+          content_id: custom_tests.AgentEvaluationScenarioCoverage
+      index: "4.1"
+    - id: metrics_description
+      title: Metrics Description
+      guidelines:
+        - Document the metrics used to evaluate the agent, including what each
+          metric measures, why it matters, and how it should be interpreted.
+        - Explain how metric scores are assigned to traces, including any use of
+          automated scorers, rubric-based evaluation, or thresholding logic.
+      parent_section: agent_evaluation
+      index_only: true
+      contents:
+        - content_type: text
+          content_id: afb04e60-e28d-4a9e-9745-50d532fb79ad
+        - content_type: text
+          content_id: fcfd639d-ac4b-441b-b793-ea3036be9c42
+      index: "4.2"
+    - id: evaluation_results
+      title: Evaluation Results
+      index_only: true
+      parent_section: agent_evaluation
+      sections:
+        - id: metric_summary
+          title: Metric Summary
+          guidelines:
+            - Summarize the main results across evaluation metrics, highlighting
+              central tendencies, notable variation, and any metrics that
+              indicate strong or weak performance.
+            - Call out the most important takeaways from the scored traces so
+              reviewers can quickly understand the overall evaluation picture.
+          parent_section: evaluation_results
+          index_only: true
+          contents:
+            - content_type: test
+              content_id: custom_tests.AgentEvaluationMetricSummary
+            - content_type: test
+              content_id: custom_tests.AgentEvaluationMetricScoreDistributions
+          index: 4.3.1
+        - id: breach_statistics
+          title: Breach Statistics
+          guidelines:
+            - Describe the frequency and distribution of policy, safety, or
+              quality breaches observed in the evaluation results.
+            - Highlight which categories of breaches are most common or most
+              important and explain what they imply for risk review.
+          parent_section: evaluation_results
+          index_only: true
+          contents:
+            - content_type: test
+              content_id: custom_tests.AgentEvaluationBreachSummary
+            - content_type: test
+              content_id: custom_tests.AgentEvaluationCategoryBreachSummary
+          index: 4.3.2
+        - id: error_analysis
+          title: Error Analysis
+          guidelines:
+            - Analyze representative low-scoring or problematic traces to
+              explain where the health assistant fails and what patterns appear
+              across those failures.
+            - Distinguish between different types of issues, such as retrieval,
+              routing, grounding, bias, or harmful-response problems, and note
+              any recurring themes.
+          parent_section: evaluation_results
+          index_only: true
+          contents:
+            - content_type: test
+              content_id: custom_tests.AgentEvaluationLowScoringTraces
+          index: 4.3.3
+      index: "4.3"
+  index: "4"
+- id: governance
+  title: Governance
+  index_only: true
+  sections:
+    - id: human_accountability
+      title: Human Accountability
+      guidelines:
+        - Describe the human roles responsible for overseeing the health
+          assistant, including ownership, review responsibilities, and decision
+          authority for high-risk or ambiguous cases.
+        - Explain when human intervention, escalation, or manual review is
+          required and how those controls help limit inappropriate reliance on
+          the agent.
+      parent_section: governance
+      index_only: true
+      contents:
+        - content_type: text
+          content_id: 979a9a45-9a29-4a6c-bddf-482185c15516
+        - content_type: text
+          content_id: 8ae86be2-6d73-4081-98b8-2fb9731d689f
+      index: "5.1"
+    - id: change_management
+      title: Change Management
+      guidelines:
+        - Describe how changes to prompts, tools, retrieval sources, scoring
+          logic, or evaluation datasets are proposed, reviewed, approved, and
+          documented.
+        - Explain how versioning, testing, and release controls are used to
+          ensure that updates to the agent are traceable and do not introduce
+          unreviewed risk.
+      parent_section: governance
+      index_only: true
+      contents:
+        - content_type: text
+          content_id: c5279ef4-9083-4902-b05c-962dd7ed5530
+        - content_type: text
+          content_id: 339ac08c-2f88-445e-9fd0-d1c74949efaa
+      index: "5.2"
+  index: "5"
+- id: monitoring
+  title: Monitoring
+  index_only: true
+  sections:
+    - id: monitoring_plan
+      title: Monitoring Plan
+      guidelines:
+        - Describe the plan for monitoring the health assistant after deployment
+          or during ongoing use, including what signals, metrics, or behaviors
+          should be tracked over time.
+        - Explain what thresholds, review triggers, or escalation processes
+          should be used when monitoring identifies potential quality, safety,
+          or compliance issues.
+      parent_section: monitoring
+      index_only: true
+      contents:
+        - content_type: text
+          content_id: cfd19fc8-fd7d-4e0e-8d47-2420a66ce5ca
+        - content_type: text
+          content_id: 740aeff6-ba15-4086-9722-47062a45bf63
+      index: "6.1"
+  index: "6"
