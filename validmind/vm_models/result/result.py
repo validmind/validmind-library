@@ -90,6 +90,12 @@ class RawData:
 class ResultTable:
     """
     A dataclass that holds the table summary of result.
+
+    Attributes:
+        data: The table data as a list of dicts or a pandas DataFrame.
+        title: Optional caption/title for the table. When set, it is sent to
+            the platform as ``metadata.caption`` and rendered by the document
+            media registry as ``Table N. <title>``.
     """
 
     data: Union[List[Any], pd.DataFrame]
@@ -111,7 +117,10 @@ class ResultTable:
         }
 
         if self.title:
-            data["metadata"] = {"title": self.title}
+            # `title` is the user-facing attribute name; we serialize it as
+            # `caption` so it flows into the document media registry on the
+            # platform side (Table N. <caption>).
+            data["metadata"] = {"title": self.title, "caption": self.title}
 
         return data
 

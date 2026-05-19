@@ -11,7 +11,7 @@ import json
 import os
 from dataclasses import dataclass
 from io import BytesIO
-from typing import Union
+from typing import Optional, Union
 
 import matplotlib
 import plotly.graph_objs as go
@@ -38,10 +38,11 @@ def create_figure(
     figure: Union[matplotlib.figure.Figure, go.Figure, go.FigureWidget, bytes],
     key: str,
     ref_id: str,
+    title: Optional[str] = None,
 ) -> "Figure":
     """Create a VM Figure object from a raw figure object."""
     if is_matplotlib_figure(figure) or is_plotly_figure(figure) or is_png_image(figure):
-        return Figure(key=key, figure=figure, ref_id=ref_id)
+        return Figure(key=key, figure=figure, ref_id=ref_id, title=title)
 
     raise ValueError(f"Unsupported figure type: {type(figure)}")
 
@@ -50,11 +51,20 @@ def create_figure(
 class Figure:
     """
     Figure objects track the schema supported by the ValidMind API.
+
+    Attributes:
+        key: Unique identifier for the figure within a test run.
+        figure: The underlying figure object (matplotlib, plotly, or PNG bytes).
+        ref_id: ID used to link the figure to its parent test result.
+        title: Optional caption/title for the figure. When set, it is sent to
+            the platform as ``metadata.caption`` and rendered by the document
+            media registry as ``Figure N. <title>``.
     """
 
     key: str
     figure: Union[matplotlib.figure.Figure, go.Figure, go.FigureWidget, bytes]
     ref_id: str  # used to link figures to results
+    title: Optional[str] = None  # caption/title used by the document media registry
 
     _type: str = "plot"  # for now this is the only figure type
     _cached_png_bytes: bytes = None  # cached PNG bytes for async-safe serialization
@@ -129,10 +139,14 @@ class Figure:
         """
         Serializes the Figure to a dictionary so it can be sent to the API.
         """
+        metadata = {"_ref_id": self.ref_id}
+        if self.title:
+            metadata["caption"] = self.title
+
         return {
             "type": self._type,
             "key": self.key,
-            "metadata": json.dumps({"_ref_id": self.ref_id}, allow_nan=False),
+            "metadata": json.dumps(metadata, allow_nan=False),
         }
 
     def _get_b64_url(self):
