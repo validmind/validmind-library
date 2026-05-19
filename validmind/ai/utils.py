@@ -119,7 +119,7 @@ def get_client_and_model():
     return __client, __model
 
 
-def get_judge_config(judge_llm=None, judge_embeddings=None):
+def _import_judge_dependencies():
     try:
         from langchain_core.embeddings import Embeddings
         from langchain_core.language_models.chat_models import BaseChatModel
@@ -128,36 +128,120 @@ def get_judge_config(judge_llm=None, judge_embeddings=None):
     except ImportError:
         raise ImportError("Please run `pip install validmind[llm]` to use LLM tests")
 
-    if judge_llm is not None or judge_embeddings is not None:
-        if isinstance(judge_llm, FunctionModel) and judge_llm is not None:
-            if isinstance(judge_llm.model, BaseChatModel):
-                judge_llm = judge_llm.model
-            else:
-                raise ValueError(
-                    "The ValidMind Functional model provided does not have have a langchain compatible LLM as a model attribute."
-                    "To use default ValidMind LLM, do not set judge_llm/judge_embedding parameter, "
-                    "ensure that you are connected to the ValidMind API and confirm ValidMind AI is enabled for your account."
-                )
-        if isinstance(judge_embeddings, FunctionModel) and judge_embeddings is not None:
-            if isinstance(judge_embeddings.model, Embeddings):
-                judge_embeddings = judge_embeddings.model
-            else:
-                raise ValueError(
-                    "The ValidMind Functional model provided does not have have a langchain compatible embeddings model as a model attribute."
-                    "To use default ValidMind LLM, do not set judge_embedding parameter, "
-                    "ensure that you are connected to the ValidMind API and confirm ValidMind AI is enabled for your account."
-                )
+    return Embeddings, BaseChatModel, FunctionModel
 
-        if (isinstance(judge_llm, BaseChatModel) or judge_llm is None) and (
-            isinstance(judge_embeddings, Embeddings) or judge_embeddings is None
-        ):
-            return judge_llm, judge_embeddings
-        else:
-            raise ValueError(
-                "Provided Judge LLM/Embeddings are not Langchain compatible. Ensure the judge LLM/embedding provided are an instance of "
-                "Langchain BaseChatModel and LangchainEmbeddings.  To use default ValidMind LLM, do not set judge_llm/judge_embedding parameter, "
-                "ensure that you are connected to the ValidMind API and confirm ValidMind AI is enabled for your account."
-            )
+
+def _unwrap_functional_judge_model(
+    judge_model,
+    expected_type,
+    model_kind,
+    FunctionModel,
+):
+    if not isinstance(judge_model, FunctionModel):
+        return judge_model
+
+    if isinstance(judge_model.model, expected_type):
+        return judge_model.model
+
+    raise ValueError(
+        "The ValidMind Functional model provided does not have have a langchain "
+        f"compatible {model_kind} model as a model attribute."
+        "To use default ValidMind LLM, do not set judge_llm/judge_embedding parameter, "
+        "ensure that you are connected to the ValidMind API and confirm ValidMind AI "
+        "is enabled for your account."
+    )
+
+
+def _normalize_judge_overrides(
+    judge_llm,
+    judge_embeddings,
+    Embeddings,
+    BaseChatModel,
+    FunctionModel,
+):
+    if judge_llm is None and judge_embeddings is None:
+        return None
+
+    judge_llm = _unwrap_functional_judge_model(
+        judge_llm,
+        BaseChatModel,
+        "LLM",
+        FunctionModel,
+    )
+    judge_embeddings = _unwrap_functional_judge_model(
+        judge_embeddings,
+        Embeddings,
+        "embeddings",
+        FunctionModel,
+    )
+
+    if (isinstance(judge_llm, BaseChatModel) or judge_llm is None) and (
+        isinstance(judge_embeddings, Embeddings) or judge_embeddings is None
+    ):
+        return judge_llm, judge_embeddings
+
+    raise ValueError(
+        "Provided Judge LLM/Embeddings are not Langchain compatible. Ensure the judge "
+        "LLM/embedding provided are an instance of Langchain BaseChatModel and "
+        "LangchainEmbeddings.  To use default ValidMind LLM, do not set "
+        "judge_llm/judge_embedding parameter, ensure that you are connected to the "
+        "ValidMind API and confirm ValidMind AI is enabled for your account."
+    )
+
+
+def _build_gemini_judge_config(model):
+    try:
+        langchain_google_genai = importlib.import_module("langchain_google_genai")
+    except ImportError:
+        raise ImportError(
+            "Please run `pip install validmind[llm]` to use Gemini LLM tests"
+        )
+
+    ChatGoogleGenerativeAI = getattr(langchain_google_genai, "ChatGoogleGenerativeAI")
+    GoogleGenerativeAIEmbeddings = getattr(
+        langchain_google_genai, "GoogleGenerativeAIEmbeddings"
+    )
+    google_api_key = _get_google_api_key()
+
+    return (
+        ChatGoogleGenerativeAI(
+            model=model,
+            api_key=google_api_key,
+        ),
+        GoogleGenerativeAIEmbeddings(
+            model=os.getenv("GEMINI_EMBEDDINGS_MODEL", GEMINI_EMBEDDINGS_MODEL),
+            google_api_key=google_api_key,
+        ),
+    )
+
+
+def _build_openai_judge_config(client, model):
+    try:
+        from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+    except ImportError:
+        raise ImportError("Please run `pip install validmind[llm]` to use LLM tests")
+
+    if client is not None and getattr(client, "base_url", None) is not None:
+        os.environ["OPENAI_API_BASE"] = str(client.base_url)
+
+    return (
+        ChatOpenAI(api_key=client.api_key, model=model),
+        OpenAIEmbeddings(api_key=client.api_key, model=OPENAI_EMBEDDINGS_MODEL),
+    )
+
+
+def get_judge_config(judge_llm=None, judge_embeddings=None):
+    Embeddings, BaseChatModel, FunctionModel = _import_judge_dependencies()
+
+    normalized_overrides = _normalize_judge_overrides(
+        judge_llm,
+        judge_embeddings,
+        Embeddings,
+        BaseChatModel,
+        FunctionModel,
+    )
+    if normalized_overrides is not None:
+        return normalized_overrides
 
     # grab default values if not passed at run time
     global __judge_llm, __judge_embeddings
@@ -168,43 +252,9 @@ def get_judge_config(judge_llm=None, judge_embeddings=None):
     client, model = get_client_and_model()
 
     if provider == "gemini":
-        try:
-            langchain_google_genai = importlib.import_module("langchain_google_genai")
-        except ImportError:
-            raise ImportError(
-                "Please run `pip install validmind[llm]` to use Gemini LLM tests"
-            )
-
-        ChatGoogleGenerativeAI = getattr(
-            langchain_google_genai, "ChatGoogleGenerativeAI"
-        )
-        GoogleGenerativeAIEmbeddings = getattr(
-            langchain_google_genai, "GoogleGenerativeAIEmbeddings"
-        )
-        google_api_key = _get_google_api_key()
-        __judge_llm = ChatGoogleGenerativeAI(
-            model=model,
-            api_key=google_api_key,
-        )
-        __judge_embeddings = GoogleGenerativeAIEmbeddings(
-            model=os.getenv("GEMINI_EMBEDDINGS_MODEL", GEMINI_EMBEDDINGS_MODEL),
-            google_api_key=google_api_key,
-        )
+        __judge_llm, __judge_embeddings = _build_gemini_judge_config(model)
     else:
-        try:
-            from langchain_openai import ChatOpenAI, OpenAIEmbeddings
-        except ImportError:
-            raise ImportError(
-                "Please run `pip install validmind[llm]` to use LLM tests"
-            )
-
-        if client is not None and getattr(client, "base_url", None) is not None:
-            os.environ["OPENAI_API_BASE"] = str(client.base_url)
-
-        __judge_llm = ChatOpenAI(api_key=client.api_key, model=model)
-        __judge_embeddings = OpenAIEmbeddings(
-            api_key=client.api_key, model=OPENAI_EMBEDDINGS_MODEL
-        )
+        __judge_llm, __judge_embeddings = _build_openai_judge_config(client, model)
 
     return __judge_llm, __judge_embeddings
 
