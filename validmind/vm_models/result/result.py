@@ -646,6 +646,11 @@ class TestResult(Result):
         if section_id:
             self._validate_section_id_for_block(section_id, position)
 
+        # Pre-serialize figures before entering async context to avoid conflicts
+        # between Plotly's kaleido library and asyncio event loops (ZD-626)
+        for figure in self.figures or []:
+            figure.pre_serialize()
+
         run_async(
             self.log_async,
             section_id=section_id,
