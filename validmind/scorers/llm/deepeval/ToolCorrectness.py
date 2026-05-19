@@ -5,7 +5,7 @@
 from typing import Any, Dict, List
 
 from validmind import tags, tasks
-from validmind.ai.utils import get_client_and_model
+from validmind.ai.utils import get_deepeval_model
 from validmind.errors import MissingDependencyError
 from validmind.tests.decorator import scorer
 from validmind.vm_models.dataset import VMDataset
@@ -88,7 +88,7 @@ def ToolCorrectness(
             f"Available columns: {dataset._df.columns.tolist()}"
         )
 
-    _, llm_model = get_client_and_model()
+    llm_model = get_deepeval_model()
     results: List[Dict[str, Any]] = []
 
     for _, row in dataset._df.iterrows():

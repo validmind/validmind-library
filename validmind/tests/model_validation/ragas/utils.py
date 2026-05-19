@@ -2,14 +2,69 @@
 # Refer to the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+from langchain_core.outputs import ChatGeneration
+
 from validmind.ai.utils import get_judge_config
 
 EMBEDDINGS_MODEL = "text-embedding-3-small"
 
 
+def _ragas_is_finished_parser(response) -> bool:
+    """Accept finish signals used by Gemini as well as OpenAI-style responses."""
+
+    is_finished_list = []
+    accepted_finish_reasons = {
+        "stop",
+        "STOP",
+        "end_turn",
+        "END_TURN",
+        "max_tokens",
+        "MAX_TOKENS",
+    }
+
+    for generation_group in response.flatten():
+        response_generation = generation_group.generations[0][0]
+        generation_info = getattr(response_generation, "generation_info", None) or {}
+
+        finish_reason = generation_info.get("finish_reason")
+        if finish_reason is not None:
+            is_finished_list.append(finish_reason in accepted_finish_reasons)
+            continue
+
+        if isinstance(response_generation, ChatGeneration):
+            response_metadata = (
+                getattr(response_generation.message, "response_metadata", None) or {}
+            )
+            finish_reason = response_metadata.get("finish_reason")
+            stop_reason = response_metadata.get("stop_reason")
+
+            if finish_reason is not None:
+                is_finished_list.append(finish_reason in accepted_finish_reasons)
+                continue
+
+            if stop_reason is not None:
+                is_finished_list.append(stop_reason in accepted_finish_reasons)
+                continue
+
+        is_finished_list.append(True)
+
+    return all(is_finished_list)
+
+
 def get_ragas_config(judge_llm=None, judge_embeddings=None):
     judge_llm, judge_embeddings = get_judge_config(judge_llm, judge_embeddings)
-    return {"llm": judge_llm, "embeddings": judge_embeddings}
+
+    try:
+        from ragas.llms.base import LangchainLLMWrapper
+    except ImportError:
+        raise ImportError("Please run `pip install validmind[llm]` to use RAGAS tests")
+
+    return {
+        "llm": LangchainLLMWrapper(
+            judge_llm, is_finished_parser=_ragas_is_finished_parser
+        ),
+        "embeddings": judge_embeddings,
+    }
 
 
 def make_sub_col_udf(root_col, sub_col):
