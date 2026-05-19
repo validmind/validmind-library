@@ -108,6 +108,24 @@ def test(func_or_id: Union[Callable[..., Any], str, None]) -> Callable[[F], F]:
     - Scalar: A single number (int or float)
     - Boolean: A single boolean value indicating whether the test passed or failed
 
+    Titled tables and figures
+    -------------------------
+    Tables and figures may be titled by returning a dict whose keys are the
+    titles. The titles are picked up by the platform's caption registry and
+    rendered as e.g. ``Table 3. Top Features`` / ``Figure 7. Calibration Curve``
+    in the model documentation::
+
+        @vm.test("my_test_id")
+        def my_test(dataset, model):
+            return (
+                {"Top Features": features_df},          # titled table
+                {"Calibration Curve": calibration_fig}, # titled figure
+            )
+
+    Tables also accept ``ResultTable(data=df, title="…")`` and figures also
+    accept ``Figure(figure=fig, key=…, ref_id=…, title="…")`` for callers that
+    want to construct the objects explicitly.
+
     The function may also include a docstring. This docstring will be used and logged
     as the metric's description.
 
