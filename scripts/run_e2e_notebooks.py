@@ -6,7 +6,7 @@ Usage:
 Note: This script is meant to be run from the root of the repo
 
 Notebooks Tested:
- - notebooks/quickstart/quickstart_model_documentation.ipynb
+ - notebooks/quickstart/quickstart_documentation.ipynb
  - notebooks/use_cases/time_series/quickstart_time_series_full_suite.ipynb
  - notebooks/use_cases/regression/quickstart_regression_full_suite.ipynb
  - notebooks/how_to/tests/custom_tests/integrate_external_test_providers.ipynb
@@ -39,7 +39,7 @@ DEFAULT_MODEL_CUID = os.getenv(
 )  # Demo Account Dev Customer Churn Model
 
 NOTEBOOKS_TO_RUN = [
-    "notebooks/quickstart/quickstart_model_documentation.ipynb",
+    "notebooks/quickstart/quickstart_documentation.ipynb",
     "notebooks/use_cases/time_series/quickstart_time_series_high_code.ipynb",
     "notebooks/use_cases/regression/quickstart_regression_full_suite.ipynb",
     "notebooks/how_to/metrics/run_unit_metrics.ipynb",
@@ -71,12 +71,12 @@ DATA_TEMPLATE_NOTEBOOKS = [
     },
     {
         # [Demo] Customer Churn Model
-        "path": "notebooks/quickstart/quickstart_model_documentation.ipynb",
+        "path": "notebooks/quickstart/quickstart_documentation.ipynb",
         "model": "cm4lr52lw00a60jpbhmzh8cah",
     },
     {
         # [Demo] Credit Risk Model
-        "path": "notebooks/use_cases/credit_risk/application_scorecard_demo.ipynb",
+        "path": "notebooks/use_cases/credit_risk/application_scorecard_full_suite.ipynb",
         "model": "cm4lr52j9009w0jpb4gr7z5o0",
     },
     {
@@ -96,7 +96,8 @@ vm.init(
   api_host = "{api_host}",
   api_key = "{api_key}",
   api_secret = "{api_secret}",
-  model = "{model}"
+  model = "{model}",
+  document = "documentation"
 )
 
 

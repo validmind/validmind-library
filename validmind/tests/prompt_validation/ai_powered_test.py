@@ -29,7 +29,8 @@ def call_model(
     judge_embeddings=None,
 ):
     """Call LLM with the given prompts and return the response"""
-    if not is_configured():
+    # Only check OpenAI config if no custom judge_llm is provided
+    if judge_llm is None and not is_configured():
         raise ValueError(
             "LLM is not configured. Please set an `OPENAI_API_KEY` environment variable "
             "or ensure that you are connected to the ValidMind API and ValidMind AI is "

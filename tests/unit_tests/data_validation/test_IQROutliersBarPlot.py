@@ -81,3 +81,20 @@ class TestIQROutliersBarPlot(unittest.TestCase):
         # Check that binary column is not included in figures
         figure_titles = [fig.layout.title.text for fig in results[:-1]]
         self.assertNotIn("binary", figure_titles)
+
+    def test_boolean_dtype_excluded_from_raw_data(self):
+        n_samples = 100
+        df = pd.DataFrame(
+            {
+                "numeric": np.random.randn(n_samples),
+                "flag": np.random.choice([True, False], n_samples),
+            }
+        )
+        vm_dataset = vm.init_dataset(
+            input_id="test_boolean_dataset", dataset=df, __log=False
+        )
+
+        results = IQROutliersBarPlot(vm_dataset)
+        raw_data = results[-1]
+
+        self.assertNotIn("flag", raw_data.outlier_counts_by_feature.index)

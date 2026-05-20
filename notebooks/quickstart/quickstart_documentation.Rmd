@@ -1,20 +1,20 @@
 ---
-title: "Quickstart for Model Documentation (R)"
+title: "Quickstart for documentation (R)"
 author: "ValidMind"
 date: "2026-03-18"
 output: html_document
 ---
 
-# Quickstart for Model Documentation
+# Quickstart for documentation
 
-Learn the basics of using ValidMind to document models as part of a model development workflow using R. This notebook uses the ValidMind R package (a `reticulate` wrapper around the Python library) to generate a draft of documentation for a binary classification model.
+Learn the basics of using ValidMind to document records as part of a development workflow with R. Using the ValidMind R package (a `reticulate` wrapper around the Python library), you'll generate a draft of documentation using ValidMind tests for a binary classification model.
 
-We will:
+To document our model with the ValidMind Library, we'll:
 
 1. Import a sample dataset and preprocess it
 2. Split the datasets and initialize them for use with ValidMind
-3. Train a logistic regression (GLM) model and initialize it for use with testing
-4. Run the full suite of documentation tests, sending results to the ValidMind Platform
+3. Initialize a ValidMind model object for use with testing
+4. Run a full suite of tests as defined by our documentation template, which will send the results of those tests to the ValidMind Platform
 
 ## Setting up
 
@@ -39,15 +39,41 @@ library(knitr)
 knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 ```
 
-## Initialize the ValidMind Library
+### Initialize the ValidMind Library
 
-Log in to the [ValidMind Platform](https://app.prod.validmind.ai) and register a model:
+#### Register sample model
 
-1. Navigate to **Inventory** and click **+ Register Model**.
-2. Under **Documents > Development**, select the `Binary classification` template.
-3. Go to **Getting Started**, select `Development` from the **DOCUMENT** drop-down, and copy the code snippet.
+Log in to the [ValidMind Platform](https://app.prod.validmind.ai) and register a sample record (model):
 
-Replace the placeholder values below with your own credentials:
+1. In the left sidebar, select **Inventory**.
+
+2. Under the **RECORD TYPE** drop-down, select `Model` and click **+ Register Model**. (Learn more: [Register records in the inventory](https://docs.validmind.ai/guide/inventory/register-records-in-inventory.html))
+
+3. Enter the model details and click **Next >** to continue to assignment of inventory record stakeholders.
+
+4. Select your own name under the **RECORD OWNER** drop-down.
+
+5. Click **Register Model** to add the model to your inventory.
+
+#### Apply documentation template
+
+Once you've registered your model, let's select a documentation template. A template predefines sections for your documentation and provides a general outline to follow, making the documentation process much easier.
+
+1. In the left sidebar that appears for your model, click **Documents** and select **Development**.
+
+2. Under **TEMPLATE**, select `Binary classification`.
+
+3. Click **Use Template** to apply the template.
+
+#### Get your code snippet
+
+Initialize the ValidMind Library with the *code snippet* unique to each record per document, ensuring your test results are uploaded to the correct record and automatically populated in the right document in the ValidMind Platform when you run the Library.
+
+1. On the left sidebar that appears for your model, select **Getting Started** and select `Development` from the **DOCUMENT** drop-down menu.
+
+2. Click **Copy snippet to clipboard**. Paste the snippet into an editor and make note of the credentials.
+
+3. Next, replace the placeholder values below with your own credentials:
 
 ```{r}
 vm_r <- vm(
@@ -164,7 +190,7 @@ vm_test_ds <- vm_r$init_dataset(
 )
 ```
 
-## Initialize a model object
+## Initialize the ValidMind model
 
 Save the R model and initialize it with ValidMind:
 
@@ -216,7 +242,7 @@ full_suite <- vm_r$run_documentation_tests(config = test_config)
 Head to the [ValidMind Platform](https://app.prod.validmind.ai) to view the generated documentation:
 
 1. Navigate to **Inventory** and select your model.
-2. Click **Development** under Documents to see the full draft of your model documentation.
+2. Click **Development** under Documents to see the full draft of your documentation.
 
 From there, you can make qualitative edits, collaborate with validators, and submit for approval.
 

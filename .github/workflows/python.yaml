@@ -47,21 +47,21 @@ jobs:
       - name: Free Disk Space
         run: ./disk_clean.sh
 
-      - name: Install poetry
-        run: pipx install poetry
-
       - name: Set up Python 3.9
         uses: actions/setup-python@v5
         with:
           python-version: '3.9'
-          cache: 'poetry'
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
 
       - name: Install Dependencies
         run: |
-          poetry env use python3.9
-          poetry install --all-extras
-          poetry run pip install torch==2.0.1 --extra-index-url https://download.pytorch.org/whl/cpu
-          poetry run pip install aequitas fairlearn vl-convert-python
+          uv sync --all-extras --group dev
+          uv pip install torch==2.0.1 --extra-index-url https://download.pytorch.org/whl/cpu
+          uv pip install aequitas fairlearn vl-convert-python
 
       - name: Ensure notebooks have no printed outputs
         run: make ensure-clean-notebooks

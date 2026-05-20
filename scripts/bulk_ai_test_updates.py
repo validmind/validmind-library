@@ -2,7 +2,7 @@
 
 
 Usage:
-    poetry run python scripts/bulk_ai_test_updates.py <path> --action <action>
+    uv run python scripts/bulk_ai_test_updates.py <path> --action <action>
 
  - path: path to a test file or directory containing test files
  - action: `add_description` or `add_raw_data`
@@ -637,7 +637,7 @@ def main(action, path, model):
         func(file)
 
     # run black on the tests directory
-    subprocess.run(["poetry", "run", "black", "validmind/tests"])
+    subprocess.run(["uv", "run", "black", "validmind/tests"])
 
 
 if __name__ == "__main__":

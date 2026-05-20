@@ -95,12 +95,7 @@ ipython_config.py
 #   install all needed dependencies.
 #Pipfile.lock
 
-# poetry
-#   Similar to Pipfile.lock, it is generally recommended to include poetry.lock in version control.
-#   This is especially recommended for binary packages to ensure reproducibility, and is more
-#   commonly ignored for libraries.
-#   https://python-poetry.org/docs/basic-usage/#commit-your-poetrylock-file-to-version-control
-#poetry.lock
+# uv lockfile is committed for reproducible dev/CI installs
 
 # PEP 582; used by e.g. github.com/David-OConnor/pyflow
 __pypackages__/
@@ -195,9 +190,9 @@ lending_club_loan_data_*.csv
 # Pickle files
 *.pkl
 # Sample application scorecard model for validation notebook — do not remove!
-!notebooks/use_cases/model_validation/xgb_model_champion.pkl
+!notebooks/use_cases/validation/xgb_model_champion.pkl
 # Sample logistic regression model for validation series — do not remove!
-!notebooks/tutorials/model_validation/lr_model_champion.pkl
+!notebooks/tutorials/validation/lr_model_champion.pkl
 # Sample XGBoost model for validation quickstart — do not remove!
 !notebooks/quickstart/xgboost_model_champion.pkl
 

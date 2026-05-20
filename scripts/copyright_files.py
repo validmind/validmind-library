@@ -5,7 +5,7 @@ This script adds a standard ValidMind copyright
 block to all Python files in the package directory.
 
 How to use:
-    poetry run python scripts/copyright_files.py
+    uv run python scripts/copyright_files.py
 """
 
 import os
@@ -62,7 +62,7 @@ def copyright_python_file(root, file):
         del lines[start_index:end_index + 1]
         # Insert the new copyright at start_index
         lines.insert(start_index, copyright)
-    
+
         # Write the modified contents back to the file
         with open(os.path.join(root, file), "w") as f:
             f.writelines(lines)

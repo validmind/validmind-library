@@ -64,7 +64,7 @@ R reads this file automatically on startup, before any code runs. Relative paths
 
 ### Option 2: `.env` file in the repo
 
-If the project uses Poetry with in-project virtualenvs (`.venv/` inside the repo), add to the repo's `.env` file:
+If the project uses `uv` (default in-repo virtualenv at `.venv/`), add to the repo's `.env` file:
 
 ```
 VALIDMIND_PYTHON=.venv/bin/python
@@ -94,8 +94,8 @@ The `python_version` parameter is no longer required — it defaults to `VALIDMI
 
 See the `notebooks/code_sharing/r/` folder for full working examples:
 
-- **`quickstart_model_documentation.Rmd`** — End-to-end model documentation workflow: load data, preprocess, train a GLM model, and run the full documentation test suite.
-- **`quickstart_model_validation.Rmd`** — End-to-end model validation workflow: load data, run data quality tests, train a champion GLM model, and run model evaluation tests.
+- **`quickstart_documentation.Rmd`** — End-to-end model documentation workflow: load data, preprocess, train a GLM model, and run the full documentation test suite.
+- **`quickstart_validation.Rmd`** — End-to-end model validation workflow: load data, run data quality tests, train a champion GLM model, and run model evaluation tests.
 
 These notebooks can be run from VS Code (with the R extension), RStudio, or interactively in a terminal R session. When running interactively, launch R from the repository root so that relative dataset paths resolve correctly.
 
