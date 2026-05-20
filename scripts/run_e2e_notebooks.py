@@ -213,7 +213,7 @@ def run_notebook(notebook_path, kernel_name, log_output=False, progress_bar=True
 
 def update_vm_init_cell(notebook_path, model, pii_detection_mode="disabled"):
     api_host = os.getenv(
-        "NOTEBOOK_RUNNER_API_HOST", "https://api.dev.vm.validmind.ai/api/v1/tracking"
+        "NOTEBOOK_RUNNER_API_HOST", "https://app.dev.vm.validmind.ai/api/v1/tracking"
     )
     api_key = os.getenv("NOTEBOOK_RUNNER_API_KEY")
     api_secret = os.getenv("NOTEBOOK_RUNNER_API_SECRET")
