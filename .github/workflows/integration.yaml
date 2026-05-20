@@ -68,7 +68,7 @@ jobs:
           NOTEBOOK_RUNNER_DEFAULT_MODEL: ${{ secrets.NOTEBOOK_RUNNER_DEFAULT_PROJECT_ID }}
           NOTEBOOK_RUNNER_API_KEY: ${{ secrets.NOTEBOOK_RUNNER_API_KEY }}
           NOTEBOOK_RUNNER_API_SECRET: ${{ secrets.NOTEBOOK_RUNNER_API_SECRET }}
-          NOTEBOOK_RUNNER_API_HOST: 'https://api.dev.vm.validmind.ai/api/v1/tracking'
+          NOTEBOOK_RUNNER_API_HOST: 'https://app.dev.vm.validmind.ai/api/v1/tracking'
           VALIDMIND_LLM_DESCRIPTIONS_ENABLED: 0
 
       - name: Failure Notification
