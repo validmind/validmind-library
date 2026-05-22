@@ -10,6 +10,7 @@ on:
       - prod
     paths-ignore:
       - 'docs/**'
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -70,6 +71,8 @@ jobs:
           NOTEBOOK_RUNNER_API_SECRET: ${{ secrets.NOTEBOOK_RUNNER_API_SECRET }}
           NOTEBOOK_RUNNER_API_HOST: 'https://app.dev.vm.validmind.ai/api/v1/tracking'
           VALIDMIND_LLM_DESCRIPTIONS_ENABLED: 0
+          LOG_LEVEL: DEBUG
+          VM_API_TIMEOUT: 120
 
       - name: Failure Notification
         if: failure()

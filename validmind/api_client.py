@@ -11,6 +11,7 @@ import asyncio
 import atexit
 import json
 import os
+import time
 from io import BytesIO
 from typing import Any, Dict, List, Optional, Tuple, Union
 from urllib.parse import urlencode, urljoin
@@ -36,6 +37,20 @@ _document = None
 _monitoring = False
 
 __api_session: Optional[aiohttp.ClientSession] = None
+
+
+def _get_api_timeout() -> int:
+    """Return the configured API timeout in seconds."""
+    return int(os.getenv("VM_API_TIMEOUT", 30))
+
+
+def _get_proxy_env_status() -> Dict[str, bool]:
+    """Return whether common proxy environment variables are configured."""
+    return {
+        "HTTP_PROXY": bool(os.getenv("HTTP_PROXY")),
+        "HTTPS_PROXY": bool(os.getenv("HTTPS_PROXY")),
+        "NO_PROXY": bool(os.getenv("NO_PROXY")),
+    }
 
 
 @atexit.register
@@ -86,10 +101,16 @@ def _get_session() -> aiohttp.ClientSession:
     global __api_session
 
     if not __api_session or __api_session.closed:
+        timeout_seconds = _get_api_timeout()
         __api_session = aiohttp.ClientSession(
             headers=_get_api_headers(),
-            timeout=aiohttp.ClientTimeout(total=int(os.getenv("VM_API_TIMEOUT", 30))),
+            timeout=aiohttp.ClientTimeout(total=timeout_seconds),
             trust_env=True,
+        )
+        logger.debug(
+            "Initialized aiohttp session with timeout=%ss trust_env=True proxy_env=%s",
+            timeout_seconds,
+            _get_proxy_env_status(),
         )
 
     return __api_session
@@ -117,12 +138,32 @@ async def _get(
 ) -> Dict[str, Any]:
     url = _get_url(endpoint, params)
     session = _get_session()
+    started_at = time.perf_counter()
 
-    async with session.get(url) as r:
-        if r.status != 200:
-            raise_api_error(await r.text())
+    try:
+        async with session.get(url) as r:
+            elapsed_ms = (time.perf_counter() - started_at) * 1000
+            logger.debug(
+                "GET %s completed status=%s elapsed_ms=%.1f timeout_s=%s",
+                endpoint,
+                r.status,
+                elapsed_ms,
+                _get_api_timeout(),
+            )
+            if r.status != 200:
+                raise_api_error(await r.text())
 
-        return await r.json()
+            return await r.json()
+    except Exception as e:
+        elapsed_ms = (time.perf_counter() - started_at) * 1000
+        logger.error(
+            "GET %s failed after %.1f ms (%s): %s",
+            endpoint,
+            elapsed_ms,
+            e.__class__.__name__,
+            e,
+        )
+        raise
 
 
 async def _post(
@@ -133,6 +174,7 @@ async def _post(
 ) -> Dict[str, Any]:
     url = _get_url(endpoint, params)
     session = _get_session()
+    started_at = time.perf_counter()
 
     if not isinstance(data, (dict)) and files is not None:
         raise ValueError("Cannot pass both non-json data and file objects to _post")
@@ -153,11 +195,37 @@ async def _post(
     else:
         _data = data
 
-    async with session.post(url, data=_data) as r:
-        if r.status != 200:
-            raise_api_error(await r.text())
+    payload_size = None
+    if isinstance(_data, str):
+        payload_size = len(_data.encode("utf-8"))
 
-        return await r.json()
+    try:
+        async with session.post(url, data=_data) as r:
+            elapsed_ms = (time.perf_counter() - started_at) * 1000
+            logger.debug(
+                "POST %s completed status=%s elapsed_ms=%.1f timeout_s=%s payload_bytes=%s files=%s",
+                endpoint,
+                r.status,
+                elapsed_ms,
+                _get_api_timeout(),
+                payload_size,
+                bool(files),
+            )
+            if r.status != 200:
+                raise_api_error(await r.text())
+
+            return await r.json()
+    except Exception as e:
+        elapsed_ms = (time.perf_counter() - started_at) * 1000
+        logger.error(
+            "POST %s failed after %.1f ms (%s) payload_bytes=%s files=%s",
+            endpoint,
+            elapsed_ms,
+            e.__class__.__name__,
+            payload_size,
+            bool(files),
+        )
+        raise
 
 
 def _ping() -> Dict[str, Any]:
