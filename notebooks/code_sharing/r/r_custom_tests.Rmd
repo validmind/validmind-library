@@ -15,9 +15,9 @@ library(validmind)
 
 ## About ValidMind
 
-ValidMind is a suite of tools for managing model risk, including risk associated with AI and statistical models.
+ValidMind is a suite of tools for managing risk, including risk associated with AI and statistical models.
 
-You use the ValidMind Library to automate documentation and validation tests, and then use the ValidMind Platform to collaborate on model documentation. Together, these products simplify model risk management, facilitate compliance with regulations and institutional standards, and enhance collaboration between yourself and model validators.
+You use the ValidMind Library to automate documentation and validation tests, and then use the ValidMind Platform to collaborate on documentation. Together, these products simplify risk management, facilitate compliance with regulations and institutional standards, and enhance collaboration between yourself and validators.
 
 <a id='toc2_1_'></a>
 
@@ -31,11 +31,11 @@ If you encounter errors due to missing modules in your Python environment, insta
 
 ### New to ValidMind?
 
-If you haven't already seen our documentation on the [ValidMind Library](https://docs.validmind.ai/developer/validmind-library.html), we recommend you begin by exploring the available resources in this section. There, you can learn more about documenting models, find code samples, or read our developer reference.
+If you haven't already seen our documentation on the [ValidMind Library](https://docs.validmind.ai/developer/validmind-library.html), we recommend you begin by exploring the available resources in this section. There, you can learn more about documenting records such as models and running tests, as well as find code samples and our Python Library API reference.
 
 <div class="alert alert-block alert-info" style="background-color: #B5B5B510; color: black; border: 1px solid #083E44; border-left-width: 5px; box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);border-radius: 5px;"><span style="color: #083E44;"><b>For access to all features available in this notebook, create a free ValidMind account.</b></span>
 <br></br>
-Signing up is FREE — <a href="https://docs.validmind.ai/guide/configuration/register-with-validmind.html" style="color: #DE257E;"><b>Register with ValidMind</b></a></div>
+Signing up is FREE — <a href="https://docs.validmind.ai/guide/access/register-with-validmind.html" style="color: #DE257E;"><b>Register with ValidMind</b></a></div>
 
 <a id='toc2_3_'></a>
 
@@ -76,7 +76,7 @@ Example: the [`classifier_full_suite`](https://docs.validmind.ai/validmind/valid
 
 <div class="alert alert-block alert-info" style="background-color: #B5B5B510; color: black; border: 1px solid #083E44; border-left-width: 5px; box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);border-radius: 5px;"><span style="color: #083E44;"><b>To access the ValidMind Platform, you'll need an account.</b></span>
 <br></br>
-Signing up is FREE — <a href="https://docs.validmind.ai/guide/configuration/register-with-validmind.html" style="color: #DE257E;"><b>Register with ValidMind</b></a></div>
+Signing up is FREE — <a href="https://docs.validmind.ai/guide/access/register-with-validmind.html" style="color: #DE257E;"><b>Register with ValidMind</b></a></div>
 
 If you encounter errors due to missing modules in your Python environment, install the modules with `pip install`, and then re-run the notebook. For more help, refer to [Installing Python Modules](https://docs.python.org/3/installing/index.html).
 
@@ -98,13 +98,15 @@ ValidMind generates a unique _code snippet_ for each registered model to connect
 
 Get your code snippet:
 
-1. In a browser, [log in to ValidMind](https://docs.validmind.ai/guide/configuration/log-in-to-validmind.html).
+1. In a browser, [log in to ValidMind](https://docs.validmind.ai/guide/access/log-in-to-validmind.html).
 
-2. In the left sidebar, navigate to **Model Inventory** and click **+ Register new model**.
+2. In the left sidebar, select **Inventory**.
 
-3. Enter the model details, making sure to select **Binary classification** as the template and **Marketing/Sales - Attrition/Churn Management** as the use case, and click **Continue**. ([Need more help?](https://docs.validmind.ai/guide/model-inventory/register-models-in-inventory.html))
+3. Under the **RECORD TYPE** drop-down, select `Model` and click **+ Register Model**. ([Learn more: Register records in the inventory](https://docs.validmind.ai/guide/inventory/register-records-in-inventory.html))
 
-4. Go to **Getting Started** and click **Copy snippet to clipboard**.
+4. Enter the model details, making sure to select **Binary classification** as the template and **Marketing/Sales - Attrition/Churn Management** as the use case, and click **Continue**.
+
+5. Go to **Getting Started** and click **Copy snippet to clipboard**.
 
 Next, replace this placeholder with your own code snippet:
 

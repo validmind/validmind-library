@@ -27,6 +27,36 @@ DEFAULT_THRESHOLDS = {
 }
 
 
+def _normalize_dict_keys(d: Dict) -> Dict:
+    """Normalize metric/threshold keys to title case (e.g. 'f1' -> 'F1')."""
+    return {k.title(): v for k, v in d.items()}
+
+
+def _prepare_metrics_and_thresholds(
+    metrics: Optional[Dict[str, Callable]],
+    thresholds: Optional[Dict[str, float]],
+) -> Tuple[Dict[str, Callable], Dict[str, float], Dict[str, float]]:
+    """
+    Prepare metrics and threshold dicts for plotting and pass/fail checks.
+
+    Custom thresholds may specify only a subset of metrics (e.g. accuracy only).
+    Plotting uses default thresholds for any metric without an explicit value so
+    charts always show a reference line; pass/fail uses only the user-provided
+    thresholds when a custom dict is supplied.
+    """
+    normalized_metrics = _normalize_dict_keys(metrics or DEFAULT_METRICS)
+    default_thresholds = _normalize_dict_keys(DEFAULT_THRESHOLDS)
+
+    if thresholds is not None:
+        pass_thresholds = _normalize_dict_keys(thresholds)
+        plot_thresholds = {**default_thresholds, **pass_thresholds}
+    else:
+        pass_thresholds = default_thresholds
+        plot_thresholds = default_thresholds
+
+    return normalized_metrics, plot_thresholds, pass_thresholds
+
+
 def _compute_metrics(
     results: dict,
     metrics: Dict[str, Callable],
@@ -230,11 +260,9 @@ def WeakspotsDiagnosis(
             "Column(s) provided in features_columns do not exist in the dataset"
         )
 
-    metrics = metrics or DEFAULT_METRICS
-    metrics = {k.title(): v for k, v in metrics.items()}
-
-    thresholds = thresholds or DEFAULT_THRESHOLDS
-    thresholds = {k.title(): v for k, v in thresholds.items()}
+    metrics, plot_thresholds, pass_thresholds = _prepare_metrics_and_thresholds(
+        metrics, thresholds
+    )
 
     results_headers = ["Slice", "Number of Records", "Feature"]
     results_headers.extend(metrics.keys())
@@ -290,14 +318,18 @@ def WeakspotsDiagnosis(
                 results_2=r2,
                 feature_column=feature,
                 metric=metric,
-                threshold=thresholds[metric],
+                threshold=plot_thresholds[metric],
             )
 
             figures.append(fig)
 
         # For simplicity, test has failed if any of the metrics is below the threshold. We will
         # rely on visual assessment for this test for now.
-        if not df[df[list(thresholds.keys())].lt(thresholds).any(axis=1)].empty:
+        pass_columns = [c for c in pass_thresholds if c in metrics]
+        if (
+            pass_columns
+            and not df[df[pass_columns].lt(pass_thresholds).any(axis=1)].empty
+        ):
             passed = False
         results_1 = pd.concat([results_1, pd.DataFrame(r1)])
         results_2 = pd.concat([results_2, pd.DataFrame(r2)])

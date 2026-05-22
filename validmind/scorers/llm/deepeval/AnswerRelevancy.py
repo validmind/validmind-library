@@ -5,7 +5,7 @@
 from typing import Any, Dict, List
 
 from validmind import tags, tasks
-from validmind.ai.utils import get_client_and_model
+from validmind.ai.utils import get_deepeval_model
 from validmind.errors import MissingDependencyError
 from validmind.tests.decorator import scorer
 from validmind.vm_models.dataset import VMDataset
@@ -69,7 +69,7 @@ def AnswerRelevancy(
             f"Actual output column '{actual_output_column}' not found in dataset. Available columns: {dataset.df.columns.tolist()}"
         )
 
-    _, model = get_client_and_model()
+    model = get_deepeval_model()
 
     metric = AnswerRelevancyMetric(
         threshold=threshold, model=model, include_reason=True, verbose_mode=False
