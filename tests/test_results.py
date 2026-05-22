@@ -501,6 +501,85 @@ class TestResultClasses(unittest.TestCase):
             self.assertIn("data:image/png;base64", html)
             self.assertIn("vm-img-test_key", html)
 
+    def test_figure_title_serializes_as_caption(self):
+        """Figure.title should be serialized into metadata as `caption` so it
+        flows into the platform's document media registry (Figure N. <caption>).
+        """
+        import json as _json
+
+        plotly_fig = go.Figure(data=go.Scatter(x=[1, 2, 3], y=[4, 5, 6]))
+
+        # With a title -> metadata.caption is set
+        titled = Figure(
+            key="k", figure=plotly_fig, ref_id="r1", title="My Cool Chart"
+        )
+        payload = titled.serialize()
+        meta = _json.loads(payload["metadata"])
+        self.assertEqual(meta["_ref_id"], "r1")
+        self.assertEqual(meta["caption"], "My Cool Chart")
+
+        # Without a title -> no caption key (back-compat)
+        untitled = Figure(key="k", figure=plotly_fig, ref_id="r2")
+        meta_untitled = _json.loads(untitled.serialize()["metadata"])
+        self.assertEqual(meta_untitled, {"_ref_id": "r2"})
+        self.assertNotIn("caption", meta_untitled)
+
+    def test_result_table_title_serializes_as_caption(self):
+        """ResultTable.title should be serialized into metadata under both
+        `title` (back-compat) and `caption` (consumed by the caption registry)."""
+        df = pd.DataFrame({"col1": [1, 2, 3]})
+
+        titled = ResultTable(data=df, title="Top Features")
+        payload = titled.serialize()
+        self.assertEqual(payload["metadata"]["title"], "Top Features")
+        self.assertEqual(payload["metadata"]["caption"], "Top Features")
+
+        untitled = ResultTable(data=df)
+        self.assertNotIn("metadata", untitled.serialize())
+
+    def test_figure_output_handler_dict_assigns_titles(self):
+        """Returning ``{"My Chart Title": fig, ...}`` from a test should produce
+        Figure objects with the dict key applied as ``title``."""
+        from validmind.tests.output import FigureOutputHandler
+
+        png = b"\x89PNG\r\n\x1a\n" + b"\x00" * 16
+
+        result = TestResult(result_id="my.test", ref_id="ref-1")
+        handler = FigureOutputHandler()
+
+        self.assertTrue(handler.can_handle({"A": png, "B": png}))
+        # dict of non-figures should NOT be claimed by FigureOutputHandler
+        self.assertFalse(handler.can_handle({"x": 1, "y": 2}))
+
+        handler.process({"Chart A": png, "Chart B": png}, result)
+
+        self.assertEqual(len(result.figures), 2)
+        self.assertEqual(
+            sorted(f.title for f in result.figures), ["Chart A", "Chart B"]
+        )
+        # Each figure gets a unique key under the same result_id/ref_id
+        keys = [f.key for f in result.figures]
+        self.assertEqual(len(set(keys)), 2)
+        for f in result.figures:
+            self.assertTrue(f.key.startswith("my.test:"))
+            self.assertEqual(f.ref_id, "ref-1")
+
+    def test_figure_output_handler_preserves_explicit_figure_title(self):
+        """If a user passes a pre-built Figure with an explicit title, the
+        dict-key wrapper must not overwrite it."""
+        from validmind.tests.output import FigureOutputHandler
+
+        png = b"\x89PNG\r\n\x1a\n" + b"\x00" * 16
+        explicit = Figure(
+            key="explicit_key", figure=png, ref_id="ref-1", title="User Title"
+        )
+
+        result = TestResult(result_id="my.test", ref_id="ref-1")
+        FigureOutputHandler().process({"Dict Key Title": explicit}, result)
+
+        self.assertEqual(len(result.figures), 1)
+        self.assertEqual(result.figures[0].title, "User Title")
+
 
 if __name__ == "__main__":
     unittest.main()

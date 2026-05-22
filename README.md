@@ -67,6 +67,8 @@ pip install validmind
 
 The ValidMind Library includes optional PII detection capabilities using Microsoft Presidio to automatically detect sensitive data in test results and prevent accidental logging.
 
+For an extended guide, refer to our how-to notebook: **[Enable PII detection](notebooks/how_to/tests/run_tests/configure_tests/enable_pii_detection.ipynb)**
+
 **Installation:**
 
 ```bash
@@ -180,8 +182,8 @@ Then create/open `.ipynb` files in VS Code and select the R kernel.
 
 Launch R from the repository root (so dataset paths resolve correctly) and run through the notebooks in `notebooks/code_sharing/r/`:
 
-- `quickstart_model_documentation.Rmd` — model documentation workflow
-- `quickstart_model_validation.Rmd` — model validation workflow
+- `quickstart_documentation.Rmd` — model documentation workflow
+- `quickstart_validation.Rmd` — model validation workflow
 
 ### Versioning
 
