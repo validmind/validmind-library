@@ -8,6 +8,7 @@ on:
     branches:
       - main
       - prod
+      - fix/integration-test-timeout
     paths-ignore:
       - 'docs/**'
   workflow_dispatch:
