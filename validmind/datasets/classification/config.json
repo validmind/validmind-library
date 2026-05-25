@@ -14,7 +14,7 @@
   },
   "regulatory_requirements": {
     "section_id": "regulatory_requirements",
-    "prompt": "Write a comprehensive paragraphs describing the regulatory requirements for this model, assuming SR 11-7 is the primary regulatory framework."
+    "prompt": "Write a comprehensive paragraphs describing the regulatory requirements for this model, assuming SR 26-2 is the primary regulatory framework for U.S. banking organizations (superseding SR 11-7)."
   },
   "model_limitations": {
     "section_id": "model_limitations",
