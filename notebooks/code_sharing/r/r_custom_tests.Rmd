@@ -47,7 +47,7 @@ Signing up is FREE — <a href="https://docs.validmind.ai/guide/access/register-
 
 **documentation, model documentation**: A structured and detailed document pertaining to a record, encompassing key components such as its underlying assumptions, methodologies, data sources, inputs, performance metrics, evaluations, limitations, and intended uses. Within the realm of risk management, this documentation serves to ensure transparency, adherence to regulatory requirements, and a clear understanding of potential risks associated with the record's application.
 
-**document template**: Lays out the structure of documents, segmented into various sections and sub-sections, and function as test suites specifying the tests that should be run, and how the results should be displayed. Document templates help automate your development, validation, monitoring, and other risk management processes. Document templates are available for default ValidMind document types as well as custom document types.
+**document template**: Lays out the structure of documents, segmented into various sections and sub-sections, and functions as test suites specifying the tests that should be run, and how the results should be displayed. Document templates help automate your development, validation, monitoring, and other risk management processes. Document templates are available for default ValidMind document types as well as custom document types.
 
 **documentation template**: A default ValidMind document type that serves as a standardized framework for developing and documenting records, including sections designated for record details, data descriptions, test results, and performance metrics. By outlining required documentation and recommended analyses, document templates ensure consistency and completeness across documentation and help guide developers through a systematic development process while promoting comparability and traceability of development outcomes.
 
@@ -62,7 +62,7 @@ Signing up is FREE — <a href="https://docs.validmind.ai/guide/access/register-
 **inputs**: Objects to be evaluated and documented in the ValidMind Library. They can be any of the following:
 
   - **model**: A single record that has been initialized in ValidMind with [`init_model()`](https://docs.validmind.ai/validmind/validmind.html#init_model). Despite the naming convention, model objects can be any type of record you want to test, document, validate, or monitor with ValidMind.
-  - **dataset**: Single dataset that has been initialized in ValidMind with [`init_dataset()`](https://docs.validmind.ai/validmind/validmind.html#init_dataset).
+  - **dataset**: A single dataset that has been initialized in ValidMind with [`init_dataset()`](https://docs.validmind.ai/validmind/validmind.html#init_dataset).
   - **models**: A list of ValidMind records - usually this is used when you want to compare multiple records in your custom tests.
   - **datasets**: A list of ValidMind datasets - usually this is used when you want to compare multiple datasets in your custom tests. (Learn more: [Run tests with multiple datasets](https://docs.validmind.ai/notebooks/how_to/tests/run_tests/configure_tests/run_tests_that_require_multiple_datasets.html))
 
