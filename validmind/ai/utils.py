@@ -59,10 +59,7 @@ def _get_configured_provider():
     if os.getenv("AZURE_OPENAI_KEY"):
         return "azure"
 
-    if _get_google_api_key():
-        return "gemini"
-
-    return None
+    return "gemini"
 
 
 def get_client_and_model():
@@ -104,17 +101,11 @@ def get_client_and_model():
 
         logger.debug(f"Using Azure OpenAI {__model} for generating descriptions")
 
-    elif provider == "gemini":
+    else:
         __client = None
         __model = os.getenv("GEMINI_MODEL", GEMINI_MODEL)
 
         logger.debug(f"Using Gemini {__model} for generating descriptions")
-
-    else:
-        raise ValueError(
-            "OPENAI_API_KEY, AZURE_OPENAI_KEY, GOOGLE_API_KEY, or GEMINI_API_KEY "
-            "must be setup to use LLM features"
-        )
 
     return __client, __model
 
@@ -202,16 +193,18 @@ def _build_gemini_judge_config(model):
         langchain_google_genai, "GoogleGenerativeAIEmbeddings"
     )
     google_api_key = _get_google_api_key()
+    chat_kwargs = {"model": model}
+    embeddings_kwargs = {
+        "model": os.getenv("GEMINI_EMBEDDINGS_MODEL", GEMINI_EMBEDDINGS_MODEL),
+    }
+
+    if google_api_key:
+        chat_kwargs["api_key"] = google_api_key
+        embeddings_kwargs["google_api_key"] = google_api_key
 
     return (
-        ChatGoogleGenerativeAI(
-            model=model,
-            api_key=google_api_key,
-        ),
-        GoogleGenerativeAIEmbeddings(
-            model=os.getenv("GEMINI_EMBEDDINGS_MODEL", GEMINI_EMBEDDINGS_MODEL),
-            google_api_key=google_api_key,
-        ),
+        ChatGoogleGenerativeAI(**chat_kwargs),
+        GoogleGenerativeAIEmbeddings(**embeddings_kwargs),
     )
 
 
@@ -228,6 +221,60 @@ def _build_openai_judge_config(client, model):
         ChatOpenAI(api_key=client.api_key, model=model),
         OpenAIEmbeddings(api_key=client.api_key, model=OPENAI_EMBEDDINGS_MODEL),
     )
+
+
+def _import_deepeval_base_llm():
+    try:
+        deepeval_base_model = importlib.import_module("deepeval.models.base_model")
+    except ImportError:
+        raise ImportError(
+            "Please run `pip install validmind[llm]` to use Gemini DeepEval scorers"
+        )
+
+    return getattr(deepeval_base_model, "DeepEvalBaseLLM")
+
+
+def _unwrap_deepeval_response(response):
+    return getattr(response, "content", response)
+
+
+def _build_gemini_deepeval_model(model):
+    DeepEvalBaseLLM = _import_deepeval_base_llm()
+    judge_llm, _ = _build_gemini_judge_config(model)
+
+    class GeminiDeepEvalModel(DeepEvalBaseLLM):
+        def __init__(self, chat_model, model_name):
+            self._chat_model = chat_model
+            self._model_name = model_name
+            self.model = self.load_model()
+
+        def load_model(self, *args, **kwargs):
+            return self._chat_model
+
+        def generate(self, prompt: str, schema=None):
+            chat_model = self.load_model()
+            if schema is not None and hasattr(chat_model, "with_structured_output"):
+                response = chat_model.with_structured_output(schema).invoke(prompt)
+            else:
+                response = chat_model.invoke(prompt)
+
+            return _unwrap_deepeval_response(response)
+
+        async def a_generate(self, prompt: str, schema=None):
+            chat_model = self.load_model()
+            if schema is not None and hasattr(chat_model, "with_structured_output"):
+                response = await chat_model.with_structured_output(schema).ainvoke(
+                    prompt
+                )
+            else:
+                response = await chat_model.ainvoke(prompt)
+
+            return _unwrap_deepeval_response(response)
+
+        def get_model_name(self, *args, **kwargs):
+            return self._model_name
+
+    return GeminiDeepEvalModel(judge_llm, model)
 
 
 def get_judge_config(judge_llm=None, judge_embeddings=None):
@@ -270,6 +317,10 @@ def get_deepeval_model():
     _, model = get_client_and_model()
 
     if provider == "gemini":
+        google_api_key = _get_google_api_key()
+        if google_api_key is None:
+            return _build_gemini_deepeval_model(model)
+
         try:
             deepeval_models = importlib.import_module("deepeval.models")
         except ImportError:
@@ -280,7 +331,7 @@ def get_deepeval_model():
         GeminiModel = getattr(deepeval_models, "GeminiModel")
         return GeminiModel(
             model=model,
-            api_key=_get_google_api_key(),
+            api_key=google_api_key,
             temperature=0,
         )
 

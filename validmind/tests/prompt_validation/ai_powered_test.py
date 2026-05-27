@@ -34,7 +34,8 @@ def call_model(
         raise ValueError(
             "LLM is not configured. Please set an `OPENAI_API_KEY`, "
             "`AZURE_OPENAI_KEY`, `GOOGLE_API_KEY`, or `GEMINI_API_KEY` "
-            "environment variable or ensure that you are connected to the "
+            "environment variable, ensure Gemini can be initialized in your "
+            "environment, or ensure that you are connected to the "
             "ValidMind API and ValidMind AI is enabled for your account."
         )
 
