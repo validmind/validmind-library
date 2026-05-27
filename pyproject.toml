@@ -122,7 +122,7 @@ pii-detection = [
 
 [dependency-groups]
 dev = [
-  "black>=22.1.0,<23",
+  "black>=22.1.0,<26",
   "click",
   "cython>=0.29.34,<0.30",
   "docstring-parser",
