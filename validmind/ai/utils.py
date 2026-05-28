@@ -20,7 +20,7 @@ __judge_embeddings = None
 OPENAI_MODEL = "gpt-4.1"
 OPENAI_EMBEDDINGS_MODEL = "text-embedding-3-small"
 GEMINI_MODEL = "gemini-2.5-pro"
-GEMINI_EMBEDDINGS_MODEL = "models/text-embedding-004"
+GEMINI_EMBEDDINGS_MODEL = "gemini-embedding-001"
 
 # can be None, True or False (ternary to represent initial state, ack and failed ack)
 __ack = None
@@ -275,6 +275,26 @@ def _build_gemini_deepeval_model(model):
             return self._model_name
 
     return GeminiDeepEvalModel(judge_llm, model)
+
+
+def run_deepeval_evaluation(*, test_cases, metrics):
+    try:
+        from deepeval import evaluate
+
+        deepeval_test_run = importlib.import_module("deepeval.test_run.test_run")
+    except ImportError:
+        raise ImportError(
+            "Please run `pip install validmind[llm]` to use Gemini DeepEval scorers"
+        )
+
+    original_is_confident = deepeval_test_run.is_confident
+
+    try:
+        # ValidMind scorers should run locally without depending on Confident AI login state.
+        deepeval_test_run.is_confident = lambda: False
+        return evaluate(test_cases=test_cases, metrics=metrics)
+    finally:
+        deepeval_test_run.is_confident = original_is_confident
 
 
 def get_judge_config(judge_llm=None, judge_embeddings=None):

@@ -202,3 +202,28 @@ def test_get_deepeval_model_supports_keyless_gemini_without_provider_env():
         "schema": "MySchema",
         "prompt": "hello",
     }
+
+
+def test_run_deepeval_evaluation_disables_confident_requests():
+    fake_evaluate = mock.Mock(return_value="evaluation-result")
+    fake_is_confident = mock.Mock(return_value=True)
+    fake_test_run_module = types.SimpleNamespace(is_confident=fake_is_confident)
+    fake_deepeval_module = types.ModuleType("deepeval")
+    fake_deepeval_module.evaluate = fake_evaluate
+
+    with mock.patch.dict(
+        sys.modules,
+        {
+            "deepeval": fake_deepeval_module,
+            "deepeval.test_run": fake_test_run_module,
+        },
+    ):
+        result = ai_utils.run_deepeval_evaluation(
+            test_cases=["test-case"], metrics=["metric"]
+        )
+
+    fake_evaluate.assert_called_once_with(
+        test_cases=["test-case"], metrics=["metric"]
+    )
+    assert fake_test_run_module.is_confident is fake_is_confident
+    assert result == "evaluation-result"

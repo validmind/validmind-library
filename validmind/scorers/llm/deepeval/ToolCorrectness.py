@@ -5,13 +5,12 @@
 from typing import Any, Dict, List
 
 from validmind import tags, tasks
-from validmind.ai.utils import get_deepeval_model
+from validmind.ai.utils import get_deepeval_model, run_deepeval_evaluation
 from validmind.errors import MissingDependencyError
 from validmind.tests.decorator import scorer
 from validmind.vm_models.dataset import VMDataset
 
 try:
-    from deepeval import evaluate
     from deepeval.metrics import ToolCorrectnessMetric
     from deepeval.test_case import LLMTestCase
 except ImportError as e:
@@ -108,7 +107,7 @@ def ToolCorrectness(
             tools_called=actual_tools_list,
         )
 
-        result = evaluate(test_cases=[test_case], metrics=[metric])
+        result = run_deepeval_evaluation(test_cases=[test_case], metrics=[metric])
         metric_data = result.test_results[0].metrics_data[0]
         score = metric_data.score
         reason = getattr(metric_data, "reason", "No reason provided")
