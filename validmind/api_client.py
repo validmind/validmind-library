@@ -335,9 +335,9 @@ def init(
     if api_key == "...":
         # special case to detect when running a notebook placeholder (...)
         # will override with environment variables for easier local development
-        api_host = (
-            api_url
-        ) = api_key = api_secret = model = issuer = client_id = audience = None
+        api_host = api_url = api_key = api_secret = model = issuer = client_id = (
+            audience
+        ) = None
 
     _model_cuid = model or os.getenv("VM_API_MODEL")
     if _model_cuid is None:

@@ -325,9 +325,9 @@ def RobustnessDiagnosis(
     # rename perturbation size for baseline
     # Convert to object type first to avoid dtype incompatibility warning
     results_df["Perturbation Size"] = results_df["Perturbation Size"].astype(object)
-    results_df.loc[
-        results_df["Perturbation Size"] == 0.0, "Perturbation Size"
-    ] = "Baseline (0.0)"
+    results_df.loc[results_df["Perturbation Size"] == 0.0, "Perturbation Size"] = (
+        "Baseline (0.0)"
+    )
 
     return (
         results_df,

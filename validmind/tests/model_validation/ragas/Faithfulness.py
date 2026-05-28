@@ -122,7 +122,7 @@ def Faithfulness(
     result_df = evaluate(
         Dataset.from_pandas(df),
         metrics=[faithfulness()],
-        **get_ragas_config(judge_llm, judge_embeddings)
+        **get_ragas_config(judge_llm, judge_embeddings),
     ).to_pandas()
 
     score_column = "faithfulness"
