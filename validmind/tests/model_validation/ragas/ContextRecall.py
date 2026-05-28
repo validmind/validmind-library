@@ -117,7 +117,7 @@ def ContextRecall(
     result_df = evaluate(
         Dataset.from_pandas(df),
         metrics=[context_recall()],
-        **get_ragas_config(judge_llm, judge_embeddings)
+        **get_ragas_config(judge_llm, judge_embeddings),
     ).to_pandas()
 
     score_column = "context_recall"

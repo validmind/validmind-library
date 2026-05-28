@@ -62,9 +62,9 @@ def MissingValues(
                 "Column": col,
                 "Number of Missing Values": missing[col],
                 "Percentage of Missing Values (%)": missing_pct[col],
-                "Pass/Fail": "Pass"
-                if missing_pct[col] <= min_percentage_threshold
-                else "Fail",
+                "Pass/Fail": (
+                    "Pass" if missing_pct[col] <= min_percentage_threshold else "Fail"
+                ),
             }
             for col in missing.index
         ],

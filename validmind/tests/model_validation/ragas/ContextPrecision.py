@@ -116,7 +116,7 @@ def ContextPrecision(
     result_df = evaluate(
         Dataset.from_pandas(df),
         metrics=[context_precision()],
-        **get_ragas_config(judge_llm, judge_embeddings)
+        **get_ragas_config(judge_llm, judge_embeddings),
     ).to_pandas()
 
     score_column = "llm_context_precision_with_reference"
