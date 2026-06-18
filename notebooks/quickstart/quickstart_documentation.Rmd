@@ -47,13 +47,15 @@ Log in to the [ValidMind Platform](https://app.prod.validmind.ai) and register a
 
 1. In the left sidebar, select **Inventory**.
 
-2. Under the **RECORD TYPE** drop-down, select `Model` and click **+ Register Model**. (Learn more: [Register records in the inventory](https://docs.validmind.ai/guide/inventory/register-records-in-inventory.html))
+2. Select `Model` by clicking on **{Record} Inventory**, where `{Record}` is the currently active type of record. (Learn more: [Register records in the inventory](https://docs.validmind.ai/guide/inventory/register-records-in-inventory.html))
 
-3. Enter the model details and click **Next >** to continue to assignment of inventory record stakeholders.
+3. Click **+ Register Model**.
 
-4. Select your own name under the **RECORD OWNER** drop-down.
+4. Enter the model details and click **Next >** to continue to assignment of inventory record stakeholders.
 
-5. Click **Register Model** to add the model to your inventory.
+5. Select your own name under the **Record Owner** drop-down.
+
+6. Click **Register Model** to add the model to your inventory.
 
 #### Apply documentation template
 
@@ -61,7 +63,7 @@ Once you've registered your model, let's select a documentation template. A temp
 
 1. In the left sidebar that appears for your model, click **Documents** and select **Development**.
 
-2. Under **TEMPLATE**, select `Binary classification`.
+2. Under **Template**, select `Binary classification`.
 
 3. Click **Use Template** to apply the template.
 
@@ -69,7 +71,7 @@ Once you've registered your model, let's select a documentation template. A temp
 
 Initialize the ValidMind Library with the *code snippet* unique to each record per document, ensuring your test results are uploaded to the correct record and automatically populated in the right document in the ValidMind Platform when you run the Library.
 
-1. On the left sidebar that appears for your model, select **Getting Started** and select `Development` from the **DOCUMENT** drop-down menu.
+1. On the left sidebar that appears for your model, select **Getting Started** and select `Development` from the **Document** drop-down menu.
 
 2. Click **Copy snippet to clipboard**. Paste the snippet into an editor and make note of the credentials.
 

@@ -49,11 +49,13 @@ For this exercise, log in to the [ValidMind Platform](https://app.prod.validmind
 
 1. In the left sidebar, select **Inventory**.
 
-2. Under the **RECORD TYPE** drop-down, select `Model` and click **+ Register Model**. (Learn more: [Register records in the inventory](https://docs.validmind.ai/guide/inventory/register-records-in-inventory.html))
+2. Select `Model` by clicking on **{Record} Inventory**, where `{Record}` is the currently active type of record. (Learn more: [Register records in the inventory](https://docs.validmind.ai/guide/inventory/register-records-in-inventory.html))
 
-3. Enter the model details and click **Next >** to continue to assignment of inventory record stakeholders.
+3. Click **+ Register Model**.
 
-4. Select your own name under the **RECORD OWNER** drop-down  — don’t worry, we’ll adjust these permissions next for validation.
+4. Enter the model details and click **Next >** to continue to assignment of inventory record stakeholders.
+
+5. Select your own name under the **Record Owner** drop-down  — don’t worry, we’ll adjust these permissions next for validation.
 
 6. Click **Register Model** to add the model to your inventory.
 
@@ -63,19 +65,19 @@ In order to log tests as a validator instead of as a developer, on the details p
 
 1. Remove yourself as an owner:
 
-   - Click on the **OWNERS** tile.
+   - Click on the **Owners** tile.
    - Click the **x** next to your name to remove yourself from that role.
    - Click **Save** to apply your changes.
 
 2. Remove yourself as a developer:
 
-   - Click on the **DEVELOPERS** tile.
+   - Click on the **Developers** tile.
    - Click the **x** next to your name to remove yourself from that role.
    - Click **Save** to apply your changes.
 
 3. Add yourself as a validator:
 
-   - Click on the **VALIDATORS** tile.
+   - Click on the **Validators** tile.
    - Select your name from the drop-down menu.
    - Click **Save** to apply your changes.
 
@@ -85,7 +87,7 @@ Next, let's select a validation report template. A template predefines sections 
 
 1. In the model's left sidebar, click **Documents** and select **Validation**.
 
-2. Under **TEMPLATE**, select `Generic Validation Report`.
+2. Under **Template**, select `Generic Validation Report`.
 
 3. Click **Use Template** to apply the template.
 
@@ -93,7 +95,7 @@ Next, let's select a validation report template. A template predefines sections 
 
 Initialize the ValidMind Library with the *code snippet* unique to each record per document, ensuring your test results are uploaded to the correct record and automatically populated in the right document in the ValidMind Platform when you run the Library.
 
-1. On the left sidebar that appears for your model, select **Getting Started** and select `Development` from the **DOCUMENT** drop-down menu.
+1. On the left sidebar that appears for your model, select **Getting Started** and select `Validation` from the **Document** drop-down menu.
 
 2. Click **Copy snippet to clipboard**. Paste the snippet into an editor and make note of the credentials.
 

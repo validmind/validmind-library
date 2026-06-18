@@ -108,9 +108,9 @@ Get your code snippet:
 
 2. In the left sidebar, select **Inventory**.
 
-3. Under the **RECORD TYPE** drop-down, select `Model` and click **+ Register Model**. ([Learn more: Register records in the inventory](https://docs.validmind.ai/guide/inventory/register-records-in-inventory.html))
+3. Select `Model` by clicking on **{Record} Inventory**, where `{Record}` is the currently active type of record. ([Learn more: Register records in the inventory](https://docs.validmind.ai/guide/inventory/register-records-in-inventory.html))
 
-4. Enter the model details, making sure to select **Binary classification** as the template and **Marketing/Sales - Attrition/Churn Management** as the use case, and click **Continue**.
+4. Click **+ Register Model**, then enter the model details, making sure to select **Binary classification** as the template and **Marketing/Sales - Attrition/Churn Management** as the use case, and click **Continue**.
 
 5. Go to **Getting Started** and click **Copy snippet to clipboard**.
 
