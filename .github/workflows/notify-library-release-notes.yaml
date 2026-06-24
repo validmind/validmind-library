@@ -1,0 +1,29 @@
+name: Notify library release notes
+
+on:
+  push:
+    tags: ['v*']
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Filter pre-release tags
+        id: filter
+        run: |
+          TAG="${{ github.ref_name }}"
+          if echo "$TAG" | grep -qE '-(rc|alpha|beta)'; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "Skipping pre-release tag $TAG"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Dispatch to release-notes
+        if: steps.filter.outputs.skip != 'true'
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.RELEASE_NOTES_GITHUB_TOKEN }}
+          repository: validmind/release-notes
+          event-type: library-release-notes
+          client-payload: '{"tag":"${{ github.ref_name }}"}'
