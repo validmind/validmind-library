@@ -238,14 +238,17 @@ def _unwrap_deepeval_response(response):
     return getattr(response, "content", response)
 
 
-def _build_gemini_deepeval_model(model):
-    DeepEvalBaseLLM = _import_deepeval_base_llm()
-    judge_llm, _ = _build_gemini_judge_config(model)
+def _build_langchain_deepeval_model(chat_model):
+    """Wrap any LangChain BaseChatModel as a DeepEval-compatible model.
 
-    class GeminiDeepEvalModel(DeepEvalBaseLLM):
-        def __init__(self, chat_model, model_name):
-            self._chat_model = chat_model
-            self._model_name = model_name
+    Used when set_judge_config() has been called so that DeepEval scorers
+    honour the same judge model as prompt-validation and RAGAS tests.
+    """
+    DeepEvalBaseLLM = _import_deepeval_base_llm()
+
+    class LangChainDeepEvalModel(DeepEvalBaseLLM):
+        def __init__(self, model):
+            self._chat_model = model
             self.model = self.load_model()
 
         def load_model(self, *args, **kwargs):
@@ -257,7 +260,6 @@ def _build_gemini_deepeval_model(model):
                 response = chat_model.with_structured_output(schema).invoke(prompt)
             else:
                 response = chat_model.invoke(prompt)
-
             return _unwrap_deepeval_response(response)
 
         async def a_generate(self, prompt: str, schema=None):
@@ -268,13 +270,21 @@ def _build_gemini_deepeval_model(model):
                 )
             else:
                 response = await chat_model.ainvoke(prompt)
-
             return _unwrap_deepeval_response(response)
 
         def get_model_name(self, *args, **kwargs):
-            return self._model_name
+            for attr in ("model", "model_name", "azure_deployment"):
+                val = getattr(self._chat_model, attr, None)
+                if val:
+                    return val
+            return type(self._chat_model).__name__
 
-    return GeminiDeepEvalModel(judge_llm, model)
+    return LangChainDeepEvalModel(chat_model)
+
+
+def _build_gemini_deepeval_model(model):
+    judge_llm, _ = _build_gemini_judge_config(model)
+    return _build_langchain_deepeval_model(judge_llm)
 
 
 def run_deepeval_evaluation(*, test_cases, metrics):
@@ -332,6 +342,9 @@ def get_deepeval_model():
     OpenAI/Azure scorers currently pass a model string. Gemini support requires a
     native DeepEval model object so the provider can be configured correctly.
     """
+    global __judge_llm
+    if __judge_llm is not None:
+        return _build_langchain_deepeval_model(__judge_llm)
 
     provider = _get_configured_provider()
     _, model = get_client_and_model()
