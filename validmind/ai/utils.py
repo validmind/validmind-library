@@ -17,6 +17,7 @@ __client = None
 __model = None
 __judge_llm = None
 __judge_embeddings = None
+__judge_llm_explicitly_set = False
 OPENAI_MODEL = "gpt-4.1"
 OPENAI_EMBEDDINGS_MODEL = "text-embedding-3-small"
 GEMINI_MODEL = "gemini-2.5-pro"
@@ -342,8 +343,8 @@ def get_deepeval_model():
     OpenAI/Azure scorers currently pass a model string. Gemini support requires a
     native DeepEval model object so the provider can be configured correctly.
     """
-    global __judge_llm
-    if __judge_llm is not None:
+    global __judge_llm, __judge_embeddings, __judge_llm_explicitly_set
+    if __judge_llm_explicitly_set and __judge_llm is not None and __judge_embeddings is not None:
         return _build_langchain_deepeval_model(__judge_llm)
 
     provider = _get_configured_provider()
@@ -372,7 +373,7 @@ def get_deepeval_model():
 
 
 def set_judge_config(judge_llm, judge_embeddings):
-    global __judge_llm, __judge_embeddings
+    global __judge_llm, __judge_embeddings, __judge_llm_explicitly_set
     try:
         from langchain_core.embeddings import Embeddings
         from langchain_core.language_models.chat_models import BaseChatModel
@@ -385,12 +386,13 @@ def set_judge_config(judge_llm, judge_embeddings):
     ):
         __judge_llm = judge_llm
         __judge_embeddings = judge_embeddings
-        # Assuming 'your_object' is the object you want to check
+        __judge_llm_explicitly_set = True
     elif isinstance(judge_llm, FunctionModel) and isinstance(
         judge_embeddings, FunctionModel
     ):
         __judge_llm = judge_llm.model
         __judge_embeddings = judge_embeddings.model
+        __judge_llm_explicitly_set = True
     else:
         raise ValueError(
             "Provided Judge LLM/Embeddings are not Langchain compatible. Ensure the judge LLM/embedding provided are an instance of "
