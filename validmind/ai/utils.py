@@ -343,8 +343,11 @@ def get_deepeval_model():
     OpenAI/Azure scorers currently pass a model string. Gemini support requires a
     native DeepEval model object so the provider can be configured correctly.
     """
-    global __judge_llm, __judge_embeddings, __judge_llm_explicitly_set
-    if __judge_llm_explicitly_set and __judge_llm is not None and __judge_embeddings is not None:
+    if (
+        __judge_llm_explicitly_set
+        and __judge_llm is not None
+        and __judge_embeddings is not None
+    ):
         return _build_langchain_deepeval_model(__judge_llm)
 
     provider = _get_configured_provider()
