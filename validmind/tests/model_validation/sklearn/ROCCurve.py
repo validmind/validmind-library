@@ -68,6 +68,7 @@ def ROCCurve(model: VMModel, dataset: VMDataset) -> Tuple[go.Figure, RawData]:
     incorrect, provided that the model's ranking format is retained. This phenomenon is commonly termed the "Class
     Imbalance Problem".
     """
+    # Binary-only by design: multiclass is skipped, not handled (unlike MinimumF1Score).
     if len(np.unique(dataset.y)) > 2:
         raise SkipTestError(
             "ROC Curve is only supported for binary classification models"
