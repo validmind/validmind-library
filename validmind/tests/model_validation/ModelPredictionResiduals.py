@@ -12,7 +12,7 @@ from validmind.errors import MissingDependencyError
 from validmind.vm_models import VMDataset, VMModel
 
 try:
-    from scipy.stats import kstest
+    from scipy.stats import kstest, norm
 except ImportError as e:
     if "scipy" in str(e):
         raise MissingDependencyError(
@@ -109,7 +109,7 @@ def ModelPredictionResiduals(
 
     # Perform KS normality test
     ks_stat, p_value = kstest(
-        residuals, "norm", args=(residuals.mean(), residuals.std())
+        residuals, norm(loc=residuals.mean(), scale=residuals.std()).cdf
     )
     ks_normality = "Normal" if p_value > p_value_threshold else "Not Normal"
 

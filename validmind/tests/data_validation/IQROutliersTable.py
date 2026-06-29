@@ -5,6 +5,8 @@
 
 from typing import Any, Dict, Tuple
 
+import pandas as pd
+
 from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset
 
@@ -72,8 +74,9 @@ def IQROutliersTable(
     all_outliers = {}
 
     for col in dataset.feature_columns_numeric:
-        # Skip binary features
-        if len(df[col].unique()) <= 2:
+        # Skip boolean and binary features. The IQR is not meaningful for them and
+        # `quantile` raises "numpy boolean subtract" on boolean dtype columns.
+        if pd.api.types.is_bool_dtype(df[col]) or df[col].nunique() <= 2:
             continue
 
         outliers = compute_outliers(df[col], threshold)
