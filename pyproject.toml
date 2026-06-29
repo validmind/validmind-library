@@ -65,6 +65,8 @@ all = [
   "pyarrow (>=22,<23) ; python_version >= '3.14'",
   "arch (>=7.0.0)",
   "shap (>=0.46.0)",
+  "numba (>=0.65.1) ; python_version >= '3.14'",
+  "llvmlite (>=0.47.0,<0.48) ; python_version >= '3.14'",
   "scorecardpy==0.1.9.6",
   "setuptools (<82)",
 ]
@@ -107,7 +109,11 @@ nlp = [
 pytorch = ["torch (>=2.0.0)"]
 stats = ["scipy", "statsmodels (>=0.14.2,<0.15.0)", "arch (>=7.0.0)"]
 xgboost = ["xgboost (>=1.5.2,<3)"]
-explainability = ["shap (>=0.46.0)"]
+explainability = [
+  "shap (>=0.46.0)",
+  "numba (>=0.65.1) ; python_version >= '3.14'",
+  "llvmlite (>=0.47.0,<0.48) ; python_version >= '3.14'",
+]
 credit_risk = ["scorecardpy==0.1.9.6", "setuptools (<82)"]
 datasets = [
   "datasets (>=2.10.0,<3.0.0) ; python_version < '3.14'",
