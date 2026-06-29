@@ -97,4 +97,4 @@ class TestIQROutliersBarPlot(unittest.TestCase):
         results = IQROutliersBarPlot(vm_dataset)
         raw_data = results[-1]
 
-        self.assertNotIn("flag", raw_data.outlier_counts_by_feature.index)
+        self.assertNotIn("flag", raw_data.outlier_counts_by_feature.columns)
