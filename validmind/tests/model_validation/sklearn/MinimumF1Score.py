@@ -58,10 +58,19 @@ def MinimumF1Score(
     closely with specific requirements.
     """
 
-    if len(np.unique(dataset.y)) > 2:
-        score = f1_score(dataset.y, dataset.y_pred(model), average="macro")
+    y_true = dataset.y
+    y_pred = dataset.y_pred(model)
+
+    # Decide the averaging method from the labels f1_score actually sees -- the
+    # union of y_true and y_pred. Inspecting y_true alone is not enough: a split
+    # whose true labels collapse to <=2 classes while the model predicts a third
+    # class is still multiclass to sklearn, and average="binary" would raise
+    # "Target is multiclass but average='binary'".
+    n_classes = len(np.unique(np.concatenate([y_true, y_pred])))
+    if n_classes > 2:
+        score = f1_score(y_true, y_pred, average="macro")
     else:
-        score = f1_score(dataset.y, dataset.y_pred(model))
+        score = f1_score(y_true, y_pred)
 
     return (
         [

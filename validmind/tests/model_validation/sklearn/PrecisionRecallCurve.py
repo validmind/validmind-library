@@ -63,6 +63,7 @@ def PrecisionRecallCurve(
         raise SkipTestError("Skipping PrecisionRecallCurve for Foundation models")
 
     y_true = dataset.y
+    # Binary-only by design: multiclass is skipped, not handled (unlike MinimumF1Score).
     if len(np.unique(y_true)) > 2:
         raise SkipTestError(
             "Precision Recall Curve is only supported for binary classification models"
