@@ -239,6 +239,84 @@ def _unwrap_deepeval_response(response):
     return getattr(response, "content", response)
 
 
+def _is_reason_only_schema(schema):
+    """True when ``schema`` is a single-field ``{reason}`` explanation schema.
+
+    DeepEval's ``*ScoreReason`` schemas carry only the human-readable explanation
+    and do not affect the metric score, so a missing value can be degraded safely.
+    """
+    fields = getattr(schema, "model_fields", None) or getattr(
+        schema, "__fields__", None
+    )
+    try:
+        return set(fields.keys()) == {"reason"}
+    except Exception:
+        return False
+
+
+def _require_structured_response(result, schema):
+    """Guard against a judge LLM returning no parseable structured output.
+
+    Gemini's default function-calling path yields ``None`` when the model
+    response contains no tool call. Returning that ``None`` to DeepEval surfaces
+    as a cryptic ``'NoneType' object has no attribute 'reason'``.
+
+    For reason-only schemas the metric score is already computed from earlier
+    verdict calls, so a missing explanation is cosmetic: degrade to a placeholder
+    reason and keep the score. Score-bearing schemas (statements, verdicts) are
+    never faked -- doing so would yield a silently wrong score -- so those raise.
+    """
+    if result is not None:
+        return result
+
+    schema_name = getattr(schema, "__name__", schema)
+
+    if _is_reason_only_schema(schema):
+        logger.warning(
+            "Judge LLM returned no structured output for %s; recording the score "
+            "with an empty explanation.",
+            schema_name,
+        )
+        return schema(reason="N/A (judge LLM returned no explanation)")
+
+    raise ValueError(
+        f"Judge LLM returned no parseable structured output for {schema_name}. "
+        "This usually means the model produced no tool call for the requested "
+        "schema. Try a different judge model, or check provider quotas and "
+        "safety settings."
+    )
+
+
+def _structured_generate(chat_model, prompt, schema):
+    """Invoke ``chat_model`` for structured output, retrying via json_mode.
+
+    Gemini's default function-calling path can return ``None`` when the model
+    emits no tool call; json_mode binds a response schema and is deterministic.
+    """
+    result = chat_model.with_structured_output(schema).invoke(prompt)
+    if result is None:
+        try:
+            result = chat_model.with_structured_output(
+                schema, method="json_mode"
+            ).invoke(prompt)
+        except Exception:
+            pass
+    return _require_structured_response(result, schema)
+
+
+async def _a_structured_generate(chat_model, prompt, schema):
+    """Async counterpart of :func:`_structured_generate`."""
+    result = await chat_model.with_structured_output(schema).ainvoke(prompt)
+    if result is None:
+        try:
+            result = await chat_model.with_structured_output(
+                schema, method="json_mode"
+            ).ainvoke(prompt)
+        except Exception:
+            pass
+    return _require_structured_response(result, schema)
+
+
 def _build_langchain_deepeval_model(chat_model):
     """Wrap any LangChain BaseChatModel as a DeepEval-compatible model.
 
@@ -258,20 +336,14 @@ def _build_langchain_deepeval_model(chat_model):
         def generate(self, prompt: str, schema=None):
             chat_model = self.load_model()
             if schema is not None and hasattr(chat_model, "with_structured_output"):
-                response = chat_model.with_structured_output(schema).invoke(prompt)
-            else:
-                response = chat_model.invoke(prompt)
-            return _unwrap_deepeval_response(response)
+                return _structured_generate(chat_model, prompt, schema)
+            return _unwrap_deepeval_response(chat_model.invoke(prompt))
 
         async def a_generate(self, prompt: str, schema=None):
             chat_model = self.load_model()
             if schema is not None and hasattr(chat_model, "with_structured_output"):
-                response = await chat_model.with_structured_output(schema).ainvoke(
-                    prompt
-                )
-            else:
-                response = await chat_model.ainvoke(prompt)
-            return _unwrap_deepeval_response(response)
+                return await _a_structured_generate(chat_model, prompt, schema)
+            return _unwrap_deepeval_response(await chat_model.ainvoke(prompt))
 
         def get_model_name(self, *args, **kwargs):
             for attr in ("model", "model_name", "azure_deployment"):
