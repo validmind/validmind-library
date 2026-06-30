@@ -6,6 +6,7 @@ on:
 
 jobs:
   notify:
+    if: vars.RELEASE_AUTOMATION == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Filter pre-release tags
