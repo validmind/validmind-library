@@ -17,6 +17,7 @@ __client = None
 __model = None
 __judge_llm = None
 __judge_embeddings = None
+__judge_llm_explicitly_set = False
 OPENAI_MODEL = "gpt-4.1"
 OPENAI_EMBEDDINGS_MODEL = "text-embedding-3-small"
 GEMINI_MODEL = "gemini-2.5-pro"
@@ -238,14 +239,95 @@ def _unwrap_deepeval_response(response):
     return getattr(response, "content", response)
 
 
-def _build_gemini_deepeval_model(model):
-    DeepEvalBaseLLM = _import_deepeval_base_llm()
-    judge_llm, _ = _build_gemini_judge_config(model)
+def _is_reason_only_schema(schema):
+    """True when ``schema`` is a single-field ``{reason}`` explanation schema.
 
-    class GeminiDeepEvalModel(DeepEvalBaseLLM):
-        def __init__(self, chat_model, model_name):
-            self._chat_model = chat_model
-            self._model_name = model_name
+    DeepEval's ``*ScoreReason`` schemas carry only the human-readable explanation
+    and do not affect the metric score, so a missing value can be degraded safely.
+    """
+    fields = getattr(schema, "model_fields", None) or getattr(
+        schema, "__fields__", None
+    )
+    try:
+        return set(fields.keys()) == {"reason"}
+    except Exception:
+        return False
+
+
+def _require_structured_response(result, schema):
+    """Guard against a judge LLM returning no parseable structured output.
+
+    Gemini's default function-calling path yields ``None`` when the model
+    response contains no tool call. Returning that ``None`` to DeepEval surfaces
+    as a cryptic ``'NoneType' object has no attribute 'reason'``.
+
+    For reason-only schemas the metric score is already computed from earlier
+    verdict calls, so a missing explanation is cosmetic: degrade to a placeholder
+    reason and keep the score. Score-bearing schemas (statements, verdicts) are
+    never faked -- doing so would yield a silently wrong score -- so those raise.
+    """
+    if result is not None:
+        return result
+
+    schema_name = getattr(schema, "__name__", schema)
+
+    if _is_reason_only_schema(schema):
+        logger.warning(
+            "Judge LLM returned no structured output for %s; recording the score "
+            "with an empty explanation.",
+            schema_name,
+        )
+        return schema(reason="N/A (judge LLM returned no explanation)")
+
+    raise ValueError(
+        f"Judge LLM returned no parseable structured output for {schema_name}. "
+        "This usually means the model produced no tool call for the requested "
+        "schema. Try a different judge model, or check provider quotas and "
+        "safety settings."
+    )
+
+
+def _structured_generate(chat_model, prompt, schema):
+    """Invoke ``chat_model`` for structured output, retrying via json_mode.
+
+    Gemini's default function-calling path can return ``None`` when the model
+    emits no tool call; json_mode binds a response schema and is deterministic.
+    """
+    result = chat_model.with_structured_output(schema).invoke(prompt)
+    if result is None:
+        try:
+            result = chat_model.with_structured_output(
+                schema, method="json_mode"
+            ).invoke(prompt)
+        except Exception:
+            pass
+    return _require_structured_response(result, schema)
+
+
+async def _a_structured_generate(chat_model, prompt, schema):
+    """Async counterpart of :func:`_structured_generate`."""
+    result = await chat_model.with_structured_output(schema).ainvoke(prompt)
+    if result is None:
+        try:
+            result = await chat_model.with_structured_output(
+                schema, method="json_mode"
+            ).ainvoke(prompt)
+        except Exception:
+            pass
+    return _require_structured_response(result, schema)
+
+
+def _build_langchain_deepeval_model(chat_model):
+    """Wrap any LangChain BaseChatModel as a DeepEval-compatible model.
+
+    Used when set_judge_config() has been called so that DeepEval scorers
+    honour the same judge model as prompt-validation and RAGAS tests.
+    """
+    DeepEvalBaseLLM = _import_deepeval_base_llm()
+
+    class LangChainDeepEvalModel(DeepEvalBaseLLM):
+        def __init__(self, model):
+            self._chat_model = model
             self.model = self.load_model()
 
         def load_model(self, *args, **kwargs):
@@ -254,27 +336,28 @@ def _build_gemini_deepeval_model(model):
         def generate(self, prompt: str, schema=None):
             chat_model = self.load_model()
             if schema is not None and hasattr(chat_model, "with_structured_output"):
-                response = chat_model.with_structured_output(schema).invoke(prompt)
-            else:
-                response = chat_model.invoke(prompt)
-
-            return _unwrap_deepeval_response(response)
+                return _structured_generate(chat_model, prompt, schema)
+            return _unwrap_deepeval_response(chat_model.invoke(prompt))
 
         async def a_generate(self, prompt: str, schema=None):
             chat_model = self.load_model()
             if schema is not None and hasattr(chat_model, "with_structured_output"):
-                response = await chat_model.with_structured_output(schema).ainvoke(
-                    prompt
-                )
-            else:
-                response = await chat_model.ainvoke(prompt)
-
-            return _unwrap_deepeval_response(response)
+                return await _a_structured_generate(chat_model, prompt, schema)
+            return _unwrap_deepeval_response(await chat_model.ainvoke(prompt))
 
         def get_model_name(self, *args, **kwargs):
-            return self._model_name
+            for attr in ("model", "model_name", "azure_deployment"):
+                val = getattr(self._chat_model, attr, None)
+                if val:
+                    return val
+            return type(self._chat_model).__name__
 
-    return GeminiDeepEvalModel(judge_llm, model)
+    return LangChainDeepEvalModel(chat_model)
+
+
+def _build_gemini_deepeval_model(model):
+    judge_llm, _ = _build_gemini_judge_config(model)
+    return _build_langchain_deepeval_model(judge_llm)
 
 
 def run_deepeval_evaluation(*, test_cases, metrics):
@@ -332,6 +415,12 @@ def get_deepeval_model():
     OpenAI/Azure scorers currently pass a model string. Gemini support requires a
     native DeepEval model object so the provider can be configured correctly.
     """
+    if (
+        __judge_llm_explicitly_set
+        and __judge_llm is not None
+        and __judge_embeddings is not None
+    ):
+        return _build_langchain_deepeval_model(__judge_llm)
 
     provider = _get_configured_provider()
     _, model = get_client_and_model()
@@ -359,7 +448,7 @@ def get_deepeval_model():
 
 
 def set_judge_config(judge_llm, judge_embeddings):
-    global __judge_llm, __judge_embeddings
+    global __judge_llm, __judge_embeddings, __judge_llm_explicitly_set
     try:
         from langchain_core.embeddings import Embeddings
         from langchain_core.language_models.chat_models import BaseChatModel
@@ -372,12 +461,13 @@ def set_judge_config(judge_llm, judge_embeddings):
     ):
         __judge_llm = judge_llm
         __judge_embeddings = judge_embeddings
-        # Assuming 'your_object' is the object you want to check
+        __judge_llm_explicitly_set = True
     elif isinstance(judge_llm, FunctionModel) and isinstance(
         judge_embeddings, FunctionModel
     ):
         __judge_llm = judge_llm.model
         __judge_embeddings = judge_embeddings.model
+        __judge_llm_explicitly_set = True
     else:
         raise ValueError(
             "Provided Judge LLM/Embeddings are not Langchain compatible. Ensure the judge LLM/embedding provided are an instance of "
