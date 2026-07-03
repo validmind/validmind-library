@@ -42,6 +42,7 @@ _monitoring = False
 _auth_mode = "api_key"
 _access_token: Optional[str] = None
 _oidc_login_context: Optional[Dict[str, str]] = None
+_credentials_backend: Optional[Any] = None
 
 __api_session: Optional[aiohttp.ClientSession] = None
 
@@ -229,8 +230,11 @@ def _obtain_oidc_tokens(
     client_id: str,
     scope: str,
     audience: Optional[str] = None,
+    *,
+    credentials_backend: Optional[Any] = None,
 ) -> Dict[str, Any]:
     """Return a credentials entry dict with access_token, expires_at, refresh_token, etc."""
+    from .credentials_backend import resolve_credentials_backend
     from .credentials_store import (
         delete_cached_entry,
         get_cached_entry,
@@ -241,9 +245,12 @@ def _obtain_oidc_tokens(
     )
     from .oidc_device import run_device_flow, try_refresh_cached_tokens
 
+    backend = resolve_credentials_backend(credentials_backend)
     norm_issuer = normalize_issuer(issuer)
     norm_client_id = normalize_client_id(client_id)
-    cached = get_cached_entry(norm_issuer, norm_client_id, audience=audience)
+    cached = get_cached_entry(
+        norm_issuer, norm_client_id, audience=audience, backend=backend
+    )
     if cached and not is_expired(cached):
         return cached
     if cached and cached.get("refresh_token"):
@@ -256,14 +263,47 @@ def _obtain_oidc_tokens(
                 audience=audience,
             )
             upsert_cached_entry(
-                norm_issuer, norm_client_id, new_tokens, audience=audience
+                norm_issuer,
+                norm_client_id,
+                new_tokens,
+                audience=audience,
+                backend=backend,
             )
             return new_tokens
         except ValidMindAuthError:
-            delete_cached_entry(norm_issuer, norm_client_id, audience=audience)
+            delete_cached_entry(
+                norm_issuer,
+                norm_client_id,
+                audience=audience,
+                backend=backend,
+            )
     tokens = run_device_flow(norm_issuer, norm_client_id, scope, audience=audience)
-    upsert_cached_entry(norm_issuer, norm_client_id, tokens, audience=audience)
+    upsert_cached_entry(
+        norm_issuer, norm_client_id, tokens, audience=audience, backend=backend
+    )
     return tokens
+
+
+def clear_oidc_credentials() -> None:
+    """Remove cached OIDC tokens for the active login context."""
+    global _access_token, _oidc_login_context
+
+    if _oidc_login_context is None:
+        return
+
+    from .credentials_store import delete_cached_entry
+
+    ctx = _oidc_login_context
+    audience = ctx.get("audience") or None
+    delete_cached_entry(
+        ctx["issuer"],
+        ctx["client_id"],
+        audience=audience,
+        backend=_credentials_backend,
+    )
+    _access_token = None
+    _oidc_login_context = None
+    _invalidate_async_session()
 
 
 def _is_entra_issuer(issuer: str) -> bool:
@@ -289,6 +329,7 @@ def init(
     client_id: Optional[str] = None,
     scope: Optional[str] = None,
     audience: Optional[str] = None,
+    credentials_backend: Optional[Any] = None,
 ):
     """
     Initializes the API client instances and calls the /ping endpoint to ensure
@@ -299,8 +340,10 @@ def init(
 
     Alternatively, pass ``issuer`` and ``client_id`` or set their ``VM_OIDC_*``
     environment variables to authenticate via the OIDC device authorization flow
-    (RFC 8628). Tokens are cached under ``~/.validmind/credentials.json``. Do not
-    combine API keys with OIDC parameters.
+    (RFC 8628). Tokens are cached via an :class:`~validmind.credentials_backend.OidcCredentialsBackend`
+    (default: ``~/.validmind/credentials.json``). Pass ``credentials_backend`` or set
+    ``VM_OIDC_CREDENTIALS_BACKEND`` / ``VM_OIDC_NO_PERSIST=1`` for custom or memory-only
+    storage. Do not combine API keys with OIDC parameters.
 
     Args:
         model (str, optional): The model CUID. Defaults to None.
@@ -323,6 +366,9 @@ def init(
             (e.g. Auth0 API Identifier). Use the same value the ValidMind backend
             expects as ``api_audience`` so the provider can issue RS256 API tokens.
             Can be set via env ``VM_OIDC_AUDIENCE``.
+        credentials_backend (optional): Pluggable OIDC token store implementing
+            ``get`` / ``put`` / ``delete``. Defaults to file storage unless overridden
+            by ``VM_OIDC_CREDENTIALS_BACKEND`` or ``VM_OIDC_NO_PERSIST=1``.
 
     Raises:
         MissingAPICredentialsError: If neither API keys nor OIDC parameters can be resolved.
@@ -330,7 +376,7 @@ def init(
         ValidMindAuthError: If OIDC configuration conflicts or login fails.
     """
     global _api_key, _api_secret, _api_host, _model_cuid, _monitoring, _document
-    global _auth_mode, _access_token, _oidc_login_context
+    global _auth_mode, _access_token, _oidc_login_context, _credentials_backend
 
     if api_key == "...":
         # special case to detect when running a notebook placeholder (...)
@@ -399,8 +445,15 @@ def init(
             audience if audience is not None else os.getenv("VM_OIDC_AUDIENCE")
         )
         oidc_audience_opt = oidc_audience_val or None
+        from .credentials_backend import resolve_credentials_backend
+
+        _credentials_backend = resolve_credentials_backend(credentials_backend)
         entry = _obtain_oidc_tokens(
-            oidc_issuer, oidc_client_id, scope_val, audience=oidc_audience_opt
+            oidc_issuer,
+            oidc_client_id,
+            scope_val,
+            audience=oidc_audience_opt,
+            credentials_backend=_credentials_backend,
         )
         _access_token = _select_oidc_bearer_token(entry)
         _oidc_login_context = {
@@ -416,6 +469,7 @@ def init(
         _auth_mode = "api_key"
         _access_token = None
         _oidc_login_context = None
+        _credentials_backend = None
         _api_key = env_key
         _api_secret = env_secret
         _api_host = resolved_host

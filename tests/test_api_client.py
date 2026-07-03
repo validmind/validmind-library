@@ -556,12 +556,11 @@ class TestAPIClientOIDC(unittest.TestCase):
         ):
             api_client.init(model="model-cuid", document="documentation")
 
-        mock_obtain.assert_called_once_with(
-            "https://env-issuer/",
-            "env-cid",
-            "openid profile email offline_access",
-            audience="https://api.example.com",
-        )
+        mock_obtain.assert_called_once()
+        _args, kwargs = mock_obtain.call_args
+        self.assertEqual(_args, ("https://env-issuer/", "env-cid", "openid profile email offline_access"))
+        self.assertEqual(kwargs.get("audience"), "https://api.example.com")
+        self.assertIsNotNone(kwargs.get("credentials_backend"))
         self.assertEqual(api_client.get_api_host(), "http://localhost/from-env-host/")
         ctx = api_client._oidc_login_context
         assert ctx is not None
@@ -620,6 +619,90 @@ class TestAPIClientOIDC(unittest.TestCase):
             document="documentation",
         )
         self.assertEqual(api_client.get_api_host(), "http://localhost/from-api-url/")
+
+    @patch("validmind.api_client._ping")
+    @patch("validmind.api_client._obtain_oidc_tokens")
+    def test_init_passes_credentials_backend(self, mock_obtain, mock_ping):
+        from validmind.credentials_backend import MemoryCredentialsBackend
+
+        backend = MemoryCredentialsBackend()
+        mock_obtain.return_value = {
+            "issuer": "https://issuer/",
+            "client_id": "cid",
+            "access_token": "tok",
+            "expires_at": "2099-01-01T00:00:00+00:00",
+            "refresh_token": None,
+            "id_token": None,
+        }
+        api_client.init(
+            model="model-cuid",
+            api_host="http://localhost/track/",
+            api_key="",
+            api_secret="",
+            issuer="https://issuer/",
+            client_id="cid",
+            credentials_backend=backend,
+            document="documentation",
+        )
+        _args, kwargs = mock_obtain.call_args
+        self.assertIs(kwargs["credentials_backend"], backend)
+
+    @patch("validmind.oidc_device.run_device_flow")
+    def test_obtain_oidc_tokens_reuses_memory_backend(self, mock_flow):
+        from validmind.credentials_backend import MemoryCredentialsBackend
+
+        mock_flow.return_value = {
+            "issuer": "https://issuer/",
+            "client_id": "cid",
+            "access_token": "tok",
+            "expires_at": "2099-01-01T00:00:00+00:00",
+            "refresh_token": None,
+            "id_token": None,
+        }
+        backend = MemoryCredentialsBackend()
+        api_client._obtain_oidc_tokens(
+            "https://issuer/",
+            "cid",
+            "openid profile email",
+            credentials_backend=backend,
+        )
+        mock_flow.assert_called_once()
+        mock_flow.reset_mock()
+        api_client._obtain_oidc_tokens(
+            "https://issuer/",
+            "cid",
+            "openid profile email",
+            credentials_backend=backend,
+        )
+        mock_flow.assert_not_called()
+
+    @patch("validmind.api_client._ping")
+    @patch("validmind.api_client._obtain_oidc_tokens")
+    def test_clear_oidc_credentials(self, mock_obtain, mock_ping):
+        from validmind.credentials_backend import MemoryCredentialsBackend
+
+        backend = MemoryCredentialsBackend()
+        mock_obtain.return_value = {
+            "issuer": "https://issuer/",
+            "client_id": "cid",
+            "access_token": "tok",
+            "expires_at": "2099-01-01T00:00:00+00:00",
+            "refresh_token": "rt",
+            "id_token": None,
+        }
+        api_client.init(
+            model="model-cuid",
+            api_host="http://localhost/track/",
+            api_key="",
+            api_secret="",
+            issuer="https://issuer/",
+            client_id="cid",
+            credentials_backend=backend,
+            document="documentation",
+        )
+        api_client.clear_oidc_credentials()
+        self.assertIsNone(api_client._oidc_login_context)
+        self.assertIsNone(api_client._access_token)
 
 
 if __name__ == "__main__":
