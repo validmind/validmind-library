@@ -2,9 +2,11 @@
 # Refer to the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+import functools
 from typing import Callable, Dict, List, Optional, Tuple
 
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 import seaborn as sns
@@ -32,9 +34,37 @@ def _normalize_dict_keys(d: Dict) -> Dict:
     return {k.title(): v for k, v in d.items()}
 
 
+def _averaged_default_metrics(labels: np.ndarray) -> Dict[str, Callable]:
+    """Bind the default precision/recall/f1 metrics to a suitable averaging mode.
+
+    scikit-learn's precision/recall/f1 default to ``average="binary"`` with
+    ``pos_label=1``, which raises for multiclass labels and for binary labels
+    that do not include ``1`` (e.g. ``{0, 4}``). Following the MinimumF1Score fix
+    (PR #529), the averaging is decided once from the global label set so the
+    per-slice scores stay comparable:
+
+    - multiclass (>2 labels): macro averaging over the global ``labels`` with
+      ``zero_division=0`` to suppress undefined-metric warnings for slices that
+      happen to lack some classes;
+    - binary but ``1`` is not a label: use the larger label as ``pos_label``;
+    - conventional binary ({0, 1}): leave scikit-learn's defaults untouched.
+    """
+    averaged = dict(DEFAULT_METRICS)
+    if len(labels) > 2:
+        kwargs = {"average": "macro", "labels": labels, "zero_division": 0}
+    elif 1 not in labels:
+        kwargs = {"pos_label": labels.max()}
+    else:
+        return averaged
+    for name in ("precision", "recall", "f1"):
+        averaged[name] = functools.partial(averaged[name], **kwargs)
+    return averaged
+
+
 def _prepare_metrics_and_thresholds(
     metrics: Optional[Dict[str, Callable]],
     thresholds: Optional[Dict[str, float]],
+    labels: Optional[np.ndarray] = None,
 ) -> Tuple[Dict[str, Callable], Dict[str, float], Dict[str, float]]:
     """
     Prepare metrics and threshold dicts for plotting and pass/fail checks.
@@ -43,7 +73,15 @@ def _prepare_metrics_and_thresholds(
     Plotting uses default thresholds for any metric without an explicit value so
     charts always show a reference line; pass/fail uses only the user-provided
     thresholds when a custom dict is supplied.
+
+    When the default metrics are used, ``labels`` (the global label set) selects
+    the averaging mode for precision/recall/f1 so multiclass and non-{0, 1}
+    binary models do not crash. Custom metric callables own their own kwargs and
+    are left untouched.
     """
+    if metrics is None and labels is not None:
+        metrics = _averaged_default_metrics(labels)
+
     normalized_metrics = _normalize_dict_keys(metrics or DEFAULT_METRICS)
     default_thresholds = _normalize_dict_keys(DEFAULT_THRESHOLDS)
 
@@ -240,6 +278,8 @@ def WeakspotsDiagnosis(
     data types only.
     - Despite its usefulness in highlighting problematic regions, the test does not offer direct suggestions for model
     improvement.
+    - For multiclass models the default precision/recall/f1 metrics are macro-averaged over the global label set; for
+    binary models whose labels do not include ``1`` (e.g. ``{0, 4}``) the larger label is used as the positive class.
     """
     feature_columns = features_columns or datasets[0].feature_columns
     numeric_and_categorical_columns = (
@@ -260,16 +300,6 @@ def WeakspotsDiagnosis(
             "Column(s) provided in features_columns do not exist in the dataset"
         )
 
-    metrics, plot_thresholds, pass_thresholds = _prepare_metrics_and_thresholds(
-        metrics, thresholds
-    )
-
-    results_headers = ["Slice", "Number of Records", "Feature"]
-    results_headers.extend(metrics.keys())
-
-    figures = []
-    passed = True
-
     df_1 = datasets[0]._df[
         feature_columns
         + [datasets[0].target_column, datasets[0].prediction_column(model)]
@@ -278,6 +308,32 @@ def WeakspotsDiagnosis(
         feature_columns
         + [datasets[1].target_column, datasets[1].prediction_column(model)]
     ]
+
+    # Decide the precision/recall/f1 averaging once from the labels sklearn will
+    # actually see -- the union of the target and prediction columns of both
+    # datasets. Deciding per slice would silently mix binary and macro semantics
+    # across bars of the same chart and still break on {0, 4}-style slices.
+    labels = np.unique(
+        np.concatenate(
+            [
+                df_1[datasets[0].target_column].values,
+                df_1[datasets[0].prediction_column(model)].values,
+                df_2[datasets[1].target_column].values,
+                df_2[datasets[1].prediction_column(model)].values,
+            ]
+        )
+    )
+
+    metrics, plot_thresholds, pass_thresholds = _prepare_metrics_and_thresholds(
+        metrics, thresholds, labels
+    )
+
+    results_headers = ["Slice", "Number of Records", "Feature"]
+    results_headers.extend(metrics.keys())
+
+    figures = []
+    passed = True
+
     results_1 = pd.DataFrame()
     results_2 = pd.DataFrame()
     for feature in feature_columns:
