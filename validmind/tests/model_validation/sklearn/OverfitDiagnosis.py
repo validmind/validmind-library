@@ -2,7 +2,8 @@
 # Refer to the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from typing import Dict, List, Tuple
+import functools
+from typing import Callable, Dict, List, Tuple
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -64,6 +65,25 @@ PERFORMANCE_METRICS = {
 }
 
 
+def _classification_metric_fn(metric: str, labels: np.ndarray) -> Callable:
+    """Resolve the metric function, binding the averaging mode when needed.
+
+    scikit-learn's precision/recall/f1 default to ``average="binary"`` with
+    ``pos_label=1``, which raises for multiclass labels and for binary labels
+    that do not include ``1`` (e.g. ``{0, 4}``). Following the MinimumF1Score fix
+    (PR #529), decide the averaging once from the global label set. Every other
+    metric (accuracy, auc, ...) is returned unchanged.
+    """
+    fn = PERFORMANCE_METRICS[metric]["function"]
+    if metric not in ("f1", "precision", "recall"):
+        return fn
+    if len(labels) > 2:
+        return functools.partial(fn, average="macro", labels=labels, zero_division=0)
+    if 1 not in labels:
+        return functools.partial(fn, pos_label=labels.max())
+    return fn
+
+
 def _prepare_results(
     results_train: dict, results_test: dict, metric: str
 ) -> pd.DataFrame:
@@ -95,6 +115,7 @@ def _compute_metrics(
     pred_column: str,
     feature_column: str,
     metric: str,
+    metric_func: Callable,
     is_classification: bool,
 ) -> None:
     results["slice"].append(str(region))
@@ -106,7 +127,6 @@ def _compute_metrics(
         results[metric].append(0)
         return
 
-    metric_func = PERFORMANCE_METRICS[metric]["function"]
     y_true = df_region[target_column].values
 
     # AUC requires probability scores
@@ -253,6 +273,24 @@ def OverfitDiagnosis(
         train_df[prob_column] = datasets[0].y_prob(model)
         test_df[prob_column] = datasets[1].y_prob(model)
 
+    # Decide the precision/recall/f1 averaging once from the labels sklearn will
+    # actually see -- the union of the target and prediction columns across both
+    # datasets -- so multiclass and non-{0, 1} binary models do not crash.
+    if is_classification:
+        labels = np.unique(
+            np.concatenate(
+                [
+                    train_df[datasets[0].target_column].values,
+                    train_df[pred_column].values,
+                    test_df[datasets[1].target_column].values,
+                    test_df[pred_column].values,
+                ]
+            )
+        )
+        metric_func = _classification_metric_fn(metric, labels)
+    else:
+        metric_func = PERFORMANCE_METRICS[metric]["function"]
+
     test_results = []
     figures = []
     results_headers = ["slice", "shape", "feature", metric]
@@ -276,6 +314,7 @@ def OverfitDiagnosis(
                 prob_column=prob_column,
                 pred_column=pred_column,
                 metric=metric,
+                metric_func=metric_func,
                 is_classification=is_classification,
             )
             df_test_region = test_df[
@@ -291,6 +330,7 @@ def OverfitDiagnosis(
                 prob_column=prob_column,
                 pred_column=pred_column,
                 metric=metric,
+                metric_func=metric_func,
                 is_classification=is_classification,
             )
 

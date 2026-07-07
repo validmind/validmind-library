@@ -2,9 +2,10 @@
 # Refer to the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+import functools
 from collections import defaultdict
 from operator import add
-from typing import List, Tuple
+from typing import Callable, List, Tuple
 
 import numpy as np
 import pandas as pd
@@ -85,8 +86,31 @@ def _add_noise_std_dev(
     return noisy_values
 
 
+def _classification_metric_fn(metric: str, labels: np.ndarray) -> Callable:
+    """Resolve the metric function, binding the averaging mode when needed.
+
+    scikit-learn's precision/recall/f1 default to ``average="binary"`` with
+    ``pos_label=1``, which raises for multiclass labels and for binary labels
+    that do not include ``1`` (e.g. ``{0, 4}``). Following the MinimumF1Score fix
+    (PR #529), decide the averaging once from the global label set. Every other
+    metric (accuracy, auc, ...) is returned unchanged.
+    """
+    fn = PERFORMANCE_METRICS[metric]["function"]
+    if metric not in ("f1", "precision", "recall"):
+        return fn
+    if len(labels) > 2:
+        return functools.partial(fn, average="macro", labels=labels, zero_division=0)
+    if 1 not in labels:
+        return functools.partial(fn, pos_label=labels.max())
+    return fn
+
+
 def _compute_metric(
-    dataset: VMDataset, model: VMModel, X: pd.DataFrame, metric: str
+    dataset: VMDataset,
+    model: VMModel,
+    X: pd.DataFrame,
+    metric: str,
+    metric_func: Callable = None,
 ) -> float:
     if metric not in PERFORMANCE_METRICS:
         raise ValueError(
@@ -100,7 +124,10 @@ def _compute_metric(
             y_proba = model.predict(X)
         return metrics.roc_auc_score(dataset.y, y_proba)
 
-    return PERFORMANCE_METRICS[metric]["function"](dataset.y, model.predict(X))
+    if metric_func is None:
+        metric_func = PERFORMANCE_METRICS[metric]["function"]
+
+    return metric_func(dataset.y, model.predict(X))
 
 
 def _compute_gap(result: dict, metric: str) -> float:
@@ -267,6 +294,19 @@ def RobustnessDiagnosis(
             else DEFAULT_REGRESSION_METRIC
         )
 
+    # Decide the precision/recall/f1 averaging once from the unperturbed labels --
+    # the union of y_true and the baseline predictions across datasets -- so
+    # multiclass and non-{0, 1} binary models do not crash.
+    metric_func = None
+    if metric in ("f1", "precision", "recall"):
+        labels = np.unique(
+            np.concatenate(
+                [np.asarray(dataset.y) for dataset in datasets]
+                + [np.asarray(model.predict(dataset.x_df())) for dataset in datasets]
+            )
+        )
+        metric_func = _classification_metric_fn(metric, labels)
+
     results = [{} for _ in range(len(datasets))]
 
     # add baseline results (no perturbation)
@@ -281,6 +321,7 @@ def RobustnessDiagnosis(
                 model=model,
                 X=dataset.x_df(),
                 metric=metric,
+                metric_func=metric_func,
             )
         ]
         result["Performance Decay"] = [0.0]
@@ -307,6 +348,7 @@ def RobustnessDiagnosis(
                     model=model,
                     X=temp_df,
                     metric=metric,
+                    metric_func=metric_func,
                 )
             )
             result["Performance Decay"].append(_compute_gap(result, metric))
@@ -325,9 +367,9 @@ def RobustnessDiagnosis(
     # rename perturbation size for baseline
     # Convert to object type first to avoid dtype incompatibility warning
     results_df["Perturbation Size"] = results_df["Perturbation Size"].astype(object)
-    results_df.loc[results_df["Perturbation Size"] == 0.0, "Perturbation Size"] = (
-        "Baseline (0.0)"
-    )
+    results_df.loc[
+        results_df["Perturbation Size"] == 0.0, "Perturbation Size"
+    ] = "Baseline (0.0)"
 
     return (
         results_df,
