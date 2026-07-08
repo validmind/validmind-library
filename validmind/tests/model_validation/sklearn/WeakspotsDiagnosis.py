@@ -2,9 +2,12 @@
 # Refer to the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-from typing import Callable, Dict, List, Optional, Tuple
+import functools
+import inspect
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 import seaborn as sns
@@ -55,6 +58,58 @@ def _prepare_metrics_and_thresholds(
         plot_thresholds = default_thresholds
 
     return normalized_metrics, plot_thresholds, pass_thresholds
+
+
+def _resolve_averaging(
+    datasets: List[VMDataset], model: VMModel
+) -> Tuple[str, Optional[Any]]:
+    """Decide the averaging strategy for label-based metrics (precision, recall, F1).
+
+    scikit-learn's precision/recall/F1 default to ``average="binary"`` with
+    ``pos_label=1``. That raises for multiclass targets ("Target is multiclass but
+    average='binary'") and for binary targets encoded outside ``{0, 1}``
+    ("pos_label=1 is not a valid label"). The label space is taken from the union of
+    true and predicted labels across every dataset so that a slice whose labels
+    collapse to a subset is still scored consistently.
+
+    Returns an ``(average, pos_label)`` pair: ``("macro", None)`` for multiclass,
+    otherwise ``("binary", <positive label>)`` where the positive label is the
+    largest class value. This leaves the standard ``{0, 1}`` case on ``pos_label=1``
+    so existing binary results are unchanged.
+    """
+    labels = set()
+    for dataset in datasets:
+        labels.update(np.unique(dataset.y).tolist())
+        labels.update(np.unique(dataset.y_pred(model)).tolist())
+    labels = sorted(labels)
+
+    if len(labels) > 2:
+        return "macro", None
+    return "binary", labels[-1]
+
+
+def _apply_averaging(
+    metrics: Dict[str, Callable], average: str, pos_label: Optional[Any]
+) -> Dict[str, Callable]:
+    """Bind the resolved averaging options onto every metric that accepts them.
+
+    accuracy (and any custom metric without an ``average`` parameter) is left
+    untouched. ``pos_label`` is only bound for binary averaging, and
+    ``zero_division=0`` is bound when supported so that empty or single-class slices
+    score 0 instead of emitting scikit-learn warnings.
+    """
+    prepared = {}
+    for name, metric_fn in metrics.items():
+        params = inspect.signature(metric_fn).parameters
+        kwargs = {}
+        if "average" in params:
+            kwargs["average"] = average
+            if pos_label is not None and "pos_label" in params:
+                kwargs["pos_label"] = pos_label
+            if "zero_division" in params:
+                kwargs["zero_division"] = 0
+        prepared[name] = functools.partial(metric_fn, **kwargs) if kwargs else metric_fn
+    return prepared
 
 
 def _compute_metrics(
@@ -263,6 +318,12 @@ def WeakspotsDiagnosis(
     metrics, plot_thresholds, pass_thresholds = _prepare_metrics_and_thresholds(
         metrics, thresholds
     )
+
+    # Bind averaging options so label-based metrics work for multiclass targets and
+    # for binary targets encoded outside {0, 1} (e.g. {0, 4}) instead of raising on
+    # scikit-learn's default average="binary"/pos_label=1.
+    average, pos_label = _resolve_averaging(datasets, model)
+    metrics = _apply_averaging(metrics, average, pos_label)
 
     results_headers = ["Slice", "Number of Records", "Feature"]
     results_headers.extend(metrics.keys())
