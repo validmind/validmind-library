@@ -15,6 +15,8 @@ from validmind import RawData, tags, tasks
 from validmind.logging import get_logger
 from validmind.vm_models import VMDataset, VMModel
 
+from ._diagnosis_metrics import bind_averaging, full_labels, multiclass_auc
+
 logger = get_logger(__name__)
 
 # TODO: A couple of improvements here could be to:
@@ -96,6 +98,10 @@ def _compute_metrics(
     feature_column: str,
     metric: str,
     is_classification: bool,
+    average: str = None,
+    pos_label=None,
+    labels: list = None,
+    is_multiclass: bool = False,
 ) -> None:
     results["slice"].append(str(region))
     results["shape"].append(df_region.shape[0])
@@ -115,11 +121,25 @@ def _compute_metrics(
         if len(np.unique(y_true)) == 1:
             return results[metric].append(0)
 
+        # The library retains only a single probability column, so a
+        # probability-based multiclass ROC AUC is not possible; fall back to the
+        # label-binarize convention used elsewhere for multiclass targets.
+        if is_multiclass:
+            return results[metric].append(
+                multiclass_auc(y_true, df_region[pred_column].values, labels)
+            )
+
         return results[metric].append(
             metric_func(y_true, df_region[prob_column].values)
         )
 
-    return results[metric].append(metric_func(y_true, df_region[pred_column].values))
+    # Bind averaging so precision/recall/F1 handle multiclass targets and binary
+    # targets encoded outside {0, 1}; accuracy and regression metrics pass through.
+    return results[metric].append(
+        bind_averaging(metric_func, average, pos_label)(
+            y_true, df_region[pred_column].values
+        )
+    )
 
 
 def _plot_overfit_regions(
@@ -253,6 +273,18 @@ def OverfitDiagnosis(
         train_df[prob_column] = datasets[0].y_prob(model)
         test_df[prob_column] = datasets[1].y_prob(model)
 
+    # Resolve the label space once so every feature slice is scored consistently:
+    # multiclass targets use macro averaging (and label-binarize AUC), binary
+    # targets keep the positive label so non-{0, 1} encodings don't break.
+    if is_classification:
+        labels = full_labels(datasets, model)
+        is_multiclass = len(labels) > 2
+        average, pos_label = (
+            ("macro", None) if is_multiclass else ("binary", labels[-1])
+        )
+    else:
+        labels, is_multiclass, average, pos_label = None, False, None, None
+
     test_results = []
     figures = []
     results_headers = ["slice", "shape", "feature", metric]
@@ -277,6 +309,10 @@ def OverfitDiagnosis(
                 pred_column=pred_column,
                 metric=metric,
                 is_classification=is_classification,
+                average=average,
+                pos_label=pos_label,
+                labels=labels,
+                is_multiclass=is_multiclass,
             )
             df_test_region = test_df[
                 (test_df[feature_column] > region.left)
@@ -292,6 +328,10 @@ def OverfitDiagnosis(
                 pred_column=pred_column,
                 metric=metric,
                 is_classification=is_classification,
+                average=average,
+                pos_label=pos_label,
+                labels=labels,
+                is_multiclass=is_multiclass,
             )
 
         results = _prepare_results(results_train, results_test, metric)
