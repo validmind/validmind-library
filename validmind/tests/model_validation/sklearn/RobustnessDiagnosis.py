@@ -17,6 +17,8 @@ from validmind.errors import MissingOrInvalidModelPredictFnError
 from validmind.logging import get_logger
 from validmind.vm_models import VMDataset, VMModel
 
+from ._diagnosis_metrics import bind_averaging, full_labels, multiclass_auc
+
 logger = get_logger(__name__)
 
 DEFAULT_DECAY_THRESHOLD = 0.05
@@ -86,7 +88,14 @@ def _add_noise_std_dev(
 
 
 def _compute_metric(
-    dataset: VMDataset, model: VMModel, X: pd.DataFrame, metric: str
+    dataset: VMDataset,
+    model: VMModel,
+    X: pd.DataFrame,
+    metric: str,
+    average: str = None,
+    pos_label=None,
+    labels: list = None,
+    is_multiclass: bool = False,
 ) -> float:
     if metric not in PERFORMANCE_METRICS:
         raise ValueError(
@@ -94,13 +103,23 @@ def _compute_metric(
         )
 
     if metric == "auc":
+        # Only a single probability column is available, so a probability-based
+        # multiclass ROC AUC is not possible; fall back to the label-binarize
+        # convention used elsewhere for multiclass targets.
+        if is_multiclass:
+            return multiclass_auc(dataset.y, model.predict(X), labels)
         try:
             y_proba = model.predict_proba(X)
         except MissingOrInvalidModelPredictFnError:
             y_proba = model.predict(X)
         return metrics.roc_auc_score(dataset.y, y_proba)
 
-    return PERFORMANCE_METRICS[metric]["function"](dataset.y, model.predict(X))
+    # Bind averaging so precision/recall/F1 handle multiclass targets and binary
+    # targets encoded outside {0, 1}; accuracy and regression metrics pass through.
+    metric_func = bind_averaging(
+        PERFORMANCE_METRICS[metric]["function"], average, pos_label
+    )
+    return metric_func(dataset.y, model.predict(X))
 
 
 def _compute_gap(result: dict, metric: str) -> float:
@@ -260,12 +279,25 @@ def RobustnessDiagnosis(
     - The test may not account for more complex or unstructured noise patterns that could affect model robustness.
     """
     # TODO: use single dataset
+    is_classification = bool(datasets[0].probability_column(model))
     if not metric:
         metric = (
             DEFAULT_CLASSIFICATION_METRIC
-            if datasets[0].probability_column(model)
+            if is_classification
             else DEFAULT_REGRESSION_METRIC
         )
+
+    # Resolve the label space once: multiclass targets use macro averaging (and
+    # label-binarize AUC), binary targets keep the positive label so non-{0, 1}
+    # encodings don't break scikit-learn's binary averaging.
+    if is_classification:
+        labels = full_labels(datasets, model)
+        is_multiclass = len(labels) > 2
+        average, pos_label = (
+            ("macro", None) if is_multiclass else ("binary", labels[-1])
+        )
+    else:
+        labels, is_multiclass, average, pos_label = None, False, None, None
 
     results = [{} for _ in range(len(datasets))]
 
@@ -281,6 +313,10 @@ def RobustnessDiagnosis(
                 model=model,
                 X=dataset.x_df(),
                 metric=metric,
+                average=average,
+                pos_label=pos_label,
+                labels=labels,
+                is_multiclass=is_multiclass,
             )
         ]
         result["Performance Decay"] = [0.0]
@@ -307,6 +343,10 @@ def RobustnessDiagnosis(
                     model=model,
                     X=temp_df,
                     metric=metric,
+                    average=average,
+                    pos_label=pos_label,
+                    labels=labels,
+                    is_multiclass=is_multiclass,
                 )
             )
             result["Performance Decay"].append(_compute_gap(result, metric))

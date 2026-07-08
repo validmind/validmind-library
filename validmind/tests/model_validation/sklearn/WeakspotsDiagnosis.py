@@ -13,6 +13,9 @@ from sklearn import metrics
 from validmind import tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 
+from ._diagnosis_metrics import apply_averaging as _apply_averaging
+from ._diagnosis_metrics import resolve_averaging as _resolve_averaging
+
 DEFAULT_METRICS = {
     "accuracy": metrics.accuracy_score,
     "precision": metrics.precision_score,
@@ -263,6 +266,12 @@ def WeakspotsDiagnosis(
     metrics, plot_thresholds, pass_thresholds = _prepare_metrics_and_thresholds(
         metrics, thresholds
     )
+
+    # Bind averaging options so label-based metrics work for multiclass targets and
+    # for binary targets encoded outside {0, 1} (e.g. {0, 4}) instead of raising on
+    # scikit-learn's default average="binary"/pos_label=1.
+    average, pos_label = _resolve_averaging(datasets, model)
+    metrics = _apply_averaging(metrics, average, pos_label)
 
     results_headers = ["Slice", "Number of Records", "Feature"]
     results_headers.extend(metrics.keys())
