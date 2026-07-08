@@ -4,10 +4,12 @@
 
 from typing import Tuple
 
+import numpy as np
 import plotly.graph_objects as go
 from sklearn.calibration import calibration_curve
 
 from validmind import tags, tasks
+from validmind.errors import SkipTestError
 from validmind.vm_models import VMDataset, VMModel
 from validmind.vm_models.result import RawData
 
@@ -70,6 +72,14 @@ def CalibrationCurve(
     - Assumes bin boundaries are appropriate for the problem
     - May be affected by class imbalance
     """
+    # Binary-only by design: sklearn's calibration_curve raises a cryptic
+    # "pos_label is not specified" error on multiclass targets, so skip cleanly
+    # like ROCCurve/PrecisionRecallCurve rather than crashing.
+    if len(np.unique(dataset.y)) > 2:
+        raise SkipTestError(
+            "Calibration Curve is only supported for binary classification models"
+        )
+
     prob_true, prob_pred = calibration_curve(
         dataset.y, dataset.y_prob(model), n_bins=n_bins
     )

@@ -31,6 +31,23 @@ except ImportError as e:
 logger = get_logger(__name__)
 
 
+def _resolve_class_index(num_classes: int, class_of_interest: Optional[int]) -> int:
+    """Pick which class's SHAP values to use.
+
+    Defaults to class 1 for binary classification (matching the historical
+    behavior) and otherwise requires an explicit, in-bounds ``class_of_interest``.
+    """
+    if num_classes == 2 and class_of_interest is None:
+        return 1
+    if class_of_interest is not None and 0 <= class_of_interest < num_classes:
+        return class_of_interest
+    raise ValueError(
+        f"Invalid class_of_interest: {class_of_interest}. Must be between 0 and "
+        f"{num_classes - 1}. Multiclass SHAP importance requires an explicit "
+        "class_of_interest."
+    )
+
+
 def select_shap_values(
     shap_values: Union[np.ndarray, List[np.ndarray]],
     class_of_interest: Optional[int] = None,
@@ -40,9 +57,11 @@ def select_shap_values(
     For regression models, returns the SHAP values directly as there are no classes.
 
     Args:
-        shap_values: The SHAP values returned by the SHAP explainer. For multiclass
-            classification, this will be a list where each element corresponds to a class.
-            For regression, this will be a single array of SHAP values.
+        shap_values: The SHAP values returned by the SHAP explainer. Depending on the
+            SHAP version, multiclass classification is returned either as a list with
+            one ``(samples, features)`` array per class or as a single
+            ``(samples, features, classes)`` array. Binary classification and
+            regression are returned as a single ``(samples, features)`` array.
         class_of_interest: The class index for which to retrieve SHAP values. If None
             (default), the function will assume binary classification and use class 1
             by default.
@@ -52,24 +71,26 @@ def select_shap_values(
         output.
 
     Raises:
-        ValueError: If class_of_interest is specified and is out of bounds for the
-            number of classes.
+        ValueError: If class_of_interest is out of bounds, or is not specified for a
+            multiclass model.
     """
-    if not isinstance(shap_values, list):
-        # For regression, return the SHAP values as they are
-        selected_values = shap_values
-    else:
+    if isinstance(shap_values, list):
+        # Older SHAP returns a list with one (samples, features) array per class.
         num_classes = len(shap_values)
-        # Default to class 1 for binary classification where no class is specified
-        if num_classes == 2 and class_of_interest is None:
-            selected_values = shap_values[1]
-        # Otherwise, use the specified class_of_interest
-        elif class_of_interest is not None and 0 <= class_of_interest < num_classes:
-            selected_values = shap_values[class_of_interest]
-        else:
-            raise ValueError(
-                f"Invalid class_of_interest: {class_of_interest}. Must be between 0 and {num_classes - 1}."
-            )
+        selected_values = shap_values[
+            _resolve_class_index(num_classes, class_of_interest)
+        ]
+    elif isinstance(shap_values, np.ndarray) and shap_values.ndim == 3:
+        # Newer SHAP returns a single (samples, features, classes) array for
+        # multiclass; select along the trailing class axis so downstream plotting
+        # receives a 2D (samples, features) array instead of raising an IndexError.
+        num_classes = shap_values.shape[-1]
+        selected_values = shap_values[
+            :, :, _resolve_class_index(num_classes, class_of_interest)
+        ]
+    else:
+        # Regression, or binary returned as a single (samples, features) array.
+        selected_values = shap_values
 
     # Add type conversion here to ensure proper float array
     if hasattr(selected_values, "dtype"):
