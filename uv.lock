@@ -11340,7 +11340,7 @@ wheels = [
 
 [[package]]
 name = "validmind"
-version = "2.13.5"
+version = "2.13.6"
 source = { editable = "." }
 dependencies = [
     { name = "aiohttp", extra = ["speedups"] },

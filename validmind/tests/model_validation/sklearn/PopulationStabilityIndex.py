@@ -7,6 +7,7 @@ from typing import Dict, List, Tuple
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 
 from validmind import RawData, tags, tasks
 from validmind.errors import SkipTestError
@@ -14,6 +15,8 @@ from validmind.logging import get_logger
 from validmind.vm_models import VMDataset, VMModel
 
 logger = get_logger(__name__)
+
+_PSI_PALETTE = ["#DE257E", "#1F77B4", "#2CA02C", "#FF7F0E", "#9467BD", "#8C564B"]
 
 
 def calculate_psi(score_initial, score_new, num_bins=10, mode="fixed"):
@@ -76,6 +79,152 @@ def calculate_psi(score_initial, score_new, num_bins=10, mode="fixed"):
     return psi_df.to_dict(orient="records")
 
 
+def _psi_table_rows(psi_results):
+    """Append the summed 'Total' row and format PSI records as table rows."""
+    total_psi = {
+        key: sum(d.get(key, 0) for d in psi_results)
+        for key in psi_results[0].keys()
+        if isinstance(psi_results[0][key], (int, float))
+    }
+    rows_with_total = psi_results + [total_psi]
+
+    table_rows = [
+        {
+            "Bin": (
+                i if i < (len(rows_with_total) - 1) else "Total"
+            ),  # The last bin is the "Total" bin
+            "Count Initial": values["initial"],
+            "Percent Initial (%)": values["percent_initial"] * 100,
+            "Count New": values["new"],
+            "Percent New (%)": values["percent_new"] * 100,
+            "PSI": values["psi"],
+        }
+        for i, values in enumerate(rows_with_total)
+    ]
+    return rows_with_total, table_rows
+
+
+def _multiclass_psi(datasets, model, classes, num_bins, mode):
+    """One-vs-rest PSI for a multiclass model.
+
+    PSI needs a 1-D score distribution to compare across the two datasets. The
+    stored single probability column cannot represent every class, so we ask the
+    underlying estimator for the full per-class probability matrix (mirroring the
+    ROC/PR curve tests). Models without a usable ``predict_proba`` (metadata-only
+    / precomputed single-column predictions) are skipped rather than crashed.
+    """
+    raw_model = getattr(model, "model", None)
+    proba_fn = getattr(raw_model, "predict_proba", None)
+    if not callable(proba_fn):
+        raise SkipTestError(
+            "Multiclass Population Stability Index requires per-class "
+            "probabilities from the underlying model's predict_proba, which is "
+            "not available for this model (e.g. metadata-only / precomputed "
+            "predictions). Skipping."
+        )
+    try:
+        prob_initial = np.asarray(proba_fn(datasets[0].x_df()))
+        prob_new = np.asarray(proba_fn(datasets[1].x_df()))
+    except Exception as e:
+        raise SkipTestError(
+            "Multiclass Population Stability Index could not compute per-class "
+            f"probabilities ({type(e).__name__}). Skipping."
+        ) from e
+
+    n_classes = len(classes)
+    for prob in (prob_initial, prob_new):
+        if prob.ndim != 2 or prob.shape[1] != n_classes:
+            raise SkipTestError(
+                "Multiclass Population Stability Index requires a per-class "
+                f"probability matrix with one column per class (got shape "
+                f"{getattr(prob, 'shape', None)} for {n_classes} classes). Skipping."
+            )
+
+    # predict_proba columns are ordered by sorted class label == np.unique.
+    fig = make_subplots(
+        rows=n_classes,
+        cols=1,
+        specs=[[{"secondary_y": True}] for _ in range(n_classes)],
+        subplot_titles=[f"Class {cls}" for cls in classes],
+        vertical_spacing=0.08,
+    )
+
+    tables = {}
+    raw_per_class = {}
+    for i, cls in enumerate(classes):
+        psi_results = calculate_psi(
+            prob_initial[:, i].copy(),
+            prob_new[:, i].copy(),
+            num_bins=num_bins,
+            mode=mode,
+        )
+        x = list(range(len(psi_results)))
+        color = _PSI_PALETTE[i % len(_PSI_PALETTE)]
+        fig.add_trace(
+            go.Bar(
+                x=x,
+                y=[d["percent_initial"] for d in psi_results],
+                name="Initial",
+                marker=dict(color="#DE257E"),
+                showlegend=i == 0,
+                legendgroup="initial",
+            ),
+            row=i + 1,
+            col=1,
+            secondary_y=False,
+        )
+        fig.add_trace(
+            go.Bar(
+                x=x,
+                y=[d["percent_new"] for d in psi_results],
+                name="New",
+                marker=dict(color="#E8B1F8"),
+                showlegend=i == 0,
+                legendgroup="new",
+            ),
+            row=i + 1,
+            col=1,
+            secondary_y=False,
+        )
+        fig.add_trace(
+            go.Scatter(
+                x=x,
+                y=[d["psi"] for d in psi_results],
+                name="PSI",
+                line=dict(color=color),
+                showlegend=i == 0,
+                legendgroup="psi",
+            ),
+            row=i + 1,
+            col=1,
+            secondary_y=True,
+        )
+
+        rows_with_total, table_rows = _psi_table_rows(psi_results)
+        table_title = (
+            f"Population Stability Index for Class {cls} "
+            f"({datasets[0].input_id} vs {datasets[1].input_id})"
+        )
+        tables[table_title] = table_rows
+        raw_per_class[str(cls)] = rows_with_total
+
+    fig.update_layout(
+        title="Population Stability Index (PSI) — one-vs-rest per class",
+        barmode="group",
+        height=300 * n_classes,
+    )
+
+    return (
+        tables,
+        fig,
+        RawData(
+            psi_raw=raw_per_class,
+            model=model.input_id,
+            datasets=[datasets[0].input_id, datasets[1].input_id],
+        ),
+    )
+
+
 @tags(
     "sklearn", "binary_classification", "multiclass_classification", "model_performance"
 )
@@ -132,9 +281,17 @@ def PopulationStabilityIndex(
     lead to misinterpretations. Any changes in PSI could be due to shifts in the model (model drift), changes in the
     relationships between features and the target variable (concept drift), or both. However, distinguishing between
     these causes is non-trivial.
+    - For multiclass models the PSI is computed one-vs-rest (one table/plot per class), which requires per-class
+    probabilities from the model's `predict_proba`. Models that cannot produce a full per-class probability matrix
+    (e.g. metadata-only models, or predictions supplied as a single precomputed probability column) are skipped for
+    the multiclass case.
     """
     if model.library in ["statsmodels", "pytorch", "catboost"]:
         raise SkipTestError(f"Skiping PSI for {model.library} models")
+
+    classes = np.unique(datasets[0].y)
+    if len(classes) > 2:
+        return _multiclass_psi(datasets, model, classes, num_bins, mode)
 
     psi_results = calculate_psi(
         datasets[0].y_prob(model).copy(),
@@ -182,35 +339,16 @@ def PopulationStabilityIndex(
         ),
     )
 
-    # sum up the PSI values to get the total values
-    total_psi = {
-        key: sum(d.get(key, 0) for d in psi_results)
-        for key in psi_results[0].keys()
-        if isinstance(psi_results[0][key], (int, float))
-    }
-    psi_results.append(total_psi)
+    # sum up the PSI values to get the total values and format the table rows
+    rows_with_total, table_rows = _psi_table_rows(psi_results)
 
     table_title = f"Population Stability Index for {datasets[0].input_id} and {datasets[1].input_id} Datasets"
 
     return (
-        {
-            table_title: [
-                {
-                    "Bin": (
-                        i if i < (len(psi_results) - 1) else "Total"
-                    ),  # The last bin is the "Total" bin
-                    "Count Initial": values["initial"],
-                    "Percent Initial (%)": values["percent_initial"] * 100,
-                    "Count New": values["new"],
-                    "Percent New (%)": values["percent_new"] * 100,
-                    "PSI": values["psi"],
-                }
-                for i, values in enumerate(psi_results)
-            ],
-        },
+        {table_title: table_rows},
         fig,
         RawData(
-            psi_raw=psi_results,
+            psi_raw=rows_with_total,
             model=model.input_id,
             datasets=[datasets[0].input_id, datasets[1].input_id],
         ),
