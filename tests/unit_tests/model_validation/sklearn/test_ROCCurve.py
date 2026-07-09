@@ -148,3 +148,53 @@ class TestROCCurve(unittest.TestCase):
         # Check AUC score (should be very close to 1.0)
         auc = float(fig.data[0].name.split("=")[1].strip().rstrip(")"))
         self.assertGreater(auc, 0.95)
+
+
+@unittest.skipUnless(XGBClassifier is not None, "xgboost optional extra required")
+class TestROCCurveMulticlass(unittest.TestCase):
+    def setUp(self):
+        np.random.seed(0)
+        n_samples = 900
+        X = np.random.randn(n_samples, 3)
+        # 3-class target with real signal so per-class AUCs beat random.
+        score = np.stack([X[:, 0], X[:, 1], X[:, 2]], axis=1)
+        y = (score + np.random.randn(n_samples, 3) * 0.3).argmax(axis=1)
+
+        X_train, X_test, y_train, y_test = train_test_split(
+            X, y, test_size=0.25, random_state=0
+        )
+
+        test_df = pd.DataFrame(
+            {
+                "f1": X_test[:, 0],
+                "f2": X_test[:, 1],
+                "f3": X_test[:, 2],
+                "target": y_test,
+            }
+        )
+
+        self.vm_test_ds = vm.init_dataset(
+            input_id="mc_test", dataset=test_df, target_column="target", __log=False
+        )
+        model = XGBClassifier()
+        model.fit(X_train, y_train)
+        self.vm_model = vm.init_model(input_id="mc_model", model=model, __log=False)
+        self.vm_test_ds.assign_predictions(self.vm_model)
+
+    def test_multiclass_one_vs_rest_traces(self):
+        fig, raw = ROCCurve(self.vm_model, self.vm_test_ds)
+
+        self.assertIsInstance(fig, go.Figure)
+        self.assertIsInstance(raw, vm.RawData)
+
+        names = [t.name for t in fig.data]
+        # 3 per-class curves + micro-average + random baseline = 5 traces.
+        self.assertEqual(len(fig.data), 5)
+        self.assertEqual(sum(n.startswith("Class ") for n in names), 3)
+        self.assertTrue(any(n.startswith("Micro-average") for n in names))
+        self.assertTrue(any(n == "Random (AUC = 0.5)" for n in names))
+
+        # Per-class RawData keyed by class label + micro; AUCs beat random.
+        self.assertEqual(set(raw.auc) - {"micro"}, {"0", "1", "2"})
+        for key in ("0", "1", "2", "micro"):
+            self.assertGreater(raw.auc[key], 0.5)

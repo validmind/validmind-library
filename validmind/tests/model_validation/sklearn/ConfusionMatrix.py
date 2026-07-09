@@ -72,15 +72,20 @@ def ConfusionMatrix(
     - It mainly serves as a descriptive tool and does not offer the capability for statistical hypothesis testing.
     - Risks of misinterpretation exist because the matrix doesn't directly provide precision, recall, or F1-score data.
     These metrics have to be computed separately.
+    - The `threshold` parameter only applies to binary classification (it splits a single positive-class probability
+    into two classes). For multiclass targets the model's argmax class predictions are used and `threshold` is ignored.
     """
-    # Get predictions using threshold for binary classification if possible
-    if hasattr(model.model, "predict_proba"):
+    # The `threshold` only has a meaning for binary classification (it splits a
+    # single positive-class probability into two classes). For multiclass we use
+    # the model's argmax class predictions directly, since thresholding a
+    # single probability column would silently produce wrong labels.
+    n_classes = len(np.unique(dataset.y))
+    if n_classes == 2 and hasattr(model.model, "predict_proba"):
         y_prob = dataset.y_prob(model)
         # Handle both 1D and 2D probability arrays
         if y_prob.ndim == 2:
-            y_pred = (y_prob[:, 1] > threshold).astype(int)
-        else:
-            y_pred = (y_prob > threshold).astype(int)
+            y_prob = y_prob[:, 1]
+        y_pred = (y_prob > threshold).astype(int)
     else:
         y_pred = dataset.y_pred(model)
 
