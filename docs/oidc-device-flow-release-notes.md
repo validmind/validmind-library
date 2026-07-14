@@ -21,7 +21,7 @@ The SDK does **OIDC discovery** against your issuer. From `{issuer}/.well-known/
 - Supply ValidMind with values that match what the **ValidMind platform** already trusts for your organization:
   - **Issuer URL** — Normalized OpenID Provider issuer (example Entra v2: `https://login.microsoftonline.com/<tenant-id>/v2.0`).
   - **Client ID** — The application (client) ID of the public OAuth client.
-  - **Scopes** — The library defaults to `openid profile email`. Your IdP may require **additional scopes** or a **resource identifier** so the access token is acceptable to the ValidMind API.
+  - **Scopes** — The library defaults to `openid profile email offline_access` so OIDC providers can issue refresh tokens. Your IdP may require **additional scopes** or a **resource identifier** so the access token is acceptable to the ValidMind API.
   - **Audience / API identifier (often required)** — Access tokens must pass ValidMind’s JWT validation (issuer, audience, signing keys). Many setups need an explicit **audience** for API-style access tokens (e.g. Auth0 API Identifier, or Azure AD custom scope / resource). Pass this as the `audience` argument (or set env `VM_OIDC_AUDIENCE`) so the provider issues tokens ValidMind can verify.
 
 **Operational checks**
@@ -56,7 +56,7 @@ vm.init(
     client_id="<oauth-public-client-id>",
     model="<model-cuid>",
     api_host="https://.../api/v1/tracking/",  # or api_url= (alias); defaults from VM_API_HOST if unset
-    scope="openid profile email",  # optional; this is the default if omitted
+    scope="openid profile email offline_access",  # optional; this is the default if omitted
     audience="<resource-or-api-identifier>",  # optional; often required for API tokens; or VM_OIDC_AUDIENCE
 )
 ```
@@ -101,7 +101,7 @@ Org and model access are enforced server-side: the user must be allowed to use t
 | Client ID | Public OAuth client for device flow |
 | Model CUID | Identifies the inventory model (`model=` or `VM_API_MODEL`) |
 | API host / URL | Tracking API base (`api_host`, `api_url`, or `VM_API_HOST`) |
-| Scope | OAuth scopes (default `openid profile email`) |
+| Scope | OAuth scopes (default `openid profile email offline_access`) |
 | Audience | Often needed so access tokens target the ValidMind API (`audience` or `VM_OIDC_AUDIENCE`) |
 | Credential file | `~/.validmind/credentials.json` (cached tokens; restrict like other secrets on shared machines) |
 

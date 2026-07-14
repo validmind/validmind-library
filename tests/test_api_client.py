@@ -531,6 +531,41 @@ class TestAPIClientOIDC(unittest.TestCase):
 
     @patch("validmind.api_client._ping")
     @patch("validmind.api_client._obtain_oidc_tokens")
+    def test_init_oidc_uses_default_scope_with_offline_access(
+        self, mock_obtain, mock_ping
+    ):
+        mock_obtain.return_value = {
+            "issuer": "https://issuer/",
+            "client_id": "cid",
+            "access_token": "tok",
+            "expires_at": "2099-01-01T00:00:00+00:00",
+            "refresh_token": "refresh-token",
+            "id_token": None,
+        }
+
+        with patch.dict(os.environ, {"VM_OIDC_SCOPE": ""}):
+            api_client.init(
+                model="model-cuid",
+                api_host="http://localhost/track/",
+                api_key="",
+                api_secret="",
+                issuer="https://issuer/",
+                client_id="cid",
+                document="documentation",
+            )
+
+        mock_obtain.assert_called_once_with(
+            "https://issuer/",
+            "cid",
+            "openid profile email offline_access",
+            audience=None,
+        )
+        ctx = api_client._oidc_login_context
+        assert ctx is not None
+        self.assertEqual(ctx["scope"], "openid profile email offline_access")
+
+    @patch("validmind.api_client._ping")
+    @patch("validmind.api_client._obtain_oidc_tokens")
     def test_init_oidc_uses_env_config(self, mock_obtain, mock_ping):
         mock_obtain.return_value = {
             "issuer": "https://env-issuer/",
