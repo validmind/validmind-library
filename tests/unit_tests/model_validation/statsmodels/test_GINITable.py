@@ -1,9 +1,11 @@
 import unittest
 import pandas as pd
 import numpy as np
+from sklearn.datasets import make_classification
 from sklearn.linear_model import LogisticRegression
 import validmind as vm
 from validmind import RawData
+from validmind.errors import SkipTestError
 from validmind.tests.model_validation.statsmodels.GINITable import GINITable
 
 
@@ -180,3 +182,61 @@ class TestGINITable(unittest.TestCase):
         self.assertAlmostEqual(
             results["GINI"].iloc[0], 2 * results["AUC"].iloc[0] - 1, places=5
         )
+
+
+class TestGINITableMulticlass(unittest.TestCase):
+    def setUp(self):
+        # 3-class target with real signal so per-class AUCs beat random.
+        X, y = make_classification(
+            n_samples=300,
+            n_features=5,
+            n_informative=4,
+            n_redundant=0,
+            n_classes=3,
+            n_clusters_per_class=1,
+            random_state=42,
+        )
+        df = pd.DataFrame(X, columns=[f"f{i}" for i in range(5)])
+        df["target"] = y
+
+        model = LogisticRegression(max_iter=1000)
+        model.fit(X, y)
+
+        self.vm_dataset = vm.init_dataset(
+            input_id="mc_dataset", dataset=df, target_column="target", __log=False
+        )
+        self.vm_model = vm.init_model(
+            input_id="mc_model", model=model, __log=False
+        )
+        self.vm_dataset.assign_predictions(self.vm_model)
+
+    def test_multiclass_one_vs_rest_rows(self):
+        results, raw_data = GINITable(self.vm_dataset, self.vm_model)
+
+        self.assertIsInstance(results, pd.DataFrame)
+        self.assertIsInstance(raw_data, RawData)
+
+        # One row per class + a micro-average row.
+        self.assertEqual(set(results["Class"]), {"0", "1", "2", "micro"})
+        self.assertEqual(len(results), 4)
+        for col in ("Class", "AUC", "GINI", "KS"):
+            self.assertIn(col, results.columns)
+
+        # Per-class and micro AUCs beat random, and GINI == 2*AUC - 1.
+        for _, row in results.iterrows():
+            self.assertGreater(row["AUC"], 0.5)
+            self.assertAlmostEqual(row["GINI"], 2 * row["AUC"] - 1, places=5)
+            self.assertGreaterEqual(row["KS"], 0.0)
+            self.assertLessEqual(row["KS"], 1.0)
+
+        # RawData carries per-class + micro fpr/tpr curves.
+        self.assertEqual(set(raw_data.fpr), {"0", "1", "2", "micro"})
+        self.assertEqual(set(raw_data.tpr), {"0", "1", "2", "micro"})
+
+    def test_multiclass_without_predict_proba_is_skipped(self):
+        # A model that can't produce a per-class probability matrix must skip,
+        # not crash. Shadow predict_proba on the estimator instance (predictions
+        # were already assigned in setUp, so nothing downstream needs it).
+        self.vm_model.model.predict_proba = None
+        with self.assertRaises(SkipTestError):
+            GINITable(self.vm_dataset, self.vm_model)

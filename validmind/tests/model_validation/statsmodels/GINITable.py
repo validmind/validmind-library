@@ -7,8 +7,10 @@ from typing import Tuple
 import numpy as np
 import pandas as pd
 from sklearn.metrics import roc_auc_score, roc_curve
+from sklearn.preprocessing import label_binarize
 
 from validmind import RawData, tags, tasks
+from validmind.errors import SkipTestError
 from validmind.vm_models import VMDataset, VMModel
 
 
@@ -58,12 +60,19 @@ def GINITable(dataset: VMDataset, model: VMModel) -> Tuple[pd.DataFrame, RawData
 
     - The GINI coefficient and KS statistic are both dependent on the AUC value. Therefore, any errors in the
     calculation of the latter will adversely impact the former metrics too.
-    - Mainly suited for binary classification models and may require modifications for effective application in
-    multi-class scenarios.
+    - For multiclass models the metrics are computed one-vs-rest (one row per class plus a micro-average row), which
+    requires per-class probabilities from the model's `predict_proba`. Models that cannot produce a full per-class
+    probability matrix (e.g. metadata-only models, or predictions supplied as a single precomputed probability column)
+    are skipped for the multiclass case rather than crashed.
     - The metrics used are threshold-dependent and may exhibit high variability based on the chosen cut-off points.
     - The test does not incorporate a method to efficiently handle missing or inefficiently processed data, which could
     lead to inaccuracies in the metrics if the data is not appropriately preprocessed.
     """
+    classes = np.unique(dataset.y)
+
+    if len(classes) > 2:
+        return _multiclass_gini_table(model, dataset, classes)
+
     y_true = np.ravel(dataset.y)  # Flatten y_true to make it one-dimensional
     y_prob = dataset.y_prob(model)
     y_true = np.array(y_true, dtype=float)
@@ -82,6 +91,84 @@ def GINITable(dataset: VMDataset, model: VMModel) -> Tuple[pd.DataFrame, RawData
     ), RawData(
         fpr=fpr,
         tpr=tpr,
+        y_true=y_true,
+        y_prob=y_prob,
+        model=model.input_id,
+        dataset=dataset.input_id,
+    )
+
+
+def _multiclass_gini_table(
+    model: VMModel, dataset: VMDataset, classes: np.ndarray
+) -> Tuple[pd.DataFrame, RawData]:
+    """One-vs-rest AUC/GINI/KS for a multiclass model.
+
+    Needs the full per-class probability matrix, which the stored single
+    probability column cannot provide, so we ask the underlying estimator for
+    it directly. Models without a usable ``predict_proba`` (metadata-only,
+    precomputed single-column probabilities) are skipped rather than crashed.
+    """
+    # The VMModel wrapper's y_prob is binary-only (positive-class column only),
+    # so reach the underlying estimator for the full per-class probability matrix.
+    raw_model = getattr(model, "model", None)
+    proba_fn = getattr(raw_model, "predict_proba", None)
+    if not callable(proba_fn):
+        raise SkipTestError(
+            "Multiclass GINITable requires per-class probabilities from the "
+            "underlying model's predict_proba, which is not available for this "
+            "model (e.g. metadata-only / precomputed predictions). Skipping."
+        )
+    try:
+        y_prob = np.asarray(proba_fn(dataset.x_df()))
+    except Exception as e:
+        raise SkipTestError(
+            "Multiclass GINITable could not compute per-class probabilities "
+            f"({type(e).__name__}). Skipping."
+        ) from e
+
+    n_classes = len(classes)
+    if y_prob.ndim != 2 or y_prob.shape[1] != n_classes:
+        raise SkipTestError(
+            "Multiclass GINITable requires a per-class probability matrix with "
+            f"one column per class (got shape {getattr(y_prob, 'shape', None)} "
+            f"for {n_classes} classes). Skipping."
+        )
+
+    # One-hot the true labels in the same class order predict_proba columns use
+    # (sklearn orders predict_proba columns by sorted class label == np.unique).
+    y_true = dataset.y.flatten()
+    y_bin = label_binarize(y_true, classes=classes)
+
+    rows = []
+    raw_fpr = {}
+    raw_tpr = {}
+    for i, cls in enumerate(classes):
+        fpr, tpr, _ = roc_curve(y_bin[:, i], y_prob[:, i])
+        auc = roc_auc_score(y_bin[:, i], y_prob[:, i])
+        key = str(cls)
+        raw_fpr[key] = fpr
+        raw_tpr[key] = tpr
+        rows.append(
+            {"Class": key, "AUC": auc, "GINI": 2 * auc - 1, "KS": max(tpr - fpr)}
+        )
+
+    # Micro-average across all one-vs-rest decisions.
+    micro_fpr, micro_tpr, _ = roc_curve(y_bin.ravel(), y_prob.ravel())
+    micro_auc = roc_auc_score(y_bin, y_prob, average="micro", multi_class="ovr")
+    raw_fpr["micro"] = micro_fpr
+    raw_tpr["micro"] = micro_tpr
+    rows.append(
+        {
+            "Class": "micro",
+            "AUC": micro_auc,
+            "GINI": 2 * micro_auc - 1,
+            "KS": max(micro_tpr - micro_fpr),
+        }
+    )
+
+    return pd.DataFrame(rows), RawData(
+        fpr=raw_fpr,
+        tpr=raw_tpr,
         y_true=y_true,
         y_prob=y_prob,
         model=model.input_id,
