@@ -7,11 +7,11 @@ from typing import Tuple
 import numpy as np
 import plotly.graph_objects as go
 from sklearn.metrics import roc_auc_score, roc_curve
-from sklearn.preprocessing import label_binarize
 
 from validmind import RawData, tags, tasks
-from validmind.errors import SkipTestError
 from validmind.vm_models import VMDataset, VMModel
+
+from ._multiclass_proba import multiclass_proba
 
 
 @tags(
@@ -76,7 +76,7 @@ def ROCCurve(model: VMModel, dataset: VMDataset) -> Tuple[go.Figure, RawData]:
     classes = np.unique(dataset.y)
 
     if len(classes) > 2:
-        return _multiclass_roc_curve(model, dataset, classes)
+        return _multiclass_roc_curve(model, dataset)
 
     y_prob = dataset.y_prob(model)
     y_true = dataset.y.astype(y_prob.dtype).flatten()
@@ -117,53 +117,27 @@ def ROCCurve(model: VMModel, dataset: VMDataset) -> Tuple[go.Figure, RawData]:
 
 
 def _multiclass_roc_curve(
-    model: VMModel, dataset: VMDataset, classes: np.ndarray
+    model: VMModel, dataset: VMDataset
 ) -> Tuple[go.Figure, RawData]:
     """One-vs-rest ROC curves for a multiclass model.
 
     Needs the full per-class probability matrix, which the stored single
-    probability column cannot provide, so we ask the model for it directly.
-    Models without a usable ``predict_proba`` (metadata-only, precomputed
-    single-column probabilities) are skipped rather than crashed.
+    probability column cannot provide; the shared helper reaches the underlying
+    estimator, aligns the probability columns to the training class order and
+    skips models that cannot supply a matching matrix.
     """
-    # The VMModel wrapper's predict_proba is binary-only (it returns just the
-    # positive-class column), so reach the underlying estimator for the full
-    # per-class probability matrix.
-    raw_model = getattr(model, "model", None)
-    proba_fn = getattr(raw_model, "predict_proba", None)
-    if not callable(proba_fn):
-        raise SkipTestError(
-            "Multiclass ROC Curve requires per-class probabilities from the "
-            "underlying model's predict_proba, which is not available for this "
-            "model (e.g. metadata-only / precomputed predictions). Skipping."
-        )
-    try:
-        y_prob = np.asarray(proba_fn(dataset.x_df()))
-    except Exception as e:
-        raise SkipTestError(
-            "Multiclass ROC Curve could not compute per-class probabilities "
-            f"({type(e).__name__}). Skipping."
-        ) from e
-
-    n_classes = len(classes)
-    if y_prob.ndim != 2 or y_prob.shape[1] != n_classes:
-        raise SkipTestError(
-            "Multiclass ROC Curve requires a per-class probability matrix with "
-            f"one column per class (got shape {getattr(y_prob, 'shape', None)} "
-            f"for {n_classes} classes). Skipping."
-        )
-
-    # One-hot the true labels in the same class order predict_proba columns use
-    # (sklearn orders predict_proba columns by sorted class label == np.unique).
-    y_true = dataset.y.flatten()
-    y_bin = label_binarize(y_true, classes=classes)
+    aligned = multiclass_proba(model, dataset, "ROC Curve")
+    y_bin = aligned.y_bin
+    y_prob = aligned.y_prob
 
     traces = []
     raw_fpr = {}
     raw_tpr = {}
     raw_auc = {}
     palette = ["#DE257E", "#1F77B4", "#2CA02C", "#FF7F0E", "#9467BD", "#8C564B"]
-    for i, cls in enumerate(classes):
+    for plot_i, (i, cls) in enumerate(
+        zip(aligned.present_indices, aligned.classes_present)
+    ):
         fpr, tpr, _ = roc_curve(y_bin[:, i], y_prob[:, i], drop_intermediate=False)
         auc = roc_auc_score(y_bin[:, i], y_prob[:, i])
         key = str(cls)
@@ -176,11 +150,14 @@ def _multiclass_roc_curve(
                 y=tpr,
                 mode="lines",
                 name=f"Class {key} (AUC = {auc:.2f})",
-                line=dict(color=palette[i % len(palette)]),
+                line=dict(color=palette[plot_i % len(palette)]),
             )
         )
 
-    # Micro-average across all one-vs-rest decisions.
+    # Micro-average across the one-vs-rest decisions of the present classes.
+    present = aligned.present_indices
+    y_bin = y_bin[:, present]
+    y_prob = y_prob[:, present]
     micro_fpr, micro_tpr, _ = roc_curve(y_bin.ravel(), y_prob.ravel())
     micro_auc = roc_auc_score(y_bin, y_prob, average="micro", multi_class="ovr")
     raw_fpr["micro"] = micro_fpr

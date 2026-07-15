@@ -7,10 +7,9 @@ from typing import Tuple
 import numpy as np
 import pandas as pd
 from sklearn.metrics import roc_auc_score, roc_curve
-from sklearn.preprocessing import label_binarize
 
 from validmind import RawData, tags, tasks
-from validmind.errors import SkipTestError
+from validmind.tests.model_validation.sklearn._multiclass_proba import multiclass_proba
 from validmind.vm_models import VMDataset, VMModel
 
 
@@ -71,7 +70,7 @@ def GINITable(dataset: VMDataset, model: VMModel) -> Tuple[pd.DataFrame, RawData
     classes = np.unique(dataset.y)
 
     if len(classes) > 2:
-        return _multiclass_gini_table(model, dataset, classes)
+        return _multiclass_gini_table(model, dataset)
 
     y_true = np.ravel(dataset.y)  # Flatten y_true to make it one-dimensional
     y_prob = dataset.y_prob(model)
@@ -99,50 +98,24 @@ def GINITable(dataset: VMDataset, model: VMModel) -> Tuple[pd.DataFrame, RawData
 
 
 def _multiclass_gini_table(
-    model: VMModel, dataset: VMDataset, classes: np.ndarray
+    model: VMModel, dataset: VMDataset
 ) -> Tuple[pd.DataFrame, RawData]:
     """One-vs-rest AUC/GINI/KS for a multiclass model.
 
     Needs the full per-class probability matrix, which the stored single
-    probability column cannot provide, so we ask the underlying estimator for
-    it directly. Models without a usable ``predict_proba`` (metadata-only,
-    precomputed single-column probabilities) are skipped rather than crashed.
+    probability column cannot provide; the shared helper reaches the underlying
+    estimator, aligns the probability columns to the training class order and
+    skips models that cannot supply a matching matrix.
     """
-    # The VMModel wrapper's y_prob is binary-only (positive-class column only),
-    # so reach the underlying estimator for the full per-class probability matrix.
-    raw_model = getattr(model, "model", None)
-    proba_fn = getattr(raw_model, "predict_proba", None)
-    if not callable(proba_fn):
-        raise SkipTestError(
-            "Multiclass GINITable requires per-class probabilities from the "
-            "underlying model's predict_proba, which is not available for this "
-            "model (e.g. metadata-only / precomputed predictions). Skipping."
-        )
-    try:
-        y_prob = np.asarray(proba_fn(dataset.x_df()))
-    except Exception as e:
-        raise SkipTestError(
-            "Multiclass GINITable could not compute per-class probabilities "
-            f"({type(e).__name__}). Skipping."
-        ) from e
-
-    n_classes = len(classes)
-    if y_prob.ndim != 2 or y_prob.shape[1] != n_classes:
-        raise SkipTestError(
-            "Multiclass GINITable requires a per-class probability matrix with "
-            f"one column per class (got shape {getattr(y_prob, 'shape', None)} "
-            f"for {n_classes} classes). Skipping."
-        )
-
-    # One-hot the true labels in the same class order predict_proba columns use
-    # (sklearn orders predict_proba columns by sorted class label == np.unique).
-    y_true = dataset.y.flatten()
-    y_bin = label_binarize(y_true, classes=classes)
+    aligned = multiclass_proba(model, dataset, "GINITable")
+    y_true = np.asarray(dataset.y).flatten()
+    y_bin = aligned.y_bin
+    y_prob = aligned.y_prob
 
     rows = []
     raw_fpr = {}
     raw_tpr = {}
-    for i, cls in enumerate(classes):
+    for i, cls in zip(aligned.present_indices, aligned.classes_present):
         fpr, tpr, _ = roc_curve(y_bin[:, i], y_prob[:, i])
         auc = roc_auc_score(y_bin[:, i], y_prob[:, i])
         key = str(cls)
@@ -152,9 +125,14 @@ def _multiclass_gini_table(
             {"Class": key, "AUC": auc, "GINI": 2 * auc - 1, "KS": max(tpr - fpr)}
         )
 
-    # Micro-average across all one-vs-rest decisions.
-    micro_fpr, micro_tpr, _ = roc_curve(y_bin.ravel(), y_prob.ravel())
-    micro_auc = roc_auc_score(y_bin, y_prob, average="micro", multi_class="ovr")
+    # Micro-average across the one-vs-rest decisions of the present classes.
+    present = aligned.present_indices
+    micro_fpr, micro_tpr, _ = roc_curve(
+        y_bin[:, present].ravel(), y_prob[:, present].ravel()
+    )
+    micro_auc = roc_auc_score(
+        y_bin[:, present], y_prob[:, present], average="micro", multi_class="ovr"
+    )
     raw_fpr["micro"] = micro_fpr
     raw_tpr["micro"] = micro_tpr
     rows.append(

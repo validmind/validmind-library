@@ -14,6 +14,8 @@ from validmind.errors import SkipTestError
 from validmind.logging import get_logger
 from validmind.vm_models import VMDataset, VMModel
 
+from ._multiclass_proba import multiclass_proba, proba_matrix
+
 logger = get_logger(__name__)
 
 _PSI_PALETTE = ["#DE257E", "#1F77B4", "#2CA02C", "#FF7F0E", "#9467BD", "#8C564B"]
@@ -104,54 +106,37 @@ def _psi_table_rows(psi_results):
     return rows_with_total, table_rows
 
 
-def _multiclass_psi(datasets, model, classes, num_bins, mode):
+def _multiclass_psi(datasets, model, num_bins, mode):
     """One-vs-rest PSI for a multiclass model.
 
     PSI needs a 1-D score distribution to compare across the two datasets. The
-    stored single probability column cannot represent every class, so we ask the
-    underlying estimator for the full per-class probability matrix (mirroring the
-    ROC/PR curve tests). Models without a usable ``predict_proba`` (metadata-only
-    / precomputed single-column predictions) are skipped rather than crashed.
+    stored single probability column cannot represent every class, so the shared
+    helper reaches the underlying estimator for the full per-class probability
+    matrix (mirroring the ROC/PR curve tests), aligning columns to the training
+    class order. The initial dataset drives the class alignment and the set of
+    classes actually present; the new dataset's matrix is validated against the
+    same class list. Models that cannot supply a matching matrix are skipped.
     """
-    raw_model = getattr(model, "model", None)
-    proba_fn = getattr(raw_model, "predict_proba", None)
-    if not callable(proba_fn):
-        raise SkipTestError(
-            "Multiclass Population Stability Index requires per-class "
-            "probabilities from the underlying model's predict_proba, which is "
-            "not available for this model (e.g. metadata-only / precomputed "
-            "predictions). Skipping."
-        )
-    try:
-        prob_initial = np.asarray(proba_fn(datasets[0].x_df()))
-        prob_new = np.asarray(proba_fn(datasets[1].x_df()))
-    except Exception as e:
-        raise SkipTestError(
-            "Multiclass Population Stability Index could not compute per-class "
-            f"probabilities ({type(e).__name__}). Skipping."
-        ) from e
+    aligned = multiclass_proba(model, datasets[0], "Population Stability Index")
+    prob_initial = aligned.y_prob
+    prob_new = proba_matrix(
+        model, datasets[1], aligned.class_list, "Population Stability Index"
+    )
 
-    n_classes = len(classes)
-    for prob in (prob_initial, prob_new):
-        if prob.ndim != 2 or prob.shape[1] != n_classes:
-            raise SkipTestError(
-                "Multiclass Population Stability Index requires a per-class "
-                f"probability matrix with one column per class (got shape "
-                f"{getattr(prob, 'shape', None)} for {n_classes} classes). Skipping."
-            )
+    classes_present = aligned.classes_present
+    n_present = len(classes_present)
 
-    # predict_proba columns are ordered by sorted class label == np.unique.
     fig = make_subplots(
-        rows=n_classes,
+        rows=n_present,
         cols=1,
-        specs=[[{"secondary_y": True}] for _ in range(n_classes)],
-        subplot_titles=[f"Class {cls}" for cls in classes],
+        specs=[[{"secondary_y": True}] for _ in range(n_present)],
+        subplot_titles=[f"Class {cls}" for cls in classes_present],
         vertical_spacing=0.08,
     )
 
     tables = {}
     raw_per_class = {}
-    for i, cls in enumerate(classes):
+    for plot_i, (i, cls) in enumerate(zip(aligned.present_indices, classes_present)):
         psi_results = calculate_psi(
             prob_initial[:, i].copy(),
             prob_new[:, i].copy(),
@@ -159,17 +144,17 @@ def _multiclass_psi(datasets, model, classes, num_bins, mode):
             mode=mode,
         )
         x = list(range(len(psi_results)))
-        color = _PSI_PALETTE[i % len(_PSI_PALETTE)]
+        color = _PSI_PALETTE[plot_i % len(_PSI_PALETTE)]
         fig.add_trace(
             go.Bar(
                 x=x,
                 y=[d["percent_initial"] for d in psi_results],
                 name="Initial",
                 marker=dict(color="#DE257E"),
-                showlegend=i == 0,
+                showlegend=plot_i == 0,
                 legendgroup="initial",
             ),
-            row=i + 1,
+            row=plot_i + 1,
             col=1,
             secondary_y=False,
         )
@@ -179,10 +164,10 @@ def _multiclass_psi(datasets, model, classes, num_bins, mode):
                 y=[d["percent_new"] for d in psi_results],
                 name="New",
                 marker=dict(color="#E8B1F8"),
-                showlegend=i == 0,
+                showlegend=plot_i == 0,
                 legendgroup="new",
             ),
-            row=i + 1,
+            row=plot_i + 1,
             col=1,
             secondary_y=False,
         )
@@ -192,10 +177,10 @@ def _multiclass_psi(datasets, model, classes, num_bins, mode):
                 y=[d["psi"] for d in psi_results],
                 name="PSI",
                 line=dict(color=color),
-                showlegend=i == 0,
+                showlegend=plot_i == 0,
                 legendgroup="psi",
             ),
-            row=i + 1,
+            row=plot_i + 1,
             col=1,
             secondary_y=True,
         )
@@ -211,7 +196,7 @@ def _multiclass_psi(datasets, model, classes, num_bins, mode):
     fig.update_layout(
         title="Population Stability Index (PSI) — one-vs-rest per class",
         barmode="group",
-        height=300 * n_classes,
+        height=300 * n_present,
     )
 
     return (
@@ -291,7 +276,7 @@ def PopulationStabilityIndex(
 
     classes = np.unique(datasets[0].y)
     if len(classes) > 2:
-        return _multiclass_psi(datasets, model, classes, num_bins, mode)
+        return _multiclass_psi(datasets, model, num_bins, mode)
 
     psi_results = calculate_psi(
         datasets[0].y_prob(model).copy(),
