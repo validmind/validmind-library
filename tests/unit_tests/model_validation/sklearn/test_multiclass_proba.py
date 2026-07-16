@@ -153,6 +153,46 @@ class TestMulticlassProbaSkips(unittest.TestCase):
         with self.assertRaises(SkipTestError):
             multiclass_proba(model, dataset, "GINITable")
 
+    def test_string_labels_with_int_trained_model_skip(self):
+        # Model trained on integer labels; the dataset's target column loads as
+        # strings (e.g. a CSV round-trip). String labels compare unequal to the
+        # integer class_list, so this must not quietly misalign label_binarize or
+        # mark classes absent -- it should skip loudly via the unknown-label guard,
+        # naming every label as unseen.
+        X, y = make_classification(
+            n_samples=400,
+            n_features=5,
+            n_informative=4,
+            n_redundant=0,
+            n_classes=3,
+            n_clusters_per_class=1,
+            random_state=42,
+        )
+        model = LogisticRegression(max_iter=1000).fit(X, y)
+
+        df = pd.DataFrame(X, columns=[f"f{i}" for i in range(5)])
+        df["target"] = y
+        df["target"] = df["target"].astype(str)
+
+        vm_dataset = vm.init_dataset(
+            input_id="ds_string_labels",
+            dataset=df,
+            target_column="target",
+            __log=False,
+        )
+        vm_model = vm.init_model(
+            input_id="model_string_labels", model=model, __log=False
+        )
+
+        with self.assertRaises(SkipTestError) as ctx:
+            multiclass_proba(vm_model, vm_dataset, "ROC Curve")
+
+        message = str(ctx.exception)
+        self.assertIn("not trained on", message)
+        self.assertIn("0", message)
+        self.assertIn("1", message)
+        self.assertIn("2", message)
+
 
 if __name__ == "__main__":
     unittest.main()

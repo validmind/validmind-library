@@ -19,7 +19,10 @@ align on ``classes_`` when available (falling back to ``np.unique``) so the
 probability columns line up, binarize against that full training class list to
 keep the columns aligned, and expose the subset of classes actually present in the
 evaluated dataset's ``y`` (a class with no positives has no defined ROC) so callers
-emit per-class output only for those.
+emit per-class output only for those. Consequently, callers that compute a
+micro-average pool only the present classes' aligned columns, so when a training
+class is absent from the evaluated slice the micro number deliberately excludes
+that class's column rather than pooling the full training-class matrix.
 """
 
 from typing import Any, List, NamedTuple
