@@ -317,7 +317,7 @@ def init(
             Can be set via env ``VM_OIDC_ISSUER``.
         client_id (str, optional): OAuth public client id for device flow. Can be
             set via env ``VM_OIDC_CLIENT_ID``.
-        scope (str, optional): OAuth scopes (default ``openid profile email``).
+        scope (str, optional): OAuth scopes (default ``openid profile email offline_access``).
             Can be set via env ``VM_OIDC_SCOPE``.
         audience (str, optional): Resource / API identifier for the access token
             (e.g. Auth0 API Identifier). Use the same value the ValidMind backend
@@ -392,7 +392,7 @@ def init(
         _api_key = None
         _api_secret = None
         _api_host = resolved_host
-        scope_val = oidc_scope or "openid profile email"
+        scope_val = oidc_scope or "openid profile email offline_access"
         from .credentials_store import normalize_audience
 
         oidc_audience_val = normalize_audience(
