@@ -263,6 +263,11 @@ def WeakspotsDiagnosis(
             "Column(s) provided in features_columns do not exist in the dataset"
         )
 
+    # Custom callables own their kwargs (e.g. partial(f1_score, average="weighted")),
+    # so averaging is only bound onto the defaults; rebinding user metrics would
+    # silently override their explicit averaging/pos_label choices.
+    using_default_metrics = metrics is None
+
     metrics, plot_thresholds, pass_thresholds = _prepare_metrics_and_thresholds(
         metrics, thresholds
     )
@@ -270,8 +275,9 @@ def WeakspotsDiagnosis(
     # Bind averaging options so label-based metrics work for multiclass targets and
     # for binary targets encoded outside {0, 1} (e.g. {0, 4}) instead of raising on
     # scikit-learn's default average="binary"/pos_label=1.
-    average, pos_label = _resolve_averaging(datasets, model)
-    metrics = _apply_averaging(metrics, average, pos_label)
+    if using_default_metrics:
+        average, pos_label = _resolve_averaging(datasets, model)
+        metrics = _apply_averaging(metrics, average, pos_label)
 
     results_headers = ["Slice", "Number of Records", "Feature"]
     results_headers.extend(metrics.keys())
