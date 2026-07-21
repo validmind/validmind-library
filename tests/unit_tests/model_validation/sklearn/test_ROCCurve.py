@@ -3,6 +3,8 @@ import numpy as np
 import pandas as pd
 import validmind as vm
 import plotly.graph_objects as go
+from sklearn.datasets import make_classification
+from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from validmind.tests.model_validation.sklearn.ROCCurve import ROCCurve
 
@@ -10,6 +12,53 @@ try:
     from xgboost import XGBClassifier
 except ImportError:
     XGBClassifier = None  # type: ignore[misc,assignment]
+
+
+class TestROCCurveMulticlassMissingClass(unittest.TestCase):
+    """A training class absent from the evaluated slice now computes (sklearn).
+
+    Uses LogisticRegression so it runs without the xgboost extra. The model is fit
+    on four classes; the dataset omits one, which previously tripped the shape
+    guard and skipped. Alignment on estimator.classes_ makes it compute instead.
+    """
+
+    def setUp(self):
+        X, y = make_classification(
+            n_samples=400,
+            n_features=5,
+            n_informative=4,
+            n_redundant=0,
+            n_classes=4,
+            n_clusters_per_class=1,
+            random_state=42,
+        )
+        model = LogisticRegression(max_iter=1000).fit(X, y)
+
+        df = pd.DataFrame(X, columns=[f"f{i}" for i in range(5)])
+        df["target"] = y
+        df = df[df["target"] != 3].reset_index(drop=True)
+
+        self.ds = vm.init_dataset(
+            input_id="mc_roc_missing", dataset=df, target_column="target", __log=False
+        )
+        self.model = vm.init_model(
+            input_id="mc_roc_missing_model", model=model, __log=False
+        )
+        self.ds.assign_predictions(self.model)
+
+    def test_missing_class_produces_present_curves_plus_micro(self):
+        fig, raw = ROCCurve(self.model, self.ds)
+        self.assertIsInstance(fig, go.Figure)
+        self.assertIsInstance(raw, vm.RawData)
+
+        names = [t.name for t in fig.data]
+        # 3 present-class curves + micro-average + random baseline = 5 traces.
+        self.assertEqual(len(fig.data), 5)
+        self.assertEqual(sum(n.startswith("Class ") for n in names), 3)
+        self.assertTrue(any(n.startswith("Micro-average") for n in names))
+
+        # Per-class RawData keyed by the present classes (no absent class 3) + micro.
+        self.assertEqual(set(raw.auc), {"0", "1", "2", "micro"})
 
 
 @unittest.skipUnless(XGBClassifier is not None, "xgboost optional extra required")

@@ -9,6 +9,58 @@ from validmind.errors import SkipTestError
 from validmind.tests.model_validation.statsmodels.GINITable import GINITable
 
 
+class TestGINITableMissingClass(unittest.TestCase):
+    """A class in training but absent from the evaluated slice now computes.
+
+    Previously the shape guard (4 predict_proba columns vs 3 dataset classes)
+    raised SkipTestError even though the one-vs-rest metrics are computable. With
+    training-class alignment the test produces a row per present class plus micro.
+    """
+
+    def setUp(self):
+        X, y = make_classification(
+            n_samples=400,
+            n_features=5,
+            n_informative=4,
+            n_redundant=0,
+            n_classes=4,
+            n_clusters_per_class=1,
+            random_state=42,
+        )
+        # Model sees all four classes.
+        model = LogisticRegression(max_iter=1000).fit(X, y)
+
+        # Dataset is a slice with class 3 removed.
+        df = pd.DataFrame(X, columns=[f"f{i}" for i in range(5)])
+        df["target"] = y
+        df = df[df["target"] != 3].reset_index(drop=True)
+
+        self.vm_dataset = vm.init_dataset(
+            input_id="mc_missing_dataset",
+            dataset=df,
+            target_column="target",
+            __log=False,
+        )
+        self.vm_model = vm.init_model(
+            input_id="mc_missing_model", model=model, __log=False
+        )
+        self.vm_dataset.assign_predictions(self.vm_model)
+
+    def test_missing_class_returns_present_rows_plus_micro(self):
+        results, raw_data = GINITable(self.vm_dataset, self.vm_model)
+
+        self.assertIsInstance(results, pd.DataFrame)
+        self.assertIsInstance(raw_data, RawData)
+
+        # 3 present classes (0, 1, 2) + micro; the absent class 3 has no row.
+        self.assertEqual(set(results["Class"]), {"0", "1", "2", "micro"})
+        self.assertEqual(len(results), 4)
+        self.assertNotIn("3", set(results["Class"]))
+
+        self.assertEqual(set(raw_data.fpr), {"0", "1", "2", "micro"})
+        self.assertEqual(set(raw_data.tpr), {"0", "1", "2", "micro"})
+
+
 class TestGINITable(unittest.TestCase):
     def setUp(self):
         """Set up test fixtures before each test method."""
