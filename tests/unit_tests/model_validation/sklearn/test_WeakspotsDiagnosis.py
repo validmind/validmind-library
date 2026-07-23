@@ -1,3 +1,4 @@
+import functools
 import unittest
 
 import numpy as np
@@ -284,6 +285,78 @@ class TestWeakspotsDiagnosisEndToEnd(unittest.TestCase):
             if checked:
                 break
         self.assertGreater(checked, 0)
+
+
+class TestWeakspotsDiagnosisCustomMetrics(unittest.TestCase):
+    """Follow-up to the #534 review: user-supplied custom metrics must keep their
+    own averaging. ``functools.partial(f1_score, average="weighted")`` still exposes
+    ``average`` via ``inspect.signature``, so the old unconditional ``_apply_averaging``
+    silently rebound it to the resolved default (macro/binary)."""
+
+    @staticmethod
+    def _first_nonempty_slice(dataset, model, feature):
+        """Return (region, y_true, y_pred) for the first non-empty bin of a feature,
+        mirroring WeakspotsDiagnosis' own binning so recomputation lines up."""
+        target = dataset.target_column
+        pred_col = dataset.prediction_column(model)
+        binned = dataset._df.copy()
+        binned["bin"] = pd.cut(binned[feature], bins=10)
+        for region, slice_df in binned.groupby("bin", observed=True):
+            if slice_df.empty:
+                continue
+            y_true = slice_df[target].values
+            y_pred = slice_df[pred_col].astype(slice_df[target].dtype).values
+            return region, y_true, y_pred
+        return None, None, None
+
+    def test_custom_metric_keeps_user_averaging(self):
+        # Multiclass target: the resolved default is macro averaging, so the old code
+        # rebound the user's weighted partial to macro. The results table must carry
+        # the user's *weighted* F1, not macro.
+        train, test, model = _train_test_pair("custom_weighted", [0, 1, 2])
+        weighted_f1 = functools.partial(skm.f1_score, average="weighted")
+        result = WeakspotsDiagnosis(
+            datasets=[train, test],
+            model=model,
+            metrics={"f1": weighted_f1},
+            thresholds={"f1": 0.5},
+        )
+        df = result[0]
+
+        feature = train.feature_columns[0]
+        region, y_true, y_pred = self._first_nonempty_slice(train, model, feature)
+        self.assertIsNotNone(region)
+        expected_weighted = weighted_f1(y_true, y_pred)
+        expected_macro = skm.f1_score(y_true, y_pred, average="macro")
+        # The scenario is only meaningful when the two averagings disagree.
+        self.assertNotAlmostEqual(expected_weighted, expected_macro)
+
+        row = df[
+            (df["Feature"] == feature)
+            & (df["Slice"] == str(region))
+            & (df["Dataset"] == train.input_id)
+        ]
+        self.assertAlmostEqual(row["F1"].iloc[0], expected_weighted)
+
+    def test_default_metrics_still_get_macro_rebinding(self):
+        # The defaults path must keep resolving/binding averaging: on a multiclass
+        # target the default F1 must equal macro (sklearn's binary default would
+        # raise), confirming the fix only skips rebinding for custom metrics.
+        train, test, model = _train_test_pair("default_macro", [0, 1, 2])
+        result = WeakspotsDiagnosis(datasets=[train, test], model=model)
+        df = result[0]
+
+        feature = train.feature_columns[0]
+        region, y_true, y_pred = self._first_nonempty_slice(train, model, feature)
+        self.assertIsNotNone(region)
+        expected_macro = skm.f1_score(y_true, y_pred, average="macro", zero_division=0)
+
+        row = df[
+            (df["Feature"] == feature)
+            & (df["Slice"] == str(region))
+            & (df["Dataset"] == train.input_id)
+        ]
+        self.assertAlmostEqual(row["F1"].iloc[0], expected_macro)
 
 
 if __name__ == "__main__":
