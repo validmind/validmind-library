@@ -186,6 +186,70 @@ class TestWeakspotsDiagnosisEndToEnd(unittest.TestCase):
         result = WeakspotsDiagnosis(datasets=[train, test], model=model)
         self.assertGreater(len(result[0]), 0)
 
+    def _all_positive_pair(self, name):
+        # Deterministic dataset for pass/fail scoping tests. Every feature slice
+        # is 2/3 positive and every row is predicted positive, so for each slice:
+        #   Accuracy = Precision = 0.667, Recall = 1.0, F1 = 0.8.
+        # With the default thresholds this fails only on Accuracy (< 0.75), while
+        # F1 (0.8) clears its 0.7 threshold. That makes an all-four pass/fail
+        # (False) disagree with an F1-only pass/fail (True), so the test tells
+        # correct scoping apart from mere crash avoidance.
+        n = 120
+        pattern = ([1, 1, 0] * (n // 3))[:n]
+        preds = [1] * n
+        train, model = _dataset_with_predictions(f"{name}_train", pattern, preds)
+        test, _ = _dataset_with_predictions(f"{name}_test", pattern, preds, model=model)
+        return train, test, model
+
+    def test_metrics_subset_without_thresholds_runs(self):
+        # Regression for sc-17267: a custom metrics dict that is a strict subset of
+        # the default metric names with no thresholds= previously raised
+        # "Unable to coerce to Series, length must be 1: given 4" because
+        # pass_thresholds still carried all four default keys.
+        train, test, model = self._all_positive_pair("subset_run")
+        result = WeakspotsDiagnosis(
+            datasets=[train, test],
+            model=model,
+            features_columns=["f1"],
+            metrics={"f1": skm.f1_score},
+        )
+        self.assertGreater(len(result[0]), 0)
+        self.assertIsInstance(result[-1], bool)
+
+    def test_metrics_subset_scopes_pass_fail_to_that_metric(self):
+        # The F1-only pass/fail must reflect only the F1 threshold. On this data
+        # the all-four default fails (Accuracy 0.667 < 0.75) while F1 (0.8) passes,
+        # so the two runs must disagree.
+        train, test, model = self._all_positive_pair("subset_scope")
+
+        default = WeakspotsDiagnosis(
+            datasets=[train, test], model=model, features_columns=["f1"]
+        )
+        f1_only = WeakspotsDiagnosis(
+            datasets=[train, test],
+            model=model,
+            features_columns=["f1"],
+            metrics={"f1": skm.f1_score},
+        )
+
+        self.assertFalse(default[-1])
+        self.assertTrue(f1_only[-1])
+
+    def test_metrics_subset_with_full_thresholds_runs(self):
+        # Supplying thresholds for metrics that are not computed must not raise:
+        # pass_columns narrows to the intersection with the requested metrics.
+        train, test, model = self._all_positive_pair("subset_full_thresh")
+        result = WeakspotsDiagnosis(
+            datasets=[train, test],
+            model=model,
+            features_columns=["f1"],
+            metrics={"f1": skm.f1_score},
+            thresholds={"accuracy": 0.9, "f1": 0.7},
+        )
+        # Only F1 (0.8 >= 0.7) is in scope, so the untriggered Accuracy threshold
+        # (0.9) must not fail the test.
+        self.assertTrue(result[-1])
+
     def test_standard_binary_matches_default_precision(self):
         # Backward compatibility: for {0, 1} the per-slice Precision values must be
         # identical to scikit-learn's default binary precision so existing reports

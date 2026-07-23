@@ -335,11 +335,10 @@ def WeakspotsDiagnosis(
         # For simplicity, test has failed if any of the metrics is below the threshold. We will
         # rely on visual assessment for this test for now.
         pass_columns = [c for c in pass_thresholds if c in metrics]
-        if (
-            pass_columns
-            and not df[df[pass_columns].lt(pass_thresholds).any(axis=1)].empty
-        ):
-            passed = False
+        if pass_columns:
+            thresholds_subset = {c: pass_thresholds[c] for c in pass_columns}
+            if not df[df[pass_columns].lt(thresholds_subset).any(axis=1)].empty:
+                passed = False
         results_1 = pd.concat([results_1, pd.DataFrame(r1)])
         results_2 = pd.concat([results_2, pd.DataFrame(r2)])
 
