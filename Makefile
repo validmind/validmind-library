@@ -67,7 +67,7 @@ version:
 	@:$(call check_defined, tag, new semver version tag to use on pyproject.toml)
 	@if echo "$(tag)" | grep -Eq '^(patch|minor|major)$$'; then uv version --bump $(tag); else uv version "$(tag)"; fi
 	@echo "__version__ = \"$$(uv version --short)\"" > validmind/__version__.py
-	@sed -i '' 's/^Version: .*/Version: '"$$(uv version --short)"'/' r/validmind/DESCRIPTION
+	@sed 's/^Version: .*/Version: '"$$(uv version --short)"'/' r/validmind/DESCRIPTION > r/validmind/DESCRIPTION.tmp && mv r/validmind/DESCRIPTION.tmp r/validmind/DESCRIPTION
 	@echo "Version updated to $$(uv version --short)"
 	@echo "Commiting changes to pyproject.toml, __version__.py and r/validmind/DESCRIPTION with message: $$(uv version --short)"
 	@git add pyproject.toml validmind/__version__.py r/validmind/DESCRIPTION
