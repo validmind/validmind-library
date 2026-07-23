@@ -2,7 +2,7 @@
 # Refer to the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
-"""Persist OIDC tokens for library authentication under ``~/.validmind/``."""
+"""OIDC token persistence helpers and normalization utilities."""
 
 from __future__ import annotations
 
@@ -11,9 +11,12 @@ import os
 import tempfile
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import TYPE_CHECKING, Any, Dict, Optional
 
 from .errors import ValidMindAuthError
+
+if TYPE_CHECKING:
+    from .credentials_backend import OidcCredentialsBackend
 
 _CREDENTIALS_VERSION = 1
 
@@ -108,18 +111,30 @@ def save_credentials_file(data: Dict[str, Any], path: Optional[Path] = None) -> 
     _atomic_write(path, data)
 
 
+def _resolve_backend(
+    backend: Optional[OidcCredentialsBackend] = None,
+    path: Optional[Path] = None,
+) -> OidcCredentialsBackend:
+    from .credentials_backend import FileCredentialsBackend, resolve_credentials_backend
+
+    if backend is not None:
+        return backend
+    if path is not None:
+        return FileCredentialsBackend(path=path)
+    return resolve_credentials_backend()
+
+
 def get_cached_entry(
     issuer: str,
     client_id: str,
     path: Optional[Path] = None,
     audience: Optional[str] = None,
+    *,
+    backend: Optional[OidcCredentialsBackend] = None,
 ) -> Optional[Dict[str, Any]]:
     key = credential_key(issuer, client_id, audience)
-    data = load_credentials_file(path)
-    entry = data.get("credentials", {}).get(key)
-    if not entry:
-        return None
-    return dict(entry)
+    store = _resolve_backend(backend=backend, path=path)
+    return store.get(key)
 
 
 def upsert_cached_entry(
@@ -128,12 +143,12 @@ def upsert_cached_entry(
     entry: Dict[str, Any],
     path: Optional[Path] = None,
     audience: Optional[str] = None,
+    *,
+    backend: Optional[OidcCredentialsBackend] = None,
 ) -> None:
     key = credential_key(issuer, client_id, audience)
     norm_issuer = normalize_issuer(issuer)
     aud = normalize_audience(audience)
-    data = load_credentials_file(path)
-    credentials = dict(data.get("credentials", {}))
     row = {
         "issuer": norm_issuer,
         "client_id": client_id,
@@ -141,9 +156,8 @@ def upsert_cached_entry(
     }
     if aud:
         row["audience"] = aud
-    credentials[key] = row
-    data["credentials"] = credentials
-    save_credentials_file(data, path)
+    store = _resolve_backend(backend=backend, path=path)
+    store.put(key, row)
 
 
 def delete_cached_entry(
@@ -151,13 +165,12 @@ def delete_cached_entry(
     client_id: str,
     path: Optional[Path] = None,
     audience: Optional[str] = None,
+    *,
+    backend: Optional[OidcCredentialsBackend] = None,
 ) -> None:
     key = credential_key(issuer, client_id, audience)
-    data = load_credentials_file(path)
-    credentials = dict(data.get("credentials", {}))
-    credentials.pop(key, None)
-    data["credentials"] = credentials
-    save_credentials_file(data, path)
+    store = _resolve_backend(backend=backend, path=path)
+    store.delete(key)
 
 
 def is_expired(entry: Dict[str, Any], skew_seconds: int = 120) -> bool:

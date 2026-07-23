@@ -79,7 +79,10 @@ api_client.init(issuer="...", client_id="...", model="...", api_host="...")
 
 ## 3. How the flow works (overview)
 
-1. **`vm.init(..., issuer=, client_id=, ...)`** loads cached tokens from `~/.validmind/credentials.json` (if present) for the normalized `(issuer, client_id)` — and optional audience — key.
+1. **`vm.init(..., issuer=, client_id=, ...)`** loads cached tokens from the active
+   :class:`~validmind.credentials_backend.OidcCredentialsBackend` (default:
+   `~/.validmind/credentials.json`) for the normalized `(issuer, client_id)` — and
+   optional audience — key.
 2. If there is a **valid access token**, it is reused.
 3. If the access token is expired but a **refresh token** is available, the library **refreshes** silently; on failure it clears that cache entry and continues.
 4. If no usable token exists, the library runs the **device authorization flow**:
@@ -103,6 +106,6 @@ Org and model access are enforced server-side: the user must be allowed to use t
 | API host / URL | Tracking API base (`api_host`, `api_url`, or `VM_API_HOST`) |
 | Scope | OAuth scopes (default `openid profile email offline_access`) |
 | Audience | Often needed so access tokens target the ValidMind API (`audience` or `VM_OIDC_AUDIENCE`) |
-| Credential file | `~/.validmind/credentials.json` (cached tokens; restrict like other secrets on shared machines) |
+| Credential file | `~/.validmind/credentials.json` by default; override with `credentials_backend`, `VM_OIDC_CREDENTIALS_BACKEND`, or `VM_OIDC_NO_PERSIST=1` |
 
-For implementation details in this repository, see `validmind/oidc_device.py`, `validmind/credentials_store.py`, and `validmind/api_client.py`.
+For implementation details in this repository, see `validmind/oidc_device.py`, `validmind/credentials_backend.py`, `validmind/credentials_store.py`, and `validmind/api_client.py`.
