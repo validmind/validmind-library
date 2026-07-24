@@ -11,6 +11,7 @@ import asyncio
 import atexit
 import json
 import os
+import threading
 from io import BytesIO
 from typing import Any, Dict, List, Optional, Tuple, Union
 from urllib.parse import urlencode, urljoin
@@ -42,6 +43,10 @@ _monitoring = False
 _auth_mode = "api_key"
 _access_token: Optional[str] = None
 _oidc_login_context: Optional[Dict[str, str]] = None
+# Expiry (ISO-8601) of the in-memory OIDC access token, for cheap request-path
+# staleness checks; guarded together with the token by _oidc_refresh_lock.
+_oidc_expires_at: Optional[str] = None
+_oidc_refresh_lock = threading.Lock()
 
 __api_session: Optional[aiohttp.ClientSession] = None
 
@@ -147,12 +152,21 @@ def _get_url(
 async def _get(
     endpoint: str, params: Optional[Dict[str, str]] = None
 ) -> Dict[str, Any]:
+    _ensure_fresh_oidc_token()
     url = _get_url(endpoint, params)
     session = _get_session()
 
     async with session.get(url) as r:
+        # A 401 can still slip through if the token was revoked ahead of its
+        # stated expiry; force a refresh and retry once (safe — GET has no body).
+        if r.status == 401 and _ensure_fresh_oidc_token(force=True):
+            session = _get_session()
+            async with session.get(url) as retry:
+                if retry.status != 200:
+                    _raise_for_api_error(retry.status, await retry.text())
+                return await retry.json()
         if r.status != 200:
-            raise_api_error(await r.text())
+            _raise_for_api_error(r.status, await r.text())
 
         return await r.json()
 
@@ -163,6 +177,7 @@ async def _post(
     data: Optional[Union[dict, FormData]] = None,
     files: Optional[Dict[str, Tuple[str, BytesIO, str]]] = None,
 ) -> Dict[str, Any]:
+    _ensure_fresh_oidc_token()
     url = _get_url(endpoint, params)
     session = _get_session()
 
@@ -186,20 +201,29 @@ async def _post(
         _data = data
 
     async with session.post(url, data=_data) as r:
+        # Not retried on 401: the request body / upload stream may already be
+        # consumed. Proactive refresh above covers the expiry case; a 401 here
+        # means a genuinely rejected token, surfaced as a clear auth error.
         if r.status != 200:
-            raise_api_error(await r.text())
+            _raise_for_api_error(r.status, await r.text())
 
         return await r.json()
 
 
 def _ping() -> Dict[str, Any]:
     """Validates that we can connect to the ValidMind API (does not use the async session)."""
+    _ensure_fresh_oidc_token()
     r = requests.get(
         url=_get_url("ping"),
         headers=_get_api_headers(),
     )
+    if r.status_code == 401 and _ensure_fresh_oidc_token(force=True):
+        r = requests.get(
+            url=_get_url("ping"),
+            headers=_get_api_headers(),
+        )
     if r.status_code != 200:
-        raise_api_error(r.text)
+        _raise_for_api_error(r.status_code, r.text)
 
     client_info = r.json()
 
@@ -224,6 +248,36 @@ def _ping() -> Dict[str, Any]:
         )
 
 
+def _refresh_oidc_from_cache(
+    issuer: str,
+    client_id: str,
+    refresh_token: str,
+    scope: Optional[str],
+    audience: Optional[str] = None,
+) -> Optional[Dict[str, Any]]:
+    """Exchange a cached refresh token for new tokens, persisting the result.
+
+    Shared by the ``init()`` path (``_obtain_oidc_tokens``) and the request path
+    (``_ensure_fresh_oidc_token``) so their refresh behaviour can't drift. On
+    success the refreshed entry is cached and returned. On a failed refresh (e.g.
+    revoked token / ``invalid_grant``) the stale entry is deleted and None is
+    returned, so a dead refresh token isn't re-attempted; the caller decides how
+    to recover (``init()`` falls back to device flow, the request path stops).
+    """
+    from .credentials_store import delete_cached_entry, upsert_cached_entry
+    from .oidc_device import try_refresh_cached_tokens
+
+    try:
+        new_tokens = try_refresh_cached_tokens(
+            issuer, client_id, refresh_token, scope, audience=audience
+        )
+    except ValidMindAuthError:
+        delete_cached_entry(issuer, client_id, audience=audience)
+        return None
+    upsert_cached_entry(issuer, client_id, new_tokens, audience=audience)
+    return new_tokens
+
+
 def _obtain_oidc_tokens(
     issuer: str,
     client_id: str,
@@ -232,14 +286,13 @@ def _obtain_oidc_tokens(
 ) -> Dict[str, Any]:
     """Return a credentials entry dict with access_token, expires_at, refresh_token, etc."""
     from .credentials_store import (
-        delete_cached_entry,
         get_cached_entry,
         is_expired,
         normalize_client_id,
         normalize_issuer,
         upsert_cached_entry,
     )
-    from .oidc_device import run_device_flow, try_refresh_cached_tokens
+    from .oidc_device import run_device_flow
 
     norm_issuer = normalize_issuer(issuer)
     norm_client_id = normalize_client_id(client_id)
@@ -247,20 +300,11 @@ def _obtain_oidc_tokens(
     if cached and not is_expired(cached):
         return cached
     if cached and cached.get("refresh_token"):
-        try:
-            new_tokens = try_refresh_cached_tokens(
-                norm_issuer,
-                norm_client_id,
-                cached["refresh_token"],
-                scope,
-                audience=audience,
-            )
-            upsert_cached_entry(
-                norm_issuer, norm_client_id, new_tokens, audience=audience
-            )
+        new_tokens = _refresh_oidc_from_cache(
+            norm_issuer, norm_client_id, cached["refresh_token"], scope, audience
+        )
+        if new_tokens is not None:
             return new_tokens
-        except ValidMindAuthError:
-            delete_cached_entry(norm_issuer, norm_client_id, audience=audience)
     tokens = run_device_flow(norm_issuer, norm_client_id, scope, audience=audience)
     upsert_cached_entry(norm_issuer, norm_client_id, tokens, audience=audience)
     return tokens
@@ -274,6 +318,100 @@ def _select_oidc_bearer_token(entry: Dict[str, Any]) -> str:
     if _is_entra_issuer(entry.get("issuer", "")) and entry.get("id_token"):
         return entry["id_token"]
     return entry["access_token"]
+
+
+def _set_oidc_access_token(entry: Dict[str, Any]) -> None:
+    """Adopt the bearer token from a credentials entry as the active token.
+
+    Records its expiry for cheap request-path staleness checks and drops the
+    pooled aiohttp session so the next request rebuilds it with the new token.
+    """
+    global _access_token, _oidc_expires_at
+    _access_token = _select_oidc_bearer_token(entry)
+    _oidc_expires_at = entry.get("expires_at")
+    _invalidate_async_session()
+
+
+def _clear_oidc_access_token() -> None:
+    """Drop the in-memory OIDC token and pooled session after an unrecoverable refresh.
+
+    Pairs with deleting the cached entry: with no usable token in memory, the next
+    request fails fast at header build with the clear "run vm.init()" error instead
+    of sending a doomed request just to get a 401 back.
+    """
+    global _access_token, _oidc_expires_at
+    _access_token = None
+    _oidc_expires_at = None
+    _invalidate_async_session()
+
+
+def _oidc_token_is_stale() -> bool:
+    """Cheap in-memory expiry check (no file I/O) using the 120s skew in is_expired."""
+    from .credentials_store import is_expired
+
+    return is_expired({"expires_at": _oidc_expires_at})
+
+
+def _ensure_fresh_oidc_token(force: bool = False) -> bool:
+    """Refresh the OIDC access token on the request path when it has expired.
+
+    The token captured at ``init()`` is otherwise reused unchanged for the life of
+    the process, so a session that outlives the provider's access-token lifetime
+    starts failing on every call until ``init()`` is re-run. This uses the cached
+    refresh token (requires ``offline_access``, the default scope) to obtain a new
+    access token in place. Returns True when a usable token is in place, False when
+    no refresh was possible (non-OIDC mode, no cached refresh token, or a failed
+    refresh — in which case the cached entry is dropped, matching init()).
+    """
+    if _auth_mode != "oidc" or _oidc_login_context is None:
+        return False
+    # Hot path: skip file I/O and the lock while the current token is still valid.
+    if not force and not _oidc_token_is_stale():
+        return True
+
+    from .credentials_store import get_cached_entry, is_expired
+
+    ctx = _oidc_login_context
+    issuer = ctx["issuer"]
+    client_id = ctx["client_id"]
+    scope = ctx.get("scope")
+    audience = ctx.get("audience") or None
+
+    with _oidc_refresh_lock:
+        entry = get_cached_entry(issuer, client_id, audience=audience)
+        if entry is None:
+            return False
+        # Another caller may have refreshed the token while we waited on the lock.
+        if not force and not is_expired(entry):
+            _set_oidc_access_token(entry)
+            return True
+        refresh_token = entry.get("refresh_token")
+        if not refresh_token:
+            return False
+        # Shared with init(): on failure the cached entry is dropped so a
+        # bad/revoked refresh token isn't re-attempted on every request. Recovery
+        # is re-running vm.init() (surfaced by the clear 401 auth error); unlike
+        # init() the request path can't fall back to interactive device flow.
+        new_tokens = _refresh_oidc_from_cache(
+            issuer, client_id, refresh_token, scope, audience
+        )
+        if new_tokens is None:
+            # Hard failure: the cache entry was dropped; clear the in-memory token
+            # too so the next request fails fast with the clear re-auth message.
+            _clear_oidc_access_token()
+            return False
+        _set_oidc_access_token(new_tokens)
+        return True
+
+
+def _raise_for_api_error(status: int, text: str) -> None:
+    """Raise a clear, actionable auth error for an OIDC 401, else defer to raise_api_error."""
+    if status == 401 and _auth_mode == "oidc":
+        raise ValidMindAuthError(
+            "ValidMind rejected the OAuth access token (HTTP 401); it may have "
+            "expired or been revoked. Run vm.init() again to re-authenticate."
+        )
+    raise_api_error(text)
 
 
 def init(
@@ -330,7 +468,7 @@ def init(
         ValidMindAuthError: If OIDC configuration conflicts or login fails.
     """
     global _api_key, _api_secret, _api_host, _model_cuid, _monitoring, _document
-    global _auth_mode, _access_token, _oidc_login_context
+    global _auth_mode, _access_token, _oidc_login_context, _oidc_expires_at
 
     if api_key == "...":
         # special case to detect when running a notebook placeholder (...)
@@ -402,20 +540,21 @@ def init(
         entry = _obtain_oidc_tokens(
             oidc_issuer, oidc_client_id, scope_val, audience=oidc_audience_opt
         )
-        _access_token = _select_oidc_bearer_token(entry)
         _oidc_login_context = {
             "issuer": entry["issuer"],
             "client_id": entry["client_id"],
             "scope": scope_val,
             "audience": entry.get("audience") or oidc_audience_val,
         }
-        _invalidate_async_session()
+        # Sets _access_token / _oidc_expires_at and invalidates the async session.
+        _set_oidc_access_token(entry)
     else:
         if env_key is None or env_secret is None:
             raise MissingAPICredentialsError()
         _auth_mode = "api_key"
         _access_token = None
         _oidc_login_context = None
+        _oidc_expires_at = None
         _api_key = env_key
         _api_secret = env_secret
         _api_host = resolved_host
@@ -656,6 +795,7 @@ def _validate_log_text_context(
 
 def generate_qualitative_text(text_generation_data: Dict[str, Any]) -> Dict[str, Any]:
     """Generate qualitative text using the ValidMind AI API."""
+    _ensure_fresh_oidc_token()
     r = requests.post(
         url=_get_url("ai/generate/qualitative_text_generation"),
         headers=_get_api_headers(),
@@ -663,7 +803,7 @@ def generate_qualitative_text(text_generation_data: Dict[str, Any]) -> Dict[str,
     )
 
     if r.status_code != 200:
-        raise_api_error(r.text)
+        _raise_for_api_error(r.status_code, r.text)
 
     return r.json()
 
@@ -901,6 +1041,7 @@ def log_metric(
 
 
 def generate_test_result_description(test_result_data: Dict[str, Any]) -> str:
+    _ensure_fresh_oidc_token()
     r = requests.post(
         url=_get_url("ai/generate/test_result_description"),
         headers=_get_api_headers(),
@@ -908,6 +1049,6 @@ def generate_test_result_description(test_result_data: Dict[str, Any]) -> str:
     )
 
     if r.status_code != 200:
-        raise_api_error(r.text)
+        _raise_for_api_error(r.status_code, r.text)
 
     return r.json()
