@@ -789,6 +789,37 @@ class TestAPIClientOIDC(unittest.TestCase):
             api_client._raise_for_api_error(401, "unauthorized")
         self.assertIn("vm.init()", str(ctx.exception))
 
+    def test_locked_caller_adopts_concurrently_refreshed_token(self):
+        # Models the "losing" caller in a refresh race deterministically: it saw
+        # a stale token (so the cheap hot-path check is bypassed and it enters
+        # the locked section), but by the time it holds the lock another caller
+        # has already refreshed and persisted a fresh token. The in-lock re-check
+        # must make it adopt that token rather than issue a second refresh — this
+        # is what collapses a stampede to a single token-endpoint call. (Mutual
+        # exclusion itself is threading.Lock's job and isn't re-tested here.)
+        self._init_oidc(access_token="old-tok", expires_at="2000-01-01T00:00:00+00:00")
+        # In-memory expiry is stale, so the cheap check is bypassed and control
+        # reaches the locked section, exactly as a contended caller would.
+        self.assertTrue(api_client._oidc_token_is_stale())
+
+        fresh_entry = {
+            "issuer": "https://issuer.example.com/",
+            "client_id": "cid",
+            "access_token": "new-tok",
+            "expires_at": "2099-01-01T00:00:00+00:00",
+            "refresh_token": "refresh-token-2",
+        }
+        with (
+            patch(
+                "validmind.credentials_store.get_cached_entry", return_value=fresh_entry
+            ),
+            patch("validmind.oidc_device.try_refresh_cached_tokens") as mock_refresh,
+        ):
+            self.assertTrue(api_client._ensure_fresh_oidc_token())
+            mock_refresh.assert_not_called()
+        # Adopted the token another caller already refreshed, no second fetch.
+        self.assertEqual(api_client._access_token, "new-tok")
+
 
 if __name__ == "__main__":
     unittest.main()
