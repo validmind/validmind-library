@@ -24,7 +24,6 @@ from validmind.errors import (
 from validmind.utils import md_to_html
 from validmind.vm_models.figure import Figure
 
-
 loop = asyncio.new_event_loop()
 
 
@@ -391,6 +390,50 @@ class TestAPIClient(unittest.TestCase):
                 content_id="dataset_summary_text",
                 context={"content_ids": ["valid", ""]},
             )
+
+    # -- request-path refresh wiring (ZD-682) -----------------------------
+    # These assert the request wrappers actually invoke the refresh hook and
+    # that the 401 retry fires end-to-end, complementing the unit tests that
+    # exercise _ensure_fresh_oidc_token in isolation.
+
+    @patch("validmind.api_client._ensure_fresh_oidc_token")
+    @patch("aiohttp.ClientSession.get")
+    def test_get_refreshes_before_request_and_retries_on_401(
+        self, mock_get, mock_ensure
+    ):
+        mock_ensure.return_value = True  # forced refresh reports success -> retry
+        mock_get.side_effect = [
+            MockAsyncResponse(401, text="unauthorized"),
+            MockAsyncResponse(200, json={"ok": True}),
+        ]
+        result = self.run_async(api_client._get, "endpoint")
+        self.assertEqual(result, {"ok": True})
+        self.assertEqual(mock_get.call_count, 2)
+        self.assertEqual(mock_ensure.call_count, 2)
+        mock_ensure.assert_any_call(force=True)
+
+    @patch("validmind.api_client._ensure_fresh_oidc_token")
+    @patch("aiohttp.ClientSession.post")
+    def test_post_refreshes_before_request(self, mock_post, mock_ensure):
+        mock_post.return_value = MockAsyncResponse(200, json={"ok": True})
+        result = self.run_async(api_client._post, "endpoint", data={"a": "b"})
+        self.assertEqual(result, {"ok": True})
+        mock_ensure.assert_called_once_with()
+
+    @patch("validmind.api_client._ensure_fresh_oidc_token")
+    @patch("requests.get")
+    def test_ping_refreshes_before_request_and_retries_on_401(
+        self, mock_get, mock_ensure
+    ):
+        mock_ensure.return_value = True
+        mock_get.side_effect = [
+            MockResponse(401, text="unauthorized"),
+            MockResponse(200, json={"model": {"name": "n", "cuid": "c"}}),
+        ]
+        api_client._ping()
+        self.assertEqual(mock_get.call_count, 2)
+        self.assertEqual(mock_ensure.call_count, 2)
+        mock_ensure.assert_any_call(force=True)
 
 
 class TestAPIClientOIDC(unittest.TestCase):
@@ -819,6 +862,33 @@ class TestAPIClientOIDC(unittest.TestCase):
             mock_refresh.assert_not_called()
         # Adopted the token another caller already refreshed, no second fetch.
         self.assertEqual(api_client._access_token, "new-tok")
+
+    def test_ensure_fresh_oidc_token_drops_cache_on_refresh_failure(self):
+        # On a failed refresh (e.g. revoked refresh token / invalid_grant), the
+        # cached entry is deleted so it isn't re-attempted on every request —
+        # matching init()'s _obtain_oidc_tokens.
+        self._init_oidc(expires_at="2000-01-01T00:00:00+00:00")
+        expired = {
+            "issuer": "https://issuer.example.com/",
+            "client_id": "cid",
+            "access_token": "old-tok",
+            "expires_at": "2000-01-01T00:00:00+00:00",
+            "refresh_token": "refresh-token",
+        }
+        with (
+            patch("validmind.credentials_store.get_cached_entry", return_value=expired),
+            patch("validmind.credentials_store.delete_cached_entry") as mock_delete,
+            patch(
+                "validmind.oidc_device.try_refresh_cached_tokens",
+                side_effect=ValidMindAuthError("invalid_grant"),
+            ),
+        ):
+            self.assertFalse(api_client._ensure_fresh_oidc_token())
+            mock_delete.assert_called_once()
+        # In-memory token is cleared too, so the next request fails fast at header
+        # build with the re-auth message rather than sending a doomed request.
+        self.assertIsNone(api_client._access_token)
+        self.assertIsNone(api_client._oidc_expires_at)
 
 
 if __name__ == "__main__":
