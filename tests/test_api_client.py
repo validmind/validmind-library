@@ -281,7 +281,9 @@ class TestAPIClient(unittest.TestCase):
             200,
             json={
                 "content_id": "dataset_summary_text",
-                "text": md_to_html("## Generated Summary\nGenerated content.", mathml=True),
+                "text": md_to_html(
+                    "## Generated Summary\nGenerated content.", mathml=True
+                ),
             },
         )
 
@@ -655,6 +657,137 @@ class TestAPIClientOIDC(unittest.TestCase):
             document="documentation",
         )
         self.assertEqual(api_client.get_api_host(), "http://localhost/from-api-url/")
+
+    # -- request-path token refresh (ZD-682) ------------------------------
+
+    def _init_oidc(
+        self,
+        *,
+        access_token="tok",
+        expires_at,
+        refresh_token="refresh-token",
+        issuer="https://issuer.example.com/",
+    ):
+        """Put the client in OIDC mode with a chosen token expiry."""
+        with (
+            patch("validmind.api_client._ping"),
+            patch("validmind.api_client._obtain_oidc_tokens") as mock_obtain,
+        ):
+            mock_obtain.return_value = {
+                "issuer": issuer,
+                "client_id": "cid",
+                "access_token": access_token,
+                "expires_at": expires_at,
+                "refresh_token": refresh_token,
+                "id_token": None,
+            }
+            api_client.init(
+                model="model-cuid",
+                api_host="http://localhost/track/",
+                api_key="",
+                api_secret="",
+                issuer=issuer,
+                client_id="cid",
+                document="documentation",
+            )
+
+    def test_ensure_fresh_oidc_token_noop_when_token_valid(self):
+        self._init_oidc(expires_at="2099-01-01T00:00:00+00:00")
+        with patch("validmind.oidc_device.try_refresh_cached_tokens") as mock_refresh:
+            self.assertTrue(api_client._ensure_fresh_oidc_token())
+            mock_refresh.assert_not_called()
+        self.assertEqual(api_client._access_token, "tok")
+
+    def test_ensure_fresh_oidc_token_refreshes_when_expired(self):
+        self._init_oidc(access_token="old-tok", expires_at="2000-01-01T00:00:00+00:00")
+        entry = {
+            "issuer": "https://issuer.example.com/",
+            "client_id": "cid",
+            "access_token": "old-tok",
+            "expires_at": "2000-01-01T00:00:00+00:00",
+            "refresh_token": "refresh-token",
+        }
+        new_tokens = {
+            "issuer": "https://issuer.example.com/",
+            "client_id": "cid",
+            "access_token": "new-tok",
+            "expires_at": "2099-01-01T00:00:00+00:00",
+            "refresh_token": "refresh-token-2",
+        }
+        with (
+            patch("validmind.credentials_store.get_cached_entry", return_value=entry),
+            patch("validmind.credentials_store.upsert_cached_entry") as mock_upsert,
+            patch(
+                "validmind.oidc_device.try_refresh_cached_tokens",
+                return_value=new_tokens,
+            ) as mock_refresh,
+        ):
+            self.assertTrue(api_client._ensure_fresh_oidc_token())
+            mock_refresh.assert_called_once()
+            mock_upsert.assert_called_once()
+        self.assertEqual(api_client._access_token, "new-tok")
+
+    def test_ensure_fresh_oidc_token_force_refreshes_valid_token(self):
+        # Backstop for the reactive-401 path: force refresh even when unexpired.
+        self._init_oidc(access_token="old-tok", expires_at="2099-01-01T00:00:00+00:00")
+        entry = {
+            "issuer": "https://issuer.example.com/",
+            "client_id": "cid",
+            "access_token": "old-tok",
+            "expires_at": "2099-01-01T00:00:00+00:00",
+            "refresh_token": "refresh-token",
+        }
+        new_tokens = {
+            "issuer": "https://issuer.example.com/",
+            "client_id": "cid",
+            "access_token": "new-tok",
+            "expires_at": "2099-01-01T00:00:00+00:00",
+            "refresh_token": "refresh-token-2",
+        }
+        with (
+            patch("validmind.credentials_store.get_cached_entry", return_value=entry),
+            patch("validmind.credentials_store.upsert_cached_entry"),
+            patch(
+                "validmind.oidc_device.try_refresh_cached_tokens",
+                return_value=new_tokens,
+            ) as mock_refresh,
+        ):
+            self.assertTrue(api_client._ensure_fresh_oidc_token(force=True))
+            mock_refresh.assert_called_once()
+        self.assertEqual(api_client._access_token, "new-tok")
+
+    def test_ensure_fresh_oidc_token_returns_false_without_refresh_token(self):
+        self._init_oidc(expires_at="2000-01-01T00:00:00+00:00", refresh_token=None)
+        entry = {
+            "issuer": "https://issuer.example.com/",
+            "client_id": "cid",
+            "access_token": "tok",
+            "expires_at": "2000-01-01T00:00:00+00:00",
+            "refresh_token": None,
+        }
+        with (
+            patch("validmind.credentials_store.get_cached_entry", return_value=entry),
+            patch("validmind.oidc_device.try_refresh_cached_tokens") as mock_refresh,
+        ):
+            self.assertFalse(api_client._ensure_fresh_oidc_token())
+            mock_refresh.assert_not_called()
+
+    def test_ensure_fresh_oidc_token_noop_in_api_key_mode(self):
+        with patch("validmind.api_client._ping"):
+            api_client.init(
+                api_key=os.environ["VM_API_KEY"],
+                api_secret=os.environ["VM_API_SECRET"],
+                api_host=os.environ["VM_API_HOST"],
+                model=os.environ["VM_API_MODEL"],
+                document="documentation",
+            )
+        self.assertFalse(api_client._ensure_fresh_oidc_token())
+
+    def test_raise_for_api_error_gives_clear_message_on_oidc_401(self):
+        self._init_oidc(expires_at="2099-01-01T00:00:00+00:00")
+        with self.assertRaises(ValidMindAuthError) as ctx:
+            api_client._raise_for_api_error(401, "unauthorized")
+        self.assertIn("vm.init()", str(ctx.exception))
 
 
 if __name__ == "__main__":
