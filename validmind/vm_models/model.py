@@ -187,10 +187,12 @@ def is_pytorch_model(model):
     Checks if the model is a PyTorch model. Need to extend this
     method to check for all ways a PyTorch model can be created
     """
-    # if we can't import torch, then it's not a PyTorch model
+    # if we can't import torch, then it's not a PyTorch model. Broken torch
+    # installs can fail with errors other than ImportError (e.g. OSError
+    # WinError 1114 when a native DLL fails to load on Windows)
     try:
         import torch.nn as nn
-    except ImportError:
+    except Exception:
         return False
 
     # return False
