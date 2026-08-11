@@ -14,12 +14,22 @@ DOCUMENT_TYPES = {
     "3": "monitoring",
 }
 
+RECORD_TYPES = {
+    "1": "Model",
+    "2": "Agent",
+    "3": "Use Case",
+    "4": "Tool",
+}
+
+DEFAULT_RECORD_TYPE = "Model"
+
 INSTALL_CHOICE = {
     "1": "install_only",
     "2": "install_and_initialize",
 }
 
 _selected_document: Optional[str] = None
+_selected_record: Optional[str] = None
 _selected_install: Optional[str] = None
 
 def ensure_ids(notebook):
@@ -319,6 +329,96 @@ def select_document():
     print(f"Selected: {labels[_selected_document]}")
     return _selected_document
 
+
+def select_record_type(
+    *,
+    input_func: Callable[[str], str] = input,
+    print_func: Callable[[str], None] = print,
+    record_type_value: Optional[str] = None,
+) -> Optional[str]:
+    """Requests the inventory record type used to fill `{record-type}` placeholders.
+
+    Fixed options are Model, Agent, Use Case, and Tool. Users can also enter a
+    custom value. Pressing Enter with no input defaults to Model.
+
+    Stores the selection in the module-level `_selected_record` variable for
+    downstream placeholder replacement.
+
+    Returns:
+        The selected record type string.
+    """
+    global _selected_record
+
+    if record_type_value is not None:
+        selected = record_type_value.strip() or DEFAULT_RECORD_TYPE
+        _selected_record = selected
+        print_func(f"Selected record type: {_selected_record}")
+        return _selected_record
+
+    choice = input_func(
+        "Select an inventory record type — "
+        "[1: Model (default)], "
+        "[2: Agent], "
+        "[3: Use Case], "
+        "[4: Tool], "
+        "[5: Custom (enter free text)], "
+        "or press Enter for Model: "
+    ).strip()
+
+    if not choice:
+        selected = DEFAULT_RECORD_TYPE
+    elif choice in RECORD_TYPES:
+        selected = RECORD_TYPES[choice]
+    elif choice == "5":
+        custom = input_func("Enter a custom inventory record type: ").strip()
+        if not custom:
+            print_func(
+                f"No custom value entered; defaulting to {DEFAULT_RECORD_TYPE}."
+            )
+            selected = DEFAULT_RECORD_TYPE
+        else:
+            selected = custom
+    else:
+        # Allow typing a known label or any free-text record type directly.
+        selected = choice
+
+    _selected_record = selected
+    print_func(f"Selected record type: {_selected_record}")
+    return _selected_record
+
+
+def replace_record_type(
+    filepath: str,
+    *,
+    record_type_value: Optional[str] = None,
+    print_func: Callable[[str], None] = print,
+) -> None:
+    """Replace `{record-type}` placeholders in a notebook file.
+
+    Uses `record_type_value` when provided; otherwise falls back to the value
+    stored by `select_record_type()`. Defaults to Model when neither is set.
+    """
+    value = (record_type_value or _selected_record or DEFAULT_RECORD_TYPE).strip()
+    if not value:
+        value = DEFAULT_RECORD_TYPE
+
+    try:
+        with open(filepath, "r", encoding="utf-8") as f:
+            content = f.read()
+
+        if "{record-type}" not in content:
+            return
+
+        content = content.replace("{record-type}", value)
+        with open(filepath, "w", encoding="utf-8") as f:
+            if not content.endswith("\n"):
+                content += "\n"
+            f.write(content)
+        print_func(f"Replaced {{record-type}} with '{value}' in '{filepath}'")
+    except Exception as e:
+        print_func(f"Error replacing record type placeholders in file: {e}")
+
+
 def add_about(filepath):
     """Appends an about-validmind notebook based on the document type selected via select_document()."""
     about_files = {
@@ -609,6 +709,7 @@ def _append_notebook(filepath, relative_path):
         print(f"Error appending notebooks: {e}")
         return False
 
+    replace_record_type(filepath)
     return True
 
 
@@ -744,6 +845,7 @@ if __name__ == "__main__":
     if filepath:
         set_title(filepath)
         select_document()
+        select_record_type()
         add_about(filepath)
         select_install()
         add_install(filepath)
