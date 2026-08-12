@@ -43,7 +43,7 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ['3.9', '3.10', '3.11', '3.12', '3.13', '3.14']
-        deps-type: ['max', 'default']
+        deps-type: ['max', 'default', 'core']
 
     steps:
       - uses: actions/checkout@v4
@@ -79,7 +79,17 @@ jobs:
           export OMP_NUM_THREADS=1
           export MKL_NUM_THREADS=1
 
-          if [[ "${{ matrix.deps-type }}" == "default" ]]; then
+          if [[ "${{ matrix.deps-type }}" == "core" ]]; then
+            # Exercise the unbounded core dependency set separately from the
+            # constrained optional extras (for example, latest scikit-learn).
+            WHEEL=$(ls dist/*.whl | head -n 1)
+            # Jinja2 is currently imported by the library but is only present
+            # transitively through optional extras. Install it as test tooling
+            # so this leg can exercise the otherwise unbounded core set.
+            python -m pip install "${WHEEL}" jinja2
+            pip check
+            python -m tests.test_unit_tests | cat
+          elif [[ "${{ matrix.deps-type }}" == "default" ]]; then
             # Install only from built artifacts (let pip resolve deps normally)
             WHEEL=$(ls dist/*.whl | head -n 1)
             python -m pip install "${WHEEL}[all]"
