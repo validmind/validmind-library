@@ -69,8 +69,8 @@ version:
 	@echo "__version__ = \"$$(uv version --short)\"" > validmind/__version__.py
 	@sed 's/^Version: .*/Version: '"$$(uv version --short)"'/' r/validmind/DESCRIPTION > r/validmind/DESCRIPTION.tmp && mv r/validmind/DESCRIPTION.tmp r/validmind/DESCRIPTION
 	@echo "Version updated to $$(uv version --short)"
-	@echo "Commiting changes to pyproject.toml, __version__.py and r/validmind/DESCRIPTION with message: $$(uv version --short)"
-	@git add pyproject.toml validmind/__version__.py r/validmind/DESCRIPTION
+	@echo "Committing changes to pyproject.toml, uv.lock, __version__.py and r/validmind/DESCRIPTION with message: $$(uv version --short)"
+	@git add pyproject.toml uv.lock validmind/__version__.py r/validmind/DESCRIPTION
 	@git commit -m "$$(uv version --short)"
 
 generate-test-id-types:

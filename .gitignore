@@ -189,12 +189,8 @@ lending_club_loan_data_*.csv
 
 # Pickle files
 *.pkl
-# Sample application scorecard model for validation notebook — do not remove!
-!notebooks/use_cases/validation/xgb_model_champion.pkl
 # Sample logistic regression model for validation series — do not remove!
 !notebooks/tutorials/validation/lr_model_champion.pkl
-# Sample XGBoost model for validation quickstart — do not remove!
-!notebooks/quickstart/xgboost_model_champion.pkl
 
 notebooks/llm/datasets/*.jsonl
 
