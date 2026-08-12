@@ -88,12 +88,7 @@ jobs:
             # so this leg can exercise the otherwise unbounded core set.
             python -m pip install "${WHEEL}" jinja2
             pip check
-            python - <<'PY'
-            import sklearn
-            import validmind
-
-            print(f"ValidMind {validmind.__version__} with scikit-learn {sklearn.__version__}")
-            PY
+            python -c 'import sklearn, validmind; print(f"ValidMind {validmind.__version__} with scikit-learn {sklearn.__version__}")'
             python -m unittest \
               tests.unit_tests.model_validation.sklearn.test_ROCCurve \
               tests.unit_tests.model_validation.sklearn.test_PrecisionRecallCurve \
