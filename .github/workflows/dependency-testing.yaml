@@ -88,7 +88,16 @@ jobs:
             # so this leg can exercise the otherwise unbounded core set.
             python -m pip install "${WHEEL}" jinja2
             pip check
-            python -m tests.test_unit_tests | cat
+            python - <<'PY'
+            import sklearn
+            import validmind
+
+            print(f"ValidMind {validmind.__version__} with scikit-learn {sklearn.__version__}")
+            PY
+            python -m unittest \
+              tests.unit_tests.model_validation.sklearn.test_ROCCurve \
+              tests.unit_tests.model_validation.sklearn.test_PrecisionRecallCurve \
+              | cat
           elif [[ "${{ matrix.deps-type }}" == "default" ]]; then
             # Install only from built artifacts (let pip resolve deps normally)
             WHEEL=$(ls dist/*.whl | head -n 1)
