@@ -38,7 +38,7 @@ from .template import preview_template as _preview_template
 from .test_suites import get_by_id as get_test_suite_by_id
 from .tests.run import _get_run_metadata
 from .utils import display as vm_display
-from .utils import get_dataset_info, get_model_info
+from .utils import get_dataset_info, get_model_info, is_html
 from .vm_models import TestSuite, TestSuiteRunner
 from .vm_models.dataset import DataFrameDataset, PolarsDataset, TorchDataset, VMDataset
 from .vm_models.html_progress import HTMLLabel, HTMLProgressBar
@@ -479,8 +479,11 @@ def run_text_generation(
         A TextGenerationResult containing the generated text.
     """
     start_time = time.perf_counter()
-    description = api_client._generate_log_text(
+    description_source = api_client._generate_log_text_source(
         content_id, prompt, context, section_id=section_id
+    )
+    description = api_client._normalize_logged_text(
+        description_source, "generated text"
     )
     metadata = _get_run_metadata(duration_seconds=time.perf_counter() - start_time)
     result = TextGenerationResult(
@@ -494,6 +497,9 @@ def run_text_generation(
         section_id=section_id,
         context=context,
         _was_description_generated=True,
+        _description_source=(
+            description_source if not is_html(description_source) else None
+        ),
     )
 
     if show:

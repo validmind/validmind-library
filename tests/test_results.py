@@ -20,6 +20,8 @@ from validmind.vm_models.result.utils import (
 
 from validmind.vm_models.figure import Figure
 from validmind.errors import InvalidParameterError
+from validmind.tests.run import run_test
+from validmind.utils import md_to_html
 
 loop = asyncio.new_event_loop()
 
@@ -98,6 +100,30 @@ class TestResultClasses(unittest.TestCase):
         self.assertEqual(test_result.description, "Test description")
         self.assertEqual(test_result.metric, 0.95)
         self.assertTrue(test_result.passed)
+
+    @patch("validmind.tests.run._get_run_metadata", return_value={})
+    @patch("validmind.tests.run.get_result_description")
+    @patch("validmind.tests.run._run_test")
+    def test_run_test_retains_markdown_description_source(
+        self, mock_run_test, mock_get_description, _mock_run_metadata
+    ):
+        """Default test descriptions retain Markdown alongside rendered HTML."""
+        equation = r"$WOE = \ln\dfrac{\%\ of\ Events}{\%\ of\ Non-Events}$"
+        mock_run_test.return_value = TestResult(
+            result_id="validmind.test.Equation",
+            doc=equation,
+            inputs={},
+        )
+        mock_get_description.return_value = md_to_html(equation, mathml=True)
+
+        result = run_test(
+            test_id="validmind.test.Equation",
+            generate_description=False,
+            show=False,
+        )
+
+        self.assertIn('<script type="math/tex">', result.description)
+        self.assertEqual(result._description_source, equation)
 
     def test_test_result_add_table(self):
         """Test adding tables to TestResult"""
@@ -229,6 +255,48 @@ class TestResultClasses(unittest.TestCase):
         )
 
     @patch("validmind.vm_models.result.result.api_client.alog_text")
+    @patch.object(TextGenerationResult, "_get_client_config")
+    def test_text_generation_result_logs_markdown_source(
+        self, mock_get_client_config, mock_log_text
+    ):
+        """Generated result HTML stays local while its Markdown is logged."""
+        equation = r"$WOE = \ln\dfrac{\%\ of\ Events}{\%\ of\ Non-Events}$"
+        text_result = TextGenerationResult(
+            result_id="text_1",
+            content_id="dataset_summary_text",
+            description=md_to_html(equation, mathml=True),
+            _description_source=equation,
+        )
+        mock_get_client_config.return_value = type(
+            "MockConfig",
+            (),
+            {
+                "documentation_template": {
+                    "sections": [
+                        {
+                            "id": "data_description",
+                            "contents": [
+                                {
+                                    "content_id": "dataset_summary_text",
+                                    "content_type": "text",
+                                }
+                            ],
+                        }
+                    ]
+                }
+            },
+        )()
+
+        self.run_async(text_result.log_async)
+
+        self.assertIn('<script type="math/tex">', text_result.description)
+        mock_log_text.assert_called_once_with(
+            content_id=f"dataset_summary_text::{DEFAULT_REVISION_NAME}",
+            text=equation,
+            section_id=None,
+        )
+
+    @patch("validmind.vm_models.result.result.api_client.alog_text")
     async def test_text_generation_result_log_async_with_section_id(self, mock_log_text):
         """Test async logging of TextGenerationResult forwards section_id"""
         text_result = TextGenerationResult(
@@ -344,33 +412,53 @@ class TestResultClasses(unittest.TestCase):
         with self.assertRaises(InvalidParameterError):
             test_result.validate_log_config(invalid_type_config)
 
-    @patch("validmind.api_client.update_metadata")
-    async def test_metadata_update_content_id_handling(self, mock_update_metadata):
+    @patch("validmind.vm_models.result.result.update_metadata")
+    @patch("validmind.api_client.alog_test_result")
+    def test_metadata_update_content_id_handling(
+        self, mock_log_test_result, mock_update_metadata
+    ):
         """Test metadata update with different content_id scenarios"""
         # Test case 1: With content_id
         test_result = TestResult(
             result_id="test_1",
             description="Test description",
+            inputs={},
             _was_description_generated=False,
         )
-        await test_result.log_async(content_id="custom_content_id")
+        self.run_async(test_result.log_async, content_id="custom_content_id")
         mock_update_metadata.assert_called_with(
-            content_id="custom_content_id::default", text="Test description"
+            content_id=f"custom_content_id::{DEFAULT_REVISION_NAME}",
+            text="Test description",
         )
 
         # Test case 2: Without content_id
         mock_update_metadata.reset_mock()
-        await test_result.log_async()
+        self.run_async(test_result.log_async)
         mock_update_metadata.assert_called_with(
-            content_id="test_description:test_1::default", text="Test description"
+            content_id=f"test_description:test_1::{DEFAULT_REVISION_NAME}",
+            text="Test description",
         )
 
         # Test case 3: With AI generated description
         test_result._was_description_generated = True
         mock_update_metadata.reset_mock()
-        await test_result.log_async()
+        self.run_async(test_result.log_async)
         mock_update_metadata.assert_called_with(
-            content_id="test_description:test_1::ai", text="Test description"
+            content_id=f"test_description:test_1::{AI_REVISION_NAME}",
+            text="Test description",
+        )
+
+        # Test case 4: Rendered HTML remains local and raw Markdown is sent safely
+        equation = r"$WOE = \ln\dfrac{\%\ of\ Events}{\%\ of\ Non-Events}$"
+        test_result.description = md_to_html(equation, mathml=True)
+        test_result._description_source = equation
+        mock_update_metadata.reset_mock()
+        self.run_async(test_result.log_async)
+        self.assertIn('<script type="math/tex">', test_result.description)
+        mock_update_metadata.assert_called_with(
+            content_id=f"test_description:test_1::{AI_REVISION_NAME}",
+            text=equation,
+            text_format="markdown",
         )
 
     def test_test_result_metric_values_integration(self):

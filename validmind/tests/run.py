@@ -16,7 +16,7 @@ from validmind.ai.test_descriptions import get_result_description
 from validmind.errors import MissingRequiredTestInputError
 from validmind.input_registry import input_registry
 from validmind.logging import get_logger
-from validmind.utils import test_id_to_name
+from validmind.utils import is_html, test_id_to_name
 from validmind.vm_models.input import VMInput
 from validmind.vm_models.result import TestResult
 
@@ -451,7 +451,7 @@ def run_test(  # noqa: C901
         result = post_process_fn(result)
 
     if not result.description:
-        result.description = get_result_description(
+        description = get_result_description(
             test_id=test_id,
             test_description=result.doc,
             tables=result.tables,
@@ -463,6 +463,9 @@ def run_test(  # noqa: C901
             additional_context=additional_context,
             params=result.params,
         )
+        result.description = description
+        if isinstance(description, str) and result.doc and not is_html(result.doc):
+            result._description_source = result.doc
 
     if show:
         result.show()

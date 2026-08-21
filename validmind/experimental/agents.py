@@ -54,7 +54,8 @@ def run_task(
     else:
         raise ValueError(f"Unsupported task: {task}")
 
-    if not is_html(generated_text):
+    description_source = generated_text if not is_html(generated_text) else None
+    if description_source is not None:
         generated_text = md_to_html(generated_text, mathml=True)
 
     # Create a test result with the generated text
@@ -68,6 +69,7 @@ def run_task(
         section_id=input.get("section_id"),
         context=input.get("context"),
         _was_description_generated=True,
+        _description_source=description_source,
     )
     if show:
         result.show()

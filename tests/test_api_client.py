@@ -23,6 +23,7 @@ from validmind.errors import (
 )
 from validmind.utils import md_to_html
 from validmind.vm_models.figure import Figure
+from validmind.vm_models.result.utils import update_metadata
 
 loop = asyncio.new_event_loop()
 
@@ -246,6 +247,32 @@ class TestAPIClient(unittest.TestCase):
                 }
             ),
         )
+
+    @patch("aiohttp.ClientSession.post")
+    def test_result_update_metadata_sends_waf_safe_markdown(
+        self, mock_post: MagicMock
+    ):
+        equation = r"$WOE = \ln\dfrac{\%\ of\ Events}{\%\ of\ Non-Events}$"
+        mock_post.return_value = MockAsyncResponse(200, json={"cuid": "abc1234"})
+
+        self.run_async(
+            update_metadata,
+            "test_description:equation::default",
+            equation,
+            text_format="markdown",
+        )
+
+        mock_post.assert_called_once_with(
+            f"{os.environ['VM_API_HOST']}/log_metadata",
+            data=json.dumps(
+                {
+                    "content_id": "test_description:equation::default",
+                    "text": equation,
+                    "text_format": "markdown",
+                }
+            ),
+        )
+        self.assertNotIn("<script", mock_post.call_args.kwargs["data"])
 
     @patch("aiohttp.ClientSession.post")
     def test_log_test_result(self, mock_post):

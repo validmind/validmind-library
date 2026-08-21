@@ -8,7 +8,7 @@ import os
 from openai import AzureOpenAI, OpenAI
 
 from ..logging import get_logger
-from ..utils import md_to_html
+from ..utils import is_html, md_to_html
 
 logger = get_logger(__name__)
 
@@ -38,6 +38,7 @@ class DescriptionFuture:
 
     def __init__(self, future):
         self._future = future
+        self.markdown_source = None
 
     def get_description(self):
         if isinstance(self._future, tuple):
@@ -46,7 +47,9 @@ class DescriptionFuture:
             # This will block until the future is completed
             description = self._future.result()
 
-        return md_to_html(description[0], mathml=True), description[1]
+        source, was_generated = description
+        self.markdown_source = source if not is_html(source) else None
+        return md_to_html(source, mathml=True), was_generated
 
 
 def _get_google_api_key():

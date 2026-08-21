@@ -20,7 +20,13 @@ from ... import api_client
 from ...ai.utils import DescriptionFuture
 from ...errors import InvalidParameterError
 from ...logging import get_logger, log_api_operation
-from ...utils import HumanReadableEncoder, display, run_async, test_id_to_name
+from ...utils import (
+    HumanReadableEncoder,
+    display,
+    md_to_html,
+    run_async,
+    test_id_to_name,
+)
 from ..figure import Figure, create_figure
 from ..html_renderer import StatefulHTMLRenderer
 from ..input import VMInput
@@ -34,6 +40,17 @@ from .utils import (
 )
 
 logger = get_logger(__name__)
+
+
+def _description_transport(rendered_description, markdown_source):
+    """Use Markdown only while it still corresponds to the rendered description."""
+    if (
+        markdown_source is not None
+        and md_to_html(markdown_source, mathml=True) == rendered_description
+    ):
+        return markdown_source, "markdown"
+
+    return rendered_description, None
 
 
 class RawData:
@@ -197,6 +214,7 @@ class TestResult(Result):
     inputs: Optional[Dict[str, Union[List[VMInput], VMInput]]] = None
     metadata: Optional[Dict[str, Any]] = None
     _was_description_generated: bool = False
+    _description_source: Optional[str] = None
     _unsafe: bool = False
     _client_config_cache: Optional[Any] = None
     _is_scorer_result: bool = False
@@ -237,6 +255,7 @@ class TestResult(Result):
                     self.description,
                     self._was_description_generated,
                 ) = description.get_description()
+                self._description_source = description.markdown_source
 
         return super().__getattribute__(name)
 
@@ -597,17 +616,23 @@ class TestResult(Result):
                 if self._was_description_generated
                 else DEFAULT_REVISION_NAME
             )
-
-            tasks.append(
-                update_metadata(
-                    content_id=(
-                        f"{content_id}::{revision_name}"
-                        if content_id
-                        else f"test_description:{self.result_id}::{revision_name}"
-                    ),
-                    text=self.description,
-                )
+            content_id_with_revision = (
+                f"{content_id}::{revision_name}"
+                if content_id
+                else f"test_description:{self.result_id}::{revision_name}"
             )
+            description_text, text_format = _description_transport(
+                self.description,
+                self._description_source,
+            )
+            metadata_kwargs = {
+                "content_id": content_id_with_revision,
+                "text": description_text,
+            }
+            if text_format is not None:
+                metadata_kwargs["text_format"] = text_format
+
+            tasks.append(update_metadata(**metadata_kwargs))
 
         return await asyncio.gather(*tasks)
 
@@ -717,6 +742,7 @@ class TextGenerationResult(Result):
     section_id: Optional[str] = None
     context: Optional[Dict[str, Any]] = None
     _was_description_generated: bool = False
+    _description_source: Optional[str] = None
     _client_config_cache: Optional[Any] = None
 
     def __post_init__(self):
@@ -853,9 +879,13 @@ class TextGenerationResult(Result):
             else f"{resolved_content_id}::{revision_name}"
         )
 
+        description_text, _ = _description_transport(
+            self.description,
+            self._description_source,
+        )
         return await api_client.alog_text(
             content_id=resolved_content_id,
-            text=self.description,
+            text=description_text,
             section_id=resolved_section_id,
         )
 
