@@ -598,9 +598,9 @@ async def alog_metadata(
         _json (dict, optional): Free-form key-value pairs to assign to the metadata. Defaults to None.
         section_id (str, optional): Section ID to append the text block to when the
             content ID does not already exist.
-        text_format (str, optional): Format of ``text``. New ``log_text`` calls use
-            ``markdown`` so conversion happens after the request passes through the
-            WAF. Omitted for backward-compatible HTML payloads.
+        text_format (str, optional): Format of ``text``. Markdown is sent as-is when
+            the backend advertises support so conversion happens after the request
+            passes through the WAF. Older backends receive locally converted HTML.
 
     Raises:
         Exception: If the API call fails.
@@ -608,6 +608,10 @@ async def alog_metadata(
     Returns:
         dict: The response from the API.
     """
+    if text_format == "markdown" and not client_config.supports_log_metadata_markdown():
+        text = md_to_html(text, mathml=True)
+        text_format = None
+
     metadata_dict = {"content_id": content_id}
     if text is not None:
         metadata_dict["text"] = text
