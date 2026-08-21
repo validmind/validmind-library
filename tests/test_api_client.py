@@ -315,9 +315,8 @@ class TestAPIClient(unittest.TestCase):
             data=json.dumps(
                 {
                     "content_id": "dataset_summary_text",
-                    "text": md_to_html(
-                        "## Generated Summary\nGenerated content.", mathml=True
-                    ),
+                    "text": "## Generated Summary\nGenerated content.",
+                    "text_format": "markdown",
                 }
             ),
         )
@@ -366,7 +365,58 @@ class TestAPIClient(unittest.TestCase):
             data=json.dumps(
                 {
                     "content_id": "dataset_summary_text",
-                    "text": md_to_html("Generated content.", mathml=True),
+                    "text": "Generated content.",
+                    "text_format": "markdown",
+                }
+            ),
+        )
+
+    @patch("aiohttp.ClientSession.post")
+    def test_log_text_sends_tex_as_waf_safe_markdown(self, mock_post: MagicMock):
+        equation = r"$WOE = \ln\dfrac{\%\ of\ Events}{\%\ of\ Non-Events}$"
+        mock_post.return_value = MockAsyncResponse(
+            200,
+            json={
+                "content_id": "text_woe_equation",
+                "text": '<p><script type="math/tex">WOE</script></p>',
+            },
+        )
+
+        self.run_async(
+            api_client.alog_text,
+            "text_woe_equation",
+            text=equation,
+        )
+
+        mock_post.assert_called_once_with(
+            f"{os.environ['VM_API_HOST']}/log_metadata",
+            data=json.dumps(
+                {
+                    "content_id": "text_woe_equation",
+                    "text": equation,
+                    "text_format": "markdown",
+                }
+            ),
+        )
+        request_body = mock_post.call_args.kwargs["data"]
+        self.assertNotIn("<script", request_body)
+
+    @patch("aiohttp.ClientSession.post")
+    def test_log_text_preserves_explicit_html_payload(self, mock_post: MagicMock):
+        html = "<p>Already converted</p>"
+        mock_post.return_value = MockAsyncResponse(
+            200,
+            json={"content_id": "existing_html", "text": html},
+        )
+
+        self.run_async(api_client.alog_text, "existing_html", text=html)
+
+        mock_post.assert_called_once_with(
+            f"{os.environ['VM_API_HOST']}/log_metadata",
+            data=json.dumps(
+                {
+                    "content_id": "existing_html",
+                    "text": html,
                 }
             ),
         )
