@@ -588,6 +588,7 @@ async def alog_metadata(
     text: Optional[str] = None,
     _json: Optional[Dict[str, Any]] = None,
     section_id: Optional[str] = None,
+    text_format: Optional[str] = None,
 ) -> Dict[str, Any]:
     """Logs free-form metadata to ValidMind API.
 
@@ -597,6 +598,9 @@ async def alog_metadata(
         _json (dict, optional): Free-form key-value pairs to assign to the metadata. Defaults to None.
         section_id (str, optional): Section ID to append the text block to when the
             content ID does not already exist.
+        text_format (str, optional): Format of ``text``. Markdown is sent as-is when
+            the backend advertises support so conversion happens after the request
+            passes through the WAF. Older backends receive locally converted HTML.
 
     Raises:
         Exception: If the API call fails.
@@ -604,11 +608,17 @@ async def alog_metadata(
     Returns:
         dict: The response from the API.
     """
+    if text_format == "markdown" and not client_config.supports_log_metadata_markdown():
+        text = md_to_html(text, mathml=True)
+        text_format = None
+
     metadata_dict = {"content_id": content_id}
     if text is not None:
         metadata_dict["text"] = text
     if _json is not None:
         metadata_dict["json"] = _json
+    if text_format is not None:
+        metadata_dict["text_format"] = text_format
 
     request_params = {}
     if section_id:
@@ -808,10 +818,17 @@ def generate_qualitative_text(text_generation_data: Dict[str, Any]) -> Dict[str,
     return r.json()
 
 
-def _normalize_logged_text(text: str, field_name: str) -> str:
-    """Validate text content and convert Markdown to HTML when needed."""
+def _validate_logged_text(text: str, field_name: str) -> str:
+    """Validate text accepted by log_text."""
     if not isinstance(text, str) or not text:
         raise ValueError(f"`{field_name}` must be a non-empty string")
+
+    return text
+
+
+def _normalize_logged_text(text: str, field_name: str) -> str:
+    """Validate text content and convert Markdown to HTML for local rendering."""
+    text = _validate_logged_text(text, field_name)
 
     if not is_html(text):
         return md_to_html(text, mathml=True)
@@ -828,7 +845,7 @@ def _validate_manual_log_text_args(
     if context is not None:
         raise ValueError("`context` is only supported when `text` is omitted")
 
-    return _normalize_logged_text(text, "text")
+    return _validate_logged_text(text, "text")
 
 
 def _build_log_text_generation_request(
@@ -860,13 +877,13 @@ def _build_log_text_generation_request(
     return request_data
 
 
-def _generate_log_text(
+def _generate_log_text_source(
     content_id: str,
     prompt: Optional[str],
     context: Optional[Dict[str, Any]],
     section_id: Optional[str] = None,
 ) -> str:
-    """Generate text for log_text and normalize it to HTML."""
+    """Generate and validate source text without converting it to HTML."""
     request_data = _build_log_text_generation_request(
         content_id,
         prompt,
@@ -874,6 +891,22 @@ def _generate_log_text(
         section_id=section_id,
     )
     generated_text = generate_qualitative_text(request_data)["content"]
+    return _validate_logged_text(generated_text, "generated text")
+
+
+def _generate_log_text(
+    content_id: str,
+    prompt: Optional[str],
+    context: Optional[Dict[str, Any]],
+    section_id: Optional[str] = None,
+) -> str:
+    """Generate text and normalize it to HTML for local result rendering."""
+    generated_text = _generate_log_text_source(
+        content_id,
+        prompt,
+        context,
+        section_id=section_id,
+    )
     return _normalize_logged_text(generated_text, "generated text")
 
 
@@ -902,14 +935,21 @@ async def alog_text(
     if text is not None:
         text = _validate_manual_log_text_args(text, prompt, context)
     else:
-        text = _generate_log_text(
+        text = _generate_log_text_source(
             content_id,
             prompt,
             context,
             section_id=section_id,
         )
 
-    return await alog_metadata(content_id, text, _json, section_id=section_id)
+    text_format = None if is_html(text) else "markdown"
+    return await alog_metadata(
+        content_id,
+        text,
+        _json,
+        section_id=section_id,
+        text_format=text_format,
+    )
 
 
 def log_text(
@@ -924,9 +964,9 @@ def log_text(
 
     Args:
         content_id (str): Unique content identifier for the text.
-        text (str, optional): The text to log. Will be converted to HTML with
-            MathML support when Markdown is provided. If omitted, text is
-            generated using the qualitative text generation backend.
+        text (str, optional): The text to log. Markdown is sent to the backend for
+            HTML and math conversion. If omitted, text is generated using the
+            qualitative text generation backend.
         prompt (str, optional): Custom prompt used for AI-assisted text
             generation. Only supported when `text` is omitted.
         context (dict, optional): Context object for AI-assisted text

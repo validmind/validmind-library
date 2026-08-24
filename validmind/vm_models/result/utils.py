@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 import os
-from typing import TYPE_CHECKING, Dict, List, Union
+from typing import TYPE_CHECKING, Dict, List, Optional, Union
 
 from jinja2 import Template
 
@@ -35,7 +35,12 @@ def get_result_template():
     return _result_template
 
 
-async def update_metadata(content_id: str, text: str, _json: Union[Dict, List] = None):
+async def update_metadata(
+    content_id: str,
+    text: str,
+    _json: Union[Dict, List] = None,
+    text_format: Optional[str] = None,
+):
     """Create or update a metadata object."""
     parts = content_id.split("::")
     content_id = parts[0]
@@ -46,7 +51,12 @@ async def update_metadata(content_id: str, text: str, _json: Union[Dict, List] =
 
     logger.debug(f"Updating metadata for `{content_id}`")
 
-    await api_client.alog_metadata(content_id, text, _json)
+    await api_client.alog_metadata(
+        content_id,
+        text,
+        _json,
+        text_format=text_format,
+    )
 
 
 def tables_to_html(tables: List["ResultTable"]) -> str:

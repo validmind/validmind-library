@@ -206,11 +206,11 @@ class TestGetContentIds(TestCase):
 
 
 class TestRunTextGeneration(TestCase):
-    @mock.patch(
-        "validmind.client.api_client._generate_log_text",
-        return_value="<p>Generated text</p>",
-    )
+    @mock.patch("validmind.client.api_client._generate_log_text_source")
     def test_run_text_generation(self, mock_generate_text):
+        equation = r"$WOE = \ln\dfrac{\%\ of\ Events}{\%\ of\ Non-Events}$"
+        mock_generate_text.return_value = equation
+
         result = run_text_generation(
             content_id="dataset_summary_text",
             prompt="Summarize the dataset.",
@@ -224,7 +224,8 @@ class TestRunTextGeneration(TestCase):
         self.assertEqual(result.prompt, "Summarize the dataset.")
         self.assertEqual(result.section_id, "data_description")
         self.assertEqual(result.context, {"content_ids": ["train_dataset"]})
-        self.assertEqual(result.description, "<p>Generated text</p>")
+        self.assertIn('<script type="math/tex">', result.description)
+        self.assertEqual(result._description_source, equation)
         self.assertTrue(result._was_description_generated)
         self.assertIn("validmind", result.metadata)
         self.assertIn("timestamp", result.metadata)

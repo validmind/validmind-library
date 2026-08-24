@@ -11,6 +11,7 @@ from validmind.ai.test_descriptions import (
     _truncate_summary,
     _truncate_text_simple,
 )
+from validmind.ai.utils import DescriptionFuture
 
 
 class TestTokenEstimation(unittest.TestCase):
@@ -28,6 +29,17 @@ class TestTokenEstimation(unittest.TestCase):
         # Test with 400 characters (should be 100 tokens)
         text_400 = "a" * 400
         self.assertEqual(_estimate_tokens_simple(text_400), 100)
+
+    def test_description_future_retains_markdown_source(self):
+        """AI test descriptions retain raw Markdown for WAF-safe logging."""
+        equation = r"$WOE = \ln\dfrac{\%\ of\ Events}{\%\ of\ Non-Events}$"
+        description = DescriptionFuture((equation, True))
+
+        rendered, was_generated = description.get_description()
+
+        self.assertTrue(was_generated)
+        self.assertIn('<script type="math/tex">', rendered)
+        self.assertEqual(description.markdown_source, equation)
 
     def test_truncate_text_simple_no_truncation(self):
         """Test that short text is not truncated."""
@@ -135,5 +147,3 @@ class TestCodePathSelection(unittest.TestCase):
         mock_encoding.decode.assert_not_called()
 
         self.assertEqual(result, "fallback_result")
-
-

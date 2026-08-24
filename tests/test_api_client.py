@@ -23,6 +23,7 @@ from validmind.errors import (
 )
 from validmind.utils import md_to_html
 from validmind.vm_models.figure import Figure
+from validmind.vm_models.result.utils import update_metadata
 
 loop = asyncio.new_event_loop()
 
@@ -74,13 +75,15 @@ class TestAPIClient(unittest.TestCase):
     @patch("requests.get")
     def test_init_successful(self, mock_requests_get):
         mock_data = {
-            "model": {"name": "test_model", "cuid": os.environ["VM_API_MODEL"]}
+            "model": {"name": "test_model", "cuid": os.environ["VM_API_MODEL"]},
+            "feature_flags": {"log_metadata_markdown": True},
         }
         mock_response = Mock(status_code=200, json=Mock(return_value=mock_data))
         mock_requests_get.return_value = mock_response
 
         success = api_client.init()
         self.assertIsNone(success)
+        self.assertTrue(api_client.client_config.supports_log_metadata_markdown())
 
         mock_requests_get.assert_called_once_with(
             url=f"{os.environ['VM_API_HOST']}/ping",
@@ -248,6 +251,63 @@ class TestAPIClient(unittest.TestCase):
         )
 
     @patch("aiohttp.ClientSession.post")
+    def test_result_update_metadata_sends_waf_safe_markdown(self, mock_post: MagicMock):
+        equation = r"$WOE = \ln\dfrac{\%\ of\ Events}{\%\ of\ Non-Events}$"
+        mock_post.return_value = MockAsyncResponse(200, json={"cuid": "abc1234"})
+
+        with patch.dict(
+            api_client.client_config.feature_flags,
+            {"log_metadata_markdown": True},
+        ):
+            self.run_async(
+                update_metadata,
+                "test_description:equation::default",
+                equation,
+                text_format="markdown",
+            )
+
+        mock_post.assert_called_once_with(
+            f"{os.environ['VM_API_HOST']}/log_metadata",
+            data=json.dumps(
+                {
+                    "content_id": "test_description:equation::default",
+                    "text": equation,
+                    "text_format": "markdown",
+                }
+            ),
+        )
+        self.assertNotIn("<script", mock_post.call_args.kwargs["data"])
+
+    @patch("aiohttp.ClientSession.post")
+    def test_result_update_metadata_falls_back_for_legacy_backend(
+        self, mock_post: MagicMock
+    ):
+        equation = r"$WOE = \ln\dfrac{\%\ of\ Events}{\%\ of\ Non-Events}$"
+        legacy_html = md_to_html(equation, mathml=True)
+        mock_post.return_value = MockAsyncResponse(200, json={"cuid": "abc1234"})
+
+        with patch.dict(api_client.client_config.feature_flags, {}, clear=True):
+            self.run_async(
+                update_metadata,
+                "test_description:equation::default",
+                equation,
+                text_format="markdown",
+            )
+
+        mock_post.assert_called_once_with(
+            f"{os.environ['VM_API_HOST']}/log_metadata",
+            data=json.dumps(
+                {
+                    "content_id": "test_description:equation::default",
+                    "text": legacy_html,
+                }
+            ),
+        )
+        request_body = mock_post.call_args.kwargs["data"]
+        self.assertIn("<script", request_body)
+        self.assertNotIn("text_format", request_body)
+
+    @patch("aiohttp.ClientSession.post")
     def test_log_test_result(self, mock_post):
         result = {
             "test_name": "test_name",
@@ -286,11 +346,15 @@ class TestAPIClient(unittest.TestCase):
             },
         )
 
-        api_client.log_text(
-            content_id="dataset_summary_text",
-            prompt="Summarize the dataset.",
-            context={"content_ids": ["train_dataset", "target_description_text"]},
-        )
+        with patch.dict(
+            api_client.client_config.feature_flags,
+            {"log_metadata_markdown": True},
+        ):
+            api_client.log_text(
+                content_id="dataset_summary_text",
+                prompt="Summarize the dataset.",
+                context={"content_ids": ["train_dataset", "target_description_text"]},
+            )
 
         mock_requests_post.assert_called_once_with(
             url=f"{os.environ['VM_API_HOST']}/ai/generate/qualitative_text_generation",
@@ -315,9 +379,8 @@ class TestAPIClient(unittest.TestCase):
             data=json.dumps(
                 {
                     "content_id": "dataset_summary_text",
-                    "text": md_to_html(
-                        "## Generated Summary\nGenerated content.", mathml=True
-                    ),
+                    "text": "## Generated Summary\nGenerated content.",
+                    "text_format": "markdown",
                 }
             ),
         )
@@ -339,11 +402,15 @@ class TestAPIClient(unittest.TestCase):
             },
         )
 
-        api_client.log_text(
-            content_id="dataset_summary_text",
-            prompt="Summarize the dataset.",
-            section_id="intended_use",
-        )
+        with patch.dict(
+            api_client.client_config.feature_flags,
+            {"log_metadata_markdown": True},
+        ):
+            api_client.log_text(
+                content_id="dataset_summary_text",
+                prompt="Summarize the dataset.",
+                section_id="intended_use",
+            )
 
         mock_requests_post.assert_called_once_with(
             url=f"{os.environ['VM_API_HOST']}/ai/generate/qualitative_text_generation",
@@ -366,7 +433,62 @@ class TestAPIClient(unittest.TestCase):
             data=json.dumps(
                 {
                     "content_id": "dataset_summary_text",
-                    "text": md_to_html("Generated content.", mathml=True),
+                    "text": "Generated content.",
+                    "text_format": "markdown",
+                }
+            ),
+        )
+
+    @patch("aiohttp.ClientSession.post")
+    def test_log_text_sends_tex_as_waf_safe_markdown(self, mock_post: MagicMock):
+        equation = r"$WOE = \ln\dfrac{\%\ of\ Events}{\%\ of\ Non-Events}$"
+        mock_post.return_value = MockAsyncResponse(
+            200,
+            json={
+                "content_id": "text_woe_equation",
+                "text": '<p><script type="math/tex">WOE</script></p>',
+            },
+        )
+
+        with patch.dict(
+            api_client.client_config.feature_flags,
+            {"log_metadata_markdown": True},
+        ):
+            self.run_async(
+                api_client.alog_text,
+                "text_woe_equation",
+                text=equation,
+            )
+
+        mock_post.assert_called_once_with(
+            f"{os.environ['VM_API_HOST']}/log_metadata",
+            data=json.dumps(
+                {
+                    "content_id": "text_woe_equation",
+                    "text": equation,
+                    "text_format": "markdown",
+                }
+            ),
+        )
+        request_body = mock_post.call_args.kwargs["data"]
+        self.assertNotIn("<script", request_body)
+
+    @patch("aiohttp.ClientSession.post")
+    def test_log_text_preserves_explicit_html_payload(self, mock_post: MagicMock):
+        html = "<p>Already converted</p>"
+        mock_post.return_value = MockAsyncResponse(
+            200,
+            json={"content_id": "existing_html", "text": html},
+        )
+
+        self.run_async(api_client.alog_text, "existing_html", text=html)
+
+        mock_post.assert_called_once_with(
+            f"{os.environ['VM_API_HOST']}/log_metadata",
+            data=json.dumps(
+                {
+                    "content_id": "existing_html",
+                    "text": html,
                 }
             ),
         )
