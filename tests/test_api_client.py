@@ -148,6 +148,24 @@ class TestAPIClient(unittest.TestCase):
         model = api_client.get_api_model()
         self.assertEqual(model, "your_model")
 
+    @patch("requests.post")
+    def test_log_metric_is_safe_inside_running_event_loop(self, mock_post):
+        mock_post.return_value = MockResponse(200, json={"ok": True})
+
+        async def handler():
+            first = api_client.log_metric("accuracy", 0.95)
+            second = api_client.log_metric("accuracy", 0.96)
+            return first, second
+
+        self.assertEqual(asyncio.run(handler()), ({"ok": True}, {"ok": True}))
+        self.assertEqual(mock_post.call_count, 2)
+        self.assertTrue(
+            all(
+                call.args[0].endswith("/log_unit_metric")
+                for call in mock_post.call_args_list
+            )
+        )
+
     @patch("requests.get")
     def test_init_missing_model_id(self, mock_requests_get):
         mock_requests_get.return_value = Mock()

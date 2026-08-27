@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - 'pyproject.toml'
+      - 'packages/**'
       - 'requirements/**'
       - 'validmind/**'
       - 'tests/**'
@@ -12,6 +13,7 @@ on:
     branches: ['*']
     paths:
       - 'pyproject.toml'
+      - 'packages/**'
       - 'requirements/**'
       - 'validmind/**'
       - 'tests/**'
@@ -68,9 +70,9 @@ jobs:
           curl -LsSf https://astral.sh/uv/install.sh | sh
           echo "$HOME/.cargo/bin" >> $GITHUB_PATH
 
-      - name: Build wheel and sdist
+      - name: Build wheels and sdists
         run: |
-          python -m build
+          uv build --all-packages
 
       - name: Install and test via pip artifacts (${{ matrix.deps-type }})
         run: |
@@ -82,7 +84,9 @@ jobs:
           if [[ "${{ matrix.deps-type }}" == "core" ]]; then
             # Exercise the unbounded core dependency set separately from the
             # constrained optional extras (for example, latest scikit-learn).
-            WHEEL=$(ls dist/*.whl | head -n 1)
+            WHEEL=$(ls dist/validmind-*.whl | head -n 1)
+            CORE_WHEEL=$(ls dist/validmind_tracking_core*.whl | head -n 1)
+            python -m pip install "${CORE_WHEEL}"
             # Jinja2 is currently imported by the library but is only present
             # transitively through optional extras. Install it as test tooling
             # so this leg can exercise the otherwise unbounded core set.
@@ -95,7 +99,9 @@ jobs:
               | cat
           elif [[ "${{ matrix.deps-type }}" == "default" ]]; then
             # Install only from built artifacts (let pip resolve deps normally)
-            WHEEL=$(ls dist/*.whl | head -n 1)
+            WHEEL=$(ls dist/validmind-*.whl | head -n 1)
+            CORE_WHEEL=$(ls dist/validmind_tracking_core*.whl | head -n 1)
+            python -m pip install "${CORE_WHEEL}"
             python -m pip install "${WHEEL}[all]"
             pip check
             python -m tests.test_unit_tests | cat
@@ -105,7 +111,9 @@ jobs:
             uv pip compile pyproject.toml -p "${{ matrix.python-version }}" --all-extras --no-emit-index-url --no-annotate --no-strip-markers --output-file "$OUT" --upgrade
             # Install constraints then the wheel without reinstalling deps
             pip install -r "$OUT"
-            WHEEL=$(ls dist/*.whl | head -n 1)
+            WHEEL=$(ls dist/validmind-*.whl | head -n 1)
+            CORE_WHEEL=$(ls dist/validmind_tracking_core*.whl | head -n 1)
+            pip install "${CORE_WHEEL}" --no-deps
             python -m pip install "${WHEEL}[all]" --no-deps
             pip check
             python -m tests.test_unit_tests | cat
@@ -146,6 +154,7 @@ jobs:
           fi
           python -m pip install --upgrade pip
           pip install -r "$FREEZE_FILE"
+          python -m pip install packages/validmind-tracking-core --no-deps
           python -m pip install . --no-deps
           python -m tests.test_unit_tests | cat
 
