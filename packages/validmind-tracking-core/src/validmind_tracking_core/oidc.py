@@ -9,6 +9,7 @@ from __future__ import annotations
 import threading
 import time
 from typing import Any, Callable, Dict, Optional
+from urllib.parse import urlparse
 
 import requests
 
@@ -37,9 +38,12 @@ def _token_entry(payload: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def _bearer_token(entry: Dict[str, Any]) -> str:
-    if "login.microsoftonline.com" in entry.get("issuer", "").lower() and entry.get(
-        "id_token"
-    ):
+    issuer = entry.get("issuer", "")
+    try:
+        issuer_host = (urlparse(issuer).hostname or "").lower()
+    except ValueError:
+        issuer_host = ""
+    if issuer_host == "login.microsoftonline.com" and entry.get("id_token"):
         return entry["id_token"]
     token = entry.get("access_token")
     if not token:

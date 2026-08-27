@@ -12,10 +12,32 @@ from validmind_tracking_core.credentials_store import (
     get_cached_entry,
     upsert_cached_entry,
 )
-from validmind_tracking_core.oidc import OIDCAuthenticator
+from validmind_tracking_core.oidc import OIDCAuthenticator, _bearer_token
 
 
 class TestOIDCAuthenticator(unittest.TestCase):
+    def test_bearer_token_matches_entra_hostname(self):
+        self.assertEqual(
+            _bearer_token(
+                {
+                    "issuer": "https://login.microsoftonline.com/tenant/v2.0",
+                    "access_token": "access-token",
+                    "id_token": "id-token",
+                }
+            ),
+            "id-token",
+        )
+        self.assertEqual(
+            _bearer_token(
+                {
+                    "issuer": "https://login.microsoftonline.com.evil.example/tenant",
+                    "access_token": "access-token",
+                    "id_token": "id-token",
+                }
+            ),
+            "access-token",
+        )
+
     @patch("validmind_tracking_core.oidc.requests.post")
     @patch("validmind_tracking_core.oidc.requests.get")
     def test_refreshes_expired_cached_token(self, mock_get, mock_post):
