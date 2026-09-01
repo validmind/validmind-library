@@ -6,7 +6,6 @@ from typing import Any, Dict, List, Tuple
 
 import pandas as pd
 import plotly.express as px
-import plotly.figure_factory as ff
 import plotly.graph_objects as go
 
 from validmind import RawData, tags, tasks
@@ -94,16 +93,23 @@ def TimeSeriesMissingValues(
     z = missing_mask.T.astype(int).values
     x = missing_mask.index.tolist()
     y = missing_mask.columns.tolist()
-    heatmap = ff.create_annotated_heatmap(
-        z=z,
-        x=x,
-        y=y,
-        colorscale="Reds",
-        showscale=False,
+    heatmap = go.Figure(
+        go.Heatmap(
+            z=z,
+            x=x,
+            y=y,
+            colorscale="Reds",
+            showscale=False,
+            texttemplate="%{z}",
+        )
     )
 
     # Update the layout after creation
-    heatmap.update_layout(title="Missing Values Heatmap")
+    heatmap.update_layout(
+        title="Missing Values Heatmap",
+        xaxis=dict(side="top", dtick=1),
+        yaxis=dict(dtick=1),
+    )
 
     return (
         [

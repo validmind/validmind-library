@@ -6,7 +6,6 @@ from typing import Tuple
 
 import numpy as np
 import pandas as pd
-import plotly.figure_factory as ff
 import plotly.graph_objects as go
 
 from validmind import RawData, tags, tasks
@@ -86,13 +85,15 @@ def LaggedCorrelationHeatmap(
         index=dataset.feature_columns,
     )
 
-    fig = ff.create_annotated_heatmap(
-        z=correlation_df.values,
-        x=list(correlation_df.columns),
-        y=list(correlation_df.index),
-        colorscale=COOLWARM,
-        annotation_text=correlation_df.round(2).values,
-        showscale=True,
+    fig = go.Figure(
+        go.Heatmap(
+            z=correlation_df.values,
+            x=list(correlation_df.columns),
+            y=list(correlation_df.index),
+            colorscale=COOLWARM,
+            showscale=True,
+            texttemplate="%{z:.2f}",
+        )
     )
     fig.update_layout(
         title={
@@ -103,7 +104,8 @@ def LaggedCorrelationHeatmap(
             "yanchor": "top",
         },
         font=dict(size=14),
-        xaxis_title="Lags",
+        xaxis=dict(title="Lags", side="top", dtick=1),
+        yaxis=dict(dtick=1),
     )
 
     return fig, RawData(correlation_matrix=correlation_df, dataset=dataset.input_id)
