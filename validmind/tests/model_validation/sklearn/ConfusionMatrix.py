@@ -6,7 +6,6 @@
 from typing import Tuple
 
 import numpy as np
-import plotly.figure_factory as ff
 import plotly.graph_objects as go
 from sklearn.metrics import confusion_matrix
 
@@ -42,9 +41,9 @@ def ConfusionMatrix(
     The mechanism used involves taking the predicted results (`y_test_predict`) from the classification model and
     comparing them against the actual values (`y_test_true`). A confusion matrix is built using the unique labels
     extracted from `y_test_true`, employing scikit-learn's metrics. The matrix is then visually rendered with the help
-    of Plotly's `create_annotated_heatmap` function. A heatmap is created which provides a two-dimensional graphical
-    representation of the model's performance, showcasing distributions of True Positives (TP), True Negatives (TN),
-    False Positives (FP), and False Negatives (FN).
+    of a Plotly heatmap. A heatmap is created which provides a two-dimensional graphical representation of the
+    model's performance, showcasing distributions of True Positives (TP), True Negatives (TN), False Positives (FP),
+    and False Negatives (FN).
 
     ### Signs of High Risk
 
@@ -110,21 +109,32 @@ def ConfusionMatrix(
             ],
         ]
 
-    fig = ff.create_annotated_heatmap(
-        z=cm,
-        colorscale="Blues",
-        x=labels,
-        y=labels,
-        annotation_text=text,
+    if text is None:
+        text = cm.astype(str)
+
+    fig = go.Figure(
+        go.Heatmap(
+            z=cm,
+            x=labels,
+            y=labels,
+            colorscale="Blues",
+            showscale=False,
+            text=text,
+            texttemplate="%{text}",
+            # Heatmap text auto-shrinks to fit the cell; pin it to the layout font
+            # size so the cells read the same as the old annotation-based figure.
+            textfont=dict(size=12),
+            hovertemplate=(
+                "True Label:%{y}<br>Predicted Label:%{x}<br>Count:%{z}<extra></extra>"
+            ),
+        )
     )
 
-    fig["data"][0][
-        "hovertemplate"
-    ] = "True Label:%{y}<br>Predicted Label:%{x}<br>Count:%{z}<extra></extra>"
-
     fig.update_layout(
-        xaxis=dict(title="Predicted label"),
-        yaxis=dict(title="True label"),
+        # `side="top"` and `dtick=1` keep the axis placement and per-class ticks that
+        # `ff.create_annotated_heatmap` used to apply for us.
+        xaxis=dict(title="Predicted label", side="top", dtick=1),
+        yaxis=dict(title="True label", dtick=1),
         autosize=False,
         width=600,
         height=600,

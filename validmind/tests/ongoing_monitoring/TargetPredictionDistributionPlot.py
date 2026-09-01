@@ -4,8 +4,8 @@
 
 from typing import Dict, List, Tuple
 
+import numpy as np
 import pandas as pd
-import plotly.figure_factory as ff
 import plotly.graph_objects as go
 
 from validmind import RawData, tags, tasks
@@ -13,7 +13,7 @@ from validmind.errors import MissingDependencyError
 from validmind.vm_models import VMDataset, VMModel
 
 try:
-    from scipy.stats import kurtosis, skew
+    from scipy.stats import gaussian_kde, kurtosis, skew
 except ImportError as e:
     if "scipy" in str(e):
         raise MissingDependencyError(
@@ -24,6 +24,17 @@ except ImportError as e:
         ) from e
 
     raise e
+
+
+def _kde_curve(values):
+    """A 500-point KDE across the data range.
+
+    This is what `ff.create_distplot(..., show_hist=False)` computed internally
+    before Plotly 7 removed the Figure Factory functions.
+    """
+    x = np.linspace(values.min(), values.max(), 500, endpoint=False)
+
+    return x, gaussian_kde(values)(x)
 
 
 @tags("visualization")
@@ -110,18 +121,8 @@ def TargetPredictionDistributionPlot(
     moments = moments.set_index("Statistic", drop=False)
 
     # Create KDE for both distributions
-    ref_kde = ff.create_distplot(
-        [pred_ref["Reference Prediction"].values],
-        ["Reference"],
-        show_hist=False,
-        show_rug=False,
-    )
-    monitor_kde = ff.create_distplot(
-        [pred_monitor["Monitoring Prediction"].values],
-        ["Monitoring"],
-        show_hist=False,
-        show_rug=False,
-    )
+    ref_x, ref_y = _kde_curve(pred_ref["Reference Prediction"].values)
+    monitor_x, monitor_y = _kde_curve(pred_monitor["Monitoring Prediction"].values)
 
     # Create new figure
     fig = go.Figure()
@@ -129,8 +130,8 @@ def TargetPredictionDistributionPlot(
     # Add reference distribution
     fig.add_trace(
         go.Scatter(
-            x=ref_kde.data[0].x,
-            y=ref_kde.data[0].y,
+            x=ref_x,
+            y=ref_y,
             fill="tozeroy",
             name="Reference Prediction",
             line=dict(color="blue", width=2),
@@ -141,8 +142,8 @@ def TargetPredictionDistributionPlot(
     # Add monitoring distribution
     fig.add_trace(
         go.Scatter(
-            x=monitor_kde.data[0].x,
-            y=monitor_kde.data[0].y,
+            x=monitor_x,
+            y=monitor_y,
             fill="tozeroy",
             name="Monitor Prediction",
             line=dict(color="red", width=2),
