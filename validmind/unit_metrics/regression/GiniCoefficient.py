@@ -7,6 +7,10 @@ import numpy as np
 from validmind import tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 
+# NumPy 2 removed `np.trapz` in favour of `np.trapezoid`; the library supports both
+# (numpy<2 below Python 3.14, numpy>=2.3 from 3.14 on).
+_trapezoid = getattr(np, "trapezoid", None) or np.trapz
+
 
 @tags("regression")
 @tasks("regression")
@@ -29,7 +33,7 @@ def GiniCoefficient(dataset: VMDataset, model: VMModel) -> float:
     cumsum_pred_norm = cumsum_pred / np.max(cumsum_pred)
 
     # Compute area under the Lorenz curve
-    area_lorenz = np.trapz(cumsum_pred_norm, x=cumsum_true_norm)
+    area_lorenz = _trapezoid(cumsum_pred_norm, x=cumsum_true_norm)
 
     # Compute Gini coefficient
     return 1 - 2 * area_lorenz

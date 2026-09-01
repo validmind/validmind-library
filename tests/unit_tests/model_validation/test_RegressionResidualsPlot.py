@@ -60,8 +60,10 @@ class TestRegressionResidualsPlot(unittest.TestCase):
         self.assertEqual(len(curve.x), 500)
         self.assertTrue(np.all(np.asarray(curve.y) > 0))
 
-        # A density curve integrates to ~1 over the data range.
-        self.assertAlmostEqual(np.trapz(curve.y, curve.x), 1.0, places=1)
+        # A density curve integrates to ~1 over the data range. NumPy 2 renamed
+        # trapz to trapezoid, and the Python 3.14 leg resolves numpy>=2.3.
+        trapezoid = getattr(np, "trapezoid", None) or np.trapz
+        self.assertAlmostEqual(trapezoid(curve.y, curve.x), 1.0, places=1)
 
 
 if __name__ == "__main__":
