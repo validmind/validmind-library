@@ -322,7 +322,9 @@ def woe_encoding(df: pd.DataFrame, verbose: bool = True) -> pd.DataFrame:
             print(f"Excluded {target_column} from WoE transformation.")
 
     # Apply the WoE transformation
-    df = sc.woebin_ply(df, bins=bins)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")  # scorecardpy uses deprecated pandas APIs
+        df = sc.woebin_ply(df, bins=bins)
 
     if verbose:
         print("Successfully converted features to WoE values.")
@@ -379,7 +381,9 @@ def _woebin(df: pd.DataFrame, verbose: bool = True) -> Dict[str, Any]:
             print(
                 f"Performing binning with breaks_adj: {breaks_adj}"
             )  # print the breaks_adj being used
-        bins = sc.woebin(df, target_column, breaks_list=breaks_adj)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")  # scorecardpy uses deprecated pandas APIs
+            bins = sc.woebin(df, target_column, breaks_list=breaks_adj)
     except Exception as e:
         print("Error during binning: ")
         print(e)

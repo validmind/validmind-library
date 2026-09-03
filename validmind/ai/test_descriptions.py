@@ -171,7 +171,9 @@ def generate_description(
             "figures": [figure._get_b64_url() for figure in figures or []],
             "additional_context": additional_context,
             "instructions": instructions,
-            "params": params,
+            # params can hold anything the test accepts (DataFrames, arrays);
+            # round-trip so the request body is plain JSON
+            "params": json.loads(json.dumps(params, cls=NumpyEncoder)),
         }
     )["content"]
 
