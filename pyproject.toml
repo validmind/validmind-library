@@ -27,7 +27,7 @@ dependencies = [
   "plotly (>=6.0.0)",
   "polars",
   "python-dotenv",
-  "scikit-learn",
+  "scikit-learn (>=1.4)",
   "seaborn",
   "tabulate (>=0.9.0,<0.10.0)",
   "tiktoken",
@@ -41,7 +41,7 @@ dependencies = [
 all = [
   "torch (>=2.0.0)",
   "xgboost (>=1.5.2,<3.1)",
-  "scikit-learn (<1.8)",
+  "scikit-learn (>=1.4,<1.8)",
   "transformers (>=4.32.0,<5.0.0)",
   "pycocoevalcap",
   "ragas (>=0.2.3,<=0.2.7)",
@@ -111,7 +111,7 @@ pytorch = ["torch (>=2.0.0)"]
 stats = ["scipy", "statsmodels (>=0.14.2,<0.15.0)", "arch (>=7.0.0)"]
 xgboost = [
   "xgboost (>=1.5.2,<3.1)",
-  "scikit-learn (<1.8)",
+  "scikit-learn (>=1.4,<1.8)",
 ]
 explainability = [
   "shap (>=0.46.0)",
