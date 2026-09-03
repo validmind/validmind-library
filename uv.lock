@@ -11268,7 +11268,7 @@ wheels = [
 
 [[package]]
 name = "validmind"
-version = "2.13.13"
+version = "2.13.14"
 source = { editable = "." }
 dependencies = [
     { name = "aiohttp", extra = ["speedups"] },
