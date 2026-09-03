@@ -542,6 +542,18 @@ class TestResult(Result):
 
         return serialized
 
+    def _pre_serialize_figures(self):
+        """Render figure PNGs before any upload request starts.
+
+        Kaleido launches a Chromium per figure and blocks the event loop while it
+        runs. Rendering while uploads are in flight lets the request timeout
+        expire on them, and with older kaleido it conflicted with asyncio
+        outright (ZD-626). log() calls this outside the loop; log_async() calls
+        it too because the test-suite runner awaits log_async() directly.
+        """
+        for figure in self.figures or []:
+            figure.pre_serialize()
+
     async def log_async(
         self,
         section_id: str = None,
@@ -552,6 +564,8 @@ class TestResult(Result):
         # Skip logging for scorers - they should not be saved to the backend
         if self._is_scorer_result:
             return
+
+        self._pre_serialize_figures()
 
         tasks = []  # collect tasks to run in parallel (async)
 
@@ -680,10 +694,7 @@ class TestResult(Result):
         if section_id:
             self._validate_section_id_for_block(section_id, position)
 
-        # Pre-serialize figures before entering async context to avoid conflicts
-        # between Plotly's kaleido library and asyncio event loops (ZD-626)
-        for figure in self.figures or []:
-            figure.pre_serialize()
+        self._pre_serialize_figures()
 
         run_async(
             self.log_async,

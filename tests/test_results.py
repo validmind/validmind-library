@@ -202,6 +202,35 @@ class TestResultClasses(unittest.TestCase):
         mock_test_result.assert_called_once()
         mock_metric.assert_called_once()
 
+    @patch("validmind.vm_models.result.result.update_metadata")
+    @patch("validmind.api_client.alog_test_result")
+    @patch("validmind.api_client.alog_figure")
+    async def test_test_result_log_async_pre_serializes_figures(
+        self, mock_figure, mock_test_result, mock_update_metadata
+    ):
+        """Figure PNGs are rendered before any upload request starts"""
+        mock_test_result.return_value = MockAsyncResponse(200, json={"cuid": "123"})
+        mock_update_metadata.return_value = None
+        cached_at_upload = []
+
+        async def record(figure):
+            cached_at_upload.append(figure._cached_png_bytes is not None)
+            return MockAsyncResponse(200, json={"cuid": "456"})
+
+        mock_figure.side_effect = record
+
+        fig, ax = plt.subplots()
+        ax.plot([1, 2], [3, 4])
+        test_result = TestResult(
+            result_id="test_1",
+            figures=[Figure(key="fig_1", figure=fig, ref_id="ref_1")],
+        )
+
+        await test_result.log_async(section_id="section_1", position=0)
+
+        self.assertEqual(cached_at_upload, [True])
+        plt.close(fig)
+
     def test_text_generation_result(self):
         """Test TextGenerationResult initialization and methods"""
         text_result = TextGenerationResult(
