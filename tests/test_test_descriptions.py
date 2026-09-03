@@ -17,6 +17,29 @@ from validmind.ai.utils import DescriptionFuture
 class TestTokenEstimation(unittest.TestCase):
     """Test token estimation and truncation functions."""
 
+    @patch("validmind.api_client.generate_test_result_description")
+    def test_generate_description_params_are_json_serializable(self, mock_generate):
+        """Params holding DataFrames (e.g. fit_params eval_set) must not break the request"""
+        import json
+
+        import pandas as pd
+
+        from validmind.ai.test_descriptions import generate_description
+        from validmind.vm_models.result import ResultTable
+
+        mock_generate.return_value = {"content": "ok"}
+
+        generate_description(
+            test_id="validmind.model_validation.sklearn.HyperParametersTuning",
+            test_description="desc",
+            tables=[ResultTable(data=[{"Optimized for": "recall", "recall": 0.9}])],
+            params={"eval_set": [(pd.DataFrame({"a": [1]}), pd.Series([0]))]},
+        )
+
+        payload = mock_generate.call_args[0][0]
+        json.dumps(payload)  # stdlib encoder, as used by requests
+        self.assertIn("eval_set", payload["params"])
+
     def test_estimate_tokens_simple(self):
         """Test simple character-based token estimation."""
         # Test with empty string
