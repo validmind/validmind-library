@@ -19,6 +19,8 @@ from urllib.parse import urlencode, urljoin
 import aiohttp
 import requests
 from aiohttp import FormData
+from validmind_tracking_core.errors import TrackingAPIError
+from validmind_tracking_core.metrics import post_metric, serialize_metric
 
 from .__version__ import __version__
 from .client_config import client_config
@@ -995,6 +997,37 @@ def log_text(
     return _render_logged_text(logged_text)
 
 
+def _send_metric_sync(
+    key: str,
+    value: Union[int, float],
+    inputs: Optional[List[str]] = None,
+    params: Optional[Dict[str, Any]] = None,
+    recorded_at: Optional[str] = None,
+    thresholds: Optional[Dict[str, Any]] = None,
+    passed: Optional[bool] = None,
+):
+    """Send one metric without creating or depending on an event loop."""
+    _ensure_fresh_oidc_token()
+    try:
+        return post_metric(
+            _get_url("log_unit_metric"),
+            serialize_metric(
+                key,
+                value,
+                inputs,
+                params,
+                recorded_at,
+                thresholds,
+                passed,
+                encoder=NumpyEncoder,
+            ),
+            _get_api_headers(),
+            timeout=float(os.getenv("VM_API_TIMEOUT", 30)),
+        )
+    except TrackingAPIError as e:
+        _raise_for_api_error(e.status_code, e.response_text)
+
+
 async def alog_metric(
     key: str,
     value: Union[int, float],
@@ -1004,38 +1037,17 @@ async def alog_metric(
     thresholds: Optional[Dict[str, Any]] = None,
     passed: Optional[bool] = None,
 ):
-    """See log_metric for details."""
-    if not key or not isinstance(key, str):
-        raise ValueError("`key` must be a non-empty string")
-
-    if value is None:
-        raise ValueError("Must provide a value for the metric")
-
-    # Validate that value is a scalar (int or float)
-    if not isinstance(value, (int, float)):
-        raise ValueError(
-            "Only scalar values (int or float) are allowed for logging metrics."
-        )
-
-    if thresholds is not None and not isinstance(thresholds, dict):
-        raise ValueError("`thresholds` must be a dictionary or None")
-
+    """See log_metric for details, without blocking the current event loop."""
     try:
-        return await _post(
-            "log_unit_metric",
-            data=json.dumps(
-                {
-                    "key": key,
-                    "value": value,
-                    "inputs": inputs or [],
-                    "params": params or {},
-                    "recorded_at": recorded_at,
-                    "thresholds": thresholds or {},
-                    "passed": passed if passed is not None else None,
-                },
-                cls=NumpyEncoder,
-                allow_nan=False,
-            ),
+        return await asyncio.to_thread(
+            _send_metric_sync,
+            key,
+            value,
+            inputs,
+            params,
+            recorded_at,
+            thresholds,
+            passed,
         )
     except Exception as e:
         logger.error("Error logging metric to ValidMind API")
@@ -1068,16 +1080,19 @@ def log_metric(
         thresholds (Dict[str, Any], optional): Thresholds for the metric
         passed (bool, optional): Whether the metric passed validation thresholds
     """
-    return run_async(
-        alog_metric,
-        key=key,
-        value=value,
-        inputs=inputs,
-        params=params,
-        recorded_at=recorded_at,
-        thresholds=thresholds,
-        passed=passed,
-    )
+    try:
+        return _send_metric_sync(
+            key,
+            value,
+            inputs,
+            params,
+            recorded_at,
+            thresholds,
+            passed,
+        )
+    except Exception as e:
+        logger.error("Error logging metric to ValidMind API")
+        raise e
 
 
 def generate_test_result_description(test_result_data: Dict[str, Any]) -> str:
