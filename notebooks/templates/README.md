@@ -8,6 +8,10 @@ The same functionality is also accesible [in our root directory Makefile](../../
 make notebook
 ```
 
+During generation you'll choose:
+
+1. A **role / document type** (development, validation, or monitoring) that selects which mini-template variants to append.
+2. An **inventory record type** (Model by default, Agent, Use Case, Tool, or custom free text) that fills `{record-type}` placeholders in install and next-steps mini-templates.
 ## Mini-templates
 
 The template generation script/notebook draws from the following mini-templates, should you need to revise them or grab the information from them manually:
