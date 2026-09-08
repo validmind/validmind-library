@@ -206,7 +206,7 @@ def ExampleConfusionMatrix(model: VMModel, dataset: VMDataset):
 
     cm = confusion_matrix(y_true, y_pred, labels=labels)
 
-    fig = ff.create_annotated_heatmap()
+    fig = go.Heatmap()
     ..
 
     return fig
@@ -230,7 +230,7 @@ def ExampleConfusionMatrix(model: VMModel, dataset: VMDataset):
 
     cm = confusion_matrix(y_true, y_pred, labels=labels)
 
-    fig = ff.create_annotated_heatmap()
+    fig = go.Heatmap()
     ..
 
     return fig, RawData(confusion_matrix=cm, model=model.input_id, dataset=dataset.input_id)
