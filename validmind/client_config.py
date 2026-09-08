@@ -39,6 +39,10 @@ class ClientConfig:
         """Returns True if the client can generate LLM-based test descriptions."""
         return self.feature_flags.get("llm_test_descriptions", True)
 
+    def supports_log_metadata_markdown(self):
+        """Return whether the backend converts Markdown logged as metadata."""
+        return self.feature_flags.get("log_metadata_markdown", False)
+
 
 client_config = ClientConfig(
     model=None,

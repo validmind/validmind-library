@@ -285,14 +285,22 @@ def WeakspotsDiagnosis(
     figures = []
     passed = True
 
-    df_1 = datasets[0]._df[
-        feature_columns
-        + [datasets[0].target_column, datasets[0].prediction_column(model)]
-    ]
-    df_2 = datasets[1]._df[
-        feature_columns
-        + [datasets[1].target_column, datasets[1].prediction_column(model)]
-    ]
+    df_1 = (
+        datasets[0]
+        ._df[
+            feature_columns
+            + [datasets[0].target_column, datasets[0].prediction_column(model)]
+        ]
+        .copy()
+    )
+    df_2 = (
+        datasets[1]
+        ._df[
+            feature_columns
+            + [datasets[1].target_column, datasets[1].prediction_column(model)]
+        ]
+        .copy()
+    )
     results_1 = pd.DataFrame()
     results_2 = pd.DataFrame()
     for feature in feature_columns:

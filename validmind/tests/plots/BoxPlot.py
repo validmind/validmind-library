@@ -4,7 +4,6 @@
 
 from typing import List, Optional
 
-import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
@@ -18,21 +17,12 @@ def _validate_inputs(
 ):
     """Validate inputs and return validated columns."""
 
-    # Get dtypes without loading data into memory
-    if not isinstance(columns, list):
-        columns = [columns]
-
-    columns_dtypes = dataset._df[columns].dtypes
-
-    columns_numeric = []
-    columns_numeric = columns_dtypes[
-        columns_dtypes.apply(lambda x: pd.api.types.is_numeric_dtype(x))
-    ].index.tolist()
-
     if columns is None:
-        columns = columns_numeric
+        columns = list(dataset.feature_columns_numeric)
     else:
-        available_columns = set(columns_numeric)
+        if not isinstance(columns, list):
+            columns = [columns]
+        available_columns = set(dataset.feature_columns_numeric)
         columns = [col for col in columns if col in available_columns]
 
     if not columns:
