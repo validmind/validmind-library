@@ -184,7 +184,10 @@ class StringOutputHandler(OutputHandler):
 
     def process(self, item: Any, result: TestResult) -> None:
         if not is_html(item):
+            result._description_source = item
             item = md_to_html(item, mathml=True)
+        else:
+            result._description_source = None
 
         result.description = item
 

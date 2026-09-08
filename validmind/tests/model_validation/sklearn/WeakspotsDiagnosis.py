@@ -263,6 +263,11 @@ def WeakspotsDiagnosis(
             "Column(s) provided in features_columns do not exist in the dataset"
         )
 
+    # Custom callables own their kwargs (e.g. partial(f1_score, average="weighted")),
+    # so averaging is only bound onto the defaults; rebinding user metrics would
+    # silently override their explicit averaging/pos_label choices.
+    using_default_metrics = metrics is None
+
     metrics, plot_thresholds, pass_thresholds = _prepare_metrics_and_thresholds(
         metrics, thresholds
     )
@@ -270,8 +275,9 @@ def WeakspotsDiagnosis(
     # Bind averaging options so label-based metrics work for multiclass targets and
     # for binary targets encoded outside {0, 1} (e.g. {0, 4}) instead of raising on
     # scikit-learn's default average="binary"/pos_label=1.
-    average, pos_label = _resolve_averaging(datasets, model)
-    metrics = _apply_averaging(metrics, average, pos_label)
+    if using_default_metrics:
+        average, pos_label = _resolve_averaging(datasets, model)
+        metrics = _apply_averaging(metrics, average, pos_label)
 
     results_headers = ["Slice", "Number of Records", "Feature"]
     results_headers.extend(metrics.keys())
@@ -279,14 +285,22 @@ def WeakspotsDiagnosis(
     figures = []
     passed = True
 
-    df_1 = datasets[0]._df[
-        feature_columns
-        + [datasets[0].target_column, datasets[0].prediction_column(model)]
-    ]
-    df_2 = datasets[1]._df[
-        feature_columns
-        + [datasets[1].target_column, datasets[1].prediction_column(model)]
-    ]
+    df_1 = (
+        datasets[0]
+        ._df[
+            feature_columns
+            + [datasets[0].target_column, datasets[0].prediction_column(model)]
+        ]
+        .copy()
+    )
+    df_2 = (
+        datasets[1]
+        ._df[
+            feature_columns
+            + [datasets[1].target_column, datasets[1].prediction_column(model)]
+        ]
+        .copy()
+    )
     results_1 = pd.DataFrame()
     results_2 = pd.DataFrame()
     for feature in feature_columns:
@@ -335,11 +349,10 @@ def WeakspotsDiagnosis(
         # For simplicity, test has failed if any of the metrics is below the threshold. We will
         # rely on visual assessment for this test for now.
         pass_columns = [c for c in pass_thresholds if c in metrics]
-        if (
-            pass_columns
-            and not df[df[pass_columns].lt(pass_thresholds).any(axis=1)].empty
-        ):
-            passed = False
+        if pass_columns:
+            thresholds_subset = {c: pass_thresholds[c] for c in pass_columns}
+            if not df[df[pass_columns].lt(thresholds_subset).any(axis=1)].empty:
+                passed = False
         results_1 = pd.concat([results_1, pd.DataFrame(r1)])
         results_2 = pd.concat([results_2, pd.DataFrame(r2)])
 

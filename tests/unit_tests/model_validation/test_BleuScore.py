@@ -1,4 +1,6 @@
 import unittest
+from unittest.mock import Mock, patch
+
 import pandas as pd
 import numpy as np
 import validmind as vm
@@ -10,6 +12,17 @@ from validmind.tests.model_validation.BleuScore import BleuScore
 class TestBleuScore(unittest.TestCase):
     def setUp(self):
         """Set up test fixtures before each test method."""
+        bleu_metric = Mock()
+        bleu_metric.compute.side_effect = lambda predictions, references: {
+            "bleu": 1.0 if predictions[0] == references[0][0] else 0.5
+        }
+        evaluate_load_patcher = patch(
+            "validmind.tests.model_validation.BleuScore.evaluate.load",
+            return_value=bleu_metric,
+        )
+        evaluate_load_patcher.start()
+        self.addCleanup(evaluate_load_patcher.stop)
+
         # Create a sample dataset with text data
         np.random.seed(42)
 
