@@ -44,7 +44,7 @@ jobs:
           sudo apt install r-base r-base-dev
 
       - name: Build the package
-        run: uv build
+        run: uv build --all-packages
 
       - name: Remove Build Environment
         run: rm -rf .venv
@@ -52,9 +52,11 @@ jobs:
       - name: 'Setup Virtual Environment for [all]'
         run: python -m venv all-venv
 
-        # This proves that the [all] install target works
+      # This proves that the [all] install target works
       - name: 'Install Built Package for [all]'
-        run: all-venv/bin/pip install --no-cache-dir "$(ls dist/validmind*.whl | head -n 1)[all]"
+        run: |
+          all-venv/bin/pip install --no-cache-dir "$(ls dist/validmind_tracking_core*.whl | head -n 1)"
+          all-venv/bin/pip install --no-cache-dir "$(ls dist/validmind-*.whl | head -n 1)[all]"
 
       - name: Install Additional Dependencies
         run: all-venv/bin/pip install nbformat papermill jupyter

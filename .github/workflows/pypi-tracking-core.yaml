@@ -1,12 +1,11 @@
-# This workflow pushes the ValidMind Library package to PyPI when a tag is created.
-# The validmind-tracking-core package must be published first for new releases.
+# Publish the dependency-light tracking core independently from the full library.
 
-name: Publish to PyPI
+name: Publish Tracking Core to PyPI
 
 on:
   push:
     tags:
-      - 'v*.*.*'
+      - 'tracking-core-v*.*.*'
 
 permissions:
   contents: read
@@ -28,16 +27,11 @@ jobs:
         with:
           enable-cache: true
 
-      - name: Install Dependencies
-        run: uv sync --group dev
+      - name: Build tracking core
+        run: uv build --package validmind-tracking-core --out-dir dist
 
-      - name: Update twine
-        run: uv pip install --upgrade twine
-
-      - name: Publish to PyPI
+      - name: Publish tracking core
         env:
           UV_PUBLISH_USERNAME: __token__
           UV_PUBLISH_PASSWORD: ${{ secrets.POETRY_PYPI_TOKEN_PYPI }}
-        run: |
-          uv build
-          uv publish
+        run: uv publish dist/validmind_tracking_core-*
