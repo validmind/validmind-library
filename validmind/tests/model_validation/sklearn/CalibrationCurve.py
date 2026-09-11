@@ -2,12 +2,15 @@
 # Refer to the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+import inspect
 from typing import Tuple
 
+import numpy as np
 import plotly.graph_objects as go
 from sklearn.calibration import calibration_curve
 
 from validmind import tags, tasks
+from validmind.errors import SkipTestError
 from validmind.vm_models import VMDataset, VMModel
 from validmind.vm_models.result import RawData
 
@@ -70,8 +73,27 @@ def CalibrationCurve(
     - Assumes bin boundaries are appropriate for the problem
     - May be affected by class imbalance
     """
+    # Binary-only by design: sklearn's calibration_curve raises a cryptic
+    # "pos_label is not specified" error on multiclass targets, so skip cleanly
+    # like ROCCurve/PrecisionRecallCurve rather than crashing.
+    if len(np.unique(dataset.y)) > 2:
+        raise SkipTestError(
+            "Calibration Curve is only supported for binary classification models"
+        )
+
+    # A two-class target encoded outside {0, 1} (e.g. {0, 4} or string labels)
+    # passes the guard above but hits sklearn's "pos_label is not specified" error.
+    # Pass the largest label as the positive class, matching the "largest label is
+    # positive" convention in _diagnosis_metrics.resolve_averaging; for {0, 1} this
+    # is byte-identical to sklearn's default. pos_label was added to
+    # calibration_curve in scikit-learn 1.1, so guard by signature inspection to
+    # keep pre-1.1 installs working (pyproject sets no scikit-learn floor).
+    kwargs = {}
+    if "pos_label" in inspect.signature(calibration_curve).parameters:
+        kwargs["pos_label"] = np.unique(dataset.y).max()
+
     prob_true, prob_pred = calibration_curve(
-        dataset.y, dataset.y_prob(model), n_bins=n_bins
+        dataset.y, dataset.y_prob(model), n_bins=n_bins, **kwargs
     )
 
     # Create DataFrame for raw data

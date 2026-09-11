@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 """
-Quickstart for model documentation
+Quickstart for documentation
 
 Welcome! Let's get you started with the basic process of documenting models with ValidMind.
 

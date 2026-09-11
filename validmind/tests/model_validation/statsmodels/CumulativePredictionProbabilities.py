@@ -4,9 +4,9 @@
 
 from typing import Tuple
 
+import matplotlib
 import numpy as np
 import plotly.graph_objects as go
-from matplotlib import cm
 
 from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset, VMModel
@@ -75,7 +75,7 @@ def _plot_cumulative_prob(df, target_col, title):
 
     # Generate a colormap and convert to Plotly-accepted color format
     # Adjust 'viridis' to any other matplotlib colormap if desired
-    colormap = cm.get_cmap("viridis")
+    colormap = matplotlib.colormaps["viridis"]
 
     fig = go.Figure()
 

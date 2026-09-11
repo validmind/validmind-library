@@ -5,11 +5,28 @@
 from typing import Tuple
 
 import numpy as np
-import plotly.figure_factory as ff
 import plotly.graph_objects as go
 
 from validmind import RawData, tags, tasks
+from validmind.errors import MissingDependencyError
 from validmind.vm_models import VMDataset, VMModel
+
+# The first colour in Plotly's default distplot palette, kept so the ported figure
+# matches what `ff.create_distplot` produced.
+KDE_COLOR = "rgb(31, 119, 180)"
+
+try:
+    from scipy.stats import gaussian_kde
+except ImportError as e:
+    if "scipy" in str(e):
+        raise MissingDependencyError(
+            "Missing required package `scipy` for RegressionResidualsPlot. "
+            "Please run `pip install validmind[stats]` to use statistical tests",
+            required_dependencies=["scipy"],
+            extra="stats",
+        ) from e
+
+    raise e
 
 
 @tags("model_performance", "visualization")
@@ -65,12 +82,30 @@ def RegressionResidualsPlot(
 
     # Residuals plot
     residuals = y_true.flatten() - y_pred.flatten()
-    fig = ff.create_distplot(
-        hist_data=[residuals],
-        group_labels=["Residuals"],
-        bin_size=[bin_size],
-        show_hist=True,
-        show_rug=False,
+    # A 500-point KDE across the data range, which is what `ff.create_distplot`
+    # computed internally with scipy before Plotly 7 removed it.
+    curve_x = np.linspace(residuals.min(), residuals.max(), 500, endpoint=False)
+    curve_y = gaussian_kde(residuals)(curve_x)
+    fig = go.Figure(
+        data=[
+            go.Histogram(
+                x=residuals,
+                histnorm="probability density",
+                autobinx=False,
+                xbins=dict(start=residuals.min(), end=residuals.max(), size=bin_size),
+                name="Residuals",
+                marker=dict(color=KDE_COLOR),
+                opacity=0.7,
+            ),
+            go.Scatter(
+                x=curve_x,
+                y=curve_y,
+                mode="lines",
+                name="Residuals",
+                showlegend=False,
+                marker=dict(color=KDE_COLOR),
+            ),
+        ]
     )
     fig.update_layout(
         title="Distribution of Residuals",

@@ -389,19 +389,22 @@ def run_async(
         The result of the function.
     """
     try:
-        if asyncio.get_event_loop().is_running() and is_notebook():
-            if __loop:
-                future = __loop.create_task(func(*args, **kwargs), name=name)
-                # wait for the future result
-                return __loop.run_until_complete(future)
-
-            return asyncio.get_event_loop().create_task(
-                func(*args, **kwargs), name=name
-            )
+        running_loop = asyncio.get_running_loop()
     except RuntimeError:
-        pass
+        running_loop = None
 
-    return asyncio.get_event_loop().run_until_complete(func(*args, **kwargs))
+    if running_loop is not None and is_notebook():
+        if __loop:
+            future = __loop.create_task(func(*args, **kwargs), name=name)
+            # wait for the future result
+            return __loop.run_until_complete(future)
+
+        return running_loop.create_task(func(*args, **kwargs), name=name)
+
+    # Plain interpreter / unittest: no running loop. asyncio.get_event_loop() is
+    # deprecated and may raise on Python 3.10+ when no loop is set; asyncio.run
+    # creates and tears down a loop for this call.
+    return asyncio.run(func(*args, **kwargs))
 
 
 def run_async_check(
@@ -839,9 +842,7 @@ def get_column_type_detail(df, column) -> dict:
         type_detail = {"type": "Boolean"}
     elif pd.api.types.is_datetime64_any_dtype(dtype):
         type_detail = {"type": "Datetime"}
-    elif pd.api.types.is_categorical_dtype(dtype) or pd.api.types.is_object_dtype(
-        dtype
-    ):
+    elif isinstance(dtype, pd.CategoricalDtype) or pd.api.types.is_object_dtype(dtype):
         type_detail = _get_text_type_detail(series)
 
     # Update result with type details
@@ -880,7 +881,7 @@ def infer_datatypes(df, detailed=False) -> list:
             column_type_mappings[column] = {"id": column, "type": "Boolean"}
         elif pd.api.types.is_datetime64_any_dtype(dtype):
             column_type_mappings[column] = {"id": column, "type": "Datetime"}
-        elif pd.api.types.is_categorical_dtype(dtype) or pd.api.types.is_object_dtype(
+        elif isinstance(dtype, pd.CategoricalDtype) or pd.api.types.is_object_dtype(
             dtype
         ):
             # Check if this is more likely to be text than categorical

@@ -67,6 +67,8 @@ pip install validmind
 
 The ValidMind Library includes optional PII detection capabilities using Microsoft Presidio to automatically detect sensitive data in test results and prevent accidental logging.
 
+For an extended guide, refer to our how-to notebook: **[Enable PII detection](notebooks/how_to/tests/run_tests/configure_tests/enable_pii_detection.ipynb)**
+
 **Installation:**
 
 ```bash
@@ -93,7 +95,7 @@ export VALIDMIND_PII_DETECTION=disabled
 
 ### Install dependencies
 
-- Ensure you have `poetry` installed: <https://python-poetry.org/>
+- Ensure you have `uv` installed: <https://docs.astral.sh/uv/getting-started/installation/>
 
 - After cloning this repo, run:
 
@@ -103,11 +105,11 @@ make install
 
 This will install the dependencies and git hooks for the project.
 
-- To run Jupyter notebooks using the source code from the repo, you can use `poetry` to register
+- To run Jupyter notebooks using the source code from the repo, you can use `uv` to register
 a new kernel with Jupyter:
 
 ```bash
-poetry run python -m ipykernel install --user --name validmind --display-name "ValidMind Library"
+uv run python -m ipykernel install --user --name validmind --display-name "ValidMind Library"
 ```
 
 ### Installing LLM validation dependencies
@@ -115,7 +117,7 @@ poetry run python -m ipykernel install --user --name validmind --display-name "V
 You can install the `transformers`, `torch` and `openai` dependencies using the `llm` extra. This will install the Hugging Face transformers and PyTorch libraries as well as the OpenAI SDK for running the LLM validation examples:
 
 ```bash
-poetry install --extras llm
+uv sync --extra llm --group dev
 ```
 
 ### Setting up R support
@@ -180,8 +182,8 @@ Then create/open `.ipynb` files in VS Code and select the R kernel.
 
 Launch R from the repository root (so dataset paths resolve correctly) and run through the notebooks in `notebooks/code_sharing/r/`:
 
-- `quickstart_model_documentation.Rmd` — model documentation workflow
-- `quickstart_model_validation.Rmd` — model validation workflow
+- `quickstart_documentation.Rmd` — model documentation workflow
+- `quickstart_validation.Rmd` — model validation workflow
 
 ### Versioning
 
@@ -191,7 +193,7 @@ Make sure you bump the package version before merging a PR with the following co
 make version tag=patch
 ```
 
-The value of `tag` corresponds to one of the options provided by Poetry: <https://python-poetry.org/docs/cli/#version>
+The value of `tag` is either `patch`, `minor`, or `major` (passed to `uv version --bump`), or an explicit version string such as `2.14.0` (passed to `uv version`).
 
 ## Generating summaries for test descriptions
 
@@ -200,13 +202,13 @@ Use `add_test_description.py` to generate a draft descriptions for a test using 
 Entire directory:
 
 ```bash
-poetry run python scripts/add_test_description.py review validmind/tests/example_directory/
+uv run python scripts/add_test_description.py review validmind/tests/example_directory/
 ```
 
 Single file:
 
 ```bash
-poetry run python scripts/add_test_description.py review validmind/tests/ongoing_monitoring/FeatureDrift.py
+uv run python scripts/add_test_description.py review validmind/tests/ongoing_monitoring/FeatureDrift.py
 ```
 
 ## Adding a copyright header
@@ -225,7 +227,6 @@ make copyright
 If you run into an error related to the ValidMind wheel, try:
 
 ```bash
-poetry add wheel
-poetry update wheel
-poetry install
+uv lock --upgrade-package wheel
+uv sync --all-extras --group dev
 ```

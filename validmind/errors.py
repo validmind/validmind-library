@@ -189,6 +189,10 @@ class MissingAPICredentialsError(BaseError):
         )
 
 
+class ValidMindAuthError(BaseError):
+    """OAuth/OIDC or library authentication failures (device flow, refresh, bad issuer)."""
+
+
 class MissingClassLabelError(BaseError):
     """
     When the one or more class labels are missing from provided dataset targets.

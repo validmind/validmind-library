@@ -23,9 +23,7 @@ def _get_metrics(scoring):
     return (
         scoring
         if isinstance(scoring, list)
-        else list(scoring.keys())
-        if isinstance(scoring, dict)
-        else [scoring]
+        else list(scoring.keys()) if isinstance(scoring, dict) else [scoring]
     )
 
 
@@ -45,7 +43,7 @@ def _create_scoring_dict(scoring, metrics, threshold):
     for metric in metrics:
         if metric == "recall":
             scoring_dict[metric] = make_scorer(
-                custom_recall, needs_proba=True, threshold=threshold
+                custom_recall, response_method="predict_proba", threshold=threshold
             )
         elif metric == "roc_auc":
             scoring_dict[metric] = "roc_auc"

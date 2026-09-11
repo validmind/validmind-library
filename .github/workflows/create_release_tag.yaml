@@ -17,19 +17,18 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.LIBRARY_RELEASE_PAT }}
 
-      - name: Install poetry
-        run: pipx install poetry
-
       - name: Set up Python 3.11
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-          cache: "poetry"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
 
       - name: Get Version from pyproject.toml
         id: get_version
         run: |
-          VERSION=$(poetry version -s)
+          VERSION=$(uv version --short)
           echo "VERSION=${VERSION}" >> $GITHUB_OUTPUT
           echo "TAG=v${VERSION}" >> $GITHUB_OUTPUT
 

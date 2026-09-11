@@ -21,6 +21,8 @@ from validmind.vm_models.result.utils import (
 from validmind.vm_models.figure import Figure
 from validmind.errors import InvalidParameterError
 from validmind.tests.output import TableOutputHandler
+from validmind.tests.run import run_test
+from validmind.utils import md_to_html
 
 loop = asyncio.new_event_loop()
 
@@ -99,6 +101,30 @@ class TestResultClasses(unittest.TestCase):
         self.assertEqual(test_result.description, "Test description")
         self.assertEqual(test_result.metric, 0.95)
         self.assertTrue(test_result.passed)
+
+    @patch("validmind.tests.run._get_run_metadata", return_value={})
+    @patch("validmind.tests.run.get_result_description")
+    @patch("validmind.tests.run._run_test")
+    def test_run_test_retains_markdown_description_source(
+        self, mock_run_test, mock_get_description, _mock_run_metadata
+    ):
+        """Default test descriptions retain Markdown alongside rendered HTML."""
+        equation = r"$WOE = \ln\dfrac{\%\ of\ Events}{\%\ of\ Non-Events}$"
+        mock_run_test.return_value = TestResult(
+            result_id="validmind.test.Equation",
+            doc=equation,
+            inputs={},
+        )
+        mock_get_description.return_value = md_to_html(equation, mathml=True)
+
+        result = run_test(
+            test_id="validmind.test.Equation",
+            generate_description=False,
+            show=False,
+        )
+
+        self.assertIn('<script type="math/tex">', result.description)
+        self.assertEqual(result._description_source, equation)
 
     def test_test_result_add_table(self):
         """Test adding tables to TestResult"""
@@ -214,6 +240,35 @@ class TestResultClasses(unittest.TestCase):
         mock_test_result.assert_called_once()
         mock_metric.assert_called_once()
 
+    @patch("validmind.vm_models.result.result.update_metadata")
+    @patch("validmind.api_client.alog_test_result")
+    @patch("validmind.api_client.alog_figure")
+    async def test_test_result_log_async_pre_serializes_figures(
+        self, mock_figure, mock_test_result, mock_update_metadata
+    ):
+        """Figure PNGs are rendered before any upload request starts"""
+        mock_test_result.return_value = MockAsyncResponse(200, json={"cuid": "123"})
+        mock_update_metadata.return_value = None
+        cached_at_upload = []
+
+        async def record(figure):
+            cached_at_upload.append(figure._cached_png_bytes is not None)
+            return MockAsyncResponse(200, json={"cuid": "456"})
+
+        mock_figure.side_effect = record
+
+        fig, ax = plt.subplots()
+        ax.plot([1, 2], [3, 4])
+        test_result = TestResult(
+            result_id="test_1",
+            figures=[Figure(key="fig_1", figure=fig, ref_id="ref_1")],
+        )
+
+        await test_result.log_async(section_id="section_1", position=0)
+
+        self.assertEqual(cached_at_upload, [True])
+        plt.close(fig)
+
     def test_text_generation_result(self):
         """Test TextGenerationResult initialization and methods"""
         text_result = TextGenerationResult(
@@ -263,6 +318,48 @@ class TestResultClasses(unittest.TestCase):
         mock_log_text.assert_called_once_with(
             content_id=f"dataset_summary_text::{DEFAULT_REVISION_NAME}",
             text="Generated text",
+            section_id=None,
+        )
+
+    @patch("validmind.vm_models.result.result.api_client.alog_text")
+    @patch.object(TextGenerationResult, "_get_client_config")
+    def test_text_generation_result_logs_markdown_source(
+        self, mock_get_client_config, mock_log_text
+    ):
+        """Generated result HTML stays local while its Markdown is logged."""
+        equation = r"$WOE = \ln\dfrac{\%\ of\ Events}{\%\ of\ Non-Events}$"
+        text_result = TextGenerationResult(
+            result_id="text_1",
+            content_id="dataset_summary_text",
+            description=md_to_html(equation, mathml=True),
+            _description_source=equation,
+        )
+        mock_get_client_config.return_value = type(
+            "MockConfig",
+            (),
+            {
+                "documentation_template": {
+                    "sections": [
+                        {
+                            "id": "data_description",
+                            "contents": [
+                                {
+                                    "content_id": "dataset_summary_text",
+                                    "content_type": "text",
+                                }
+                            ],
+                        }
+                    ]
+                }
+            },
+        )()
+
+        self.run_async(text_result.log_async)
+
+        self.assertIn('<script type="math/tex">', text_result.description)
+        mock_log_text.assert_called_once_with(
+            content_id=f"dataset_summary_text::{DEFAULT_REVISION_NAME}",
+            text=equation,
             section_id=None,
         )
 
@@ -386,33 +483,53 @@ class TestResultClasses(unittest.TestCase):
         with self.assertRaises(InvalidParameterError):
             test_result.validate_log_config(invalid_type_config)
 
-    @patch("validmind.api_client.update_metadata")
-    async def test_metadata_update_content_id_handling(self, mock_update_metadata):
+    @patch("validmind.vm_models.result.result.update_metadata")
+    @patch("validmind.api_client.alog_test_result")
+    def test_metadata_update_content_id_handling(
+        self, mock_log_test_result, mock_update_metadata
+    ):
         """Test metadata update with different content_id scenarios"""
         # Test case 1: With content_id
         test_result = TestResult(
             result_id="test_1",
             description="Test description",
+            inputs={},
             _was_description_generated=False,
         )
-        await test_result.log_async(content_id="custom_content_id")
+        self.run_async(test_result.log_async, content_id="custom_content_id")
         mock_update_metadata.assert_called_with(
-            content_id="custom_content_id::default", text="Test description"
+            content_id=f"custom_content_id::{DEFAULT_REVISION_NAME}",
+            text="Test description",
         )
 
         # Test case 2: Without content_id
         mock_update_metadata.reset_mock()
-        await test_result.log_async()
+        self.run_async(test_result.log_async)
         mock_update_metadata.assert_called_with(
-            content_id="test_description:test_1::default", text="Test description"
+            content_id=f"test_description:test_1::{DEFAULT_REVISION_NAME}",
+            text="Test description",
         )
 
         # Test case 3: With AI generated description
         test_result._was_description_generated = True
         mock_update_metadata.reset_mock()
-        await test_result.log_async()
+        self.run_async(test_result.log_async)
         mock_update_metadata.assert_called_with(
-            content_id="test_description:test_1::ai", text="Test description"
+            content_id=f"test_description:test_1::{AI_REVISION_NAME}",
+            text="Test description",
+        )
+
+        # Test case 4: Rendered HTML remains local and raw Markdown is sent safely
+        equation = r"$WOE = \ln\dfrac{\%\ of\ Events}{\%\ of\ Non-Events}$"
+        test_result.description = md_to_html(equation, mathml=True)
+        test_result._description_source = equation
+        mock_update_metadata.reset_mock()
+        self.run_async(test_result.log_async)
+        self.assertIn('<script type="math/tex">', test_result.description)
+        mock_update_metadata.assert_called_with(
+            content_id=f"test_description:test_1::{AI_REVISION_NAME}",
+            text=equation,
+            text_format="markdown",
         )
 
     def test_test_result_metric_values_integration(self):
@@ -562,6 +679,85 @@ class TestResultClasses(unittest.TestCase):
             self.assertNotIn("vm-plotly-data", html)
             self.assertIn("data:image/png;base64", html)
             self.assertIn("vm-img-test_key", html)
+
+    def test_figure_title_serializes_as_caption(self):
+        """Figure.title should be serialized into metadata as `caption` so it
+        flows into the platform's document media registry (Figure N. <caption>).
+        """
+        import json as _json
+
+        plotly_fig = go.Figure(data=go.Scatter(x=[1, 2, 3], y=[4, 5, 6]))
+
+        # With a title -> metadata.caption is set
+        titled = Figure(
+            key="k", figure=plotly_fig, ref_id="r1", title="My Cool Chart"
+        )
+        payload = titled.serialize()
+        meta = _json.loads(payload["metadata"])
+        self.assertEqual(meta["_ref_id"], "r1")
+        self.assertEqual(meta["caption"], "My Cool Chart")
+
+        # Without a title -> no caption key (back-compat)
+        untitled = Figure(key="k", figure=plotly_fig, ref_id="r2")
+        meta_untitled = _json.loads(untitled.serialize()["metadata"])
+        self.assertEqual(meta_untitled, {"_ref_id": "r2"})
+        self.assertNotIn("caption", meta_untitled)
+
+    def test_result_table_title_serializes_as_caption(self):
+        """ResultTable.title should be serialized into metadata under both
+        `title` (back-compat) and `caption` (consumed by the caption registry)."""
+        df = pd.DataFrame({"col1": [1, 2, 3]})
+
+        titled = ResultTable(data=df, title="Top Features")
+        payload = titled.serialize()
+        self.assertEqual(payload["metadata"]["title"], "Top Features")
+        self.assertEqual(payload["metadata"]["caption"], "Top Features")
+
+        untitled = ResultTable(data=df)
+        self.assertNotIn("metadata", untitled.serialize())
+
+    def test_figure_output_handler_dict_assigns_titles(self):
+        """Returning ``{"My Chart Title": fig, ...}`` from a test should produce
+        Figure objects with the dict key applied as ``title``."""
+        from validmind.tests.output import FigureOutputHandler
+
+        png = b"\x89PNG\r\n\x1a\n" + b"\x00" * 16
+
+        result = TestResult(result_id="my.test", ref_id="ref-1")
+        handler = FigureOutputHandler()
+
+        self.assertTrue(handler.can_handle({"A": png, "B": png}))
+        # dict of non-figures should NOT be claimed by FigureOutputHandler
+        self.assertFalse(handler.can_handle({"x": 1, "y": 2}))
+
+        handler.process({"Chart A": png, "Chart B": png}, result)
+
+        self.assertEqual(len(result.figures), 2)
+        self.assertEqual(
+            sorted(f.title for f in result.figures), ["Chart A", "Chart B"]
+        )
+        # Each figure gets a unique key under the same result_id/ref_id
+        keys = [f.key for f in result.figures]
+        self.assertEqual(len(set(keys)), 2)
+        for f in result.figures:
+            self.assertTrue(f.key.startswith("my.test:"))
+            self.assertEqual(f.ref_id, "ref-1")
+
+    def test_figure_output_handler_preserves_explicit_figure_title(self):
+        """If a user passes a pre-built Figure with an explicit title, the
+        dict-key wrapper must not overwrite it."""
+        from validmind.tests.output import FigureOutputHandler
+
+        png = b"\x89PNG\r\n\x1a\n" + b"\x00" * 16
+        explicit = Figure(
+            key="explicit_key", figure=png, ref_id="ref-1", title="User Title"
+        )
+
+        result = TestResult(result_id="my.test", ref_id="ref-1")
+        FigureOutputHandler().process({"Dict Key Title": explicit}, result)
+
+        self.assertEqual(len(result.figures), 1)
+        self.assertEqual(result.figures[0].title, "User Title")
 
 
 if __name__ == "__main__":

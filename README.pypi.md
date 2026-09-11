@@ -19,7 +19,7 @@ ValidMind helps developers, data scientists and risk and compliance stakeholders
 
 > **All you need to get started with ValidMind is an account with us.**
 >
-> Signing up is FREE — **[Register with ValidMind](https://docs.validmind.ai/guide/configuration/register-with-validmind.html)**
+> Signing up is FREE — **[Register with ValidMind](https://docs.validmind.ai/guide/access/register-with-validmind.html)**
 
 That's right — you can run tests and log documentation even if you don't have a model available, so go ahead and get started with the [**ValidMind Library**](https://docs.validmind.ai/developer/validmind-library.html)!
 

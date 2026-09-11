@@ -17,25 +17,26 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install poetry
-        run: pipx install poetry
-
       - name: Set up Python 3.11
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-          cache: 'poetry'
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
 
       - name: Install Dependencies
-        run: poetry env use python3.11 && poetry install
+        run: uv sync --group dev
 
       - name: Update twine
-        run: poetry run pip install --upgrade twine
+        run: uv pip install --upgrade twine
 
       - name: Publish to PyPI
         env:
-          PYPI_USERNAME: __token__
-          PYPI_PASSWORD: ${{ secrets.POETRY_PYPI_TOKEN_PYPI }}
+          UV_PUBLISH_USERNAME: __token__
+          UV_PUBLISH_PASSWORD: ${{ secrets.POETRY_PYPI_TOKEN_PYPI }}
         run: |
-          poetry build
-          poetry publish -u $PYPI_USERNAME -p $PYPI_PASSWORD
+          uv build
+          uv publish

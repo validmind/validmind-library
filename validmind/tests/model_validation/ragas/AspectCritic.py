@@ -165,7 +165,7 @@ def AspectCritic(
     result_df = evaluate(
         Dataset.from_pandas(df),
         metrics=all_aspects,
-        **get_ragas_config(judge_llm, judge_embeddings)
+        **get_ragas_config(judge_llm, judge_embeddings),
     ).to_pandas()
 
     # reverse the score for aspects where lower is better

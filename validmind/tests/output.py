@@ -55,7 +55,8 @@ class MetricOutputHandler(OutputHandler):
 
 
 class FigureOutputHandler(OutputHandler):
-    def can_handle(self, item: Any) -> bool:
+    @staticmethod
+    def _is_figure_like(item: Any) -> bool:
         return (
             isinstance(item, Figure)
             or is_matplotlib_figure(item)
@@ -63,8 +64,23 @@ class FigureOutputHandler(OutputHandler):
             or is_png_image(item)
         )
 
-    def process(self, item: Any, result: TestResult) -> None:
+    def can_handle(self, item: Any) -> bool:
+        if self._is_figure_like(item):
+            return True
+        # Allow `{"My Chart Title": fig, ...}` so figures can be titled the
+        # same way tables already are (the dict key becomes the figure title).
+        if (
+            isinstance(item, dict)
+            and item
+            and all(self._is_figure_like(v) for v in item.values())
+        ):
+            return True
+        return False
+
+    def _add_one(self, item: Any, result: TestResult, title: str = None) -> None:
         if isinstance(item, Figure):
+            if title and not item.title:
+                item.title = title
             result.add_figure(item)
         else:
             random_id = str(uuid4())[:4]
@@ -73,8 +89,16 @@ class FigureOutputHandler(OutputHandler):
                     key=f"{result.result_id}:{random_id}",
                     figure=item,
                     ref_id=result.ref_id,
+                    title=title,
                 )
             )
+
+    def process(self, item: Any, result: TestResult) -> None:
+        if isinstance(item, dict):
+            for title, fig in item.items():
+                self._add_one(fig, result, title=title or None)
+            return
+        self._add_one(item, result)
 
 
 class TableOutputHandler(OutputHandler):
@@ -205,7 +229,10 @@ class StringOutputHandler(OutputHandler):
 
     def process(self, item: Any, result: TestResult) -> None:
         if not is_html(item):
+            result._description_source = item
             item = md_to_html(item, mathml=True)
+        else:
+            result._description_source = None
 
         result.description = item
 

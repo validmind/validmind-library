@@ -19,10 +19,11 @@ from validmind.errors import (
     APIRequestError,
     MissingAPICredentialsError,
     MissingModelIdError,
+    ValidMindAuthError,
 )
 from validmind.utils import md_to_html
 from validmind.vm_models.figure import Figure
-
+from validmind.vm_models.result.utils import update_metadata
 
 loop = asyncio.new_event_loop()
 
@@ -74,13 +75,15 @@ class TestAPIClient(unittest.TestCase):
     @patch("requests.get")
     def test_init_successful(self, mock_requests_get):
         mock_data = {
-            "model": {"name": "test_model", "cuid": os.environ["VM_API_MODEL"]}
+            "model": {"name": "test_model", "cuid": os.environ["VM_API_MODEL"]},
+            "feature_flags": {"log_metadata_markdown": True},
         }
         mock_response = Mock(status_code=200, json=Mock(return_value=mock_data))
         mock_requests_get.return_value = mock_response
 
         success = api_client.init()
         self.assertIsNone(success)
+        self.assertTrue(api_client.client_config.supports_log_metadata_markdown())
 
         mock_requests_get.assert_called_once_with(
             url=f"{os.environ['VM_API_HOST']}/ping",
@@ -248,6 +251,63 @@ class TestAPIClient(unittest.TestCase):
         )
 
     @patch("aiohttp.ClientSession.post")
+    def test_result_update_metadata_sends_waf_safe_markdown(self, mock_post: MagicMock):
+        equation = r"$WOE = \ln\dfrac{\%\ of\ Events}{\%\ of\ Non-Events}$"
+        mock_post.return_value = MockAsyncResponse(200, json={"cuid": "abc1234"})
+
+        with patch.dict(
+            api_client.client_config.feature_flags,
+            {"log_metadata_markdown": True},
+        ):
+            self.run_async(
+                update_metadata,
+                "test_description:equation::default",
+                equation,
+                text_format="markdown",
+            )
+
+        mock_post.assert_called_once_with(
+            f"{os.environ['VM_API_HOST']}/log_metadata",
+            data=json.dumps(
+                {
+                    "content_id": "test_description:equation::default",
+                    "text": equation,
+                    "text_format": "markdown",
+                }
+            ),
+        )
+        self.assertNotIn("<script", mock_post.call_args.kwargs["data"])
+
+    @patch("aiohttp.ClientSession.post")
+    def test_result_update_metadata_falls_back_for_legacy_backend(
+        self, mock_post: MagicMock
+    ):
+        equation = r"$WOE = \ln\dfrac{\%\ of\ Events}{\%\ of\ Non-Events}$"
+        legacy_html = md_to_html(equation, mathml=True)
+        mock_post.return_value = MockAsyncResponse(200, json={"cuid": "abc1234"})
+
+        with patch.dict(api_client.client_config.feature_flags, {}, clear=True):
+            self.run_async(
+                update_metadata,
+                "test_description:equation::default",
+                equation,
+                text_format="markdown",
+            )
+
+        mock_post.assert_called_once_with(
+            f"{os.environ['VM_API_HOST']}/log_metadata",
+            data=json.dumps(
+                {
+                    "content_id": "test_description:equation::default",
+                    "text": legacy_html,
+                }
+            ),
+        )
+        request_body = mock_post.call_args.kwargs["data"]
+        self.assertIn("<script", request_body)
+        self.assertNotIn("text_format", request_body)
+
+    @patch("aiohttp.ClientSession.post")
     def test_log_test_result(self, mock_post):
         result = {
             "test_name": "test_name",
@@ -280,15 +340,21 @@ class TestAPIClient(unittest.TestCase):
             200,
             json={
                 "content_id": "dataset_summary_text",
-                "text": md_to_html("## Generated Summary\nGenerated content.", mathml=True),
+                "text": md_to_html(
+                    "## Generated Summary\nGenerated content.", mathml=True
+                ),
             },
         )
 
-        api_client.log_text(
-            content_id="dataset_summary_text",
-            prompt="Summarize the dataset.",
-            context={"content_ids": ["train_dataset", "target_description_text"]},
-        )
+        with patch.dict(
+            api_client.client_config.feature_flags,
+            {"log_metadata_markdown": True},
+        ):
+            api_client.log_text(
+                content_id="dataset_summary_text",
+                prompt="Summarize the dataset.",
+                context={"content_ids": ["train_dataset", "target_description_text"]},
+            )
 
         mock_requests_post.assert_called_once_with(
             url=f"{os.environ['VM_API_HOST']}/ai/generate/qualitative_text_generation",
@@ -313,9 +379,8 @@ class TestAPIClient(unittest.TestCase):
             data=json.dumps(
                 {
                     "content_id": "dataset_summary_text",
-                    "text": md_to_html(
-                        "## Generated Summary\nGenerated content.", mathml=True
-                    ),
+                    "text": "## Generated Summary\nGenerated content.",
+                    "text_format": "markdown",
                 }
             ),
         )
@@ -337,11 +402,15 @@ class TestAPIClient(unittest.TestCase):
             },
         )
 
-        api_client.log_text(
-            content_id="dataset_summary_text",
-            prompt="Summarize the dataset.",
-            section_id="intended_use",
-        )
+        with patch.dict(
+            api_client.client_config.feature_flags,
+            {"log_metadata_markdown": True},
+        ):
+            api_client.log_text(
+                content_id="dataset_summary_text",
+                prompt="Summarize the dataset.",
+                section_id="intended_use",
+            )
 
         mock_requests_post.assert_called_once_with(
             url=f"{os.environ['VM_API_HOST']}/ai/generate/qualitative_text_generation",
@@ -364,7 +433,62 @@ class TestAPIClient(unittest.TestCase):
             data=json.dumps(
                 {
                     "content_id": "dataset_summary_text",
-                    "text": md_to_html("Generated content.", mathml=True),
+                    "text": "Generated content.",
+                    "text_format": "markdown",
+                }
+            ),
+        )
+
+    @patch("aiohttp.ClientSession.post")
+    def test_log_text_sends_tex_as_waf_safe_markdown(self, mock_post: MagicMock):
+        equation = r"$WOE = \ln\dfrac{\%\ of\ Events}{\%\ of\ Non-Events}$"
+        mock_post.return_value = MockAsyncResponse(
+            200,
+            json={
+                "content_id": "text_woe_equation",
+                "text": '<p><script type="math/tex">WOE</script></p>',
+            },
+        )
+
+        with patch.dict(
+            api_client.client_config.feature_flags,
+            {"log_metadata_markdown": True},
+        ):
+            self.run_async(
+                api_client.alog_text,
+                "text_woe_equation",
+                text=equation,
+            )
+
+        mock_post.assert_called_once_with(
+            f"{os.environ['VM_API_HOST']}/log_metadata",
+            data=json.dumps(
+                {
+                    "content_id": "text_woe_equation",
+                    "text": equation,
+                    "text_format": "markdown",
+                }
+            ),
+        )
+        request_body = mock_post.call_args.kwargs["data"]
+        self.assertNotIn("<script", request_body)
+
+    @patch("aiohttp.ClientSession.post")
+    def test_log_text_preserves_explicit_html_payload(self, mock_post: MagicMock):
+        html = "<p>Already converted</p>"
+        mock_post.return_value = MockAsyncResponse(
+            200,
+            json={"content_id": "existing_html", "text": html},
+        )
+
+        self.run_async(api_client.alog_text, "existing_html", text=html)
+
+        mock_post.assert_called_once_with(
+            f"{os.environ['VM_API_HOST']}/log_metadata",
+            data=json.dumps(
+                {
+                    "content_id": "existing_html",
+                    "text": html,
                 }
             ),
         )
@@ -388,6 +512,505 @@ class TestAPIClient(unittest.TestCase):
                 content_id="dataset_summary_text",
                 context={"content_ids": ["valid", ""]},
             )
+
+    # -- request-path refresh wiring (ZD-682) -----------------------------
+    # These assert the request wrappers actually invoke the refresh hook and
+    # that the 401 retry fires end-to-end, complementing the unit tests that
+    # exercise _ensure_fresh_oidc_token in isolation.
+
+    @patch("validmind.api_client._ensure_fresh_oidc_token")
+    @patch("aiohttp.ClientSession.get")
+    def test_get_refreshes_before_request_and_retries_on_401(
+        self, mock_get, mock_ensure
+    ):
+        mock_ensure.return_value = True  # forced refresh reports success -> retry
+        mock_get.side_effect = [
+            MockAsyncResponse(401, text="unauthorized"),
+            MockAsyncResponse(200, json={"ok": True}),
+        ]
+        result = self.run_async(api_client._get, "endpoint")
+        self.assertEqual(result, {"ok": True})
+        self.assertEqual(mock_get.call_count, 2)
+        self.assertEqual(mock_ensure.call_count, 2)
+        mock_ensure.assert_any_call(force=True)
+
+    @patch("validmind.api_client._ensure_fresh_oidc_token")
+    @patch("aiohttp.ClientSession.post")
+    def test_post_refreshes_before_request(self, mock_post, mock_ensure):
+        mock_post.return_value = MockAsyncResponse(200, json={"ok": True})
+        result = self.run_async(api_client._post, "endpoint", data={"a": "b"})
+        self.assertEqual(result, {"ok": True})
+        mock_ensure.assert_called_once_with()
+
+    @patch("validmind.api_client._ensure_fresh_oidc_token")
+    @patch("requests.get")
+    def test_ping_refreshes_before_request_and_retries_on_401(
+        self, mock_get, mock_ensure
+    ):
+        mock_ensure.return_value = True
+        mock_get.side_effect = [
+            MockResponse(401, text="unauthorized"),
+            MockResponse(200, json={"model": {"name": "n", "cuid": "c"}}),
+        ]
+        api_client._ping()
+        self.assertEqual(mock_get.call_count, 2)
+        self.assertEqual(mock_ensure.call_count, 2)
+        mock_ensure.assert_any_call(force=True)
+
+
+class TestAPIClientOIDC(unittest.TestCase):
+    """OIDC device-flow authentication via vm.init()."""
+
+    def tearDown(self):
+        with patch("validmind.api_client._ping"):
+            api_client.init(
+                api_key=os.environ["VM_API_KEY"],
+                api_secret=os.environ["VM_API_SECRET"],
+                api_host=os.environ["VM_API_HOST"],
+                model=os.environ["VM_API_MODEL"],
+                document="documentation",
+            )
+
+    @patch("validmind.api_client.reload")
+    def test_init_rejects_api_key_with_oidc(self, mock_reload):
+        with self.assertRaises(ValidMindAuthError):
+            api_client.init(
+                api_key="x",
+                api_secret="y",
+                model="m",
+                api_host="http://h/",
+                issuer="https://issuer/",
+                client_id="cid",
+            )
+        mock_reload.assert_not_called()
+
+    @patch("validmind.api_client.reload")
+    def test_init_requires_client_id_with_issuer(self, mock_reload):
+        with self.assertRaises(ValidMindAuthError):
+            api_client.init(
+                model="m",
+                api_host="http://h/",
+                issuer="https://issuer/",
+            )
+        mock_reload.assert_not_called()
+
+    @patch("validmind.api_client._ping")
+    @patch("validmind.api_client._obtain_oidc_tokens")
+    def test_init_oidc_uses_bearer_headers(self, mock_obtain, mock_ping):
+        mock_obtain.return_value = {
+            "issuer": "https://issuer/",
+            "client_id": "cid",
+            "access_token": "tok",
+            "expires_at": "2099-01-01T00:00:00+00:00",
+            "refresh_token": None,
+            "id_token": None,
+        }
+        api_client.init(
+            model="model-cuid",
+            api_host="http://localhost/track/",
+            api_key="",
+            api_secret="",
+            issuer="https://issuer/",
+            client_id="cid",
+            document="documentation",
+        )
+        headers = api_client._get_api_headers()
+        self.assertEqual(headers["Authorization"], "Bearer tok")
+        self.assertNotIn("X-API-KEY", headers)
+
+    @patch("validmind.api_client._ping")
+    @patch("validmind.api_client._obtain_oidc_tokens")
+    def test_init_entra_oidc_uses_id_token(self, mock_obtain, mock_ping):
+        mock_obtain.return_value = {
+            "issuer": "https://login.microsoftonline.com/tenant-id/v2.0",
+            "client_id": "cid",
+            "access_token": "access-token",
+            "expires_at": "2099-01-01T00:00:00+00:00",
+            "refresh_token": None,
+            "id_token": "id-token",
+        }
+        api_client.init(
+            model="model-cuid",
+            api_host="http://localhost/track/",
+            api_key="",
+            api_secret="",
+            issuer="https://login.microsoftonline.com/tenant-id/v2.0",
+            client_id="cid",
+            document="documentation",
+        )
+        headers = api_client._get_api_headers()
+        self.assertEqual(headers["Authorization"], "Bearer id-token")
+
+    @patch("validmind.api_client._ping")
+    @patch("validmind.api_client._obtain_oidc_tokens")
+    def test_init_non_entra_oidc_prefers_access_token(self, mock_obtain, mock_ping):
+        mock_obtain.return_value = {
+            "issuer": "https://issuer.example.com/",
+            "client_id": "cid",
+            "access_token": "access-token",
+            "expires_at": "2099-01-01T00:00:00+00:00",
+            "refresh_token": None,
+            "id_token": "id-token",
+        }
+        api_client.init(
+            model="model-cuid",
+            api_host="http://localhost/track/",
+            api_key="",
+            api_secret="",
+            issuer="https://issuer.example.com/",
+            client_id="cid",
+            document="documentation",
+        )
+        headers = api_client._get_api_headers()
+        self.assertEqual(headers["Authorization"], "Bearer access-token")
+
+    @patch("validmind.api_client._ping")
+    @patch("validmind.api_client._obtain_oidc_tokens")
+    def test_init_oidc_passes_audience(self, mock_obtain, mock_ping):
+        mock_obtain.return_value = {
+            "issuer": "https://issuer/",
+            "client_id": "cid",
+            "access_token": "tok",
+            "expires_at": "2099-01-01T00:00:00+00:00",
+            "refresh_token": None,
+            "id_token": None,
+            "audience": "https://api.example.com",
+        }
+        api_client.init(
+            model="model-cuid",
+            api_host="http://localhost/track/",
+            api_key="",
+            api_secret="",
+            issuer="https://issuer/",
+            client_id="cid",
+            audience="https://api.example.com",
+            document="documentation",
+        )
+        mock_obtain.assert_called_once()
+        _args, kwargs = mock_obtain.call_args
+        self.assertEqual(
+            kwargs.get("audience"),
+            "https://api.example.com",
+        )
+        ctx = api_client._oidc_login_context
+        assert ctx is not None
+        self.assertEqual(ctx["audience"], "https://api.example.com")
+
+    @patch("validmind.api_client._ping")
+    @patch("validmind.api_client._obtain_oidc_tokens")
+    def test_init_oidc_uses_default_scope_with_offline_access(
+        self, mock_obtain, mock_ping
+    ):
+        mock_obtain.return_value = {
+            "issuer": "https://issuer/",
+            "client_id": "cid",
+            "access_token": "tok",
+            "expires_at": "2099-01-01T00:00:00+00:00",
+            "refresh_token": "refresh-token",
+            "id_token": None,
+        }
+
+        with patch.dict(os.environ, {"VM_OIDC_SCOPE": ""}):
+            api_client.init(
+                model="model-cuid",
+                api_host="http://localhost/track/",
+                api_key="",
+                api_secret="",
+                issuer="https://issuer/",
+                client_id="cid",
+                document="documentation",
+            )
+
+        mock_obtain.assert_called_once_with(
+            "https://issuer/",
+            "cid",
+            "openid profile email offline_access",
+            audience=None,
+        )
+        ctx = api_client._oidc_login_context
+        assert ctx is not None
+        self.assertEqual(ctx["scope"], "openid profile email offline_access")
+
+    @patch("validmind.api_client._ping")
+    @patch("validmind.api_client._obtain_oidc_tokens")
+    def test_init_oidc_uses_env_config(self, mock_obtain, mock_ping):
+        mock_obtain.return_value = {
+            "issuer": "https://env-issuer/",
+            "client_id": "env-cid",
+            "access_token": "tok",
+            "expires_at": "2099-01-01T00:00:00+00:00",
+            "refresh_token": None,
+            "id_token": None,
+            "audience": "https://api.example.com",
+        }
+
+        with patch.dict(
+            os.environ,
+            {
+                "VM_API_KEY": "",
+                "VM_API_SECRET": "",
+                "VM_API_HOST": "http://localhost/from-env-host/",
+                "VM_OIDC_ISSUER": "https://env-issuer/",
+                "VM_OIDC_CLIENT_ID": "env-cid",
+                "VM_OIDC_SCOPE": "openid profile email offline_access",
+                "VM_OIDC_AUDIENCE": "https://api.example.com",
+            },
+        ):
+            api_client.init(model="model-cuid", document="documentation")
+
+        mock_obtain.assert_called_once_with(
+            "https://env-issuer/",
+            "env-cid",
+            "openid profile email offline_access",
+            audience="https://api.example.com",
+        )
+        self.assertEqual(api_client.get_api_host(), "http://localhost/from-env-host/")
+        ctx = api_client._oidc_login_context
+        assert ctx is not None
+        self.assertEqual(ctx["issuer"], "https://env-issuer/")
+        self.assertEqual(ctx["client_id"], "env-cid")
+        self.assertEqual(ctx["scope"], "openid profile email offline_access")
+        self.assertEqual(ctx["audience"], "https://api.example.com")
+
+    @patch("validmind.api_client._ping")
+    @patch("validmind.api_client._obtain_oidc_tokens")
+    def test_init_oidc_uses_env_api_url_alias(self, mock_obtain, mock_ping):
+        mock_obtain.return_value = {
+            "issuer": "https://env-issuer/",
+            "client_id": "env-cid",
+            "access_token": "tok",
+            "expires_at": "2099-01-01T00:00:00+00:00",
+            "refresh_token": None,
+            "id_token": None,
+        }
+
+        with patch.dict(
+            os.environ,
+            {
+                "VM_API_KEY": "",
+                "VM_API_SECRET": "",
+                "VM_API_HOST": "",
+                "VM_API_URL": "http://localhost/from-env-api-url/",
+                "VM_OIDC_ISSUER": "https://env-issuer/",
+                "VM_OIDC_CLIENT_ID": "env-cid",
+            },
+        ):
+            api_client.init(model="model-cuid", document="documentation")
+
+        self.assertEqual(
+            api_client.get_api_host(), "http://localhost/from-env-api-url/"
+        )
+
+    @patch("validmind.api_client._ping")
+    @patch("validmind.api_client._obtain_oidc_tokens")
+    def test_api_url_alias_sets_host(self, mock_obtain, mock_ping):
+        mock_obtain.return_value = {
+            "issuer": "https://issuer/",
+            "client_id": "cid",
+            "access_token": "tok",
+            "expires_at": "2099-01-01T00:00:00+00:00",
+            "refresh_token": None,
+            "id_token": None,
+        }
+        api_client.init(
+            model="model-cuid",
+            api_url="http://localhost/from-api-url/",
+            api_key="",
+            api_secret="",
+            issuer="https://issuer/",
+            client_id="cid",
+            document="documentation",
+        )
+        self.assertEqual(api_client.get_api_host(), "http://localhost/from-api-url/")
+
+    # -- request-path token refresh (ZD-682) ------------------------------
+
+    def _init_oidc(
+        self,
+        *,
+        access_token="tok",
+        expires_at,
+        refresh_token="refresh-token",
+        issuer="https://issuer.example.com/",
+    ):
+        """Put the client in OIDC mode with a chosen token expiry."""
+        with (
+            patch("validmind.api_client._ping"),
+            patch("validmind.api_client._obtain_oidc_tokens") as mock_obtain,
+        ):
+            mock_obtain.return_value = {
+                "issuer": issuer,
+                "client_id": "cid",
+                "access_token": access_token,
+                "expires_at": expires_at,
+                "refresh_token": refresh_token,
+                "id_token": None,
+            }
+            api_client.init(
+                model="model-cuid",
+                api_host="http://localhost/track/",
+                api_key="",
+                api_secret="",
+                issuer=issuer,
+                client_id="cid",
+                document="documentation",
+            )
+
+    def test_ensure_fresh_oidc_token_noop_when_token_valid(self):
+        self._init_oidc(expires_at="2099-01-01T00:00:00+00:00")
+        with patch("validmind.oidc_device.try_refresh_cached_tokens") as mock_refresh:
+            self.assertTrue(api_client._ensure_fresh_oidc_token())
+            mock_refresh.assert_not_called()
+        self.assertEqual(api_client._access_token, "tok")
+
+    def test_ensure_fresh_oidc_token_refreshes_when_expired(self):
+        self._init_oidc(access_token="old-tok", expires_at="2000-01-01T00:00:00+00:00")
+        entry = {
+            "issuer": "https://issuer.example.com/",
+            "client_id": "cid",
+            "access_token": "old-tok",
+            "expires_at": "2000-01-01T00:00:00+00:00",
+            "refresh_token": "refresh-token",
+        }
+        new_tokens = {
+            "issuer": "https://issuer.example.com/",
+            "client_id": "cid",
+            "access_token": "new-tok",
+            "expires_at": "2099-01-01T00:00:00+00:00",
+            "refresh_token": "refresh-token-2",
+        }
+        with (
+            patch("validmind.credentials_store.get_cached_entry", return_value=entry),
+            patch("validmind.credentials_store.upsert_cached_entry") as mock_upsert,
+            patch(
+                "validmind.oidc_device.try_refresh_cached_tokens",
+                return_value=new_tokens,
+            ) as mock_refresh,
+        ):
+            self.assertTrue(api_client._ensure_fresh_oidc_token())
+            mock_refresh.assert_called_once()
+            mock_upsert.assert_called_once()
+        self.assertEqual(api_client._access_token, "new-tok")
+
+    def test_ensure_fresh_oidc_token_force_refreshes_valid_token(self):
+        # Backstop for the reactive-401 path: force refresh even when unexpired.
+        self._init_oidc(access_token="old-tok", expires_at="2099-01-01T00:00:00+00:00")
+        entry = {
+            "issuer": "https://issuer.example.com/",
+            "client_id": "cid",
+            "access_token": "old-tok",
+            "expires_at": "2099-01-01T00:00:00+00:00",
+            "refresh_token": "refresh-token",
+        }
+        new_tokens = {
+            "issuer": "https://issuer.example.com/",
+            "client_id": "cid",
+            "access_token": "new-tok",
+            "expires_at": "2099-01-01T00:00:00+00:00",
+            "refresh_token": "refresh-token-2",
+        }
+        with (
+            patch("validmind.credentials_store.get_cached_entry", return_value=entry),
+            patch("validmind.credentials_store.upsert_cached_entry"),
+            patch(
+                "validmind.oidc_device.try_refresh_cached_tokens",
+                return_value=new_tokens,
+            ) as mock_refresh,
+        ):
+            self.assertTrue(api_client._ensure_fresh_oidc_token(force=True))
+            mock_refresh.assert_called_once()
+        self.assertEqual(api_client._access_token, "new-tok")
+
+    def test_ensure_fresh_oidc_token_returns_false_without_refresh_token(self):
+        self._init_oidc(expires_at="2000-01-01T00:00:00+00:00", refresh_token=None)
+        entry = {
+            "issuer": "https://issuer.example.com/",
+            "client_id": "cid",
+            "access_token": "tok",
+            "expires_at": "2000-01-01T00:00:00+00:00",
+            "refresh_token": None,
+        }
+        with (
+            patch("validmind.credentials_store.get_cached_entry", return_value=entry),
+            patch("validmind.oidc_device.try_refresh_cached_tokens") as mock_refresh,
+        ):
+            self.assertFalse(api_client._ensure_fresh_oidc_token())
+            mock_refresh.assert_not_called()
+
+    def test_ensure_fresh_oidc_token_noop_in_api_key_mode(self):
+        with patch("validmind.api_client._ping"):
+            api_client.init(
+                api_key=os.environ["VM_API_KEY"],
+                api_secret=os.environ["VM_API_SECRET"],
+                api_host=os.environ["VM_API_HOST"],
+                model=os.environ["VM_API_MODEL"],
+                document="documentation",
+            )
+        self.assertFalse(api_client._ensure_fresh_oidc_token())
+
+    def test_raise_for_api_error_gives_clear_message_on_oidc_401(self):
+        self._init_oidc(expires_at="2099-01-01T00:00:00+00:00")
+        with self.assertRaises(ValidMindAuthError) as ctx:
+            api_client._raise_for_api_error(401, "unauthorized")
+        self.assertIn("vm.init()", str(ctx.exception))
+
+    def test_locked_caller_adopts_concurrently_refreshed_token(self):
+        # Models the "losing" caller in a refresh race deterministically: it saw
+        # a stale token (so the cheap hot-path check is bypassed and it enters
+        # the locked section), but by the time it holds the lock another caller
+        # has already refreshed and persisted a fresh token. The in-lock re-check
+        # must make it adopt that token rather than issue a second refresh — this
+        # is what collapses a stampede to a single token-endpoint call. (Mutual
+        # exclusion itself is threading.Lock's job and isn't re-tested here.)
+        self._init_oidc(access_token="old-tok", expires_at="2000-01-01T00:00:00+00:00")
+        # In-memory expiry is stale, so the cheap check is bypassed and control
+        # reaches the locked section, exactly as a contended caller would.
+        self.assertTrue(api_client._oidc_token_is_stale())
+
+        fresh_entry = {
+            "issuer": "https://issuer.example.com/",
+            "client_id": "cid",
+            "access_token": "new-tok",
+            "expires_at": "2099-01-01T00:00:00+00:00",
+            "refresh_token": "refresh-token-2",
+        }
+        with (
+            patch(
+                "validmind.credentials_store.get_cached_entry", return_value=fresh_entry
+            ),
+            patch("validmind.oidc_device.try_refresh_cached_tokens") as mock_refresh,
+        ):
+            self.assertTrue(api_client._ensure_fresh_oidc_token())
+            mock_refresh.assert_not_called()
+        # Adopted the token another caller already refreshed, no second fetch.
+        self.assertEqual(api_client._access_token, "new-tok")
+
+    def test_ensure_fresh_oidc_token_drops_cache_on_refresh_failure(self):
+        # On a failed refresh (e.g. revoked refresh token / invalid_grant), the
+        # cached entry is deleted so it isn't re-attempted on every request —
+        # matching init()'s _obtain_oidc_tokens.
+        self._init_oidc(expires_at="2000-01-01T00:00:00+00:00")
+        expired = {
+            "issuer": "https://issuer.example.com/",
+            "client_id": "cid",
+            "access_token": "old-tok",
+            "expires_at": "2000-01-01T00:00:00+00:00",
+            "refresh_token": "refresh-token",
+        }
+        with (
+            patch("validmind.credentials_store.get_cached_entry", return_value=expired),
+            patch("validmind.credentials_store.delete_cached_entry") as mock_delete,
+            patch(
+                "validmind.oidc_device.try_refresh_cached_tokens",
+                side_effect=ValidMindAuthError("invalid_grant"),
+            ),
+        ):
+            self.assertFalse(api_client._ensure_fresh_oidc_token())
+            mock_delete.assert_called_once()
+        # In-memory token is cleared too, so the next request fails fast at header
+        # build with the re-auth message rather than sending a doomed request.
+        self.assertIsNone(api_client._access_token)
+        self.assertIsNone(api_client._oidc_expires_at)
 
 
 if __name__ == "__main__":

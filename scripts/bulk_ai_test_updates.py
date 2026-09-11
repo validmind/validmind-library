@@ -2,7 +2,7 @@
 
 
 Usage:
-    poetry run python scripts/bulk_ai_test_updates.py <path> --action <action>
+    uv run python scripts/bulk_ai_test_updates.py <path> --action <action>
 
  - path: path to a test file or directory containing test files
  - action: `add_description` or `add_raw_data`
@@ -206,7 +206,7 @@ def ExampleConfusionMatrix(model: VMModel, dataset: VMDataset):
 
     cm = confusion_matrix(y_true, y_pred, labels=labels)
 
-    fig = ff.create_annotated_heatmap()
+    fig = go.Heatmap()
     ..
 
     return fig
@@ -230,7 +230,7 @@ def ExampleConfusionMatrix(model: VMModel, dataset: VMDataset):
 
     cm = confusion_matrix(y_true, y_pred, labels=labels)
 
-    fig = ff.create_annotated_heatmap()
+    fig = go.Heatmap()
     ..
 
     return fig, RawData(confusion_matrix=cm, model=model.input_id, dataset=dataset.input_id)
@@ -637,7 +637,7 @@ def main(action, path, model):
         func(file)
 
     # run black on the tests directory
-    subprocess.run(["poetry", "run", "black", "validmind/tests"])
+    subprocess.run(["uv", "run", "black", "validmind/tests"])
 
 
 if __name__ == "__main__":

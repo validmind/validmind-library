@@ -266,7 +266,7 @@ def main(path, update_only):
         add_or_update_unit_test(vm_test_path, unit_test_path)
 
     # run black on the tests directory
-    subprocess.run(["poetry", "run", "black", UNIT_TESTS_DIR])
+    subprocess.run(["uv", "run", "black", UNIT_TESTS_DIR])
 
 
 if __name__ == "__main__":

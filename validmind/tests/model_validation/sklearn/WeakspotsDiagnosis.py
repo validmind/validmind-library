@@ -13,6 +13,9 @@ from sklearn import metrics
 from validmind import tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 
+from ._diagnosis_metrics import apply_averaging as _apply_averaging
+from ._diagnosis_metrics import resolve_averaging as _resolve_averaging
+
 DEFAULT_METRICS = {
     "accuracy": metrics.accuracy_score,
     "precision": metrics.precision_score,
@@ -25,6 +28,36 @@ DEFAULT_THRESHOLDS = {
     "recall": 0.5,
     "f1": 0.7,
 }
+
+
+def _normalize_dict_keys(d: Dict) -> Dict:
+    """Normalize metric/threshold keys to title case (e.g. 'f1' -> 'F1')."""
+    return {k.title(): v for k, v in d.items()}
+
+
+def _prepare_metrics_and_thresholds(
+    metrics: Optional[Dict[str, Callable]],
+    thresholds: Optional[Dict[str, float]],
+) -> Tuple[Dict[str, Callable], Dict[str, float], Dict[str, float]]:
+    """
+    Prepare metrics and threshold dicts for plotting and pass/fail checks.
+
+    Custom thresholds may specify only a subset of metrics (e.g. accuracy only).
+    Plotting uses default thresholds for any metric without an explicit value so
+    charts always show a reference line; pass/fail uses only the user-provided
+    thresholds when a custom dict is supplied.
+    """
+    normalized_metrics = _normalize_dict_keys(metrics or DEFAULT_METRICS)
+    default_thresholds = _normalize_dict_keys(DEFAULT_THRESHOLDS)
+
+    if thresholds is not None:
+        pass_thresholds = _normalize_dict_keys(thresholds)
+        plot_thresholds = {**default_thresholds, **pass_thresholds}
+    else:
+        pass_thresholds = default_thresholds
+        plot_thresholds = default_thresholds
+
+    return normalized_metrics, plot_thresholds, pass_thresholds
 
 
 def _compute_metrics(
@@ -230,11 +263,21 @@ def WeakspotsDiagnosis(
             "Column(s) provided in features_columns do not exist in the dataset"
         )
 
-    metrics = metrics or DEFAULT_METRICS
-    metrics = {k.title(): v for k, v in metrics.items()}
+    # Custom callables own their kwargs (e.g. partial(f1_score, average="weighted")),
+    # so averaging is only bound onto the defaults; rebinding user metrics would
+    # silently override their explicit averaging/pos_label choices.
+    using_default_metrics = metrics is None
 
-    thresholds = thresholds or DEFAULT_THRESHOLDS
-    thresholds = {k.title(): v for k, v in thresholds.items()}
+    metrics, plot_thresholds, pass_thresholds = _prepare_metrics_and_thresholds(
+        metrics, thresholds
+    )
+
+    # Bind averaging options so label-based metrics work for multiclass targets and
+    # for binary targets encoded outside {0, 1} (e.g. {0, 4}) instead of raising on
+    # scikit-learn's default average="binary"/pos_label=1.
+    if using_default_metrics:
+        average, pos_label = _resolve_averaging(datasets, model)
+        metrics = _apply_averaging(metrics, average, pos_label)
 
     results_headers = ["Slice", "Number of Records", "Feature"]
     results_headers.extend(metrics.keys())
@@ -242,14 +285,22 @@ def WeakspotsDiagnosis(
     figures = []
     passed = True
 
-    df_1 = datasets[0]._df[
-        feature_columns
-        + [datasets[0].target_column, datasets[0].prediction_column(model)]
-    ]
-    df_2 = datasets[1]._df[
-        feature_columns
-        + [datasets[1].target_column, datasets[1].prediction_column(model)]
-    ]
+    df_1 = (
+        datasets[0]
+        ._df[
+            feature_columns
+            + [datasets[0].target_column, datasets[0].prediction_column(model)]
+        ]
+        .copy()
+    )
+    df_2 = (
+        datasets[1]
+        ._df[
+            feature_columns
+            + [datasets[1].target_column, datasets[1].prediction_column(model)]
+        ]
+        .copy()
+    )
     results_1 = pd.DataFrame()
     results_2 = pd.DataFrame()
     for feature in feature_columns:
@@ -290,15 +341,18 @@ def WeakspotsDiagnosis(
                 results_2=r2,
                 feature_column=feature,
                 metric=metric,
-                threshold=thresholds[metric],
+                threshold=plot_thresholds[metric],
             )
 
             figures.append(fig)
 
         # For simplicity, test has failed if any of the metrics is below the threshold. We will
         # rely on visual assessment for this test for now.
-        if not df[df[list(thresholds.keys())].lt(thresholds).any(axis=1)].empty:
-            passed = False
+        pass_columns = [c for c in pass_thresholds if c in metrics]
+        if pass_columns:
+            thresholds_subset = {c: pass_thresholds[c] for c in pass_columns}
+            if not df[df[pass_columns].lt(thresholds_subset).any(axis=1)].empty:
+                passed = False
         results_1 = pd.concat([results_1, pd.DataFrame(r1)])
         results_2 = pd.concat([results_2, pd.DataFrame(r2)])
 

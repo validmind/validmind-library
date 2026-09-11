@@ -6,7 +6,7 @@ import uuid
 from typing import Any, Dict, List, Optional
 
 from validmind import tags, tasks
-from validmind.ai.utils import get_client_and_model
+from validmind.ai.utils import get_deepeval_model
 from validmind.errors import MissingDependencyError
 from validmind.tests.decorator import scorer
 from validmind.vm_models import VMModel
@@ -79,7 +79,7 @@ def PlanAdherence(
             extra="llm",
         ) from None
 
-    _, llm_model = get_client_and_model()
+    llm_model = get_deepeval_model()
     results: List[Dict[str, Any]] = []
 
     # Run one golden at a time so the metric runs after each predict_fn and

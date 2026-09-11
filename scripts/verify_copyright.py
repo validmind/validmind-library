@@ -10,7 +10,7 @@ This script verifies that all files under a directory have the
 ValidMind copyright block as a header.
 
 How to use:
-    poetry run python scripts/verify_copyright.py
+    uv run python scripts/verify_copyright.py
 """
 
 import os

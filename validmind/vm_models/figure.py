@@ -11,7 +11,7 @@ import json
 import os
 from dataclasses import dataclass
 from io import BytesIO
-from typing import Union
+from typing import Optional, Union
 
 import matplotlib
 import plotly.graph_objs as go
@@ -38,10 +38,11 @@ def create_figure(
     figure: Union[matplotlib.figure.Figure, go.Figure, go.FigureWidget, bytes],
     key: str,
     ref_id: str,
+    title: Optional[str] = None,
 ) -> "Figure":
     """Create a VM Figure object from a raw figure object."""
     if is_matplotlib_figure(figure) or is_plotly_figure(figure) or is_png_image(figure):
-        return Figure(key=key, figure=figure, ref_id=ref_id)
+        return Figure(key=key, figure=figure, ref_id=ref_id, title=title)
 
     raise ValueError(f"Unsupported figure type: {type(figure)}")
 
@@ -50,13 +51,23 @@ def create_figure(
 class Figure:
     """
     Figure objects track the schema supported by the ValidMind API.
+
+    Attributes:
+        key: Unique identifier for the figure within a test run.
+        figure: The underlying figure object (matplotlib, plotly, or PNG bytes).
+        ref_id: ID used to link the figure to its parent test result.
+        title: Optional caption/title for the figure. When set, it is sent to
+            the platform as ``metadata.caption`` and rendered by the document
+            media registry as ``Figure N. <title>``.
     """
 
     key: str
     figure: Union[matplotlib.figure.Figure, go.Figure, go.FigureWidget, bytes]
     ref_id: str  # used to link figures to results
+    title: Optional[str] = None  # caption/title used by the document media registry
 
     _type: str = "plot"  # for now this is the only figure type
+    _cached_png_bytes: bytes = None  # cached PNG bytes for async-safe serialization
 
     def __post_init__(self):
         # Wrap around with FigureWidget so that we can display interactive Plotly
@@ -71,6 +82,41 @@ class Figure:
     def __repr__(self):
         return f"Figure(key={self.key}, ref_id={self.ref_id})"
 
+    def _get_png_bytes(self) -> bytes:
+        """Get PNG bytes for the figure, using cache if available.
+
+        This method returns cached PNG bytes if pre_serialize() was called,
+        otherwise it generates them on demand. Caching is important for Plotly
+        figures because to_image() uses kaleido which conflicts with asyncio
+        event loops when called from within an async context.
+        """
+        if self._cached_png_bytes is not None:
+            return self._cached_png_bytes
+
+        if is_matplotlib_figure(self.figure):
+            buffer = BytesIO()
+            self.figure.savefig(buffer, format="png")
+            buffer.seek(0)
+            return buffer.read()
+        elif is_plotly_figure(self.figure):
+            return self.figure.to_image(format="png")
+        elif is_png_image(self.figure):
+            return self.figure
+        else:
+            raise UnsupportedFigureError(
+                f"Unrecognized figure type: {get_full_typename(self.figure)}"
+            )
+
+    def pre_serialize(self):
+        """Pre-serialize the figure to PNG bytes for async-safe upload.
+
+        Call this method before entering an async context (e.g., before run_async)
+        to avoid conflicts between Plotly's kaleido library and asyncio event loops.
+        The cached bytes will be used by to_html(), _get_b64_url(), and serialize_files().
+        """
+        if self._cached_png_bytes is None:
+            self._cached_png_bytes = self._get_png_bytes()
+
     def to_html(self):
         """
         Returns HTML representation that preserves state when notebook is saved.
@@ -78,99 +124,50 @@ class Figure:
         """
         metadata = {"key": self.key, "ref_id": self.ref_id, "type": self._type}
 
-        if is_matplotlib_figure(self.figure):
-            tmpfile = BytesIO()
-            self.figure.savefig(tmpfile, format="png")
-            encoded = base64.b64encode(tmpfile.getvalue()).decode("utf-8")
-            return StatefulHTMLRenderer.render_figure(encoded, self.key, metadata)
+        png_bytes = self._get_png_bytes()
+        encoded = base64.b64encode(png_bytes).decode("utf-8")
 
-        elif is_plotly_figure(self.figure):
-            png_file = self.figure.to_image(format="png")
-            encoded = base64.b64encode(png_file).decode("utf-8")
-            # Add plotly-specific metadata only if interactive figures are enabled
-            if os.getenv("VALIDMIND_INTERACTIVE_FIGURES", "true").lower() in (
-                "true",
-                "1",
-                "yes",
-            ):
-                metadata["plotly_json"] = self.figure.to_json()
-            return StatefulHTMLRenderer.render_figure(encoded, self.key, metadata)
+        # Add plotly-specific metadata only if interactive figures are enabled
+        if is_plotly_figure(self.figure) and os.getenv(
+            "VALIDMIND_INTERACTIVE_FIGURES", "true"
+        ).lower() in ("true", "1", "yes"):
+            metadata["plotly_json"] = self.figure.to_json()
 
-        elif is_png_image(self.figure):
-            encoded = base64.b64encode(self.figure).decode("utf-8")
-            return StatefulHTMLRenderer.render_figure(encoded, self.key, metadata)
-
-        else:
-            raise UnsupportedFigureError(
-                f"Figure type {type(self.figure)} not supported for plotting"
-            )
+        return StatefulHTMLRenderer.render_figure(encoded, self.key, metadata)
 
     def serialize(self):
         """
         Serializes the Figure to a dictionary so it can be sent to the API.
         """
+        metadata = {"_ref_id": self.ref_id}
+        if self.title:
+            metadata["caption"] = self.title
+
         return {
             "type": self._type,
             "key": self.key,
-            "metadata": json.dumps({"_ref_id": self.ref_id}, allow_nan=False),
+            "metadata": json.dumps(metadata, allow_nan=False),
         }
 
     def _get_b64_url(self):
         """
         Returns a base64 encoded URL for the figure.
         """
-        if is_matplotlib_figure(self.figure):
-            buffer = BytesIO()
-            self.figure.savefig(buffer, format="png")
-            buffer.seek(0)
-
-            b64_data = base64.b64encode(buffer.read()).decode("utf-8")
-
-            return f"data:image/png;base64,{b64_data}"
-
-        elif is_plotly_figure(self.figure):
-            bytes = self.figure.to_image(format="png")
-            b64_data = base64.b64encode(bytes).decode("utf-8")
-
-            return f"data:image/png;base64,{b64_data}"
-
-        elif is_png_image(self.figure):
-            b64_data = base64.b64encode(self.figure).decode("utf-8")
-
-            return f"data:image/png;base64,{b64_data}"
-
-        raise UnsupportedFigureError(
-            f"Unrecognized figure type: {get_full_typename(self.figure)}"
-        )
+        png_bytes = self._get_png_bytes()
+        b64_data = base64.b64encode(png_bytes).decode("utf-8")
+        return f"data:image/png;base64,{b64_data}"
 
     def serialize_files(self):
         """Creates a `requests`-compatible files object to be sent to the API."""
-        if is_matplotlib_figure(self.figure):
-            buffer = BytesIO()
-            self.figure.savefig(buffer, bbox_inches="tight")
-            buffer.seek(0)
-            return {"image": (f"{self.key}.png", buffer, "image/png")}
+        png_bytes = self._get_png_bytes()
+        files = {"image": (f"{self.key}.png", png_bytes, "image/png")}
 
-        elif is_plotly_figure(self.figure):
-            # When using plotly, we need to use we will produce two files:
-            # - a JSON file that will be used to display the figure in the ValidMind Platform
-            # - a PNG file that will be used to display the figure in documents
-            return {
-                "image": (
-                    f"{self.key}.png",
-                    self.figure.to_image(format="png"),
-                    "image/png",
-                ),
-                "json_image": (
-                    f"{self.key}.json",
-                    self.figure.to_json(),
-                    "application/json",
-                ),
-            }
+        # For Plotly figures, also include the JSON for interactive display
+        if is_plotly_figure(self.figure):
+            files["json_image"] = (
+                f"{self.key}.json",
+                self.figure.to_json(),
+                "application/json",
+            )
 
-        elif is_png_image(self.figure):
-            return {"image": (f"{self.key}.png", self.figure, "image/png")}
-
-        raise UnsupportedFigureError(
-            f"Unrecognized figure type: {get_full_typename(self.figure)}"
-        )
+        return files

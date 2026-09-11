@@ -81,7 +81,7 @@ def ScoreProbabilityAlignment(
 
     # Calculate statistics per bin
     results = []
-    for bin_name, group in df.groupby("score_bin"):
+    for bin_name, group in df.groupby("score_bin", observed=True):
         bin_stats = {
             "Score Range": f"{bin_name.left:.0f}-{bin_name.right:.0f}",
             "Mean Score": group[score_column].mean(),

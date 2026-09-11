@@ -2,8 +2,8 @@
 # Refer to the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+import matplotlib
 import plotly.graph_objects as go
-from matplotlib import cm
 
 from validmind import tags, tasks
 from validmind.vm_models import VMDataset
@@ -77,7 +77,7 @@ def ScorecardHistogram(
 def _plot_score_histogram(df, score_col, target_col, title):
     # Generate a colormap and convert to Plotly-accepted color format
     # Adjust 'viridis' to any other matplotlib colormap if desired
-    colormap = cm.get_cmap("viridis")
+    colormap = matplotlib.colormaps["viridis"]
 
     fig = go.Figure()
 

@@ -2,12 +2,13 @@
 # Refer to the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
+import importlib
 import os
 
 from openai import AzureOpenAI, OpenAI
 
 from ..logging import get_logger
-from ..utils import md_to_html
+from ..utils import is_html, md_to_html
 
 logger = get_logger(__name__)
 
@@ -16,7 +17,11 @@ __client = None
 __model = None
 __judge_llm = None
 __judge_embeddings = None
-EMBEDDINGS_MODEL = "text-embedding-3-small"
+__judge_llm_explicitly_set = False
+OPENAI_MODEL = "gpt-4.1"
+OPENAI_EMBEDDINGS_MODEL = "text-embedding-3-small"
+GEMINI_MODEL = "gemini-2.5-pro"
+GEMINI_EMBEDDINGS_MODEL = "gemini-embedding-001"
 
 # can be None, True or False (ternary to represent initial state, ack and failed ack)
 __ack = None
@@ -33,6 +38,7 @@ class DescriptionFuture:
 
     def __init__(self, future):
         self._future = future
+        self.markdown_source = None
 
     def get_description(self):
         if isinstance(self._future, tuple):
@@ -41,7 +47,23 @@ class DescriptionFuture:
             # This will block until the future is completed
             description = self._future.result()
 
-        return md_to_html(description[0], mathml=True), description[1]
+        source, was_generated = description
+        self.markdown_source = source if not is_html(source) else None
+        return md_to_html(source, mathml=True), was_generated
+
+
+def _get_google_api_key():
+    return os.getenv("GOOGLE_API_KEY") or os.getenv("GEMINI_API_KEY")
+
+
+def _get_configured_provider():
+    if os.getenv("OPENAI_API_KEY"):
+        return "openai"
+
+    if os.getenv("AZURE_OPENAI_KEY"):
+        return "azure"
+
+    return "gemini"
 
 
 def get_client_and_model():
@@ -52,16 +74,18 @@ def get_client_and_model():
     """
     global __client, __model
 
-    if __client and __model:
+    if __model is not None:
         return __client, __model
 
-    if "OPENAI_API_KEY" in os.environ:
+    provider = _get_configured_provider()
+
+    if provider == "openai":
         __client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-        __model = os.getenv("VM_OPENAI_MODEL", "gpt-4o")
+        __model = os.getenv("OPENAI_MODEL", OPENAI_MODEL)
 
         logger.debug(f"Using OpenAI {__model} for generating descriptions")
 
-    elif "AZURE_OPENAI_KEY" in os.environ:
+    elif provider == "azure":
         if "AZURE_OPENAI_ENDPOINT" not in os.environ:
             raise ValueError(
                 "AZURE_OPENAI_ENDPOINT must be set to run LLM tests with Azure"
@@ -82,72 +106,352 @@ def get_client_and_model():
         logger.debug(f"Using Azure OpenAI {__model} for generating descriptions")
 
     else:
-        raise ValueError(
-            "OPENAI_API_KEY, AZURE_OPENAI_KEY must be setup to use LLM features"
-        )
+        __client = None
+        __model = os.getenv("GEMINI_MODEL", GEMINI_MODEL)
+
+        logger.debug(f"Using Gemini {__model} for generating descriptions")
 
     return __client, __model
 
 
-def get_judge_config(judge_llm=None, judge_embeddings=None):
+def _import_judge_dependencies():
     try:
         from langchain_core.embeddings import Embeddings
         from langchain_core.language_models.chat_models import BaseChatModel
-        from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 
         from validmind.models.function import FunctionModel
     except ImportError:
         raise ImportError("Please run `pip install validmind[llm]` to use LLM tests")
 
-    if judge_llm is not None or judge_embeddings is not None:
-        if isinstance(judge_llm, FunctionModel) and judge_llm is not None:
-            if isinstance(judge_llm.model, BaseChatModel):
-                judge_llm = judge_llm.model
-            else:
-                raise ValueError(
-                    "The ValidMind Functional model provided does not have have a langchain compatible LLM as a model attribute."
-                    "To use default ValidMind LLM, do not set judge_llm/judge_embedding parameter, "
-                    "ensure that you are connected to the ValidMind API and confirm ValidMind AI is enabled for your account."
-                )
-        if isinstance(judge_embeddings, FunctionModel) and judge_embeddings is not None:
-            if isinstance(judge_embeddings.model, Embeddings):
-                judge_embeddings = judge_embeddings.model
-            else:
-                raise ValueError(
-                    "The ValidMind Functional model provided does not have have a langchain compatible embeddings model as a model attribute."
-                    "To use default ValidMind LLM, do not set judge_embedding parameter, "
-                    "ensure that you are connected to the ValidMind API and confirm ValidMind AI is enabled for your account."
-                )
+    return Embeddings, BaseChatModel, FunctionModel
 
-        if (isinstance(judge_llm, BaseChatModel) or judge_llm is None) and (
-            isinstance(judge_embeddings, Embeddings) or judge_embeddings is None
-        ):
-            return judge_llm, judge_embeddings
-        else:
-            raise ValueError(
-                "Provided Judge LLM/Embeddings are not Langchain compatible. Ensure the judge LLM/embedding provided are an instance of "
-                "Langchain BaseChatModel and LangchainEmbeddings.  To use default ValidMind LLM, do not set judge_llm/judge_embedding parameter, "
-                "ensure that you are connected to the ValidMind API and confirm ValidMind AI is enabled for your account."
-            )
+
+def _unwrap_functional_judge_model(
+    judge_model,
+    expected_type,
+    model_kind,
+    FunctionModel,
+):
+    if not isinstance(judge_model, FunctionModel):
+        return judge_model
+
+    if isinstance(judge_model.model, expected_type):
+        return judge_model.model
+
+    raise ValueError(
+        "The ValidMind Functional model provided does not have have a langchain "
+        f"compatible {model_kind} model as a model attribute."
+        "To use default ValidMind LLM, do not set judge_llm/judge_embedding parameter, "
+        "ensure that you are connected to the ValidMind API and confirm ValidMind AI "
+        "is enabled for your account."
+    )
+
+
+def _normalize_judge_overrides(
+    judge_llm,
+    judge_embeddings,
+    Embeddings,
+    BaseChatModel,
+    FunctionModel,
+):
+    if judge_llm is None and judge_embeddings is None:
+        return None
+
+    judge_llm = _unwrap_functional_judge_model(
+        judge_llm,
+        BaseChatModel,
+        "LLM",
+        FunctionModel,
+    )
+    judge_embeddings = _unwrap_functional_judge_model(
+        judge_embeddings,
+        Embeddings,
+        "embeddings",
+        FunctionModel,
+    )
+
+    if (isinstance(judge_llm, BaseChatModel) or judge_llm is None) and (
+        isinstance(judge_embeddings, Embeddings) or judge_embeddings is None
+    ):
+        return judge_llm, judge_embeddings
+
+    raise ValueError(
+        "Provided Judge LLM/Embeddings are not Langchain compatible. Ensure the judge "
+        "LLM/embedding provided are an instance of Langchain BaseChatModel and "
+        "LangchainEmbeddings.  To use default ValidMind LLM, do not set "
+        "judge_llm/judge_embedding parameter, ensure that you are connected to the "
+        "ValidMind API and confirm ValidMind AI is enabled for your account."
+    )
+
+
+def _build_gemini_judge_config(model):
+    try:
+        langchain_google_genai = importlib.import_module("langchain_google_genai")
+    except ImportError:
+        raise ImportError(
+            "Please run `pip install validmind[llm]` to use Gemini LLM tests"
+        )
+
+    ChatGoogleGenerativeAI = getattr(langchain_google_genai, "ChatGoogleGenerativeAI")
+    GoogleGenerativeAIEmbeddings = getattr(
+        langchain_google_genai, "GoogleGenerativeAIEmbeddings"
+    )
+    google_api_key = _get_google_api_key()
+    chat_kwargs = {"model": model}
+    embeddings_kwargs = {
+        "model": os.getenv("GEMINI_EMBEDDINGS_MODEL", GEMINI_EMBEDDINGS_MODEL),
+    }
+
+    if google_api_key:
+        chat_kwargs["api_key"] = google_api_key
+        embeddings_kwargs["google_api_key"] = google_api_key
+
+    return (
+        ChatGoogleGenerativeAI(**chat_kwargs),
+        GoogleGenerativeAIEmbeddings(**embeddings_kwargs),
+    )
+
+
+def _build_openai_judge_config(client, model):
+    try:
+        from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+    except ImportError:
+        raise ImportError("Please run `pip install validmind[llm]` to use LLM tests")
+
+    if client is not None and getattr(client, "base_url", None) is not None:
+        os.environ["OPENAI_API_BASE"] = str(client.base_url)
+
+    return (
+        ChatOpenAI(api_key=client.api_key, model=model),
+        OpenAIEmbeddings(api_key=client.api_key, model=OPENAI_EMBEDDINGS_MODEL),
+    )
+
+
+def _import_deepeval_base_llm():
+    try:
+        deepeval_base_model = importlib.import_module("deepeval.models.base_model")
+    except ImportError:
+        raise ImportError(
+            "Please run `pip install validmind[llm]` to use Gemini DeepEval scorers"
+        )
+
+    return getattr(deepeval_base_model, "DeepEvalBaseLLM")
+
+
+def _unwrap_deepeval_response(response):
+    return getattr(response, "content", response)
+
+
+def _is_reason_only_schema(schema):
+    """True when ``schema`` is a single-field ``{reason}`` explanation schema.
+
+    DeepEval's ``*ScoreReason`` schemas carry only the human-readable explanation
+    and do not affect the metric score, so a missing value can be degraded safely.
+    """
+    fields = getattr(schema, "model_fields", None) or getattr(
+        schema, "__fields__", None
+    )
+    try:
+        return set(fields.keys()) == {"reason"}
+    except Exception:
+        return False
+
+
+def _require_structured_response(result, schema):
+    """Guard against a judge LLM returning no parseable structured output.
+
+    Gemini's default function-calling path yields ``None`` when the model
+    response contains no tool call. Returning that ``None`` to DeepEval surfaces
+    as a cryptic ``'NoneType' object has no attribute 'reason'``.
+
+    For reason-only schemas the metric score is already computed from earlier
+    verdict calls, so a missing explanation is cosmetic: degrade to a placeholder
+    reason and keep the score. Score-bearing schemas (statements, verdicts) are
+    never faked -- doing so would yield a silently wrong score -- so those raise.
+    """
+    if result is not None:
+        return result
+
+    schema_name = getattr(schema, "__name__", schema)
+
+    if _is_reason_only_schema(schema):
+        logger.warning(
+            "Judge LLM returned no structured output for %s; recording the score "
+            "with an empty explanation.",
+            schema_name,
+        )
+        return schema(reason="N/A (judge LLM returned no explanation)")
+
+    raise ValueError(
+        f"Judge LLM returned no parseable structured output for {schema_name}. "
+        "This usually means the model produced no tool call for the requested "
+        "schema. Try a different judge model, or check provider quotas and "
+        "safety settings."
+    )
+
+
+def _structured_generate(chat_model, prompt, schema):
+    """Invoke ``chat_model`` for structured output, retrying via json_mode.
+
+    Gemini's default function-calling path can return ``None`` when the model
+    emits no tool call; json_mode binds a response schema and is deterministic.
+    """
+    result = chat_model.with_structured_output(schema).invoke(prompt)
+    if result is None:
+        try:
+            result = chat_model.with_structured_output(
+                schema, method="json_mode"
+            ).invoke(prompt)
+        except Exception:
+            pass
+    return _require_structured_response(result, schema)
+
+
+async def _a_structured_generate(chat_model, prompt, schema):
+    """Async counterpart of :func:`_structured_generate`."""
+    result = await chat_model.with_structured_output(schema).ainvoke(prompt)
+    if result is None:
+        try:
+            result = await chat_model.with_structured_output(
+                schema, method="json_mode"
+            ).ainvoke(prompt)
+        except Exception:
+            pass
+    return _require_structured_response(result, schema)
+
+
+def _build_langchain_deepeval_model(chat_model):
+    """Wrap any LangChain BaseChatModel as a DeepEval-compatible model.
+
+    Used when set_judge_config() has been called so that DeepEval scorers
+    honour the same judge model as prompt-validation and RAGAS tests.
+    """
+    DeepEvalBaseLLM = _import_deepeval_base_llm()
+
+    class LangChainDeepEvalModel(DeepEvalBaseLLM):
+        def __init__(self, model):
+            self._chat_model = model
+            self.model = self.load_model()
+
+        def load_model(self, *args, **kwargs):
+            return self._chat_model
+
+        def generate(self, prompt: str, schema=None):
+            chat_model = self.load_model()
+            if schema is not None and hasattr(chat_model, "with_structured_output"):
+                return _structured_generate(chat_model, prompt, schema)
+            return _unwrap_deepeval_response(chat_model.invoke(prompt))
+
+        async def a_generate(self, prompt: str, schema=None):
+            chat_model = self.load_model()
+            if schema is not None and hasattr(chat_model, "with_structured_output"):
+                return await _a_structured_generate(chat_model, prompt, schema)
+            return _unwrap_deepeval_response(await chat_model.ainvoke(prompt))
+
+        def get_model_name(self, *args, **kwargs):
+            for attr in ("model", "model_name", "azure_deployment"):
+                val = getattr(self._chat_model, attr, None)
+                if val:
+                    return val
+            return type(self._chat_model).__name__
+
+    return LangChainDeepEvalModel(chat_model)
+
+
+def _build_gemini_deepeval_model(model):
+    judge_llm, _ = _build_gemini_judge_config(model)
+    return _build_langchain_deepeval_model(judge_llm)
+
+
+def run_deepeval_evaluation(*, test_cases, metrics):
+    try:
+        from deepeval import evaluate
+
+        deepeval_test_run = importlib.import_module("deepeval.test_run.test_run")
+    except ImportError:
+        raise ImportError(
+            "Please run `pip install validmind[llm]` to use Gemini DeepEval scorers"
+        )
+
+    original_is_confident = deepeval_test_run.is_confident
+
+    try:
+        # ValidMind scorers should run locally without depending on Confident AI login state.
+        deepeval_test_run.is_confident = lambda: False
+        return evaluate(test_cases=test_cases, metrics=metrics)
+    finally:
+        deepeval_test_run.is_confident = original_is_confident
+
+
+def get_judge_config(judge_llm=None, judge_embeddings=None):
+    Embeddings, BaseChatModel, FunctionModel = _import_judge_dependencies()
+
+    normalized_overrides = _normalize_judge_overrides(
+        judge_llm,
+        judge_embeddings,
+        Embeddings,
+        BaseChatModel,
+        FunctionModel,
+    )
+    if normalized_overrides is not None:
+        return normalized_overrides
 
     # grab default values if not passed at run time
     global __judge_llm, __judge_embeddings
     if __judge_llm and __judge_embeddings:
         return __judge_llm, __judge_embeddings
 
+    provider = _get_configured_provider()
     client, model = get_client_and_model()
-    os.environ["OPENAI_API_BASE"] = str(client.base_url)
 
-    __judge_llm = ChatOpenAI(api_key=client.api_key, model=model)
-    __judge_embeddings = OpenAIEmbeddings(
-        api_key=client.api_key, model=EMBEDDINGS_MODEL
-    )
+    if provider == "gemini":
+        __judge_llm, __judge_embeddings = _build_gemini_judge_config(model)
+    else:
+        __judge_llm, __judge_embeddings = _build_openai_judge_config(client, model)
 
     return __judge_llm, __judge_embeddings
 
 
+def get_deepeval_model():
+    """Get the model object expected by DeepEval scorers.
+
+    OpenAI/Azure scorers currently pass a model string. Gemini support requires a
+    native DeepEval model object so the provider can be configured correctly.
+    """
+    if (
+        __judge_llm_explicitly_set
+        and __judge_llm is not None
+        and __judge_embeddings is not None
+    ):
+        return _build_langchain_deepeval_model(__judge_llm)
+
+    provider = _get_configured_provider()
+    _, model = get_client_and_model()
+
+    if provider == "gemini":
+        google_api_key = _get_google_api_key()
+        if google_api_key is None:
+            return _build_gemini_deepeval_model(model)
+
+        try:
+            deepeval_models = importlib.import_module("deepeval.models")
+        except ImportError:
+            raise ImportError(
+                "Please run `pip install validmind[llm]` to use Gemini DeepEval scorers"
+            )
+
+        GeminiModel = getattr(deepeval_models, "GeminiModel")
+        return GeminiModel(
+            model=model,
+            api_key=google_api_key,
+            temperature=0,
+        )
+
+    return model
+
+
 def set_judge_config(judge_llm, judge_embeddings):
-    global __judge_llm, __judge_embeddings
+    global __judge_llm, __judge_embeddings, __judge_llm_explicitly_set
     try:
         from langchain_core.embeddings import Embeddings
         from langchain_core.language_models.chat_models import BaseChatModel
@@ -160,12 +464,13 @@ def set_judge_config(judge_llm, judge_embeddings):
     ):
         __judge_llm = judge_llm
         __judge_embeddings = judge_embeddings
-        # Assuming 'your_object' is the object you want to check
+        __judge_llm_explicitly_set = True
     elif isinstance(judge_llm, FunctionModel) and isinstance(
         judge_embeddings, FunctionModel
     ):
         __judge_llm = judge_llm.model
         __judge_embeddings = judge_embeddings.model
+        __judge_llm_explicitly_set = True
     else:
         raise ValueError(
             "Provided Judge LLM/Embeddings are not Langchain compatible. Ensure the judge LLM/embedding provided are an instance of "
@@ -181,19 +486,16 @@ def is_configured():
         return True
 
     try:
-        client, model = get_client_and_model()
-        # send an empty message with max_tokens=1 to "ping" the API
-        response = client.chat.completions.create(
-            model=model,
-            messages=[{"role": "user", "content": ""}],
-            max_tokens=1,
+        judge_llm, _ = get_judge_config()
+        response = judge_llm.invoke(
+            [("user", "ping")],
         )
         logger.debug(
-            f"Received response from OpenAI: {response.choices[0].message.content}"
+            f"Received response from judge LLM: {getattr(response, 'content', response)}"
         )
         __ack = True
     except Exception as e:
-        logger.debug(f"Failed to connect to OpenAI: {e}")
+        logger.debug(f"Failed to connect to judge LLM: {e}")
         __ack = False
 
     return __ack

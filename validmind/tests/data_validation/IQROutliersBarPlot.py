@@ -5,6 +5,7 @@
 
 from typing import Tuple
 
+import pandas as pd
 import plotly.graph_objects as go
 
 from validmind import RawData, tags, tasks
@@ -76,12 +77,17 @@ def IQROutliersBarPlot(
     """
     df = dataset.df
 
+    # Exclude boolean and binary features. The IQR is not meaningful for them and
+    # `quantile` raises "numpy boolean subtract" on boolean dtype columns.
+    eligible_columns = [
+        col
+        for col in dataset.feature_columns_numeric
+        if not pd.api.types.is_bool_dtype(df[col]) and df[col].nunique() > 2
+    ]
+
     figures = []
 
-    for col in dataset.feature_columns_numeric:
-        # Skip binary features
-        if len(df[col].unique()) <= 2:
-            continue
+    for col in eligible_columns:
 
         outliers = compute_outliers(df[col], threshold)
         if outliers.empty:
@@ -121,8 +127,10 @@ def IQROutliersBarPlot(
         )
         figures.append(fig)
 
-    outliers_by_feature = df[dataset.feature_columns_numeric].apply(
-        lambda col: compute_outliers(col, threshold)
+    outliers_by_feature = (
+        df[eligible_columns].apply(lambda col: compute_outliers(col, threshold))
+        if eligible_columns
+        else df.iloc[:, 0:0]
     )
 
     return (

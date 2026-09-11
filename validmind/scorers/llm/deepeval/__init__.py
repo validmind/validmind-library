@@ -104,7 +104,7 @@ def _extract_tool_calls_from_message(
 
 
 def extract_tool_calls_from_agent_output(
-    agent_output: Dict[str, Any]
+    agent_output: Dict[str, Any],
 ) -> List[ToolCall]:
     """Extract ToolCall objects from an agent's output.
 

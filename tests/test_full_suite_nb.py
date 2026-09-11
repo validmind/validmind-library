@@ -5,11 +5,15 @@ import asyncio
 import unittest
 from unittest.mock import patch
 
-import xgboost as xgb
-
 from validmind.datasets.classification import customer_churn
 
+try:
+    import xgboost as xgb
+except ImportError:
+    xgb = None
 
+
+@unittest.skipUnless(xgb is not None, "xgboost optional extra required")
 class TestFullTestSuiteNB(unittest.TestCase):
     @patch("validmind.utils.is_notebook")
     @patch.multiple(

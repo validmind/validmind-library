@@ -3,11 +3,65 @@ import numpy as np
 import pandas as pd
 import validmind as vm
 import plotly.graph_objects as go
-from xgboost import XGBClassifier
+from sklearn.datasets import make_classification
+from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from validmind.tests.model_validation.sklearn.ROCCurve import ROCCurve
 
+try:
+    from xgboost import XGBClassifier
+except ImportError:
+    XGBClassifier = None  # type: ignore[misc,assignment]
 
+
+class TestROCCurveMulticlassMissingClass(unittest.TestCase):
+    """A training class absent from the evaluated slice now computes (sklearn).
+
+    Uses LogisticRegression so it runs without the xgboost extra. The model is fit
+    on four classes; the dataset omits one, which previously tripped the shape
+    guard and skipped. Alignment on estimator.classes_ makes it compute instead.
+    """
+
+    def setUp(self):
+        X, y = make_classification(
+            n_samples=400,
+            n_features=5,
+            n_informative=4,
+            n_redundant=0,
+            n_classes=4,
+            n_clusters_per_class=1,
+            random_state=42,
+        )
+        model = LogisticRegression(max_iter=1000).fit(X, y)
+
+        df = pd.DataFrame(X, columns=[f"f{i}" for i in range(5)])
+        df["target"] = y
+        df = df[df["target"] != 3].reset_index(drop=True)
+
+        self.ds = vm.init_dataset(
+            input_id="mc_roc_missing", dataset=df, target_column="target", __log=False
+        )
+        self.model = vm.init_model(
+            input_id="mc_roc_missing_model", model=model, __log=False
+        )
+        self.ds.assign_predictions(self.model)
+
+    def test_missing_class_produces_present_curves_plus_micro(self):
+        fig, raw = ROCCurve(self.model, self.ds)
+        self.assertIsInstance(fig, go.Figure)
+        self.assertIsInstance(raw, vm.RawData)
+
+        names = [t.name for t in fig.data]
+        # 3 present-class curves + micro-average + random baseline = 5 traces.
+        self.assertEqual(len(fig.data), 5)
+        self.assertEqual(sum(n.startswith("Class ") for n in names), 3)
+        self.assertTrue(any(n.startswith("Micro-average") for n in names))
+
+        # Per-class RawData keyed by the present classes (no absent class 3) + micro.
+        self.assertEqual(set(raw.auc), {"0", "1", "2", "micro"})
+
+
+@unittest.skipUnless(XGBClassifier is not None, "xgboost optional extra required")
 class TestROCCurve(unittest.TestCase):
     def setUp(self):
         # Create binary classification test dataset
@@ -143,3 +197,53 @@ class TestROCCurve(unittest.TestCase):
         # Check AUC score (should be very close to 1.0)
         auc = float(fig.data[0].name.split("=")[1].strip().rstrip(")"))
         self.assertGreater(auc, 0.95)
+
+
+@unittest.skipUnless(XGBClassifier is not None, "xgboost optional extra required")
+class TestROCCurveMulticlass(unittest.TestCase):
+    def setUp(self):
+        np.random.seed(0)
+        n_samples = 900
+        X = np.random.randn(n_samples, 3)
+        # 3-class target with real signal so per-class AUCs beat random.
+        score = np.stack([X[:, 0], X[:, 1], X[:, 2]], axis=1)
+        y = (score + np.random.randn(n_samples, 3) * 0.3).argmax(axis=1)
+
+        X_train, X_test, y_train, y_test = train_test_split(
+            X, y, test_size=0.25, random_state=0
+        )
+
+        test_df = pd.DataFrame(
+            {
+                "f1": X_test[:, 0],
+                "f2": X_test[:, 1],
+                "f3": X_test[:, 2],
+                "target": y_test,
+            }
+        )
+
+        self.vm_test_ds = vm.init_dataset(
+            input_id="mc_test", dataset=test_df, target_column="target", __log=False
+        )
+        model = XGBClassifier()
+        model.fit(X_train, y_train)
+        self.vm_model = vm.init_model(input_id="mc_model", model=model, __log=False)
+        self.vm_test_ds.assign_predictions(self.vm_model)
+
+    def test_multiclass_one_vs_rest_traces(self):
+        fig, raw = ROCCurve(self.vm_model, self.vm_test_ds)
+
+        self.assertIsInstance(fig, go.Figure)
+        self.assertIsInstance(raw, vm.RawData)
+
+        names = [t.name for t in fig.data]
+        # 3 per-class curves + micro-average + random baseline = 5 traces.
+        self.assertEqual(len(fig.data), 5)
+        self.assertEqual(sum(n.startswith("Class ") for n in names), 3)
+        self.assertTrue(any(n.startswith("Micro-average") for n in names))
+        self.assertTrue(any(n == "Random (AUC = 0.5)" for n in names))
+
+        # Per-class RawData keyed by class label + micro; AUCs beat random.
+        self.assertEqual(set(raw.auc) - {"micro"}, {"0", "1", "2"})
+        for key in ("0", "1", "2", "micro"):
+            self.assertGreater(raw.auc[key], 0.5)

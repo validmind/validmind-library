@@ -142,7 +142,7 @@ class VMDataset(VMInput):
 
         self.feature_columns_categorical = feature_dtypes[
             feature_dtypes.apply(
-                lambda x: pd.api.types.is_categorical_dtype(x)
+                lambda x: isinstance(x, pd.CategoricalDtype)
                 or pd.api.types.is_object_dtype(x)
             )
         ].index.tolist()

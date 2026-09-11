@@ -83,3 +83,25 @@ class TestIQROutliersTable(unittest.TestCase):
         # Verify binary column is not in results
         for summary in outliers_summary:
             self.assertNotIn("binary", summary["Variable"])
+
+    def test_boolean_dtype_excluded_from_raw_data(self):
+        n_samples = 100
+        normal_data = np.array([1.0] * 25 + [2.0] * 50 + [3.0] * 25)
+        data_with_outliers = normal_data.copy()
+        data_with_outliers[0:4] = [-15, -10, 10, 15]
+        df = pd.DataFrame(
+            {
+                "with_outliers": data_with_outliers,
+                "flag": np.random.choice([True, False], n_samples),
+            }
+        )
+        vm_dataset = vm.init_dataset(
+            input_id="test_boolean_dataset", dataset=df, __log=False
+        )
+
+        result, raw_data = IQROutliersTable(vm_dataset)
+        outliers_summary = result["Summary of Outliers Detected by IQR Method"]
+        summary_variables = [summary["Variable"] for summary in outliers_summary]
+
+        self.assertNotIn("flag", summary_variables)
+        self.assertNotIn("flag", raw_data.all_outliers)

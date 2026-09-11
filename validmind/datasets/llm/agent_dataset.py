@@ -413,14 +413,16 @@ class LLMAgentDataset(VMDataset):
 
                     test_case = LLMTestCase(
                         input=str(row["input"]),
-                        actual_output=str(row["actual_output"])
-                        if pd.notna(row["actual_output"])
-                        else "",
+                        actual_output=(
+                            str(row["actual_output"])
+                            if pd.notna(row["actual_output"])
+                            else ""
+                        ),
                         expected_output=expected_output_val,
                         context=context_val if context_val else None,
-                        retrieval_context=retrieval_context_val
-                        if retrieval_context_val
-                        else None,
+                        retrieval_context=(
+                            retrieval_context_val if retrieval_context_val else None
+                        ),
                         # Note: tools_called deserialization would need more complex logic
                         # for now we'll keep it simple
                     )
