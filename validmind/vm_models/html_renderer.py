@@ -6,6 +6,7 @@
 HTML renderer for ValidMind components that preserves state in saved notebooks.
 """
 
+import html
 import json
 import uuid
 from typing import Any, Dict, List, Optional, Union
@@ -18,6 +19,38 @@ class StatefulHTMLRenderer:
 
     # Plotly.js CDN URL - using a stable version
     PLOTLY_CDN_URL = "https://cdn.plot.ly/plotly-2.27.0.min.js"
+
+    @staticmethod
+    def _render_table_cell(value: Any) -> Any:
+        """Render structured table cells as HTML for notebook display."""
+        if not isinstance(value, dict) or "value" not in value:
+            return value
+
+        css_properties = {
+            "bgcolor": "background-color",
+            "backgroundColor": "background-color",
+            "color": "color",
+            "fontWeight": "font-weight",
+            "textAlign": "text-align",
+        }
+        styles = []
+
+        for key, css_property in css_properties.items():
+            css_value = value.get(key)
+            if css_value is not None:
+                styles.append(f"{css_property}: {html.escape(str(css_value))}")
+
+        styles.extend(
+            [
+                "display: block",
+                "margin: -8px",
+                "padding: 8px",
+                "min-height: 22px",
+            ]
+        )
+
+        cell_value = html.escape(str(value["value"]))
+        return f'<div style="{"; ".join(styles)}">{cell_value}</div>'
 
     @staticmethod
     def _get_progress_css() -> str:
@@ -150,11 +183,16 @@ class StatefulHTMLRenderer:
 
         title_html = f"<h4>{title}</h4>" if title else ""
 
+        formatters = {
+            column: StatefulHTMLRenderer._render_table_cell for column in data.columns
+        }
+
         # Convert DataFrame to HTML with styling
         table_html = data.to_html(
             classes="vm-table table table-striped table-hover",
             table_id=table_id,
             escape=False,
+            formatters=formatters,
             index=False,
         )
 
@@ -206,7 +244,7 @@ class StatefulHTMLRenderer:
 
         return f"""
         <div class="vm-accordion" id="{accordion_id}">
-            {''.join(accordion_items)}
+            {"".join(accordion_items)}
         </div>
 
         <script>
@@ -293,7 +331,7 @@ class StatefulHTMLRenderer:
 
         <script>
         // Create global update functions for this progress bar
-        window.updateProgress_{bar_id.replace('-', '_')} = function(value, description) {{
+        window.updateProgress_{bar_id.replace("-", "_")} = function(value, description) {{
             var maxValue = {max_value};
             var percentage = (value / maxValue * 100);
 
@@ -306,7 +344,7 @@ class StatefulHTMLRenderer:
             if (descElement && description) descElement.innerHTML = description;
         }};
 
-        window.completeProgress_{bar_id.replace('-', '_')} = function() {{
+        window.completeProgress_{bar_id.replace("-", "_")} = function() {{
             var descElement = document.getElementById('{bar_id}-description');
             if (descElement) descElement.innerHTML = 'Test suite complete!';
         }};

@@ -11,6 +11,7 @@ Notebooks Tested:
  - notebooks/use_cases/regression/quickstart_regression_full_suite.ipynb
  - notebooks/how_to/tests/custom_tests/integrate_external_test_providers.ipynb
  - notebooks/how_to/tests/custom_tests/implement_custom_tests.ipynb
+ - notebooks/how_to/tests/custom_tests/style_custom_test_tables.ipynb
 
 To add more notebooks to the list, simply add the path to the `NOTEBOOKS_TO_RUN` list.
 This will use the default project id for the notebook. If you want to use a different
@@ -45,6 +46,7 @@ NOTEBOOKS_TO_RUN = [
     "notebooks/how_to/metrics/run_unit_metrics.ipynb",
     "notebooks/how_to/tests/custom_tests/integrate_external_test_providers.ipynb",
     "notebooks/how_to/tests/custom_tests/implement_custom_tests.ipynb",
+    "notebooks/how_to/tests/custom_tests/style_custom_test_tables.ipynb",
     "notebooks/how_to/tests/explore_tests/explore_tests.ipynb",
 ]
 
