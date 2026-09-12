@@ -113,6 +113,22 @@ class ResultTable:
         title: Optional caption/title for the table. When set, it is sent to
             the platform as ``metadata.caption`` and rendered by the document
             media registry as ``Table N. <title>``.
+
+    Styled cells
+    ------------
+    A cell is normally a plain scalar. Tests that return a ``pandas.Styler``
+    produce *styled* cells for the subset of cells that have supported CSS
+    applied; those cells are dicts of the form::
+
+        {"value": <display value>, "bgcolor": ..., "color": ...,
+         "fontWeight": ..., "textAlign": ...}
+
+    Only the keys that were actually styled are present, so a single column may
+    mix scalars and dicts. ``value`` is the Styler's formatted display value
+    when a formatter is registered, and the original value otherwise. The CSS
+    values are passed through verbatim from the test author. This schema is
+    shared with the platform, which renders it in the documentation UI and in
+    HTML/DOCX exports. See ``validmind.tests.output.TableOutputHandler``.
     """
 
     data: Union[List[Any], pd.DataFrame]

@@ -103,7 +103,9 @@ def test(func_or_id: Union[Callable[..., Any], str, None]) -> Callable[[F], F]:
 
     The function should return one of the following types:
 
-    - Table: Either a list of dictionaries or a pandas DataFrame
+    - Table: A list of dictionaries, a pandas DataFrame, or a pandas Styler
+      (see `validmind.vm_models.result.ResultTable` for how cell styles are
+      preserved)
     - Plot: Either a matplotlib figure or a plotly figure
     - Scalar: A single number (int or float)
     - Boolean: A single boolean value indicating whether the test passed or failed
@@ -206,7 +208,9 @@ def scorer(func_or_id: Union[Callable[..., Any], str, None] = None) -> Callable[
 
     The function should return one of the following types:
 
-    - Table: Either a list of dictionaries or a pandas DataFrame
+    - Table: A list of dictionaries, a pandas DataFrame, or a pandas Styler
+      (see `validmind.vm_models.result.ResultTable` for how cell styles are
+      preserved)
     - Plot: Either a matplotlib figure or a plotly figure
     - Scalar: A single number (int or float)
     - Boolean: A single boolean value indicating whether the test passed or failed
