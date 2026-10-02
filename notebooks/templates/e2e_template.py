@@ -394,7 +394,7 @@ def replace_record_type(
     record_type_value: Optional[str] = None,
     print_func: Callable[[str], None] = print,
 ) -> None:
-    """Replace `{record-type}` placeholders in a notebook file.
+    """Replace `{record-type}` (UI labels) and `{record-type-lower}` (prose) placeholders in a notebook file.
 
     Uses `record_type_value` when provided; otherwise falls back to the value
     stored by `select_record_type()`. Defaults to Model when neither is set.
@@ -403,15 +403,19 @@ def replace_record_type(
     if not value:
         value = DEFAULT_RECORD_TYPE
 
+    # Built-in types are capitalised for UI labels; lowercase them in prose. Custom values stay as typed.
+    lower = value.lower() if value in RECORD_TYPES.values() else value
+
     try:
         with open(filepath, "r", encoding="utf-8") as f:
             content = f.read()
 
-        if "{record-type}" not in content:
+        if "{record-type" not in content:
             return
 
         # Escape for the notebook's JSON so quotes or backslashes in a custom value don't break the file
-        content = content.replace("{record-type}", json.dumps(value, ensure_ascii=False)[1:-1])
+        for placeholder, text in (("{record-type-lower}", lower), ("{record-type}", value)):
+            content = content.replace(placeholder, json.dumps(text, ensure_ascii=False)[1:-1])
         with open(filepath, "w", encoding="utf-8") as f:
             if not content.endswith("\n"):
                 content += "\n"
