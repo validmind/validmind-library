@@ -364,6 +364,10 @@ def select_record_type(
         "[5: Custom (enter free text)], "
         "or press Enter for Model: "
     ).strip()
+    while choice and choice not in RECORD_TYPES and choice != "5":
+        choice = input_func(
+            f"'{choice}' is not an option. Enter 1-5, or press Enter for Model: "
+        ).strip()
 
     if not choice:
         selected = DEFAULT_RECORD_TYPE
@@ -378,9 +382,6 @@ def select_record_type(
             selected = DEFAULT_RECORD_TYPE
         else:
             selected = custom
-    else:
-        # Allow typing a known label or any free-text record type directly.
-        selected = choice
 
     _selected_record = selected
     print_func(f"Selected record type: {_selected_record}")
@@ -409,7 +410,8 @@ def replace_record_type(
         if "{record-type}" not in content:
             return
 
-        content = content.replace("{record-type}", value)
+        # Escape for the notebook's JSON so quotes or backslashes in a custom value don't break the file
+        content = content.replace("{record-type}", json.dumps(value, ensure_ascii=False)[1:-1])
         with open(filepath, "w", encoding="utf-8") as f:
             if not content.endswith("\n"):
                 content += "\n"
