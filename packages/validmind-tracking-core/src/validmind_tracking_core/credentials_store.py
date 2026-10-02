@@ -1,5 +1,5 @@
 # Copyright © 2023-2026 ValidMind Inc. All rights reserved.
-# Refer to the LICENSE file in the root directory for details.
+# Refer to the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 """Small, file-backed OIDC credential store used by the tracking SDKs."""
@@ -8,10 +8,17 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import tempfile
+from contextlib import contextmanager
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Iterator, Optional
+
+try:
+    import fcntl
+except ImportError:  # Windows
+    fcntl = None
 
 from .errors import TrackingAuthError
 
@@ -101,6 +108,27 @@ def save_credentials_file(data: Dict[str, Any], path: Optional[Path] = None) -> 
     _atomic_write(path, normalized)
 
 
+@contextmanager
+def _locked(path: Path) -> Iterator[None]:
+    """Hold an exclusive lock across a read-modify-write of the credentials file.
+
+    A sidecar lock file is used because the credentials file itself is replaced
+    atomically on every write.
+    """
+    # ponytail: no cross-process lock on Windows (no fcntl); add msvcrt.locking if
+    # multi-worker Windows services need it.
+    if fcntl is None:
+        yield
+        return
+    path.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
+    with open(path.with_name(path.name + ".lock"), "a") as handle:
+        fcntl.flock(handle, fcntl.LOCK_EX)
+        try:
+            yield
+        finally:
+            fcntl.flock(handle, fcntl.LOCK_UN)
+
+
 def get_cached_entry(
     issuer: str,
     client_id: str,
@@ -119,17 +147,18 @@ def upsert_cached_entry(
     path: Optional[Path] = None,
     audience: Optional[str] = None,
 ) -> None:
+    path = path or credentials_path()
     key = credential_key(issuer, client_id, audience)
-    normalized_issuer = normalize_issuer(issuer)
+    row = {"issuer": normalize_issuer(issuer), "client_id": client_id, **entry}
     normalized_audience = normalize_audience(audience)
-    data = load_credentials_file(path)
-    credentials = dict(data.get("credentials", {}))
-    row = {"issuer": normalized_issuer, "client_id": client_id, **entry}
     if normalized_audience:
         row["audience"] = normalized_audience
-    credentials[key] = row
-    data["credentials"] = credentials
-    save_credentials_file(data, path)
+    with _locked(path):
+        data = load_credentials_file(path)
+        credentials = dict(data.get("credentials", {}))
+        credentials[key] = row
+        data["credentials"] = credentials
+        save_credentials_file(data, path)
 
 
 def delete_cached_entry(
@@ -138,11 +167,22 @@ def delete_cached_entry(
     path: Optional[Path] = None,
     audience: Optional[str] = None,
 ) -> None:
-    data = load_credentials_file(path)
-    credentials = dict(data.get("credentials", {}))
-    credentials.pop(credential_key(issuer, client_id, audience), None)
-    data["credentials"] = credentials
-    save_credentials_file(data, path)
+    path = path or credentials_path()
+    with _locked(path):
+        data = load_credentials_file(path)
+        credentials = dict(data.get("credentials", {}))
+        credentials.pop(credential_key(issuer, client_id, audience), None)
+        data["credentials"] = credentials
+        save_credentials_file(data, path)
+
+
+def _parse_timestamp(raw: str) -> datetime:
+    # datetime.fromisoformat before Python 3.11 accepts only 3 or 6 fractional
+    # digits and "+HH:MM" offsets, so normalize "Z", nanoseconds and "+HHMM".
+    raw = raw.strip().replace("Z", "+00:00")
+    raw = re.sub(r"\.(\d+)", lambda m: "." + m.group(1)[:6].ljust(6, "0"), raw)
+    raw = re.sub(r"([+-]\d{2})(\d{2})$", r"\1:\2", raw)
+    return datetime.fromisoformat(raw)
 
 
 def is_expired(entry: Dict[str, Any], skew_seconds: int = 120) -> bool:
@@ -150,8 +190,8 @@ def is_expired(entry: Dict[str, Any], skew_seconds: int = 120) -> bool:
     if not raw:
         return True
     try:
-        expires = datetime.fromisoformat(raw.replace("Z", "+00:00"))
-    except ValueError:
+        expires = _parse_timestamp(raw)
+    except (TypeError, ValueError, AttributeError):
         return True
     if expires.tzinfo is None:
         expires = expires.replace(tzinfo=timezone.utc)

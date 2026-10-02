@@ -1,5 +1,5 @@
 # Copyright © 2023-2026 ValidMind Inc. All rights reserved.
-# Refer to the LICENSE file in the root directory for details.
+# Refer to the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 """Synchronous OIDC device-flow authentication for tracking clients."""
@@ -23,11 +23,24 @@ from .credentials_store import (
     normalize_issuer,
     upsert_cached_entry,
 )
-from .errors import TrackingAuthError
+from .errors import TrackingAuthError, TrackingConfigurationError
 
 _OPENID_CONFIG_SUFFIX = "/.well-known/openid-configuration"
 _DEFAULT_TIMEOUT = 30.0
 _DEFAULT_SCOPE = "openid profile email offline_access"
+_LOOPBACK_HOSTS = {"localhost", "127.0.0.1", "::1"}
+
+
+def _require_https(issuer: str) -> None:
+    parsed = urlparse(issuer)
+    if parsed.scheme == "https":
+        return
+    if parsed.scheme == "http" and (parsed.hostname or "").lower() in _LOOPBACK_HOSTS:
+        return
+    raise TrackingConfigurationError(
+        f"OIDC issuer must be an https:// URL (http is allowed only for "
+        f"localhost), got {issuer!r}"
+    )
 
 
 def _token_entry(payload: Dict[str, Any]) -> Dict[str, Any]:
@@ -212,8 +225,9 @@ def run_device_flow(
     audience: Optional[str] = None,
     timeout: float = _DEFAULT_TIMEOUT,
     status_callback: Optional[Callable[[Dict[str, Any]], None]] = None,
+    configuration: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
-    configuration = fetch_openid_configuration(issuer, timeout=timeout)
+    configuration = configuration or fetch_openid_configuration(issuer, timeout=timeout)
     device = request_device_authorization(
         configuration["device_authorization_endpoint"],
         client_id,
@@ -245,7 +259,12 @@ def run_device_flow(
 
 
 class OIDCAuthenticator:
-    """Load, refresh, or interactively obtain a bearer token."""
+    """Load, refresh, or (with ``interactive=True``) device-login for a bearer token.
+
+    Non-interactive by default so a service never blocks waiting for a human:
+    with no usable cached credential it raises ``TrackingAuthError`` instead of
+    starting the device flow.
+    """
 
     def __init__(
         self,
@@ -255,17 +274,21 @@ class OIDCAuthenticator:
         scope: Optional[str] = None,
         audience: Optional[str] = None,
         timeout: float = _DEFAULT_TIMEOUT,
-        credentials_path_value=None,
+        credentials_path=None,
         status_callback: Optional[Callable[[Dict[str, Any]], None]] = None,
+        interactive: bool = False,
     ):
         self.issuer = normalize_issuer(issuer)
+        _require_https(self.issuer)
         self.client_id = normalize_client_id(client_id)
         self.scope = scope or _DEFAULT_SCOPE
         self.audience = normalize_audience(audience) or None
         self.timeout = timeout
-        self.credentials_path = credentials_path_value
+        self.credentials_path = credentials_path
         self.status_callback = status_callback
+        self.interactive = interactive
         self._entry: Optional[Dict[str, Any]] = None
+        self._configuration: Optional[Dict[str, Any]] = None
         self._refresh_lock = threading.Lock()
 
     def initialize(self) -> None:
@@ -281,7 +304,7 @@ class OIDCAuthenticator:
         if cached and cached.get("refresh_token"):
             try:
                 refreshed = refresh_access_token(
-                    self._token_endpoint(cached),
+                    self._token_endpoint(),
                     self.client_id,
                     cached["refresh_token"],
                     scope=self.scope,
@@ -299,6 +322,13 @@ class OIDCAuthenticator:
                 refreshed.setdefault("refresh_token", cached["refresh_token"])
                 self._save(refreshed)
                 return
+        if not self.interactive:
+            raise TrackingAuthError(
+                "No usable cached OIDC credentials for "
+                f"{self.issuer!r}. Log in once with interactive=True (or "
+                "`validmind_metrics.init(interactive=True)`), or use API-key "
+                "credentials for unattended services."
+            )
         entry = run_device_flow(
             self.issuer,
             self.client_id,
@@ -306,6 +336,7 @@ class OIDCAuthenticator:
             audience=self.audience,
             timeout=self.timeout,
             status_callback=self.status_callback,
+            configuration=self._discovery(),
         )
         self._save(entry)
 
@@ -326,7 +357,7 @@ class OIDCAuthenticator:
                     "OIDC access token is missing or expired; initialize the client again"
                 )
             refreshed = refresh_access_token(
-                self._token_endpoint(cached),
+                self._token_endpoint(),
                 self.client_id,
                 cached["refresh_token"],
                 scope=self.scope,
@@ -350,6 +381,12 @@ class OIDCAuthenticator:
             audience=self.audience,
         )
 
-    def _token_endpoint(self, entry: Dict[str, Any]) -> str:
-        configuration = fetch_openid_configuration(self.issuer, timeout=self.timeout)
-        return configuration["token_endpoint"]
+    def _discovery(self) -> Dict[str, Any]:
+        if self._configuration is None:
+            self._configuration = fetch_openid_configuration(
+                self.issuer, timeout=self.timeout
+            )
+        return self._configuration
+
+    def _token_endpoint(self) -> str:
+        return self._discovery()["token_endpoint"]

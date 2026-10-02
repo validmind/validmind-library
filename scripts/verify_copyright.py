@@ -19,8 +19,8 @@ copyright_path = os.path.join(os.getcwd(), "scripts", "copyright.txt")
 with open(copyright_path) as f:
     copyright = f.read()
 
-# Scan the Python package directory
-directory = os.path.join(os.getcwd(), "validmind")
+# Scan the library and the workspace packages
+directories = [os.path.join(os.getcwd(), d) for d in ("validmind", "packages")]
 
 # List of file extensions to process
 extensions = [".py"]
@@ -29,7 +29,7 @@ extensions = [".py"]
 errors = []
 
 # Loop through all files in the directory and its subdirectories
-for root, dirs, files in os.walk(directory):
+for root, dirs, files in (w for d in directories for w in os.walk(d)):
     for file in files:
         # Check if the file has a valid extension
         if file.endswith(tuple(extensions)) and file != "__version__.py":

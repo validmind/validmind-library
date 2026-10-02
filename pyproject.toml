@@ -25,6 +25,8 @@ dependencies = [
   "numpy (>=2.3,<3.0.0) ; python_version >= '3.14'",
   "openai (>=1)",
   "pandas (>=2.0.3,<3.0.0)",
+  # Plotly 7 is a new major that the figure code and kaleido export haven't been
+  # validated against yet; lift the cap once they have.
   "plotly (>=6.0.0,<7.0.0)",
   "polars",
   "python-dotenv",

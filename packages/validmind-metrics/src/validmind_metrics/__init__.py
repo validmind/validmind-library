@@ -1,9 +1,10 @@
 # Copyright © 2023-2026 ValidMind Inc. All rights reserved.
-# Refer to the LICENSE file in the root directory for details.
+# Refer to the LICENSE file in the root of this repository for details.
 # SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
 
 """Lightweight metric logging client for the ValidMind Platform."""
 
+import threading
 from typing import Any, Dict, List, Optional
 
 from validmind_tracking_core import (
@@ -11,25 +12,35 @@ from validmind_tracking_core import (
     TrackingAPIError,
     TrackingAuthError,
     TrackingConfigurationError,
+    TrackingConnectionError,
+    TrackingError,
 )
 
 __version__ = "0.1.0"
 
 _client: Optional[MetricsClient] = None
+_client_lock = threading.Lock()
 
 
 def init(**kwargs: Any) -> MetricsClient:
-    """Create and retain the default metric client."""
+    """Create and retain the default metric client.
+
+    Accepts the same keyword arguments as ``MetricsClient``; anything not passed
+    is read from the ``VM_*`` environment variables.
+    """
     global _client
     kwargs.setdefault("client_version", __version__)
-    _client = MetricsClient(**kwargs)
-    return _client
+    with _client_lock:
+        _client = MetricsClient(**kwargs)
+        return _client
 
 
 def _get_client() -> MetricsClient:
-    if _client is None:
-        return init()
-    return _client
+    global _client
+    with _client_lock:
+        if _client is None:
+            _client = MetricsClient(client_version=__version__)
+        return _client
 
 
 def log_metric(
@@ -79,6 +90,8 @@ __all__ = [
     "TrackingAPIError",
     "TrackingAuthError",
     "TrackingConfigurationError",
+    "TrackingConnectionError",
+    "TrackingError",
     "alog_metric",
     "init",
     "log_metric",

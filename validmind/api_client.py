@@ -20,7 +20,11 @@ import aiohttp
 import requests
 from aiohttp import FormData
 from validmind_tracking_core.errors import TrackingAPIError
-from validmind_tracking_core.metrics import post_metric, serialize_metric
+from validmind_tracking_core.metrics import (
+    post_metric,
+    serialize_metric,
+    timeout_from_env,
+)
 
 from .__version__ import __version__
 from .client_config import client_config
@@ -997,35 +1001,21 @@ def log_text(
     return _render_logged_text(logged_text)
 
 
-def _send_metric_sync(
-    key: str,
-    value: Union[int, float],
-    inputs: Optional[List[str]] = None,
-    params: Optional[Dict[str, Any]] = None,
-    recorded_at: Optional[str] = None,
-    thresholds: Optional[Dict[str, Any]] = None,
-    passed: Optional[bool] = None,
-):
-    """Send one metric without creating or depending on an event loop."""
-    _ensure_fresh_oidc_token()
+def _send_metric_sync(body: str):
+    """Send one serialized metric without creating or depending on an event loop."""
     try:
+        _ensure_fresh_oidc_token()
         return post_metric(
             _get_url("log_unit_metric"),
-            serialize_metric(
-                key,
-                value,
-                inputs,
-                params,
-                recorded_at,
-                thresholds,
-                passed,
-                encoder=NumpyEncoder,
-            ),
+            body,
             _get_api_headers(),
-            timeout=float(os.getenv("VM_API_TIMEOUT", 30)),
+            timeout=timeout_from_env(),
         )
-    except TrackingAPIError as e:
-        _raise_for_api_error(e.status_code, e.response_text)
+    except Exception as e:
+        logger.error("Error logging metric to ValidMind API")
+        if isinstance(e, TrackingAPIError):
+            _raise_for_api_error(e.status_code, e.response_text)
+        raise
 
 
 async def alog_metric(
@@ -1038,20 +1028,17 @@ async def alog_metric(
     passed: Optional[bool] = None,
 ):
     """See log_metric for details, without blocking the current event loop."""
-    try:
-        return await asyncio.to_thread(
-            _send_metric_sync,
-            key,
-            value,
-            inputs,
-            params,
-            recorded_at,
-            thresholds,
-            passed,
-        )
-    except Exception as e:
-        logger.error("Error logging metric to ValidMind API")
-        raise e
+    body = serialize_metric(
+        key,
+        value,
+        inputs,
+        params,
+        recorded_at,
+        thresholds,
+        passed,
+        encoder=NumpyEncoder,
+    )
+    return await asyncio.to_thread(_send_metric_sync, body)
 
 
 def log_metric(
@@ -1080,19 +1067,17 @@ def log_metric(
         thresholds (Dict[str, Any], optional): Thresholds for the metric
         passed (bool, optional): Whether the metric passed validation thresholds
     """
-    try:
-        return _send_metric_sync(
-            key,
-            value,
-            inputs,
-            params,
-            recorded_at,
-            thresholds,
-            passed,
-        )
-    except Exception as e:
-        logger.error("Error logging metric to ValidMind API")
-        raise e
+    body = serialize_metric(
+        key,
+        value,
+        inputs,
+        params,
+        recorded_at,
+        thresholds,
+        passed,
+        encoder=NumpyEncoder,
+    )
+    return _send_metric_sync(body)
 
 
 def generate_test_result_description(test_result_data: Dict[str, Any]) -> str:

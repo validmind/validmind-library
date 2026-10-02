@@ -8,15 +8,33 @@ version = "0.1.0"
 description = "Dependency-light authentication and tracking transport for ValidMind SDKs"
 readme = "README.md"
 requires-python = ">=3.9,<3.15"
-license = { text = "AGPL-3.0 AND ValidMind Commercial" }
+license = { file = "LICENSE" }
+authors = [
+  { name = "Andres Rodriguez", email = "andres@validmind.ai" },
+  { name = "Juan Martinez", email = "juan@validmind.ai" },
+  { name = "Anil Sorathiya", email = "anil@validmind.ai" },
+  { name = "Luis Pallares", email = "luis@validmind.ai" },
+  { name = "John Walz", email = "john@validmind.ai" },
+]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Operating System :: OS Independent",
+  "Typing :: Typed",
+]
 dependencies = [
   "requests (>=2.28.0,<3.0.0)",
 ]
+
+[project.urls]
+Homepage = "https://validmind.com"
+Documentation = "https://docs.validmind.ai"
+Repository = "https://github.com/validmind/validmind-library"
 
 [tool.hatch.build.targets.sdist]
 include = [
   "/src",
   "/README.md",
+  "/LICENSE",
   "/pyproject.toml",
 ]
 

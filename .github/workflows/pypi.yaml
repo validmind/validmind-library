@@ -1,5 +1,5 @@
 # This workflow pushes the ValidMind Library package to PyPI when a tag is created.
-# The validmind-tracking-core package must be published first for new releases.
+# The validmind-tracking-core package must be published first; the job checks this.
 
 name: Publish to PyPI
 
@@ -33,6 +33,15 @@ jobs:
 
       - name: Update twine
         run: uv pip install --upgrade twine
+
+      - name: Check validmind-tracking-core is on PyPI
+        # validmind depends on validmind-tracking-core; publishing before that
+        # version exists would ship an uninstallable wheel. Publish it first by
+        # pushing a tracking-core-v* tag.
+        run: |
+          SPEC=$(python -c "import tomllib; print(next(d for d in tomllib.load(open('pyproject.toml','rb'))['project']['dependencies'] if d.startswith('validmind-tracking-core')).replace(' ', ''))")
+          echo "Resolving ${SPEC} from PyPI"
+          python -m pip download --no-deps --dest /tmp/tracking-core-check "${SPEC}"
 
       - name: Publish to PyPI
         env:
