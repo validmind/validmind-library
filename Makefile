@@ -7,13 +7,13 @@ __check_defined = \
       $(error Undefined $1$(if $2, ($2))))
 
 format:
-	uv run black validmind
-	uv run isort validmind
+	uv run black validmind packages
+	uv run isort validmind packages
 
 lint:
 # don't check max line length for now since black already takes care of it
 # and flake8 is too strict where it doesn't need to be
-	uv run flake8 validmind --config .flake8
+	uv run flake8 validmind packages --config .flake8
 
 install:
 	uv sync --all-extras --group dev
@@ -28,7 +28,12 @@ ifdef ONLY
 	uv run python -m unittest $(ONLY)
 else
 	uv run python -m unittest discover tests
+	$(MAKE) test-packages
 endif
+
+test-packages:
+	uv run --package validmind-tracking-core python -m unittest discover packages/validmind-tracking-core/tests
+	uv run --package validmind-metrics python -m unittest discover packages/validmind-metrics/tests
 
 test-unit:
 	uv run python -m unittest "tests.test_unit_tests"

@@ -1,0 +1,45 @@
+[build-system]
+requires = ["hatchling>=1.26.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "validmind-metrics"
+version = "0.1.0"
+description = "Lightweight metric logging client for the ValidMind Platform"
+readme = "README.md"
+requires-python = ">=3.9,<3.15"
+license = { file = "LICENSE" }
+authors = [
+  { name = "Andres Rodriguez", email = "andres@validmind.ai" },
+  { name = "Juan Martinez", email = "juan@validmind.ai" },
+  { name = "Anil Sorathiya", email = "anil@validmind.ai" },
+  { name = "Luis Pallares", email = "luis@validmind.ai" },
+  { name = "John Walz", email = "john@validmind.ai" },
+]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Operating System :: OS Independent",
+  "Typing :: Typed",
+]
+dependencies = [
+  "validmind-tracking-core>=0.1.0,<0.2.0",
+]
+
+[tool.uv.sources]
+validmind-tracking-core = { workspace = true }
+
+[project.urls]
+Homepage = "https://validmind.com"
+Documentation = "https://docs.validmind.ai"
+Repository = "https://github.com/validmind/validmind-library"
+
+[tool.hatch.build.targets.sdist]
+include = [
+  "/src",
+  "/README.md",
+  "/LICENSE",
+  "/pyproject.toml",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/validmind_metrics"]

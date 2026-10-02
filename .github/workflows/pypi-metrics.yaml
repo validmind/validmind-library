@@ -1,0 +1,37 @@
+# Publish the lightweight metric SDK independently from the full library.
+
+name: Publish Metrics SDK to PyPI
+
+on:
+  push:
+    tags:
+      - 'metrics-v*.*.*'
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Build metrics SDK
+        run: uv build --package validmind-metrics --out-dir dist
+
+      - name: Publish metrics SDK
+        env:
+          UV_PUBLISH_USERNAME: __token__
+          UV_PUBLISH_PASSWORD: ${{ secrets.POETRY_PYPI_TOKEN_PYPI }}
+        run: uv publish dist/validmind_metrics-*
