@@ -364,9 +364,10 @@ def select_record_type(
         "[5: Custom (enter free text)], "
         "or press Enter for Model: "
     ).strip()
-    while choice and choice not in RECORD_TYPES and choice != "5":
+    # Any non-numeric text is taken as a custom record type; only unknown numbers re-prompt.
+    while choice.isdigit() and choice not in RECORD_TYPES and choice != "5":
         choice = input_func(
-            f"'{choice}' is not an option. Enter 1-5, or press Enter for Model: "
+            f"'{choice}' is not an option. Enter 1-5, a custom name, or press Enter for Model: "
         ).strip()
 
     if not choice:
@@ -382,6 +383,8 @@ def select_record_type(
             selected = DEFAULT_RECORD_TYPE
         else:
             selected = custom
+    else:
+        selected = choice
 
     _selected_record = selected
     print_func(f"Selected record type: {_selected_record}")
