@@ -19,6 +19,7 @@ from urllib.parse import urlencode, urljoin
 import aiohttp
 import requests
 from aiohttp import FormData
+from packaging.version import Version
 
 from .__version__ import __version__
 from .client_config import client_config
@@ -246,6 +247,46 @@ def _ping() -> Dict[str, Any]:
             f"(ID: {client_config.model.get('cuid', 'N/A')})\n"
             f"📁 Document Type: {client_config.document_type}"
         )
+
+    # Every successful ping, not only the first: reconnecting or switching
+    # models must still warn.
+    _log_ping_messages(client_info.get("messages"))
+
+
+def _ping_message_applies(message: Dict[str, Any]) -> bool:
+    """Whether a /ping message targets this library version.
+
+    ``if_client_version_lte`` missing or null means every version. Uses
+    ``packaging.version`` rather than ``utils.parse_version``, which drops
+    pre- and post-release parts.
+    """
+    cutoff = message.get("if_client_version_lte")
+    if cutoff is None:
+        return True
+    return Version(__version__) <= Version(str(cutoff))
+
+
+def _log_ping_messages(messages: Any) -> None:
+    """Log the platform messages returned by /ping as warnings, one line each.
+
+    Parsed defensively: a missing or malformed ``messages`` value, a bad entry
+    or an unparseable version cutoff is skipped quietly and never fails
+    ``vm.init()``. ``type``, ``severity`` and ``action`` aren't interpreted.
+    """
+    if not isinstance(messages, list):
+        return
+
+    for message in messages:
+        try:
+            text = message.get("message") if isinstance(message, dict) else None
+            if not isinstance(text, str) or not text.strip():
+                logger.debug(f"Ignoring malformed /ping message: {message!r}")
+                continue
+            if not _ping_message_applies(message):
+                continue
+            logger.warning(" ".join(text.split()))
+        except Exception:
+            logger.debug(f"Ignoring malformed /ping message: {message!r}")
 
 
 def _refresh_oidc_from_cache(

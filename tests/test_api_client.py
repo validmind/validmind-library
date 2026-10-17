@@ -1,5 +1,6 @@
 import asyncio
 import json
+import logging
 import os
 import unittest
 from unittest.mock import MagicMock, Mock, patch
@@ -1011,6 +1012,229 @@ class TestAPIClientOIDC(unittest.TestCase):
         # build with the re-auth message rather than sending a doomed request.
         self.assertIsNone(api_client._access_token)
         self.assertIsNone(api_client._oidc_expires_at)
+
+
+# Contract fixture: the /ping body the backend returns today for a connection
+# to a version that isn't its record's Primary. ``messages`` is copied verbatim
+# from validmind/backend tests/integration/test_record_versioning_ping.py
+# (DEPRECATION and test_pinging_v2_names_v1_as_the_primary) at commit 4270c9574
+# ("[Versioning B8] /ping version warning", backend PR #3836); the other keys
+# follow src/backend/routes/tracking.py at that commit, with the documentation
+# template emptied for brevity. A live /ping against a local stack (2026-10-16)
+# returned the same keys and message shape.
+PING_NON_PRIMARY_JSON = """
+{
+  "model": {"cuid": "cm_v2_cuid", "name": "Credit Risk Model"},
+  "document_type": "model_documentation",
+  "documentation_template": {},
+  "feature_flags": {"llm_test_descriptions": true, "log_metadata_markdown": true},
+  "sentry_config": {"send_logs": false, "environment": "production"},
+  "messages": [
+    {
+      "if_client_version_lte": "2.5.21",
+      "message": "The log_metrics endpoint is deprecated. Please use log_test_results instead.",
+      "severity": "warning",
+      "type": "deprecation",
+      "action": "update_client"
+    },
+    {
+      "if_client_version_lte": null,
+      "message": "This is v2 of Credit Risk Model. v1 is the Primary version. Results will be logged to v2.",
+      "severity": "warning",
+      "type": "record_version",
+      "action": "none"
+    }
+  ]
+}
+"""
+NON_PRIMARY_TEXT = (
+    "This is v2 of Credit Risk Model. v1 is the Primary version."
+    " Results will be logged to v2."
+)
+# Same backend test file, test_after_promoting_v2_and_retiring_v1.
+RETIRED_MESSAGE = {
+    "if_client_version_lte": None,
+    "message": (
+        "v1 of Credit Risk Model is retired (read-only). Results will still"
+        " be logged to v1."
+    ),
+    "severity": "warning",
+    "type": "record_version",
+    "action": "none",
+}
+DEPRECATION_TEXT = (
+    "The log_metrics endpoint is deprecated. Please use log_test_results instead."
+)
+
+
+class CaptureLogs(logging.Handler):
+    """Collects the records of the library's named logger (it doesn't
+    propagate); unlike ``assertLogs``, capturing nothing is fine."""
+
+    def __init__(self, name="validmind.api_client"):
+        super().__init__(level=logging.DEBUG)
+        self.logger = logging.getLogger(name)
+        self.records = []
+
+    def emit(self, record):
+        self.records.append(record)
+
+    def __enter__(self):
+        self.logger.addHandler(self)
+        return self
+
+    def __exit__(self, *exc):
+        self.logger.removeHandler(self)
+
+    def messages(self, level):
+        return [r.getMessage() for r in self.records if r.levelname == level]
+
+
+def ping_body(**overrides):
+    body = json.loads(PING_NON_PRIMARY_JSON)
+    body.update(overrides)
+    return body
+
+
+class TestPingMessages(unittest.TestCase):
+    """``_ping()`` logs the platform messages /ping returns as warnings."""
+
+    def setUp(self):
+        api_client.client_config.model = None
+        get = patch("requests.get")
+        self.mock_get = get.start()
+        self.addCleanup(get.stop)
+
+    def _respond(self, body):
+        self.mock_get.return_value = MockResponse(200, json=body)
+
+    def _warnings(self, body, version=None):
+        """Run ``init()`` against ``body``; return the warnings logged."""
+        self._respond(body)
+        with patch("validmind.api_client.__version__", version or __version__):
+            with CaptureLogs() as logs:
+                api_client.init(document="documentation")
+        return logs.messages("WARNING")
+
+    def test_non_primary_message_is_logged_and_old_deprecation_is_not(self):
+        self.assertEqual(self._warnings(ping_body()), [NON_PRIMARY_TEXT])
+
+    def test_retired_message_is_logged(self):
+        self.assertEqual(
+            self._warnings(ping_body(messages=[RETIRED_MESSAGE])),
+            [RETIRED_MESSAGE["message"]],
+        )
+
+    def test_version_cutoff(self):
+        def message(cutoff):
+            return {**RETIRED_MESSAGE, "if_client_version_lte": cutoff}
+
+        cases = [
+            # (running version, cutoff, logged)
+            ("2.14.0", "2.5.21", False),  # a string compare would log this
+            ("2.14.0", "2.13.99", False),
+            ("2.14.0", "2.14.0", True),
+            ("2.14.0", "2.14.1", True),
+            ("2.14.0", "3.0", True),
+            ("2.5.21", "2.5.21", True),
+            # parse_version() drops pre-releases and would log this one
+            ("2.14.0", "2.14.0rc1", False),
+            ("2.14.0rc1", "2.14.0", True),
+        ]
+        for version, cutoff, logged in cases:
+            with self.subTest(version=version, cutoff=cutoff):
+                warnings = self._warnings(
+                    ping_body(messages=[message(cutoff)]), version=version
+                )
+                expected = [RETIRED_MESSAGE["message"]] if logged else []
+                self.assertEqual(warnings, expected)
+
+    def test_deprecation_is_logged_for_clients_it_targets(self):
+        self.assertEqual(
+            self._warnings(ping_body(), version="2.5.21"),
+            [DEPRECATION_TEXT, NON_PRIMARY_TEXT],
+        )
+
+    def test_malformed_messages_never_fail_init(self):
+        bodies = {
+            "missing": {k: v for k, v in ping_body().items() if k != "messages"},
+            "null": ping_body(messages=None),
+            "string": ping_body(messages="x"),
+            "dict": ping_body(messages={"message": "x"}),
+            "bad entries": ping_body(
+                messages=[
+                    "x",
+                    {},
+                    None,
+                    7,
+                    {"message": None},
+                    {"message": ""},
+                    {"message": ["x"]},
+                    {"message": "bad cutoff", "if_client_version_lte": "nope"},
+                    {"message": "bad cutoff type", "if_client_version_lte": {}},
+                ]
+            ),
+        }
+        for name, body in bodies.items():
+            with self.subTest(name):
+                self.assertEqual(self._warnings(body), [])
+                self.assertEqual(api_client.client_config.model["cuid"], "cm_v2_cuid")
+
+    def test_unknown_type_severity_and_extra_keys_still_log_one_line(self):
+        message = {
+            "message": "Line one.\n  Line two.",
+            "severity": "catastrophic",
+            "type": "something_new",
+            "extra": 1,
+        }
+        self.assertEqual(
+            self._warnings(ping_body(messages=[message])), ["Line one. Line two."]
+        )
+
+    def test_reconnect_warns_again_but_banner_shows_once(self):
+        self._respond(ping_body())
+        with CaptureLogs() as logs:
+            api_client.init(document="documentation")
+            api_client.reload()
+
+        warnings = logs.messages("WARNING")
+        banners = [
+            r for r in logs.records if "Connected to ValidMind" in r.getMessage()
+        ]
+        self.assertEqual(warnings, [NON_PRIMARY_TEXT, NON_PRIMARY_TEXT])
+        self.assertEqual(len(banners), 1)
+        self.assertEqual(self.mock_get.call_count, 2)
+
+    def test_connection_behavior_is_unchanged(self):
+        body = ping_body()
+        self._respond(body)
+        with CaptureLogs() as logs:
+            api_client.init(document="documentation")
+
+        config = api_client.client_config
+        self.assertEqual(config.model, body["model"])
+        self.assertEqual(config.feature_flags, body["feature_flags"])
+        self.assertEqual(config.documentation_template, {})
+        self.assertEqual(config.document_type, "model_documentation")
+        self.assertEqual(
+            logs.records[0].getMessage(),
+            "🎉 Connected to ValidMind!\n"
+            "📊 Model: Credit Risk Model (ID: cm_v2_cuid)\n"
+            "📁 Document Type: model_documentation",
+        )
+        self.assertEqual(logs.records[0].levelname, "INFO")
+
+    @patch("validmind.api_client._ensure_fresh_oidc_token")
+    def test_one_warning_after_a_401_retry(self, mock_ensure):
+        mock_ensure.return_value = True
+        self.mock_get.side_effect = [
+            MockResponse(401, text="unauthorized"),
+            MockResponse(200, json=ping_body()),
+        ]
+        with CaptureLogs() as logs:
+            api_client._ping()
+
+        self.assertEqual(logs.messages("WARNING"), [NON_PRIMARY_TEXT])
 
 
 if __name__ == "__main__":
