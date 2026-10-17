@@ -32,12 +32,6 @@ jobs:
         with:
           enable-cache: true
 
-      - name: Install Python Dependencies
-        run: |
-          uv sync --extra huggingface --extra llm --group dev
-          uv pip install torch==2.0.1 --extra-index-url https://download.pytorch.org/whl/cpu
-          uv pip install aequitas fairlearn vl-convert-python
-
       - name: Install R Dependencies
         run: |
           sudo apt-get update
@@ -45,9 +39,6 @@ jobs:
 
       - name: Build the package
         run: uv build
-
-      - name: Remove Build Environment
-        run: rm -rf .venv
 
       - name: 'Setup Virtual Environment for [all]'
         run: python -m venv all-venv

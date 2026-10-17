@@ -100,9 +100,10 @@ jobs:
             pip check
             python -m tests.test_unit_tests | cat
           else
-            # Generate latest-compatible constraints (max)
+            # Generate latest-compatible constraints (max). --no-sources: resolve torch from
+            # PyPI as users get it, not the repo's CPU-only dev index (pip can't find +cpu builds)
             OUT=constraints-max.txt
-            uv pip compile pyproject.toml -p "${{ matrix.python-version }}" --all-extras --no-emit-index-url --no-annotate --no-strip-markers --output-file "$OUT" --upgrade
+            uv pip compile pyproject.toml --no-sources -p "${{ matrix.python-version }}" --all-extras --no-emit-index-url --no-annotate --no-strip-markers --output-file "$OUT" --upgrade
             # Install constraints then the wheel without reinstalling deps
             pip install -r "$OUT"
             WHEEL=$(ls dist/*.whl | head -n 1)

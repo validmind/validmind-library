@@ -23,29 +23,10 @@ permissions:
 jobs:
   tests:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     steps:
-      # TODO figure out why VM Library requires so much disk space and fix that
-      # - name: Free Disk Space (Ubuntu)
-      #   uses: jlumbroso/free-disk-space@main
-      #   with:
-      #     # this might remove tools that are actually needed,
-      #     # if set to "true" but frees about 6 GB
-      #     tool-cache: false
-
-      #     # all of these default to true, but feel free to set to
-      #     # "false" if necessary for your workflow
-      #     android: true
-      #     dotnet: true
-      #     haskell: true
-      #     large-packages: true
-      #     docker-images: true
-      #     swap-storage: true
-
       - uses: actions/checkout@v4
-
-      - name: Free Disk Space
-        run: ./disk_clean.sh
 
       - name: Set up Python 3.9
         uses: actions/setup-python@v5
@@ -56,11 +37,15 @@ jobs:
         uses: astral-sh/setup-uv@v5
         with:
           enable-cache: true
+          # Keep downloaded wheels between runs (the default prunes them before saving)
+          prune-cache: false
+          # Key on pyproject.toml, not uv.lock, so lock-only bumps reuse the cache. On Python 3.9
+          # blis and thinc have no wheels and take ~8 min to compile on every cache miss.
+          cache-dependency-glob: pyproject.toml
 
       - name: Install Dependencies
         run: |
           uv sync --all-extras --group dev
-          uv pip install torch==2.0.1 --extra-index-url https://download.pytorch.org/whl/cpu
           uv pip install aequitas fairlearn vl-convert-python
 
       - name: Ensure notebooks have no printed outputs

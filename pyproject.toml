@@ -195,3 +195,14 @@ profile = "black"
 
 [tool.uv]
 exclude-newer = "7 days"
+
+# CPU-only torch for this repo's own installs (dev, CI). CI runners have no GPU, and PyPI's Linux
+# torch pulls ~3 GB of NVIDIA libraries. uv-only setting: the published package still depends on
+# plain `torch`, so what users install is unchanged.
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[tool.uv.sources]
+torch = [{ index = "pytorch-cpu", marker = "sys_platform == 'linux'" }]
