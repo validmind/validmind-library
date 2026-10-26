@@ -12,7 +12,7 @@ from validmind import RawData, tags, tasks
 from validmind.errors import SkipTestError
 from validmind.vm_models import VMDataset, VMModel
 
-from .statsmodels.statsutils import predict_frame
+from .statsmodels.statsutils import categorical_columns, predict_frame
 
 
 def _is_binary(values):
@@ -40,6 +40,9 @@ def FeatureSensitivity(
     balance by $40". It reveals features whose influence is larger than their business
     importance would justify, effects that are asymmetric (a non-linear model reacting
     differently to rises and falls), and features that barely matter.
+    `statsmodels.RegressionModelSensitivityPlot` is the time-series counterpart: it applies
+    a multiplicative shock and plots predictions along the series. This test is for
+    cross-sectional data and reports the effect on the portfolio mean per feature.
 
     ### Test Mechanism
 
@@ -73,13 +76,17 @@ def FeatureSensitivity(
 
     - One feature at a time: correlated features would move together in reality; use
     scenario analysis for joint movements.
-    - Categorical (non-numeric) features are not shocked.
+    - Categorical features are not shocked: non-numeric columns, and numeric columns a
+    statsmodels formula treats as categorical (`C(x)`).
     - The baseline is the dataset's own predictions recomputed by the model; models that
     cannot predict on the dataset's features are not supported.
     """
     df = dataset.df
     feature_columns = dataset.feature_columns
     features = features or list(dataset.feature_columns_numeric)
+    # a numeric column the formula wraps in C() has levels, not a scale to shift along
+    categorical = categorical_columns(model, features)
+    features = [feature for feature in features if feature not in categorical]
     shocks = shocks or {}
     if not features:
         raise SkipTestError("FeatureSensitivity requires numeric features")

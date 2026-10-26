@@ -34,5 +34,17 @@ class TestTailPerformance(unittest.TestCase):
         self.assertEqual(rows.loc["Top 5% by actual", "Count"], 50)
 
 
+    def test_ties_do_not_widen_a_tail(self):
+        y = np.r_[np.zeros(300), np.arange(1, 701, dtype=float)]  # 30% zeros
+        dataset = vm.init_dataset(
+            pd.DataFrame({"x": y, "y": y}), input_id="z", target_column="y", __log=False
+        )
+        dataset.assign_predictions(self.model, prediction_values=y)
+        rows = TailPerformance(dataset, self.model)[0].set_index("Group")
+
+        self.assertEqual(rows.loc["Bottom 10% by actual", "Count"], 100)
+        self.assertEqual(rows.loc["Bottom 10% by prediction", "Count"], 100)
+
+
 if __name__ == "__main__":
     unittest.main()

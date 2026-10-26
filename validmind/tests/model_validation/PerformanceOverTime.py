@@ -12,7 +12,7 @@ from plotly.subplots import make_subplots
 from validmind import RawData, tags, tasks
 from validmind.vm_models import VMDataset, VMModel
 
-from ._segments import mean_and_half_width, segment_columns_or_default, z_value
+from ._segments import MISSING, mean_and_half_width, segment_columns_or_default, z_value
 
 
 @tags("model_performance", "stability", "time_series_data", "visualization")
@@ -45,7 +45,8 @@ def PerformanceOverTime(
     confidence interval, the MAE and the R². A period is **flagged** when its bias
     interval excludes zero; with `adjust_for_multiple_periods` (default) the confidence
     level is Bonferroni-adjusted for the number of periods assessed. Periods smaller than
-    `min_period_size` are reported but not assessed.
+    `min_period_size` are reported but not assessed. Rows with no period are reported
+    together as a final `Missing` period.
 
     The plot shows the bias with its interval and the MAE over time.
 
@@ -69,12 +70,17 @@ def PerformanceOverTime(
     to separate a change in the population from a change in behaviour.
     """
     segment_columns_or_default(dataset, [time_column])  # validates the column
-    periods = dataset.df[time_column].to_numpy()
+    # rows without a period are reported together, after the last period
+    missing = dataset.df[time_column].isna().to_numpy()
+    periods = dataset.df[time_column].to_numpy(dtype=object)
+    periods[missing] = MISSING
     actual = np.asarray(dataset.y, dtype=float)
     predicted = np.asarray(dataset.y_pred(model), dtype=float)
     residuals = actual - predicted
 
-    ordered = sorted(pd.unique(periods))
+    ordered = sorted(pd.unique(periods[~missing])) + (
+        [MISSING] if missing.any() else []
+    )
     sizes = {p: int((periods == p).sum()) for p in ordered}
     assessed = sum(n >= min_period_size for n in sizes.values())
     z = z_value(confidence_level, assessed if adjust_for_multiple_periods else 1)

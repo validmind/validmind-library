@@ -12,6 +12,8 @@ from scipy import stats
 
 SegmentColumn = Union[str, Sequence[str]]
 
+MISSING = "Missing"
+
 
 def segment_columns_or_default(
     dataset, segment_columns: Optional[List[SegmentColumn]]
@@ -35,14 +37,15 @@ def segment_columns_or_default(
 
 def segment_labels(values: pd.Series, n_bins: int, max_categories: int) -> pd.Series:
     """Quantile bins for numeric columns with many values; the values themselves otherwise."""
+    labels = values
     if pd.api.types.is_numeric_dtype(values) and values.nunique() > max_categories:
         bins = pd.qcut(values, q=n_bins, duplicates="drop")
         # qcut nudges the first edge below the minimum; show the real minimum instead
         lowest = values.min()
-        return bins.map(
-            lambda b: f"{max(b.left, lowest):,.4g} – {b.right:,.4g}"
-        ).astype(str)
-    return values.astype(str)
+        labels = bins.map(
+            lambda b: f"{max(b.left, lowest):,.4g} – {b.right:,.4g}", na_action="ignore"
+        )
+    return labels.astype(object).where(values.notna(), MISSING).astype(str)
 
 
 def iter_segments(df, segment_columns, n_bins, max_categories):
@@ -59,8 +62,10 @@ def iter_segments(df, segment_columns, n_bins, max_categories):
 
 
 def _natural_key(label):
-    """Sort numeric bin labels by their lower edge, other labels alphabetically."""
+    """Sort numeric bin labels by their lower edge, other labels alphabetically, missing last."""
     head = label.split(" – ")[0].split(" × ")[0].replace(",", "")
+    if head == MISSING:
+        return (2, 0.0, label)
     try:
         return (0, float(head), label)
     except ValueError:

@@ -17,7 +17,7 @@ from validmind.vm_models import VMDataset, VMModel
 _SHAPIRO_MAX_N = 5000
 
 
-@tags("model_diagnosis", "statistical_test", "visualization")
+@tags("model_diagnosis", "statistical_test", "normality", "visualization")
 @tasks("regression")
 def ResidualNormality(
     dataset: VMDataset,
@@ -36,6 +36,9 @@ def ResidualNormality(
     and in the tails. Skewed or heavy-tailed residuals also signal that the model misses part
     of the target's structure, such as a floor at zero or a sub-population. This test checks
     the residuals, not the features: feature normality is not an assumption of regression.
+    `stats.NormalityTests` tests the features; `ModelPredictionResiduals` plots residuals
+    with a single Kolmogorov-Smirnov test. This test adds Jarque-Bera, Shapiro-Wilk and
+    Anderson-Darling, skewness and kurtosis, a Q-Q plot, and a pass/fail result.
 
     ### Test Mechanism
 

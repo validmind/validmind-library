@@ -92,6 +92,10 @@ def ScenarioAnalysis(
     model second-round effects (for example customers leaving the portfolio).
     - Applies the same change to every row.
     """
+    if "Baseline" in scenarios:
+        raise ValueError(
+            "'Baseline' is reserved for the unstressed predictions; rename that scenario"
+        )
     feature_columns = dataset.feature_columns
     frames = {"Baseline": dataset.df}
     for name, changes in scenarios.items():

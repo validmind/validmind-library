@@ -95,6 +95,22 @@ class TestFeatureSensitivity(unittest.TestCase):
 
         pd.testing.assert_frame_equal(tables[0], tables[1])
 
+    def test_numeric_column_wrapped_in_c_is_not_shocked(self):
+        df = self.df.assign(cards=np.resize([1, 2, 3, 4], len(self.df)))
+        fit = smf.ols("y ~ big + small + flag + C(cards)", df).fit()
+        model = vm.init_model(fit, input_id="f", __log=False)
+        dataset = vm.init_dataset(
+            df,
+            input_id="d",
+            target_column="y",
+            feature_columns=["big", "small", "flag", "cards"],
+            __log=False,
+        )
+        dataset.assign_predictions(model, prediction_values=np.zeros(len(df)))
+        table = FeatureSensitivity(dataset, model)[0]
+
+        self.assertEqual(set(table["Feature"]), {"big", "small", "flag"})
+
     def test_non_linear_model_is_asymmetric(self):
         df = self.df.assign(y=np.exp(self.df.big / 4))
         model = vm.init_model(

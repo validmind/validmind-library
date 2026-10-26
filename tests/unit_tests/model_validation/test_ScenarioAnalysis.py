@@ -61,6 +61,7 @@ class TestScenarioAnalysis(unittest.TestCase):
             ({"s": {"a": {"divide": 2}}}, "unknown operation"),
             ({"s": {"a": 2}}, "exactly one of"),
             ({"s": {"a": {"add": 1, "set": 2}}}, "exactly one of"),
+            ({"Baseline": {"a": {"add": 1}}}, "reserved"),
         ]:
             with self.assertRaisesRegex(ValueError, message):
                 self._run(scenarios)

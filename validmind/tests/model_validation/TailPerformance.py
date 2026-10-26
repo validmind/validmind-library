@@ -35,7 +35,8 @@ def TailPerformance(
     ### Test Mechanism
 
     Five groups are compared: all observations; the top and bottom `tail_share` (10% by
-    default) by actual value; and the top and bottom `tail_share` by prediction. For each
+    default) by actual value; and the top and bottom `tail_share` by prediction, with ties
+    broken by row order so each tail holds exactly that share. For each
     group the test reports the count, the mean actual and predicted values, the mean
     residual (`actual - predicted`), the MAE, and the MAE relative to the overall MAE. A
     bar chart shows the mean residual by group.
@@ -64,11 +65,16 @@ def TailPerformance(
     residuals = actual - predicted
     overall_mae = float(np.abs(residuals).mean())
 
+    # rank rather than compare with a quantile, so ties (such as many zero balances)
+    # cannot push a tail beyond its share
+    def ranks(values):
+        return pd.Series(values).rank(method="first").to_numpy()
+
     def top(values):
-        return values >= np.quantile(values, 1 - tail_share)
+        return ranks(values) > len(values) * (1 - tail_share)
 
     def bottom(values):
-        return values <= np.quantile(values, tail_share)
+        return ranks(values) <= len(values) * tail_share
 
     pct = f"{tail_share:.0%}"
     groups = {

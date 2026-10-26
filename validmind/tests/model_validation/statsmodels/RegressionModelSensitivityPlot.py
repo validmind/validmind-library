@@ -23,7 +23,7 @@ def integrate_diff(series_diff, start_value):
     return series
 
 
-@tags("senstivity_analysis", "visualization")
+@tags("sensitivity_analysis", "visualization")
 @tasks("regression")
 def RegressionModelSensitivityPlot(
     dataset: VMDataset,

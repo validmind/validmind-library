@@ -86,3 +86,11 @@ class TestRegressionCoeffs(unittest.TestCase):
         self.assertTrue(
             (np.asarray(wide.error_y.array) > np.asarray(narrow.error_y.array)).all()
         )
+
+    def test_table_shows_the_chart_confidence_level(self):
+        _, table, _ = RegressionCoeffs(self.vm_model, confidence_level=0.90)
+        intervals = np.asarray(self.model.conf_int(alpha=0.10))
+
+        self.assertEqual(list(table.columns[-2:]), ["[0.05", "0.95]"])
+        np.testing.assert_allclose(table["[0.05"].astype(float), intervals[:, 0], atol=5e-4)
+        np.testing.assert_allclose(table["0.95]"].astype(float), intervals[:, 1], atol=5e-4)

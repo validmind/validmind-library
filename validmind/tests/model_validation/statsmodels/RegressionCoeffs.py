@@ -24,7 +24,7 @@ def RegressionCoeffs(
 
     ### Purpose
 
-    The `RegressionCoeffs` metric visualizes the estimated regression coefficients alongside their 95% confidence intervals,
+    The `RegressionCoeffs` metric visualizes the estimated regression coefficients alongside their confidence intervals (95% by default),
     providing insights into the impact and significance of predictor variables on the response variable. This visualization
     helps to understand the variability and uncertainty in the model's estimates, aiding in the evaluation of the
     significance of each predictor.
@@ -72,6 +72,12 @@ def RegressionCoeffs(
     intervals = pd.DataFrame(model.model.conf_int(alpha=1 - confidence_level))
     lower_ci = intervals.iloc[:, 0].to_numpy(dtype=float)
     upper_ci = intervals.iloc[:, 1].to_numpy(dtype=float)
+
+    # the summary table's interval columns are always 95%; show the chart's level instead
+    alpha = 1 - confidence_level
+    coefficients = coefficients.drop(columns=list(coefficients.columns[-2:]))
+    coefficients[f"[{alpha / 2:g}"] = [f"{v:.3f}" for v in lower_ci]
+    coefficients[f"{1 - alpha / 2:g}]"] = [f"{v:.3f}" for v in upper_ci]
 
     # Create a bar plot with confidence intervals
     fig = go.Figure()

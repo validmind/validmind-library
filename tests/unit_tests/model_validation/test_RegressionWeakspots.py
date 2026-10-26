@@ -38,6 +38,13 @@ class TestRegressionWeakspots(unittest.TestCase):
         _, _, passed, _ = RegressionWeakspots(*_dataset(noisy_scale=1.0))
         self.assertTrue(passed)
 
+    def test_missing_values_in_a_binned_column_do_not_crash(self):
+        dataset, model = _dataset(noisy_scale=1.0)
+        dataset.add_extra_column("score", np.r_[np.full(10, np.nan), np.arange(3990.0)])
+        table = RegressionWeakspots(dataset, model, segment_columns=["score"])[0]
+
+        self.assertEqual(table["Segment"].iloc[-1], "Missing")
+
     def test_requires_a_material_difference(self):
         # 1.15x noise is statistically clear on 1,000 rows but below the 1.25x ratio
         table, _, passed, _ = RegressionWeakspots(*_dataset(noisy_scale=1.15))

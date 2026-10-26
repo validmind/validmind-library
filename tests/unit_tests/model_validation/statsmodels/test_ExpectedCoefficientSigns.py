@@ -2,6 +2,7 @@ import unittest
 
 import numpy as np
 import pandas as pd
+import statsmodels.api as sm
 import statsmodels.formula.api as smf
 
 import validmind as vm
@@ -51,6 +52,16 @@ class TestExpectedCoefficientSigns(unittest.TestCase):
         )
         self.assertFalse(passed)
         self.assertEqual(table["Result"].iloc[0], "Fail (not significant)")
+
+    def test_array_api_on_numpy_arrays(self):
+        rng = np.random.default_rng(1)
+        X = rng.normal(0, 1, (300, 2))
+        y = 2 * X[:, 0] - 3 * X[:, 1] + rng.normal(0, 1, 300)
+        model = vm.init_model(sm.OLS(y, sm.add_constant(X)).fit(), input_id="a", __log=False)
+        table, passed, _ = ExpectedCoefficientSigns(model, expected_signs={"x1": "+", "x2": "+"})
+
+        self.assertFalse(passed)
+        self.assertEqual(list(table["Result"]), ["Pass", "Fail"])
 
     def test_unknown_coefficient_raises(self):
         with self.assertRaisesRegex(ValueError, "not in the model"):
