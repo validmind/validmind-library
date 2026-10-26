@@ -135,25 +135,46 @@ class TestPredictionIntervals(unittest.TestCase):
             PredictionIntervals(dataset, model)
 
     def test_rows_with_a_missing_regressor_are_excluded(self):
-        holdout = _frame(500, seed=1)
-        holdout.loc[holdout.index[:200], "x"] = np.nan
         X = sm.add_constant(self.train[["x", "z"]])
         array = vm.init_model(sm.OLS(self.train.y, X).fit(), input_id="a", __log=False)
-        for model in (self.model, array):
-            dataset = vm.init_dataset(
-                holdout,
-                input_id="d",
-                target_column="y",
-                feature_columns=["x", "z"],
-                __log=False,
-            )
-            dataset.assign_predictions(model, prediction_values=np.zeros(len(holdout)))
-            coverage = PredictionIntervals(dataset, model)[0][
-                "Prediction Interval Coverage"
-            ]
+        base = _frame(500, seed=1)
+        base.loc[base.index[:200], "x"] = np.nan
+        # coverage computed by hand on the complete rows only
+        complete = base.dropna()
+        bounds = self.fit.get_prediction(complete).summary_frame(alpha=0.05)
+        expected = float(
+            (
+                (complete.y.to_numpy() >= bounds.obs_ci_lower.to_numpy())
+                & (complete.y.to_numpy() <= bounds.obs_ci_upper.to_numpy())
+            ).mean()
+        )
+        indexes = {
+            "default": base.index,
+            "shuffled": np.random.default_rng(0).permutation(base.index),
+            "duplicated": np.repeat(np.arange(250), 2),
+        }
+        for (label, index), model in (
+            (item, model) for item in indexes.items() for model in (self.model, array)
+        ):
+            with self.subTest(index=label, model=model.input_id):
+                holdout = base.set_axis(index)
+                dataset = vm.init_dataset(
+                    holdout,
+                    input_id="d",
+                    target_column="y",
+                    feature_columns=["x", "z"],
+                    __log=False,
+                )
+                dataset.assign_predictions(
+                    model, prediction_values=np.zeros(len(holdout))
+                )
+                coverage = PredictionIntervals(dataset, model)[0][
+                    "Prediction Interval Coverage"
+                ].iloc[0]
 
-            self.assertEqual(coverage["Observations"].iloc[0], 300)
-            self.assertEqual(coverage["Excluded (Missing)"].iloc[0], 200)
+                self.assertEqual(coverage["Observations"], 300)
+                self.assertEqual(coverage["Excluded (Missing)"], 200)
+                self.assertAlmostEqual(coverage["Coverage"], expected, places=4)
 
 
 if __name__ == "__main__":

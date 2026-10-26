@@ -80,14 +80,19 @@ def PredictionIntervals(
     results = ols_results(model, "PredictionIntervals")
     alpha = 1 - confidence_level
 
-    df = dataset.df
-    frame = results.get_prediction(
-        design_data(results, df, dataset.feature_columns)
-    ).summary_frame(alpha=alpha)
-    # formula models drop rows with a missing regressor; put them back as NaN by label
-    frame = (
-        frame.set_axis(df.index) if len(frame) == len(df) else frame.reindex(df.index)
-    )
+    # positions, not labels: a shuffled or duplicated index must not misalign rows
+    df = dataset.df.reset_index(drop=True)
+    if getattr(results.model, "formula", None) is not None:
+        from patsy import dmatrix
+
+        # drops rows with a missing regressor but, unlike get_prediction's own
+        # transform, keeps the positions of the rows it keeps
+        exog = dmatrix(results.model.data.design_info, df, return_type="dataframe")
+        prediction = results.get_prediction(exog, transform=False)
+    else:
+        exog = design_data(results, df, dataset.feature_columns)
+        prediction = results.get_prediction(exog)
+    frame = prediction.summary_frame(alpha=alpha).set_axis(exog.index).reindex(df.index)
 
     columns = ["mean", "obs_ci_lower", "obs_ci_upper"]
     actual = np.asarray(dataset.y, dtype=float)
