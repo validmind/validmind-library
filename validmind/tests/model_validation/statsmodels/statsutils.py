@@ -15,3 +15,68 @@ def adj_r2_score(
     return 1 - (1 - r2_score(actual, predicted)) * (rowcount - 1) / (
         rowcount - featurecount
     )
+
+
+INTERCEPT_NAMES = ("Intercept", "const")
+
+
+def ols_results(model, test_name: str):
+    """
+    Return the fitted statsmodels OLS results behind a VMModel.
+
+    Works for models fitted with the formula API (`smf.ols`) and the array API
+    (`sm.OLS`). Raises SkipTestError for any other model.
+    """
+    from validmind.errors import SkipTestError
+
+    results = getattr(model, "model", None)
+    fitted_model = getattr(results, "model", None)
+
+    if getattr(model, "library", None) != "statsmodels" or fitted_model is None:
+        raise SkipTestError(f"{test_name} requires a fitted statsmodels OLS model")
+
+    from statsmodels.regression.linear_model import OLS
+
+    if not isinstance(fitted_model, OLS):
+        raise SkipTestError(
+            f"{test_name} supports statsmodels OLS models, "
+            f"not {type(fitted_model).__name__}"
+        )
+
+    return results
+
+
+def row_labels(results):
+    """Row labels of the data the model was fitted on (positions if none)."""
+    labels = getattr(results.model.data, "row_labels", None)
+    return list(labels) if labels is not None else list(range(int(results.nobs)))
+
+
+def design_data(results, df):
+    """
+    Data to pass to `results.predict` / `results.get_prediction` for the rows of `df`.
+
+    Formula models apply their own transformations to the original columns; array models
+    need their regressor columns in order, with the constant added back.
+    """
+    if getattr(results.model, "formula", None) is not None:
+        return df
+
+    data = df.copy()
+    for name in results.model.exog_names:
+        if name in INTERCEPT_NAMES:
+            data[name] = 1.0
+    return data[list(results.model.exog_names)]
+
+
+def predict_frame(model, df, feature_columns):
+    """
+    Predictions of any regression VMModel for the rows of `df`.
+
+    statsmodels models receive their design data (see `design_data`); every other model
+    receives the dataset's feature columns as a DataFrame.
+    """
+    if getattr(model, "library", None) == "statsmodels":
+        results = model.model
+        return np.asarray(results.predict(design_data(results, df)), dtype=float)
+    return np.asarray(model.predict(df[list(feature_columns)]), dtype=float)

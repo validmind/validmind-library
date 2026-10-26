@@ -69,3 +69,20 @@ class TestRegressionCoeffs(unittest.TestCase):
         # Check if error bars are present
         self.assertTrue(hasattr(fig.data[0], "error_y"))
         self.assertTrue(fig.data[0].error_y.visible)
+
+    def test_error_bars_are_distances_to_the_model_confidence_interval(self):
+        fig, _, _ = RegressionCoeffs(self.vm_model)
+        bar = fig.data[0]
+        intervals = np.asarray(self.model.conf_int(alpha=0.05))
+        coef = np.asarray(self.model.params)
+
+        np.testing.assert_allclose(bar.error_y.array, intervals[:, 1] - coef)
+        np.testing.assert_allclose(bar.error_y.arrayminus, coef - intervals[:, 0])
+
+    def test_confidence_level_is_a_parameter(self):
+        wide = RegressionCoeffs(self.vm_model, confidence_level=0.99)[0].data[0]
+        narrow = RegressionCoeffs(self.vm_model, confidence_level=0.90)[0].data[0]
+
+        self.assertTrue(
+            (np.asarray(wide.error_y.array) > np.asarray(narrow.error_y.array)).all()
+        )

@@ -220,6 +220,14 @@ def background_generate_description(
 
             return test_description, False
 
+    # Render figures to PNG here, on the calling thread: Plotly's renderer (kaleido)
+    # deadlocks when several description workers start it at the same time.
+    for figure in figures or []:
+        try:
+            figure.pre_serialize()
+        except Exception:
+            pass  # the worker hits the same error and falls back to the default
+
     return DescriptionFuture(__executor.submit(wrapped))
 
 

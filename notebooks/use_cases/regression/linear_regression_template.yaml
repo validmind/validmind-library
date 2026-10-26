@@ -1,0 +1,318 @@
+# Copyright © 2023-2026 ValidMind Inc. All rights reserved.
+# Refer to the LICENSE file in the root of this repository for details.
+# SPDX-License-Identifier: AGPL-3.0 AND ValidMind Commercial
+
+- id: model_overview
+  title: Model Overview
+  index_only: true
+  sections:
+    - id: purpose_and_use
+      title: Purpose and Intended Use
+      parent_section: model_overview
+      guidelines:
+        - State what the model predicts, for whom, and which business decisions
+          rely on it.
+        - Explain which errors matter most for that use (for example, whether
+          under-prediction is more costly than over-prediction).
+        - Describe the population and time period the model is meant to cover.
+      contents:
+        - content_id: purpose_and_use
+          content_type: text
+    - id: methodology
+      title: Methodology
+      parent_section: model_overview
+      guidelines:
+        - Describe the model form (ordinary least squares regression), the
+          target, and the candidate explanatory variables.
+        - Justify a linear model for this problem and state its known
+          limitations, such as a target bounded at zero.
+        - Describe any challenger models and why they were considered.
+      contents:
+        - content_id: methodology
+          content_type: text
+
+- id: data
+  title: Data
+  index_only: true
+  sections:
+    - id: data_description
+      title: Data Description
+      parent_section: data
+      guidelines:
+        - Describe the data sources, the observation period, and each variable.
+        - Explain how the development and out-of-time samples were defined.
+      contents:
+        - content_id: data_description
+          content_type: text
+        - content_id: validmind.data_validation.DatasetDescription:raw_data
+          content_type: test
+        - content_id: validmind.data_validation.DescriptiveStatistics:raw_data
+          content_type: test
+    - id: data_quality
+      title: Data Quality
+      parent_section: data
+      guidelines:
+        - Report missing values, duplicates, implausible values and outliers.
+        - Describe every correction made to the data and its justification.
+      contents:
+        - content_id: data_quality
+          content_type: text
+        - content_id: validmind.data_validation.MissingValues:raw_data
+          content_type: test
+        - content_id: validmind.data_validation.Duplicates:raw_data
+          content_type: test
+        - content_id: validmind.data_validation.IQROutliersTable:raw_data
+          content_type: test
+        - content_id: validmind.data_validation.Skewness:raw_data
+          content_type: test
+    - id: correlations
+      title: Correlations
+      parent_section: data
+      guidelines:
+        - Identify strongly correlated candidate variables and their
+          implications for the model specification.
+      contents:
+        - content_id: validmind.data_validation.PearsonCorrelationMatrix:raw_data
+          content_type: test
+        - content_id: validmind.data_validation.HighPearsonCorrelation:raw_data
+          content_type: test
+    - id: data_split
+      title: Development and Out-of-Time Samples
+      parent_section: data
+      contents:
+        - content_id: validmind.data_validation.DatasetSplit
+          content_type: test
+
+- id: model_specification
+  title: Model Specification
+  index_only: true
+  sections:
+    - id: influential_observations
+      title: Influential Observations
+      parent_section: model_specification
+      guidelines:
+        - Identify observations that individually drive the estimates, and
+          explain how each was investigated and treated.
+      contents:
+        - content_id: validmind.model_validation.statsmodels.InfluentialObservations:candidate_model
+          content_type: test
+    - id: multicollinearity
+      title: Multicollinearity and Variable Selection
+      parent_section: model_specification
+      guidelines:
+        - Report multicollinearity among candidate variables and justify which
+          variables were kept or removed.
+        - Show the final model is free of harmful multicollinearity.
+      contents:
+        - content_id: variable_selection
+          content_type: text
+        - content_id: validmind.model_validation.statsmodels.VarianceInflationFactor:candidate_model
+          content_type: test
+        - content_id: validmind.model_validation.statsmodels.VarianceInflationFactor:champion
+          content_type: test
+    - id: coefficients
+      title: Coefficients
+      parent_section: model_specification
+      guidelines:
+        - Present the estimated coefficients with their uncertainty.
+        - Confirm each effect has the expected direction and that inference
+          holds without the constant-variance assumption.
+        - Show the coefficients are stable under resampling.
+      contents:
+        - content_id: validmind.model_validation.statsmodels.RegressionCoeffs:champion
+          content_type: test
+        - content_id: validmind.model_validation.statsmodels.ExpectedCoefficientSigns:champion
+          content_type: test
+        - content_id: validmind.model_validation.statsmodels.RobustStandardErrors:champion
+          content_type: test
+        - content_id: validmind.model_validation.statsmodels.CoefficientStability:champion
+          content_type: test
+    - id: functional_form
+      title: Functional Form
+      parent_section: model_specification
+      guidelines:
+        - Test whether each variable's effect is adequately captured by a
+          straight line, and describe any transformation considered.
+      contents:
+        - content_id: validmind.model_validation.statsmodels.LinearitySpecification:champion
+          content_type: test
+
+- id: assumptions
+  title: Model Assumptions
+  index_only: true
+  sections:
+    - id: residual_diagnostics
+      title: Residual Diagnostics
+      parent_section: assumptions
+      guidelines:
+        - Assess whether the residuals are normally distributed and have
+          constant variance.
+        - Distinguish statistically significant departures from material ones,
+          and state their consequences for inference and prediction intervals.
+      contents:
+        - content_id: assumption_assessment
+          content_type: text
+        - content_id: validmind.model_validation.ResidualNormality:champion
+          content_type: test
+        - content_id: validmind.model_validation.Heteroscedasticity:champion
+          content_type: test
+
+- id: performance
+  title: Performance and Uncertainty
+  index_only: true
+  sections:
+    - id: predictive_performance
+      title: Predictive Performance
+      parent_section: performance
+      contents:
+        - content_id: validmind.model_validation.sklearn.RegressionR2Square:champion_test
+          content_type: test
+        - content_id: validmind.model_validation.sklearn.RegressionPerformance:champion_test
+          content_type: test
+    - id: prediction_uncertainty
+      title: Prediction Uncertainty
+      parent_section: performance
+      guidelines:
+        - Backtest the coverage of the model's prediction intervals on held-out
+          data.
+      contents:
+        - content_id: validmind.model_validation.statsmodels.PredictionIntervals:test
+          content_type: test
+    - id: prediction_soundness
+      title: Prediction Soundness and Calibration
+      parent_section: performance
+      guidelines:
+        - Check that predictions stay within the feasible range of the target.
+        - Check calibration across the prediction range and accuracy in the
+          tails, where exposure concentrates.
+      contents:
+        - content_id: validmind.model_validation.PredictionRange:champion_test
+          content_type: test
+        - content_id: validmind.model_validation.CalibrationByDecile:champion_test
+          content_type: test
+        - content_id: validmind.model_validation.TailPerformance:champion_test
+          content_type: test
+
+- id: benchmarking
+  title: Champion and Challenger
+  index_only: true
+  sections:
+    - id: challenger_comparison
+      title: Comparison with the Challenger
+      parent_section: benchmarking
+      guidelines:
+        - Compare the champion with the challenger on the same data.
+        - State whether any difference is statistically significant, and weigh
+          it against the challenger's added complexity.
+      contents:
+        - content_id: challenger_assessment
+          content_type: text
+        - content_id: validmind.model_validation.sklearn.RegressionErrorsComparison:champion_vs_challenger
+          content_type: test
+        - content_id: validmind.model_validation.PerformanceConfidenceIntervals:champion_vs_challenger
+          content_type: test
+        - content_id: validmind.model_validation.PredictionRange:challenger_test
+          content_type: test
+
+- id: sensitivity
+  title: Sensitivity and Stress Testing
+  index_only: true
+  sections:
+    - id: feature_sensitivity
+      title: Feature Sensitivity
+      parent_section: sensitivity
+      guidelines:
+        - Show how the portfolio-level prediction responds to each variable, and
+          confirm the size and direction are plausible.
+      contents:
+        - content_id: validmind.model_validation.FeatureSensitivity:champion
+          content_type: test
+        - content_id: validmind.model_validation.FeatureSensitivity:challenger
+          content_type: test
+    - id: stress_scenarios
+      title: Stress Scenarios
+      parent_section: sensitivity
+      guidelines:
+        - Define the stress scenarios and justify their severity.
+        - Report the projected impact and whether it is plausible.
+      contents:
+        - content_id: stress_scenarios
+          content_type: text
+        - content_id: validmind.model_validation.ScenarioAnalysis:champion
+          content_type: test
+        - content_id: validmind.model_validation.ScenarioAnalysis:challenger
+          content_type: test
+
+- id: segment_analysis
+  title: Segment Analysis
+  index_only: true
+  sections:
+    - id: segment_bias
+      title: Bias and Accuracy by Segment
+      parent_section: segment_analysis
+      guidelines:
+        - Look for segments, including along variables the model does not use,
+          in which the model is systematically biased or materially less
+          accurate.
+        - Assess the materiality of each finding for the model's intended use.
+      contents:
+        - content_id: segment_findings
+          content_type: text
+        - content_id: validmind.model_validation.ResidualBiasBySegment:champion_test
+          content_type: test
+        - content_id: validmind.model_validation.RegressionWeakspots:champion_test
+          content_type: test
+        - content_id: validmind.model_validation.ResidualBiasBySegment:challenger_test
+          content_type: test
+
+- id: stability
+  title: Stability Over Time
+  index_only: true
+  sections:
+    - id: out_of_time
+      title: Out-of-Time Performance
+      parent_section: stability
+      guidelines:
+        - Compare performance on the development and out-of-time samples.
+        - Show when any change began, and whether prediction intervals remain
+          reliable out of time.
+      contents:
+        - content_id: validmind.model_validation.sklearn.RegressionErrorsComparison:in_time_vs_out_of_time
+          content_type: test
+        - content_id: validmind.model_validation.PerformanceOverTime:champion
+          content_type: test
+        - content_id: validmind.model_validation.statsmodels.PredictionIntervals:oot
+          content_type: test
+    - id: population_drift
+      title: Population Drift
+      parent_section: stability
+      guidelines:
+        - Measure how the distribution of each variable changed between the
+          development and out-of-time samples, and explain the drivers.
+      contents:
+        - content_id: validmind.ongoing_monitoring.FeatureDrift:development_vs_out_of_time
+          content_type: test
+
+- id: conclusions
+  title: Conclusions
+  index_only: true
+  sections:
+    - id: limitations
+      title: Limitations and Findings
+      parent_section: conclusions
+      guidelines:
+        - Summarize every finding with its severity and the evidence for it.
+        - State the model's known limitations and the conditions under which it
+          should not be relied on.
+      contents:
+        - content_id: limitations
+          content_type: text
+    - id: monitoring_plan
+      title: Ongoing Monitoring
+      parent_section: conclusions
+      guidelines:
+        - Define the metrics, thresholds and frequency for monitoring the model
+          in use, and the actions triggered by a breach.
+      contents:
+        - content_id: monitoring_plan
+          content_type: text

@@ -86,6 +86,45 @@ class TestTokenEstimation(unittest.TestCase):
         self.assertTrue(result.endswith("a"))
 
 
+class TestBackgroundDescriptionFigures(unittest.TestCase):
+    """Plotly figures must be rendered before descriptions run in the thread pool."""
+
+    @patch("validmind.api_client.generate_test_result_description")
+    def test_figures_are_rendered_on_the_calling_thread(self, mock_generate):
+        import threading
+
+        import plotly.graph_objects as go
+        from plotly.basedatatypes import BaseFigure
+
+        from validmind.ai.test_descriptions import background_generate_description
+        from validmind.vm_models.figure import Figure
+
+        mock_generate.return_value = {"content": "ok"}
+        render_threads = []
+
+        def fake_to_image(fig, *args, **kwargs):
+            render_threads.append(threading.current_thread())
+            return b"png"
+
+        # kaleido deadlocks when several workers render at once, so no figure may be
+        # rendered inside the pool. Figure wraps plotly figures in a FigureWidget, so
+        # patch the base class both share.
+        with patch.object(BaseFigure, "to_image", fake_to_image):
+            figures = [
+                Figure(key=f"fig_{i}", figure=go.Figure(), ref_id="ref") for i in range(3)
+            ]
+            future = background_generate_description(
+                test_id="validmind.model_validation.ResidualNormality",
+                test_description="desc",
+                figures=figures,
+            )
+            description, generated = future._future.result()
+
+        self.assertTrue(generated)
+        self.assertEqual(len(render_threads), 3)
+        self.assertTrue(all(t is threading.current_thread() for t in render_threads))
+
+
 class TestTruncateSummary(unittest.TestCase):
     """Test the _truncate_summary function."""
 
