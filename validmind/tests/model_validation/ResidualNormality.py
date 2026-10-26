@@ -48,8 +48,10 @@ def ResidualNormality(
     - **Jarque-Bera:** based on skewness and kurtosis; sensitive to asymmetry and heavy tails.
     - **Shapiro-Wilk:** a general test with good power; if there are more than 5,000
     residuals, a random sample of 5,000 is tested (seeded by `seed`).
-    - **Anderson-Darling:** gives extra weight to the tails; compared with its critical value
-    at the significance level closest to `significance_level`.
+    - **Anderson-Darling:** gives extra weight to the tails. With SciPy 1.17 or later its
+    p-value is interpolated from tables (reported between 0.01 and 0.15); with older SciPy
+    the statistic is compared with its critical value at the level closest to
+    `significance_level`.
 
     The Q-Q plot compares standardized residual quantiles with normal quantiles; points off
     the diagonal show where the distribution departs (one tail, both tails, a step).
@@ -87,11 +89,24 @@ def ResidualNormality(
     )
     sw_stat, sw_p = stats.shapiro(shapiro_sample)
 
-    anderson = stats.anderson(residuals, dist="norm")
-    levels = np.asarray(anderson.significance_level) / 100
-    level_idx = int(np.argmin(np.abs(levels - significance_level)))
-    ad_critical = float(anderson.critical_values[level_idx])
-    ad_level = float(levels[level_idx])
+    try:
+        anderson = stats.anderson(residuals, dist="norm", method="interpolate")
+    except TypeError:  # SciPy < 1.17: critical values only, no p-value
+        anderson = stats.anderson(residuals, dist="norm")
+
+    if hasattr(anderson, "pvalue"):
+        ad_p = float(anderson.pvalue)
+        ad_fails_when = f"p-value < {significance_level}"
+        ad_passed = ad_p >= significance_level
+    else:
+        levels = np.asarray(anderson.significance_level) / 100
+        level_idx = int(np.argmin(np.abs(levels - significance_level)))
+        ad_critical = float(anderson.critical_values[level_idx])
+        ad_p = np.nan
+        ad_fails_when = (
+            f"statistic > {ad_critical:.4f} (critical value at {levels[level_idx]:.1%})"
+        )
+        ad_passed = anderson.statistic <= ad_critical
 
     tests_df = pd.DataFrame(
         [
@@ -112,9 +127,9 @@ def ResidualNormality(
             {
                 "Test": "Anderson-Darling",
                 "Statistic": float(anderson.statistic),
-                "p-value": np.nan,
-                "Fails When": f"statistic > {ad_critical:.4f} (critical value at {ad_level:.1%})",
-                "Pass/Fail": "Pass" if anderson.statistic <= ad_critical else "Fail",
+                "p-value": ad_p,
+                "Fails When": ad_fails_when,
+                "Pass/Fail": "Pass" if ad_passed else "Fail",
             },
         ]
     )

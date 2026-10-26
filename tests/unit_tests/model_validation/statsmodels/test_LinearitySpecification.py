@@ -1,4 +1,5 @@
 import unittest
+import warnings
 
 import numpy as np
 import pandas as pd
@@ -49,6 +50,17 @@ class TestLinearitySpecification(unittest.TestCase):
         titles = [a.text for a in fig.layout.annotations]
         self.assertEqual(titles, ["x", "z"])  # no intercept, no binary flag
         self.assertEqual(set(raw.lowess), {"x", "z"})
+
+    def test_count_regressor_with_few_levels_is_smoothed_quietly(self):
+        rng = np.random.default_rng(0)
+        df = pd.DataFrame({"x": rng.normal(size=1000), "count": rng.poisson(1, 1000)})
+        df["y"] = df.x + df["count"] + rng.normal(size=1000)
+        model = _model(smf.ols("y ~ x + count", df).fit())
+        with warnings.catch_warnings():
+            warnings.simplefilter("error", RuntimeWarning)
+            raw = LinearitySpecification(model)[-1]
+
+        self.assertTrue(np.isfinite(raw.lowess["count"]).all())
 
     def test_array_api(self):
         X = sm.add_constant(self.df[["x", "z", "flag"]])

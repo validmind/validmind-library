@@ -131,7 +131,10 @@ def LinearitySpecification(
     for k, i in enumerate(continuous):
         x = exog[:, i]
         partial_residual = resid + params[i] * x
-        smooth = lowess(partial_residual, x, frac=0.3, return_sorted=True)
+        # many tied values (a count with few levels) leave some local windows with no
+        # spread in x; lowess divides by zero there and still returns a finite smooth
+        with np.errstate(divide="ignore", invalid="ignore"):
+            smooth = lowess(partial_residual, x, frac=0.3, return_sorted=True)
         smoothers[names[i]] = smooth
         row, col = k // n_cols + 1, k % n_cols + 1
         fig.add_trace(

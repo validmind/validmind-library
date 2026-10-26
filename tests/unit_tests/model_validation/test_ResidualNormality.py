@@ -1,4 +1,5 @@
 import unittest
+import warnings
 
 import numpy as np
 import pandas as pd
@@ -29,6 +30,15 @@ class TestResidualNormality(unittest.TestCase):
         self.assertTrue(passed)
         self.assertTrue((tables["Normality Tests"]["Pass/Fail"] == "Pass").all())
         self.assertIsInstance(fig, go.Figure)
+
+    def test_anderson_darling_uses_no_deprecated_scipy_api(self):
+        dataset, model = _setup(lambda rng, n: rng.normal(0, 1, n))
+        with warnings.catch_warnings():
+            warnings.simplefilter("error", FutureWarning)
+            tables = ResidualNormality(dataset, model)[0]
+        row = tables["Normality Tests"].set_index("Test").loc["Anderson-Darling"]
+
+        self.assertEqual(row["Pass/Fail"], "Pass")
 
     def test_fails_skewed_errors(self):
         dataset, model = _setup(lambda rng, n: rng.exponential(1, n))
