@@ -4,6 +4,7 @@
 
 from typing import Dict, List, Tuple
 
+import numpy as np
 from sklearn.metrics import mean_squared_error, r2_score
 
 from validmind import RawData, tags, tasks
@@ -59,8 +60,8 @@ def RegressionModelSummary(
             "Adjusted R-Squared": adj_r2_score(
                 y_true, y_pred, len(y_true), len(dataset.feature_columns)
             ),
-            "MSE": mean_squared_error(y_true, y_pred, squared=True),
-            "RMSE": mean_squared_error(y_true, y_pred, squared=False),
+            "MSE": mean_squared_error(y_true, y_pred),
+            "RMSE": np.sqrt(mean_squared_error(y_true, y_pred)),
         }
     ], RawData(
         y_true=y_true, y_pred=y_pred, model=model.input_id, dataset=dataset.input_id

@@ -10,6 +10,8 @@ from typing import List
 import pandas as pd
 
 __all__: List[str] = [
+    "california_housing",
+    "credit_card_balance",
     "fred",
     "lending_club",
 ]

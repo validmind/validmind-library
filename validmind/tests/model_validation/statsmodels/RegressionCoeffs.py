@@ -9,43 +9,32 @@ import pandas as pd
 import plotly.graph_objects as go
 
 from validmind import RawData, tags, tasks
-from validmind.errors import MissingDependencyError, SkipTestError
-
-try:
-    from scipy import stats
-except ImportError as e:
-    if "scipy" in str(e):
-        raise MissingDependencyError(
-            "Missing required package `scipy` for RegressionCoeffs. "
-            "Please run `pip install validmind[stats]` to use statistical tests",
-            required_dependencies=["scipy"],
-            extra="stats",
-        ) from e
-
-    raise e
+from validmind.errors import SkipTestError
 from validmind.vm_models import VMModel
 
 
 @tags("tabular_data", "visualization", "model_training")
 @tasks("regression")
-def RegressionCoeffs(model: VMModel) -> Tuple[go.Figure, RawData, pd.DataFrame]:
+def RegressionCoeffs(
+    model: VMModel, confidence_level: float = 0.95
+) -> Tuple[go.Figure, RawData, pd.DataFrame]:
     """
     Assesses the significance and uncertainty of predictor variables in a regression model through visualization of
-    coefficients and their 95% confidence intervals.
+    coefficients and their confidence intervals.
 
     ### Purpose
 
-    The `RegressionCoeffs` metric visualizes the estimated regression coefficients alongside their 95% confidence intervals,
+    The `RegressionCoeffs` metric visualizes the estimated regression coefficients alongside their confidence intervals (95% by default),
     providing insights into the impact and significance of predictor variables on the response variable. This visualization
     helps to understand the variability and uncertainty in the model's estimates, aiding in the evaluation of the
     significance of each predictor.
 
     ### Test Mechanism
 
-    The function operates by extracting the estimated coefficients and their standard errors from the regression model.
-    Using these, it calculates the confidence intervals at a 95% confidence level, which indicates the range within which
-    the true coefficient value is expected to fall 95% of the time. The confidence intervals are computed using the
-    Z-value associated with the 95% confidence level. The coefficients and their confidence intervals are then visualized
+    The function operates by extracting the estimated coefficients and their confidence intervals at `confidence_level`
+    (default 95%) from the fitted statsmodels model, which uses the model's own reference distribution (Student's t for
+    OLS). The confidence interval indicates the range within which the true coefficient value is expected to fall with
+    that confidence. The coefficients and their confidence intervals are then visualized
     in a bar plot. The x-axis represents the predictor variables, the y-axis represents the estimated coefficients, and
     the error bars depict the confidence intervals.
 
@@ -77,16 +66,18 @@ def RegressionCoeffs(model: VMModel) -> Tuple[go.Figure, RawData, pd.DataFrame]:
     if model.library != "statsmodels":
         raise SkipTestError("Only statsmodels are supported for this metric")
 
-    # Extract estimated coefficients and standard errors
     coefficients = model.regression_coefficients()
-    coef = pd.to_numeric(coefficients["coef"])
-    std_err = pd.to_numeric(coefficients["std err"])
+    coef = pd.Series(model.model.params).to_numpy(dtype=float)
+    std_err = pd.Series(model.model.bse).to_numpy(dtype=float)
+    intervals = pd.DataFrame(model.model.conf_int(alpha=1 - confidence_level))
+    lower_ci = intervals.iloc[:, 0].to_numpy(dtype=float)
+    upper_ci = intervals.iloc[:, 1].to_numpy(dtype=float)
 
-    # Calculate confidence intervals
-    confidence_level = 0.95  # 95% confidence interval
-    z_value = stats.norm.ppf((1 + confidence_level) / 2)  # Calculate Z-value
-    lower_ci = coef - z_value * std_err
-    upper_ci = coef + z_value * std_err
+    # the summary table's interval columns are always 95%; show the chart's level instead
+    alpha = 1 - confidence_level
+    coefficients = coefficients.drop(columns=list(coefficients.columns[-2:]))
+    coefficients[f"[{alpha / 2:g}"] = [f"{v:.3f}" for v in lower_ci]
+    coefficients[f"{1 - alpha / 2:g}]"] = [f"{v:.3f}" for v in upper_ci]
 
     # Create a bar plot with confidence intervals
     fig = go.Figure()
@@ -99,15 +90,16 @@ def RegressionCoeffs(model: VMModel) -> Tuple[go.Figure, RawData, pd.DataFrame]:
             error_y=dict(
                 type="data",
                 symmetric=False,
-                arrayminus=lower_ci,
-                array=upper_ci,
+                # error bars are distances from the coefficient, not bounds
+                arrayminus=coef - lower_ci,
+                array=upper_ci - coef,
                 visible=True,
             ),
         )
     )
 
     fig.update_layout(
-        title=f"{model.input_id} Coefficients with Confidence Intervals",
+        title=f"{model.input_id} Coefficients with {confidence_level:.0%} Confidence Intervals",
         xaxis_title="Predictor Variables",
         yaxis_title="Coefficients",
     )
