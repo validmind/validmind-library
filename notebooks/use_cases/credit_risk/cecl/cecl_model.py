@@ -61,46 +61,69 @@ def long_run_averages(through=REPORTING_QUARTER):
     }
 
 
-def build_scenario_paths(
-    rs_quarters=RS_QUARTERS,
-    reversion_quarters=REVERSION_QUARTERS,
-    reporting_quarter=REPORTING_QUARTER,
-    horizon=MAX_HORIZON,
-):
-    """Quarterly macro paths per scenario for ``horizon`` quarters after the reporting date.
+def _changes(levels, jump):
+    """Changes from a jump-off quarter: unemployment and mortgage rate in points, HPI in logs."""
+    return pd.DataFrame(
+        {
+            "unemployment_rate": levels["unemployment_rate"].to_numpy()
+            - jump["unemployment_rate"],
+            "mortgage_rate": levels["mortgage_rate"].to_numpy() - jump["mortgage_rate"],
+            "hpi_log_change": np.log(
+                levels["house_price_index"].to_numpy() / jump["house_price_index"]
+            ),
+        }
+    )
 
-    Each Fed 2025 scenario's change from its own jump-off quarter is applied to the
-    reporting-quarter actuals. Adverse is the midpoint of baseline and severely
-    adverse. The forecast holds for ``rs_quarters``, reverts in a straight line to the
-    long-run averages since 1990 over ``reversion_quarters`` and stays there.
+
+def scenario_changes(rs_quarters=RS_QUARTERS):
+    """Each Fed 2025 scenario's change from its own jump-off quarter, per forecast quarter.
+
+    Adverse is the midpoint of baseline and severely adverse.
     """
-    macro = load_macro_history()
     fed = load_fed_scenarios()
-    reporting = pd.Period(reporting_quarter, freq="Q")
-    long_run = long_run_averages(reporting_quarter)
     jump = fed[fed["scenario"] == "jump_off"].iloc[0]
-
-    shocks = {}
+    changes = {}
     for s in ["baseline", "severely_adverse"]:
         f = fed[fed["scenario"] == s]
         if rs_quarters > len(f):
             raise ValueError(
                 f"The Fed scenarios cover {len(f)} quarters, not {rs_quarters}"
             )
-        f = f.iloc[:rs_quarters]
-        shocks[s] = pd.DataFrame(
-            {
-                "unemployment_rate": f["unemployment_rate"].to_numpy()
-                - jump["unemployment_rate"],
-                "mortgage_rate": f["mortgage_rate"].to_numpy() - jump["mortgage_rate"],
-                "hpi_log_change": np.log(
-                    f["house_price_index"].to_numpy() / jump["house_price_index"]
-                ),
-            }
-        )
-    shocks["adverse"] = (shocks["baseline"] + shocks["severely_adverse"]) / 2
+        changes[s] = _changes(f.iloc[:rs_quarters], jump)
+    changes["adverse"] = (changes["baseline"] + changes["severely_adverse"]) / 2
+    return changes
 
+
+def historical_changes(start, rs_quarters=RS_QUARTERS):
+    """The macro changes that actually followed ``start``, over ``rs_quarters`` quarters."""
+    macro = load_macro_history()
+    start = pd.Period(start, freq="Q")
+    following = macro.loc[start + 1 : start + rs_quarters]
+    if len(following) < rs_quarters:
+        raise ValueError(f"History covers only {len(following)} quarters after {start}")
+    return _changes(following, macro.loc[start])
+
+
+def path_from_changes(
+    changes,
+    reversion_quarters=REVERSION_QUARTERS,
+    reporting_quarter=REPORTING_QUARTER,
+    horizon=MAX_HORIZON,
+):
+    """A quarterly macro path for ``horizon`` quarters after the reporting date.
+
+    ``changes`` (one row per forecast quarter, from ``scenario_changes`` or
+    ``historical_changes``) are applied to the reporting-quarter actuals. The forecast
+    holds for ``len(changes)`` quarters, then unemployment, the mortgage rate and the
+    house-price growth rate revert in a straight line to their long-run averages since
+    1990 over ``reversion_quarters`` and stay there. House prices revert in growth, not
+    level, so a fall during the forecast is never recovered by reversion alone.
+    """
+    macro = load_macro_history()
+    reporting = pd.Period(reporting_quarter, freq="Q")
+    long_run = long_run_averages(reporting_quarter)
     actual = macro.loc[reporting]
+    rs_quarters = len(changes)
     h = np.arange(1, horizon + 1)
     # Weight on the forecast: 1 through the R&S period, falling linearly to 0 over
     # reversion. With no reversion period the path jumps straight to long run.
@@ -111,26 +134,54 @@ def build_scenario_paths(
         held = np.r_[forecast, np.repeat(forecast[-1], pad)]
         return w * held + (1 - w) * long_run_value
 
-    paths = {}
-    for s, shock in shocks.items():
-        hpi_growth = np.diff(np.r_[0, shock["hpi_log_change"]])
-        paths[s] = pd.DataFrame(
-            {
-                "horizon": h,
-                "unemployment_rate": blend(
-                    actual["unemployment_rate"] + shock["unemployment_rate"].to_numpy(),
-                    long_run["unemployment_rate"],
-                ),
-                "mortgage_rate": blend(
-                    actual["mortgage_rate"] + shock["mortgage_rate"].to_numpy(),
-                    long_run["mortgage_rate"],
-                ),
-                "house_price_index": actual["house_price_index"]
-                * np.exp(np.cumsum(blend(hpi_growth, long_run["hpi_growth"]))),
-            },
-            index=pd.period_range(reporting + 1, periods=horizon, freq="Q"),
-        )
-    return paths
+    hpi_growth = np.diff(np.r_[0, changes["hpi_log_change"]])
+    return pd.DataFrame(
+        {
+            "horizon": h,
+            "unemployment_rate": blend(
+                actual["unemployment_rate"] + changes["unemployment_rate"].to_numpy(),
+                long_run["unemployment_rate"],
+            ),
+            "mortgage_rate": blend(
+                actual["mortgage_rate"] + changes["mortgage_rate"].to_numpy(),
+                long_run["mortgage_rate"],
+            ),
+            "house_price_index": actual["house_price_index"]
+            * np.exp(np.cumsum(blend(hpi_growth, long_run["hpi_growth"]))),
+        },
+        index=pd.period_range(reporting + 1, periods=horizon, freq="Q"),
+    )
+
+
+def shocked_changes(
+    changes, unemployment_rate=0.0, house_price_index=0.0, mortgage_rate=0.0
+):
+    """``changes`` plus a shock that builds in a straight line to its full size by the
+    last forecast quarter: unemployment and mortgage rate in points, house prices as a
+    fractional change in level (-0.2 is a 20% fall)."""
+    ramp = np.arange(1, len(changes) + 1) / len(changes)
+    out = changes.copy()
+    out["unemployment_rate"] += unemployment_rate * ramp
+    out["mortgage_rate"] += mortgage_rate * ramp
+    out["hpi_log_change"] += np.log1p(house_price_index) * ramp
+    return out
+
+
+def build_scenario_paths(
+    rs_quarters=RS_QUARTERS,
+    reversion_quarters=REVERSION_QUARTERS,
+    reporting_quarter=REPORTING_QUARTER,
+    horizon=MAX_HORIZON,
+):
+    """Quarterly macro paths per scenario for ``horizon`` quarters after the reporting date.
+
+    Each Fed 2025 scenario's change from its own jump-off quarter is applied to the
+    reporting-quarter actuals; see ``path_from_changes``.
+    """
+    return {
+        s: path_from_changes(changes, reversion_quarters, reporting_quarter, horizon)
+        for s, changes in scenario_changes(rs_quarters).items()
+    }
 
 
 def actual_path(as_of, horizon=MAX_HORIZON):
