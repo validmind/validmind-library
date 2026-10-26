@@ -64,6 +64,8 @@ def ExpectedCoefficientSigns(
     - Requires a statsmodels OLS model.
     - Only as good as the expectations supplied; it does not judge magnitudes.
     """
+    if not expected_signs:
+        raise ValueError("expected_signs must name at least one coefficient")
     results = ols_results(model, "ExpectedCoefficientSigns")
     # a model fitted on numpy arrays has array params, named x1, x2, ... by statsmodels
     names = results.model.exog_names

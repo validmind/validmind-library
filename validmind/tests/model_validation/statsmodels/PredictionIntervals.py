@@ -9,6 +9,7 @@ import pandas as pd
 import plotly.graph_objects as go
 
 from validmind import RawData, tags, tasks
+from validmind.errors import SkipTestError
 from validmind.vm_models import VMDataset, VMModel
 
 from .statsutils import design_data, ols_results
@@ -79,15 +80,28 @@ def PredictionIntervals(
     results = ols_results(model, "PredictionIntervals")
     alpha = 1 - confidence_level
 
+    df = dataset.df
+    frame = results.get_prediction(
+        design_data(results, df, dataset.feature_columns)
+    ).summary_frame(alpha=alpha)
+    # formula models drop rows with a missing regressor; put them back as NaN by label
     frame = (
-        results.get_prediction(design_data(results, dataset.df))
-        .summary_frame(alpha=alpha)
-        .reset_index(drop=True)
+        frame.set_axis(df.index) if len(frame) == len(df) else frame.reindex(df.index)
     )
-    predicted = frame["mean"].to_numpy(dtype=float)
-    lower = frame["obs_ci_lower"].to_numpy(dtype=float)
-    upper = frame["obs_ci_upper"].to_numpy(dtype=float)
+
+    columns = ["mean", "obs_ci_lower", "obs_ci_upper"]
     actual = np.asarray(dataset.y, dtype=float)
+    # a NaN bound would count the row as inside the interval
+    valid = np.isfinite(frame[columns].to_numpy(dtype=float)).all(axis=1) & np.isfinite(
+        actual
+    )
+    if not valid.any():
+        raise SkipTestError("PredictionIntervals found no rows without missing values")
+    excluded = int((~valid).sum())
+    predicted, lower, upper = (
+        frame[column].to_numpy(dtype=float)[valid] for column in columns
+    )
+    actual = actual[valid]
 
     below, above = actual < lower, actual > upper
     inside = ~(below | above)
@@ -98,6 +112,7 @@ def PredictionIntervals(
             {
                 "Nominal Level": confidence_level,
                 "Observations": len(actual),
+                "Excluded (Missing)": excluded,
                 "Coverage": coverage,
                 "Below Interval": float(below.mean()),
                 "Above Interval": float(above.mean()),
@@ -218,6 +233,7 @@ def PredictionIntervals(
             lower=lower,
             upper=upper,
             predicted=predicted,
+            excluded_missing=excluded,
             model=model.input_id,
             dataset=dataset.input_id,
         ),

@@ -89,16 +89,23 @@ def Heteroscedasticity(
     if not numeric:
         raise SkipTestError("Heteroscedasticity requires numeric feature columns")
 
-    regressors = add_constant(
-        dataset.df[numeric].to_numpy(dtype=float), has_constant="add"
-    )
+    features = dataset.df[numeric].to_numpy(dtype=float)
+    # models such as HistGradientBoostingRegressor predict on missing values; the tests
+    # cannot use those rows
+    valid = np.isfinite(features).all(axis=1) & np.isfinite(residuals)
+    if valid.sum() <= len(numeric) + 1:
+        raise SkipTestError(
+            "Heteroscedasticity found too few rows without missing values"
+        )
+    regressors = add_constant(features[valid], has_constant="add")
 
     rows = []
     for name, test in [("Breusch-Pagan", het_breuschpagan), ("White", het_white)]:
-        lm, lm_p, _, _ = test(residuals, regressors)
+        lm, lm_p, _, _ = test(residuals[valid], regressors)
         rows.append(
             {
                 "Test": name,
+                "Observations": int(valid.sum()),
                 "LM Statistic": float(lm),
                 "p-value": float(lm_p),
                 "Significance Level": significance_level,

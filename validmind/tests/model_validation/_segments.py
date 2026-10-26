@@ -42,9 +42,14 @@ def segment_labels(values: pd.Series, n_bins: int, max_categories: int) -> pd.Se
         bins = pd.qcut(values, q=n_bins, duplicates="drop")
         # qcut nudges the first edge below the minimum; show the real minimum instead
         lowest = values.min()
-        labels = bins.map(
-            lambda b: f"{max(b.left, lowest):,.4g} – {b.right:,.4g}", na_action="ignore"
-        )
+        # add digits until every bin has its own label (e.g. YYYYMMDD dates need 8)
+        for digits in range(4, 16):
+            labels = bins.map(
+                lambda b: f"{max(b.left, lowest):,.{digits}g} – {b.right:,.{digits}g}",
+                na_action="ignore",
+            )
+            if labels.nunique() == bins.nunique():
+                break
     return labels.astype(object).where(values.notna(), MISSING).astype(str)
 
 

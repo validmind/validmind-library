@@ -60,7 +60,8 @@ def RobustStandardErrors(
     misspecified.
     - Does not account for clustered or autocorrelated errors.
     """
-    results = ols_results(model, "RobustStandardErrors")
+    # refit: a model fitted with .fit(cov_type=...) already carries robust errors in bse
+    results = ols_results(model, "RobustStandardErrors").model.fit()
     robust = results.get_robustcov_results(cov_type=cov_type)
 
     ols_se = np.asarray(results.bse, dtype=float)

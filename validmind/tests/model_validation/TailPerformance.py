@@ -70,11 +70,14 @@ def TailPerformance(
     def ranks(values):
         return pd.Series(values).rank(method="first").to_numpy()
 
+    # round, so floating-point error cannot make the two tails different sizes
+    tail_size = round(len(actual) * tail_share)
+
     def top(values):
-        return ranks(values) > len(values) * (1 - tail_share)
+        return ranks(values) > len(values) - tail_size
 
     def bottom(values):
-        return ranks(values) <= len(values) * tail_share
+        return ranks(values) <= tail_size
 
     pct = f"{tail_share:.0%}"
     groups = {

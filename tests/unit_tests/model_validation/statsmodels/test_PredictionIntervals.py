@@ -70,7 +70,10 @@ class TestPredictionIntervals(unittest.TestCase):
         holdout = _frame(2000, seed=1)
         dataset = vm.init_dataset(holdout, input_id="d", target_column="y", __log=False)
         dataset.assign_predictions(
-            model, prediction_values=np.asarray(fit.predict(sm.add_constant(holdout[["x", "z"]])))
+            model,
+            prediction_values=np.asarray(
+                fit.predict(sm.add_constant(holdout[["x", "z"]]))
+            ),
         )
 
         formula_tables = PredictionIntervals(
@@ -85,10 +88,72 @@ class TestPredictionIntervals(unittest.TestCase):
     def test_skips_non_statsmodels_models(self):
         sk = LinearRegression().fit(self.train[["x", "z"]], self.train.y)
         model = vm.init_model(sk, input_id="sk", __log=False)
-        dataset = vm.init_dataset(self.train, input_id="d", target_column="y", __log=False)
+        dataset = vm.init_dataset(
+            self.train, input_id="d", target_column="y", __log=False
+        )
         dataset.assign_predictions(model)
         with self.assertRaises(SkipTestError):
             PredictionIntervals(dataset, model)
+
+    def test_array_api_on_numpy_arrays(self):
+        X = sm.add_constant(self.train[["x", "z"]].to_numpy())
+        fit = sm.OLS(self.train.y.to_numpy(), X).fit()
+        model = vm.init_model(fit, input_id="np", __log=False)
+        holdout = _frame(2000, seed=1)
+        dataset = vm.init_dataset(
+            holdout,
+            input_id="d",
+            target_column="y",
+            feature_columns=["x", "z"],
+            __log=False,
+        )
+        dataset.assign_predictions(model, prediction_values=np.zeros(len(holdout)))
+
+        formula_tables = PredictionIntervals(
+            _dataset(holdout, self.model, self.fit), self.model
+        )[0]
+        array_tables = PredictionIntervals(dataset, model)[0]
+        pd.testing.assert_frame_equal(
+            formula_tables["Prediction Interval Coverage"],
+            array_tables["Prediction Interval Coverage"],
+        )
+
+    def test_numpy_model_with_unmatched_feature_count_skips(self):
+        fit = sm.OLS(
+            self.train.y.to_numpy(), sm.add_constant(self.train[["x"]].to_numpy())
+        ).fit()
+        model = vm.init_model(fit, input_id="np", __log=False)
+        dataset = vm.init_dataset(
+            self.train,
+            input_id="d",
+            target_column="y",
+            feature_columns=["x", "z"],
+            __log=False,
+        )
+        dataset.assign_predictions(model, prediction_values=np.zeros(len(self.train)))
+        with self.assertRaisesRegex(SkipTestError, "by position"):
+            PredictionIntervals(dataset, model)
+
+    def test_rows_with_a_missing_regressor_are_excluded(self):
+        holdout = _frame(500, seed=1)
+        holdout.loc[holdout.index[:200], "x"] = np.nan
+        X = sm.add_constant(self.train[["x", "z"]])
+        array = vm.init_model(sm.OLS(self.train.y, X).fit(), input_id="a", __log=False)
+        for model in (self.model, array):
+            dataset = vm.init_dataset(
+                holdout,
+                input_id="d",
+                target_column="y",
+                feature_columns=["x", "z"],
+                __log=False,
+            )
+            dataset.assign_predictions(model, prediction_values=np.zeros(len(holdout)))
+            coverage = PredictionIntervals(dataset, model)[0][
+                "Prediction Interval Coverage"
+            ]
+
+            self.assertEqual(coverage["Observations"].iloc[0], 300)
+            self.assertEqual(coverage["Excluded (Missing)"].iloc[0], 200)
 
 
 if __name__ == "__main__":

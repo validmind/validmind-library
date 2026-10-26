@@ -62,33 +62,55 @@ class TestResidualBiasBySegment(unittest.TestCase):
 
     def test_numeric_columns_are_binned_from_their_real_minimum(self):
         dataset, model = _dataset()
-        table = ResidualBiasBySegment(dataset, model, segment_columns=["score"], n_bins=4)[0]
+        table = ResidualBiasBySegment(
+            dataset, model, segment_columns=["score"], n_bins=4
+        )[0]
         self.assertEqual(len(table), 4)
         first_edge = float(table["Segment"].iloc[0].split(" – ")[0].replace(",", ""))
         self.assertAlmostEqual(first_edge, dataset.df.score.min(), delta=1)
 
     def test_missing_values_are_their_own_segment_listed_last(self):
         dataset, model = _dataset(missing_scores=10)
-        table = ResidualBiasBySegment(dataset, model, segment_columns=["score"], n_bins=4)[0]
+        table = ResidualBiasBySegment(
+            dataset, model, segment_columns=["score"], n_bins=4
+        )[0]
 
         self.assertEqual(table["Segment"].iloc[-1], "Missing")
         self.assertEqual(table["Count"].iloc[-1], 10)
 
     def test_column_pairs_segment_on_combinations(self):
         dataset, model = _dataset()
-        table = ResidualBiasBySegment(dataset, model, segment_columns=[["group", "flag"]])[0]
+        table = ResidualBiasBySegment(
+            dataset, model, segment_columns=[["group", "flag"]]
+        )[0]
         self.assertEqual(set(table["Segment Column"]), {"group × flag"})
         self.assertEqual(len(table), 8)
 
     def test_small_segments_are_reported_not_assessed(self):
         dataset, model = _dataset(n=200, bias=5.0)
-        table = ResidualBiasBySegment(dataset, model, segment_columns=["group"], min_segment_size=1000)[0]
+        table = ResidualBiasBySegment(
+            dataset, model, segment_columns=["group"], min_segment_size=1000
+        )[0]
         self.assertTrue((table.Result == "Too small to assess").all())
 
     def test_unknown_column_explains_extra_columns(self):
         dataset, model = _dataset()
         with self.assertRaisesRegex(ValueError, "add_extra_column"):
             ResidualBiasBySegment(dataset, model, segment_columns=["missing"])
+
+    def test_large_values_keep_one_segment_per_bin(self):
+        n = 1000
+        df = pd.DataFrame({"x": np.zeros(n), "date": 20240101 + np.arange(n) % 365})
+        df["y"] = np.random.default_rng(0).normal(0, 1, n)
+        model = vm.init_model(input_id="m", predict_fn=lambda row: 0.0, __log=False)
+        dataset = vm.init_dataset(df, input_id="d", target_column="y", __log=False)
+        dataset.assign_predictions(model, prediction_values=np.zeros(n))
+        table = ResidualBiasBySegment(
+            dataset, model, segment_columns=["date"], n_bins=4
+        )[0]
+
+        self.assertEqual(len(table), 4)
+        self.assertEqual(table["Segment"].nunique(), 4)
 
 
 if __name__ == "__main__":

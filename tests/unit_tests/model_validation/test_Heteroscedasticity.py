@@ -14,7 +14,11 @@ from validmind.tests.model_validation.Heteroscedasticity import Heteroscedastici
 def _setup(heteroscedastic, n=1000, seed=0):
     rng = np.random.default_rng(seed)
     df = pd.DataFrame(
-        {"x": rng.uniform(1, 10, n), "z": rng.normal(0, 1, n), "group": rng.choice(["a", "b"], n)}
+        {
+            "x": rng.uniform(1, 10, n),
+            "z": rng.normal(0, 1, n),
+            "group": rng.choice(["a", "b"], n),
+        }
     )
     scale = df.x if heteroscedastic else 3.0
     df["y"] = 2 * df.x + df.z + rng.normal(0, 1, n) * scale
@@ -25,7 +29,11 @@ def _sklearn(df):
     fit = LinearRegression().fit(df[["x", "z"]], df.y)
     model = vm.init_model(fit, input_id="m", __log=False)
     dataset = vm.init_dataset(
-        df, input_id="d", target_column="y", feature_columns=["x", "z", "group"], __log=False
+        df,
+        input_id="d",
+        target_column="y",
+        feature_columns=["x", "z", "group"],
+        __log=False,
     )
     # the model uses x and z only; "group" is a categorical feature of the dataset
     dataset.assign_predictions(model, prediction_values=fit.predict(df[["x", "z"]]))
@@ -38,7 +46,9 @@ class TestHeteroscedasticity(unittest.TestCase):
         spread = tables["Residual Spread by Prediction Bin"]["Residual Std. Deviation"]
 
         self.assertFalse(passed)
-        self.assertTrue((tables["Heteroscedasticity Tests"]["Pass/Fail"] == "Fail").all())
+        self.assertTrue(
+            (tables["Heteroscedasticity Tests"]["Pass/Fail"] == "Fail").all()
+        )
         self.assertGreater(spread.iloc[-1], 2 * spread.iloc[0])
         self.assertIsInstance(fig, go.Figure)
 
@@ -51,7 +61,11 @@ class TestHeteroscedasticity(unittest.TestCase):
         fit = smf.ols("y ~ x + z", df).fit()
         model = vm.init_model(fit, input_id="sm", __log=False)
         dataset = vm.init_dataset(
-            df, input_id="d", target_column="y", feature_columns=["x", "z", "group"], __log=False
+            df,
+            input_id="d",
+            target_column="y",
+            feature_columns=["x", "z", "group"],
+            __log=False,
         )
         dataset.assign_predictions(model, prediction_values=fit.predict(df).values)
 
@@ -67,6 +81,24 @@ class TestHeteroscedasticity(unittest.TestCase):
 
         with self.assertRaises(SkipTestError):
             Heteroscedasticity(dataset, model)
+
+    def test_rows_with_missing_features_are_excluded(self):
+        df = _setup(True)
+        df.loc[df.index[:10], "x"] = np.nan
+        fit = LinearRegression().fit(df[["x", "z"]].fillna(0), df.y)
+        model = vm.init_model(fit, input_id="m", __log=False)
+        dataset = vm.init_dataset(
+            df, input_id="d", target_column="y", feature_columns=["x", "z"], __log=False
+        )
+        dataset.assign_predictions(
+            model, prediction_values=fit.predict(df[["x", "z"]].fillna(0))
+        )
+        tables, _, passed, _ = Heteroscedasticity(dataset, model)
+
+        self.assertFalse(passed)
+        self.assertTrue(
+            (tables["Heteroscedasticity Tests"]["Observations"] == 990).all()
+        )
 
 
 if __name__ == "__main__":

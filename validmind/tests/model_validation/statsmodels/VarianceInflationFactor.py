@@ -91,14 +91,15 @@ def VarianceInflationFactor(
     for i, name in enumerate(names):
         if name in INTERCEPT_NAMES:
             continue
-        vif = float(variance_inflation_factor(exog, i))
+        # classify the value that is shown, so the status and the pass/fail agree
+        vif = round(float(variance_inflation_factor(exog, i)), 2)
         if vif >= vif_threshold:
             status = "Severe"
         elif vif >= moderate_vif_threshold:
             status = "Moderate"
         else:
             status = "OK"
-        rows.append({"Feature": name, "VIF": round(vif, 2), "Status": status})
+        rows.append({"Feature": name, "VIF": vif, "Status": status})
 
     vif_df = pd.DataFrame(rows)
 

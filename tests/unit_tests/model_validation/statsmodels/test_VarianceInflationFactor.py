@@ -6,6 +6,7 @@ import plotly.graph_objects as go
 import statsmodels.api as sm
 import statsmodels.formula.api as smf
 from sklearn.linear_model import LinearRegression
+from statsmodels.stats.outliers_influence import variance_inflation_factor
 
 import validmind as vm
 from validmind.errors import SkipTestError
@@ -78,6 +79,26 @@ class TestVarianceInflationFactor(unittest.TestCase):
         sk = LinearRegression().fit(self.df[["x1", "x3"]], self.df.y)
         with self.assertRaises(SkipTestError):
             VarianceInflationFactor(_model(sk))
+
+    def test_status_and_pass_fail_use_the_value_shown(self):
+        fit = smf.ols("y ~ x1 + x2 + x3", self.df).fit()
+        raw = {
+            name: variance_inflation_factor(fit.model.exog, i)
+            for i, name in enumerate(fit.model.exog_names)
+            if name != "Intercept"
+        }
+        # a threshold the raw VIF is just below and the shown (rounded) VIF reaches
+        name, threshold = next(
+            (n, round(v, 2)) for n, v in raw.items() if round(v, 2) > v
+        )
+        tables, _, passed, _ = VarianceInflationFactor(
+            _model(fit), vif_threshold=threshold, moderate_vif_threshold=threshold / 2
+        )
+        row = tables["Variance Inflation Factor"].set_index("Feature").loc[name]
+
+        self.assertEqual(row["VIF"], threshold)
+        self.assertEqual(row["Status"], "Severe")
+        self.assertFalse(passed)
 
 
 if __name__ == "__main__":

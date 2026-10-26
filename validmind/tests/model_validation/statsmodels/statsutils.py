@@ -5,6 +5,7 @@
 import re
 
 import numpy as np
+import pandas as pd
 from sklearn.metrics import r2_score
 
 
@@ -27,7 +28,8 @@ def ols_results(model, test_name: str):
     Return the fitted statsmodels OLS results behind a VMModel.
 
     Works for models fitted with the formula API (`smf.ols`) and the array API
-    (`sm.OLS`). Raises SkipTestError for any other model.
+    (`sm.OLS`), on a DataFrame or on numpy arrays. Raises SkipTestError for any other
+    model.
     """
     from validmind.errors import SkipTestError
 
@@ -54,21 +56,43 @@ def row_labels(results):
     return list(labels) if labels is not None else list(range(int(results.nobs)))
 
 
-def design_data(results, df):
+def design_data(results, df, feature_columns=None):
     """
     Data to pass to `results.predict` / `results.get_prediction` for the rows of `df`.
 
     Formula models apply their own transformations to the original columns; array models
-    need their regressor columns in order, with the constant added back.
+    need their regressor columns in order, with the constant added back. An array model
+    fitted on numpy arrays names its regressors `x1, x2, ...`; those are taken to be
+    `feature_columns`, in the same order.
     """
+    from validmind.errors import SkipTestError
+
     if getattr(results.model, "formula", None) is not None:
         return df
 
-    data = df.copy()
-    for name in results.model.exog_names:
+    names = list(results.model.exog_names)
+    regressors = [name for name in names if name not in INTERCEPT_NAMES]
+    if all(name in df.columns for name in regressors):
+        data = df.copy()
+    elif feature_columns is not None and len(feature_columns) == len(regressors):
+        data = pd.DataFrame(
+            {
+                name: df[column].to_numpy()
+                for name, column in zip(regressors, feature_columns)
+            },
+            index=df.index,
+        )
+    else:
+        raise SkipTestError(
+            f"The model's regressors {regressors} are not dataset columns, and the "
+            f"dataset has {len(feature_columns or [])} feature columns to match them "
+            "by position. Fit the model on a DataFrame, or set the dataset's "
+            "feature_columns in the order the model was fitted on."
+        )
+    for name in names:
         if name in INTERCEPT_NAMES:
             data[name] = 1.0
-    return data[list(results.model.exog_names)]
+    return data[names]
 
 
 def predict_frame(model, df, feature_columns):
@@ -80,7 +104,9 @@ def predict_frame(model, df, feature_columns):
     """
     if getattr(model, "library", None) == "statsmodels":
         results = model.model
-        return np.asarray(results.predict(design_data(results, df)), dtype=float)
+        return np.asarray(
+            results.predict(design_data(results, df, feature_columns)), dtype=float
+        )
     return np.asarray(model.predict(df[list(feature_columns)]), dtype=float)
 
 

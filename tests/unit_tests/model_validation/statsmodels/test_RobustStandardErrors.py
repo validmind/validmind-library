@@ -56,6 +56,16 @@ class TestRobustStandardErrors(unittest.TestCase):
         )
         self.assertFalse(passed)
 
+    def test_model_fitted_with_robust_errors_is_still_compared_to_ols(self):
+        df = _data(heteroscedastic=True)
+        plain = RobustStandardErrors(_model(smf.ols("y ~ x", df).fit()))
+        robust_fit = RobustStandardErrors(
+            _model(smf.ols("y ~ x", df).fit(cov_type="HC3"))
+        )
+
+        self.assertFalse(robust_fit[1])
+        pd.testing.assert_frame_equal(plain[0], robust_fit[0])
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -16,7 +16,7 @@ from .statsmodels.statsutils import categorical_columns, predict_frame
 
 
 def _is_binary(values):
-    return set(np.unique(values)) <= {0, 1}
+    return set(np.unique(values[~np.isnan(values)])) <= {0, 1}
 
 
 @tags("sensitivity_analysis", "visualization")
@@ -97,13 +97,15 @@ def FeatureSensitivity(
     for feature in features:
         values = df[feature].to_numpy(dtype=float)
         if _is_binary(values):
-            up, down, shock_label = np.ones_like(values), np.zeros_like(values), "0 → 1"
+            missing = np.isnan(values)  # missing values stay missing
+            up, down = np.where(missing, np.nan, 1.0), np.where(missing, np.nan, 0.0)
+            shock_label = "0 → 1"
         else:
-            amount = shocks.get(feature, shock_std * values.std(ddof=1))
+            amount = shocks.get(feature, shock_std * np.nanstd(values, ddof=1))
             up, down = values + amount, values - amount
             if clip_to_range:
-                up = np.clip(up, values.min(), values.max())
-                down = np.clip(down, values.min(), values.max())
+                up = np.clip(up, np.nanmin(values), np.nanmax(values))
+                down = np.clip(down, np.nanmin(values), np.nanmax(values))
             shock_label = f"± {amount:,.4g}"
 
         means = {}

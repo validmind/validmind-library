@@ -5,6 +5,7 @@ import pandas as pd
 import plotly.graph_objects as go
 import statsmodels.api as sm
 import statsmodels.formula.api as smf
+from sklearn.ensemble import HistGradientBoostingRegressor
 from sklearn.linear_model import LinearRegression
 
 import validmind as vm
@@ -53,13 +54,21 @@ class TestFeatureSensitivity(unittest.TestCase):
         share = self.df.flag.mean()
 
         self.assertEqual(rows.loc["flag", "Shock"], "0 → 1")
-        self.assertAlmostEqual(rows.loc["flag", "Change (Up)"], 4 * (1 - share), delta=0.05)
-        self.assertAlmostEqual(rows.loc["flag", "Change (Down)"], -4 * share, delta=0.05)
+        self.assertAlmostEqual(
+            rows.loc["flag", "Change (Up)"], 4 * (1 - share), delta=0.05
+        )
+        self.assertAlmostEqual(
+            rows.loc["flag", "Change (Down)"], -4 * share, delta=0.05
+        )
 
     def test_custom_shock_in_feature_units(self):
         dataset, model = _sklearn(self.df)
         rows = FeatureSensitivity(
-            dataset, model, features=["small"], shocks={"small": 0.1}, clip_to_range=False
+            dataset,
+            model,
+            features=["small"],
+            shocks={"small": 0.1},
+            clip_to_range=False,
         )[0].set_index("Feature")
 
         self.assertEqual(list(rows.index), ["small"])
@@ -79,7 +88,9 @@ class TestFeatureSensitivity(unittest.TestCase):
 
     def test_statsmodels_formula_and_array_apis(self):
         formula = smf.ols("y ~ big + small + flag", self.df).fit()
-        array = sm.OLS(self.df.y, sm.add_constant(self.df[["big", "small", "flag"]])).fit()
+        array = sm.OLS(
+            self.df.y, sm.add_constant(self.df[["big", "small", "flag"]])
+        ).fit()
         tables = []
         for fit, name in [(formula, "f"), (array, "a")]:
             model = vm.init_model(fit, input_id=name, __log=False)
@@ -118,9 +129,31 @@ class TestFeatureSensitivity(unittest.TestCase):
         )
         dataset = vm.init_dataset(df, input_id="d", target_column="y", __log=False)
         dataset.assign_predictions(model, prediction_values=df.y.to_numpy())
-        row = FeatureSensitivity(dataset, model, features=["big"], clip_to_range=False)[0]
+        row = FeatureSensitivity(dataset, model, features=["big"], clip_to_range=False)[
+            0
+        ]
 
         self.assertGreater(row["Change (Up)"].iloc[0], -row["Change (Down)"].iloc[0])
+
+    def test_missing_values_are_left_unshocked(self):
+        df = self.df.copy()
+        df.loc[df.index[:20], ["big", "flag"]] = np.nan
+        fit = HistGradientBoostingRegressor(random_state=0).fit(
+            df[["big", "small", "flag"]], df.y
+        )
+        model = vm.init_model(fit, input_id="hgb", __log=False)
+        dataset = vm.init_dataset(df, input_id="d", target_column="y", __log=False)
+        dataset.assign_predictions(model)
+        rows = FeatureSensitivity(dataset, model, clip_to_range=False)[0].set_index(
+            "Feature"
+        )
+
+        self.assertEqual(rows.loc["flag", "Shock"], "0 → 1")
+        self.assertAlmostEqual(
+            float(rows.loc["big", "Shock"].lstrip("± ")), df.big.std(), delta=0.001
+        )
+        self.assertGreater(rows.loc["big", "Change (Up)"], 0)
+        self.assertLess(rows.loc["big", "Change (Down)"], 0)
 
 
 if __name__ == "__main__":

@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 
 from validmind import RawData, tags, tasks
+from validmind.errors import SkipTestError
 from validmind.vm_models import VMModel
 
 from .statsutils import INTERCEPT_NAMES, ols_results
@@ -39,7 +40,8 @@ def CoefficientStability(
     by `seed`), and the model is re-estimated on each resample. For each coefficient the test
     reports the original estimate, the analytical confidence interval, the bootstrap
     percentile interval at `confidence_level`, the ratio of their widths, and the share of
-    resamples in which the coefficient keeps the sign of the original estimate.
+    resamples in which the coefficient keeps the sign of the original estimate. Resamples
+    that cannot estimate every coefficient (a rare dummy with no rows) are skipped.
 
     The test passes when every coefficient except the intercept keeps its sign in at least
     `sign_stability_threshold` of resamples.
@@ -71,10 +73,19 @@ def CoefficientStability(
 
     rng = np.random.default_rng(seed)
     n = len(endog)
-    draws = np.empty((n_bootstrap, len(names)))
-    for b in range(n_bootstrap):
+    draws = []
+    for _ in range(n_bootstrap):
         idx = rng.integers(0, n, n)
-        draws[b] = np.linalg.lstsq(exog[idx], endog[idx], rcond=None)[0]
+        # a resample missing every row of a rare dummy cannot estimate it; lstsq would
+        # report 0, which reads as a sign flip
+        if np.linalg.matrix_rank(exog[idx]) == len(names):
+            draws.append(np.linalg.lstsq(exog[idx], endog[idx], rcond=None)[0])
+    if len(draws) < n_bootstrap / 2:
+        raise SkipTestError(
+            f"CoefficientStability: only {len(draws)} of {n_bootstrap} resamples could "
+            "estimate every coefficient; a regressor is too rare to bootstrap"
+        )
+    draws = np.array(draws)
 
     alpha = 1 - confidence_level
     lower, upper = np.quantile(draws, [alpha / 2, 1 - alpha / 2], axis=0)
@@ -109,6 +120,7 @@ def CoefficientStability(
         passed,
         RawData(
             bootstrap_coefficients=pd.DataFrame(draws, columns=names),
+            rank_deficient_draws=n_bootstrap - len(draws),
             model=model.input_id,
         ),
     )

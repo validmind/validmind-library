@@ -56,8 +56,23 @@ class TestCoefficientStability(unittest.TestCase):
             _model(sm.OLS(self.df.y, X).fit()), n_bootstrap=100
         )
         self.assertFalse(passed)
-        self.assertEqual(table.set_index("Coefficient").loc["const", "Pass/Fail"], "N/A")
+        self.assertEqual(
+            table.set_index("Coefficient").loc["const", "Pass/Fail"], "N/A"
+        )
         self.assertEqual(raw.bootstrap_coefficients.shape, (100, 3))
+
+    def test_rare_dummy_is_not_read_as_a_sign_flip(self):
+        df = self.df.assign(rare=0)
+        df.loc[df.index[:2], "rare"] = 1  # 2 of 400 rows
+        df["y"] += 5 * df.rare
+        table, _, raw = CoefficientStability(
+            _model(smf.ols("y ~ x + rare", df).fit()), n_bootstrap=200
+        )
+
+        self.assertEqual(
+            table.set_index("Coefficient").loc["rare", "Sign Stability"], 1.0
+        )
+        self.assertGreater(raw.rank_deficient_draws, 0)
 
 
 if __name__ == "__main__":

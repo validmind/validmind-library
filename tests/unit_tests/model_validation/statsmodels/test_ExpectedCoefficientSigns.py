@@ -57,8 +57,12 @@ class TestExpectedCoefficientSigns(unittest.TestCase):
         rng = np.random.default_rng(1)
         X = rng.normal(0, 1, (300, 2))
         y = 2 * X[:, 0] - 3 * X[:, 1] + rng.normal(0, 1, 300)
-        model = vm.init_model(sm.OLS(y, sm.add_constant(X)).fit(), input_id="a", __log=False)
-        table, passed, _ = ExpectedCoefficientSigns(model, expected_signs={"x1": "+", "x2": "+"})
+        model = vm.init_model(
+            sm.OLS(y, sm.add_constant(X)).fit(), input_id="a", __log=False
+        )
+        table, passed, _ = ExpectedCoefficientSigns(
+            model, expected_signs={"x1": "+", "x2": "+"}
+        )
 
         self.assertFalse(passed)
         self.assertEqual(list(table["Result"]), ["Pass", "Fail"])
@@ -70,6 +74,10 @@ class TestExpectedCoefficientSigns(unittest.TestCase):
     def test_invalid_sign_raises(self):
         with self.assertRaisesRegex(ValueError, "must be"):
             ExpectedCoefficientSigns(self.model, expected_signs={"up": "up"})
+
+    def test_empty_expected_signs_raises(self):
+        with self.assertRaisesRegex(ValueError, "at least one"):
+            ExpectedCoefficientSigns(self.model, expected_signs={})
 
 
 if __name__ == "__main__":
