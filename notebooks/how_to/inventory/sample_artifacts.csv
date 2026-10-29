@@ -1,0 +1,7 @@
+record,title,description,severity,status,risk_area,due_date
+Retail Credit Scorecard,Population stability not monitored,The scorecard has no population stability index tracked since deployment.,High,open,Model Stability and Robustness,2027-03-31
+Retail Credit Scorecard,Reject inference undocumented,The documentation does not describe how rejected applications were treated in development.,Medium,open,Assumptions,2027-02-28
+SME Probability of Default,Small development sample,Only 412 defaults in the development window; estimates for the smallest segment are unstable.,High,open,Data Quality,2027-01-31
+Card Fraud Detection,Threshold set without cost analysis,The alert threshold was chosen without weighing investigation cost against fraud loss.,Medium,open,Model Performance,2027-04-30
+Deposit Balance Forecast,No back-testing after rate changes,Forecast accuracy has not been re-tested since the last two policy rate changes.,Low,open,Model Stability and Robustness,2027-05-31
+Customer Support Assistant,Prompt changes not version controlled,System prompt edits are made directly in production with no review or history.,High,open,Prompt Sensitivity,2027-01-15
