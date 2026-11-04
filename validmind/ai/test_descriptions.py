@@ -168,7 +168,11 @@ def generate_description(
             "test_description": test_description,
             "title": title,
             "summary": _truncate_summary(summary, test_id),
-            "figures": [figure._get_b64_url() for figure in figures or []],
+            "figures": [
+                figure._get_b64_url()
+                for figure in figures or []
+                if figure.has_static_image
+            ],
             "additional_context": additional_context,
             "instructions": instructions,
             # params can hold anything the test accepts (DataFrames, arrays);

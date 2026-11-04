@@ -18,8 +18,49 @@ import plotly.graph_objs as go
 
 from ..client_config import client_config
 from ..errors import UnsupportedFigureError
+from ..logging import get_logger
 from ..utils import get_full_typename
 from .html_renderer import StatefulHTMLRenderer
+
+logger = get_logger(__name__)
+
+# Set once Plotly's static image export (kaleido + Chrome) fails, so later
+# figures skip it instead of retrying (and hanging) on every figure.
+_static_export_unavailable = False
+_placeholder_png: Optional[bytes] = None
+
+
+def _static_export_disabled() -> bool:
+    """Static PNG export of Plotly figures can be turned off with
+    VALIDMIND_PLOTLY_STATIC_EXPORT=false (e.g. on Databricks serverless,
+    where Chrome can't run)."""
+    return os.getenv("VALIDMIND_PLOTLY_STATIC_EXPORT", "true").lower() in (
+        "false",
+        "0",
+        "no",
+    )
+
+
+def _get_placeholder_png() -> bytes:
+    """A PNG standing in for a Plotly figure that couldn't be rendered. The
+    figure's Plotly JSON is still uploaded, so the platform can render it."""
+    global _placeholder_png
+    if _placeholder_png is None:
+        from matplotlib.figure import Figure as MplFigure
+
+        fig = MplFigure(figsize=(6, 3))
+        fig.text(
+            0.5,
+            0.5,
+            "Static preview unavailable.\nThis is an interactive Plotly figure.",
+            ha="center",
+            va="center",
+            color="#555555",
+        )
+        buffer = BytesIO()
+        fig.savefig(buffer, format="png")
+        _placeholder_png = buffer.getvalue()
+    return _placeholder_png
 
 
 def is_matplotlib_figure(figure) -> bool:
@@ -107,13 +148,42 @@ class Figure:
             buffer.seek(0)
             return buffer.read()
         elif is_plotly_figure(self.figure):
-            return self.figure.to_image(format="png")
+            return self._get_plotly_png_bytes()
         elif is_png_image(self.figure):
             return self.figure
         else:
             raise UnsupportedFigureError(
                 f"Unrecognized figure type: {get_full_typename(self.figure)}"
             )
+
+    @property
+    def has_static_image(self) -> bool:
+        """False for a Plotly figure that can't be rendered to a real PNG."""
+        if not is_plotly_figure(self.figure):
+            return True
+        return not (_static_export_unavailable or _static_export_disabled())
+
+    def _get_plotly_png_bytes(self) -> bytes:
+        """Render a Plotly figure to PNG, falling back to a placeholder when
+        kaleido/Chrome isn't available so the run doesn't fail. The figure's
+        JSON is uploaded either way."""
+        global _static_export_unavailable
+
+        if _static_export_unavailable or _static_export_disabled():
+            return _get_placeholder_png()
+
+        try:
+            return self.figure.to_image(format="png")
+        except Exception as e:
+            _static_export_unavailable = True
+            logger.warning(
+                "Could not render Plotly figures to PNG (kaleido needs a working "
+                "Chrome install): %s. Figures will be sent as Plotly JSON with a "
+                "placeholder image. Set VALIDMIND_PLOTLY_STATIC_EXPORT=false to "
+                "skip this attempt.",
+                e,
+            )
+            return _get_placeholder_png()
 
     def pre_serialize(self):
         """Pre-serialize the figure to PNG bytes for async-safe upload.
