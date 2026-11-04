@@ -9,6 +9,7 @@ Figure objects track the figure schema supported by the ValidMind API.
 import base64
 import json
 import os
+import threading
 from dataclasses import dataclass
 from io import BytesIO
 from typing import Optional, Union
@@ -28,6 +29,7 @@ logger = get_logger(__name__)
 # figures skip it instead of retrying (and hanging) on every figure.
 _static_export_unavailable = False
 _placeholder_png: Optional[bytes] = None
+_export_lock = threading.Lock()
 
 
 def _static_export_disabled() -> bool:
@@ -45,7 +47,10 @@ def _get_placeholder_png() -> bytes:
     """A PNG standing in for a Plotly figure that couldn't be rendered. The
     figure's Plotly JSON is still uploaded, so the platform can render it."""
     global _placeholder_png
-    if _placeholder_png is None:
+    with _export_lock:
+        if _placeholder_png is not None:
+            return _placeholder_png
+
         from matplotlib.figure import Figure as MplFigure
 
         fig = MplFigure(figsize=(6, 3))
@@ -60,7 +65,7 @@ def _get_placeholder_png() -> bytes:
         buffer = BytesIO()
         fig.savefig(buffer, format="png")
         _placeholder_png = buffer.getvalue()
-    return _placeholder_png
+        return _placeholder_png
 
 
 def is_matplotlib_figure(figure) -> bool:
@@ -175,14 +180,17 @@ class Figure:
         try:
             return self.figure.to_image(format="png")
         except Exception as e:
-            _static_export_unavailable = True
-            logger.warning(
-                "Could not render Plotly figures to PNG (kaleido needs a working "
-                "Chrome install): %s. Figures will be sent as Plotly JSON with a "
-                "placeholder image. Set VALIDMIND_PLOTLY_STATIC_EXPORT=false to "
-                "skip this attempt.",
-                e,
-            )
+            with _export_lock:
+                first_failure = not _static_export_unavailable
+                _static_export_unavailable = True
+            if first_failure:
+                logger.warning(
+                    "Could not render Plotly figures to PNG (kaleido needs a "
+                    "working Chrome install): %s. Figures will be sent as Plotly "
+                    "JSON with a placeholder image. Set "
+                    "VALIDMIND_PLOTLY_STATIC_EXPORT=false to skip this attempt.",
+                    e,
+                )
             return _get_placeholder_png()
 
     def pre_serialize(self):
